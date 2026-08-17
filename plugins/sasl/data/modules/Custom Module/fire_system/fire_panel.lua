@@ -112,10 +112,10 @@ defineProperty("fire_detected", globalPropertyi("tu154/custom/fire/fire_detected
 defineProperty("fire_siren", globalPropertyi("tu154/custom/fire/fire_siren")) --  
 
 -- sounds
-local rotary_sound = loadSample('Custom Sounds/plastic_switch.wav')
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 local passed = get(frame_time)
 
@@ -178,17 +178,17 @@ local function swichers_check()
 	changes_but = changes_but - lamp_test_last - smoke_test_last - ext_test_last - fire_ext_1_last - fire_ext_2_last - fire_ext_3_last
 	changes_but = changes_but - cold_eng_1_last - cold_eng_2_last - cold_eng_3_last - cold_apu_last - neutral_gas_last
 	
-	if changes_but ~= 0 then playSample(button_sound, false) end -- play sound
+	if changes_but ~= 0 then sasl.al.playSample(button_sound, false) end -- play sound
 	
 	local changes_rot = fire_sensor_sel_sw + fire_place_sel_sw - fire_sensor_sel_last - fire_place_sel_last
 	
-	if changes_rot ~= 0 then playSample(rotary_sound, false) end -- play sound
+	if changes_rot ~= 0 then sasl.al.playSample(rotary_sound, false) end -- play sound
 	
 	local changes_sw = fire_main_switch_sw + fire_buzzer_sw - fire_main_switch_last - fire_buzzer_last
 	
-	if changes_sw ~= 0 then playSample(switcher_sound, false) end -- play sound
+	if changes_sw ~= 0 then sasl.al.playSample(switcher_sound, false) end -- play sound
 	
-	if fire_buzzer_cap_sw ~= fire_buzzer_cap_last then playSample(cap_sound, false) end -- play sound
+	if fire_buzzer_cap_sw ~= fire_buzzer_cap_last then sasl.al.playSample(cap_sound, false) end -- play sound
 	
 	if fire_buzzer_cap_sw == 0 then set(fire_buzzer, 1) end
 	

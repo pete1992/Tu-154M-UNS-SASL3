@@ -48,7 +48,7 @@ components = {
             y = 0, 
             width = 16, 
             height = 16, 
-            shape = loadImage("interactive.png")
+            shape = sasl.gl.loadImage("interactive.png")
         },  
         --]]
         onMouseHold = function(comp, x, y, button)

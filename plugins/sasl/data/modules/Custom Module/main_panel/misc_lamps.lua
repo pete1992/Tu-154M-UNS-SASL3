@@ -105,7 +105,7 @@ defineProperty("nav2_fail", globalPropertyi("tu154/custom/failures/nav2_fail")) 
 -- ready
 defineProperty("to_ready", globalPropertyi("tu154/custom/checklist/to_ready")) --  
 
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 local button_last = 0
 
@@ -131,7 +131,7 @@ function update()
 	
 	-- power and controlls
 	local test_btn = get(lamp_test)-- 
-	if button_last ~= test_btn then playSample(button_sound, false) end
+	if button_last ~= test_btn then sasl.al.playSample(button_sound, false) end
 	button_last = test_btn
 	test_btn = test_btn * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
 	

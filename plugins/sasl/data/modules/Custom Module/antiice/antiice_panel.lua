@@ -81,8 +81,8 @@ defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) 
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
 
 -- sounds
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 local passed = get(frame_time)
 
@@ -168,11 +168,11 @@ local function check_controls()
 	changes = changes - soi21_on_last - antiice_slats_last - antiice_eng_1_last - antiice_eng_2_last - antiice_eng_3_last - antiice_wing_last
 	changes = changes - window_heat_1_last - window_heat_2_last - window_heat_3_last - pitot_heat_1_last - pitot_heat_2_last - pitot_heat_3_last
 	
-	if 0 ~= changes then playSample(switcher_sound, false) end
+	if 0 ~= changes then sasl.al.playSample(switcher_sound, false) end
 	
 	local soi21_test_sw = get(soi21_test)
 	
-	if soi21_test_sw ~= soi21_test_last then playSample(button_sound, false) end
+	if soi21_test_sw ~= soi21_test_last then sasl.al.playSample(button_sound, false) end
 	
 	soi21_on_last = soi21_on_sw
 	antiice_slats_last = antiice_slats_sw

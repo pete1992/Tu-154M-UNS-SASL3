@@ -25,7 +25,9 @@ defineProperty("showLeadingZeros", false)
 -- show sign instead of first digit
 defineProperty("showSign", false)
 
-function draw(self)
+local WHITE = { 1, 1, 1, 1 }
+
+function draw()
     local sign = get(showSign)
     local leading = get(showLeadingZeros)
     local digitsNum = get(digits)
@@ -44,10 +46,12 @@ function draw(self)
     local digitHeight = 0.0714285714286
     local img = get(image)
     local overlayImg = get(overlayImage)
+    local textureWidth, textureHeight = sasl.gl.getTextureSize(img)
 
     if 0 < frac then
         local y = (12 + 1) * digitHeight
-        drawTexturePart(img, pos - digitWidth * frac, 0, digitWidth, 100, 0, y, 1, digitHeight, 1, 1, 1) 
+        sasl.gl.drawTexturePart(img, pos - digitWidth * frac, 0, digitWidth, 100,
+            0, y * textureHeight, textureWidth, digitHeight * textureHeight, WHITE)
     end
 
     if get(valueEnabler) then
@@ -63,23 +67,25 @@ function draw(self)
             prevDigit = digit
             v = math.floor(v / 10)
             local y = (10 - digit + 1) * digitHeight
-            drawTexturePart(img, pos, 0, digitWidth, 100, 0, y, 1, digitHeight, 1, 1, 1) 
+            sasl.gl.drawTexturePart(img, pos, 0, digitWidth, 100,
+                0, y * textureHeight, textureWidth, digitHeight * textureHeight, WHITE)
             pos = pos - digitWidth
             if frac == i then
                 pos = pos - digitWidth
             end
             if (i > frac) and (not leading) and (0 == v) then
-                break;
+                break
             end
         end
         if sign and (0 > get(value)) then
             local y = (13 + 1) * digitHeight
-            drawTexturePart(img, pos, 0, digitWidth, 100, 0, y, 1, digitHeight, 1, 1, 1) 
+            sasl.gl.drawTexturePart(img, pos, 0, digitWidth, 100,
+                0, y * textureHeight, textureWidth, digitHeight * textureHeight, WHITE)
         end
     end
         
     if overlayImg then
-        drawTexture(overlayImg, 0, 0, 100, 100, 1, 1, 1) 
+        sasl.gl.drawTexture(overlayImg, 0, 0, 100, 100, WHITE)
     end
 end
 

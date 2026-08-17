@@ -68,7 +68,7 @@ set(tank2L_pump, 0)
 set(tank3R_pump, 0)
 set(tank3L_pump, 0)
 
-function onAvionicsDone()
+function onModuleDone()
 	
 	set(tank1_pump, 1)
 	set(tank4_pump, 1)

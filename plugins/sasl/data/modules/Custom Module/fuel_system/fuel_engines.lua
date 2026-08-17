@@ -62,8 +62,8 @@ defineProperty("elevation", globalPropertyf("sim/flightmodel/position/elevation"
 defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
-local rod_on = loadSample('Custom Sounds/ROD_ON.wav')
-local rod_off = loadSample('Custom Sounds/ROD_OFF.wav')
+local rod_on = sasl.al.loadSample('Custom Sounds/ROD_ON.wav')
+local rod_off = sasl.al.loadSample('Custom Sounds/ROD_OFF.wav')
 
 local valve_1 = 0.7
 local valve_2 = 0.7
@@ -92,14 +92,14 @@ function update()
 	set(fuel_cutoff_3, mix_3)
 	
 	-- set sound
-	if mix_1 ~= mix_1_last and mix_1 == 1 then playSample(rod_on, false)
-	elseif mix_1 ~= mix_1_last and mix_1_last == 1 then playSample(rod_off, false) end
+	if mix_1 ~= mix_1_last and mix_1 == 1 then sasl.al.playSample(rod_on, false)
+	elseif mix_1 ~= mix_1_last and mix_1_last == 1 then sasl.al.playSample(rod_off, false) end
 	
-	if mix_2 ~= mix_2_last and mix_2 == 1 then playSample(rod_on, false)
-	elseif mix_2 ~= mix_2_last and mix_2_last == 1 then playSample(rod_off, false) end
+	if mix_2 ~= mix_2_last and mix_2 == 1 then sasl.al.playSample(rod_on, false)
+	elseif mix_2 ~= mix_2_last and mix_2_last == 1 then sasl.al.playSample(rod_off, false) end
 	
-	if mix_3 ~= mix_3_last and mix_3 == 1 then playSample(rod_on, false)
-	elseif mix_3 ~= mix_3_last and mix_3_last == 1 then playSample(rod_off, false) end
+	if mix_3 ~= mix_3_last and mix_3 == 1 then sasl.al.playSample(rod_on, false)
+	elseif mix_3 ~= mix_3_last and mix_3_last == 1 then sasl.al.playSample(rod_off, false) end
 	
 	mix_1_last = mix_1
 	mix_2_last = mix_2

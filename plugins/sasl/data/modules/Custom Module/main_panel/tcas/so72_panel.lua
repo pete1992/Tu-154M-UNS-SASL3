@@ -5,7 +5,7 @@ size = {440, 167}
 -- default datarefs
 defineProperty("xpdr_code", globalPropertyf("sim/cockpit/radios/transponder_code"))
 
-ident_cmd = findCommand("sim/transponder/transponder_ident")  -- comand of transponder ident
+ident_cmd = sasl.findCommand("sim/transponder/transponder_ident")  -- comand of transponder ident
 defineProperty("xpdr_fail", globalPropertyi("sim/operation/failures/rel_g_xpndr"))
 
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
@@ -35,10 +35,10 @@ defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have 
 set(transponder_red, 0)
 set(transponder_green, 0)
 
-local text_font = loadFont("digital7_space.fnt")
+local text_font = sasl.gl.loadBitmapFont("digital7_space.fnt")
 
-local rot_sound = loadSample('Custom Sounds/rot_click_big.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local rot_sound = sasl.al.loadSample('Custom Sounds/rot_click_big.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 local function getDigits(squawk)
     local d1 = math.floor(squawk / 1000)
@@ -55,12 +55,12 @@ local buttons_last = 0
 
 local function sounds()
 	local sw = get(transponder_mode)
-	if sw_last ~= sw then playSample(rot_sound, false) end
+	if sw_last ~= sw then sasl.al.playSample(rot_sound, false) end
 	
 	sw_last = sw
 	
 	local buttons = get(transponder_control) + get(transponder_sign) + get(transponder_but_1) + get(transponder_but_2) + get(transponder_but_3) + get(transponder_but_4) + get(transponder_emerg)
-	if buttons_last ~= buttons then playSample(button_sound, false) end
+	if buttons_last ~= buttons then sasl.al.playSample(button_sound, false) end
 	
 	buttons_last = buttons
 
@@ -131,7 +131,7 @@ function update()
 	
 	-- send IDENT signal
 	if power and mode > 1 and get(transponder_sign) == 1 then
-		commandOnce(ident_cmd)
+		sasl.commandOnce(ident_cmd)
 	end
 	
 	-- lamps. need to add logic with fails

@@ -17,8 +17,8 @@ defineProperty("sim_time", globalPropertyf("sim/time/zulu_time_sec"))  -- zulu t
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
 
 -- images
-defineProperty("wc_screen_img", loadImage("taws_welcome.png", 0, 0, 1000, 770))
-local text_font = loadFont('taws_scr.fnt')
+defineProperty("wc_screen_img", sasl.gl.loadImage("taws_welcome.png", 0, 0, 1000, 770))
+local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
 
 local screen_work = get(mode_set) == 4
 local brightness = 0.8

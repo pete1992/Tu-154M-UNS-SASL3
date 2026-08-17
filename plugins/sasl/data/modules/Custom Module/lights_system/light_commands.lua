@@ -47,8 +47,8 @@ local function setup_hold_command(off_value, on_value, cmd_name, property_ref)
         end
     end
 
-    local command = findCommand(cmd_name) or createCommand(cmd_name, 0)
-    registerCommandHandler(command, 0, create_handler(off_value, on_value, property_ref))
+    local command = sasl.findCommand(cmd_name) or sasl.createCommand(cmd_name, 0)
+    sasl.registerCommandHandler(command, 0, create_handler(off_value, on_value, property_ref))
 end
 
 -- Register a command that toggles a property between two values on command press.
@@ -67,8 +67,8 @@ local function setup_toggle_command(off_value, on_value, cmd_name, property_ref)
         end
     end
 
-    local command = findCommand(cmd_name) or createCommand(cmd_name, 0)
-    registerCommandHandler(command, 0, create_handler(off_value, on_value, property_ref))
+    local command = sasl.findCommand(cmd_name) or sasl.createCommand(cmd_name, 0)
+    sasl.registerCommandHandler(command, 0, create_handler(off_value, on_value, property_ref))
 end
 
 -- Standard X-Plane light commands mapped to the custom light switches.
@@ -77,7 +77,7 @@ setup_toggle_command(0, 1, "sim/lights/strobe_lights_toggle", strobe_set)
 setup_toggle_command(0, 1, "sim/lights/spot_lights_toggle", tail_light_set)
 
 -- Toggle both landing-light extension switches together.
-local landing_light_open = findCommand("sim/lights/landing_lights_toggle")
+local landing_light_open = sasl.findCommand("sim/lights/landing_lights_toggle")
 
 function landing_light_open_hnd(phase)
     if phase == 0 then
@@ -95,10 +95,10 @@ function landing_light_open_hnd(phase)
     return 0
 end
 
-registerCommandHandler(landing_light_open, 0, landing_light_open_hnd)
+sasl.registerCommandHandler(landing_light_open, 0, landing_light_open_hnd)
 
 -- Step both landing-light mode switches upward toward LANDING (+1).
-local landing_light_up = findCommand("sim/lights/landing_lights_on")
+local landing_light_up = sasl.findCommand("sim/lights/landing_lights_on")
 
 function landing_light_up_hnd(phase)
     if phase == 0 then
@@ -116,10 +116,10 @@ function landing_light_up_hnd(phase)
     return 0
 end
 
-registerCommandHandler(landing_light_up, 0, landing_light_up_hnd)
+sasl.registerCommandHandler(landing_light_up, 0, landing_light_up_hnd)
 
 -- Step both landing-light mode switches downward toward TAXI (-1).
-local landing_light_down = findCommand("sim/lights/landing_lights_off")
+local landing_light_down = sasl.findCommand("sim/lights/landing_lights_off")
 
 function landing_light_down_hnd(phase)
     if phase == 0 then
@@ -137,7 +137,7 @@ function landing_light_down_hnd(phase)
     return 0
 end
 
-registerCommandHandler(landing_light_down, 0, landing_light_down_hnd)
+sasl.registerCommandHandler(landing_light_down, 0, landing_light_down_hnd)
 
 --[[
 Mapped X-Plane commands:

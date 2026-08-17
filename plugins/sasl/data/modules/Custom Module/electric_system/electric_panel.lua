@@ -202,9 +202,9 @@ end
 
 local function playPanelSample(sample)
     if XP11 then
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     else
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     end
 end
 
@@ -252,9 +252,9 @@ end
 
 -- Sounds.
 local SAMPLES = {
-    rotary = loadSample("Custom Sounds/plastic_switch.wav"),
-    switcher = loadSample("Custom Sounds/metal_switch.wav"),
-    cap = loadSample("Custom Sounds/cap.wav"),
+    rotary = sasl.al.loadSample("Custom Sounds/plastic_switch.wav"),
+    switcher = sasl.al.loadSample("Custom Sounds/metal_switch.wav"),
+    cap = sasl.al.loadSample("Custom Sounds/cap.wav"),
 }
 
 -- Gauge conversion tables.

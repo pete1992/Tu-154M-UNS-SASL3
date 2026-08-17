@@ -84,66 +84,66 @@ defineProperty("at_1_lamp", globalPropertyf("tu154/custom/lights/small/at_1")) -
 defineProperty("at_2_lamp", globalPropertyf("tu154/custom/lights/small/at_2")) --  2
 
 -- load images ENG
-defineProperty("bg_img", loadImage("absu_bk.png"))
+defineProperty("bg_img", sasl.gl.loadImage("absu_bk.png"))
 
-defineProperty("contr_off_img", loadImage("absu_ess.png", 6, 342, 85, 69))
-defineProperty("contr_stab_img", loadImage("absu_ess.png", 6, 412, 85, 69))
+defineProperty("contr_off_img", sasl.gl.loadImage("absu_ess.png", 6, 342, 85, 69))
+defineProperty("contr_stab_img", sasl.gl.loadImage("absu_ess.png", 6, 412, 85, 69))
 
-defineProperty("reset_lamp_img", loadImage("absu_ess.png", 359, 160, 54, 54))
-defineProperty("zk_lamp_img", loadImage("absu_ess.png", 243, 160, 54, 54))
-defineProperty("nvu_lamp_img", loadImage("absu_ess.png", 243, 217, 54, 54))
-defineProperty("az1_lamp_img", loadImage("absu_ess.png", 301, 217, 54, 54))
-defineProperty("az2_lamp_img", loadImage("absu_ess.png", 360, 217, 54, 54))
-defineProperty("app_lamp_img", loadImage("absu_ess.png", 243, 273, 54, 54))
-defineProperty("gs_lamp_img", loadImage("absu_ess.png", 360, 273, 54, 54))
-defineProperty("m_lamp_img", loadImage("absu_ess.png", 243, 330, 54, 54))
-defineProperty("v_lamp_img", loadImage("absu_ess.png", 302, 330, 54, 54))
-defineProperty("h_lamp_img", loadImage("absu_ess.png", 361, 330, 54, 54))
-defineProperty("stab_lamp_img", loadImage("absu_ess.png", 302, 273, 54, 54))
-defineProperty("off_1_lamp_img", loadImage("absu_ess.png", 243, 388, 54, 54))
-defineProperty("off_2_lamp_img", loadImage("absu_ess.png", 303, 388, 54, 54))
-defineProperty("off_3_lamp_img", loadImage("absu_ess.png", 361, 388, 54, 54))
+defineProperty("reset_lamp_img", sasl.gl.loadImage("absu_ess.png", 359, 160, 54, 54))
+defineProperty("zk_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 160, 54, 54))
+defineProperty("nvu_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 217, 54, 54))
+defineProperty("az1_lamp_img", sasl.gl.loadImage("absu_ess.png", 301, 217, 54, 54))
+defineProperty("az2_lamp_img", sasl.gl.loadImage("absu_ess.png", 360, 217, 54, 54))
+defineProperty("app_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 273, 54, 54))
+defineProperty("gs_lamp_img", sasl.gl.loadImage("absu_ess.png", 360, 273, 54, 54))
+defineProperty("m_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 330, 54, 54))
+defineProperty("v_lamp_img", sasl.gl.loadImage("absu_ess.png", 302, 330, 54, 54))
+defineProperty("h_lamp_img", sasl.gl.loadImage("absu_ess.png", 361, 330, 54, 54))
+defineProperty("stab_lamp_img", sasl.gl.loadImage("absu_ess.png", 302, 273, 54, 54))
+defineProperty("off_1_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 388, 54, 54))
+defineProperty("off_2_lamp_img", sasl.gl.loadImage("absu_ess.png", 303, 388, 54, 54))
+defineProperty("off_3_lamp_img", sasl.gl.loadImage("absu_ess.png", 361, 388, 54, 54))
 
-defineProperty("sw_dn_img", loadImage("absu_ess.png", 86, 7, 32, 110))
-defineProperty("sw_up_img", loadImage("absu_ess.png", 125, 7, 32, 110))
-defineProperty("sw_ctr_img", loadImage("absu_ess.png", 165, 88, 36, 36))
+defineProperty("sw_dn_img", sasl.gl.loadImage("absu_ess.png", 86, 7, 32, 110))
+defineProperty("sw_up_img", sasl.gl.loadImage("absu_ess.png", 125, 7, 32, 110))
+defineProperty("sw_ctr_img", sasl.gl.loadImage("absu_ess.png", 165, 88, 36, 36))
 
-defineProperty("switcher_big", loadImage("absu_ess.png", 0, 0, 78, 124))
-defineProperty("roll_knob", loadImage("absu_ess.png", 2, 132, 196, 196))
+defineProperty("switcher_big", sasl.gl.loadImage("absu_ess.png", 0, 0, 78, 124))
+defineProperty("roll_knob", sasl.gl.loadImage("absu_ess.png", 2, 132, 196, 196))
 
-defineProperty("spd_hnd", loadImage("absu_ess.png", 445, 13, 52, 114))
-defineProperty("wheel_img", loadImage("absu_ess.png", 212, 0, 21, 512))
+defineProperty("spd_hnd", sasl.gl.loadImage("absu_ess.png", 445, 13, 52, 114))
+defineProperty("wheel_img", sasl.gl.loadImage("absu_ess.png", 212, 0, 21, 512))
 
-defineProperty("arrest_cap_closed", loadImage("absu_ess.png", 244, 11, 55, 92))
-defineProperty("arrest_cap_open", loadImage("absu_ess.png", 243, 115, 55, 37))
+defineProperty("arrest_cap_closed", sasl.gl.loadImage("absu_ess.png", 244, 11, 55, 92))
+defineProperty("arrest_cap_open", sasl.gl.loadImage("absu_ess.png", 243, 115, 55, 37))
 
-defineProperty("smooth_cap_closed", loadImage("absu_ess.png", 315, 14, 47, 89))
-defineProperty("smooth_cap_open", loadImage("absu_ess.png", 314, 115, 48, 37))
+defineProperty("smooth_cap_closed", sasl.gl.loadImage("absu_ess.png", 315, 14, 47, 89))
+defineProperty("smooth_cap_open", sasl.gl.loadImage("absu_ess.png", 314, 115, 48, 37))
 
-defineProperty("black_cap_closed", loadImage("absu_ess.png", 374, 14, 56, 86))
-defineProperty("black_cap_open", loadImage("absu_ess.png", 374, 114, 56, 37))
+defineProperty("black_cap_closed", sasl.gl.loadImage("absu_ess.png", 374, 14, 56, 86))
+defineProperty("black_cap_open", sasl.gl.loadImage("absu_ess.png", 374, 114, 56, 37))
 
-defineProperty("small_lamp", loadImage("absu_ess.png", 167, 9, 31, 31))
+defineProperty("small_lamp", sasl.gl.loadImage("absu_ess.png", 167, 9, 31, 31))
 
 -- load images RUS
-defineProperty("bg_img_RUS", loadImage("absu_bk_RUS.png"))
+defineProperty("bg_img_RUS", sasl.gl.loadImage("absu_bk_RUS.png"))
 
-defineProperty("contr_off_img_RUS", loadImage("absu_ess_RUS.png", 6, 342, 85, 69))
-defineProperty("contr_stab_img_RUS", loadImage("absu_ess_RUS.png", 6, 412, 85, 69))
+defineProperty("contr_off_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 6, 342, 85, 69))
+defineProperty("contr_stab_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 6, 412, 85, 69))
 
-defineProperty("reset_lamp_img_RUS", loadImage("absu_ess_RUS.png", 359, 160, 54, 54))
-defineProperty("zk_lamp_img_RUS", loadImage("absu_ess_RUS.png", 243, 160, 54, 54))
-defineProperty("nvu_lamp_img_RUS", loadImage("absu_ess_RUS.png", 243, 217, 54, 54))
-defineProperty("az1_lamp_img_RUS", loadImage("absu_ess_RUS.png", 301, 217, 54, 54))
-defineProperty("az2_lamp_img_RUS", loadImage("absu_ess_RUS.png", 360, 217, 54, 54))
-defineProperty("app_lamp_img_RUS", loadImage("absu_ess_RUS.png", 243, 273, 54, 54))
-defineProperty("gs_lamp_img_RUS", loadImage("absu_ess_RUS.png", 360, 273, 54, 54))
-defineProperty("stab_lamp_img_RUS", loadImage("absu_ess_RUS.png", 302, 273, 54, 54))
-defineProperty("off_1_lamp_img_RUS", loadImage("absu_ess_RUS.png", 243, 388, 54, 54))
-defineProperty("off_2_lamp_img_RUS", loadImage("absu_ess_RUS.png", 303, 388, 54, 54))
-defineProperty("off_3_lamp_img_RUS", loadImage("absu_ess_RUS.png", 361, 388, 54, 54))
+defineProperty("reset_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 359, 160, 54, 54))
+defineProperty("zk_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, 160, 54, 54))
+defineProperty("nvu_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, 217, 54, 54))
+defineProperty("az1_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 301, 217, 54, 54))
+defineProperty("az2_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 360, 217, 54, 54))
+defineProperty("app_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, 273, 54, 54))
+defineProperty("gs_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 360, 273, 54, 54))
+defineProperty("stab_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 302, 273, 54, 54))
+defineProperty("off_1_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, 388, 54, 54))
+defineProperty("off_2_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 303, 388, 54, 54))
+defineProperty("off_3_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 361, 388, 54, 54))
 
-defineProperty("arrest_cap_closed_RUS", loadImage("absu_ess_RUS.png", 244, 11, 55, 92))
+defineProperty("arrest_cap_closed_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 244, 11, 55, 92))
 
 local RUS = true
 
@@ -152,17 +152,17 @@ local RUS = true
 --[[
 local lang_last = RUS
 
-local bg_image = loadImage("absu_bk_RUS.png")
+local bg_image = sasl.gl.loadImage("absu_bk_RUS.png")
 
 local function changeBG()
   if RUS then
    
-    bg_image = loadImage("absu_bk_RUS.png") -- load a new one
+    bg_image = sasl.gl.loadImage("absu_bk_RUS.png") -- load a new one
 	
 	print(bg_image)
   else
     
-    bg_image = loadImage("absu_bk.png") -- load a new one
+    bg_image = sasl.gl.loadImage("absu_bk.png") -- load a new one
 	
 	print(bg_image)
   end

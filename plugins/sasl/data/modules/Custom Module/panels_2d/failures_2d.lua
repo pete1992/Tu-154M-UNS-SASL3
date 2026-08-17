@@ -5,7 +5,7 @@ size = {512, 700}
 defineProperty("save_state", globalPropertyi("tu154/custom/save_state")) --    
 
 -- images
-defineProperty("bg_img", loadImage("repair_tex.png"))
+defineProperty("bg_img", sasl.gl.loadImage("repair_tex.png"))
 
 defineProperty("show_fail_panel", globalPropertyi("tu154/custom/panels/show_fail_panel")) --   
 

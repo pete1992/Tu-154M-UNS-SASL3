@@ -16,8 +16,8 @@ defineProperty("fuel_q_3L", globalProperty("sim/flightmodel/weight/m_fuel[5]")) 
 defineProperty("gear1_deflect", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))
 
 -- load images
-defineProperty("bg_img1", loadImage("palette.png", 0, 0, 251, 305))
-defineProperty("bg_img2", loadImage("palette.png", 250, 0, 251, 305))
+defineProperty("bg_img1", sasl.gl.loadImage("palette.png", 0, 0, 251, 305))
+defineProperty("bg_img2", sasl.gl.loadImage("palette.png", 250, 0, 251, 305))
 
 defineProperty("cg_pos_actual", globalProperty("tu154/custom/misc/cg_pos_actual"))
 defineProperty("weight_actual", globalProperty("tu154/custom/misc/weight_actual"))

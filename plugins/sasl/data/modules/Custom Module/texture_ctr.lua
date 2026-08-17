@@ -2,10 +2,10 @@
 
 -- no default texture
 defineProperty("image")
-defineProperty("lapha")
+defineProperty("alpha", 1)
 
-function draw(self) 
+function draw()
 	local a = get(alpha)
-    drawTexture(get(image), 0, 0, 100, 100, a, a, a) 
+    sasl.gl.drawTexture(get(image), 0, 0, 100, 100, { a, a, a, 1 })
 end
 

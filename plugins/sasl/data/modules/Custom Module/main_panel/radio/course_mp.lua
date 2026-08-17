@@ -69,12 +69,12 @@ defineProperty("nav_from_lit", globalPropertyf("tu154/custom/lights/small/nav_1_
 defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
-local rot_small_sound = loadSample('Custom Sounds/cursmp.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
-local rotary_sound = loadSample('Custom Sounds/plastic_switch.wav')
-local switcher_sound = loadSample('Custom Sounds/plastic_switch.wav')
+local rot_small_sound = sasl.al.loadSample('Custom Sounds/cursmp.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
 
-setSampleGain(rot_small_sound, 700)
+sasl.al.setSampleGain(rot_small_sound, 700)
 
 -- returns true if current beacon is ILS
 function isIls(freq)
@@ -95,7 +95,7 @@ local function rotary()
 	
 	local summ = nav_left_sw + nav_right_sw
 	
-	if summ ~= rot_summ_last then playSample(rot_small_sound, false) end
+	if summ ~= rot_summ_last then sasl.al.playSample(rot_small_sound, false) end
 
 	rot_summ_last = summ
 
@@ -110,7 +110,7 @@ local function buttons()
 	
 	local summ = nav_but_1_sw + nav_but_2_sw + nav_but_3_sw
 	
-	if summ ~= but_summ_last then playSample(button_sound, false) end
+	if summ ~= but_summ_last then sasl.al.playSample(button_sound, false) end
 	
 	but_summ_last = summ
 	
@@ -125,7 +125,7 @@ local function switchers()
 	
 	local summ = nav_mode_sw + nav_man_auto_sw + nav_mile_km_sw
 	
-	if summ ~= sw_summ_last then playSample(switcher_sound, false) end
+	if summ ~= sw_summ_last then sasl.al.playSample(switcher_sound, false) end
 	
 	sw_summ_last = summ
 
@@ -145,7 +145,7 @@ local function lamps(flag)
 	
 end
 
-local text_font = loadFont('digital7_it.fnt')
+local text_font = sasl.gl.loadBitmapFont('digital7_it.fnt')
 
 -- variables for separate manipulations
 

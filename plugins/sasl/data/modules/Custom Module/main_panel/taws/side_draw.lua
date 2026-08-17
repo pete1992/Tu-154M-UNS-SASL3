@@ -24,29 +24,29 @@ function draw()
 		
 		if height > 660 then
 			local y = math.min((height - 660) * 0.39, 82)
-			drawRectangle((x-1) * x_coef, 520, x_coef, y, 1, 0.3, 0.3, 1) -- red
-			drawRectangle((x-1) * x_coef, 390, x_coef, 130,1, 0.6, 0.2, 1) -- orange
-			drawRectangle((x-1) * x_coef, 260, x_coef, 130, 1, 0.8, 0.2, 1) -- dark yellow
-			drawRectangle((x-1) * x_coef, 130, x_coef, 130, 1, 1, 0.3, 1) -- yellow
-			drawRectangle((x-1) * x_coef, 0, x_coef, 130, 0.3, 1, 0.3, 1) -- green
+			sasl.gl.drawRectangle((x-1) * x_coef, 520, x_coef, y, 1, 0.3, 0.3, 1) -- red
+			sasl.gl.drawRectangle((x-1) * x_coef, 390, x_coef, 130,1, 0.6, 0.2, 1) -- orange
+			sasl.gl.drawRectangle((x-1) * x_coef, 260, x_coef, 130, 1, 0.8, 0.2, 1) -- dark yellow
+			sasl.gl.drawRectangle((x-1) * x_coef, 130, x_coef, 130, 1, 1, 0.3, 1) -- yellow
+			sasl.gl.drawRectangle((x-1) * x_coef, 0, x_coef, 130, 0.3, 1, 0.3, 1) -- green
 		elseif height > 330 then
 			local y = math.min((height - 330) * 0.39, 130)
-			drawRectangle((x-1) * x_coef, 390, x_coef, y, 1, 0.6, 0.2, 1) -- orange
-			drawRectangle((x-1) * x_coef, 260, x_coef, 130, 1, 0.8, 0.2, 1) -- dark yellow
-			drawRectangle((x-1) * x_coef, 130, x_coef, 130, 1, 1, 0.3, 1) -- yellow
-			drawRectangle((x-1) * x_coef, 0, x_coef, 130, 0.3, 1, 0.3, 1) -- green
+			sasl.gl.drawRectangle((x-1) * x_coef, 390, x_coef, y, 1, 0.6, 0.2, 1) -- orange
+			sasl.gl.drawRectangle((x-1) * x_coef, 260, x_coef, 130, 1, 0.8, 0.2, 1) -- dark yellow
+			sasl.gl.drawRectangle((x-1) * x_coef, 130, x_coef, 130, 1, 1, 0.3, 1) -- yellow
+			sasl.gl.drawRectangle((x-1) * x_coef, 0, x_coef, 130, 0.3, 1, 0.3, 1) -- green
 		elseif height > 0 then
 			local y = height * 0.39
-			drawRectangle((x-1) * x_coef, 260, x_coef, y, 1, 0.8, 0.2, 1) -- dark yellow
-			drawRectangle((x-1) * x_coef, 130, x_coef, 130, 1, 1, 0.3, 1) -- yellow
-			drawRectangle((x-1) * x_coef, 0, x_coef, 130, 0.3, 1, 0.3, 1) -- green
+			sasl.gl.drawRectangle((x-1) * x_coef, 260, x_coef, y, 1, 0.8, 0.2, 1) -- dark yellow
+			sasl.gl.drawRectangle((x-1) * x_coef, 130, x_coef, 130, 1, 1, 0.3, 1) -- yellow
+			sasl.gl.drawRectangle((x-1) * x_coef, 0, x_coef, 130, 0.3, 1, 0.3, 1) -- green
 		elseif height > -330 then
 			local y = -(-330 - height) * 0.39
-			drawRectangle((x-1) * x_coef, 130, x_coef, y, 1, 1, 0.3, 1)	-- yellow
-			drawRectangle((x-1) * x_coef, 0, x_coef, 130, 0.3, 1, 0.3, 1) -- green
+			sasl.gl.drawRectangle((x-1) * x_coef, 130, x_coef, y, 1, 1, 0.3, 1)	-- yellow
+			sasl.gl.drawRectangle((x-1) * x_coef, 0, x_coef, 130, 0.3, 1, 0.3, 1) -- green
 		elseif height > -660 then
 			local y = -(-660 - height) * 0.39
-			drawRectangle((x-1) * x_coef, 0, x_coef, y, 0.3, 1, 0.3, 1) -- green
+			sasl.gl.drawRectangle((x-1) * x_coef, 0, x_coef, y, 0.3, 1, 0.3, 1) -- green
 		end
 			
 	end
@@ -67,8 +67,8 @@ function draw()
 			
 			if current_y + y_step > 620 or current_y < -20 then break end
 			
-			if y_step > 0 then drawRectangle(i * 10, current_y - 5, 10, y_step + 5, 1, 0, 1, 1)
-			else drawRectangle(i * 10, current_y - 5, 10, -y_step + 5, 1, 0, 1, 1)
+			if y_step > 0 then sasl.gl.drawRectangle(i * 10, current_y - 5, 10, y_step + 5, 1, 0, 1, 1)
+			else sasl.gl.drawRectangle(i * 10, current_y - 5, 10, -y_step + 5, 1, 0, 1, 1)
 			end
 		
 			y_last = current_y

@@ -291,14 +291,14 @@ local function process_throttle_inputs(raw_1, raw_2, raw_3)
         throttle_input_state.filtered_3
 end
 
-rev_comm = findCommand("sim/engines/thrust_reverse_toggle")
+rev_comm = sasl.findCommand("sim/engines/thrust_reverse_toggle")
 function rev_comm_hnd(phase)
 	if 0 == phase then 
 		set(throttle_ratio_all, 0)
 	end
 	return 0
 end
-registerCommandHandler(rev_comm, 0, rev_comm_hnd)
+sasl.registerCommandHandler(rev_comm, 0, rev_comm_hnd)
 function update()
 	local passed = get(frame_time)
 	local stop_lever = get(throttle_lock) 
@@ -438,7 +438,7 @@ end
 	set(acf_tmax, 108288 * height_coef)
 end
 
-function onAvionicsDone()
+function onModuleDone()
 	set(override, 0)
 	print("throttles released")
 end

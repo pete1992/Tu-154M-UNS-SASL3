@@ -181,9 +181,9 @@ defineProperty("fuel_flowmeter_2_fail", globalPropertyi("tu154/custom/failures/f
 defineProperty("fuel_flowmeter_3_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_3_fail"))
 
 -- sounds
-local rotary_sound = loadSample('Custom Sounds/plastic_switch.wav')
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
 
 local passed = get(frame_time)
 
@@ -410,7 +410,7 @@ local function check_switchers()
 	sw_change = sw_change - fuel_trans_last - fuel_porc_last - fuel_level_last - fuel_flow_mode_last - fuel_flow_on_last
 	sw_change = sw_change - fuel_meter_on_last - fuel_meter_mech_on_last - fire_valve_1_last - fire_valve_2_last - fire_valve_3_last
 	
-	if sw_change ~= 0 then playSample(switcher_sound, false) end -- play sound
+	if sw_change ~= 0 then sasl.al.playSample(switcher_sound, false) end -- play sound
 
 	pump_tank2_left_last = pump_tank2_left_sw
 	pump_tank2_right_last = pump_tank2_right_sw
@@ -457,7 +457,7 @@ local function caps_check()
 	
 	cap_change = cap_change - fuel_trans_cap_last - fuel_porc_cap_last - fuel_flow_on_cap_last - fire_valve_1_cap_last - fire_valve_2_cap_last - fire_valve_3_cap_last
 	
-	if cap_change ~= 0 then playSample(cap_sound, false) end -- play sound
+	if cap_change ~= 0 then sasl.al.playSample(cap_sound, false) end -- play sound
 	
 	fuel_trans_cap_last = fuel_trans_cap_sw
 	fuel_porc_cap_last = fuel_porc_cap_sw

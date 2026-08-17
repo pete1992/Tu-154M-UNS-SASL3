@@ -163,9 +163,9 @@ local function sw_reset()
 
 end
 
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
-local rotary_sound = loadSample('Custom Sounds/plastic_switch.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
 
 local passed = get(frame_time)
 
@@ -420,7 +420,7 @@ local function switchers()
 	
 	local summ = get(nvu_power_on) + get(nvu_calc_on) + get(nvu_corr_on)
 	
-	if summ ~= switchers_summ then playSample(switcher_sound, false) end
+	if summ ~= switchers_summ then sasl.al.playSample(switcher_sound, false) end
 	
 	switchers_summ = summ
 
@@ -433,7 +433,7 @@ local function buttons()
 	local summ = get(nvu_left_btn) + get(nvu_ctr_btn) + get(nvu_right_btn) + get(zpu_1_left_btn) + get(zpu_1_ctr_btn) + get(zpu_1_right_btn)
 	summ = summ + get(zpu_2_left_btn) + get(zpu_2_ctr_btn) + get(zpu_2_right_btn)
 	
-	if summ ~= but_summ then playSample(button_sound, false) end
+	if summ ~= but_summ then sasl.al.playSample(button_sound, false) end
 	
 	but_summ = summ
 
@@ -445,7 +445,7 @@ local function rotary()
 	
 	local summ = get(nvu_param_sel) + get(nvu_turn_sel)
 	
-	if summ ~= rot_summ then playSample(rotary_sound, false) end
+	if summ ~= rot_summ then sasl.al.playSample(rotary_sound, false) end
 	
 	rot_summ = summ
 

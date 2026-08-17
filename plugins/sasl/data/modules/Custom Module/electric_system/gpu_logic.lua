@@ -70,13 +70,13 @@ local GPU_OUTPUT_VOLTAGE = 115
 local GPU_CONTROL_VOLTAGE = 13
 local GPU_OVERLOAD_LIMIT = 900
 
-local gpu_start_out = loadSample("Custom Sounds/gpu_start_out.wav")
-local gpu_run_out = loadSample("Custom Sounds/gpu_run_out.wav")
-local gpu_stop_out = loadSample("Custom Sounds/gpu_stop_out.wav")
+local gpu_start_out = sasl.al.loadSample("Custom Sounds/gpu_start_out.wav")
+local gpu_run_out = sasl.al.loadSample("Custom Sounds/gpu_run_out.wav")
+local gpu_stop_out = sasl.al.loadSample("Custom Sounds/gpu_stop_out.wav")
 
-local gpu_start_inn = loadSample("Custom Sounds/gpu_start_inn.wav")
-local gpu_run_inn = loadSample("Custom Sounds/gpu_run_inn.wav")
-local gpu_stop_inn = loadSample("Custom Sounds/gpu_stop_inn.wav")
+local gpu_start_inn = sasl.al.loadSample("Custom Sounds/gpu_start_inn.wav")
+local gpu_run_inn = sasl.al.loadSample("Custom Sounds/gpu_run_inn.wav")
+local gpu_stop_inn = sasl.al.loadSample("Custom Sounds/gpu_stop_inn.wav")
 
 local STATE = {
     work_timer = 0,
@@ -88,38 +88,38 @@ local STATE = {
 
 local function playGpuSample(sample, looped)
     if XP11 then
-        playSample(sample, looped and 1 or 0)
+        sasl.al.playSample(sample, looped and 1 or 0)
     else
-        playSample(sample, looped)
+        sasl.al.playSample(sample, looped)
     end
 end
 
 local function stopAllGpuSamples()
-    stopSample(gpu_start_out)
-    stopSample(gpu_run_out)
-    stopSample(gpu_stop_out)
-    stopSample(gpu_start_inn)
-    stopSample(gpu_run_inn)
-    stopSample(gpu_stop_inn)
+    sasl.al.stopSample(gpu_start_out)
+    sasl.al.stopSample(gpu_run_out)
+    sasl.al.stopSample(gpu_stop_out)
+    sasl.al.stopSample(gpu_start_inn)
+    sasl.al.stopSample(gpu_run_inn)
+    sasl.al.stopSample(gpu_stop_inn)
 end
 
 local function loadSounds()
-    gpu_start_out = loadSample("Custom Sounds/gpu_start_out.wav")
-    gpu_run_out = loadSample("Custom Sounds/gpu_run_out.wav")
-    gpu_stop_out = loadSample("Custom Sounds/gpu_stop_out.wav")
-    gpu_start_inn = loadSample("Custom Sounds/gpu_start_inn.wav")
-    gpu_run_inn = loadSample("Custom Sounds/gpu_run_inn.wav")
-    gpu_stop_inn = loadSample("Custom Sounds/gpu_stop_inn.wav")
+    gpu_start_out = sasl.al.loadSample("Custom Sounds/gpu_start_out.wav")
+    gpu_run_out = sasl.al.loadSample("Custom Sounds/gpu_run_out.wav")
+    gpu_stop_out = sasl.al.loadSample("Custom Sounds/gpu_stop_out.wav")
+    gpu_start_inn = sasl.al.loadSample("Custom Sounds/gpu_start_inn.wav")
+    gpu_run_inn = sasl.al.loadSample("Custom Sounds/gpu_run_inn.wav")
+    gpu_stop_inn = sasl.al.loadSample("Custom Sounds/gpu_stop_inn.wav")
     STATE.sounds_loaded = true
 end
 
 local function unloadSounds()
-    unloadSample(gpu_start_out)
-    unloadSample(gpu_run_out)
-    unloadSample(gpu_stop_out)
-    unloadSample(gpu_start_inn)
-    unloadSample(gpu_run_inn)
-    unloadSample(gpu_stop_inn)
+    sasl.al.unloadSample(gpu_start_out)
+    sasl.al.unloadSample(gpu_run_out)
+    sasl.al.unloadSample(gpu_stop_out)
+    sasl.al.unloadSample(gpu_start_inn)
+    sasl.al.unloadSample(gpu_run_inn)
+    sasl.al.unloadSample(gpu_stop_inn)
     STATE.sounds_loaded = false
 end
 
@@ -214,28 +214,28 @@ local function updateGpuSounds(dt)
 
     -- Sound state.
     if work_anim > 0 and work_anim < 1 and present == 1 then
-        if not isSamplePlaying(gpu_start_out) then
+        if not sasl.al.isSamplePlaying(gpu_start_out) then
             playGpuSample(gpu_start_out, false)
             playGpuSample(gpu_start_inn, false)
         end
 
-        stopSample(gpu_run_out)
-        stopSample(gpu_run_inn)
+        sasl.al.stopSample(gpu_run_out)
+        sasl.al.stopSample(gpu_run_inn)
     elseif work_anim == 1 then
-        if not isSamplePlaying(gpu_run_out) then
+        if not sasl.al.isSamplePlaying(gpu_run_out) then
             playGpuSample(gpu_run_out, true)
             playGpuSample(gpu_run_inn, true)
         end
     elseif work_anim > 0 and work_anim < 1 and present == 0 then
-        if not isSamplePlaying(gpu_stop_out) then
+        if not sasl.al.isSamplePlaying(gpu_stop_out) then
             playGpuSample(gpu_stop_out, false)
             playGpuSample(gpu_stop_inn, false)
         end
 
-        stopSample(gpu_start_out)
-        stopSample(gpu_run_out)
-        stopSample(gpu_start_inn)
-        stopSample(gpu_run_inn)
+        sasl.al.stopSample(gpu_start_out)
+        sasl.al.stopSample(gpu_run_out)
+        sasl.al.stopSample(gpu_start_inn)
+        sasl.al.stopSample(gpu_run_inn)
     elseif work_anim == 0 then
         stopAllGpuSamples()
     end
@@ -278,13 +278,13 @@ local function updateGpuSounds(dt)
 
     local inside_gain = 2000 * (1 - external)
 
-    setSampleGain(gpu_start_out, outside_gain)
-    setSampleGain(gpu_run_out, outside_gain)
-    setSampleGain(gpu_stop_out, outside_gain)
+    sasl.al.setSampleGain(gpu_start_out, outside_gain)
+    sasl.al.setSampleGain(gpu_run_out, outside_gain)
+    sasl.al.setSampleGain(gpu_stop_out, outside_gain)
 
-    setSampleGain(gpu_start_inn, inside_gain)
-    setSampleGain(gpu_run_inn, inside_gain)
-    setSampleGain(gpu_stop_inn, inside_gain)
+    sasl.al.setSampleGain(gpu_start_inn, inside_gain)
+    sasl.al.setSampleGain(gpu_run_inn, inside_gain)
+    sasl.al.setSampleGain(gpu_stop_inn, inside_gain)
 end
 
 function update()

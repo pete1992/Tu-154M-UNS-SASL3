@@ -11,10 +11,10 @@ defineProperty("pz", globalPropertyf("sim/graphics/view/pilots_head_z"))
 defineProperty("az", globalPropertyf("sim/graphics/view/pilots_head_the"))
 defineProperty("ax", globalPropertyf("sim/graphics/view/pilots_head_psi"))
 
-cockview2 = findCommand("sim/view/3d_cockpit_cmnd_look") -- command from X-Plane 10
+cockview2 = sasl.findCommand("sim/view/3d_cockpit_cmnd_look") -- command from X-Plane 10
 
 -- images
-defineProperty("bg", loadImage("cam_panel.png"))
+defineProperty("bg", sasl.gl.loadImage("cam_panel.png"))
 
 local a = -10
 local a_last = -10
@@ -22,7 +22,7 @@ local a_last = -10
 function update()
 
 	if a_last ~= a then
-		if a ~= -10 then commandOnce(cockview2) end -- XP10 view workaround
+		if a ~= -10 then sasl.commandOnce(cockview2) end -- XP10 view workaround
 			if a == 0 then set(px , 0.112098) set(py , 0.082449) set(pz , -21.521582) set(az, -2.575267) set(ax, 0)
 		elseif a == 1 then set(px , -0.488292) set(py , 0.444840) set(pz , -21.146372) set(az, -2.565663) set(ax, 0)
 		elseif a == 2 then set(px , -0.011775) set(py , 0.314453) set(pz , -21.446339) set(az, -87.580978) set(ax, 0)

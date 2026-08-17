@@ -73,13 +73,13 @@ set(gear3_deploy, 1)
 
 --]]
 
-local lock_sound = loadSample('Custom Sounds/gear_lock.wav') --
+local lock_sound = sasl.al.loadSample('Custom Sounds/gear_lock.wav') --
 
-local handle_sound = loadSample('Custom Sounds/geal_lvr.wav') --
+local handle_sound = sasl.al.loadSample('Custom Sounds/geal_lvr.wav') --
 
-gear_command_up = findCommand("sim/flight_controls/landing_gear_up")
-gear_command_down = findCommand("sim/flight_controls/landing_gear_down")
-gear_toggle = findCommand("sim/flight_controls/landing_gear_toggle")
+gear_command_up = sasl.findCommand("sim/flight_controls/landing_gear_up")
+gear_command_down = sasl.findCommand("sim/flight_controls/landing_gear_down")
+gear_toggle = sasl.findCommand("sim/flight_controls/landing_gear_toggle")
 
 -- local variables
 local passed = 0
@@ -142,9 +142,9 @@ function gear_toggle_handler(phase)
 	return 0
 end
 
-registerCommandHandler(gear_command_up, 0, gear_up_handler)
-registerCommandHandler(gear_command_down, 0, gear_down_handler)
-registerCommandHandler(gear_toggle, 0, gear_toggle_handler)
+sasl.registerCommandHandler(gear_command_up, 0, gear_up_handler)
+sasl.registerCommandHandler(gear_command_down, 0, gear_down_handler)
+sasl.registerCommandHandler(gear_toggle, 0, gear_toggle_handler)
 
 local lock1_last = lock1
 local lock2_last = lock2
@@ -251,7 +251,7 @@ local MASTER = get(ismaster) ~= 1
 		end
 		
 		-- sound
-		if lever ~= lever_last then playSample(handle_sound, false) end
+		if lever ~= lever_last then sasl.al.playSample(handle_sound, false) end
 		lever_last = lever
 		
 		local gear_move = bool2int(power_L * (1 - gs_in_use) == 1 or power_R * gs_in_use == 1)
@@ -322,7 +322,7 @@ local MASTER = get(ismaster) ~= 1
 		
 		-- sounds
 		if lock1_last ~= lock1 then --or lock2_last ~= lock2 or lock3_last ~= lock3 then
-			playSample(lock_sound, false)
+			sasl.al.playSample(lock_sound, false)
 		end
 		
 		-- collapse
@@ -361,7 +361,7 @@ end
 
 end
 
-function onAvionicsDone()
+function onModuleDone()
 	set(gear1_deploy, 1)
 	set(gear2_deploy, 1)	
 	set(gear3_deploy, 1)

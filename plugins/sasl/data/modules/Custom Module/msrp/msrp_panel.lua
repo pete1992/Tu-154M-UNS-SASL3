@@ -56,9 +56,9 @@ local function sw_reset()
 end
 
 -- sounds
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
-local rot_sound = loadSample('Custom Sounds/rot_click.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local rot_sound = sasl.al.loadSample('Custom Sounds/rot_click.wav')
 
 local passed = get(frame_time)
 
@@ -149,7 +149,7 @@ local function check_controls()
 
 	local lamp_test_msrp_sw = get(lamp_test_msrp)
 
-	if lamp_test_msrp_sw ~= lamp_test_msrp_last then playSample(button_sound, false) end
+	if lamp_test_msrp_sw ~= lamp_test_msrp_last then sasl.al.playSample(button_sound, false) end
 	
 	local msrp_date_ten_sw = get(msrp_date_ten)
 	local msrp_date_one_sw = get(msrp_date_one)
@@ -167,7 +167,7 @@ local function check_controls()
 	changes = changes - msrp_date_ten_last - msrp_date_one_last - msrp_month_ten_last - msrp_month_one_last - msrp_year_ten_last - msrp_year_one_last
 	changes = changes - msrp_route_hun_last - msrp_route_ten_last - msrp_route_one_last
 	
-	if changes ~= 0 then playSample(rot_sound, false) end
+	if changes ~= 0 then sasl.al.playSample(rot_sound, false) end
 	
 	local msrp_mlp_1_sw = get(msrp_mlp_1)
 	local msrp_mlp_2_sw = get(msrp_mlp_2)
@@ -178,7 +178,7 @@ local function check_controls()
 	local swt = msrp_mlp_1_sw + msrp_mlp_2_sw + msrp_night_day_sw + msrp_main_switch_sw + mars_on_sw
 	swt = swt - msrp_mlp_1_last - msrp_mlp_2_last - msrp_night_day_last - msrp_main_switch_last - mars_on_last
 	
-	if swt ~= 0 then  playSample(switcher_sound, false) end
+	if swt ~= 0 then  sasl.al.playSample(switcher_sound, false) end
 	
 	msrp_date_ten_last = msrp_date_ten_sw
 	msrp_date_one_last = msrp_date_one_sw

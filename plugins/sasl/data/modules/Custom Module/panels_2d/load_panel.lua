@@ -30,8 +30,8 @@ defineProps({
 })
 
 -- Panel images are SASL properties, not Datarefs.
-defineProperty("bg_img", loadImage("load_panel.png"))
-defineProperty("bg_img_rus", loadImage("load_panel_RUS.png"))
+defineProperty("bg_img", sasl.gl.loadImage("load_panel.png"))
+defineProperty("bg_img_rus", sasl.gl.loadImage("load_panel_RUS.png"))
 
 -- Payload inputs, aircraft state, and load results.
 defineProps({
@@ -80,7 +80,7 @@ defineProps({
 include("fuel_tables.lua")
 
 --include("fuel_tables.sec")
-local draw_font = loadFont('basic_font.fnt')
+local draw_font = sasl.gl.loadBitmapFont('basic_font.fnt')
 ---local EMPTY_WEIGHT = 54865
 -- Internal mutable panel state.
 -- Keeping mutable values in one table prevents Lua 5.1 functions from capturing

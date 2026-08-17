@@ -169,7 +169,7 @@ function update()
 	local plane_z = get(pos_z)
 
 	-- Terrain probe (keep exact call signature and returns)
-	local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = probeTerrain(
+	local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(
 		plane_x, plane_y, plane_z
 	)
 

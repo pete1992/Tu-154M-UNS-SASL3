@@ -1,8 +1,9 @@
 size = {205, 305}
 
-defineProperty("bg", loadImage("UMETAR.png", 0, 0, 205, 305))
+defineProperty("bg", sasl.gl.loadImage("UMETAR.png", 0, 0, 205, 305))
 
-local font = loadFont('UPhone.fnt')
+local font = sasl.gl.loadBitmapFont('UPhone.fnt')
+local COLOR_WHITE = { 1, 1, 1, 1 }
 
 local METAR1 = ""
 local METAR2 = ""
@@ -76,7 +77,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -92,7 +93,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -108,7 +109,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -124,7 +125,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -140,7 +141,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -156,7 +157,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -172,7 +173,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -188,7 +189,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -204,7 +205,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -220,7 +221,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -236,7 +237,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -252,7 +253,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -268,7 +269,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -284,7 +285,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -300,7 +301,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -316,7 +317,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -332,7 +333,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -348,7 +349,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -364,7 +365,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -380,7 +381,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -396,7 +397,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -412,7 +413,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -428,7 +429,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -444,7 +445,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -460,7 +461,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -476,7 +477,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -492,7 +493,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -508,7 +509,7 @@ input = string.sub(input, 1, -2)
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -519,13 +520,13 @@ notLoaded = true
 }
 function draw()
  drawAll(components)
- drawText(font, 10, 264, METAR1, 1.0, 1.0, 1.0)
- drawText(font, 10, 237, METAR2, 1.0, 1.0, 1.0)
- drawText(font, 10, 210, METAR3, 1.0, 1.0, 1.0)
- drawText(font, 10, 183, METAR4, 1.0, 1.0, 1.0)
- drawText(font, 10, 156, METAR5, 1.0, 1.0, 1.0)
- drawText(font, 10, 129, METAR6, 1.0, 1.0, 1.0)
- drawText(font, 10, 92, input, 1.0, 1.0, 1.0)
+ sasl.gl.drawBitmapText(font, 10, 264, METAR1, TEXT_ALIGN_LEFT, COLOR_WHITE)
+ sasl.gl.drawBitmapText(font, 10, 237, METAR2, TEXT_ALIGN_LEFT, COLOR_WHITE)
+ sasl.gl.drawBitmapText(font, 10, 210, METAR3, TEXT_ALIGN_LEFT, COLOR_WHITE)
+ sasl.gl.drawBitmapText(font, 10, 183, METAR4, TEXT_ALIGN_LEFT, COLOR_WHITE)
+ sasl.gl.drawBitmapText(font, 10, 156, METAR5, TEXT_ALIGN_LEFT, COLOR_WHITE)
+ sasl.gl.drawBitmapText(font, 10, 129, METAR6, TEXT_ALIGN_LEFT, COLOR_WHITE)
+ sasl.gl.drawBitmapText(font, 10, 92, input, TEXT_ALIGN_LEFT, COLOR_WHITE)
 
 end
 function draw()

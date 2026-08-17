@@ -315,7 +315,7 @@ function update()
 		local plane_y = get(pos_y)
 		local plane_z = get(pos_z)
 			
-		local acf_lat, acf_lon, acf_alt = localToWorld(plane_x, plane_y, plane_z)
+		local acf_lat, acf_lon, acf_alt = sasl.localToWorld(plane_x, plane_y, plane_z)
 		
 		local max_dist = GS * 60 -- distance of forecast
 		
@@ -363,8 +363,8 @@ function update()
 				local p_x = plane_x + dir_x * dist - right_x * 250
 				local p_z = plane_z + dir_z * dist - right_z * 250
 				
-				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = probeTerrain(p_x, plane_y, p_z)
-				local lat, lon, alt = localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
+				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
+				local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
 				
 				local gnd_alt = alt - acf_alt
 
@@ -414,8 +414,8 @@ function update()
 				local p_x = plane_x + dir_x * dist
 				local p_z = plane_z + dir_z * dist
 				
-				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = probeTerrain(p_x, plane_y, p_z)
-				local lat, lon, alt = localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
+				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
+				local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
 				
 				local gnd_alt = alt - acf_alt
 
@@ -466,8 +466,8 @@ function update()
 				local p_x = plane_x + dir_x * dist + right_x * 250
 				local p_z = plane_z + dir_z * dist + right_z * 250
 				
-				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = probeTerrain(p_x, plane_y, p_z)
-				local lat, lon, alt = localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
+				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
+				local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
 				
 				local gnd_alt = alt - acf_alt
 

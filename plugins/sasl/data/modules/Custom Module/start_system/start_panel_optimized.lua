@@ -77,15 +77,15 @@ defineProps({
 })
 
 -- Panel sounds
-local switcher_sound = loadSample("Custom Sounds/metal_switch.wav")
-local cap_sound = loadSample("Custom Sounds/cap.wav")
-local button_sound = loadSample("Custom Sounds/plastic_btn.wav")
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
+local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 
 local function playPanelSample(sample)
     if XP11 then
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     else
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     end
 end
 

@@ -19,36 +19,36 @@ defineProperty("vvi", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_pi
 defineProperty("vvi_int", globalPropertyf("tu154/custom/gauges/vvi_left")) -- VVI
 
 -- load images
-defineProperty("scale_img", loadImage("tcas_scale.png", 14, 6, 482, 482))
-defineProperty("needle_img", loadImage("tcas_scale.png", 2, 478, 346, 32))
+defineProperty("scale_img", sasl.gl.loadImage("tcas_scale.png", 14, 6, 482, 482))
+defineProperty("needle_img", sasl.gl.loadImage("tcas_scale.png", 2, 478, 346, 32))
 
-defineProperty("scale_15", loadImage("tcas_marks.png", 18, 66, 72, 72))
-defineProperty("scale_10", loadImage("tcas_marks.png", 123, 65, 102, 102))
-defineProperty("scale_5", loadImage("tcas_marks.png", 276, 57, 194, 194))
-defineProperty("scale_3", loadImage("tcas_marks.png", 18, 293, 268, 174))
-defineProperty("mc_img", loadImage("tcas_marks.png", 0, 0, 53, 22))
-defineProperty("stby_img", loadImage("tcas_marks.png", 8, 190, 110, 46))
-defineProperty("ta_img", loadImage("tcas_marks.png", 144, 191, 83, 46))
-defineProperty("test_img", loadImage("tcas_marks.png", 64, 0, 78, 22))
+defineProperty("scale_15", sasl.gl.loadImage("tcas_marks.png", 18, 66, 72, 72))
+defineProperty("scale_10", sasl.gl.loadImage("tcas_marks.png", 123, 65, 102, 102))
+defineProperty("scale_5", sasl.gl.loadImage("tcas_marks.png", 276, 57, 194, 194))
+defineProperty("scale_3", sasl.gl.loadImage("tcas_marks.png", 18, 293, 268, 174))
+defineProperty("mc_img", sasl.gl.loadImage("tcas_marks.png", 0, 0, 53, 22))
+defineProperty("stby_img", sasl.gl.loadImage("tcas_marks.png", 8, 190, 110, 46))
+defineProperty("ta_img", sasl.gl.loadImage("tcas_marks.png", 144, 191, 83, 46))
+defineProperty("test_img", sasl.gl.loadImage("tcas_marks.png", 64, 0, 78, 22))
 
-defineProperty("range_15", loadImage("tcas_marks.png", 372, 399, 112, 24))
-defineProperty("range_10", loadImage("tcas_marks.png", 372, 364, 112, 24))
-defineProperty("range_5", loadImage("tcas_marks.png", 372, 329, 112, 24))
-defineProperty("range_3", loadImage("tcas_marks.png", 372, 293, 112, 24))
+defineProperty("range_15", sasl.gl.loadImage("tcas_marks.png", 372, 399, 112, 24))
+defineProperty("range_10", sasl.gl.loadImage("tcas_marks.png", 372, 364, 112, 24))
+defineProperty("range_5", sasl.gl.loadImage("tcas_marks.png", 372, 329, 112, 24))
+defineProperty("range_3", sasl.gl.loadImage("tcas_marks.png", 372, 293, 112, 24))
 
-defineProperty("above_img", loadImage("tcas_marks.png", 372, 433, 113, 22))
-defineProperty("below_img", loadImage("tcas_marks.png", 371, 465, 115, 22))
+defineProperty("above_img", sasl.gl.loadImage("tcas_marks.png", 372, 433, 113, 22))
+defineProperty("below_img", sasl.gl.loadImage("tcas_marks.png", 371, 465, 115, 22))
 
 -- RA scales
-defineProperty("tcas_scale_climb", loadImage("tcas_scale_climb.png", 14, 6, 482, 482))
-defineProperty("tcas_scale_climb_10", loadImage("tcas_scale_climb_10.png", 14, 6, 482, 482))
-defineProperty("tcas_scale_descend", loadImage("tcas_scale_descend.png", 14, 6, 482, 482))
-defineProperty("tcas_scale_descend_10", loadImage("tcas_scale_descend_10.png", 14, 6, 482, 482))
-defineProperty("tcas_scale_maintain_lvl", loadImage("tcas_scale_maintain_lvl.png", 14, 6, 482, 482))
-defineProperty("tcas_scale_not_climb", loadImage("tcas_scale_not_climb.png", 14, 6, 482, 482))
-defineProperty("tcas_scale_not_climb_2", loadImage("tcas_scale_not_climb_2.png", 14, 6, 482, 482))
-defineProperty("tcas_scale_not_descend", loadImage("tcas_scale_not_descend.png", 14, 6, 482, 482))
-defineProperty("tcas_scale_not_descend_2", loadImage("tcas_scale_not_descend_2.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_climb", sasl.gl.loadImage("tcas_scale_climb.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_climb_10", sasl.gl.loadImage("tcas_scale_climb_10.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_descend", sasl.gl.loadImage("tcas_scale_descend.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_descend_10", sasl.gl.loadImage("tcas_scale_descend_10.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_maintain_lvl", sasl.gl.loadImage("tcas_scale_maintain_lvl.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_not_climb", sasl.gl.loadImage("tcas_scale_not_climb.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_not_climb_2", sasl.gl.loadImage("tcas_scale_not_climb_2.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_not_descend", sasl.gl.loadImage("tcas_scale_not_descend.png", 14, 6, 482, 482))
+defineProperty("tcas_scale_not_descend_2", sasl.gl.loadImage("tcas_scale_not_descend_2.png", 14, 6, 482, 482))
 
 -- datarefs
 defineProperty("mode_set", globalPropertyi("tu154/custom/tcas/mode_set"))  --  TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA	4

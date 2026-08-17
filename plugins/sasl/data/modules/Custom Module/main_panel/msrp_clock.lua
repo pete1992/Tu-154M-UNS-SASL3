@@ -2,7 +2,7 @@
 
 size = {195, 84}
 
-defineProperty("digitsImage", loadImage("green_digit_strip.png", 12, 0, 40, 784))
+defineProperty("digitsImage", sasl.gl.loadImage("green_digit_strip.png", 12, 0, 40, 784))
 
 defineProperty("sim_time", globalPropertyf("sim/time/zulu_time_sec"))  -- zulu time
 defineProperty("msrp_power", globalPropertyi("tu154/custom/msrp/msrp_power"))  -- MSRP power

@@ -1269,7 +1269,7 @@ function update()
 	
 end
 
--- function onAvionicsDone()
+-- function onModuleDone()
 	-- write_file()
 	-- print("state file saved")
 -- end

@@ -1,21 +1,21 @@
 -- this is tcas screen draw script
 size = {482, 530}
 
-defineProperty("non_intr_img", loadImage("tcas_marks.png", 333, 4, 18, 18))
-defineProperty("prox_trf_img", loadImage("tcas_marks.png", 358, 4, 18, 18))
-defineProperty("ta_trf_img", loadImage("tcas_marks.png", 384, 4, 18, 18))
-defineProperty("ra_trf_img", loadImage("tcas_marks.png", 407, 4, 18, 18))
+defineProperty("non_intr_img", sasl.gl.loadImage("tcas_marks.png", 333, 4, 18, 18))
+defineProperty("prox_trf_img", sasl.gl.loadImage("tcas_marks.png", 358, 4, 18, 18))
+defineProperty("ta_trf_img", sasl.gl.loadImage("tcas_marks.png", 384, 4, 18, 18))
+defineProperty("ra_trf_img", sasl.gl.loadImage("tcas_marks.png", 407, 4, 18, 18))
 -- arrows
-defineProperty("blu_dn_img", loadImage("tcas_marks.png", 433, 4, 9, 18))
-defineProperty("yel_dn_img", loadImage("tcas_marks.png", 445, 4, 9, 18))
-defineProperty("red_dn_img", loadImage("tcas_marks.png", 457, 4, 9, 18))
-defineProperty("blu_up_img", loadImage("tcas_marks.png", 470, 4, 9, 18))
-defineProperty("yel_up_img", loadImage("tcas_marks.png", 482, 4, 9, 18))
-defineProperty("red_up_img", loadImage("tcas_marks.png", 494, 4, 9, 18))
+defineProperty("blu_dn_img", sasl.gl.loadImage("tcas_marks.png", 433, 4, 9, 18))
+defineProperty("yel_dn_img", sasl.gl.loadImage("tcas_marks.png", 445, 4, 9, 18))
+defineProperty("red_dn_img", sasl.gl.loadImage("tcas_marks.png", 457, 4, 9, 18))
+defineProperty("blu_up_img", sasl.gl.loadImage("tcas_marks.png", 470, 4, 9, 18))
+defineProperty("yel_up_img", sasl.gl.loadImage("tcas_marks.png", 482, 4, 9, 18))
+defineProperty("red_up_img", sasl.gl.loadImage("tcas_marks.png", 494, 4, 9, 18))
 defineProperty("table_draw")
 defineProperty("tcas_range_set", globalPropertyi("tu154/custom/tcas/range_set"))
 
-local font = loadFont('tcas_scr.fnt')
+local font = sasl.gl.loadBitmapFont('tcas_scr.fnt')
 
 function draw()
 	
@@ -57,7 +57,7 @@ function draw()
 			local y = targets[i][2] * 0.042 * range_coef + 187.5
 			
 			if x > 30 and x < size[1] - 30 and y > 70 and y < size[2] - 50 then
-				drawTexture(mark_img, x, y, 26, 26, 1,1,1)
+				sasl.gl.drawTexture(mark_img, x, y, 26, 26, 1,1,1)
 				
 				local text = targets[i][6]
 				local rate = targets[i][5]
@@ -65,19 +65,19 @@ function draw()
 				local above = sign(targets[i][3])
 				
 				if mark == 2 or mark == 1 then
-					drawText(font, x-10, y + above * 27 + 2, text, 0, 1, 1)
-					if rate == -1 then drawTexture(blu_dn, x + 24, y, 18, 26, 1,1,1)
-					elseif rate == 1 then drawTexture(blu_up, x + 24, y, 18, 26, 1,1,1)
+					sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, {0, 1, 1, 1})
+					if rate == -1 then sasl.gl.drawTexture(blu_dn, x + 24, y, 18, 26, 1,1,1)
+					elseif rate == 1 then sasl.gl.drawTexture(blu_up, x + 24, y, 18, 26, 1,1,1)
 				end
 				elseif mark == 3 then
-					drawText(font, x-10, y + above * 27 + 2, text, 1, 1, 0)
-					if rate == -1 then drawTexture(yel_dn, x + 24, y, 18, 26, 1,1,1)
-					elseif rate == 1 then drawTexture(yel_up, x + 24, y, 18, 26, 1,1,1)
+					sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, {1, 1, 0, 1})
+					if rate == -1 then sasl.gl.drawTexture(yel_dn, x + 24, y, 18, 26, 1,1,1)
+					elseif rate == 1 then sasl.gl.drawTexture(yel_up, x + 24, y, 18, 26, 1,1,1)
 					end
 						elseif mark == 4 then
-							drawText(font, x-10, y + above * 27 + 2, text, 1, 0, 0)
-							if rate == -1 then drawTexture(red_dn, x + 24, y, 18, 26, 1,1,1)
-						elseif rate == 1 then drawTexture(red_up, x + 24, y, 18, 26, 1,1,1)
+							sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, {1, 0, 0, 1})
+							if rate == -1 then sasl.gl.drawTexture(red_dn, x + 24, y, 18, 26, 1,1,1)
+						elseif rate == 1 then sasl.gl.drawTexture(red_up, x + 24, y, 18, 26, 1,1,1)
 					end
 				end
 			end

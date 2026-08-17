@@ -61,11 +61,11 @@ defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = p
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
 -- sounds
-local btn_click = loadSample('Custom Sounds/acs_btn.wav')
---local tik_tak = loadSample('Custom Sounds/acs_tik_tik.wav')
+local btn_click = sasl.al.loadSample('Custom Sounds/acs_btn.wav')
+--local tik_tak = sasl.al.loadSample('Custom Sounds/acs_tik_tik.wav')
 
---playSample(tik_tak, true)  -- clock now ticks :)
---setSampleGain(tik_tak, 0)
+--sasl.al.playSample(tik_tak, true)  -- clock now ticks :)
+--sasl.al.setSampleGain(tik_tak, 0)
 
 -- local variables
 -- chrono variables
@@ -134,7 +134,7 @@ local function knob_work()
 	end
 	
 	-- calculate on press
-if knob_summ ~= knob_last then playSample(btn_click, false)
+if knob_summ ~= knob_last then sasl.al.playSample(btn_click, false)
 	
 	knob_last = knob_summ
 	
@@ -184,7 +184,7 @@ function update()
 	local fail_3 = get(acs3_fail)
 	
 	-- mute sound when sim is paused
-	--if get(frame_time) == 0 then setSampleGain(tik_tak, 0) end
+	--if get(frame_time) == 0 then sasl.al.setSampleGain(tik_tak, 0) end
 	
 local MASTER = get(ismaster) ~= 1	
 	
@@ -341,7 +341,7 @@ if MASTER then
 		set(flight_timer_hours_3, flight_hour_angle_3)
 	end	
 	
-	--setSampleGain(tik_tak, 100 * get(fan_volume_ratio))
+	--sasl.al.setSampleGain(tik_tak, 100 * get(fan_volume_ratio))
 end	
 	
 end

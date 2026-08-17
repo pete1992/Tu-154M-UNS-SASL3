@@ -239,9 +239,9 @@ local triangle_lit = 0
 -----------------------------------------------------------------------
 -- Sounds
 -----------------------------------------------------------------------
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local button_sound   = loadSample('Custom Sounds/plastic_btn.wav')
-local cap_sound      = loadSample('Custom Sounds/cap.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local button_sound   = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local cap_sound      = sasl.al.loadSample('Custom Sounds/cap.wav')
 
 -----------------------------------------------------------------------
 -- Init helper
@@ -270,7 +270,7 @@ local function buttons()
     summ = summ + get(absu_stab_speed) + get(absu_throt_off_1) + get(absu_throt_off_2) + get(absu_throt_off_3) + get(lamp_test_eng)
 
     if button_summ_last ~= summ then
-        playSample(button_sound, false)
+        sasl.al.playSample(button_sound, false)
     end
     button_summ_last = summ
 end
@@ -288,7 +288,7 @@ local function switchers()
     summ = summ + get(ZK_select) + get(nav_select) + get(vbe_select)
 
     if switchers_summ ~= summ then
-        playSample(switcher_sound, false)
+        sasl.al.playSample(switcher_sound, false)
     end
     switchers_summ = summ
 
@@ -311,7 +311,7 @@ local function caps()
     summ = summ + get(hydro_circuit_auto_man_cap) + get(hydro_long_control_cap)
 
     if caps_summ ~= summ then
-        playSample(cap_sound, false)
+        sasl.al.playSample(cap_sound, false)
     end
     caps_summ = summ
 

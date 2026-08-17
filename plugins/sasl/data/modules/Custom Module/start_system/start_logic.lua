@@ -30,9 +30,9 @@ defineProperty("sim_start1", globalProperty("sim/flightmodel2/engines/starter_ma
 defineProperty("sim_start2", globalProperty("sim/flightmodel2/engines/starter_making_torque[0]")) -- time of starter work
 defineProperty("sim_start3", globalProperty("sim/flightmodel2/engines/starter_making_torque[2]")) -- time of starter work
 
-starter_1 = findCommand("sim/starters/engage_starter_1")  -- simulator command for starter 1
-starter_2 = findCommand("sim/starters/engage_starter_2")  -- simulator command for starter 2
-starter_3 = findCommand("sim/starters/engage_starter_3")  -- simulator command for starter 3
+starter_1 = sasl.findCommand("sim/starters/engage_starter_1")  -- simulator command for starter 1
+starter_2 = sasl.findCommand("sim/starters/engage_starter_2")  -- simulator command for starter 2
+starter_3 = sasl.findCommand("sim/starters/engage_starter_3")  -- simulator command for starter 3
 
 -- sources
 defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
@@ -134,9 +134,9 @@ local eng1_rpm_check = false
 local eng2_rpm_check = false
 local eng3_rpm_check = false
 
-commandEnd(starter_1)
-commandEnd(starter_2)
-commandEnd(starter_3)
+sasl.commandEnd(starter_1)
+sasl.commandEnd(starter_2)
+sasl.commandEnd(starter_3)
 
 local start_button_pressed = false
 local starter_press = 0
@@ -176,19 +176,19 @@ function update()
 		set(fuel_in_1, 0) 
 		set(sim_ignition1, 0) 
 		set(sim_igniter1, 0)
-		commandEnd(starter_1)
+		sasl.commandEnd(starter_1)
 	end
 	if (time_now - eng2_start_time > START_SEQ_TIME and rpm2 < RPM_APD_OFF) or (blocked and rpm2 >= 5) then 
 		set(fuel_in_2, 0) 
 		set(sim_ignition2, 0) 
 		set(sim_igniter2, 0)
-		commandEnd(starter_2)
+		sasl.commandEnd(starter_2)
 	end
 	if (time_now - eng3_start_time > START_SEQ_TIME and rpm3 < RPM_APD_OFF) or (blocked and rpm3 >= 5) then 
 		set(fuel_in_3, 0) 
 		set(sim_ignition3, 0) 
 		set(sim_igniter3, 0)
-		commandEnd(starter_3)
+		sasl.commandEnd(starter_3)
 	
 	end	
 	
@@ -262,13 +262,13 @@ function update()
 	if eng1_starting and not eng1_starting_air and power27L then
 		-- turn on the starter
 		if time_now - eng1_start_time > 1 and time_now - eng1_start_time <= START_SEQ_TIME then
-			commandBegin(starter_1)
+			sasl.commandBegin(starter_1)
 
 		end 
 		
 		-- turn OFF starter
 		if rpm1 > RPM_APD_OFF or time_now - eng1_start_time > START_SEQ_TIME then
-			commandEnd(starter_1)
+			sasl.commandEnd(starter_1)
 
 			eng1_starting = false
 		end
@@ -286,7 +286,7 @@ function update()
 		
 		-- stop button
 		if stop_button then
-			commandEnd(starter_1)
+			sasl.commandEnd(starter_1)
 
 			eng1_starting = false
 			set(sim_ignition1, 0) 
@@ -306,10 +306,10 @@ function update()
 		if time_now - eng1_start_time < START_SEQ_TIME and rpm1 > RPM_FOR_IGNITER and rpm1 < RPM_APD_OFF + 20 then
 			set(sim_ignition1, 1) 
 			set(sim_igniter1, 1)			
-			commandBegin(starter_1)
+			sasl.commandBegin(starter_1)
 			set(fuel_in_1, 1)
 		else
-			commandEnd(starter_1)
+			sasl.commandEnd(starter_1)
 			eng1_starting_air = false
 		end
 	end
@@ -322,12 +322,12 @@ function update()
 	if eng2_starting and not eng2_starting_air and power27R then
 		-- turn on the starter
 		if time_now - eng2_start_time > 1 and time_now - eng2_start_time <= START_SEQ_TIME then
-			commandBegin(starter_2)
+			sasl.commandBegin(starter_2)
 		end 
 		
 		-- turn OFF starter
 		if rpm2 > RPM_APD_OFF or time_now - eng2_start_time > START_SEQ_TIME then
-			commandEnd(starter_2)
+			sasl.commandEnd(starter_2)
 			eng2_starting = false
 		end
 		
@@ -344,7 +344,7 @@ function update()
 		
 		-- stop button
 		if stop_button then
-			commandEnd(starter_2)
+			sasl.commandEnd(starter_2)
 			eng2_starting = false
 			set(sim_ignition2, 0) 
 			set(sim_igniter2, 0)
@@ -363,10 +363,10 @@ function update()
 		if time_now - eng2_start_time < START_SEQ_TIME and rpm2 > RPM_FOR_IGNITER and rpm2 < RPM_APD_OFF + 20 then
 			set(sim_ignition2, 1) 
 			set(sim_igniter2, 1)			
-			commandBegin(starter_2)
+			sasl.commandBegin(starter_2)
 			set(fuel_in_2, 1)
 		else
-			commandEnd(starter_2)
+			sasl.commandEnd(starter_2)
 			eng2_starting_air = false
 		end
 	end
@@ -379,12 +379,12 @@ function update()
 	if eng3_starting and not eng3_starting_air and power27R then
 		-- turn on the starter
 		if time_now - eng3_start_time > 1 and time_now - eng3_start_time <= START_SEQ_TIME then
-			commandBegin(starter_3)
+			sasl.commandBegin(starter_3)
 		end 
 		
 		-- turn OFF starter
 		if rpm3 > RPM_APD_OFF or time_now - eng3_start_time > START_SEQ_TIME then
-			commandEnd(starter_3)
+			sasl.commandEnd(starter_3)
 			eng3_starting = false
 		end
 		
@@ -401,7 +401,7 @@ function update()
 		
 		-- stop button
 		if stop_button then
-			commandEnd(starter_3)
+			sasl.commandEnd(starter_3)
 			eng3_starting = false
 			set(sim_ignition3, 0) 
 			set(sim_igniter3, 0)
@@ -420,10 +420,10 @@ function update()
 		if time_now - eng3_start_time < START_SEQ_TIME and rpm3 > RPM_FOR_IGNITER and rpm3 < RPM_APD_OFF + 20 then
 			set(sim_ignition3, 1) 
 			set(sim_igniter3, 1)			
-			commandBegin(starter_3)
+			sasl.commandBegin(starter_3)
 			set(fuel_in_3, 1)
 		else
-			commandEnd(starter_3)
+			sasl.commandEnd(starter_3)
 			eng3_starting_air = false
 		end
 	end
@@ -431,13 +431,13 @@ function update()
 ----------------------------------------	
 	-- stop starter (bugs workariond)
 	if not eng1_starting and not eng1_starting_air then 
-		commandEnd(starter_1)
+		sasl.commandEnd(starter_1)
 	end
 	if not eng2_starting and not eng2_starting_air then 
-		commandEnd(starter_2)
+		sasl.commandEnd(starter_2)
 	end
 	if not eng3_starting and not eng3_starting_air then 
-		commandEnd(starter_3)
+		sasl.commandEnd(starter_3)
 	end	
 	
 	-- reduce starter presure

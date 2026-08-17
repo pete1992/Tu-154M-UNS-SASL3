@@ -26,7 +26,7 @@ defineProperty("gear3_deploy", globalProperty("sim/aircraft/parts/acf_gear_deplo
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
 
 -- images
-defineProperty("scale_side_img", loadImage("taws_scale_2.png", 0, 0, 1000, 770))
+defineProperty("scale_side_img", sasl.gl.loadImage("taws_scale_2.png", 0, 0, 1000, 770))
 
 local rows = 60
 
@@ -67,7 +67,7 @@ local plane_z = get(pos_z)
 
 local LG = false
 
-local text_font = loadFont('taws_scr.fnt')
+local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
 
 local range_text = " 20"
 
@@ -135,20 +135,20 @@ function update()
 		plane_z = get(pos_z)
 		LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear2_deploy) > 0.99
 		
-		local acf_lat, acf_lon, acf_alt = localToWorld(plane_x, plane_y, plane_z)
+		local acf_lat, acf_lon, acf_alt = sasl.localToWorld(plane_x, plane_y, plane_z)
 		
 		height = distance * 1000
 		
 		for row = 1, rows, 1 do
 			local p_x = plane_x + dir_x * height * row/rows
 			local p_z = plane_z + dir_z * height * row/rows
-			prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = probeTerrain(p_x, plane_y, p_z)
+			prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
 								
 			--local probe_dist = math.sqrt((p_x)^2 + (p_z)^2) / 1000
 			--local correct = interpolate(correct_tbl, probe_dist) - 130
 			
 			--heightTable[row] = locationY + correct - plane_y
-			local lat, lon, alt = localToWorld(locationX, locationY, locationZ)
+			local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ)
 			
 			heightTable[row] = alt - acf_alt
 		end	

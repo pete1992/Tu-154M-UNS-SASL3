@@ -211,65 +211,65 @@ defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt
 defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
 
 -- load images
-defineProperty("bg_img", loadImage("overhead_tex.png", 0, 0, 1458, 1013))
+defineProperty("bg_img", sasl.gl.loadImage("overhead_tex.png", 0, 0, 1458, 1013))
 
-defineProperty("sw_dn_img", loadImage("overhead_tex.png", 1831, 15, 39, 100))
-defineProperty("sw_up_img", loadImage("overhead_tex.png", 1871, 12, 39, 100))
-defineProperty("sw_ctr_img", loadImage("overhead_tex.png", 1916, 42, 36, 36))
+defineProperty("sw_dn_img", sasl.gl.loadImage("overhead_tex.png", 1831, 15, 39, 100))
+defineProperty("sw_up_img", sasl.gl.loadImage("overhead_tex.png", 1871, 12, 39, 100))
+defineProperty("sw_ctr_img", sasl.gl.loadImage("overhead_tex.png", 1916, 42, 36, 36))
 
-defineProperty("sw_left_img", loadImage("overhead_tex.png", 1624, 288, 100, 36))
-defineProperty("sw_right_img", loadImage("overhead_tex.png", 1624, 328, 100, 36))
+defineProperty("sw_left_img", sasl.gl.loadImage("overhead_tex.png", 1624, 288, 100, 36))
+defineProperty("sw_right_img", sasl.gl.loadImage("overhead_tex.png", 1624, 328, 100, 36))
 
-defineProperty("big_sw_dn_img", loadImage("overhead_tex.png", 1956, 13, 39, 102))
-defineProperty("big_sw_up_img", loadImage("overhead_tex.png", 2000, 12, 39, 102))
+defineProperty("big_sw_dn_img", sasl.gl.loadImage("overhead_tex.png", 1956, 13, 39, 102))
+defineProperty("big_sw_up_img", sasl.gl.loadImage("overhead_tex.png", 2000, 12, 39, 102))
 
-defineProperty("red_cap_up", loadImage("overhead_tex.png", 1466, 134, 56, 42))
-defineProperty("blue_cap_up", loadImage("overhead_tex.png", 1524, 236, 56, 42))
-defineProperty("black_cap_up", loadImage("overhead_tex.png", 1466, 285, 56, 42))
+defineProperty("red_cap_up", sasl.gl.loadImage("overhead_tex.png", 1466, 134, 56, 42))
+defineProperty("blue_cap_up", sasl.gl.loadImage("overhead_tex.png", 1524, 236, 56, 42))
+defineProperty("black_cap_up", sasl.gl.loadImage("overhead_tex.png", 1466, 285, 56, 42))
 
-defineProperty("em_light_cap_dn", loadImage("overhead_tex.png", 1467, 182, 56, 95))
-defineProperty("mgv_ctr_cap_dn", loadImage("overhead_tex.png", 1523, 134, 56, 95))
-defineProperty("pkp_right_cap_dn", loadImage("overhead_tex.png", 1578, 134, 56, 95))
-defineProperty("pkp_left_cap_dn", loadImage("overhead_tex.png", 1634, 134, 56, 95))
-defineProperty("sau_cap_dn", loadImage("overhead_tex.png", 1692, 134, 56, 95))
-defineProperty("bkk_cap_dn", loadImage("overhead_tex.png", 1750, 134, 56, 95))
-defineProperty("bkk_test_cap_dn", loadImage("overhead_tex.png", 1805, 134, 56, 95))
-defineProperty("taws_main_cap_dn", loadImage("overhead_tex.png", 1467, 334, 56, 95))
-defineProperty("taws_36_cap_dn", loadImage("overhead_tex.png", 1525, 334, 56, 95))
+defineProperty("em_light_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1467, 182, 56, 95))
+defineProperty("mgv_ctr_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1523, 134, 56, 95))
+defineProperty("pkp_right_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1578, 134, 56, 95))
+defineProperty("pkp_left_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1634, 134, 56, 95))
+defineProperty("sau_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1692, 134, 56, 95))
+defineProperty("bkk_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1750, 134, 56, 95))
+defineProperty("bkk_test_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1805, 134, 56, 95))
+defineProperty("taws_main_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1467, 334, 56, 95))
+defineProperty("taws_36_cap_dn", sasl.gl.loadImage("overhead_tex.png", 1525, 334, 56, 95))
 
-defineProperty("big_rotary_sw", loadImage("overhead_tex.png", 1788, 19, 27, 80))
-defineProperty("small_rotary_sw", loadImage("overhead_tex.png", 1740, 19, 38, 80))
+defineProperty("big_rotary_sw", sasl.gl.loadImage("overhead_tex.png", 1788, 19, 27, 80))
+defineProperty("small_rotary_sw", sasl.gl.loadImage("overhead_tex.png", 1740, 19, 38, 80))
 
-defineProperty("ark_big_num", loadImage("overhead_tex.png", 1473, 5, 108, 108))
-defineProperty("ark_mid_num", loadImage("overhead_tex.png", 1594, 23, 72, 72))
-defineProperty("ark_small_num", loadImage("overhead_tex.png", 1676, 34, 50, 50))
+defineProperty("ark_big_num", sasl.gl.loadImage("overhead_tex.png", 1473, 5, 108, 108))
+defineProperty("ark_mid_num", sasl.gl.loadImage("overhead_tex.png", 1594, 23, 72, 72))
+defineProperty("ark_small_num", sasl.gl.loadImage("overhead_tex.png", 1676, 34, 50, 50))
 
-defineProperty("big_scale", loadImage("overhead_tex.png", 1889, 155, 159, 159))
-defineProperty("tks_handle", loadImage("overhead_tex.png", 1866, 319, 47, 47))
+defineProperty("big_scale", sasl.gl.loadImage("overhead_tex.png", 1889, 155, 159, 159))
+defineProperty("tks_handle", sasl.gl.loadImage("overhead_tex.png", 1866, 319, 47, 47))
 
-defineProperty("small_lamp", loadImage("overhead_tex.png", 1825, 299, 19, 19))
-defineProperty("tks_main_lamp", loadImage("overhead_tex.png", 1935, 329, 32, 32))
-defineProperty("tks_aux_lamp", loadImage("overhead_tex.png", 1982, 329, 32, 32))
+defineProperty("small_lamp", sasl.gl.loadImage("overhead_tex.png", 1825, 299, 19, 19))
+defineProperty("tks_main_lamp", sasl.gl.loadImage("overhead_tex.png", 1935, 329, 32, 32))
+defineProperty("tks_aux_lamp", sasl.gl.loadImage("overhead_tex.png", 1982, 329, 32, 32))
 
-defineProperty("trans_cap_open", loadImage("overhead_tex.png", 1469, 449, 46, 32))
-defineProperty("trans_cap_closed", loadImage("overhead_tex.png", 1469, 487, 46, 49))
+defineProperty("trans_cap_open", sasl.gl.loadImage("overhead_tex.png", 1469, 449, 46, 32))
+defineProperty("trans_cap_closed", sasl.gl.loadImage("overhead_tex.png", 1469, 487, 46, 49))
 
 -- rus tex
-defineProperty("bg_img_RUS", loadImage("overhead_tex_RUS.png", 0, 0, 1458, 1013))
+defineProperty("bg_img_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 0, 0, 1458, 1013))
 
-defineProperty("em_light_cap_dn_RUS", loadImage("overhead_tex_RUS.png", 1467, 182, 56, 95))
-defineProperty("mgv_ctr_cap_dn_RUS", loadImage("overhead_tex_RUS.png", 1523, 134, 56, 95))
-defineProperty("pkp_right_cap_dn_RUS", loadImage("overhead_tex_RUS.png", 1578, 134, 56, 95))
-defineProperty("pkp_left_cap_dn_RUS", loadImage("overhead_tex_RUS.png", 1634, 134, 56, 95))
-defineProperty("sau_cap_dn_RUS", loadImage("overhead_tex_RUS.png", 1692, 134, 56, 95))
-defineProperty("bkk_cap_dn_RUS", loadImage("overhead_tex_RUS.png", 1750, 134, 56, 95))
-defineProperty("taws_main_cap_dn_RUS", loadImage("overhead_tex_RUS.png", 1467, 334, 56, 95))
-defineProperty("taws_36_cap_dn_RUS", loadImage("overhead_tex_RUS.png", 1525, 334, 56, 95))
+defineProperty("em_light_cap_dn_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1467, 182, 56, 95))
+defineProperty("mgv_ctr_cap_dn_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1523, 134, 56, 95))
+defineProperty("pkp_right_cap_dn_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1578, 134, 56, 95))
+defineProperty("pkp_left_cap_dn_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1634, 134, 56, 95))
+defineProperty("sau_cap_dn_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1692, 134, 56, 95))
+defineProperty("bkk_cap_dn_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1750, 134, 56, 95))
+defineProperty("taws_main_cap_dn_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1467, 334, 56, 95))
+defineProperty("taws_36_cap_dn_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1525, 334, 56, 95))
 
-defineProperty("big_scale_RUS", loadImage("overhead_tex_RUS.png", 1889, 155, 159, 159))
+defineProperty("big_scale_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1889, 155, 159, 159))
 
-defineProperty("tks_main_lamp_RUS", loadImage("overhead_tex_RUS.png", 1935, 329, 32, 32))
-defineProperty("tks_aux_lamp_RUS", loadImage("overhead_tex_RUS.png", 1982, 329, 32, 32))
+defineProperty("tks_main_lamp_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1935, 329, 32, 32))
+defineProperty("tks_aux_lamp_RUS", sasl.gl.loadImage("overhead_tex_RUS.png", 1982, 329, 32, 32))
 
 local function getDigits(squawk)
     local d1 = math.floor(squawk / 1000)
@@ -281,9 +281,9 @@ local function getDigits(squawk)
     return d1, d2, d3, d4
 end
 
-local so72_font = loadFont("digital7_space.fnt")
+local so72_font = sasl.gl.loadBitmapFont("digital7_space.fnt")
 
-local text_font = loadFont('digital7_it.fnt')
+local text_font = sasl.gl.loadBitmapFont('digital7_it.fnt')
 
 local nav_1_power = false
 local nav_1_freq_show = ""

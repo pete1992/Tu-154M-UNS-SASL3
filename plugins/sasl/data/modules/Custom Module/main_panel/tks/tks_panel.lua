@@ -56,8 +56,8 @@ defineProps({
 -- ----------------------------------------------------------------------------
 -- Sounds
 -- ----------------------------------------------------------------------------
-local switcher_sound = loadSample('Custom Sounds/plastic_switch.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 -- ----------------------------------------------------------------------------
 -- State
@@ -76,13 +76,13 @@ local function switchers_check()
 
 	local sw_summ = tks_mode_sw + tks_user_sw + tks_source_sw + tks_course_set_sw
 	if sw_summ ~= sw_last then
-		playSample(switcher_sound, false)
+		sasl.al.playSample(switcher_sound, false)
 	end
 	sw_last = sw_summ
 
 	local butt_now = get(tks_corrr_button)
 	if butt_last ~= butt_now then
-		playSample(button_sound, false)
+		sasl.al.playSample(button_sound, false)
 	end
 	butt_last = butt_now
 end

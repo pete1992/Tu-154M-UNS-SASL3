@@ -1,8 +1,8 @@
 size = {205, 305}
 
-defineProperty("bg", loadImage("UTurn.png", 0, 0, 205, 305))
---defineProperty("selection", loadImage("UConvert.png", 5, 315, 48, 20))
-defineProperty("digitsImage", loadImage("UPhone.png", 473, 0, 14, 280))
+defineProperty("bg", sasl.gl.loadImage("UTurn.png", 0, 0, 205, 305))
+--defineProperty("selection", sasl.gl.loadImage("UConvert.png", 5, 315, 48, 20))
+defineProperty("digitsImage", sasl.gl.loadImage("UPhone.png", 473, 0, 14, 280))
 
 local course1 = 0
 local course2 = 0
@@ -68,7 +68,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		course1 = course1 - 10
@@ -83,7 +83,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		course1 = course1 - 1
@@ -110,7 +110,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		course1 = course1 + 1
@@ -125,7 +125,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		course1 = course1 + 10
@@ -141,7 +141,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		course2 = course2 - 10
@@ -156,7 +156,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		course2 = course2 - 1
@@ -183,7 +183,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		course2 = course2 + 1
@@ -198,7 +198,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		course2 = course2 + 10
@@ -214,7 +214,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		bank = bank - 5
@@ -229,7 +229,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		bank = bank - 1
@@ -257,7 +257,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		bank = bank + 1
@@ -272,7 +272,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		bank = bank + 5
@@ -288,7 +288,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		TAS = TAS - 10
@@ -303,7 +303,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		TAS = TAS - 1
@@ -329,7 +329,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		TAS = TAS + 1
@@ -344,7 +344,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		TAS = TAS + 10

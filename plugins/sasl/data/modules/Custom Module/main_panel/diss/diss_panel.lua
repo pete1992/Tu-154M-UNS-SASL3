@@ -80,8 +80,8 @@ defineProps({
 -- ----------------------------------------------------------------------------
 -- Samples
 -- ----------------------------------------------------------------------------
-local switcher_sound = loadSample("Custom Sounds/metal_switch.wav")
-local button_sound = loadSample("Custom Sounds/plastic_btn.wav")
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 
 -- ----------------------------------------------------------------------------
 -- State
@@ -114,7 +114,7 @@ local function switchers()
 	local summ = diss_on_sw + diss_mode_sw + nvu_mode_sw
 
 	if summ ~= sw_summ_last then
-		playSample(switcher_sound, false)
+		sasl.al.playSample(switcher_sound, false)
 	end
 
 	sw_summ_last = summ
@@ -134,7 +134,7 @@ local function buttons()
 	summ = summ + wind_spd_left_sw + wind_spd_ctr_sw + wind_spd_right_sw
 
 	if summ ~= but_summ_last then
-		playSample(button_sound, false)
+		sasl.al.playSample(button_sound, false)
 	end
 
 	but_summ_last = summ

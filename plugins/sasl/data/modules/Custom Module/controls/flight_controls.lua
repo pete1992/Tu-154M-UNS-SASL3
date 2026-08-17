@@ -566,7 +566,7 @@ function update()
     end
 end
 
-function onAvionicsDone()
+function onModuleDone()
     set(overr, 0)
     print("flight controls released")
 end

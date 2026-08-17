@@ -47,8 +47,8 @@ set(brake_runtime_left, 1)
 set(brake_runtime_right, 1)
 
 -- sound
-local brake_hnd_on = loadSample('Custom Sounds/parking_on.wav')
-local brake_hnd_off = loadSample('Custom Sounds/parking_off.wav')
+local brake_hnd_on = sasl.al.loadSample('Custom Sounds/parking_on.wav')
+local brake_hnd_off = sasl.al.loadSample('Custom Sounds/parking_off.wav')
 
 local termo_coef = {
 {0, 1},
@@ -73,7 +73,7 @@ local right_pedal_num = nil
 local sim_brake = 0
 local passed = 0
 local comm_brake = 0
-regular_brk_comm = findCommand("sim/flight_controls/brakes_regular")
+regular_brk_comm = sasl.findCommand("sim/flight_controls/brakes_regular")
 
 local termo_left = get(thermo)
 local termo_right = get(thermo)
@@ -94,8 +94,8 @@ function regular_brk_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(regular_brk_comm, 0, regular_brk_hnd)
-max_brk_comm = findCommand("sim/flight_controls/brakes_max")
+sasl.registerCommandHandler(regular_brk_comm, 0, regular_brk_hnd)
+max_brk_comm = sasl.findCommand("sim/flight_controls/brakes_max")
 
 function max_brk_hnd(phase)
 	if 1 == phase then -- hold
@@ -113,8 +113,8 @@ function max_brk_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(max_brk_comm, 0, max_brk_hnd)
-park_brk_max_comm = findCommand("sim/flight_controls/brakes_toggle_max")
+sasl.registerCommandHandler(max_brk_comm, 0, max_brk_hnd)
+park_brk_max_comm = sasl.findCommand("sim/flight_controls/brakes_toggle_max")
 
 function park_brk_max_hnd(phase)
 	if 0 == phase then -- toggle
@@ -130,8 +130,8 @@ function park_brk_max_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(park_brk_max_comm, 0, park_brk_max_hnd)
-park_brk_reg_comm = findCommand("sim/flight_controls/brakes_toggle_regular")
+sasl.registerCommandHandler(park_brk_max_comm, 0, park_brk_max_hnd)
+park_brk_reg_comm = sasl.findCommand("sim/flight_controls/brakes_toggle_regular")
 
 function park_brk_reg_hnd(phase)
 	if 0 == phase then -- toggle
@@ -147,10 +147,10 @@ function park_brk_reg_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(park_brk_reg_comm, 0, park_brk_reg_hnd)
+sasl.registerCommandHandler(park_brk_reg_comm, 0, park_brk_reg_hnd)
 
-local left_brk_cmd = findCommand("sim/flight_controls/left_brake")
-local right_brk_cmd = findCommand("sim/flight_controls/right_brake")
+local left_brk_cmd = sasl.findCommand("sim/flight_controls/left_brake")
+local right_brk_cmd = sasl.findCommand("sim/flight_controls/right_brake")
 local left_brk = 0
 local right_brk = 0
 
@@ -177,8 +177,8 @@ function right_brk_cmd_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(left_brk_cmd, 0, left_brk_cmd_hnd)
-registerCommandHandler(right_brk_cmd, 0, right_brk_cmd_hnd)
+sasl.registerCommandHandler(left_brk_cmd, 0, left_brk_cmd_hnd)
+sasl.registerCommandHandler(right_brk_cmd, 0, right_brk_cmd_hnd)
 set(parking_brake, 1)
 set(overr, 1)
 
@@ -212,8 +212,8 @@ function update()
 	
 	-- sounds
 	if park_lever_last ~= park_lvr then
-		if park_lvr == 1 then playSample(brake_hnd_on, false)
-		else playSample(brake_hnd_off, false) end
+		if park_lvr == 1 then sasl.al.playSample(brake_hnd_on, false)
+		else sasl.al.playSample(brake_hnd_off, false) end
 	end
 	
 	park_lever_last = park_lvr
@@ -293,6 +293,6 @@ end
 	set(brake_R, math.max(right_blake, brake_2, park_lvr))	
 end
 
-function onAvionicsDone()
+function onModuleDone()
 	set(overr, 0)
 end

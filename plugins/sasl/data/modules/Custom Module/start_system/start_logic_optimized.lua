@@ -7,7 +7,7 @@ Changelog
 - Corrected apd_working_1..3 and start_sys_work from globalPropertyf to globalPropertyi to match their creator definitions.
 - Replaced the three duplicated engine-start sequences with one persistent three-engine state table and shared helpers.
 - Fixed start abort handling so timeout, engine-cover and ground-start power-loss aborts also clear the internal starting state.
-- Prevented an engine-cover abort from being followed by commandBegin() again in the same frame.
+- Prevented an engine-cover abort from being followed by sasl.commandBegin() again in the same frame.
 - Turned ignition and igniters off when a ground or air start finishes.
 - Made all simulator/system side effects master-owned for SmartCopilot while keeping the internal state machine active on every instance.
 - Limited the APU N1 and starter-torque workarounds to X-Plane 11.
@@ -178,9 +178,9 @@ defineProps({
 })
 
 -- Simulator starter commands.
-starter_1 = findCommand("sim/starters/engage_starter_1")
-starter_2 = findCommand("sim/starters/engage_starter_2")
-starter_3 = findCommand("sim/starters/engage_starter_3")
+starter_1 = sasl.findCommand("sim/starters/engage_starter_1")
+starter_2 = sasl.findCommand("sim/starters/engage_starter_2")
+starter_3 = sasl.findCommand("sim/starters/engage_starter_3")
 
 local START_SEQ_TIME = 56
 local RPM_FOR_FUEL_IN = 16
@@ -283,7 +283,7 @@ end
 
 local function endStarterCommand(engine, MASTER)
     if MASTER then
-        commandEnd(engine.command)
+        sasl.commandEnd(engine.command)
     end
 end
 
@@ -292,7 +292,7 @@ local function abortStart(engine, MASTER)
         set(engine.fuel, 0)
         set(engine.ignition, 0)
         set(engine.igniter, 0)
-        commandEnd(engine.command)
+        sasl.commandEnd(engine.command)
     end
 
     engine.ground_starting = false
@@ -303,7 +303,7 @@ local function finishStart(engine, MASTER)
     if MASTER then
         set(engine.ignition, 0)
         set(engine.igniter, 0)
-        commandEnd(engine.command)
+        sasl.commandEnd(engine.command)
     end
 
     engine.ground_starting = false
@@ -381,7 +381,7 @@ local function processGroundStart(
     local rpm = engine.rpm_value
 
     if elapsed > 1 and elapsed <= START_SEQ_TIME and MASTER then
-        commandBegin(engine.command)
+        sasl.commandBegin(engine.command)
     end
 
     if rpm > RPM_APD_OFF then
@@ -436,7 +436,7 @@ local function processAirStart(
         if MASTER then
             set(engine.ignition, 1)
             set(engine.igniter, 1)
-            commandBegin(engine.command)
+            sasl.commandBegin(engine.command)
             set(engine.fuel, 1)
         end
     else
@@ -446,9 +446,9 @@ end
 
 -- Stop any stale starter command when this component is initialized.
 if get(ismaster) ~= 1 then
-    commandEnd(starter_1)
-    commandEnd(starter_2)
-    commandEnd(starter_3)
+    sasl.commandEnd(starter_1)
+    sasl.commandEnd(starter_2)
+    sasl.commandEnd(starter_3)
 end
 
 function update()
@@ -483,7 +483,7 @@ function update()
 
     -- Automatic fuel/ignition cutoff after a failed start or with engine
     -- covers installed. Clearing the local state prevents a later
-    -- commandBegin() from reactivating the starter in the same frame.
+    -- sasl.commandBegin() from reactivating the starter in the same frame.
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
         local rpm = engine.rpm_value
@@ -600,7 +600,7 @@ function update()
             local engine = ENGINES[i]
 
             if not engine.ground_starting and not engine.air_starting then
-                commandEnd(engine.command)
+                sasl.commandEnd(engine.command)
             end
         end
     end

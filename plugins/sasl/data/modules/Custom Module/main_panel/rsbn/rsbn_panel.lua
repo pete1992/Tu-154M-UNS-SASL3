@@ -38,8 +38,8 @@ defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) --
 defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
 defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
 
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
-local rotary_sound = loadSample('Custom Sounds/plastic_switch.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
 
 local passed = 0
 
@@ -52,7 +52,7 @@ local function buttons()
 
 	local but_summ = rsbn_control_strobe_sw + rsbn_control_azimuth_sw + rsbn_control_distance_sw
 	
-	if but_summ ~= but_summ_last then playSample(button_sound, false) end
+	if but_summ ~= but_summ_last then sasl.al.playSample(button_sound, false) end
 	
 	but_summ_last = but_summ
 
@@ -67,7 +67,7 @@ local function rotary()
 	
 	local summ = rsbn_ch_ten_sw + rsbn_ch_one_sw
 	
-	if summ ~= rot_summ_last then playSample(rotary_sound, false) end
+	if summ ~= rot_summ_last then sasl.al.playSample(rotary_sound, false) end
 	
 	rot_summ_last = summ
 

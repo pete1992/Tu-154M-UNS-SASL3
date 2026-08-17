@@ -1,8 +1,8 @@
 size = {241, 446}
 
-defineProperty("bg", loadImage("UPhone.png", 0, 0, 241, 446))
-defineProperty("APPS", loadImage("UPhone.png", 260, 0, 205, 305))
-defineProperty("digitsImage", loadImage("UPhone.png", 493, 0, 14, 280))
+defineProperty("bg", sasl.gl.loadImage("UPhone.png", 0, 0, 241, 446))
+defineProperty("APPS", sasl.gl.loadImage("UPhone.png", 260, 0, 205, 305))
+defineProperty("digitsImage", sasl.gl.loadImage("UPhone.png", 493, 0, 14, 280))
 defineProperty("uphone_subpanel",globalPropertyi("tu154/custom/panels/show_phone")) --   
 
 program = 0
@@ -23,7 +23,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -49,7 +49,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		visible = function()
 		return program == 0
@@ -73,7 +73,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		visible = function()
 		return program == 0
@@ -97,7 +97,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		visible = function()
 		return program == 0
@@ -122,7 +122,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		visible = function()
 		return program == 0
@@ -148,7 +148,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		
 		onMouseHold = function()

@@ -59,9 +59,9 @@ function update()
 	
 end
 
---gear_togle_command = findCommand("sim/flight_controls/gyro_rotor_trim_up")
+--gear_togle_command = sasl.findCommand("sim/flight_controls/gyro_rotor_trim_up")
 
-gear_togle_command = findCommand("sim/flight_controls/nwheel_steer_toggle")
+gear_togle_command = sasl.findCommand("sim/flight_controls/nwheel_steer_toggle")
 function gear_toggle_handler(phase)
 	if 0 == phase then
 		if get(nosewheel_turn_enable) ~= 1 then set(nosewheel_turn_enable, 1)
@@ -70,9 +70,9 @@ function gear_toggle_handler(phase)
 return 0
 end
 
-registerCommandHandler(gear_togle_command, 0, gear_toggle_handler)
+sasl.registerCommandHandler(gear_togle_command, 0, gear_toggle_handler)
 
-function onAvionicsDone()
+function onModuleDone()
 	set(override_wheel_steer, 0)
 
 end

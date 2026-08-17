@@ -1,18 +1,18 @@
 size = {205, 305}
 
-defineProperty("bg", loadImage("UConvert.png", 0, 0, 205, 305))
-defineProperty("selection", loadImage("UConvert.png", 5, 315, 48, 20))
-defineProperty("digitsImage", loadImage("UPhone.png", 493, 0, 14, 280))
-defineProperty("kg", loadImage("UConvert.png", 6, 94, 31, 18))
-defineProperty("lb", loadImage("UConvert.png", 6, 124, 31, 18))
-defineProperty("km", loadImage("UConvert.png", 49, 94, 31, 18))
-defineProperty("nm", loadImage("UConvert.png", 49, 124, 31, 18))
-defineProperty("mps", loadImage("UConvert.png", 97, 94, 46, 18))
-defineProperty("fpm", loadImage("UConvert.png", 97, 124, 46, 18))
+defineProperty("bg", sasl.gl.loadImage("UConvert.png", 0, 0, 205, 305))
+defineProperty("selection", sasl.gl.loadImage("UConvert.png", 5, 315, 48, 20))
+defineProperty("digitsImage", sasl.gl.loadImage("UPhone.png", 493, 0, 14, 280))
+defineProperty("kg", sasl.gl.loadImage("UConvert.png", 6, 94, 31, 18))
+defineProperty("lb", sasl.gl.loadImage("UConvert.png", 6, 124, 31, 18))
+defineProperty("km", sasl.gl.loadImage("UConvert.png", 49, 94, 31, 18))
+defineProperty("nm", sasl.gl.loadImage("UConvert.png", 49, 124, 31, 18))
+defineProperty("mps", sasl.gl.loadImage("UConvert.png", 97, 94, 46, 18))
+defineProperty("fpm", sasl.gl.loadImage("UConvert.png", 97, 124, 46, 18))
 
-defineProperty("hpa", loadImage("UConvert.png", 152, 95, 37, 18))
-defineProperty("inhg", loadImage("UConvert.png", 153, 125, 44, 22))
-defineProperty("mmhg", loadImage("UConvert.png", 134, 153, 62, 22))
+defineProperty("hpa", sasl.gl.loadImage("UConvert.png", 152, 95, 37, 18))
+defineProperty("inhg", sasl.gl.loadImage("UConvert.png", 153, 125, 44, 22))
+defineProperty("mmhg", sasl.gl.loadImage("UConvert.png", 134, 153, 62, 22))
 
 local input = 0
 local output = 0
@@ -83,7 +83,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		if unit == 0 or unit == 1 then
@@ -113,7 +113,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateleft.png")
+			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
 		onMouseHold = function()
 		if unit == 0 or unit == 1 then
@@ -143,7 +143,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		if unit == 0 or unit == 1 then
@@ -173,7 +173,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("rotateright.png")
+			shape = sasl.gl.loadImage("rotateright.png")
 		},  
 		onMouseHold = function()
 		if unit == 0 or unit == 1 then
@@ -205,7 +205,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		onMouseHold = function()
 		input = 0
@@ -229,7 +229,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		onMouseHold = function()
 		input = 0
@@ -254,7 +254,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		onMouseHold = function()
 		input = 0
@@ -278,7 +278,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -303,7 +303,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  		
 		onMouseHold = function()
 		input = 0
@@ -327,7 +327,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -353,7 +353,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  		
 		onMouseHold = function()
 		input = 1013.25
@@ -377,7 +377,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
 		onMouseHold = function()
@@ -402,7 +402,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		},  		
 		onMouseHold = function()
 		input = 760

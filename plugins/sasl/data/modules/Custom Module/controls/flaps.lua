@@ -60,27 +60,27 @@ defineProperty("stab_eng_fail", globalPropertyi("tu154/custom/failures/stab_eng_
 defineProperty("stab_automatic_fail", globalPropertyi("tu154/custom/failures/stab_automatic_fail")) -- 
 defineProperty("slats_fail", globalPropertyi("tu154/custom/failures/slats_fail")) -- 
 
-flaps_cmd_up = findCommand("sim/flight_controls/flaps_up")
-flaps_cmd_down = findCommand("sim/flight_controls/flaps_down")
+flaps_cmd_up = sasl.findCommand("sim/flight_controls/flaps_up")
+flaps_cmd_down = sasl.findCommand("sim/flight_controls/flaps_down")
 
-local flaps_sound = loadSample('Custom Sounds/flaps_hnd.wav') --
+local flaps_sound = sasl.al.loadSample('Custom Sounds/flaps_hnd.wav') --
 
 function flaps_up_handler(phase)
 	if 0 == phase then
-		if get(external_view) == 0 then playSample(flaps_sound, false) end
+		if get(external_view) == 0 then sasl.al.playSample(flaps_sound, false) end
 	end
 	return 0
 end
 
 function flaps_down_handler(phase)
 	if 0 == phase then
-		if get(external_view) == 0 then playSample(flaps_sound, false) end
+		if get(external_view) == 0 then sasl.al.playSample(flaps_sound, false) end
 	end
 	return 0
 end
 
-registerCommandHandler(flaps_cmd_up, 0, flaps_up_handler)
-registerCommandHandler(flaps_cmd_down, 0, flaps_down_handler)
+sasl.registerCommandHandler(flaps_cmd_up, 0, flaps_up_handler)
+sasl.registerCommandHandler(flaps_cmd_down, 0, flaps_down_handler)
 
 flap_lever_tbl = {
 {-50000, 0},
@@ -229,7 +229,7 @@ if MASTER then
 	-- flap sounds
 	
 	if flaps_lever_last ~= flap_lever_pos and (flap_lever_pos == 0 or flap_lever_pos == 15 or flap_lever_pos == 28 or flap_lever_pos == 36 or flap_lever_pos == 45) then
-		playSample(flaps_sound, false)
+		sasl.al.playSample(flaps_sound, false)
 	end
 	
 	flaps_lever_last = flap_lever_pos

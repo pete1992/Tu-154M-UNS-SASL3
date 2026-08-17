@@ -68,7 +68,7 @@ local function lamps()
 	
 end
 
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 local buttn_last = get(test_lamps)
 
@@ -78,7 +78,7 @@ function update()
 	
 	local button_sw = get(test_lamps)
 	
-	if button_sw ~= buttn_last then playSample(button_sound, false) end
+	if button_sw ~= buttn_last then sasl.al.playSample(button_sound, false) end
 	buttn_last = button_sw
 
 end

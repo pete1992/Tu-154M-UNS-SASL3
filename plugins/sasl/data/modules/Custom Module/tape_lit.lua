@@ -12,10 +12,15 @@ defineProperty("scrollX", 0)
 -- amount to scroll vertically
 defineProperty("scrollY", 0)
 
+local WHITE = { 1, 1, 1, 1 }
+
 -- draw tape
-function draw(self)
+function draw()
     local sz = get(window)
-    drawTexturePart(get(image), 0, 0, 100, 100, 
-        get(scrollX), get(scrollY), sz[1], sz[2], 1,1,1,1) 
+    local imageId = get(image)
+    local textureWidth, textureHeight = sasl.gl.getTextureSize(imageId)
+    sasl.gl.drawTexturePart(imageId, 0, 0, 100, 100,
+        get(scrollX) * textureWidth, get(scrollY) * textureHeight,
+        sz[1] * textureWidth, sz[2] * textureHeight, WHITE)
 end
 

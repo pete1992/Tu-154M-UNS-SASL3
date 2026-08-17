@@ -10,7 +10,7 @@ defineProperty("brt_handle", globalPropertyf("tu154/custom/rotary/srpbz/brightne
 
 defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  
 
-local text_font = loadFont('taws_scr.fnt')
+local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
 
 local msg = 0
 local eng = false

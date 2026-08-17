@@ -32,16 +32,16 @@ defineProperty("cam_in_cockpit", globalPropertyi("sim/graphics/view/view_is_exte
 
 defineProperty("fan_volume_ratio", globalPropertyf("sim/operation/sound/fan_volume_ratio")) -- 
 
-local vent1_sound = loadSample('Custom Sounds/cockpit_fan.wav')
-local vent2_sound = loadSample('Custom Sounds/cockpit_fan.wav')
-local vent3_sound = loadSample('Custom Sounds/cockpit_fan.wav')
+local vent1_sound = sasl.al.loadSample('Custom Sounds/cockpit_fan.wav')
+local vent2_sound = sasl.al.loadSample('Custom Sounds/cockpit_fan.wav')
+local vent3_sound = sasl.al.loadSample('Custom Sounds/cockpit_fan.wav')
 
-playSample(vent1_sound, true) -- fan sound
-setSampleGain(vent1_sound, 0)
-playSample(vent2_sound, true) -- fan sound
-setSampleGain(vent2_sound, 0)
-playSample(vent3_sound, true) -- fan sound
-setSampleGain(vent3_sound, 0)
+sasl.al.playSample(vent1_sound, true) -- fan sound
+sasl.al.setSampleGain(vent1_sound, 0)
+sasl.al.playSample(vent2_sound, true) -- fan sound
+sasl.al.setSampleGain(vent2_sound, 0)
+sasl.al.playSample(vent3_sound, true) -- fan sound
+sasl.al.setSampleGain(vent3_sound, 0)
 
 local vent1_spd = 0
 local vent2_spd = 0
@@ -98,13 +98,13 @@ function update()
 	
 	local vol = get(fan_volume_ratio)
 	
-	if inside then setSampleGain(vent1_sound, math.min(vent1_spd * 10, 1000)) else setSampleGain(vent1_sound, 0) end
-	if inside then setSampleGain(vent2_sound, math.min(vent2_spd * 10, 1000)) else setSampleGain(vent2_sound, 0) end
-	if inside then setSampleGain(vent3_sound, math.min(vent3_spd * 10, 1000)) else setSampleGain(vent3_sound, 0) end
+	if inside then sasl.al.setSampleGain(vent1_sound, math.min(vent1_spd * 10, 1000)) else sasl.al.setSampleGain(vent1_sound, 0) end
+	if inside then sasl.al.setSampleGain(vent2_sound, math.min(vent2_spd * 10, 1000)) else sasl.al.setSampleGain(vent2_sound, 0) end
+	if inside then sasl.al.setSampleGain(vent3_sound, math.min(vent3_spd * 10, 1000)) else sasl.al.setSampleGain(vent3_sound, 0) end
 	
-	setSamplePitch(vent1_sound, vent1_spd * vol)
-	setSamplePitch(vent2_sound, vent2_spd * vol)
-	setSamplePitch(vent3_sound, vent3_spd * vol)
+	sasl.al.setSamplePitch(vent1_sound, vent1_spd * vol)
+	sasl.al.setSamplePitch(vent2_sound, vent2_spd * vol)
+	sasl.al.setSamplePitch(vent3_sound, vent3_spd * vol)
 
 end
 

@@ -304,7 +304,7 @@ local function refresh_data()
 			local local_z = get(pos_z) -- latitude. positive from N to S
 			local local_y = get(pos_y) -- altitude. positive UP
 			
-			local lat, lon, local_alt = localToWorld(local_x, local_y, local_z)
+			local lat, lon, local_alt = sasl.localToWorld(local_x, local_y, local_z)
 			
 			local cur = get(course)
 			
@@ -316,7 +316,7 @@ local function refresh_data()
 				--dist
 				acf_circ_tbl[i][2] = math.sqrt( (acf_local_tbl[i][1] - local_x)^2 + (acf_local_tbl[i][3] - local_z)^2 )
 				-- altitude
-				local lat, lon, alt = localToWorld(acf_local_tbl[i][1], acf_local_tbl[i][2], acf_local_tbl[i][3])
+				local lat, lon, alt = sasl.localToWorld(acf_local_tbl[i][1], acf_local_tbl[i][2], acf_local_tbl[i][3])
 				
 				acf_circ_tbl[i][3] = alt - local_alt
 

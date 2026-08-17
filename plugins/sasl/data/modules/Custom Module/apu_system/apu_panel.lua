@@ -95,8 +95,8 @@ defineProps({
 })
 
 -- Sounds
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 local passed = get(frame_time)
 
 -- Keeps the default X-Plane APU active as a bridge for simulator systems.
@@ -208,10 +208,10 @@ local function check_controls()
         or test_lamps_but ~= test_lamps_last
 
     if switch_changed then
-        playSample(switcher_sound, false)
+        sasl.al.playSample(switcher_sound, false)
     end
     if button_changed then
-        playSample(button_sound, false)
+        sasl.al.playSample(button_sound, false)
     end
 
     apu_main_last = apu_main_sw

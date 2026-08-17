@@ -84,35 +84,35 @@ defineProperty("diss_wind_spd_10", globalPropertyf("tu154/custom/gauges/misc/dis
 defineProperty("diss_wind_spd_100", globalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_100")) --   
 
 -- images
-defineProperty("bg_img", loadImage("nvu_tex.png", 0, 0, 636, 786))
-defineProperty("bg_img_RUS", loadImage("nvu_tex_RUS.png", 0, 0, 636, 786))
+defineProperty("bg_img", sasl.gl.loadImage("nvu_tex.png", 0, 0, 636, 786))
+defineProperty("bg_img_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 0, 0, 636, 786))
 
-defineProperty("small_lamp", loadImage("overhead_tex.png", 1825, 299, 19, 19))
-defineProperty("sw_dn_img", loadImage("overhead_tex.png", 1831, 15, 39, 100))
-defineProperty("sw_up_img", loadImage("overhead_tex.png", 1871, 12, 39, 100))
-defineProperty("sw_ctr_img", loadImage("overhead_tex.png", 1916, 42, 36, 36))
+defineProperty("small_lamp", sasl.gl.loadImage("overhead_tex.png", 1825, 299, 19, 19))
+defineProperty("sw_dn_img", sasl.gl.loadImage("overhead_tex.png", 1831, 15, 39, 100))
+defineProperty("sw_up_img", sasl.gl.loadImage("overhead_tex.png", 1871, 12, 39, 100))
+defineProperty("sw_ctr_img", sasl.gl.loadImage("overhead_tex.png", 1916, 42, 36, 36))
 
-defineProperty("big_scale", loadImage("nvu_tex.png", 644, 5, 176, 176))
-defineProperty("small_scale", loadImage("nvu_tex.png", 836, 42, 102, 102))
-defineProperty("handle_img", loadImage("nvu_tex.png", 955, 68, 45, 45))
-defineProperty("switch_img", loadImage("nvu_tex.png", 648, 209, 42, 70))
+defineProperty("big_scale", sasl.gl.loadImage("nvu_tex.png", 644, 5, 176, 176))
+defineProperty("small_scale", sasl.gl.loadImage("nvu_tex.png", 836, 42, 102, 102))
+defineProperty("handle_img", sasl.gl.loadImage("nvu_tex.png", 955, 68, 45, 45))
+defineProperty("switch_img", sasl.gl.loadImage("nvu_tex.png", 648, 209, 42, 70))
 
-defineProperty("white_digits", loadImage("white_digits.png", 12, 0, 40, 784))
-defineProperty("white_digits_scale", loadImage("white_digits_scale.png", 12, 0, 40, 784))
-defineProperty("yellow_digits", loadImage("yellow_digits.png", 12, 0, 40, 784))
+defineProperty("white_digits", sasl.gl.loadImage("white_digits.png", 12, 0, 40, 784))
+defineProperty("white_digits_scale", sasl.gl.loadImage("white_digits_scale.png", 12, 0, 40, 784))
+defineProperty("yellow_digits", sasl.gl.loadImage("yellow_digits.png", 12, 0, 40, 784))
 
-defineProperty("sign_plane", loadImage("nvu_tex.png", 741, 216, 88, 18))
-defineProperty("sign_point", loadImage("nvu_tex.png", 741, 243, 88, 18))
-defineProperty("sign_beacon", loadImage("nvu_tex.png", 741, 271, 88, 18))
+defineProperty("sign_plane", sasl.gl.loadImage("nvu_tex.png", 741, 216, 88, 18))
+defineProperty("sign_point", sasl.gl.loadImage("nvu_tex.png", 741, 243, 88, 18))
+defineProperty("sign_beacon", sasl.gl.loadImage("nvu_tex.png", 741, 271, 88, 18))
 
-defineProperty("sign_plane_RUS", loadImage("nvu_tex_RUS.png", 741, 216, 88, 18))
-defineProperty("sign_point_RUS", loadImage("nvu_tex_RUS.png", 741, 243, 88, 18))
-defineProperty("sign_beacon_RUS", loadImage("nvu_tex_RUS.png", 741, 271, 88, 18))
+defineProperty("sign_plane_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 741, 216, 88, 18))
+defineProperty("sign_point_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 741, 243, 88, 18))
+defineProperty("sign_beacon_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 741, 271, 88, 18))
 
-defineProperty("sign_I", loadImage("nvu_tex.png", 741, 297, 26, 31))
-defineProperty("sign_II", loadImage("nvu_tex.png", 777, 297, 26, 31))
+defineProperty("sign_I", sasl.gl.loadImage("nvu_tex.png", 741, 297, 26, 31))
+defineProperty("sign_II", sasl.gl.loadImage("nvu_tex.png", 777, 297, 26, 31))
 
-defineProperty("black_plank", loadImage("nvu_tex.png", 850, 216, 60, 30))
+defineProperty("black_plank", sasl.gl.loadImage("nvu_tex.png", 850, 216, 60, 30))
 
 local RUS = true
 

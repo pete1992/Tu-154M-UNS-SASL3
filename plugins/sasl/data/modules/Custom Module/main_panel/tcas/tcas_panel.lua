@@ -32,7 +32,7 @@ defineProperty("flt_id", globalPropertyi("tu154/custom/tcas/flt_id"))  -- 0 = co
 defineProperty("xpdr_code", globalPropertyf("sim/cockpit/radios/transponder_code"))
 defineProperty("xpdr_mode", globalPropertyf("sim/cockpit/radios/transponder_mode")) 
 defineProperty("xpdr_led", globalPropertyf("sim/cockpit/radios/transponder_light"))
-ident_cmd = findCommand("sim/transponder/transponder_ident")  -- comand of transponder ident
+ident_cmd = sasl.findCommand("sim/transponder/transponder_ident")  -- comand of transponder ident
 defineProperty("xpdr_fail", globalPropertyi("sim/operation/failures/rel_g_xpndr"))
 
 -- time
@@ -76,21 +76,21 @@ local function getDigits(squawk)
 end
 
 -- sounds
-local ajust_v_speed = loadSample('Custom Sounds/tcas/ajust_v_speed.wav')
-local clear_conflict = loadSample('Custom Sounds/tcas/clear_conflict.wav')
-local climb = loadSample('Custom Sounds/tcas/climb.wav')
-local climb_now = loadSample('Custom Sounds/tcas/climb_now.wav')
-local descend = loadSample('Custom Sounds/tcas/descend.wav')
-local descend_now = loadSample('Custom Sounds/tcas/descend_now.wav')
-local increase_climb = loadSample('Custom Sounds/tcas/increase_climb.wav')
-local increase_descend = loadSample('Custom Sounds/tcas/increase_descend.wav')
-local maintain_v_speed = loadSample('Custom Sounds/tcas/maintain_v_speed.wav')
-local monitor_v_speed = loadSample('Custom Sounds/tcas/monitor_v_speed.wav')
-local tcas_test_passed = loadSample('Custom Sounds/tcas/tcas_test_passed.wav')
-local traffic_snd = loadSample('Custom Sounds/tcas/traffic.wav')
+local ajust_v_speed = sasl.al.loadSample('Custom Sounds/tcas/ajust_v_speed.wav')
+local clear_conflict = sasl.al.loadSample('Custom Sounds/tcas/clear_conflict.wav')
+local climb = sasl.al.loadSample('Custom Sounds/tcas/climb.wav')
+local climb_now = sasl.al.loadSample('Custom Sounds/tcas/climb_now.wav')
+local descend = sasl.al.loadSample('Custom Sounds/tcas/descend.wav')
+local descend_now = sasl.al.loadSample('Custom Sounds/tcas/descend_now.wav')
+local increase_climb = sasl.al.loadSample('Custom Sounds/tcas/increase_climb.wav')
+local increase_descend = sasl.al.loadSample('Custom Sounds/tcas/increase_descend.wav')
+local maintain_v_speed = sasl.al.loadSample('Custom Sounds/tcas/maintain_v_speed.wav')
+local monitor_v_speed = sasl.al.loadSample('Custom Sounds/tcas/monitor_v_speed.wav')
+local tcas_test_passed = sasl.al.loadSample('Custom Sounds/tcas/tcas_test_passed.wav')
+local traffic_snd = sasl.al.loadSample('Custom Sounds/tcas/traffic.wav')
 
-local rot_sound = loadSample('Custom Sounds/rot_click.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local rot_sound = sasl.al.loadSample('Custom Sounds/rot_click.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 local tcas_rot_big_last = get(tcas_rot_big)
 local tcas_rot_small_last = get(tcas_rot_small)
@@ -133,7 +133,7 @@ function update()
 	end
 
 	-- ident button
-	if get(tcas_ident_btn) == 1 and power then commandOnce(ident_cmd) end
+	if get(tcas_ident_btn) == 1 and power then sasl.commandOnce(ident_cmd) end
 
 	-- check big knob rotation
 	local tcas_rot_big_now = get(tcas_rot_big)
@@ -173,7 +173,7 @@ function update()
 	
 	-- sounds	
 	if tcas_rot_big_now - tcas_rot_big_last + tcas_rot_small_now - tcas_rot_small_last + tcas_mode_now - tcas_mode_last ~= 0 then
-		playSample(rot_sound, false)
+		sasl.al.playSample(rot_sound, false)
 	end
 	
 	local tcas_ident_btn_sw = get(tcas_ident_btn)
@@ -192,7 +192,7 @@ function update()
 	changes = changes - tcas_ident_btn_last - tcas_fcn_btn_last - tcas_left_btn_last - tcas_right_btn_last - tcas_ent_btn_last
 	changes = changes - tcas_atc_btn_last - tcas_rng_dn_btn_last - tcas_alt_btn_last - tcas_rng_up_btn_last
 	
-	if changes ~= 0 then playSample(button_sound, false) end
+	if changes ~= 0 then sasl.al.playSample(button_sound, false) end
 	
 	local text = get(screen_mode)
 	cursor_timer = cursor_timer + passed
@@ -326,68 +326,68 @@ function update()
 	
 	-- traffic sound
 	if mode >= 3 and scale == 0 and traffic and traffic ~= traffic_last then
-		playSample(traffic_snd, false)
+		sasl.al.playSample(traffic_snd, false)
 	end
 	
 	-- clear of conflict
 	if mode == 4 and scale == 0 and scale ~= scale_last then
-		playSample(clear_conflict, false)
+		sasl.al.playSample(clear_conflict, false)
 		
-		stopSample(traffic_snd)
-		stopSample(ajust_v_speed)
-		stopSample(climb)
-		stopSample(climb_now)
-		stopSample(descend)
-		stopSample(descend_now)
-		stopSample(increase_climb)
-		stopSample(increase_descend)
-		stopSample(maintain_v_speed)
-		stopSample(monitor_v_speed)
+		sasl.al.stopSample(traffic_snd)
+		sasl.al.stopSample(ajust_v_speed)
+		sasl.al.stopSample(climb)
+		sasl.al.stopSample(climb_now)
+		sasl.al.stopSample(descend)
+		sasl.al.stopSample(descend_now)
+		sasl.al.stopSample(increase_climb)
+		sasl.al.stopSample(increase_descend)
+		sasl.al.stopSample(maintain_v_speed)
+		sasl.al.stopSample(monitor_v_speed)
 	end
 	
 	-- climb
 	if mode == 4 and scale == 1 and scale_last == 0 and scale ~= scale_last then
-		playSample(climb, false)
+		sasl.al.playSample(climb, false)
 	end
 	
 	-- climb now
 	if mode == 4 and scale == 1 and scale_last == 3 and scale ~= scale_last then
-		playSample(climb_now, false)
+		sasl.al.playSample(climb_now, false)
 	end
 	
 	-- descend
 	if mode == 4 and scale == 3 and scale_last == 0 and scale ~= scale_last then
-		playSample(descend, false)
+		sasl.al.playSample(descend, false)
 	end	
 	
 	-- descend now
 	if mode == 4 and scale == 3 and scale_last == 1 and scale ~= scale_last then
-		playSample(descend_now, false)
+		sasl.al.playSample(descend_now, false)
 	end
 	
 	-- increase climb
 	if mode == 4 and scale == 2 and our_vvi < 12 and scale ~= scale_last then
-		playSample(increase_climb, false)
+		sasl.al.playSample(increase_climb, false)
 	end	
 	
 	-- increase descend
 	if mode == 4 and scale == 4 and our_vvi > -12 and scale ~= scale_last then
-		playSample(increase_descend, false)
+		sasl.al.playSample(increase_descend, false)
 	end		
 	
 	-- adjust VS
 	if mode == 4 and ((scale == 1 and our_vvi > 12) or (scale == 3 and our_vvi < -12) or (scale == 7 and our_vvi > 0) or (scale == 9 and our_vvi < 0) or (scale == 6 and our_vvi > 10) or (scale == 8 and our_vvi < -10)) and scale ~= scale_last then
-		playSample(ajust_v_speed, false)
+		sasl.al.playSample(ajust_v_speed, false)
 	end		
 	
 	-- maintain VS
 	if mode == 4 and ((scale == 2 and our_vvi > 12) or (scale == 4 and our_vvi < -12)) and scale ~= scale_last then
-		playSample(maintain_v_speed, false)
+		sasl.al.playSample(maintain_v_speed, false)
 	end	
 	
 	-- test OK
 	if mode == 0 and text == 0 and text_last == 5 and text_last ~= text then
-		playSample(tcas_test_passed, false)
+		sasl.al.playSample(tcas_test_passed, false)
 	end	
 	
 	text_last = text
@@ -467,11 +467,11 @@ components = {
 }
 
 --[[
-local font = loadFont('segmental.fnt')
+local font = sasl.gl.loadBitmapFont('segmental.fnt')
 
 function draw()
 
-	drawText(font, 235, 1245, "@@@@@@@@", 1, 0.7, 0.5)
+	sasl.gl.drawBitmapText(font, 235, 1245, "@@@@@@@@", TEXT_ALIGN_LEFT, {1, 0.7, 0.5, 1})
 
 end
 

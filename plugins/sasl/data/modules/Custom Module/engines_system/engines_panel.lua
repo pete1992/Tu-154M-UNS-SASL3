@@ -458,9 +458,9 @@ local function lamps_fwd()
 end
 
 -- sounds
-local rotary_sound = loadSample('Custom Sounds/plastic_switch.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
 
 local control_ut_last = get(control_ut)
 local control_vibro_1_last = get(control_vibro_1)
@@ -506,9 +506,9 @@ local function check_controls()
 	
 	local caps_change = gauges_on_1_cap_sw + gauges_on_2_cap_sw + gauges_on_3_cap_sw - gauges_on_1_cap_last - gauges_on_2_cap_last - gauges_on_3_cap_last
 	
-	if change_but ~= 0 then	playSample(button_sound, false)	end
-	if change_sw ~= 0 then playSample(rotary_sound, false) end
-	if caps_change ~= 0 then playSample(cap_sound, false) end 
+	if change_but ~= 0 then	sasl.al.playSample(button_sound, false)	end
+	if change_sw ~= 0 then sasl.al.playSample(rotary_sound, false) end
+	if caps_change ~= 0 then sasl.al.playSample(cap_sound, false) end
 	
 	-- check caps
 	if gauges_on_1_cap_sw == 0 then set(gauges_on_1, 1) end

@@ -77,9 +77,9 @@ defineProperty("rel_lbrakes", globalPropertyi("sim/operation/failures/rel_lbrake
 defineProperty("rel_rbrakes", globalPropertyi("sim/operation/failures/rel_rbrakes")) -- Right Brakes
 
 -- sounds
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 local passed = 0
 
@@ -159,9 +159,9 @@ local function check_switchers ()
 	
 	local sw_changes = connect2to1_sw + pump_2_sw + pump_3_sw - connect2to1_last - pump_2_last - pump_3_last
 	
-	if sw_changes ~= 0 then playSample(switcher_sound, false) end
+	if sw_changes ~= 0 then sasl.al.playSample(switcher_sound, false) end
 	
-	if connect2to1_cap_sw - connect2to1_cap_last ~= 0 then playSample(cap_sound, false) end
+	if connect2to1_cap_sw - connect2to1_cap_last ~= 0 then sasl.al.playSample(cap_sound, false) end
 	
 	connect2to1_last = connect2to1_sw
 	pump_2_last = pump_2_sw
@@ -191,7 +191,7 @@ local function buttons_check ()
 	
 	local sw_changes = lamp_test_hydro_sw + qty_test_12_sw + qty_test_3_sw + accum_fill_sw - lamp_test_hydro_last - qty_test_12_last - qty_test_3_last - accum_fill_last
 	
-	if sw_changes ~= 0 then playSample(button_sound, false) end
+	if sw_changes ~= 0 then sasl.al.playSample(button_sound, false) end
 	
 	lamp_test_hydro_last = lamp_test_hydro_sw
 	qty_test_12_last = qty_test_12_sw

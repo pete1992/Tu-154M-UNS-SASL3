@@ -196,7 +196,7 @@ local pitch_mode_main = 1
 
 local signal_timer = 0
 
-TOGA_COMM = findCommand("sim/engines/TOGA_power")
+TOGA_COMM = sasl.findCommand("sim/engines/TOGA_power")
 
 local thro_last_1 = get(tro_comm_1)
 local thro_last_2 = get(tro_comm_2)
@@ -218,9 +218,9 @@ function TOGA_comm_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(TOGA_COMM, 0, TOGA_comm_hnd)
+sasl.registerCommandHandler(TOGA_COMM, 0, TOGA_comm_hnd)
 
-local AP_toggle = findCommand("sim/autopilot/fdir_toggle")
+local AP_toggle = sasl.findCommand("sim/autopilot/fdir_toggle")
 
 function AP_toggle_hnd(phase)
 	if 0 == phase then
@@ -236,7 +236,7 @@ function AP_toggle_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(AP_toggle, 0, AP_toggle_hnd)
+sasl.registerCommandHandler(AP_toggle, 0, AP_toggle_hnd)
 
 local roll_submode = 1
 local pitch_submode = 1

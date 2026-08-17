@@ -1,13 +1,13 @@
 size = {205, 305}
 
-defineProperty("overlay", loadImage("UHUD.png", 0, 0, 205, 305))
-defineProperty("black", loadImage("UHUD.png", 5, 500, 5, 5))
-defineProperty("digitsImage", loadImage("UPhone.png", 493, 0, 14, 280))
-defineProperty("tape", loadImage("UHUD.png", 241, 0, 128, 512))
-defineProperty("compass", loadImage("UHUD.png", 370, 278, 128, 128))
-defineProperty("search", loadImage("UHUD.png", 0, 387, 205, 125))
-defineProperty("warning", loadImage("UHUD.png", 0, 307, 205, 78))
-defineProperty("understood", loadImage("UHUD.png", 381, 433, 107, 21))
+defineProperty("overlay", sasl.gl.loadImage("UHUD.png", 0, 0, 205, 305))
+defineProperty("black", sasl.gl.loadImage("UHUD.png", 5, 500, 5, 5))
+defineProperty("digitsImage", sasl.gl.loadImage("UPhone.png", 493, 0, 14, 280))
+defineProperty("tape", sasl.gl.loadImage("UHUD.png", 241, 0, 128, 512))
+defineProperty("compass", sasl.gl.loadImage("UHUD.png", 370, 278, 128, 128))
+defineProperty("search", sasl.gl.loadImage("UHUD.png", 0, 387, 205, 125))
+defineProperty("warning", sasl.gl.loadImage("UHUD.png", 0, 307, 205, 78))
+defineProperty("understood", sasl.gl.loadImage("UHUD.png", 381, 433, 107, 21))
 
 defineProperty("pitch", globalPropertyf("sim/flightmodel/position/theta"))
 defineProperty("roll", globalPropertyf("sim/flightmodel/position/phi"))
@@ -171,7 +171,7 @@ components = {
 			y = 32,  
 			width = 16, 
 			height = 16, 
-			shape = loadImage("interactive.png")
+			shape = sasl.gl.loadImage("interactive.png")
 		}, 
 		visible = function()
 		return alignment == 0

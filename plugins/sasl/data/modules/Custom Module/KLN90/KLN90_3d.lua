@@ -1,4 +1,4 @@
-﻿size = {457, 146.5}
+size = {457, 146.5}
 
 ---------------------------------------------------------------------------------
 -- Smart Copilot section --
@@ -74,66 +74,66 @@ defineProperty("kln_flag", globalPropertyi("tu154/custom/kln90/kln_flag")) --   
 --------------------------------------
 --------------------------------------
 
-defineProperty("bg", loadImage("KLN90.png", 0, 0, 914, 293))
-defineProperty("glass", loadImage("KLN90.png", 10, 298, 426, 199))
-defineProperty("powerknob", loadImage("KLN90.png", 455, 321, 52, 52))
-defineProperty("powerext", loadImage("KLN90.png", 445, 400, 65, 50))
-defineProperty("rknobstex", loadImage("KLN90.png", 528, 312, 71, 71))
---defineProperty("arrowtex", loadImage("KLNmap.png", 125, 98, 275, 150))
-defineProperty("mapplane", loadImage("KLNmap.png", 2, 2, 5, 4))
-defineProperty("mapstar", loadImage("KLNmap.png", 16, 2, 5, 5))
-defineProperty("mapdiamond", loadImage("KLNmap.png", 9, 2, 5, 5))
-defineProperty("mappixel", loadImage("KLNmap.png", 4, 10, 1, 1))
-defineProperty("mapplus", loadImage("KLNmap.png", 43, 3, 3, 3))
+defineProperty("bg", sasl.gl.loadImage("KLN90.png", 0, 0, 914, 293))
+defineProperty("glass", sasl.gl.loadImage("KLN90.png", 10, 298, 426, 199))
+defineProperty("powerknob", sasl.gl.loadImage("KLN90.png", 455, 321, 52, 52))
+defineProperty("powerext", sasl.gl.loadImage("KLN90.png", 445, 400, 65, 50))
+defineProperty("rknobstex", sasl.gl.loadImage("KLN90.png", 528, 312, 71, 71))
+--defineProperty("arrowtex", sasl.gl.loadImage("KLNmap.png", 125, 98, 275, 150))
+defineProperty("mapplane", sasl.gl.loadImage("KLNmap.png", 2, 2, 5, 4))
+defineProperty("mapstar", sasl.gl.loadImage("KLNmap.png", 16, 2, 5, 5))
+defineProperty("mapdiamond", sasl.gl.loadImage("KLNmap.png", 9, 2, 5, 5))
+defineProperty("mappixel", sasl.gl.loadImage("KLNmap.png", 4, 10, 1, 1))
+defineProperty("mapplus", sasl.gl.loadImage("KLNmap.png", 43, 3, 3, 3))
 
---defineProperty("mappixel", loadImage("KLNmap.png", 4, 11, 2, 2))
+--defineProperty("mappixel", sasl.gl.loadImage("KLNmap.png", 4, 11, 2, 2))
 
-defineProperty("mapquad", loadImage("KLNmap.png", 9, 9, 3, 3))
-defineProperty("mapAPT", loadImage("KLNmap.png", 23, 2, 5, 5))
-defineProperty("mapNDB", loadImage("KLNmap.png", 30, 3, 4, 4))
-defineProperty("mapVOR", loadImage("KLNmap.png", 36, 2, 5, 5))
+defineProperty("mapquad", sasl.gl.loadImage("KLNmap.png", 9, 9, 3, 3))
+defineProperty("mapAPT", sasl.gl.loadImage("KLNmap.png", 23, 2, 5, 5))
+defineProperty("mapNDB", sasl.gl.loadImage("KLNmap.png", 30, 3, 4, 4))
+defineProperty("mapVOR", sasl.gl.loadImage("KLNmap.png", 36, 2, 5, 5))
 
-defineProperty("Atex", loadImage("KLNmap.png", 1, 36, 5, 7))
-defineProperty("Btex", loadImage("KLNmap.png", 7, 36, 5, 7))
-defineProperty("Ctex", loadImage("KLNmap.png", 13, 36, 5, 7))
-defineProperty("Dtex", loadImage("KLNmap.png", 19, 36, 5, 7))
-defineProperty("Etex", loadImage("KLNmap.png", 25, 36, 5, 7))
-defineProperty("Ftex", loadImage("KLNmap.png", 31, 36, 5, 7))
-defineProperty("Gtex", loadImage("KLNmap.png", 37, 36, 5, 7))
-defineProperty("Htex", loadImage("KLNmap.png", 43, 36, 5, 7))
-defineProperty("Itex", loadImage("KLNmap.png", 49, 36, 5, 7))
-defineProperty("Jtex", loadImage("KLNmap.png", 55, 36, 5, 7))
-defineProperty("Ktex", loadImage("KLNmap.png", 61, 36, 5, 7))
-defineProperty("Ltex", loadImage("KLNmap.png", 67, 36, 5, 7))
-defineProperty("Mtex", loadImage("KLNmap.png", 73, 36, 5, 7))
-defineProperty("Ntex", loadImage("KLNmap.png", 79, 36, 5, 7))
-defineProperty("Otex", loadImage("KLNmap.png", 85, 36, 5, 7))
-defineProperty("Ptex", loadImage("KLNmap.png", 91, 36, 5, 7))
-defineProperty("Qtex", loadImage("KLNmap.png", 97, 36, 5, 7))
-defineProperty("Rtex", loadImage("KLNmap.png", 103, 36, 5, 7))
-defineProperty("Stex", loadImage("KLNmap.png", 109, 36, 5, 7))
-defineProperty("Ttex", loadImage("KLNmap.png", 115, 36, 5, 7))
-defineProperty("Utex", loadImage("KLNmap.png", 121, 36, 5, 7))
-defineProperty("Vtex", loadImage("KLNmap.png", 127, 36, 5, 7))
-defineProperty("Wtex", loadImage("KLNmap.png", 133, 36, 5, 7))
-defineProperty("Xtex", loadImage("KLNmap.png", 139, 36, 5, 7))
-defineProperty("Ytex", loadImage("KLNmap.png", 145, 36, 5, 7))
-defineProperty("Ztex", loadImage("KLNmap.png", 151, 36, 5, 7))
-defineProperty("ötex", loadImage("KLNmap.png", 157, 36, 5, 7))
-defineProperty("ö0tex", loadImage("KLNmap.png", 1, 44, 5, 7))
-defineProperty("ö1tex", loadImage("KLNmap.png", 7, 44, 5, 7))
-defineProperty("ö2tex", loadImage("KLNmap.png", 13, 44, 5, 7))
-defineProperty("ö3tex", loadImage("KLNmap.png", 19, 44, 5, 7))
-defineProperty("ö4tex", loadImage("KLNmap.png", 25, 44, 5, 7))
-defineProperty("ö5tex", loadImage("KLNmap.png", 31, 44, 5, 7))
-defineProperty("ö6tex", loadImage("KLNmap.png", 37, 44, 5, 7))
-defineProperty("ö7tex", loadImage("KLNmap.png", 43, 44, 5, 7))
-defineProperty("ö8tex", loadImage("KLNmap.png", 49, 44, 5, 7))
-defineProperty("ö9tex", loadImage("KLNmap.png", 55, 44, 5, 7))
+defineProperty("Atex", sasl.gl.loadImage("KLNmap.png", 1, 36, 5, 7))
+defineProperty("Btex", sasl.gl.loadImage("KLNmap.png", 7, 36, 5, 7))
+defineProperty("Ctex", sasl.gl.loadImage("KLNmap.png", 13, 36, 5, 7))
+defineProperty("Dtex", sasl.gl.loadImage("KLNmap.png", 19, 36, 5, 7))
+defineProperty("Etex", sasl.gl.loadImage("KLNmap.png", 25, 36, 5, 7))
+defineProperty("Ftex", sasl.gl.loadImage("KLNmap.png", 31, 36, 5, 7))
+defineProperty("Gtex", sasl.gl.loadImage("KLNmap.png", 37, 36, 5, 7))
+defineProperty("Htex", sasl.gl.loadImage("KLNmap.png", 43, 36, 5, 7))
+defineProperty("Itex", sasl.gl.loadImage("KLNmap.png", 49, 36, 5, 7))
+defineProperty("Jtex", sasl.gl.loadImage("KLNmap.png", 55, 36, 5, 7))
+defineProperty("Ktex", sasl.gl.loadImage("KLNmap.png", 61, 36, 5, 7))
+defineProperty("Ltex", sasl.gl.loadImage("KLNmap.png", 67, 36, 5, 7))
+defineProperty("Mtex", sasl.gl.loadImage("KLNmap.png", 73, 36, 5, 7))
+defineProperty("Ntex", sasl.gl.loadImage("KLNmap.png", 79, 36, 5, 7))
+defineProperty("Otex", sasl.gl.loadImage("KLNmap.png", 85, 36, 5, 7))
+defineProperty("Ptex", sasl.gl.loadImage("KLNmap.png", 91, 36, 5, 7))
+defineProperty("Qtex", sasl.gl.loadImage("KLNmap.png", 97, 36, 5, 7))
+defineProperty("Rtex", sasl.gl.loadImage("KLNmap.png", 103, 36, 5, 7))
+defineProperty("Stex", sasl.gl.loadImage("KLNmap.png", 109, 36, 5, 7))
+defineProperty("Ttex", sasl.gl.loadImage("KLNmap.png", 115, 36, 5, 7))
+defineProperty("Utex", sasl.gl.loadImage("KLNmap.png", 121, 36, 5, 7))
+defineProperty("Vtex", sasl.gl.loadImage("KLNmap.png", 127, 36, 5, 7))
+defineProperty("Wtex", sasl.gl.loadImage("KLNmap.png", 133, 36, 5, 7))
+defineProperty("Xtex", sasl.gl.loadImage("KLNmap.png", 139, 36, 5, 7))
+defineProperty("Ytex", sasl.gl.loadImage("KLNmap.png", 145, 36, 5, 7))
+defineProperty("Ztex", sasl.gl.loadImage("KLNmap.png", 151, 36, 5, 7))
+defineProperty("ötex", sasl.gl.loadImage("KLNmap.png", 157, 36, 5, 7))
+defineProperty("ö0tex", sasl.gl.loadImage("KLNmap.png", 1, 44, 5, 7))
+defineProperty("ö1tex", sasl.gl.loadImage("KLNmap.png", 7, 44, 5, 7))
+defineProperty("ö2tex", sasl.gl.loadImage("KLNmap.png", 13, 44, 5, 7))
+defineProperty("ö3tex", sasl.gl.loadImage("KLNmap.png", 19, 44, 5, 7))
+defineProperty("ö4tex", sasl.gl.loadImage("KLNmap.png", 25, 44, 5, 7))
+defineProperty("ö5tex", sasl.gl.loadImage("KLNmap.png", 31, 44, 5, 7))
+defineProperty("ö6tex", sasl.gl.loadImage("KLNmap.png", 37, 44, 5, 7))
+defineProperty("ö7tex", sasl.gl.loadImage("KLNmap.png", 43, 44, 5, 7))
+defineProperty("ö8tex", sasl.gl.loadImage("KLNmap.png", 49, 44, 5, 7))
+defineProperty("ö9tex", sasl.gl.loadImage("KLNmap.png", 55, 44, 5, 7))
 
-defineProperty("lknobstex", loadImage("KLN90.png", 528, 392, 71, 71))
+defineProperty("lknobstex", sasl.gl.loadImage("KLN90.png", 528, 392, 71, 71))
 
-defineProperty("cage", loadImage("KLN90.png", 9, 501, 415, 2))
+defineProperty("cage", sasl.gl.loadImage("KLN90.png", 9, 501, 415, 2))
 defineProperty("sim_run_time", globalPropertyf("sim/time/total_running_time_sec")) -- sim time
 
 defineProperty("hourin", globalPropertyi("sim/cockpit2/clock_timer/zulu_time_hours"))
@@ -206,12 +206,12 @@ defineProperty("KLN90visible", globalPropertyi("tu154/custom/xap/KLN90/visible")
 defineProperty("popx", globalPropertyi("tu154/custom/xap/KLN90pop/x"))
 defineProperty("popy", globalPropertyi("tu154/custom/xap/KLN90pop/y"))
 
-local alert = loadSample('altitude_alerts.wav')
-local alertl = loadSample('altitude_alert.wav')
+local alert = sasl.al.loadSample('altitude_alerts.wav')
+local alertl = sasl.al.loadSample('altitude_alert.wav')
 
-local font = loadFont('KLN90.fnt')
-local fontb = loadFont('KLN90_2.fnt')
-local fontl = loadFont('KLN90_3.fnt')
+local font = sasl.gl.loadBitmapFont('KLN90.fnt')
+local fontb = sasl.gl.loadBitmapFont('KLN90_2.fnt')
+local fontl = sasl.gl.loadBitmapFont('KLN90_3.fnt')
 local cagevisible = 0
 local power = 0
 local power_knob = 0
@@ -657,16 +657,16 @@ local bline = {"", "", "", "", "", "", ""}
 -- commands declaration --
 --------------------------
 
-local KLNpowerc_command = createCommand("xap/KLN90/Toggle_Power_Switch", "Power")
+local KLNpowerc_command = sasl.createCommand("xap/KLN90/Toggle_Power_Switch", "Power")
 function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									set(kln_power_knob, 1 - get(kln_power_knob))
 								end
 								return 1
 							end
-							registerCommandHandler(KLNpowerc_command, 0, KLNpowerc_handler)
+							sasl.registerCommandHandler(KLNpowerc_command, 0, KLNpowerc_handler)
 							
-							local KLNincbrtc_command = createCommand("xap/KLN90/Increase_Brightness", "Power")
+							local KLNincbrtc_command = sasl.createCommand("xap/KLN90/Increase_Brightness", "Power")
 							function KLNincbrtc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									brt = brt + 0.1
@@ -674,9 +674,9 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								end
 								return 1
 							end
-							registerCommandHandler(KLNincbrtc_command, 0, KLNincbrtc_handler)
+							sasl.registerCommandHandler(KLNincbrtc_command, 0, KLNincbrtc_handler)
 							
-							local KLNdecbrtc_command = createCommand("xap/KLN90/Decrease_Brightness", "Power")
+							local KLNdecbrtc_command = sasl.createCommand("xap/KLN90/Decrease_Brightness", "Power")
 							function KLNdecbrtc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									brt = brt - 0.1
@@ -685,8 +685,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNdecbrtc_command, 0, KLNdecbrtc_handler)
-							local KLNLCRSRc_command = createCommand("xap/KLN90/Toggle_Left_Cursor", "Left Cursor")
+							sasl.registerCommandHandler(KLNdecbrtc_command, 0, KLNdecbrtc_handler)
+							local KLNLCRSRc_command = sasl.createCommand("xap/KLN90/Toggle_Left_Cursor", "Left Cursor")
 							function KLNLCRSRc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									if controls["lspage"] == 0 then
@@ -698,8 +698,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 
-							registerCommandHandler(KLNLCRSRc_command, 0, KLNLCRSRc_handler)
-							local KLNRCRSRc_command = createCommand("xap/KLN90/Toggle_Right_Cursor", "Right Cursor")
+							sasl.registerCommandHandler(KLNLCRSRc_command, 0, KLNLCRSRc_handler)
+							local KLNRCRSRc_command = sasl.createCommand("xap/KLN90/Toggle_Right_Cursor", "Right Cursor")
 							function KLNRCRSRc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									if controls["rspage"] == 0 then
@@ -711,8 +711,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNRCRSRc_command, 0, KLNRCRSRc_handler)
-							local KLNSCANc_command = createCommand("xap/KLN90/Toggle_Scan_Mode", "Right Cursor")
+							sasl.registerCommandHandler(KLNRCRSRc_command, 0, KLNRCRSRc_handler)
+							local KLNSCANc_command = sasl.createCommand("xap/KLN90/Toggle_Scan_Mode", "Right Cursor")
 							function KLNSCANc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									if controls["SCAN"]  == 1 then controls["SCAN"] = 0
@@ -722,17 +722,17 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNSCANc_command, 0, KLNSCANc_handler)
-							local KLNlknoblccc_command = createCommand("xap/KLN90/Turn_Left_Large_Knob_Counterclockwise", "Right Cursor")
+							sasl.registerCommandHandler(KLNSCANc_command, 0, KLNSCANc_handler)
+							local KLNlknoblccc_command = sasl.createCommand("xap/KLN90/Turn_Left_Large_Knob_Counterclockwise", "Right Cursor")
 							function KLNlknoblccc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["lknobl"] = -1
 								end
 								return 1
 							end
-							registerCommandHandler(KLNlknoblccc_command, 0, KLNlknoblccc_handler)
+							sasl.registerCommandHandler(KLNlknoblccc_command, 0, KLNlknoblccc_handler)
 							
-							local KLNlknobsccc_command = createCommand("xap/KLN90/Turn_Left_Small_Knob_Counterclockwise", "Right Cursor")
+							local KLNlknobsccc_command = sasl.createCommand("xap/KLN90/Turn_Left_Small_Knob_Counterclockwise", "Right Cursor")
 							function KLNlknobsccc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["lknobs"] = -1
@@ -742,8 +742,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 								
-							registerCommandHandler(KLNlknobsccc_command, 0, KLNlknobsccc_handler)
-							local KLNlknobscc_command = createCommand("xap/KLN90/Turn_Left_Small_Knob_Clockwise", "Right Cursor")
+							sasl.registerCommandHandler(KLNlknobsccc_command, 0, KLNlknobsccc_handler)
+							local KLNlknobscc_command = sasl.createCommand("xap/KLN90/Turn_Left_Small_Knob_Clockwise", "Right Cursor")
 							function KLNlknobscc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["lknobs"] = 1
@@ -753,8 +753,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 								
-							registerCommandHandler(KLNlknobscc_command, 0, KLNlknobscc_handler)
-							local KLNlknoblcc_command = createCommand("xap/KLN90/Turn_Left_Large_Knob_Clockwise", "Right Cursor")
+							sasl.registerCommandHandler(KLNlknobscc_command, 0, KLNlknobscc_handler)
+							local KLNlknoblcc_command = sasl.createCommand("xap/KLN90/Turn_Left_Large_Knob_Clockwise", "Right Cursor")
 							function KLNlknoblcc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["lknobl"] = 1
@@ -762,8 +762,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNlknoblcc_command, 0, KLNlknoblcc_handler)
-							local KLNMSGc_command = createCommand("xap/KLN90/Toggle_Message_Page", "Right Cursor")
+							sasl.registerCommandHandler(KLNlknoblcc_command, 0, KLNlknoblcc_handler)
+							local KLNMSGc_command = sasl.createCommand("xap/KLN90/Toggle_Message_Page", "Right Cursor")
 							function KLNMSGc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									if rpage > 0 then
@@ -788,8 +788,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNMSGc_command, 0, KLNMSGc_handler)
-							local KLNALTc_command = createCommand("xap/KLN90/Toggle_Altitude_Page", "Right Cursor")
+							sasl.registerCommandHandler(KLNMSGc_command, 0, KLNMSGc_handler)
+							local KLNALTc_command = sasl.createCommand("xap/KLN90/Toggle_Altitude_Page", "Right Cursor")
 							function KLNALTc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									if controls["ALT"] == 0 then
@@ -801,8 +801,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNALTc_command, 0, KLNALTc_handler)
-							local KLNDTOc_command = createCommand("xap/KLN90/Toggle_Direct_To_Page", "Right Cursor")
+							sasl.registerCommandHandler(KLNALTc_command, 0, KLNALTc_handler)
+							local KLNDTOc_command = sasl.createCommand("xap/KLN90/Toggle_Direct_To_Page", "Right Cursor")
 							function KLNDTOc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									if get(GPSmode) == 2 and controls["DCT"] == 1 then
@@ -814,8 +814,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNDTOc_command, 0, KLNDTOc_handler)
-							local KLNCLRc_command = createCommand("xap/KLN90/Press_CLR", "Right Cursor")
+							sasl.registerCommandHandler(KLNDTOc_command, 0, KLNDTOc_handler)
+							local KLNCLRc_command = sasl.createCommand("xap/KLN90/Press_CLR", "Right Cursor")
 							function KLNCLRc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["CLR"] = 1
@@ -823,8 +823,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNCLRc_command, 0, KLNCLRc_handler)
-							local KLNENTc_command = createCommand("xap/KLN90/Press_ENT", "Right Cursor")
+							sasl.registerCommandHandler(KLNCLRc_command, 0, KLNCLRc_handler)
+							local KLNENTc_command = sasl.createCommand("xap/KLN90/Press_ENT", "Right Cursor")
 							function KLNENTc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["ENT"] = 1
@@ -832,8 +832,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNENTc_command, 0, KLNENTc_handler)
-							local KLNrknoblccc_command = createCommand("xap/KLN90/Turn_Right_Large_Knob_Counterclockwise", "Right Cursor")
+							sasl.registerCommandHandler(KLNENTc_command, 0, KLNENTc_handler)
+							local KLNrknoblccc_command = sasl.createCommand("xap/KLN90/Turn_Right_Large_Knob_Counterclockwise", "Right Cursor")
 							function KLNrknoblccc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["rknobl"] = -1
@@ -841,8 +841,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNrknoblccc_command, 0, KLNrknoblccc_handler)
-							local KLNrknobsccc_command = createCommand("xap/KLN90/Turn_Right_Small_Knob_Counterclockwise", "Right Cursor")
+							sasl.registerCommandHandler(KLNrknoblccc_command, 0, KLNrknoblccc_handler)
+							local KLNrknobsccc_command = sasl.createCommand("xap/KLN90/Turn_Right_Small_Knob_Counterclockwise", "Right Cursor")
 							function KLNrknobsccc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["rknobs"] = -1
@@ -852,8 +852,8 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNrknobsccc_command, 0, KLNrknobsccc_handler)
-							local KLNrknobscc_command = createCommand("xap/KLN90/Turn_Right_Small_Knob_Clockwise", "Right Cursor")
+							sasl.registerCommandHandler(KLNrknobsccc_command, 0, KLNrknobsccc_handler)
+							local KLNrknobscc_command = sasl.createCommand("xap/KLN90/Turn_Right_Small_Knob_Clockwise", "Right Cursor")
 							function KLNrknobscc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["rknobs"] = 1
@@ -863,15 +863,15 @@ function KLNpowerc_handler(phase)  -- for all commands phase equals: 0 on press;
 								return 1
 							end
 							
-							registerCommandHandler(KLNrknobscc_command, 0, KLNrknobscc_handler)
-							local KLNrknoblcc_command = createCommand("xap/KLN90/Turn_Right_Large_Knob_Clockwise", "Right Cursor")
+							sasl.registerCommandHandler(KLNrknobscc_command, 0, KLNrknobscc_handler)
+							local KLNrknoblcc_command = sasl.createCommand("xap/KLN90/Turn_Right_Large_Knob_Clockwise", "Right Cursor")
 							function KLNrknoblcc_handler(phase)  -- for all commands phase equals: 0 on press; 1 while holding; 2 on release
 								if 0 == phase then
 									controls["rknobl"] = 1
 								end
 								return 1
 							end
-							registerCommandHandler(KLNrknoblcc_command, 0, KLNrknoblcc_handler)
+							sasl.registerCommandHandler(KLNrknoblcc_command, 0, KLNrknoblcc_handler)
 
 ---------------------
 -- 2D panel --
@@ -885,7 +885,7 @@ defineProperty("scroll",globalPropertyi("sim/graphics/misc/current_scroll_pos"))
 local coef = get(window_height) / 1024
 if coef > 1 then coef = 1 end  -- set initial coefficient for float panel's size - make 'em smaller, if screen resolution less then 1024 by height.
 
-defineProperty("closeImage", loadImage("close.png"))  -- close cross image
+defineProperty("closeImage", sasl.gl.loadImage("close.png"))  -- close cross image
 KLN90_panel = contextWindow {
 	position = { 50, 50, 733 * coef, 235 * coef };
 	--position = { 50, 50, 917 * coef, 293 * coef };
@@ -987,8 +987,8 @@ if file then
 			values["HSIinterf"] = tonumber(string.sub(line, 11))	
 		elseif string.find(line, "#Volume") then
 			values["volume"] = tonumber(string.sub(line, 8))	
-			setSampleGain(alert, values["volume"]*10)
-			setSampleGain(alertl, values["volume"]*10)
+			sasl.al.setSampleGain(alert, values["volume"]*10)
+			sasl.al.setSampleGain(alertl, values["volume"]*10)
 		end
 	end
 	file:close()
@@ -1848,19 +1848,19 @@ end
 
 function FMS()
 	if values["primary"] == 1 then
-		commandOnce(findCommand("sim/FMS/init"))
+		sasl.commandOnce(sasl.findCommand("sim/FMS/init"))
 		
 		local num = 1
 		while num <= FPlan[0]["length"] do
 			if FPlan[0][num]["types"] == 4 or FPlan[0][num]["types"] == 5 or FPlan[0][num]["USR"] == 1 then
-				commandOnce(findCommand("sim/FMS/type_latlon"))
+				sasl.commandOnce(sasl.findCommand("sim/FMS/type_latlon"))
 				
 				local lat = FPlan[0][num]["lat"]
 				if lat < 0 then
-					commandOnce(findCommand("sim/FMS/sign"))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/sign"))
 					lat = math.abs(lat)
 				else
-					commandOnce(findCommand("sim/FMS/key_space"))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/key_space"))
 				end
 				
 				lat = string.format("%.03f", lat)
@@ -1869,44 +1869,44 @@ function FMS()
 				
 				local num2 = 1
 				while num2 <= 6 do
-					commandOnce(findCommand("sim/FMS/key_" .. string.sub(lat, num2, num2)))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/key_" .. string.sub(lat, num2, num2)))
 					num2 = num2 + 1
 				end
 				
 				local lon = FPlan[0][num]["lon"]
 				if lon < 0 then
-					commandOnce(findCommand("sim/FMS/sign"))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/sign"))
 					lon = math.abs(lon)
 				else
-					commandOnce(findCommand("sim/FMS/key_space"))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/key_space"))
 				end
 				lon = string.format("%.03f", lon)
 				local dec = string.find(lon, "%.")
 				lon = ("0"):rep(4-dec) .. lon
 				num2 = 1
 				while num2 <= 7 do
-					commandOnce(findCommand("sim/FMS/key_" .. string.sub(lon, num2, num2)))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/key_" .. string.sub(lon, num2, num2)))
 					num2 = num2 + 1
 				end
 				
 			else
 				if FPlan[0][num]["types"] == 0 then
-					commandOnce(findCommand("sim/FMS/type_apt"))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/type_apt"))
 				elseif FPlan[0][num]["types"] == 1 then
-					commandOnce(findCommand("sim/FMS/type_vor"))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/type_vor"))
 				elseif FPlan[0][num]["types"] == 2 then
-					commandOnce(findCommand("sim/FMS/type_ndb"))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/type_ndb"))
 				elseif FPlan[0][num]["types"] == 3 then
-					commandOnce(findCommand("sim/FMS/type_fix"))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/type_fix"))
 				end
 				
 				local num2 = 1
 				while num2 <= 5 do
-					commandOnce(findCommand("sim/FMS/key_" .. string.sub(FPlan[0][num]["ident"], num2, num2)))
+					sasl.commandOnce(sasl.findCommand("sim/FMS/key_" .. string.sub(FPlan[0][num]["ident"], num2, num2)))
 					num2 = num2 + 1
 				end
 			end
-			commandOnce(findCommand("sim/FMS/next"))
+			sasl.commandOnce(sasl.findCommand("sim/FMS/next"))
 			
 			num = num + 1
 		end
@@ -3004,7 +3004,7 @@ function nearestlist(types)
 	
 end
 
-function onAvionicsDone()
+function onModuleDone()
 	set(overrideGPS, 0)
 	set(overrideNAV, 0)
 	
@@ -7738,7 +7738,7 @@ function WPTpage(types, mode, subpage)
 						elseif rpage ==-6 then
 							if values["primary"] == 1 then
 								set(overrideGPS, 0)
-								commandOnce(findCommand("sim/FMS/type_vor"))
+								sasl.commandOnce(sasl.findCommand("sim/FMS/type_vor"))
 							end
 							rpage = -5
 							values["timer"] = 3
@@ -7826,10 +7826,10 @@ function WPTpage(types, mode, subpage)
 										end
 									end
 								end
-							elseif values["HTlevel"] == 1 and isSamplePlaying(alert) == false then
-								playSample(alertl, false)
+							elseif values["HTlevel"] == 1 and sasl.al.isSamplePlaying(alert) == false then
+								sasl.al.playSample(alertl, false)
 								values["HTlevel"] = 2
-							elseif values["HTlevel"] == 2 and isSamplePlaying(alertl) == false then
+							elseif values["HTlevel"] == 2 and sasl.al.isSamplePlaying(alertl) == false then
 								values["HTlevel"] = 3
 								values["warnnum"] = 1
 							elseif values["HTlevel"] == 3 and values["dist"] > 5 then
@@ -7899,9 +7899,9 @@ function WPTpage(types, mode, subpage)
 						end
 						
 						if values["warnnum"] > 0 then
-							if isSamplePlaying(alert) == false then
+							if sasl.al.isSamplePlaying(alert) == false then
 								values["warnnum"] = values["warnnum"] - 1
-								playSample(alert, false)
+								sasl.al.playSample(alert, false)
 							end
 						end
 						
@@ -8030,7 +8030,7 @@ function WPTpage(types, mode, subpage)
 						
 						if rpage == -5 then
 							if values["primary"] == 1 then
-								-- commandOnce(findCommand("sim/FMS/clear"))
+								-- sasl.commandOnce(sasl.findCommand("sim/FMS/clear"))
 								if get(show_gns) == 0 then set(overrideGPS, 1) end
 							end
 							controls["rCRSR"] = 0
@@ -12555,14 +12555,14 @@ function WPTpage(types, mode, subpage)
 								if controls["lknobs"] == -1 then
 									values["volume"] = values["volume"] - 1
 									if values["volume"] < 0 then values["volume"] = 0 end
-									setSampleGain(alert, values["volume"]*10)
-									setSampleGain(alertl, values["volume"]*10)
+									sasl.al.setSampleGain(alert, values["volume"]*10)
+									sasl.al.setSampleGain(alertl, values["volume"]*10)
 									controls["lknobs"] = 0
 								elseif controls["lknobs"] == 1 then
 									values["volume"] = values["volume"] + 1
 									if values["volume"] > 99 then values["volume"] = 99 end
-									setSampleGain(alert, values["volume"]*10)
-									setSampleGain(alertl, values["volume"]*10)
+									sasl.al.setSampleGain(alert, values["volume"]*10)
+									sasl.al.setSampleGain(alertl, values["volume"]*10)
 									controls["lknobs"] = 0
 								elseif controls["lknobl"] ~= 0 then
 									controls["lknobl"] = 0
@@ -15138,7 +15138,7 @@ function WPTpage(types, mode, subpage)
 										values["MSGSTAT"][10] = 1
 										if values["VNVpause"] == 1 then
 											set(simspeed, 0)
-											playSample(alertl, false)
+											sasl.al.playSample(alertl, false)
 										end
 										
 									elseif reqsec > 90 then
@@ -16791,7 +16791,7 @@ components = {
 				y = 32,  
 				width = 16, 
 				height = 16, 
-				shape = loadImage("interactive.png")
+				shape = sasl.gl.loadImage("interactive.png")
 			},  
 			
 			onMouseHold = function()
@@ -16811,7 +16811,7 @@ components = {
 		y = 32,  
 		width = 16, 
 		height = 16, 
-		shape = loadImage("interactive.png")
+		shape = sasl.gl.loadImage("interactive.png")
 	},  
 	
 	onMouseHold = function()
@@ -16831,7 +16831,7 @@ x = 16,
 y = 32,  
 width = 16, 
 height = 16, 
-shape = loadImage("interactive.png")
+shape = sasl.gl.loadImage("interactive.png")
 },  
 
 onMouseHold = function()
@@ -16850,7 +16850,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateleft.png")
+	shape = sasl.gl.loadImage("rotateleft.png")
 },  
 
 onMouseHold = function()
@@ -16867,7 +16867,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateright.png")
+	shape = sasl.gl.loadImage("rotateright.png")
 },  
 
 onMouseHold = function()
@@ -16884,7 +16884,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("interactive.png")
+	shape = sasl.gl.loadImage("interactive.png")
 },  
 
 onMouseHold = function()
@@ -16917,7 +16917,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("interactive.png")
+	shape = sasl.gl.loadImage("interactive.png")
 },  
 
 onMouseHold = function()
@@ -16938,7 +16938,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("interactive.png")
+	shape = sasl.gl.loadImage("interactive.png")
 },  
 
 onMouseHold = function()
@@ -16959,7 +16959,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("interactive.png")
+	shape = sasl.gl.loadImage("interactive.png")
 },  
 
 onMouseHold = function()
@@ -16976,7 +16976,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("interactive.png")
+	shape = sasl.gl.loadImage("interactive.png")
 },  
 
 onMouseHold = function()
@@ -16993,7 +16993,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateleft2.png")
+	shape = sasl.gl.loadImage("rotateleft2.png")
 },  
 
 onMouseHold = function()
@@ -17011,7 +17011,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateright2.png")
+	shape = sasl.gl.loadImage("rotateright2.png")
 },  
 
 onMouseHold = function()
@@ -17029,7 +17029,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateleft.png")
+	shape = sasl.gl.loadImage("rotateleft.png")
 },  
 
 onMouseHold = function()
@@ -17046,7 +17046,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateright.png")
+	shape = sasl.gl.loadImage("rotateright.png")
 },  
 
 onMouseHold = function()
@@ -17063,7 +17063,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("interactive.png")
+	shape = sasl.gl.loadImage("interactive.png")
 },  
 
 onMouseHold = function()
@@ -17082,7 +17082,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateleft2.png")
+	shape = sasl.gl.loadImage("rotateleft2.png")
 },  
 
 onMouseHold = function()
@@ -17100,7 +17100,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateright2.png")
+	shape = sasl.gl.loadImage("rotateright2.png")
 },  
 
 onMouseHold = function()
@@ -17118,7 +17118,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateleft.png")
+	shape = sasl.gl.loadImage("rotateleft.png")
 },  
 
 onMouseHold = function()
@@ -17135,7 +17135,7 @@ end
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("rotateright.png")
+	shape = sasl.gl.loadImage("rotateright.png")
 },  
 
 onMouseHold = function()
@@ -17152,7 +17152,7 @@ interactive {
 	y = 32,  
 	width = 16, 
 	height = 16, 
-	shape = loadImage("interactive.png")
+	shape = sasl.gl.loadImage("interactive.png")
 },  
 
 	onMouseHold = function()
@@ -17200,41 +17200,41 @@ function draw()
 		--drawAll(Nav5Comp)
 		--drawAll(APT3Comp)
 		
-		drawText(font, 125, 98, get(sc_gline_1), brt, brt, brt)
-		drawText(font, 125, 87, get(sc_gline_2), brt, brt, brt)
-		drawText(font, 125, 76, get(sc_gline_3), brt, brt, brt)
-		drawText(font, 125, 65, get(sc_gline_4), brt, brt, brt)
-		drawText(font, 125, 54, get(sc_gline_5), brt, brt, brt)
-		drawText(font, 125, 43, get(sc_gline_6), brt, brt, brt)
-		drawText(font, 125, 29, get(sc_gline_7), brt, brt, brt)
+		sasl.gl.drawBitmapText(font, 125, 98, get(sc_gline_1), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 87, get(sc_gline_2), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 76, get(sc_gline_3), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 65, get(sc_gline_4), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 54, get(sc_gline_5), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 43, get(sc_gline_6), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 29, get(sc_gline_7), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
 	
-		drawText(fontb, 125, 98, get(sc_bline_1), brt, brt, brt)
-		drawText(fontb, 125, 87, get(sc_bline_2), brt, brt, brt)
-		drawText(fontb, 125, 76, get(sc_bline_3), brt, brt, brt)
-		drawText(fontb, 125, 65, get(sc_bline_4), brt, brt, brt)
-		drawText(fontb, 125, 54, get(sc_bline_5), brt, brt, brt)
-		drawText(fontb, 125, 43, get(sc_bline_6), brt, brt, brt)
-		drawText(fontb, 125, 29, get(sc_bline_7), brt, brt, brt)
+		sasl.gl.drawBitmapText(fontb, 125, 98, get(sc_bline_1), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 87, get(sc_bline_2), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 76, get(sc_bline_3), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 65, get(sc_bline_4), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 54, get(sc_bline_5), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 43, get(sc_bline_6), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 29, get(sc_bline_7), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
 		
-		drawText(fontl, 129.5, 87, get(sc_scaleline), brt, brt, brt)
+		sasl.gl.drawBitmapText(fontl, 129.5, 87, get(sc_scaleline), TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
 	else
 		
-		drawText(font, 125, 98, gline[1], brt, brt, brt)
-		drawText(font, 125, 87, gline[2], brt, brt, brt)
-		drawText(font, 125, 76, gline[3], brt, brt, brt)
-		drawText(font, 125, 65, gline[4], brt, brt, brt)
-		drawText(font, 125, 54, gline[5], brt, brt, brt)
-		drawText(font, 125, 43, gline[6], brt, brt, brt)
-		drawText(font, 125, 29, gline[7], brt, brt, brt)
+		sasl.gl.drawBitmapText(font, 125, 98, gline[1], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 87, gline[2], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 76, gline[3], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 65, gline[4], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 54, gline[5], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 43, gline[6], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(font, 125, 29, gline[7], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
 	
-		drawText(fontb, 125, 98, bline[1], brt, brt, brt)
-		drawText(fontb, 125, 87, bline[2], brt, brt, brt)
-		drawText(fontb, 125, 76, bline[3], brt, brt, brt)
-		drawText(fontb, 125, 65, bline[4], brt, brt, brt)
-		drawText(fontb, 125, 54, bline[5], brt, brt, brt)
-		drawText(fontb, 125, 43, bline[6], brt, brt, brt)
-		drawText(fontb, 125, 29, bline[7], brt, brt, brt)
-		drawText(fontl, 129.5, 87, values["scaleline"], brt, brt, brt)
+		sasl.gl.drawBitmapText(fontb, 125, 98, bline[1], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 87, bline[2], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 76, bline[3], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 65, bline[4], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 54, bline[5], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 43, bline[6], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontb, 125, 29, bline[7], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
+		sasl.gl.drawBitmapText(fontl, 129.5, 87, values["scaleline"], TEXT_ALIGN_LEFT, {brt, brt, brt, 1})
 	end
 	
 	drawAll(Nav5Comp)

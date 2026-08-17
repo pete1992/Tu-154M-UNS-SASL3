@@ -23,7 +23,7 @@ defineProperty("control_thro_other", globalPropertyf("tu154/custom/SC/control_th
 local coef = (get(window_height) / 1024) * 0.8
 
 if coef > 1 then coef = 1 end  
-defineProperty("closeImage", loadImage("close.png"))  
+defineProperty("closeImage", sasl.gl.loadImage("close.png"))
 palette = contextWindow {
 	position = { 50, 50, 251 * coef, 305 * coef };
 	noDecore = true;
@@ -159,7 +159,7 @@ uphone = contextWindow {
     noBackground = true;
     noClose = true;
 	movable = true;
-	resizeble = true;
+	resizable = true;
 	resizeProportional = true;
 	savePosition = true;
 	name = "uphone";
@@ -209,17 +209,17 @@ fails_panel = contextWindow {
 		};
 	};
 }
-defineProperty("menu_wt", loadImage("menus.png", 0, 0, 31, 30))
-defineProperty("menu_gr", loadImage("menus.png", 30, 0, 31, 30))
-defineProperty("menu_ex_wt", loadImage("menus.png", 0, 30, 31, 90))
-defineProperty("nav_ext_gr", loadImage("menus.png", 30, 30, 31, 30))
-defineProperty("serv_ext_gr", loadImage("menus.png", 30, 60, 31, 30))
-defineProperty("misc_ext_gr", loadImage("menus.png", 30, 90, 31, 30))
-defineProperty("nav_menu_wt", loadImage("menus.png", 60, 29, 121, 31))
-defineProperty("serv_menu_wt", loadImage("menus.png", 60, 59, 61, 31))
-defineProperty("misc_menu_wt", loadImage("menus.png", 60, 89, 121, 31))
-defineProperty("thro_red", loadImage("menus.png", 90, 0, 31, 30))
-defineProperty("thro_grn", loadImage("menus.png", 120, 0, 31, 30))
+defineProperty("menu_wt", sasl.gl.loadImage("menus.png", 0, 0, 31, 30))
+defineProperty("menu_gr", sasl.gl.loadImage("menus.png", 30, 0, 31, 30))
+defineProperty("menu_ex_wt", sasl.gl.loadImage("menus.png", 0, 30, 31, 90))
+defineProperty("nav_ext_gr", sasl.gl.loadImage("menus.png", 30, 30, 31, 30))
+defineProperty("serv_ext_gr", sasl.gl.loadImage("menus.png", 30, 60, 31, 30))
+defineProperty("misc_ext_gr", sasl.gl.loadImage("menus.png", 30, 90, 31, 30))
+defineProperty("nav_menu_wt", sasl.gl.loadImage("menus.png", 60, 29, 121, 31))
+defineProperty("serv_menu_wt", sasl.gl.loadImage("menus.png", 60, 59, 61, 31))
+defineProperty("misc_menu_wt", sasl.gl.loadImage("menus.png", 60, 89, 121, 31))
+defineProperty("thro_red", sasl.gl.loadImage("menus.png", 90, 0, 31, 30))
+defineProperty("thro_grn", sasl.gl.loadImage("menus.png", 120, 0, 31, 30))
 
 local main_menu_ext = false
 local nav_ext = false
@@ -329,7 +329,7 @@ nav_menu = contextWindow {
 			position = {90, 0, 31, 31 },
 			onMouseDown = function() 
 				if get(show_gns) == 1 then  
-					commandOnce(findCommand("sim/GPS/g430n1_popup"))
+					sasl.commandOnce(sasl.findCommand("sim/GPS/g430n1_popup"))
 					set(KLN90visible, 0)
 				elseif get(show_gns) == 0 then 
 					set(KLN90visible, 1 - get(KLN90visible))
@@ -568,18 +568,5 @@ function update()
 end
 
 function draw()
-	drawAll(components)  -- you need this in order for X-Plane to draw the interactive areas when mouse click zones are set to on in graphics settings
-    
-end
-
-function onAvionicsDone()
-	savePopupsPositions()
-end
-
-onAvionicsDone = function()
-	savePopupsPositions()
-end
-
-function draw()
-	drawAll(components)
+	drawAll(components)  -- required for interactive areas in the context windows
 end

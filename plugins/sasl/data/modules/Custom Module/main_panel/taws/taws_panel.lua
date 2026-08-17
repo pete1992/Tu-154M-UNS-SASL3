@@ -46,9 +46,9 @@ defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   .
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
 
 -- sounds
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
 
 local passed = get(frame_time)
 
@@ -73,7 +73,7 @@ local function buttons_check()
 	change = change - but_view_last - but_empty_last - but_down_last - but_up_last - egpws_control_last - egpws_contr_gs_last
 	
 	if change ~= 0 then
-		playSample(button_sound, false)
+		sasl.al.playSample(button_sound, false)
 	end
 	
 	but_view_last = but_view_sw
@@ -104,7 +104,7 @@ local function switchers_check()
 	changes = changes - egpws_alarm_1_last - egpws_alarm_2_last - egpws_relief_last - egpws_mode_last
 	
 	if changes ~= 0 then
-		playSample (switcher_sound, false)
+		sasl.al.playSample (switcher_sound, false)
 	end
 	
 	-- caps
@@ -112,7 +112,7 @@ local function switchers_check()
 	local egpws_alarm_2_cap_sw = get(egpws_alarm_2_cap)
 	
 	if egpws_alarm_1_cap_sw + egpws_alarm_2_cap_sw - egpws_alarm_1_cap_last - egpws_alarm_2_cap_last ~= 0 then
-		playSample(cap_sound, false)
+		sasl.al.playSample(cap_sound, false)
 	end
 	
 	egpws_alarm_1_last = egpws_alarm_1_sw

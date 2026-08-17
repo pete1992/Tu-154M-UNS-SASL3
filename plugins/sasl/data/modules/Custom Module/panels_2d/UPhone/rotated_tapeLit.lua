@@ -15,10 +15,15 @@ defineProperty("scrollY", 0)
 -- rotation angle
 defineProperty("angle", 0)
 
+local WHITE = { 1, 1, 1, 1 }
+
 -- draw tape
-function draw(self)
+function draw()
     local sz = get(window)
-    drawRotatedTexturePart(get(image), get(angle), 0, 0, 100, 100, 
-        get(scrollX), get(scrollY), sz[1], sz[2], 1, 1, 1) 
+    local imageId = get(image)
+    local textureWidth, textureHeight = sasl.gl.getTextureSize(imageId)
+    sasl.gl.drawRotatedTexturePart(imageId, get(angle), 0, 0, 100, 100,
+        get(scrollX) * textureWidth, get(scrollY) * textureHeight,
+        sz[1] * textureWidth, sz[2] * textureHeight, WHITE)
 end
 

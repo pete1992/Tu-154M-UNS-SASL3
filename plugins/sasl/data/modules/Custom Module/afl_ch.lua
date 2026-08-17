@@ -172,10 +172,10 @@ function draw()
 		for i = -180, 180, 10 do
 			local dg = i*2 + 500
 			
-			drawRectangle(dg, 0, 1, 500, 1, 0.5, 0.5, 0.5)
+			sasl.gl.drawRectangle(dg, 0, 1, 500, 1, 0.5, 0.5, 0.5)
 			
 			if i == 0 then
-				drawRectangle(dg, 0, 1, 500, 1, 0, 1, 1)
+				sasl.gl.drawRectangle(dg, 0, 1, 500, 1, 0, 1, 1)
 			end
 			
 		end
@@ -188,9 +188,9 @@ function draw()
 			local cd = afl_tab[tostring(i)][2] * 100 + 250
 			local cm = afl_tab[tostring(i)][3] * 200 + 250
 			
-			drawRectangle(dg, cl, 2, 2, 1, 0, 0, 1)
-			drawRectangle(dg, cd, 2, 2, 0, 1, 0, 1)
-			drawRectangle(dg, cm, 2, 2, 0, 0, 1, 1)
+			sasl.gl.drawRectangle(dg, cl, 2, 2, 1, 0, 0, 1)
+			sasl.gl.drawRectangle(dg, cd, 2, 2, 0, 1, 0, 1)
+			sasl.gl.drawRectangle(dg, cm, 2, 2, 0, 0, 1, 1)
 		end
 
 		local num = -200
@@ -206,9 +206,9 @@ function draw()
 			local cd = afl_tab[tostring(x)][2] * 100 + 250
 			local cm = afl_tab[tostring(x)][3] * 200 + 250
 			
-			drawRectangle(dg, cl, 2, 2, 1, 0, 0, 1)
-			drawRectangle(dg, cd, 2, 2, 0, 1, 0, 1)
-			drawRectangle(dg, cm, 2, 2, 0, 0, 1, 1)			
+			sasl.gl.drawRectangle(dg, cl, 2, 2, 1, 0, 0, 1)
+			sasl.gl.drawRectangle(dg, cd, 2, 2, 0, 1, 0, 1)
+			sasl.gl.drawRectangle(dg, cm, 2, 2, 0, 0, 1, 1)
 
 		end
 		
@@ -219,9 +219,9 @@ function draw()
 			local cd = afl_tab[tostring(i)][2] * 100 + 250
 			local cm = afl_tab[tostring(i)][3] * 200 + 250
 			
-			drawRectangle(dg, cl, 2, 2, 1, 0, 0, 1)
-			drawRectangle(dg, cd, 2, 2, 0, 1, 0, 1)
-			drawRectangle(dg, cm, 2, 2, 0, 0, 1, 1)
+			sasl.gl.drawRectangle(dg, cl, 2, 2, 1, 0, 0, 1)
+			sasl.gl.drawRectangle(dg, cd, 2, 2, 0, 1, 0, 1)
+			sasl.gl.drawRectangle(dg, cm, 2, 2, 0, 0, 1, 1)
 		end
 		
 end

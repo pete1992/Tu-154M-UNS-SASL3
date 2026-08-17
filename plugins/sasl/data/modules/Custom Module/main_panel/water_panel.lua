@@ -51,11 +51,11 @@ defineProperty("water_lvl", globalPropertyf("tu154/custom/misc/water_level")) --
 defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
-local switch_sound = loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
-local btn_click = loadSample('Custom Sounds/plastic_btn.wav')
-local rot_click = loadSample('Custom Sounds/rot_click.wav')
-local plastic_sound = loadSample('Custom Sounds/plastic_switch.wav')
+local switch_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local btn_click = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local rot_click = sasl.al.loadSample('Custom Sounds/rot_click.wav')
+local plastic_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
 
 local passed = get(frame_time)
 
@@ -67,13 +67,13 @@ local function controls()
 	local switchers = get(wing_light) + get(gear_fan) + get(galley_heat) + get(lavatory_heat) + get(water_meter) + get(water_compressor_1)
 	switchers = switchers + get(water_compressor_2) + get(tail_temp_signal) + get(tail_temp_heat)
 	
-	if switchers ~= switchers_last then playSample(switch_sound, false) end
+	if switchers ~= switchers_last then sasl.al.playSample(switch_sound, false) end
 	
 	switchers_last = switchers
 	
 	local buttons = get(tail_temp_signal_control_1) + get(tail_temp_signal_control_2) + get(lamp_test_eng_up_1) + get(lamp_test_eng_up_2)
 
-	if buttons ~= buttons_last then playSample(btn_click, false) end
+	if buttons ~= buttons_last then sasl.al.playSample(btn_click, false) end
 	
 	buttons_last = buttons
 

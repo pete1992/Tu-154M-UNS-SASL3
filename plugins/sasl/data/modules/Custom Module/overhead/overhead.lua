@@ -79,9 +79,9 @@ defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) 
 defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
 
 -- sounds
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 
 local notLoaded = true
 local start_timer = 0
@@ -265,7 +265,7 @@ local function switchers()
 	changes = changes - micron_1_on_last - micron_2_on_last - spu_on_last - sgs_on_last - sd75_1_on_last - sd75_2_on_last
 	changes = changes - vent_1_last - vent_2_last - vent_3_last - arm406_last - ushdb_mode_1_last - ushdb_mode_2_last
 	
-	if changes ~= 0 then playSample(switcher_sound, false) end
+	if changes ~= 0 then sasl.al.playSample(switcher_sound, false) end
 	
 	var_left_last = var_left_sw
 	var_right_last = var_right_sw
@@ -341,7 +341,7 @@ local function caps ()
 	local changes = bkk_contr_cap_sw + bkk_on_cap_sw + sau_stu_cap_sw + pkp_left_cap_sw + pkp_right_cap_sw + mgv_contr_cap_sw + emerg_light_cap_sw
 	changes = changes - bkk_contr_cap_last - bkk_on_cap_last - sau_stu_cap_last - pkp_left_cap_last - pkp_right_cap_last - mgv_contr_cap_last - emerg_light_cap_last
 	
-	if changes ~= 0 then playSample(cap_sound, false) end
+	if changes ~= 0 then sasl.al.playSample(cap_sound, false) end
 	
 	bkk_contr_cap_last = bkk_contr_cap_sw
 	bkk_on_cap_last = bkk_on_cap_sw
@@ -371,7 +371,7 @@ local function buttons()
 	
 	local changes = tks_signal_off_sw + svs_contr_sw - tks_signal_off_last - svs_contr_last
 	
-	if changes ~= 0 then playSample(button_sound, false) end
+	if changes ~= 0 then sasl.al.playSample(button_sound, false) end
 	
 	tks_signal_off_last = tks_signal_off_sw
 	svs_contr_last = svs_contr_sw

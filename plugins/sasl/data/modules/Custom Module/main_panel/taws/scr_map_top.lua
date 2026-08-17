@@ -10,7 +10,7 @@ defineProperty("distance_set", globalPropertyi("tu154/custom/taws/distance_set")
 defineProperty("brt_handle", globalPropertyf("tu154/custom/rotary/srpbz/brightness")) --  
 
 -- load images
-defineProperty("scale_top_img", loadImage("taws_scale_1.png", 0, 0, 1000, 770))
+defineProperty("scale_top_img", sasl.gl.loadImage("taws_scale_1.png", 0, 0, 1000, 770))
 
 -- map parameters
 defineProperty("pos_x", globalPropertyf("sim/flightmodel/position/local_x")) -- longtitude. positive from W to E
@@ -120,7 +120,7 @@ local plane_z = get(pos_z)
 
 local LG = false
 
-local text_font = loadFont('taws_scr.fnt')
+local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
 
 local range_text = " 20"
 
@@ -183,17 +183,17 @@ function update()
 	-- scan terrain and fill temp table
 	if screen_work then
 		
-		local acf_lat, acf_lon, acf_alt = localToWorld(plane_x, plane_y, plane_z)
+		local acf_lat, acf_lon, acf_alt = sasl.localToWorld(plane_x, plane_y, plane_z)
 		for row = frame_counter * 2 - 1, frame_counter * 2, 1 do
 			for col = 1, cols, 1 do
 				local p_x = plane_x + dir_x * height * row/rows - right_x * width / 2 + right_x * width * col/cols;
 				local p_z = plane_z + dir_z * height * row/rows - right_z * width / 2 + right_z * width * col/cols;
-				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = probeTerrain(p_x, plane_y, p_z)
+				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
 								
 				--local probe_dist = math.sqrt((p_x)^2 + (p_z)^2) / 1000
 				--local correct = interpolate(correct_tbl, probe_dist) - 130
 				
-				local lat, lon, alt = localToWorld(locationX, locationY, locationZ)
+				local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ)
 				
 				tempHeightTable[col][row] = giveColor(acf_alt, alt, isWet, LG)
 				

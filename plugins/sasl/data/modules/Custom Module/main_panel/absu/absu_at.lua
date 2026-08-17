@@ -118,8 +118,8 @@ local ACTIVE_SCALER = 0.6        -- (at_1_work + at_2_work) multiplier
 -----------------------------------------------------------------------
 -- Command handlers: throttle up/down collapse (same logic)
 -----------------------------------------------------------------------
-local THR_dn = findCommand("sim/engines/throttle_down")
-local THR_up = findCommand("sim/engines/throttle_up")
+local THR_dn = sasl.findCommand("sim/engines/throttle_down")
+local THR_up = sasl.findCommand("sim/engines/throttle_up")
 
 local function thr_common_handler(phase)
 	if phase == 1 then
@@ -128,8 +128,8 @@ local function thr_common_handler(phase)
 	return 0
 end
 
-registerCommandHandler(THR_dn, 0, thr_common_handler)
-registerCommandHandler(THR_up, 0, thr_common_handler)
+sasl.registerCommandHandler(THR_dn, 0, thr_common_handler)
+sasl.registerCommandHandler(THR_up, 0, thr_common_handler)
 
 -----------------------------------------------------------------------
 -- Update loop

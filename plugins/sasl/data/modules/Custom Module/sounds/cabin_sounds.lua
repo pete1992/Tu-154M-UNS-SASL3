@@ -1,7 +1,7 @@
 --[[
 Changelog
 - Grouped all 53 existing Dataref bindings through defineProps() while preserving property names, paths, constructors, and original binding order.
-- Added X-Plane internal version detection for XP11/XP12-compatible playSample() calls.
+- Added X-Plane internal version detection for XP11/XP12-compatible sasl.al.playSample() calls.
 - Replaced Russian comments with English comments.
 - Fixed radio-altimeter DH power logic so both left and right signals require 27 V power.
 - Replaced sum-based ABSU mode tracking with independent roll and pitch state tracking.
@@ -98,26 +98,26 @@ local XP11 = get(xp_version) > 120000
 
 local function playPanelSample(sample, looped)
     if XP11 then
-        playSample(sample, looped and 1 or 0)
+        sasl.al.playSample(sample, looped and 1 or 0)
     else
-        playSample(sample, looped)
+        sasl.al.playSample(sample, looped)
     end
 end
 
 -- Sound samples. Keep legacy/unused samples because other aircraft revisions
 -- may still depend on these interfaces.
 local SAMPLES = {
-    absu = loadSample("Custom Sounds/short_speaker.wav"),
-    long_speaker = loadSample("Custom Sounds/long_speaker.wav"),
-    inverters = loadSample("Custom Sounds/inverters.wav"),
-    long_siren = loadSample("Custom Sounds/long_siren.wav"),
-    short_siren = loadSample("Custom Sounds/short_siren.wav"),
-    bell = loadSample("Custom Sounds/mrp_bell.wav"),
-    rv5_tone = loadSample("Custom Sounds/rv5_tone.wav"),
-    lights_noise = loadSample("Custom Sounds/lights_noise.wav"),
-    air_cond_noise = loadSample("Custom Sounds/air_noise.wav"),
-    taxi_noise = loadSample("Custom Sounds/roll_inn.wav"),
-    flaps_sound = loadSample("Custom Sounds/flaps_hnd.wav"),
+    absu = sasl.al.loadSample("Custom Sounds/short_speaker.wav"),
+    long_speaker = sasl.al.loadSample("Custom Sounds/long_speaker.wav"),
+    inverters = sasl.al.loadSample("Custom Sounds/inverters.wav"),
+    long_siren = sasl.al.loadSample("Custom Sounds/long_siren.wav"),
+    short_siren = sasl.al.loadSample("Custom Sounds/short_siren.wav"),
+    bell = sasl.al.loadSample("Custom Sounds/mrp_bell.wav"),
+    rv5_tone = sasl.al.loadSample("Custom Sounds/rv5_tone.wav"),
+    lights_noise = sasl.al.loadSample("Custom Sounds/lights_noise.wav"),
+    air_cond_noise = sasl.al.loadSample("Custom Sounds/air_noise.wav"),
+    taxi_noise = sasl.al.loadSample("Custom Sounds/roll_inn.wav"),
+    flaps_sound = sasl.al.loadSample("Custom Sounds/flaps_hnd.wav"),
 }
 
 local STATE = {
@@ -145,16 +145,16 @@ local STATE = {
 }
 
 playPanelSample(SAMPLES.inverters, true)
-setSampleGain(SAMPLES.inverters, 0)
+sasl.al.setSampleGain(SAMPLES.inverters, 0)
 
 playPanelSample(SAMPLES.air_cond_noise, true)
-setSampleGain(SAMPLES.air_cond_noise, 0)
+sasl.al.setSampleGain(SAMPLES.air_cond_noise, 0)
 
 -- Load switch/cap samples after the continuously running samples to preserve
 -- the original initialization sequence.
-SAMPLES.switcher = loadSample("Custom Sounds/metal_switch.wav")
-SAMPLES.button = loadSample("Custom Sounds/plastic_btn.wav")
-SAMPLES.cap = loadSample("Custom Sounds/cap.wav")
+SAMPLES.switcher = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+SAMPLES.button = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
+SAMPLES.cap = sasl.al.loadSample("Custom Sounds/cap.wav")
 
 function update()
     local passed = get(frame_time)
@@ -218,15 +218,15 @@ function update()
 
     STATE.rv_counter = STATE.rv_counter - passed
 
-    if not isSamplePlaying(SAMPLES.rv5_tone) and STATE.rv_counter > 0 then
+    if not sasl.al.isSamplePlaying(SAMPLES.rv5_tone) and STATE.rv_counter > 0 then
         playPanelSample(SAMPLES.rv5_tone, true)
     end
 
     if STATE.rv_counter <= 0 then
-        stopSample(SAMPLES.rv5_tone)
+        sasl.al.stopSample(SAMPLES.rv5_tone)
     end
 
-    setSampleGain(SAMPLES.rv5_tone, 1000 * warning_volume)
+    sasl.al.setSampleGain(SAMPLES.rv5_tone, 1000 * warning_volume)
 
     --------------------------------------------------------------------------
     -- Main siren
@@ -249,31 +249,31 @@ function update()
     if continuous_siren then
         STATE.short_siren_timer = 0
 
-        if not isSamplePlaying(SAMPLES.long_siren) then
+        if not sasl.al.isSamplePlaying(SAMPLES.long_siren) then
             playPanelSample(SAMPLES.long_siren, true)
         end
     elseif pulsed_pressure_siren then
         STATE.short_siren_timer = STATE.short_siren_timer + passed
 
-        if not isSamplePlaying(SAMPLES.long_siren)
+        if not sasl.al.isSamplePlaying(SAMPLES.long_siren)
             and STATE.short_siren_timer > 0.2 then
             playPanelSample(SAMPLES.long_siren, true)
         end
 
         if STATE.short_siren_timer > 0.4 then
             STATE.short_siren_timer = 0
-            stopSample(SAMPLES.long_siren)
+            sasl.al.stopSample(SAMPLES.long_siren)
         end
     else
         STATE.short_siren_timer = 0
-        stopSample(SAMPLES.long_siren)
+        sasl.al.stopSample(SAMPLES.long_siren)
     end
 
     if passed == 0 or external == 1 then
-        stopSample(SAMPLES.long_siren)
+        sasl.al.stopSample(SAMPLES.long_siren)
     end
 
-    setSampleGain(SAMPLES.long_siren, 1000 * warning_volume)
+    sasl.al.setSampleGain(SAMPLES.long_siren, 1000 * warning_volume)
 
     --------------------------------------------------------------------------
     -- Speaker alarm
@@ -298,10 +298,10 @@ function update()
 
         STATE.short_speaker_timer = 0
 
-        if not isSamplePlaying(SAMPLES.absu) then
+        if not sasl.al.isSamplePlaying(SAMPLES.absu) then
             playPanelSample(SAMPLES.absu, false)
         end
-        stopSample(SAMPLES.long_speaker)
+        sasl.al.stopSample(SAMPLES.long_speaker)
 
     elseif get(speaker_auasp) == 1
         and power
@@ -311,10 +311,10 @@ function update()
 
         STATE.short_speaker_timer = 0
 
-        if not isSamplePlaying(SAMPLES.long_speaker) then
+        if not sasl.al.isSamplePlaying(SAMPLES.long_speaker) then
             playPanelSample(SAMPLES.long_speaker, true)
         end
-        stopSample(SAMPLES.absu)
+        sasl.al.stopSample(SAMPLES.absu)
 
     elseif (get(speaker_fuel) == 1 or get(speaker_speed) == 1)
         and power
@@ -324,17 +324,17 @@ function update()
 
         STATE.short_speaker_timer = STATE.short_speaker_timer + passed
 
-        if not isSamplePlaying(SAMPLES.long_speaker)
+        if not sasl.al.isSamplePlaying(SAMPLES.long_speaker)
             and STATE.short_speaker_timer > 0.3 then
             playPanelSample(SAMPLES.long_speaker, true)
         end
 
         if STATE.short_speaker_timer > 0.6 then
             STATE.short_speaker_timer = 0
-            stopSample(SAMPLES.long_speaker)
+            sasl.al.stopSample(SAMPLES.long_speaker)
         end
 
-        stopSample(SAMPLES.absu)
+        sasl.al.stopSample(SAMPLES.absu)
 
     elseif (absu_mode_changed or stu_disconnected)
         and power
@@ -344,18 +344,18 @@ function update()
 
         STATE.short_speaker_timer = 0
         playPanelSample(SAMPLES.absu, false)
-        stopSample(SAMPLES.long_speaker)
+        sasl.al.stopSample(SAMPLES.long_speaker)
 
     else
         STATE.short_speaker_timer = 0
-        stopSample(SAMPLES.long_speaker)
+        sasl.al.stopSample(SAMPLES.long_speaker)
     end
 
     STATE.roll_last = roll_now
     STATE.pitch_last = pitch_now
     STATE.stu_last = stu_now
 
-    setSampleGain(SAMPLES.long_speaker, 1000 * warning_volume)
+    sasl.al.setSampleGain(SAMPLES.long_speaker, 1000 * warning_volume)
 
     --------------------------------------------------------------------------
     -- Marker receiver
@@ -365,12 +365,12 @@ function update()
         or get(outer_marker) == 1
 
     if marker_active and power and external == 0 then
-        if not isSamplePlaying(SAMPLES.bell) then
+        if not sasl.al.isSamplePlaying(SAMPLES.bell) then
             playPanelSample(SAMPLES.bell, false)
         end
     end
 
-    setSampleGain(SAMPLES.bell, 1000 * warning_volume)
+    sasl.al.setSampleGain(SAMPLES.bell, 1000 * warning_volume)
 
     --------------------------------------------------------------------------
     -- Rectifier/inverter power noise
@@ -395,7 +395,7 @@ function update()
     local rectifier_count = bool2int(vu_left == 1 or vu_left == 2)
         + bool2int(vu_right == 1 or vu_right == 2)
 
-    setSampleGain(
+    sasl.al.setSampleGain(
         SAMPLES.inverters,
         fan_volume
             * STATE.invert_counter
@@ -406,10 +406,10 @@ function update()
             * 0.2
             * run
     )
-    setSamplePitch(SAMPLES.inverters, STATE.invert_counter * 800 + 200)
+    sasl.al.setSamplePitch(SAMPLES.inverters, STATE.invert_counter * 800 + 200)
 
     if passed == 0 or external == 1 then
-        setSampleGain(SAMPLES.inverters, 0)
+        sasl.al.setSampleGain(SAMPLES.inverters, 0)
     end
 
     --------------------------------------------------------------------------
@@ -417,14 +417,14 @@ function update()
     --------------------------------------------------------------------------
     local air_usage = get(air_usage_L) + get(air_usage_R)
 
-    setSampleGain(
+    sasl.al.setSampleGain(
         SAMPLES.air_cond_noise,
         fan_volume
             * math.min(600, air_usage)
             * (1 - external)
             * run
     )
-    setSamplePitch(SAMPLES.air_cond_noise, 1000)
+    sasl.al.setSamplePitch(SAMPLES.air_cond_noise, 1000)
 
     --------------------------------------------------------------------------
     -- High-speed ground-roll noise
@@ -442,18 +442,18 @@ function update()
     local taxi_pitch = 1000 + (groundspeed_now - 80) * 3
 
     if taxi_gain > 0 then
-        if not isSamplePlaying(SAMPLES.taxi_noise) then
+        if not sasl.al.isSamplePlaying(SAMPLES.taxi_noise) then
             playPanelSample(SAMPLES.taxi_noise, true)
         end
     else
-        stopSample(SAMPLES.taxi_noise)
+        sasl.al.stopSample(SAMPLES.taxi_noise)
     end
 
-    setSampleGain(
+    sasl.al.setSampleGain(
         SAMPLES.taxi_noise,
         taxi_gain * 10 * get(ground_volume_ratio)
     )
-    setSamplePitch(SAMPLES.taxi_noise, taxi_pitch)
+    sasl.al.setSamplePitch(SAMPLES.taxi_noise, taxi_pitch)
 
     --------------------------------------------------------------------------
     -- Extended landing-light aerodynamic noise
@@ -465,7 +465,7 @@ function update()
 
     -- The original gain is zero at and below 150 kt. Do not run the loop there.
     if light_extension > 0.1 and ias > 150 then
-        if not isSamplePlaying(SAMPLES.lights_noise) then
+        if not sasl.al.isSamplePlaying(SAMPLES.lights_noise) then
             playPanelSample(SAMPLES.lights_noise, true)
         end
 
@@ -474,10 +474,10 @@ function update()
             * (1 - external)
             * get(weather_volume_ratio)
 
-        setSampleGain(SAMPLES.lights_noise, gain)
-        setSamplePitch(SAMPLES.lights_noise, 250 + ias)
+        sasl.al.setSampleGain(SAMPLES.lights_noise, gain)
+        sasl.al.setSamplePitch(SAMPLES.lights_noise, 250 + ias)
     else
-        stopSample(SAMPLES.lights_noise)
+        sasl.al.stopSample(SAMPLES.lights_noise)
     end
 
     --------------------------------------------------------------------------

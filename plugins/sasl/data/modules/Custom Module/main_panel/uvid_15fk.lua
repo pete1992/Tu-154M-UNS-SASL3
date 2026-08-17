@@ -33,7 +33,7 @@ defineProperty("sim_barometer_setting", globalPropertyf("sim/cockpit/misc/barome
 defineProperty("vd15_lamp", globalPropertyf("tu154/custom/lights/small/vd15_lamp"))  --  15
 
 -- sounds
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
 
 local left_MSL = 0
 local uvid_alt = 0
@@ -60,7 +60,7 @@ function update()
 	
 	-- sounds
 	if switcher_last ~= sw_on then
-		playSample(switcher_sound, false)
+		sasl.al.playSample(switcher_sound, false)
 	end
 	switcher_last = sw_on
 	

@@ -1,7 +1,7 @@
 --[[
 Changelog
 - Grouped all property bindings through a local defineProps() helper while preserving all existing property names, Dataref paths, constructors, and their original order.
-- Added X-Plane version detection so all panel sounds use the correct playSample() argument for X-Plane 11 and X-Plane 12.
+- Added X-Plane version detection so all panel sounds use the correct sasl.al.playSample() argument for X-Plane 11 and X-Plane 12.
 - Replaced Russian comments with English comments.
 - Replaced sum-based control-change detection with direct state comparisons to prevent opposite changes from cancelling each other.
 - Prevented the automatic cold-and-dark reset from producing artificial switch sounds.
@@ -88,19 +88,19 @@ local lights_off_last = get(landing_light_off)
 local lights_cap_last = get(landing_light_off_cap)
 
 -- Sound samples.
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local rotary_sound = loadSample('Custom Sounds/rot_click_big.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
-local seatbelt_sound = loadSample('Custom Sounds/seatbelt.wav')
-local nosmoke_sound= loadSample('Custom Sounds/nosmoke.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/rot_click_big.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local seatbelt_sound = sasl.al.loadSample('Custom Sounds/seatbelt.wav')
+local nosmoke_sound= sasl.al.loadSample('Custom Sounds/nosmoke.wav')
 
 local XP11 = get(xp_version) > 120000
 
 local function playPanelSample(sample)
     if XP11 then
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     else
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     end
 end
 

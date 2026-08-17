@@ -33,14 +33,14 @@ defineProperty("checklist_selected",globalPropertyi("tu154/custom/checklist/chec
 
 -- images
 
-defineProperty("bg_img_0", loadImage("checklist_tex.png", 0, 0, 240, 850))
-defineProperty("bg_img_1", loadImage("checklist_tex.png", 249, 0, 240, 850))
+defineProperty("bg_img_0", sasl.gl.loadImage("checklist_tex.png", 0, 0, 240, 850))
+defineProperty("bg_img_1", sasl.gl.loadImage("checklist_tex.png", 249, 0, 240, 850))
 
-defineProperty("bg_img_0_RUS", loadImage("checklist_tex_RUS.png", 0, 0, 240, 850))
-defineProperty("bg_img_1_RUS", loadImage("checklist_tex_RUS.png", 249, 0, 240, 850))
+defineProperty("bg_img_0_RUS", sasl.gl.loadImage("checklist_tex_RUS.png", 0, 0, 240, 850))
+defineProperty("bg_img_1_RUS", sasl.gl.loadImage("checklist_tex_RUS.png", 249, 0, 240, 850))
 
-defineProperty("fishka_left", loadImage("checklist_tex.png", 0, 859, 166, 25))
-defineProperty("fishka_right", loadImage("checklist_tex.png", 0, 887, 166, 25))
+defineProperty("fishka_left", sasl.gl.loadImage("checklist_tex.png", 0, 859, 166, 25))
+defineProperty("fishka_right", sasl.gl.loadImage("checklist_tex.png", 0, 887, 166, 25))
 
 components = {
 

@@ -2,7 +2,7 @@
 -- SASL
 
 defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) > 100000
+local XP11 = get(xp_version) > 120000
 
 local function defineProps(defs)
     -- Correct: build property handles by calling the constructor with path
@@ -184,15 +184,15 @@ end
 
 local function playPanelSample(sample)
     if XP11 then
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     else
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     end
 end
 
 -- Sound samples
-local window_open = loadSample('Custom Sounds/window_open.wav')
-local window_close = loadSample('Custom Sounds/window_close.wav')
+local window_open = sasl.al.loadSample('Custom Sounds/window_open.wav')
+local window_close = sasl.al.loadSample('Custom Sounds/window_close.wav')
 
 -- State variables
 local gear_turn_pos = 0

@@ -117,6 +117,6 @@ function update()
 
 end
 
-function onAvionicsDone()
+function onModuleDone()
 	set(override_wheel_steer, 0)
 end

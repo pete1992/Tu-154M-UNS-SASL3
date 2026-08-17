@@ -20,7 +20,7 @@ function draw()
 			local r = colorTable[drawTable[x][y]][1]
 			local g = colorTable[drawTable[x][y]][2]
 			local b = colorTable[drawTable[x][y]][3]
-			drawRectangle((x-1) * cor_x, (y-1) * cor_y, cor_x, cor_y, r, g, b, 1)
+			sasl.gl.drawRectangle((x-1) * cor_x, (y-1) * cor_y, cor_x, cor_y, r, g, b, 1)
 		end
 	end
 

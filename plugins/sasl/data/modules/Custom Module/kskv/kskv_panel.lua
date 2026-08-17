@@ -111,10 +111,10 @@ defineProperty("airbleed_3", globalPropertyi("tu154/custom/failures/airbleed_3")
 defineProperty("main_pressure", globalPropertyi("tu154/custom/alarm/main_pressure")) --    
 
 -- sounds
-local rotary_sound = loadSample('Custom Sounds/plastic_switch.wav')
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
-local button_sound = loadSample('Custom Sounds/plastic_btn.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 local XP11 = get(xp_version) > 120000
 -- time
 local passed = get(frame_time)
@@ -155,7 +155,7 @@ local cab_high_lit = 0
 local function lamps()
 	-- make sound for button
 	local test_btn = get(lamp_test_srd)
-	if test_btn ~= lamp_test_srd_last then playSample(button_sound, false) end
+	if test_btn ~= lamp_test_srd_last then sasl.al.playSample(button_sound, false) end
 	lamp_test_srd_last = test_btn
 	
 	local day_night = 1 - get(day_night_set) * 0.25
@@ -275,9 +275,9 @@ local function rotary_sw()
 	
 if change ~= 0 then
 	if XP11 then
-    playSample(rotary_sound, false)
+    sasl.al.playSample(rotary_sound, false)
 else
-    playSample(rotary_sound, false)
+    sasl.al.playSample(rotary_sound, false)
 end
 end
 	
@@ -451,7 +451,7 @@ local function check_switchers()
 	change = change - cockpit_mode_set_last - cabin1_mode_set_last - cabin2_mode_set_last - left_sys_mode_set_last - right_sys_mode_set_last
 	change = change - sard_disable_last - door_heat_last
 	
-	if change ~= 0 then playSample(switcher_sound, false) end
+	if change ~= 0 then sasl.al.playSample(switcher_sound, false) end
 	
 	cabin_sel_last = cabin_sel_sw
 	heat_close_last = heat_close_sw
@@ -519,7 +519,7 @@ local function caps_check()
 	change = change - heat_close_cap_last - ground_cond_on_cap_last - skv_faster_work_cap_last - psvp_left_on_cap_last - psvp_right_on_cap_last
 	change = change - emerg_decompress_cap_last - dubler_on_cap_last - sard_disable_cap_last
 
-	if change ~= 0 then playSample(cap_sound, false) end
+	if change ~= 0 then sasl.al.playSample(cap_sound, false) end
 
 	heat_close_cap_last = heat_close_cap_sw
 	ground_cond_on_cap_last = ground_cond_on_cap_sw

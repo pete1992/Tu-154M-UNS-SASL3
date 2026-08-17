@@ -2,7 +2,7 @@ size = {100, 100}
 
 local count = 0
 
-defineProperty("digitsImage", loadImage("white-digits.png", 3, 0, 10, 196)) 
+defineProperty("digitsImage", sasl.gl.loadImage("white-digits.png", 3, 0, 10, 196))
 
 function update()
 

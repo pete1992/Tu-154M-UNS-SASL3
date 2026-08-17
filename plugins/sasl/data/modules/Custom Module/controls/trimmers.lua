@@ -3,7 +3,7 @@
 --[[
 Changelog
 - Grouped all 29 existing Dataref bindings through defineProps() while preserving property names, paths, constructors, and original binding order.
-- Added X-Plane internal version detection for XP11/XP12-compatible playSample() calls.
+- Added X-Plane internal version detection for XP11/XP12-compatible sasl.al.playSample() calls.
 - Reduced all electric trim rates to 65% of the previous values through one TRIM_SPEED_SCALE constant.
 - Preserved the original 1.25 pitch-trim speed asymmetry below neutral.
 - Cached electrical power, trim controls, failures, and trim positions once per frame.
@@ -64,16 +64,16 @@ local XP11 = get(xp_version) > 120000
 
 local function playPanelSample(sample)
     if XP11 then
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     else
-        playSample(sample, false)
+        sasl.al.playSample(sample, false)
     end
 end
 
 local SAMPLES = {
-    up = loadSample("Custom Sounds/trimm_up.wav"),
-    down = loadSample("Custom Sounds/trimm_down.wav"),
-    center = loadSample("Custom Sounds/trimm_ctr.wav"),
+    up = sasl.al.loadSample("Custom Sounds/trimm_up.wav"),
+    down = sasl.al.loadSample("Custom Sounds/trimm_down.wav"),
+    center = sasl.al.loadSample("Custom Sounds/trimm_ctr.wav"),
 }
 
 -- Global trim-speed tuning. 0.65 = 65% of the original speed.
@@ -257,7 +257,7 @@ function update()
 end
 
 -- Pitch trim UP.
-pitch_UP_comm = findCommand("sim/flight_controls/pitch_trim_up")
+pitch_UP_comm = sasl.findCommand("sim/flight_controls/pitch_trim_up")
 
 function pitch_UP_hnd(phase)
     if phase == 0 or phase == 1 then
@@ -272,10 +272,10 @@ function pitch_UP_hnd(phase)
     return 0
 end
 
-registerCommandHandler(pitch_UP_comm, 0, pitch_UP_hnd)
+sasl.registerCommandHandler(pitch_UP_comm, 0, pitch_UP_hnd)
 
 -- Pitch trim DOWN.
-pitch_DOWN_comm = findCommand("sim/flight_controls/pitch_trim_down")
+pitch_DOWN_comm = sasl.findCommand("sim/flight_controls/pitch_trim_down")
 
 function pitch_DOWN_hnd(phase)
     if phase == 0 or phase == 1 then
@@ -290,10 +290,10 @@ function pitch_DOWN_hnd(phase)
     return 0
 end
 
-registerCommandHandler(pitch_DOWN_comm, 0, pitch_DOWN_hnd)
+sasl.registerCommandHandler(pitch_DOWN_comm, 0, pitch_DOWN_hnd)
 
 -- Pitch trim CENTER / takeoff.
-pitch_TO_comm = findCommand("sim/flight_controls/pitch_trim_takeoff")
+pitch_TO_comm = sasl.findCommand("sim/flight_controls/pitch_trim_takeoff")
 
 function pitch_TO_hnd(phase)
     if (phase == 0 or phase == 1) and normalPitchTrimAvailable() then
@@ -303,10 +303,10 @@ function pitch_TO_hnd(phase)
     return 0
 end
 
-registerCommandHandler(pitch_TO_comm, 0, pitch_TO_hnd)
+sasl.registerCommandHandler(pitch_TO_comm, 0, pitch_TO_hnd)
 
 -- Roll trim LEFT.
-roll_LEFT_comm = findCommand("sim/flight_controls/aileron_trim_left")
+roll_LEFT_comm = sasl.findCommand("sim/flight_controls/aileron_trim_left")
 
 function roll_LEFT_hnd(phase)
     if phase == 0 or phase == 1 then
@@ -317,10 +317,10 @@ function roll_LEFT_hnd(phase)
     return 0
 end
 
-registerCommandHandler(roll_LEFT_comm, 0, roll_LEFT_hnd)
+sasl.registerCommandHandler(roll_LEFT_comm, 0, roll_LEFT_hnd)
 
 -- Roll trim RIGHT.
-roll_RIGHT_comm = findCommand("sim/flight_controls/aileron_trim_right")
+roll_RIGHT_comm = sasl.findCommand("sim/flight_controls/aileron_trim_right")
 
 function roll_RIGHT_hnd(phase)
     if phase == 0 or phase == 1 then
@@ -331,10 +331,10 @@ function roll_RIGHT_hnd(phase)
     return 0
 end
 
-registerCommandHandler(roll_RIGHT_comm, 0, roll_RIGHT_hnd)
+sasl.registerCommandHandler(roll_RIGHT_comm, 0, roll_RIGHT_hnd)
 
 -- Roll trim CENTER.
-roll_CTR_comm = findCommand("sim/flight_controls/aileron_trim_center")
+roll_CTR_comm = sasl.findCommand("sim/flight_controls/aileron_trim_center")
 
 function roll_CTR_hnd(phase)
     if (phase == 0 or phase == 1) and rollTrimAvailable() then
@@ -344,10 +344,10 @@ function roll_CTR_hnd(phase)
     return 0
 end
 
-registerCommandHandler(roll_CTR_comm, 0, roll_CTR_hnd)
+sasl.registerCommandHandler(roll_CTR_comm, 0, roll_CTR_hnd)
 
 -- Yaw trim LEFT.
-yaw_LEFT_comm = findCommand("sim/flight_controls/rudder_trim_left")
+yaw_LEFT_comm = sasl.findCommand("sim/flight_controls/rudder_trim_left")
 
 function yaw_LEFT_hnd(phase)
     if phase == 0 or phase == 1 then
@@ -358,10 +358,10 @@ function yaw_LEFT_hnd(phase)
     return 0
 end
 
-registerCommandHandler(yaw_LEFT_comm, 0, yaw_LEFT_hnd)
+sasl.registerCommandHandler(yaw_LEFT_comm, 0, yaw_LEFT_hnd)
 
 -- Yaw trim RIGHT.
-yaw_RIGHT_comm = findCommand("sim/flight_controls/rudder_trim_right")
+yaw_RIGHT_comm = sasl.findCommand("sim/flight_controls/rudder_trim_right")
 
 function yaw_RIGHT_hnd(phase)
     if phase == 0 or phase == 1 then
@@ -372,10 +372,10 @@ function yaw_RIGHT_hnd(phase)
     return 0
 end
 
-registerCommandHandler(yaw_RIGHT_comm, 0, yaw_RIGHT_hnd)
+sasl.registerCommandHandler(yaw_RIGHT_comm, 0, yaw_RIGHT_hnd)
 
 -- Yaw trim CENTER.
-yaw_CTR_comm = findCommand("sim/flight_controls/rudder_trim_center")
+yaw_CTR_comm = sasl.findCommand("sim/flight_controls/rudder_trim_center")
 
 function yaw_CTR_hnd(phase)
     if (phase == 0 or phase == 1) and yawTrimAvailable() then
@@ -385,4 +385,4 @@ function yaw_CTR_hnd(phase)
     return 0
 end
 
-registerCommandHandler(yaw_CTR_comm, 0, yaw_CTR_hnd)
+sasl.registerCommandHandler(yaw_CTR_comm, 0, yaw_CTR_hnd)

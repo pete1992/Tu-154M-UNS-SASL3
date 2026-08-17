@@ -30,11 +30,11 @@ defineProperty("ark_mode_2", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_
 defineProperty("com1_power", globalPropertyi("sim/cockpit2/radios/actuators/com1_power"))
 defineProperty("com2_power", globalPropertyi("sim/cockpit2/radios/actuators/com2_power"))
 
-local switch_sound = loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
-local btn_click = loadSample('Custom Sounds/plastic_btn.wav')
-local rot_click = loadSample('Custom Sounds/rot_click.wav')
-local plastic_sound = loadSample('Custom Sounds/plastic_switch.wav')
+local switch_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local btn_click = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local rot_click = sasl.al.loadSample('Custom Sounds/rot_click.wav')
+local plastic_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
 
 local mode_last = get(spu_source)
 
@@ -45,7 +45,7 @@ function update()
 	
 	set(VHF2Freq, get(VHF1Freq))
 	
-	if mode ~= mode_last then playSample(switch_sound, false) end
+	if mode ~= mode_last then sasl.al.playSample(switch_sound, false) end
 	mode_last = mode
 	
 	if mode == 0 and power then -- COM 1

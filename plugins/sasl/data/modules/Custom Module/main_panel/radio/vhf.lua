@@ -24,16 +24,16 @@ defineProps({
     { "vhf_cc", "tu154/custom/radio/vhf1_cc", globalPropertyf },
 })
 
-local rot_small_sound = loadSample('Custom Sounds/com.wav')
-setSampleGain(rot_small_sound, 500)
-local text_font = loadFont('digital7_it.fnt')
+local rot_small_sound = sasl.al.loadSample('Custom Sounds/com.wav')
+sasl.al.setSampleGain(rot_small_sound, 500)
+local text_font = sasl.gl.loadBitmapFont('digital7_it.fnt')
 local rot_summ_last = 0
 
 local function rotary()
 	local nav_left_sw = get(vhf_left)
 	local nav_right_sw = get(vhf_right)
 	local summ = nav_left_sw + nav_right_sw
-	if summ ~= rot_summ_last then playSample(rot_small_sound, false) end
+	if summ ~= rot_summ_last then sasl.al.playSample(rot_small_sound, false) end
 	rot_summ_last = summ
 end
 
@@ -100,7 +100,7 @@ end
 	knob_last_R = right_knob
 end
 
-function onAvionicsDone()
+function onModuleDone()
 	set(com_power, 1)
 
 end

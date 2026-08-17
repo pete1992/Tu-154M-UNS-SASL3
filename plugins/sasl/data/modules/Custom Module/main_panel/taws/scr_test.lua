@@ -18,8 +18,8 @@ defineProperty("gs_msg_vol", globalPropertyf("tu154/custom/taws/gs_msg_vol")) --
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
 
 -- images
-defineProperty("screen_img_img", loadImage("taws_clock.png", 0, 0, 1000, 770))
-local text_font = loadFont('taws_scr.fnt')
+defineProperty("screen_img_img", sasl.gl.loadImage("taws_clock.png", 0, 0, 1000, 770))
+local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
 
 local screen_work = get(mode_set) == 5
 local brightness = 0.8

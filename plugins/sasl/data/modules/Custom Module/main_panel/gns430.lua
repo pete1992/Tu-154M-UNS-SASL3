@@ -34,7 +34,7 @@ defineProperty("kill_map_fms_line", globalPropertyi("sim/graphics/misc/kill_map_
 defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
-local LB_left = findCommand("sim/GPS/g430n1_coarse_down")
+local LB_left = sasl.findCommand("sim/GPS/g430n1_coarse_down")
 
 function LB_left_hnd(phase)
 	if 1 == phase then
@@ -43,9 +43,9 @@ function LB_left_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(LB_left, 0, LB_left_hnd)
+sasl.registerCommandHandler(LB_left, 0, LB_left_hnd)
 
-local LB_right = findCommand("sim/GPS/g430n1_coarse_up")
+local LB_right = sasl.findCommand("sim/GPS/g430n1_coarse_up")
 
 function LB_right_hnd(phase)
 	if 1 == phase then
@@ -54,9 +54,9 @@ function LB_right_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(LB_right, 0, LB_right_hnd)
+sasl.registerCommandHandler(LB_right, 0, LB_right_hnd)
 
-local LS_left = findCommand("sim/GPS/g430n1_fine_down")
+local LS_left = sasl.findCommand("sim/GPS/g430n1_fine_down")
 
 function LS_left_hnd(phase)
 	if 1 == phase then
@@ -65,9 +65,9 @@ function LS_left_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(LS_left, 0, LS_left_hnd)
+sasl.registerCommandHandler(LS_left, 0, LS_left_hnd)
 
-local LS_right = findCommand("sim/GPS/g430n1_fine_up")
+local LS_right = sasl.findCommand("sim/GPS/g430n1_fine_up")
 
 function LS_right_hnd(phase)
 	if 1 == phase then
@@ -76,9 +76,9 @@ function LS_right_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(LS_right, 0, LS_right_hnd)
+sasl.registerCommandHandler(LS_right, 0, LS_right_hnd)
 
-local RB_left = findCommand("sim/GPS/g430n1_chapter_dn")
+local RB_left = sasl.findCommand("sim/GPS/g430n1_chapter_dn")
 
 function RB_left_hnd(phase)
 	if 1 == phase then
@@ -87,9 +87,9 @@ function RB_left_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(RB_left, 0, RB_left_hnd)
+sasl.registerCommandHandler(RB_left, 0, RB_left_hnd)
 
-local RB_right = findCommand("sim/GPS/g430n1_chapter_up")
+local RB_right = sasl.findCommand("sim/GPS/g430n1_chapter_up")
 
 function RB_right_hnd(phase)
 	if 1 == phase then
@@ -98,9 +98,9 @@ function RB_right_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(RB_right, 0, RB_right_hnd)
+sasl.registerCommandHandler(RB_right, 0, RB_right_hnd)
 
-local RS_left = findCommand("sim/GPS/g430n1_page_dn")
+local RS_left = sasl.findCommand("sim/GPS/g430n1_page_dn")
 
 function RS_left_hnd(phase)
 	if 1 == phase then
@@ -109,9 +109,9 @@ function RS_left_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(RS_left, 0, RS_left_hnd)
+sasl.registerCommandHandler(RS_left, 0, RS_left_hnd)
 
-local RS_right = findCommand("sim/GPS/g430n1_page_up")
+local RS_right = sasl.findCommand("sim/GPS/g430n1_page_up")
 
 function RS_right_hnd(phase)
 	if 1 == phase then
@@ -120,7 +120,7 @@ function RS_right_hnd(phase)
 	return 0
 end
 
-registerCommandHandler(RS_right, 0, RS_right_hnd)
+sasl.registerCommandHandler(RS_right, 0, RS_right_hnd)
 
 --[[
 sim/GPS/g430n1_popup			Popup 2D panel
@@ -183,7 +183,7 @@ function update()
 
 end
 
-function onAvionicsDone()
+function onModuleDone()
 	
 	set(gps_power, 1)
 	set(kill_map_fms_line, 0)

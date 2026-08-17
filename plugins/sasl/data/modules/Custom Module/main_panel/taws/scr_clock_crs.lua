@@ -4,23 +4,23 @@ size = {480, 94}
 
 defineProperty("course", 0)
 
-local text_font = loadFont('taws_scr.fnt')
+local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
 
 function draw()
 	
 	local crs = get(course) -- seconds
-	--drawRectangle(0, 0, size[1], size[2], 1, 0, 0, 1) -- test
+	--sasl.gl.drawRectangle(0, 0, size[1], size[2], 1, 0, 0, 1) -- test
 	
-	drawRectangle(0, 65, size[1], 10, 1, 1, 1, 1) -- horizontal line
+	sasl.gl.drawRectangle(0, 65, size[1], 10, 1, 1, 1, 1) -- horizontal line
 	
-	--drawRectangle(245, 45, 5, 20, 1, 1, 1, 1) -- zero line text
+	--sasl.gl.drawRectangle(245, 45, 5, 20, 1, 1, 1, 1) -- zero line text
 	
 	for i = math.floor((crs - 40) / 10) * 10, math.floor((crs + 40) / 10) * 10, 10 do
 		
 		if i % 30 == 0 then  -- big lines
 			local line_pos = 240 + (i - crs) * 6
 			if line_pos > 0 and line_pos < size[1] - 5 then
-				drawRectangle(line_pos, 45, 5, 20, 1, 1, 1, 1) -- digit line
+				sasl.gl.drawRectangle(line_pos, 45, 5, 20, 1, 1, 1, 1) -- digit line
 			end
 			
 			local text_pos = 218 + (i - crs) * 6
@@ -31,12 +31,12 @@ function draw()
 				
 				if text < 10 then text = " "..text end
 				
-				drawText(text_font, text_pos, 10, text, 1,1,1,1)
+				sasl.gl.drawBitmapText(text_font, text_pos, 10, text, TEXT_ALIGN_LEFT, {1, 1, 1, 1})
 			end --]]
 		else -- small lines
 			local line_pos = 240 + (i - crs) * 6
 			if line_pos > 0 and line_pos < size[1] - 5 then
-				drawRectangle(line_pos, 30, 5, 35, 1, 1, 1, 1) -- plain line
+				sasl.gl.drawRectangle(line_pos, 30, 5, 35, 1, 1, 1, 1) -- plain line
 			end
 		end
 	

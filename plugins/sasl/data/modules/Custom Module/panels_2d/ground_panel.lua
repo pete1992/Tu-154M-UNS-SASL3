@@ -70,17 +70,17 @@ defineProperty("pitot_fail2", globalPropertyi("tu154/custom/failures/pitot2")) -
 defineProperty("static_fail_L", globalPropertyi("tu154/custom/failures/static1"))  -- static fail
 defineProperty("static_fail_R", globalPropertyi("tu154/custom/failures/static2"))  -- static fail
 defineProperty("uap_fail", globalPropertyi("tu154/custom/failures/AOA")) -- fail
-local text_font = loadFont('basic_font.fnt')
+local text_font = sasl.gl.loadBitmapFont('basic_font.fnt')
 -- load images
-defineProperty("bg_img", loadImage("ground_tex.png")) -- ENG
-defineProperty("bg_img_rus", loadImage("ground_tex_RUS.png")) -- ENG
-defineProperty("green_lamp", loadImage("overhead_tex.png", 1825, 299, 19, 19))
-defineProperty("yellow_lamp", loadImage("overhead_tex.png", 1825, 333, 19, 19))
-defineProperty("lev_img", loadImage("absu_ess.png", 432, 160, 30, 29))
+defineProperty("bg_img", sasl.gl.loadImage("ground_tex.png")) -- ENG
+defineProperty("bg_img_rus", sasl.gl.loadImage("ground_tex_RUS.png")) -- ENG
+defineProperty("green_lamp", sasl.gl.loadImage("overhead_tex.png", 1825, 299, 19, 19))
+defineProperty("yellow_lamp", sasl.gl.loadImage("overhead_tex.png", 1825, 333, 19, 19))
+defineProperty("lev_img", sasl.gl.loadImage("absu_ess.png", 432, 160, 30, 29))
 asu_work = globalPropertyi("tu154/custom/asu/work")
 
 -- sim/operation/toggle_yoke
-yokes_cmd = findCommand("sim/operation/toggle_yoke")
+yokes_cmd = sasl.findCommand("sim/operation/toggle_yoke")
 
 function yokes_hnd(phase)
 	if 0 == phase then
@@ -88,7 +88,7 @@ function yokes_hnd(phase)
 	end
 	return 0
 end
-registerCommandHandler(yokes_cmd, 0, yokes_hnd)
+sasl.registerCommandHandler(yokes_cmd, 0, yokes_hnd)
 
 local ladder_1_pos = get(ladder_1)
 local ladder_2_pos = get(ladder_2)
@@ -128,7 +128,7 @@ function update()
 		coldDarkReset()
 	end
 	-- main sound volume
-	setMasterGain(get(sounds_volume))
+	sasl.al.setMasterGain(get(sounds_volume))
 	ladder_1_pos = get(ladder_1)
 	ladder_2_pos = get(ladder_2)
 	catering_pos = get(catering)

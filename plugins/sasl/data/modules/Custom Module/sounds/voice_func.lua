@@ -52,7 +52,7 @@ end
 -- play first phrase from the table and move next ones up one step
 function read_phrase()
 	local timeout = phrases_tbl[1][2]
-	if phrases_tbl[1][1] ~= 0 and get(enable_crew_vo) == 1 then playSample(phrases_tbl[1][1], false) end
+	if phrases_tbl[1][1] ~= 0 and get(enable_crew_vo) == 1 then sasl.al.playSample(phrases_tbl[1][1], false) end
 	
 	move_phr(1)
 	

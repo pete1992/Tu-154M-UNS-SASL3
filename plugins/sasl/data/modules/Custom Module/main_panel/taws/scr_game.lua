@@ -13,11 +13,11 @@ defineProperty("but_empty", globalPropertyi("tu154/custom/buttons/srpbz/but_empt
 defineProperty("but_down", globalPropertyi("tu154/custom/buttons/srpbz/but_down")) --   
 defineProperty("but_up", globalPropertyi("tu154/custom/buttons/srpbz/but_up")) --  
 
-local pong_sound = loadSample('Custom Sounds/pong.wav') --
-local sqr_sound = loadSample('Custom Sounds/square.wav') --
+local pong_sound = sasl.al.loadSample('Custom Sounds/pong.wav') --
+local sqr_sound = sasl.al.loadSample('Custom Sounds/square.wav') --
 
 -- images
-local text_font = loadFont('taws_scr.fnt')
+local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
 
 local screen_work = false
 
@@ -140,19 +140,19 @@ function update()
 		if ball.x <= ball.size/2 then 
 			ball.x = ball.size/2
 			ball.vel_x = math.abs(ball.vel_x) 
-			playSample(pong_sound, false) 
+			sasl.al.playSample(pong_sound, false)
 		end 
 		-- right wall
 		if ball.x >= size[1]-ball.size/2 then 
 			ball.x = size[1]-ball.size/2
 			ball.vel_x = -math.abs(ball.vel_x) 
-			playSample(pong_sound, false) 
+			sasl.al.playSample(pong_sound, false)
 		end 
 		-- upper wall
 		if ball.y >= size[2]-ball.size/2 - 50 then 
 			ball.y = size[2]-ball.size/2 - 50
 			ball.vel_y = -math.abs(ball.vel_y) 
-			playSample(pong_sound, false) 
+			sasl.al.playSample(pong_sound, false)
 		end 
 		
 		-- ball hit the floor
@@ -179,7 +179,7 @@ function update()
 				
 				score = score + 10
 				
-				playSample(sqr_sound, false)
+				sasl.al.playSample(sqr_sound, false)
 				
 				if ball.x + ball.size/2 < v.x + barrel_x / 10 or ball.x - ball.size/2 > v.x + barrel_x - barrel_x / 10 then
 					ball.vel_x = -ball.vel_x
@@ -202,7 +202,7 @@ function update()
 			ball.vel_x = math.sin((ball.x - player.x) / player.size_x * 2)
 			ball.vel_y = math.abs(math.cos((ball.x - player.x) / player.size_x * 2))
 			
-			if game_started then playSample(pong_sound, false) end
+			if game_started then sasl.al.playSample(pong_sound, false) end
 		
 		end
 		
@@ -217,31 +217,31 @@ function draw()
 	
 if screen_work then
 	-- draw background
-	drawRectangle(0, 0, size[1], size[2]-50, 0.0, 0.1, 0.2, 1) 
+	sasl.gl.drawRectangle(0, 0, size[1], size[2]-50, 0.0, 0.1, 0.2, 1)
 	
 	-- draw player
-	drawRectangle(player.x - player.size_x/2, player.y, player.size_x, player.size_y, 0.3, 0.8, 0.5, 1) 
+	sasl.gl.drawRectangle(player.x - player.size_x/2, player.y, player.size_x, player.size_y, 0.3, 0.8, 0.5, 1)
 	
 	-- draw ball
-	drawRectangle(ball.x - ball.size/2, ball.y - ball.size/2, ball.size, ball.size, 0.9, 0.4, 0.1, 1) 
+	sasl.gl.drawRectangle(ball.x - ball.size/2, ball.y - ball.size/2, ball.size, ball.size, 0.9, 0.4, 0.1, 1)
 	
 	-- draw barrels
 	for _, v in pairs(barrels) do
-		drawRectangle(v.x, v.y, barrel_x, barrel_y, 0.8, 0.8, 0.5, 1)
+		sasl.gl.drawRectangle(v.x, v.y, barrel_x, barrel_y, 0.8, 0.8, 0.5, 1)
 	end
 	
-	drawText(text_font, 10, 350, "P: "..player.life, 1,1,1,1)
-	drawText(text_font, 100, 350, "LVL: "..level, 1,1,1,1)
-	drawText(text_font, 250, 350, "PTS: "..score, 1,1,1,1)
+	sasl.gl.drawBitmapText(text_font, 10, 350, "P: "..player.life, TEXT_ALIGN_LEFT, {1, 1, 1, 1})
+	sasl.gl.drawBitmapText(text_font, 100, 350, "LVL: "..level, TEXT_ALIGN_LEFT, {1, 1, 1, 1})
+	sasl.gl.drawBitmapText(text_font, 250, 350, "PTS: "..score, TEXT_ALIGN_LEFT, {1, 1, 1, 1})
 	
 	if game_lost then
-		drawText(text_font, 130, 210, "GAME OVER", 1,1,1,1)
-		drawText(text_font, 40, 150, "PRESS MOD TO EXIT", 1,1,1,1)
-		drawText(text_font, 15, 100, "PRESS BUT2 TO RESET", 1,1,1,1)
+		sasl.gl.drawBitmapText(text_font, 130, 210, "GAME OVER", TEXT_ALIGN_LEFT, {1, 1, 1, 1})
+		sasl.gl.drawBitmapText(text_font, 40, 150, "PRESS MOD TO EXIT", TEXT_ALIGN_LEFT, {1, 1, 1, 1})
+		sasl.gl.drawBitmapText(text_font, 15, 100, "PRESS BUT2 TO RESET", TEXT_ALIGN_LEFT, {1, 1, 1, 1})
 	end
 	
 	if not game_started then
-		drawText(text_font, 160, 170, "LEVEL: "..level, 1,1,1,1)
+		sasl.gl.drawBitmapText(text_font, 160, 170, "LEVEL: "..level, TEXT_ALIGN_LEFT, {1, 1, 1, 1})
 	end
 	
 end

@@ -119,9 +119,9 @@ defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = p
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
 -- sounds
-local rotary_sound = loadSample('Custom Sounds/plastic_switch.wav')
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = loadSample('Custom Sounds/cap.wav')
+local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
 local passed = get(frame_time)
 local notLoaded = true
 
@@ -459,7 +459,7 @@ local function caps_check()
 	
 	changes = changes - stab_man_cap_last - contr_force_cap_last - nosewheel_turn_cap_last - slat_man_cap_last - gears_retr_lock_cap_last - gears_ext_3GS_cap_last - busters_cap_last - flaps_sel_cap_last - emerg_elev_trimm_cap_last
 	
-	if changes ~= 0 then playSample(cap_sound, false) end
+	if changes ~= 0 then sasl.al.playSample(cap_sound, false) end
 	stab_man_cap_last = stab_man_cap_sw
 	contr_force_cap_last = contr_force_cap_sw
 	nosewheel_turn_cap_last = nosewheel_turn_cap_sw
@@ -516,7 +516,7 @@ local function swichers_check()
 	changes = changes - stab_manual_last - stab_setting_last - ail_trimm_sw_last - rudd_trimm_sw_last - contr_force_set_last - nosewheel_turn_enable_last - nosewheel_turn_sel_last
 	changes = changes - slat_man_last - flaps_sel_last - gears_retr_lock_last - gears_ext_3GS_last - buster_on_1_last - buster_on_2_last - buster_on_3_last - emerg_elev_trimm_last
 	
-	if changes ~= 0 then playSample(switcher_sound, false) end
+	if changes ~= 0 then sasl.al.playSample(switcher_sound, false) end
 
 	stab_manual_last = stab_manual_sw
 	stab_setting_last = stab_setting_sw

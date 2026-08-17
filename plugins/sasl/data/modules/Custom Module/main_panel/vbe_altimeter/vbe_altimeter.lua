@@ -44,24 +44,24 @@ defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = p
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
 -- load images
-defineProperty("scale_img", loadImage("vbe_scale.png", 0, 4, 424, 424))
-defineProperty("green_img", loadImage("vbe_scale.png", 445, 0, 60, 60))
-defineProperty("yellow_img", loadImage("vbe_scale.png", 445, 65, 60, 60))
-defineProperty("hpa_rus_img", loadImage("vbe_scale.png", 441, 135, 68, 35))
-defineProperty("hpa_eng_img", loadImage("vbe_scale.png", 441, 176, 68, 35))
-defineProperty("borderg_img", loadImage("vbe_scale.png", 5, 458, 153, 50))
-defineProperty("ft_img", loadImage("vbe_scale.png", 448, 220, 46, 35))
-defineProperty("mtr_img", loadImage("vbe_scale.png", 448, 257, 46, 35))
-defineProperty("ALT_img", loadImage("vbe_scale.png", 437, 301, 68, 33))
-defineProperty("E_img", loadImage("vbe_scale.png", 442, 345, 27, 46))
-defineProperty("minus_img", loadImage("vbe_scale.png", 442, 350, 27, 35))
-defineProperty("needle_img", loadImage("vbe_scale.png", 178, 482, 320, 6))
-defineProperty("digitsImage", loadImage("black_digit_strip.png", 12, 0, 40, 784))
-defineProperty("bold_digitsImage", loadImage("bold_digit_strip.png", 12, 0, 40, 784))
+defineProperty("scale_img", sasl.gl.loadImage("vbe_scale.png", 0, 4, 424, 424))
+defineProperty("green_img", sasl.gl.loadImage("vbe_scale.png", 445, 0, 60, 60))
+defineProperty("yellow_img", sasl.gl.loadImage("vbe_scale.png", 445, 65, 60, 60))
+defineProperty("hpa_rus_img", sasl.gl.loadImage("vbe_scale.png", 441, 135, 68, 35))
+defineProperty("hpa_eng_img", sasl.gl.loadImage("vbe_scale.png", 441, 176, 68, 35))
+defineProperty("borderg_img", sasl.gl.loadImage("vbe_scale.png", 5, 458, 153, 50))
+defineProperty("ft_img", sasl.gl.loadImage("vbe_scale.png", 448, 220, 46, 35))
+defineProperty("mtr_img", sasl.gl.loadImage("vbe_scale.png", 448, 257, 46, 35))
+defineProperty("ALT_img", sasl.gl.loadImage("vbe_scale.png", 437, 301, 68, 33))
+defineProperty("E_img", sasl.gl.loadImage("vbe_scale.png", 442, 345, 27, 46))
+defineProperty("minus_img", sasl.gl.loadImage("vbe_scale.png", 442, 350, 27, 35))
+defineProperty("needle_img", sasl.gl.loadImage("vbe_scale.png", 178, 482, 320, 6))
+defineProperty("digitsImage", sasl.gl.loadImage("black_digit_strip.png", 12, 0, 40, 784))
+defineProperty("bold_digitsImage", sasl.gl.loadImage("bold_digit_strip.png", 12, 0, 40, 784))
 
 -- sounds
-local switcher_sound = loadSample('Custom Sounds/metal_switch.wav')
-local vbe_alarm_snd = loadSample('Custom Sounds/vbe_alarm.wav')
+local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local vbe_alarm_snd = sasl.al.loadSample('Custom Sounds/vbe_alarm.wav')
 
 local power = true
 local mode = get(vbe_mode) -- 0 - meters, 1 - feet
@@ -105,7 +105,7 @@ function update()
 	local num = get(gauge_num)
 	-- check switchers and make it sound
 	if get(vbe_on) ~= switcher_last then
-		playSample(switcher_sound, false)
+		sasl.al.playSample(switcher_sound, false)
 	end
 	switcher_last = get(vbe_on)
 	
@@ -294,11 +294,11 @@ end
 	-- sounds
 	local external = get(external_view) == 1
 	if ((mode_last ~= border_mode and border_mode == 1) or (mode_last == 0 and border_mode == 2) or (mode_last == 2 and border_mode == 1)) and self_test_timer > 8 and num == 0 and not external then
-		playSample(vbe_alarm_snd, false)
+		sasl.al.playSample(vbe_alarm_snd, false)
 	end
 	mode_last = border_mode
 	
-	setSampleGain(vbe_alarm_snd, 1000 * get(warning_volume_ratio))
+	sasl.al.setSampleGain(vbe_alarm_snd, 1000 * get(warning_volume_ratio))
 	
 	-- self test after power ON
 	self_test_timer = self_test_timer + passed
@@ -315,10 +315,10 @@ end
 			needle_angle = self_test_timer * 45 + 90
 			border_mode = 2
 		elseif self_test_timer < 8 then
-			if not isSamplePlaying(vbe_alarm_snd) and self_test_timer < 5 and num == 0 and not external then
-				playSample(vbe_alarm_snd, false)
+			if not sasl.al.isSamplePlaying(vbe_alarm_snd) and self_test_timer < 5 and num == 0 and not external then
+				sasl.al.playSample(vbe_alarm_snd, false)
 			elseif external or self_test_timer >= 6 then
-				stopSample(vbe_alarm_snd)
+				sasl.al.stopSample(vbe_alarm_snd)
 			end
 			mode = 1
 			show_E = false
