@@ -1,0 +1,10 @@
+{
+    "panel": {
+        "left":     2057,
+        "bottom":   0,
+        "width":    1013,
+        "height":   713,
+		"enabled": true,
+		"aircraft_managed": false
+    }
+}

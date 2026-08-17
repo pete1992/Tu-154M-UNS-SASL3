@@ -1,0 +1,1535 @@
+createGlobalPropertyi("tu154/custom/save_state_enabled", 1) --     
+createGlobalPropertyi("tu154/custom/reset_state", 0) --   
+createGlobalPropertyi("tu154/custom/save_state", 0) --    
+createGlobalPropertyi("tu154/custom/hardware_cockpit", 0) --     
+createGlobalPropertyf("tu154/custom/time/frame_time", 0.1) --   .   ,    .  FPS  10 -    = 0.1
+createGlobalPropertyf("tu154/custom/anim/cargo_1", 0) --    1. 0 - , 1 - 
+createGlobalPropertyf("tu154/custom/anim/cargo_2", 0) --    2. 0 - , 1 - 
+createGlobalPropertyf("tu154/custom/anim/apu_doors", 0) --   . 0 - , 1 - .
+createGlobalPropertyf("tu154/custom/anim/pax_door_1", 0) --    
+createGlobalPropertyf("tu154/custom/anim/pax_door_2", 0) --    
+createGlobalPropertyf("tu154/custom/anim/pax_door_3", 0) --    
+createGlobalPropertyf("tu154/custom/anim/lg/front_pos", 1) --    
+createGlobalPropertyf("tu154/custom/anim/lg/front_defl", 0) --    
+createGlobalPropertyf("tu154/custom/anim/lg/front_turn", 0) --    
+createGlobalPropertyf("tu154/custom/anim/lg/main_pos_left", 1) --    . 0-1 - , 1+ -  
+createGlobalPropertyf("tu154/custom/anim/lg/main_rot_left", 0) --     
+createGlobalPropertyf("tu154/custom/anim/lg/main_pos_right", 1) --    . 0-1 - , 1+ -  
+createGlobalPropertyf("tu154/custom/anim/lg/main_rot_right", 0) --     
+createGlobalPropertyf("tu154/custom/anim/light_open_left", 0) --   
+createGlobalPropertyf("tu154/custom/anim/light_open_right", 0) --   
+createGlobalPropertyf("tu154/custom/anim/spd_brk_inn_left", 0) --    
+createGlobalPropertyf("tu154/custom/anim/spd_brk_inn_right", 0) --    
+createGlobalPropertyf("tu154/custom/anim/wing_flx_left", 0) --    .   -  
+createGlobalPropertyf("tu154/custom/anim/wing_flx_right", 0) --    .   -  
+createGlobalPropertyf("tu154/custom/anim/rudder_anim", 0) --      .          .
+createGlobalPropertyf("tu154/custom/anim/elev_anim_L", 0) --    
+createGlobalPropertyf("tu154/custom/anim/elev_anim_R", 0) --    
+createGlobalPropertyf("tu154/custom/anim/cockpit_door", 0) --    
+createGlobalPropertyf("tu154/custom/anim/cockpit_table_1", 0) --    
+createGlobalPropertyf("tu154/custom/anim/cockpit_table_2", 0) --    
+createGlobalPropertyf("tu154/custom/anim/cockpit_vent_1", 0) --   
+createGlobalPropertyf("tu154/custom/anim/cockpit_vent_2", 0) --   
+createGlobalPropertyf("tu154/custom/anim/cockpit_vent_3", 0) --   
+createGlobalPropertyf("tu154/custom/anim/cockpit_window_left", 0) --  
+createGlobalPropertyf("tu154/custom/anim/cockpit_window_right", 0) --  
+createGlobalPropertyi("tu154/custom/anim/show_gns", 1) --    GNS430  KLN
+createGlobalPropertyi("tu154/custom/anim/RXP", 0) --    RXP
+createGlobalPropertyi("tu154/custom/anim/show_yokes", 1) --   
+createGlobalPropertyi("tu154/custom/anim/show_chairs", 1) --   
+createGlobalPropertyf("tu154/custom/anim/rise_chair_arm_L", 0) --   
+createGlobalPropertyf("tu154/custom/anim/rise_chair_arm_R", 0) --   
+createGlobalPropertyi("tu154/custom/anim/table_up_L", 0) --  
+createGlobalPropertyi("tu154/custom/anim/table_up_R", 0) --  
+createGlobalPropertyi("tu154/custom/anim/gpu_present", 0) --  
+createGlobalPropertyf("tu154/custom/anim/gpu_work", 0) --  .   
+createGlobalPropertyf("tu154/custom/anim/ground_stuff_angle", 0) --      
+createGlobalPropertyf("tu154/custom/anim/window_ice_1", 0) --    
+createGlobalPropertyf("tu154/custom/anim/window_ice_2", 0) --    
+createGlobalPropertyf("tu154/custom/anim/window_ice_3", 0) --    
+createGlobalPropertyf("tu154/custom/anim/window_ice_4", 0) --     
+createGlobalPropertyi("tu154/custom/anim/gear_blocks", 0) --   
+createGlobalPropertyi("tu154/custom/anim/sensors_caps", 0) --   
+createGlobalPropertyi("tu154/custom/anim/engine_caps", 0) --   
+createGlobalPropertyf("tu154/custom/anim/ladder_1", 500) -- . 500 - . +50..0 - , 0 -   , 0..-50 - 
+createGlobalPropertyf("tu154/custom/anim/ladder_2", 500) -- 
+createGlobalPropertyf("tu154/custom/anim/catering", 500) -- 
+createGlobalPropertyf("tu154/custom/anim/fuel_tanker", 500) -- 
+createGlobalPropertyi("tu154/custom/anim/ladder_1_call", 0) -- . 1 ,0 - 
+createGlobalPropertyi("tu154/custom/anim/ladder_2_call", 0) -- 
+createGlobalPropertyi("tu154/custom/anim/catering_call", 0) -- 
+createGlobalPropertyi("tu154/custom/anim/fuel_tanker_call", 0) -- 
+createGlobalPropertyf("tu154/custom/anim/reverse_mid", 0) --    
+createGlobalPropertyi("tu154/custom/buttons/clock_24_left", 0) --   24- . 0 - , 1 -  (  )
+createGlobalPropertyi("tu154/custom/buttons/clock_24_right", 0) --   24- 
+createGlobalPropertyf("tu154/custom/gauges/clock_24_hours", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/clock_24_mins", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/clock_24_red", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/spu_1_power", 1) --     .  -1 -  2, 0 - , 1 -  1
+createGlobalPropertyi("tu154/custom/switchers/spu_1_mode", 0) --     . 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/spu_1_source", 0) --     
+createGlobalPropertyi("tu154/custom/switchers/spu_2_power", 1) --     2
+createGlobalPropertyi("tu154/custom/switchers/spu_2_mode", 0) --     2
+createGlobalPropertyi("tu154/custom/switchers/spu_2_source", 0) --     2
+createGlobalPropertyi("tu154/custom/switchers/spu_3_power", 1) --     
+createGlobalPropertyi("tu154/custom/switchers/spu_3_mode", 0) --     
+createGlobalPropertyi("tu154/custom/switchers/spu_3_source", 0) --     
+createGlobalPropertyi("tu154/custom/switchers/spu_4_power", 1) --     
+createGlobalPropertyi("tu154/custom/switchers/spu_4_mode", 0) --     
+createGlobalPropertyi("tu154/custom/switchers/spu_4_source", 0) --     
+createGlobalPropertyi("tu154/custom/lights/mid_left_panel_int_set", 3) --      
+createGlobalPropertyi("tu154/custom/lights/left_panel_int_set", 3) --     
+createGlobalPropertyi("tu154/custom/lights/right_panel_int_set", 3) --     
+createGlobalPropertyi("tu154/custom/lights/mid_right_panel_int_set", 3) --      2
+createGlobalPropertyi("tu154/custom/lights/ovhd_panel_int_set", 3) --     
+createGlobalPropertyf("tu154/custom/lights/left_panel_flood_set", 0.3) --      
+createGlobalPropertyf("tu154/custom/lights/right_panel_flood_set", 0.3) --      
+createGlobalPropertyf("tu154/custom/lights/mid_panel_flood_set", 0.3) --      
+createGlobalPropertyf("tu154/custom/lights/front_panel_flood_set", 0.3) --      
+createGlobalPropertyf("tu154/custom/lights/ovhd_front_panel_flood_set", 0.3) --       
+createGlobalPropertyf("tu154/custom/lights/ovhd_back_panel_flood_set", 0.3) --       
+createGlobalPropertyf("tu154/custom/lights/eng_panel_flood_set", 0.3) --     
+createGlobalPropertyi("tu154/custom/lights/cabinl_flood_set", 0) --   
+createGlobalPropertyi("tu154/custom/lights/azs_panel_flood_set", 0) --    
+createGlobalPropertyi("tu154/custom/lights/day_night_set", 0) --   - . 0 - , 1 - .    .
+createGlobalPropertyi("tu154/custom/lights/cargo_light_1_set", 0) --    
+createGlobalPropertyi("tu154/custom/lights/cargo_light_2_set", 0) --    
+createGlobalPropertyi("tu154/custom/lights/tech_light_set", 0) --    
+createGlobalPropertyi("tu154/custom/lights/gear_nacelle_light_set", 0) --    
+createGlobalPropertyf("tu154/custom/lights/cabin_2d_light", 0) --  2D   
+createGlobalPropertyi("tu154/custom/lights/nav_lights_set", 1) --   
+createGlobalPropertyi("tu154/custom/lights/strobe_set", 1) --   
+createGlobalPropertyi("tu154/custom/lights/wing_light_left_set", 0) --   
+createGlobalPropertyi("tu154/custom/lights/wing_light_right_set", 0) --   
+createGlobalPropertyi("tu154/custom/lights/tail_light_set", 1) --   
+createGlobalPropertyi("tu154/custom/lights/wing_light_left", 0) --   
+createGlobalPropertyi("tu154/custom/lights/wing_light_right", 0) --   
+createGlobalPropertyi("tu154/custom/lights/tail_light", 0) --  
+createGlobalPropertyi("tu154/custom/lights/landing_ext_set_L", 0) --   
+createGlobalPropertyi("tu154/custom/lights/landing_ext_set_R", 0) --   
+createGlobalPropertyi("tu154/custom/lights/landing_mode_set_L", 0) --   . -1 - , 0 - , +1 - 
+createGlobalPropertyi("tu154/custom/lights/landing_mode_set_R", 0) --   
+createGlobalPropertyi("tu154/custom/lights/light_signal_set", 0) --   
+createGlobalPropertyf("tu154/custom/controlls/nosewheel_lever", 0) --    
+createGlobalPropertyf("tu154/custom/controlls/yoke_pitch", 0) --    
+createGlobalPropertyf("tu154/custom/controlls/yoke_roll", 0) --    
+createGlobalPropertyf("tu154/custom/controlls/pedals", 0) --  
+createGlobalPropertyf("tu154/custom/controlls/brake_L", 0) --   
+createGlobalPropertyf("tu154/custom/controlls/brake_R", 0) --   
+createGlobalPropertyf("tu154/custom/controlls/brake_emerg", 0) --  
+createGlobalPropertyf("tu154/custom/controlls/brake_emerg_L", 0) --   
+createGlobalPropertyf("tu154/custom/controlls/brake_emerg_R", 0) --   
+createGlobalPropertyf("tu154/custom/controlls/spoilers_lever", 0) --  
+createGlobalPropertyf("tu154/custom/controlls/throttle_1", 0) --  1
+createGlobalPropertyf("tu154/custom/controlls/throttle_2", 0) --  2
+createGlobalPropertyf("tu154/custom/controlls/throttle_3", 0) --  3
+createGlobalPropertyf("tu154/custom/controlls/throttle_1_ENG", 0) --  1 
+createGlobalPropertyf("tu154/custom/controlls/throttle_2_ENG", 0) --  2 
+createGlobalPropertyf("tu154/custom/controlls/throttle_3_ENG", 0) --  3 
+createGlobalPropertyf("tu154/custom/controlls/revers_L", 0) --   
+createGlobalPropertyf("tu154/custom/controlls/revers_R", 0) --   
+createGlobalPropertyf("tu154/custom/controlls/fuel_cutoff_1", 0) --    1
+createGlobalPropertyf("tu154/custom/controlls/fuel_cutoff_2", 0) --    2
+createGlobalPropertyf("tu154/custom/controlls/fuel_cutoff_3", 0) --    3
+createGlobalPropertyf("tu154/custom/controlls/throttle_lock", 0) --   
+createGlobalPropertyi("tu154/custom/controll/parking_brake", 0) --   
+createGlobalPropertyi("tu154/custom/controll/emerg_gear_ext", 0) --    
+createGlobalPropertyf("tu154/custom/controll/flaps_lever", 0) --   . 0-45
+createGlobalPropertyi("tu154/custom/controll/gear_lever", 0) --   . -1 - , 0 - , +1 - 
+createGlobalPropertyi("tu154/custom/controll/elev_trimm_switcher", 0) --    . -1 - , 0 - , +1 
+createGlobalPropertyi("tu154/custom/controll/stab_man_cap", 0) --   
+createGlobalPropertyi("tu154/custom/controll/stab_manual", 0) --   . 0 - , +1 - 
+createGlobalPropertyi("tu154/custom/controll/stab_setting", 1) --    . 0 - , 1 - , 2 - 
+createGlobalPropertyi("tu154/custom/controll/ail_trimm_sw", 0) --   
+createGlobalPropertyi("tu154/custom/controll/rudd_trimm_sw", 0) --   
+createGlobalPropertyi("tu154/custom/controll/contr_force_cap", 0) --     
+createGlobalPropertyi("tu154/custom/controll/contr_force_set", 0) --    . -1 - , 0 , +1 - -
+createGlobalPropertyi("tu154/custom/switchers/nosewheel_turn_enable", 1) --      
+createGlobalPropertyi("tu154/custom/switchers/nosewheel_turn_sel", 0) --     . 0 - 10, 1 - 63
+createGlobalPropertyi("tu154/custom/switchers/nosewheel_turn_cap", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/slat_man", 0) --   . -1 - , 0 , +1 - 
+createGlobalPropertyi("tu154/custom/switchers/slat_man_cap", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/flaps_sel", 0) --    . -1 - , 0 - , +1 - 
+createGlobalPropertyi("tu154/custom/switchers/flaps_sel_cap", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/gears_retr_lock", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/gears_retr_lock_cap", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/gears_ext_3GS", 0) --    3
+createGlobalPropertyi("tu154/custom/switchers/gears_ext_3GS_cap", 0) --     3
+createGlobalPropertyi("tu154/custom/gauges/acs1/left_knob_press", 0) --    1 
+createGlobalPropertyi("tu154/custom/gauges/acs1/right_knob_press", 0) --    1 
+createGlobalPropertyf("tu154/custom/gauges/acs1/needle_hours", 0) --   1 
+createGlobalPropertyf("tu154/custom/gauges/acs1/needle_mins", 0) --   1 
+createGlobalPropertyf("tu154/custom/gauges/acs1/needle_secs", 0) --   1 
+createGlobalPropertyi("tu154/custom/gauges/acs1/flag_pos", 0) -- -  1 . -1 - , 0 - -, +1 - 
+createGlobalPropertyf("tu154/custom/gauges/acs1/flight_timer_hours", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/acs1/flight_timer_mins", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/acs1/stopwatch_mins", 0) --   
+createGlobalPropertyi("tu154/custom/gauges/acs2/left_knob_press", 0) --    1 2
+createGlobalPropertyi("tu154/custom/gauges/acs2/right_knob_press", 0) --    1 2
+createGlobalPropertyf("tu154/custom/gauges/acs2/needle_hours", 0) --   1 2
+createGlobalPropertyf("tu154/custom/gauges/acs2/needle_mins", 0) --   1 2
+createGlobalPropertyf("tu154/custom/gauges/acs2/needle_secs", 0) --   1 2
+createGlobalPropertyi("tu154/custom/gauges/acs2/flag_pos", 0) -- -  1 2
+createGlobalPropertyf("tu154/custom/gauges/acs2/flight_timer_hours", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/acs2/flight_timer_mins", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/acs2/stopwatch_mins", 0) --   
+createGlobalPropertyi("tu154/custom/gauges/acs3/left_knob_press", 0) --    1 
+createGlobalPropertyi("tu154/custom/gauges/acs3/right_knob_press", 0) --    1 
+createGlobalPropertyf("tu154/custom/gauges/acs3/needle_hours", 0) --   1 
+createGlobalPropertyf("tu154/custom/gauges/acs3/needle_mins", 0) --   1 
+createGlobalPropertyf("tu154/custom/gauges/acs3/needle_secs", 0) --   1 
+createGlobalPropertyi("tu154/custom/gauges/acs3/flag_pos", 0) -- -  1 
+createGlobalPropertyf("tu154/custom/gauges/acs3/flight_timer_hours", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/acs3/flight_timer_mins", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/acs3/stopwatch_mins", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/speed/kus_ias_left", 0) --    730 
+createGlobalPropertyf("tu154/custom/gauges/speed/kus_tas_left", 0) --    730 
+createGlobalPropertyf("tu154/custom/gauges/speed/kus_ias_right", 0) --    730 2
+createGlobalPropertyf("tu154/custom/gauges/speed/kus_tas_right", 0) --    730 2
+createGlobalPropertyf("tu154/custom/gauges/speed/kus_ias_eng", 0) --    730 
+createGlobalPropertyf("tu154/custom/gauges/speed/kus_tas_eng", 0) --    730 
+createGlobalPropertyf("tu154/custom/gauges/speed/ias_left", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/speed/ias_yellow_left", 0) --      
+createGlobalPropertyf("tu154/custom/gauges/speed/ias_right", 0) --   2
+createGlobalPropertyf("tu154/custom/gauges/speed/ias_yellow_right", 0) --      2
+createGlobalPropertyf("tu154/custom/gauges/speed/mach_left", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/speed/mach_right", 0) --   2
+createGlobalPropertyf("tu154/custom/gauges/speed/speed_mid_needle", 0) --     
+createGlobalPropertyi("tu154/custom/gauges/speed/speed_mid_flag", 0) --      0 - , 1 - 
+createGlobalPropertyf("tu154/custom/gauges/alt/var75", 0) --  75 
+createGlobalPropertyf("tu154/custom/gauges/alt/var30", 0) --  30 
+createGlobalPropertyf("tu154/custom/gauges/alt/radioalt_needle_left", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/alt/radioalt_dh_left", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left", 0) --   
+createGlobalPropertyi("tu154/custom/gauges/alt/radioalt_button_left", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/alt/radioalt_needle_right", 0) --   2
+createGlobalPropertyf("tu154/custom/gauges/alt/radioalt_dh_right", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/alt/radioalt_flag_right", 0) --   2
+createGlobalPropertyi("tu154/custom/gauges/alt/radioalt_button_right", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_needle_left", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_feet_counter", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_hundreads_counter", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_thousands_counter", 0) --    .
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_tens_thousands_counter", 0) --     .
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_pressure_knob", 1013) --   
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_pressure_one", 3) --  
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_pressure_ten", 1) --  
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_pressure_hund", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/alt/uvid_pressure_thous", 1) --  
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_alt_left", 0) --   15 
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_tri_needle_left", 0) --    15 
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_pressure_left", 760) --   15 
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_alt_right", 0) --   15 2
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_tri_needle_right", 0) --    15 2
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_pressure_right", 760) --   15 2
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_alt_eng", 0) --   15 
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_tri_needle_eng", 0) --    15 
+createGlobalPropertyf("tu154/custom/gauges/alt/vd15_pressure_eng", 760) --   15 
+createGlobalPropertyf("tu154/custom/gauges/alt/vbe_alt_left", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_press_left", 1013) --    
+createGlobalPropertyf("tu154/custom/gauges/alt/vbe_brt_left", 0.7) --    
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_press_knob_left", 0) --      
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_fl_knob_left", 0) --      
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_mode_but_left", 0) --      
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_mode_left", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_std_left", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/alt/vbe_alt_right", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_press_right", 1013) --    
+createGlobalPropertyf("tu154/custom/gauges/alt/vbe_brt_right", 0.7) --    
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_press_knob_right", 0) --      
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_fl_knob_right", 0) --      
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_mode_but_right", 0) --      
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_mode_right", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/alt/vbe_std_right", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/vsi/vsi_brt_left", 0.7) --   VSI
+createGlobalPropertyf("tu154/custom/gauges/vsi/vsi_brt_right", 0.7) --   VSI
+createGlobalPropertyf("tu154/custom/gauges/compas/radiocomp_scale_left", 0) --     
+createGlobalPropertyf("tu154/custom/gauges/compas/bearing_1_left", 0) --   1  
+createGlobalPropertyf("tu154/custom/gauges/compas/bearing_2_left", 0) --   2  
+createGlobalPropertyi("tu154/custom/gauges/compas/source_1_switch_left", 1) --   1  . 0 - , 1 - 1, 2 - 2, 3 - VOR1, 4 - VOR2, 5 - 
+createGlobalPropertyi("tu154/custom/gauges/compas/source_2_switch_left", 2) --   2  
+createGlobalPropertyf("tu154/custom/gauges/compas/radiocomp_scale_right", 0) --     2
+createGlobalPropertyf("tu154/custom/gauges/compas/bearing_1_right", 0) --   1  2
+createGlobalPropertyf("tu154/custom/gauges/compas/bearing_2_right", 0) --   2  2
+createGlobalPropertyi("tu154/custom/gauges/compas/source_1_switch_right", 1) --   1  2. 0 - , 1 - 1, 2 - 2, 3 - VOR1, 4 - VOR2, 5 - 
+createGlobalPropertyi("tu154/custom/gauges/compas/source_2_switch_right", 2) --   2  2
+createGlobalPropertyf("tu154/custom/gauges/compas/big_knob", 0) --      
+createGlobalPropertyf("tu154/custom/gauges/compas/big_course_needle", 0) --  ""
+createGlobalPropertyf("tu154/custom/gauges/compas/big_true_course_needle", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/compas/big_tri_needle", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_gyro_course_L", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_L", 0) --     
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_helper_course_L", 0) --       
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_slip_angle_L", 0) --     
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_course_plank_L", 0) --     +   
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_gs_plank_L", 0) --     +   
+createGlobalPropertyi("tu154/custom/gauges/compas/pkp_course_flag_L", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/compas/pkp_gs_flag_L", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/compas/pkp_main_flag_L", 0) --   
+createGlobalPropertyi("tu154/custom/gauges/compas/pkp_obs_flag_L", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_one_L", 0) --  . 
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_ten_L", 0) --  . 
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_hundr_L", 0) --  . 
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_knob_L", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_set_L", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_gyro_course_R", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_R", 0) --     2
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_helper_course_R", 0) --       2
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_slip_angle_R", 0) --     2
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_course_plank_R", 0) --    2 +   
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_gs_plank_R", 0) --    2 +   
+createGlobalPropertyi("tu154/custom/gauges/compas/pkp_course_flag_R", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/compas/pkp_gs_flag_R", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/compas/pkp_main_flag_R", 0) --   
+createGlobalPropertyi("tu154/custom/gauges/compas/pkp_obs_flag_R", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_one_R", 0) --  . 
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_ten_R", 0) --  . 
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_hundr_R", 0) --  . 
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_knob_R", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/compas/pkp_obs_set_R", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/ahz/roll_L", 0) --     +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/pitch_L", 0) --     +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/dir_roll_L", 0) --     +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/dir_pitch_L", 0) --      + 
+createGlobalPropertyf("tu154/custom/gauges/ahz/course_plank_L", 0) --     +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/gs_plank_L", 0) --     + 
+createGlobalPropertyf("tu154/custom/gauges/ahz/speed_plank_L", 0) --     + 
+createGlobalPropertyf("tu154/custom/gauges/ahz/pitch_corr_L", 0) --      + 
+createGlobalPropertyi("tu154/custom/gauges/ahz/ahz_flag_L", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/ahz/dir_roll_flag_L", 0) --      
+createGlobalPropertyi("tu154/custom/gauges/ahz/dir_pitch_flag_L", 0) --      
+createGlobalPropertyf("tu154/custom/gauges/ahz/roll_R", 0) --    2 +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/pitch_R", 0) --    2 +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/dir_roll_R", 0) --    2 +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/dir_pitch_R", 0) --     2 + 
+createGlobalPropertyf("tu154/custom/gauges/ahz/course_plank_R", 0) --    2 +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/gs_plank_R", 0) --    2 + 
+createGlobalPropertyf("tu154/custom/gauges/ahz/speed_plank_R", 0) --    2 + 
+createGlobalPropertyf("tu154/custom/gauges/ahz/pitch_corr_R", 0) --     2 + 
+createGlobalPropertyi("tu154/custom/gauges/ahz/ahz_flag_R", 0) --    
+createGlobalPropertyi("tu154/custom/gauges/ahz/dir_roll_flag_R", 0) --      
+createGlobalPropertyi("tu154/custom/gauges/ahz/dir_pitch_flag_R", 0) --      
+createGlobalPropertyf("tu154/custom/gauges/ahz/roll_C", 0) --    +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/pitch_C", 0) --    +  
+createGlobalPropertyf("tu154/custom/gauges/ahz/pitch_corr_C", 0) --     + 
+createGlobalPropertyi("tu154/custom/gauges/ahz/ahz_flag_C", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/misc/aoa_ind", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/aoa_sector", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/misc/gforce_ind", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/misc/gforce_max", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/gforce_min", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/misc/gforce_reset", 0) --     
+createGlobalPropertyf("tu154/custom/gauges/engine/rpm_low_1", 0) --     №1
+createGlobalPropertyf("tu154/custom/gauges/engine/rpm_low_2", 0) --     №2
+createGlobalPropertyf("tu154/custom/gauges/engine/rpm_low_3", 0) --     №3
+createGlobalPropertyf("tu154/custom/gauges/engine/rpm_high_1", 0) --     №1
+createGlobalPropertyf("tu154/custom/gauges/engine/rpm_high_2", 0) --     №2
+createGlobalPropertyf("tu154/custom/gauges/engine/rpm_high_3", 0) --     №3
+createGlobalPropertyf("tu154/custom/gauges/misc/stab_ind", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/elevator_ind", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/flap_left_ind", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/misc/flap_right_ind", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/ZK_select", 0) --  " "   . 0-, 1-
+createGlobalPropertyi("tu154/custom/switchers/nav_select", 0) --  - 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/vbe_select", 0) --  . 0-, 1-
+createGlobalPropertyf("tu154/custom/gauges/hydro/pressure_ind_1", 0) --    1
+createGlobalPropertyf("tu154/custom/gauges/hydro/pressure_ind_2", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/hydro/pressure_ind_3", 0) --    3
+createGlobalPropertyf("tu154/custom/gauges/hydro/pressure_ind_emerg", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/misc/thermo_outside", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/misc/turn_rate_ind", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/misc/slip_rate_ind", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/misc/rudder_pos_ind", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/aileron_pos_ind", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/elevator_pos_ind", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/fuel_front_ind", 0) --     
+createGlobalPropertyi("tu154/custom/buttons/misc/fuel_front_zero", 0) --     . 
+createGlobalPropertyi("tu154/custom/buttons/misc/fuel_front_max", 0) --     . 
+createGlobalPropertyf("tu154/custom/gauges/misc/rsbn_azimuth_ind", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/misc/rsbn_distance_km", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/misc/rsbn_km_one", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/rsbn_km_ten", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/rsbn_km_hun", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/compas_big_needle", 0) --     2
+createGlobalPropertyf("tu154/custom/gauges/misc/compas_small_needle", 0) --     2
+createGlobalPropertyf("tu154/custom/gauges/misc/compas_knob", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_1", 1) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_10", 2) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_100", 3) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_plus_angle_1", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_plus_angle_10", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_minus_angle_1", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_minus_angle_10", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_1", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_10", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_100", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/ovhd/var_left", 1) -- .  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/var_right", 1) -- .  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/uvid_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/auasp_on", 1) -- . 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/auasp_contr", 0) -- .  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/eup_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/agr_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/bkk_contr_cap", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/ovhd/bkk_contr", 0) --  . -1 - 2, 0 - , +1 - 1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/bkk_on_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/bkk_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sau_stu_on", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sau_stu_cap", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/ovhd/pkp_left_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/pkp_left_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/pkp_right_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/pkp_right_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/mgv_contr_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/mgv_contr", 1) --    
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_on_1", 1) --   1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_on_2", 1) --   2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_heat", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_corr_1", 1) --   2 - 1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_corr_2", 1) --   2 - 2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/curs_pnp_mode_1", 1) --   . 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/curs_pnp_mode_2", 1) --   . 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/buttons/ovhd/svs_contr", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/svs_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/svs_heat", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/kln_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tcas_on", 1) --  TCAS
+createGlobalPropertyi("tu154/custom/switchers/ovhd/emerg_light_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/emerg_light_on", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/vbe_1_on", 1) --  1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/vbe_2_on", 1) --  2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/curs_np_on_1", 1) --   1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/curs_np_on_2", 1) --   2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tra_67_on", 1) --  67
+createGlobalPropertyi("tu154/custom/buttons/ovhd/tks_signal_off", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/ovhd/rsbn_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/rsbn_recon", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/rv5_1_on", 1) -- 5 1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/rv5_2_on", 1) -- 5 2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/vhf_1_on", 1) --  1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/vhf_2_on", 1) --  2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/stabil_ga_main", 1) --     
+createGlobalPropertyi("tu154/custom/switchers/ovhd/stabil_ga_reserv", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/micron_1_on", 1) --  1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/micron_2_on", 1) --  2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/spu_on", 1) -- 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sgs_on", 1) -- 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sd75_1_on", 1) -- 75 1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sd75_2_on", 1) -- 75 2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/mars_on", 1) -- 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/diss_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/diss_mode", 1) --  . 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/nvu_calc_set", 1) -- . -1 -    , 0 -   , 1 -   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/vent_1", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/vent_2", 0) --  2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/vent_3", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sign_belts", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sign_nosmoke", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sign_exit", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/window_heat_1", -1) --  . -1 - , 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/window_heat_2", -1) --  . -1 - , 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/window_heat_3", -1) --  . -1 - , 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_1", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_2", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_3", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/arm406", 1) --  406
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ushdb_mode_1", 0) --    1. 0 - , 1 - VOR
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ushdb_mode_2", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/egpws_relief", 1) -- 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/egpws_mode", 0) -- QNH - QFE
+createGlobalPropertyi("tu154/custom/buttons/ovhd/egpws_control", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/ovhd/egpws_contr_gs", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_strobe", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_azimuth", 0) --    
+createGlobalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_distance", 0) --    
+createGlobalPropertyi("tu154/custom/buttons/ovhd/rsbn_ch_ten", 0) --    
+createGlobalPropertyi("tu154/custom/buttons/ovhd/rsbn_ch_one", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/ovhd/transponder_mode", 0) --  . 0 , 1 , 2 , 3 , 4 -, 5 , 6 . 
+createGlobalPropertyi("tu154/custom/buttons/ovhd/transponder_control", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/ovhd/transponder_sign", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/ovhd/transponder_but_1", 0) --  1
+createGlobalPropertyi("tu154/custom/buttons/ovhd/transponder_but_2", 0) --  2
+createGlobalPropertyi("tu154/custom/buttons/ovhd/transponder_but_3", 0) --  3
+createGlobalPropertyi("tu154/custom/buttons/ovhd/transponder_but_4", 0) --  4
+createGlobalPropertyi("tu154/custom/buttons/ovhd/transponder_emerg", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/ovhd/transponder_emerg_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_mode", 1) --   0 - , 1 - , 2 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_mode_left", 1) --   . 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_mode_right", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_lat_mode", 1) --   . 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/tks_course_set", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/ovhd/tks_corrr_button", 0) --  
+createGlobalPropertyf("tu154/custom/rotary/ovhd/tks_lat_set", 45) --   
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_1_mode", 1) --   1 0 - , 1 - , 2 - , 3 - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_1_channel", 1) --   1
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_1_hundr_left", 1) --   1 - 17
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_1_tens_left", 1) --   1 - 10 (0)
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_1_ones_left", 0) --   0 - 9
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_1_hundr_right", 1) --   1 - 17
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_1_tens_right", 1) --   1 - 10 (0)
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_1_ones_right", 0) --   0 - 9
+createGlobalPropertyi("tu154/custom/buttons/ovhd/ark_1_ramka", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_2_mode", 1) --   2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_2_channel", 1) --   2
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_2_hundr_left", 1) --   1 - 17
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_2_tens_left", 1) --   1 - 10 (0)
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_2_ones_left", 0) --   0 - 9
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_2_hundr_right", 1) --   1 - 17
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_2_tens_right", 1) --   1 - 10 (0)
+createGlobalPropertyi("tu154/custom/switchers/ovhd/ark_2_ones_right", 0) --   0 - 9
+createGlobalPropertyi("tu154/custom/buttons/ovhd/ark_2_ramka", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sp50_mode", 0) --  50. 0 - ILS, 1 - Katet, 2 - SP-50
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sp50_nav_mode", 0) --  50.  - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sp50_night_day", 1) --  50.  - 
+createGlobalPropertyi("tu154/custom/switchers/ovhd/sp50_dme_rsbn", 0) --  50. DME - 
+createGlobalPropertyi("tu154/custom/rotary/ovhd/vhf_1_left", 0) --   
+createGlobalPropertyi("tu154/custom/rotary/ovhd/vhf_1_right", 0) --   
+createGlobalPropertyi("tu154/custom/rotary/ovhd/vhf_2_left", 0) --   
+createGlobalPropertyi("tu154/custom/rotary/ovhd/vhf_2_right", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/nav_1_mode", 1) --  1.  - VOR-DME
+createGlobalPropertyi("tu154/custom/switchers/nav_1_man_auto", 0) --   - 
+createGlobalPropertyi("tu154/custom/switchers/nav_1_mile_km", 1) --   - 
+createGlobalPropertyi("tu154/custom/rotary/ovhd/nav_1_left", 0) --  
+createGlobalPropertyi("tu154/custom/rotary/ovhd/nav_1_right", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_1", 0) --  1
+createGlobalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_2", 0) --  2
+createGlobalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_3", 0) --  3
+createGlobalPropertyi("tu154/custom/switchers/nav_2_mode", 1) --  1.  - VOR-DME
+createGlobalPropertyi("tu154/custom/switchers/nav_2_man_auto", 0) --   - 
+createGlobalPropertyi("tu154/custom/switchers/nav_2_mile_km", 1) --   - 
+createGlobalPropertyi("tu154/custom/rotary/ovhd/nav_2_left", 0) --  
+createGlobalPropertyi("tu154/custom/rotary/ovhd/nav_2_right", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/ovhd/nav_2_but_1", 0) --  1
+createGlobalPropertyi("tu154/custom/buttons/ovhd/nav_2_but_2", 0) --  2
+createGlobalPropertyi("tu154/custom/buttons/ovhd/nav_2_but_3", 0) --  3
+createGlobalPropertyf("tu154/custom/gauges/eng/fuel_temp_1", 20) --  
+createGlobalPropertyf("tu154/custom/gauges/eng/fuel_temp_2", 20) --  
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_qty_1", 1) --  
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_qty_2", 1) --  
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_qty_3", 1) --  
+createGlobalPropertyf("tu154/custom/gauges/eng/km5_scale_1", 0) --    5
+createGlobalPropertyf("tu154/custom/gauges/eng/km5_needle_1", 0) --  5
+createGlobalPropertyf("tu154/custom/gauges/eng/km5_knob_1", 0) --   5
+createGlobalPropertyf("tu154/custom/gauges/eng/km5_scale_2", 0) --    5
+createGlobalPropertyf("tu154/custom/gauges/eng/km5_needle_2", 0) --  5
+createGlobalPropertyf("tu154/custom/gauges/eng/km5_knob_2", 0) --   5
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_front", 0) --     
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_upper_gear", 0) --      
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_eng_up_1", 0) --       
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_eng_up_2", 0) --       
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_msrp", 0) --    
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_pa56", 0) --       -56
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_fire_panel", 0) --      
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_apu", 0) --      
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_engines", 0) --       
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_hydro", 0) --      
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_srd", 0) --      
+createGlobalPropertyi("tu154/custom/buttons/lamp_test_doors", 0) --         
+createGlobalPropertyi("tu154/custom/switchers/eng/wing_light", 1) --     
+createGlobalPropertyi("tu154/custom/switchers/eng/door_heat", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/gear_fan", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/galley_heat", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/lavatory_heat", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/water_meter", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/water_compressor_1", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/water_compressor_2", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/eng/water_pressure", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/tail_temp_signal_control_1", 0) --     
+createGlobalPropertyi("tu154/custom/buttons/eng/tail_temp_signal_control_2", 0) --     
+createGlobalPropertyi("tu154/custom/switchers/eng/tail_temp_signal", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/tail_temp_heat", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_date_ten", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_date_one", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_month_ten", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_month_one", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_year_ten", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_year_one", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_route_hun", 0) --  . 
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_route_ten", 0) --  . 
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_route_one", 0) --  . 
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_mlp_1", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_mlp_2", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_night_day", 1) --   - 
+createGlobalPropertyi("tu154/custom/switchers/eng/msrp_main_switch", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_trimm_rud_1", 1) --   1
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_trimm_rud_2", 1) --   2
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_trimm_rud_1_cap", 0) --   1
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_trimm_rud_2_cap", 0) --   2
+createGlobalPropertyi("tu154/custom/switchers/eng/emerg_gen_on_1", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/emerg_gen_on_2", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/emerg_gen_on_3", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/emerg_gen_on_1_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/emerg_gen_on_2_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/emerg_gen_on_3_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_1", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_2", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_3", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_1", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_2", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_3", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_1", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_2", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_3", 1) --  56 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_circuit_auto_man", 0) --   - 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_long_control", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_circuit_auto_man_cap", 0) --   - 
+createGlobalPropertyi("tu154/custom/switchers/eng/hydro_long_control_cap", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/fire_ext_1", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/fire_ext_2", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/fire_ext_3", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/cold_eng_1", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/cold_eng_2", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/cold_eng_3", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/cold_apu", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/neutral_gas", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/smoke_test", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/ext_test", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/fire_sensor_sel", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/fire_place_sel", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/fire_main_switch", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/fire_buzzer", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/fire_buzzer_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/srd_buzzer", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/srd_buzzer_cap", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/srd_buzzer_test", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/fuel_buzzer", 1) --    2500
+createGlobalPropertyi("tu154/custom/switchers/eng/fuel_buzzer_cap", 0) --    2500
+createGlobalPropertyi("tu154/custom/switchers/eng/soi21_on", 1) --   21
+createGlobalPropertyi("tu154/custom/buttons/eng/soi21_test", 0) --   21
+createGlobalPropertyi("tu154/custom/switchers/eng/antiice_slats", 0) -- 
+createGlobalPropertyi("tu154/custom/switchers/eng/antiice_eng_1", 0) -- 
+createGlobalPropertyi("tu154/custom/switchers/eng/antiice_eng_2", 0) -- 
+createGlobalPropertyi("tu154/custom/switchers/eng/antiice_eng_3", 0) -- 
+createGlobalPropertyi("tu154/custom/switchers/eng/antiice_wing", 0) -- 
+createGlobalPropertyf("tu154/custom/gauges/eng/stab_temp", 20) --  
+createGlobalPropertyf("tu154/custom/gauges/eng/wing_temp", 20) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/sard_disable", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/sard_disable_cap", 0) --    
+createGlobalPropertyf("tu154/custom/gauges/eng/bus115_freq", 0) --   115 - 
+createGlobalPropertyf("tu154/custom/gauges/eng/bus115_volt", 0) --   115 - 
+createGlobalPropertyf("tu154/custom/gauges/eng/bus115_amp", 0) --   115 - 
+createGlobalPropertyi("tu154/custom/switchers/eng/gpu_on", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/apu_gen_on", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/bus115_volt_sel", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/bus115_volt_phase_sel", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/bus115_amp_sel", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/bus115_amp_phase_sel", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/gen_1_on", 1) --   1. -1 - , 0 - , +1 - .
+createGlobalPropertyi("tu154/custom/switchers/eng/gen_2_on", 1) --   2. -1 - , 0 - , +1 - .
+createGlobalPropertyi("tu154/custom/switchers/eng/gen_3_on", 1) --   3. -1 - , 0 - , +1 - .
+createGlobalPropertyi("tu154/custom/switchers/eng/emerg_inv115", 0) -- .  115
+createGlobalPropertyi("tu154/custom/switchers/eng/emerg_inv115_cap", 0) -- .  115
+createGlobalPropertyf("tu154/custom/gauges/eng/bus36_volt", 0) --   36 - 
+createGlobalPropertyi("tu154/custom/switchers/eng/bus36_volt_sel", 0) --   36
+createGlobalPropertyi("tu154/custom/switchers/eng/pts250_sel", 0) --  250. 0 - №1, 1 - №2
+createGlobalPropertyi("tu154/custom/switchers/eng/bus36_tr_left_to_right", 0) --    2. 0 - , 1 - 
+createGlobalPropertyi("tu154/custom/switchers/eng/bus36_tr_right_to_left", 0) --    1
+createGlobalPropertyi("tu154/custom/switchers/eng/pts250_on", 0) --  250
+createGlobalPropertyi("tu154/custom/switchers/eng/pts250_mode", 0) --  250.  - 
+createGlobalPropertyi("tu154/custom/switchers/eng/pts250_on_cap", 0) --  250
+createGlobalPropertyi("tu154/custom/switchers/eng/pts250_mode_cap", 0) --  250.  - 
+createGlobalPropertyf("tu154/custom/gauges/eng/bus27_volt", 0) --   27 - 
+createGlobalPropertyf("tu154/custom/gauges/eng/bus27_amp1", 0) --   27 - 
+createGlobalPropertyf("tu154/custom/gauges/eng/bus27_amp2", 0) --   27 - 
+createGlobalPropertyi("tu154/custom/switchers/eng/bus27_volt_sel", 0) --   27
+createGlobalPropertyi("tu154/custom/switchers/eng/bus27_amp1_sel", 0) --   27
+createGlobalPropertyi("tu154/custom/switchers/eng/bus27_amp2_sel", 0) --   27
+createGlobalPropertyi("tu154/custom/switchers/eng/bus27_connect", 0) --   27
+createGlobalPropertyi("tu154/custom/switchers/eng/bus27_connect_cap", 0) --   27
+createGlobalPropertyi("tu154/custom/switchers/eng/bus27_vu1", 1) -- 1. -1 - , 0 - , +1 - .
+createGlobalPropertyi("tu154/custom/switchers/eng/bus27_vu2", 1) -- 2. -1 - , 0 - , +1 - .
+createGlobalPropertyi("tu154/custom/switchers/eng/bat1_on", 1) --  1
+createGlobalPropertyi("tu154/custom/switchers/eng/bat2_on", 1) --  2
+createGlobalPropertyi("tu154/custom/switchers/eng/bat3_on", 1) --  3
+createGlobalPropertyi("tu154/custom/switchers/eng/bat4_on", 1) --  4
+createGlobalPropertyi("tu154/custom/switchers/eng/apu_main_switch", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/apu_start_mode", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/apu_air_bleed", 0) --    . -1 - , 0 - , +1 - 
+createGlobalPropertyi("tu154/custom/buttons/eng/apu_start", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/apu_stop", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/eng/apu_rpm", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/eng/apu_egt", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/eng/apu_oil_temp", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/eng/egt_1", 20) --   1
+createGlobalPropertyf("tu154/custom/gauges/eng/egt_2", 20) --   2
+createGlobalPropertyf("tu154/custom/gauges/eng/egt_3", 20) --   3
+createGlobalPropertyf("tu154/custom/gauges/eng/fuel_press_1", 0) --    1
+createGlobalPropertyf("tu154/custom/gauges/eng/fuel_press_2", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/eng/fuel_press_3", 0) --    3
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_press_1", 0) --    1
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_press_2", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_press_3", 0) --    3
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_temp_1", 0) --    1
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_temp_2", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/eng/oil_temp_3", 0) --    3
+createGlobalPropertyf("tu154/custom/gauges/eng/fuel_flow_1", 0) --    1
+createGlobalPropertyf("tu154/custom/gauges/eng/fuel_flow_2", 0) --    2
+createGlobalPropertyf("tu154/custom/gauges/eng/fuel_flow_3", 0) --    3
+createGlobalPropertyf("tu154/custom/gauges/eng/vibra_1", 0) --   1
+createGlobalPropertyf("tu154/custom/gauges/eng/vibra_2", 0) --   2
+createGlobalPropertyf("tu154/custom/gauges/eng/vibra_3", 0) --   3
+createGlobalPropertyi("tu154/custom/buttons/eng/control_ut", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/control_vibro_1", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/control_vibro_2", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/control_vibro_3", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/vibro_sel_1", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/vibro_sel_2", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/vibro_sel_3", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/fuel/fuel_meter_summ", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank1", 0) --     1
+createGlobalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank2_left", 0) --     2
+createGlobalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank2_right", 0) --     2
+createGlobalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank3_left", 0) --     3
+createGlobalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank3_right", 0) --     3
+createGlobalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank4", 0) --     4
+createGlobalPropertyf("tu154/custom/gauges/fuel/fuel_meter_mech", 0) -- 
+createGlobalPropertyi("tu154/custom/buttons/fuel/fuel_meter_summ_zero", 0) --   .  
+createGlobalPropertyi("tu154/custom/buttons/fuel/fuel_meter_summ_max", 0) --   .  P
+createGlobalPropertyi("tu154/custom/buttons/fuel/fuel_meter_tank2_zero", 0) --   2.  
+createGlobalPropertyi("tu154/custom/buttons/fuel/fuel_meter_tank2_max", 0) --   2.  P
+createGlobalPropertyi("tu154/custom/buttons/fuel/fuel_meter_tank3_zero", 0) --   3.  
+createGlobalPropertyi("tu154/custom/buttons/fuel/fuel_meter_tank3_max", 0) --   3.  P
+createGlobalPropertyi("tu154/custom/buttons/fuel/fuel_meter_tank4_zero", 0) --   4.  
+createGlobalPropertyi("tu154/custom/buttons/fuel/fuel_meter_tank4_max", 0) --   4.  P
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank2_left", 1) --   2
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank2_right", 1) --   2
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank3_left", 1) --   3
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank3_right", 1) --   3
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank4", 1) --   4
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank1_1", 1) --   1
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank1_2", 1) --   1
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank1_3", 1) --   1
+createGlobalPropertyi("tu154/custom/switchers/fuel/pump_tank1_4", 1) --   1
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_trans", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_trans_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_porc", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_porc_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_level", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_flow_mode", 1) --  .  - 
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_flow_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_flow_on_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_meter_on", 1) -- 
+createGlobalPropertyi("tu154/custom/switchers/fuel/fuel_meter_mech_on", 1) -- 
+createGlobalPropertyi("tu154/custom/switchers/fuel/fire_valve_1", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fire_valve_2", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fire_valve_3", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fire_valve_1_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fire_valve_2_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/fuel/fire_valve_3_cap", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/hydro/qty_12", 0) -- 
+createGlobalPropertyf("tu154/custom/gauges/hydro/qty_3", 0) -- 
+createGlobalPropertyi("tu154/custom/switchers/hydro/connect2to1", 0) --  2   1 
+createGlobalPropertyi("tu154/custom/switchers/hydro/connect2to1_cap", 0) --  2   1 
+createGlobalPropertyi("tu154/custom/switchers/hydro/pump_2", 0) --  2
+createGlobalPropertyi("tu154/custom/switchers/hydro/pump_3", 0) --  3
+createGlobalPropertyi("tu154/custom/buttons/hydro/qty_test_12", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/hydro/qty_test_3", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/hydro/accum_fill", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/airbleed/cabin_alt", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/airbleed/cabin_diff", 0) --  
+createGlobalPropertyf("tu154/custom/gauges/airbleed/cabin_vvi", 0) --  . 
+createGlobalPropertyf("tu154/custom/gauges/airbleed/cockpit_temp", 20) --   
+createGlobalPropertyf("tu154/custom/gauges/airbleed/cabin_temp", 20) --   
+createGlobalPropertyf("tu154/custom/gauges/airbleed/system_temp", 20) --   
+createGlobalPropertyf("tu154/custom/gauges/airbleed/air_flow_1", 0) --  . 
+createGlobalPropertyf("tu154/custom/gauges/airbleed/air_flow_2", 0) --  . 
+createGlobalPropertyi("tu154/custom/switchers/airbleed/cabin_sel", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/cockpit_temp_set", 20) --   
+createGlobalPropertyi("tu154/custom/switchers/airbleed/cabin1_temp_set", 20) --   
+createGlobalPropertyi("tu154/custom/switchers/airbleed/cabin2_temp_set", 20) --   
+createGlobalPropertyi("tu154/custom/switchers/airbleed/cockpit_mode_set", 1) --   . 0 - . 1 - , 2 - , 3 - 
+createGlobalPropertyi("tu154/custom/switchers/airbleed/cabin1_mode_set", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/airbleed/cabin2_mode_set", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/airbleed/heat_close", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/heat_close_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/left_sys_temp_set", 22) --    
+createGlobalPropertyi("tu154/custom/switchers/airbleed/right_sys_temp_set", 22) --    
+createGlobalPropertyi("tu154/custom/switchers/airbleed/left_sys_mode_set", 1) --    
+createGlobalPropertyi("tu154/custom/switchers/airbleed/right_sys_mode_set", 1) --    
+createGlobalPropertyi("tu154/custom/switchers/airbleed/ground_cond_on", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/ground_cond_on_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/skv_faster_work", 0) -- -1 -  , 0 - , +1 -   
+createGlobalPropertyi("tu154/custom/switchers/airbleed/skv_faster_work_cap", 0) -- 
+createGlobalPropertyi("tu154/custom/switchers/airbleed/sys_temp_select", 1) --   . 0 -  , 1 - , 2 -  1, 3 -  2, 4 -  , 5 -  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/psvp_left_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/psvp_right_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/psvp_left_on_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/psvp_right_on_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/air_valve_left", 0) --  . -1 , 0 - , +1 
+createGlobalPropertyi("tu154/custom/switchers/airbleed/air_valve_right", 0) --  . -1 , 0 - , +1 
+createGlobalPropertyi("tu154/custom/switchers/airbleed/air_valve_both", 0) --  . -1 , 0 - , +1 
+createGlobalPropertyi("tu154/custom/switchers/airbleed/emerg_decompress", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/emerg_decompress_cap", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/airbleed/eng_valve_1", 1) --    
+createGlobalPropertyi("tu154/custom/switchers/airbleed/eng_valve_2", 1) --    
+createGlobalPropertyi("tu154/custom/switchers/airbleed/eng_valve_3", 1) --    
+createGlobalPropertyi("tu154/custom/switchers/airbleed/dubler_on", 0) -- 
+createGlobalPropertyi("tu154/custom/switchers/airbleed/dubler_on_cap", 0) -- 
+createGlobalPropertyf("tu154/custom/gauges/eng/starter_press", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/eng/starter_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/starter_switch", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/starter_eng_select", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/eng/starter_mode", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/starter_start", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/eng/starter_stop", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/flight_start_1", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/flight_start_2", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/flight_start_3", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/gauges_on_1", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/gauges_on_2", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/gauges_on_3", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/gauges_on_1_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/gauges_on_2_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/eng/gauges_on_3_cap", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/eng/reserv_pump_test", 0) --    
+createGlobalPropertyi("tu154/custom/buttons/console/absu_zk", 0) --     
+createGlobalPropertyi("tu154/custom/buttons/console/absu_reset", 0) --      
+createGlobalPropertyi("tu154/custom/buttons/console/absu_nvu", 0) --     
+createGlobalPropertyi("tu154/custom/buttons/console/absu_az1", 0) --   1   
+createGlobalPropertyi("tu154/custom/buttons/console/absu_az2", 0) --   2   
+createGlobalPropertyi("tu154/custom/buttons/console/absu_app", 0) --     
+createGlobalPropertyi("tu154/custom/buttons/console/absu_gs", 0) --     
+createGlobalPropertyi("tu154/custom/buttons/console/absu_stab_m", 0) --  M   
+createGlobalPropertyi("tu154/custom/buttons/console/absu_stab_v", 0) --  V   
+createGlobalPropertyi("tu154/custom/buttons/console/absu_stab_h", 0) --  H   
+createGlobalPropertyi("tu154/custom/buttons/console/absu_stab", 0) --     
+createGlobalPropertyi("tu154/custom/buttons/console/absu_stab_speed", 0) --  C   
+createGlobalPropertyi("tu154/custom/buttons/console/absu_throt_off_1", 0) --   1   
+createGlobalPropertyi("tu154/custom/buttons/console/absu_throt_off_2", 0) --   2   
+createGlobalPropertyi("tu154/custom/buttons/console/absu_throt_off_3", 0) --   3   
+createGlobalPropertyi("tu154/custom/gauges/console/absu_roll_mode", 0) --   . 0 - , 1 - , 2 - 
+createGlobalPropertyi("tu154/custom/gauges/console/absu_pitch_mode", 0) --   . 0 - , 1 - , 2 - 
+createGlobalPropertyf("tu154/custom/gauges/console/gear_brake_press_L", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/console/gear_brake_press_R", 0) --   
+createGlobalPropertyf("tu154/custom/gauges/console/map_angle", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/console/buster_on_1", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/console/buster_on_2", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/console/buster_on_3", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/console/busters_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/console/rls_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/console/rls_mode", 0) --  . 0 -, 1 - 
+createGlobalPropertyi("tu154/custom/switchers/console/rls_distance", 4) --  
+createGlobalPropertyf("tu154/custom/switchers/console/rls_brt", 1) --  
+createGlobalPropertyf("tu154/custom/switchers/console/rls_contr", 1) --  
+createGlobalPropertyf("tu154/custom/switchers/console/rls_signs", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/console/absu_zpu_sel", 0) --  .  - 
+createGlobalPropertyi("tu154/custom/switchers/console/absu_nav_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/console/absu_landing_on", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/console/absu_needles_on", 1) -- 
+createGlobalPropertyi("tu154/custom/switchers/console/absu_speed_mode", 0) --  . 0 - , 1 - , 2 - 1, 3 - 2, 4 - 
+createGlobalPropertyi("tu154/custom/switchers/console/absu_speed_change", 0) --   . 
+createGlobalPropertyi("tu154/custom/switchers/console/absu_speed_off", 0) --  1  2
+createGlobalPropertyi("tu154/custom/switchers/console/absu_speed_prepare", 1) -- 
+createGlobalPropertyi("tu154/custom/switchers/console/absu_speed_off_cap", 0) --  1  2
+createGlobalPropertyi("tu154/custom/switchers/console/absu_speed_prepare_cap", 0) -- 
+createGlobalPropertyi("tu154/custom/switchers/console/absu_speed_us_right_left", 1) -- 
+createGlobalPropertyi("tu154/custom/buttons/console/absu_speed_test_1", 0) --    
+createGlobalPropertyi("tu154/custom/buttons/console/absu_speed_test_2", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/console/absu_turn_handle", 0) --  
+createGlobalPropertyf("tu154/custom/switchers/console/absu_pitch_wheel", 0) --  , 
+createGlobalPropertyi("tu154/custom/switchers/console/absu_roll_ch_on", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/console/absu_pitch_ch_on", 1) --   
+createGlobalPropertyi("tu154/custom/switchers/console/absu_smooth_on", 0) --  " "
+createGlobalPropertyi("tu154/custom/switchers/console/absu_smooth_on_cap", 0) --  " "
+createGlobalPropertyi("tu154/custom/switchers/console/absu_pitch_wheel_dir", 0) --   , 
+createGlobalPropertyi("tu154/custom/buttons/console/absu_arrest", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/console/absu_arrest_cap", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/console/nvu_param_sel", 0) --     . -4 - Z, -3 - S, -2 - Zm, -1 - Sm, 0 - off, 1 - Sn, 2 - Zn, 3 - S, 4 - Z
+createGlobalPropertyi("tu154/custom/switchers/console/nvu_turn_sel", 0) --    , -1 - , 0 - , 1 - 5, 2 - 10, 3 - 15, 4 - 20, 5 - 25
+createGlobalPropertyi("tu154/custom/switchers/console/nvu_power_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/console/nvu_calc_on", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/console/nvu_corr_on", 0) --  
+createGlobalPropertyf("tu154/custom/nvu/current_Z1_1", 4) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/current_Z1_10", 3) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/current_Z1_100", 2) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/current_Z1_1000", 1) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_1", 4) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_10", 3) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_100", 2) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_1000", 1) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/current_S1_1", 4) -- S1
+createGlobalPropertyf("tu154/custom/nvu/current_S1_10", 3) -- S1
+createGlobalPropertyf("tu154/custom/nvu/current_S1_100", 2) -- S1
+createGlobalPropertyf("tu154/custom/nvu/current_S1_1000", 1) -- S1
+createGlobalPropertyf("tu154/custom/nvu/current_S1_min_1", 4) -- S1
+createGlobalPropertyf("tu154/custom/nvu/current_S1_min_10", 3) -- S1
+createGlobalPropertyf("tu154/custom/nvu/current_S1_min_100", 2) -- S1
+createGlobalPropertyf("tu154/custom/nvu/current_S1_min_1000", 1) -- S1
+createGlobalPropertyf("tu154/custom/nvu/next_Z1_1", 4) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/next_Z1_10", 3) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/next_Z1_100", 2) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/next_Z1_1000", 1) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_1", 4) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_10", 3) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_100", 2) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_1000", 1) -- Z1
+createGlobalPropertyf("tu154/custom/nvu/next_S1_1", 4) -- S1
+createGlobalPropertyf("tu154/custom/nvu/next_S1_10", 3) -- S1
+createGlobalPropertyf("tu154/custom/nvu/next_S1_100", 2) -- S1
+createGlobalPropertyf("tu154/custom/nvu/next_S1_1000", 1) -- S1
+createGlobalPropertyf("tu154/custom/nvu/next_S1_min_1", 4) -- S1
+createGlobalPropertyf("tu154/custom/nvu/next_S1_min_10", 3) -- S1
+createGlobalPropertyf("tu154/custom/nvu/next_S1_min_100", 2) -- S1
+createGlobalPropertyf("tu154/custom/nvu/next_S1_min_1000", 1) -- S1
+createGlobalPropertyf("tu154/custom/nvu/current_Z2_1", 4) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/current_Z2_10", 3) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/current_Z2_100", 2) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/current_Z2_1000", 1) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/current_S2_1", 4) -- S2
+createGlobalPropertyf("tu154/custom/nvu/current_S2_10", 3) -- S2
+createGlobalPropertyf("tu154/custom/nvu/current_S2_100", 2) -- S2
+createGlobalPropertyf("tu154/custom/nvu/current_S2_1000", 1) -- S2
+createGlobalPropertyf("tu154/custom/nvu/next_Z2_1", 4) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/next_Z2_10", 3) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/next_Z2_100", 2) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/next_Z2_1000", 1) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/next_S2_1", 4) -- S2
+createGlobalPropertyf("tu154/custom/nvu/next_S2_10", 3) -- S2
+createGlobalPropertyf("tu154/custom/nvu/next_S2_100", 2) -- S2
+createGlobalPropertyf("tu154/custom/nvu/next_S2_1000", 1) -- S2
+createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_1", 4) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_10", 3) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_100", 2) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_1000", 1) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/current_S2_min_1", 4) -- S2
+createGlobalPropertyf("tu154/custom/nvu/current_S2_min_10", 3) -- S2
+createGlobalPropertyf("tu154/custom/nvu/current_S2_min_100", 2) -- S2
+createGlobalPropertyf("tu154/custom/nvu/current_S2_min_1000", 1) -- S2
+createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_1", 4) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_10", 3) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_100", 2) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_1000", 1) -- Z2
+createGlobalPropertyf("tu154/custom/nvu/next_S2_min_1", 4) -- S2
+createGlobalPropertyf("tu154/custom/nvu/next_S2_min_10", 3) -- S2
+createGlobalPropertyf("tu154/custom/nvu/next_S2_min_100", 2) -- S2
+createGlobalPropertyf("tu154/custom/nvu/next_S2_min_1000", 1) -- S2
+createGlobalPropertyf("tu154/custom/nvu/zpu1_01", 5) -- ZPU
+createGlobalPropertyf("tu154/custom/nvu/zpu1_1", 3) -- ZPU
+createGlobalPropertyf("tu154/custom/nvu/zpu1_10", 2) -- ZPU
+createGlobalPropertyf("tu154/custom/nvu/zpu1_100", 1) -- ZPU
+createGlobalPropertyf("tu154/custom/nvu/zpu2_01", 5) -- ZPU
+createGlobalPropertyf("tu154/custom/nvu/zpu2_1", 3) -- ZPU
+createGlobalPropertyf("tu154/custom/nvu/zpu2_10", 2) -- ZPU
+createGlobalPropertyf("tu154/custom/nvu/zpu2_100", 1) -- ZPU
+createGlobalPropertyf("tu154/custom/nvu/z1_minus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/z1_plus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/s1_minus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/s1_plus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/z2_minus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/z2_plus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/s2_minus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/s2_plus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/z1_next_minus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/z1_next_plus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/s1_next_minus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/s1_next_plus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/z2_next_minus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/z2_next_plus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/s2_next_minus_cap", 1) -- digits cap
+createGlobalPropertyf("tu154/custom/nvu/s2_next_plus_cap", 1) -- digits cap
+createGlobalPropertyi("tu154/custom/buttons/nvu/nvu_left_btn", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/nvu/nvu_ctr_btn", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/nvu/nvu_right_btn", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/nvu/zpu_1_left_btn", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/nvu/zpu_1_ctr_btn", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/nvu/zpu_1_right_btn", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/nvu/zpu_2_left_btn", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/nvu/zpu_2_ctr_btn", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/nvu/zpu_2_right_btn", 0) --   
+createGlobalPropertyi("tu154/custom/rotary/console/nav_1_course", 0) --   1
+createGlobalPropertyf("tu154/custom/rotary/console/nav_1_course_1", 0) --   1
+createGlobalPropertyf("tu154/custom/rotary/console/nav_1_course_10", 0) --   1
+createGlobalPropertyf("tu154/custom/rotary/console/nav_1_course_100", 0) --   1
+createGlobalPropertyi("tu154/custom/rotary/console/nav_2_course", 0) --   2
+createGlobalPropertyf("tu154/custom/rotary/console/nav_2_course_1", 0) --   2
+createGlobalPropertyf("tu154/custom/rotary/console/nav_2_course_10", 0) --   2
+createGlobalPropertyf("tu154/custom/rotary/console/nav_2_course_100", 0) --   2
+createGlobalPropertyf("tu154/custom/rotary/console/wind_set", 0) --  
+createGlobalPropertyi("tu154/custom/button/console/wind_course_left", 0) --     
+createGlobalPropertyi("tu154/custom/button/console/wind_course_ctr", 0) --     
+createGlobalPropertyi("tu154/custom/button/console/wind_course_right", 0) --     
+createGlobalPropertyi("tu154/custom/button/console/wind_spd_left", 0) --     
+createGlobalPropertyi("tu154/custom/button/console/wind_spd_ctr", 0) --    
+createGlobalPropertyi("tu154/custom/button/console/wind_spd_right", 0) --    
+createGlobalPropertyi("tu154/custom/switchers/console/emerg_elev_trimm", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/console/emerg_elev_trimm_cap", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/console/radio", 0) --    
+createGlobalPropertyi("tu154/custom/buttons/console/pdu406_control", 0) --  -
+createGlobalPropertyi("tu154/custom/buttons/console/pdu406_sound_off", 0) --   
+createGlobalPropertyf("tu154/custom/switchers/sard/sard_cabin_press_set", 650) --    
+createGlobalPropertyf("tu154/custom/switchers/sard/sard_abs_press_set", 1013) --   
+createGlobalPropertyf("tu154/custom/switchers/sard/sard_diff_set", 0.6) --   
+createGlobalPropertyf("tu154/custom/switchers/sard/sard_spd_set", 0.5) --    
+createGlobalPropertyi("tu154/custom/switchers/tcas/tcas_mode", 4) --  TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA
+createGlobalPropertyi("tu154/custom/switchers/tcas/tcas_rot_big", 0) --  
+createGlobalPropertyi("tu154/custom/switchers/tcas/tcas_rot_small", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_ident_btn", 0) --  IDENT
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_fcn_btn", 0) --  FCN
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_left_btn", 0) --  <
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_right_btn", 0) --  >
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_ent_btn", 0) --  ENT
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_atc_btn", 0) --  ATC
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_alt_btn", 0) --  ALT
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_rng_dn_btn", 0) --  RNG DN
+createGlobalPropertyi("tu154/custom/buttons/tcas/tcas_rng_up_btn", 0) --  RNG UP
+createGlobalPropertyi("tu154/custom/buttons/srpbz/but_view", 0) --  
+createGlobalPropertyi("tu154/custom/buttons/srpbz/but_empty", 0) --  -
+createGlobalPropertyi("tu154/custom/buttons/srpbz/but_down", 0) --   
+createGlobalPropertyi("tu154/custom/buttons/srpbz/but_up", 0) --   
+createGlobalPropertyf("tu154/custom/rotary/srpbz/brightness", 0.7) --  
+createGlobalPropertyf("tu154/custom/light/no_LIT", 0) --      ,   LIT ,    
+createGlobalPropertyf("tu154/custom/lights/exit_lamp", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fasten_seatbelts_lamp", 0) --   
+createGlobalPropertyf("tu154/custom/lights/nosmoking_lamp", 0) --   
+createGlobalPropertyf("tu154/custom/lights/toilet_busy_lamp", 0) --   
+createGlobalPropertyf("tu154/custom/lights/seats_leters_lamp", 0) --    
+createGlobalPropertyf("tu154/custom/lights/mid_left_panel_int", 0) --   
+createGlobalPropertyf("tu154/custom/lights/left_panel_int", 0) --      
+createGlobalPropertyf("tu154/custom/lights/right_panel_int", 0) --      2
+createGlobalPropertyf("tu154/custom/lights/mid_right_panel_int", 0) --       
+createGlobalPropertyf("tu154/custom/lights/ovhd_panel_int", 0) --      
+createGlobalPropertyf("tu154/custom/lights/left_panel_flood", 0) --     
+createGlobalPropertyf("tu154/custom/lights/right_panel_flood", 0) --     
+createGlobalPropertyf("tu154/custom/lights/mid_panel_flood", 0) --     
+createGlobalPropertyf("tu154/custom/lights/front_panel_flood", 0) --     
+createGlobalPropertyf("tu154/custom/lights/ovhd_front_panel_flood", 0) --      
+createGlobalPropertyf("tu154/custom/lights/ovhd_back_panel_flood", 0) --      
+createGlobalPropertyf("tu154/custom/lights/eng_panel_flood", 0) --    
+createGlobalPropertyf("tu154/custom/lights/azs_panel_flood", 0) --   
+createGlobalPropertyf("tu154/custom/lights/cargo_light_1", 0) --    1
+createGlobalPropertyf("tu154/custom/lights/cargo_light_2", 0) --    2
+createGlobalPropertyf("tu154/custom/lights/tech_light", 0) --  -
+createGlobalPropertyf("tu154/custom/lights/gear_nacelle_light", 0) --   
+createGlobalPropertyf("tu154/custom/lights/left_spotlight_flood", 0) --   
+createGlobalPropertyf("tu154/custom/lights/ark1_left_lit", 0) --     1
+createGlobalPropertyf("tu154/custom/lights/ark1_right_lit", 0) --     1
+createGlobalPropertyf("tu154/custom/lights/ark1_all_lit", 0) --   1
+createGlobalPropertyf("tu154/custom/lights/ark2_left_lit", 0) --     2
+createGlobalPropertyf("tu154/custom/lights/ark2_right_lit", 0) --     2
+createGlobalPropertyf("tu154/custom/lights/ark2_all_lit", 0) --   2
+createGlobalPropertyf("tu154/custom/lights/tks_mode_lit_mk", 0) --    - 
+createGlobalPropertyf("tu154/custom/lights/tks_mode_lit_ak", 0) --    - 
+createGlobalPropertyf("tu154/custom/lights/tks_mode_lit_gpk", 0) --    - 
+createGlobalPropertyf("tu154/custom/lights/to_not_ready", 0) --    
+createGlobalPropertyf("tu154/custom/lights/wrong_trimm", 0) --  
+createGlobalPropertyf("tu154/custom/lights/controll_roll", 0) --  
+createGlobalPropertyf("tu154/custom/lights/controll_pitch", 0) --  
+createGlobalPropertyf("tu154/custom/lights/yoke_sign", 0) --        
+createGlobalPropertyf("tu154/custom/lights/triangle", 0) --   
+createGlobalPropertyf("tu154/custom/lights/controll_thrust", 0) --  
+createGlobalPropertyf("tu154/custom/lights/course_lim", 0) --    
+createGlobalPropertyf("tu154/custom/lights/gs_lim", 0) --    
+createGlobalPropertyf("tu154/custom/lights/fire", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/no_ag_controll", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fuel_less_2500", 0) --   2500
+createGlobalPropertyf("tu154/custom/lights/sso_danger", 0) --  
+createGlobalPropertyf("tu154/custom/lights/sso_connect", 0) --  
+createGlobalPropertyf("tu154/custom/lights/speed_high", 0) --  
+createGlobalPropertyf("tu154/custom/lights/roll_left_high", 0) --   
+createGlobalPropertyf("tu154/custom/lights/roll_right_high", 0) --   
+createGlobalPropertyf("tu154/custom/lights/alpha_high", 0) --  
+createGlobalPropertyf("tu154/custom/lights/g_force_high", 0) --  
+createGlobalPropertyf("tu154/custom/lights/auasp_lamp", 0) --   
+createGlobalPropertyf("tu154/custom/lights/toga", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/decision_height", 0) --     
+createGlobalPropertyf("tu154/custom/lights/course", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/glideslope", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/zk_lamp", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/thrust_automat", 0) --  
+createGlobalPropertyf("tu154/custom/lights/stab_roll", 0) --  
+createGlobalPropertyf("tu154/custom/lights/stab_pitch", 0) --  
+createGlobalPropertyf("tu154/custom/lights/nvu_lamp", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/vor_lamp", 0) -- VOR
+createGlobalPropertyf("tu154/custom/lights/stab_h", 0) --  H
+createGlobalPropertyf("tu154/custom/lights/stab_v", 0) --  V
+createGlobalPropertyf("tu154/custom/lights/stab_m", 0) --  M
+createGlobalPropertyf("tu154/custom/lights/marker_1", 0) --  1
+createGlobalPropertyf("tu154/custom/lights/marker_2", 0) --  2
+createGlobalPropertyf("tu154/custom/lights/marker_3", 0) --  3
+createGlobalPropertyf("tu154/custom/lights/pull_up", 0) --  
+createGlobalPropertyf("tu154/custom/lights/check_alt_left", 0) --  
+createGlobalPropertyf("tu154/custom/lights/check_alt_right", 0) --  
+createGlobalPropertyf("tu154/custom/lights/sns_lamp", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/fp_eng_fail_1", 0) -- .  1   
+createGlobalPropertyf("tu154/custom/lights/fp_eng_fail_2", 0) -- .  2   
+createGlobalPropertyf("tu154/custom/lights/fp_eng_fail_3", 0) -- .  3   
+createGlobalPropertyf("tu154/custom/lights/fp_reverse_1", 0) --   1   
+createGlobalPropertyf("tu154/custom/lights/fp_reverse_3", 0) --   3   
+createGlobalPropertyf("tu154/custom/lights/stab_work", 0) --  
+createGlobalPropertyf("tu154/custom/lights/flaps_1_valve", 0) --  1 
+createGlobalPropertyf("tu154/custom/lights/flaps_2_valve", 0) --  2 
+createGlobalPropertyf("tu154/custom/lights/spoilers_mid_left", 0) --   
+createGlobalPropertyf("tu154/custom/lights/spoilers_mid_right", 0) --   
+createGlobalPropertyf("tu154/custom/lights/spoilers_inn_left", 0) --   
+createGlobalPropertyf("tu154/custom/lights/spoilers_inn_right", 0) --   
+createGlobalPropertyf("tu154/custom/lights/gears_not_ext", 0) --   
+createGlobalPropertyf("tu154/custom/lights/gears_red_left", 0) --   
+createGlobalPropertyf("tu154/custom/lights/gears_red_front", 0) --   
+createGlobalPropertyf("tu154/custom/lights/gears_red_right", 0) --   
+createGlobalPropertyf("tu154/custom/lights/gears_green_left", 0) --   
+createGlobalPropertyf("tu154/custom/lights/gears_green_front", 0) --   
+createGlobalPropertyf("tu154/custom/lights/gears_green_right", 0) --   
+createGlobalPropertyf("tu154/custom/lights/gears_red_left_eng", 0) --      
+createGlobalPropertyf("tu154/custom/lights/gears_red_front_eng", 0) --      
+createGlobalPropertyf("tu154/custom/lights/gears_red_right_eng", 0) --      
+createGlobalPropertyf("tu154/custom/lights/gears_green_left_eng", 0) --      
+createGlobalPropertyf("tu154/custom/lights/gears_green_front_eng", 0) --      
+createGlobalPropertyf("tu154/custom/lights/gears_green_right_eng", 0) --      
+createGlobalPropertyf("tu154/custom/lights/flaps_unsync", 0) --  
+createGlobalPropertyf("tu154/custom/lights/slats_unsync", 0) --  
+createGlobalPropertyf("tu154/custom/lights/slats_extended", 0) --  
+createGlobalPropertyf("tu154/custom/lights/to_rudder", 0) -- - 
+createGlobalPropertyf("tu154/custom/lights/to_elevator", 0) -- - 
+createGlobalPropertyf("tu154/custom/lights/trimm_zero_course", 0) --  
+createGlobalPropertyf("tu154/custom/lights/trimm_zero_roll", 0) --  
+createGlobalPropertyf("tu154/custom/lights/trimm_zero_pitch", 0) --  
+createGlobalPropertyf("tu154/custom/lights/damper_course", 0) --  
+createGlobalPropertyf("tu154/custom/lights/damper_roll", 0) --  
+createGlobalPropertyf("tu154/custom/lights/damper_pitch", 0) --  
+createGlobalPropertyf("tu154/custom/lights/no_reserve_c", 0) --   
+createGlobalPropertyf("tu154/custom/lights/no_reserve_g", 0) --   
+createGlobalPropertyf("tu154/custom/lights/pitch_control_fail", 0) --  
+createGlobalPropertyf("tu154/custom/lights/roll_control_fail", 0) --  
+createGlobalPropertyf("tu154/custom/lights/ga_main_fail", 0) --   
+createGlobalPropertyf("tu154/custom/lights/ga_reserve_fail", 0) --   
+createGlobalPropertyf("tu154/custom/lights/msg_lamp", 0) -- MSG
+createGlobalPropertyf("tu154/custom/lights/wpt_lamp", 0) -- WPT
+createGlobalPropertyf("tu154/custom/lights/stuard_call", 0) --  
+createGlobalPropertyf("tu154/custom/lights/mgv_control_fail", 0) --   
+createGlobalPropertyf("tu154/custom/lights/sns_lamp", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/correct_on", 0) --  
+createGlobalPropertyf("tu154/custom/lights/change_ch_o", 0) --  
+createGlobalPropertyf("tu154/custom/lights/warning_terrain", 0) --  
+createGlobalPropertyf("tu154/custom/lights/gs_low", 0) --  
+createGlobalPropertyf("tu154/custom/lights/cockpit_p_low", 0) --   
+createGlobalPropertyf("tu154/custom/lights/nvu_fail", 0) --  
+createGlobalPropertyf("tu154/custom/lights/nvu_vor_automat", 0) -- -VOR 
+createGlobalPropertyf("tu154/custom/lights/dist_autonom", 0) --  
+createGlobalPropertyf("tu154/custom/lights/diss_memory", 0) --  
+createGlobalPropertyf("tu154/custom/lights/azimuth_autonom", 0) --  
+createGlobalPropertyf("tu154/custom/lights/srpbz_fail", 0) --  
+createGlobalPropertyf("tu154/custom/lights/tcas_ident", 0) --   
+createGlobalPropertyf("tu154/custom/lights/other_hatches", 0) --    
+createGlobalPropertyf("tu154/custom/lights/left_front_pax_door", 0) --    
+createGlobalPropertyf("tu154/custom/lights/left_mid_pax_door", 0) --    
+createGlobalPropertyf("tu154/custom/lights/right_mid_pax_door", 0) --    
+createGlobalPropertyf("tu154/custom/lights/cargo_front_door", 0) --   
+createGlobalPropertyf("tu154/custom/lights/cargo_back_door", 0) --   
+createGlobalPropertyf("tu154/custom/lights/turn63_lamp", 0) --  63 
+createGlobalPropertyf("tu154/custom/lights/nosewheel_turn_off", 0) --   
+createGlobalPropertyf("tu154/custom/lights/busters_off", 0) --  
+createGlobalPropertyf("tu154/custom/lights/water_level_1", 0) --   1
+createGlobalPropertyf("tu154/custom/lights/water_level_12", 0) --   1/2
+createGlobalPropertyf("tu154/custom/lights/water_level_14", 0) --   1/4
+createGlobalPropertyf("tu154/custom/lights/water_level_0", 0) --   0
+createGlobalPropertyf("tu154/custom/lights/ra56_roll_fail_1", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/ra56_roll_fail_2", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/ra56_roll_fail_3", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/ra56_pitch_fail_1", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/ra56_pitch_fail_2", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/ra56_pitch_fail_3", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/ra56_course_fail_1", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/ra56_course_fail_2", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/ra56_course_fail_3", 0) --  56 
+createGlobalPropertyf("tu154/custom/lights/nvu_no_reserve", 0) --   
+createGlobalPropertyf("tu154/custom/lights/absu_work", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_1", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_2", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_zone2_left", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_zone2_right", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_zone3", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_zone4", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_zone5_left", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_zone5_right", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/smoke_zone6", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/fire_eng_1", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/fire_eng_2", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/fire_eng_3", 0) --   
+createGlobalPropertyf("tu154/custom/lights/fire/overheat_eng_1", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fire/overheat_eng_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fire/overheat_eng_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fire/fuel_off_eng_1", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fire/fuel_off_eng_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fire/fuel_off_eng_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fire/check_overheat", 0) --    
+createGlobalPropertyf("tu154/custom/lights/fire/fire_apu", 0) --  
+createGlobalPropertyf("tu154/custom/lights/fire/turn_on_spz", 0) --  
+createGlobalPropertyf("tu154/custom/lights/apu/low_oil", 0) --  
+createGlobalPropertyf("tu154/custom/lights/apu/low_oil_press", 0) --  
+createGlobalPropertyf("tu154/custom/lights/apu/high_temp", 0) --  
+createGlobalPropertyf("tu154/custom/lights/apu/high_rpm", 0) --  
+createGlobalPropertyf("tu154/custom/lights/apu/pta6_fail", 0) --  6 
+createGlobalPropertyf("tu154/custom/lights/apu/doors_open", 0) --  
+createGlobalPropertyf("tu154/custom/lights/apu/fuel_press", 0) --  
+createGlobalPropertyf("tu154/custom/lights/apu/start_ready", 0) --   
+createGlobalPropertyf("tu154/custom/lights/apu/work_mode", 0) --   
+createGlobalPropertyf("tu154/custom/lights/apu/start_apu", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_dangerous_vibro", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_oil_level", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_oil_p", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_bypass_valve", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_vna33", 0) --  33
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_reverse_lock", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_high_vibro", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_chips", 0) --   
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_fuel_p", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_filter_fail", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_vna0", 0) --  0
+createGlobalPropertyf("tu154/custom/lights/engines/eng1_reverse_doors", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_dangerous_vibro", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_oil_level", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_oil_p", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_bypass_valve", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_vna33", 0) --  33
+createGlobalPropertyf("tu154/custom/lights/engines/eng_at_on", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_high_vibro", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_chips", 0) --   
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_fuel_p", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_filter_fail", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng2_vna0", 0) --  0
+createGlobalPropertyf("tu154/custom/lights/engines/eng_block", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_dangerous_vibro", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_oil_level", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_oil_p", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_bypass_valve", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_vna33", 0) --  33
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_reverse_lock", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_high_vibro", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_chips", 0) --   
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_fuel_p", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_filter_fail", 0) --  
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_vna0", 0) --  0
+createGlobalPropertyf("tu154/custom/lights/engines/eng3_reverse_doors", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/transponder1_fail", 0) --  .  
+createGlobalPropertyf("tu154/custom/lights/small/transponder1_kd", 0) --  . 
+createGlobalPropertyf("tu154/custom/lights/small/transponder1_kp", 0) --  . 
+createGlobalPropertyf("tu154/custom/lights/small/leftside_yellow", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/turn_on_aux", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/front_hydr_fail_1", 0) --    1.  
+createGlobalPropertyf("tu154/custom/lights/small/front_hydr_fail_2", 0) --    2.  
+createGlobalPropertyf("tu154/custom/lights/small/front_hydr_fail_3", 0) --    3.  
+createGlobalPropertyf("tu154/custom/lights/small/front_hydr_fail_4", 0) --    .  
+createGlobalPropertyf("tu154/custom/lights/small/rv5_left_dh", 0) --    5
+createGlobalPropertyf("tu154/custom/lights/small/rv5_right_dh", 0) --    5
+createGlobalPropertyf("tu154/custom/lights/small/vd15_lamp", 0) --      
+createGlobalPropertyf("tu154/custom/lights/small/bkk_ok", 0) --      
+createGlobalPropertyf("tu154/custom/lights/small/heat_ok_1", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/heat_ok_2", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/heat_ok_3", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/sp50_c1", 0) --  50 -  1
+createGlobalPropertyf("tu154/custom/lights/small/sp50_g1", 0) --  50 -  1
+createGlobalPropertyf("tu154/custom/lights/small/sp50_c2", 0) --  50 -  2
+createGlobalPropertyf("tu154/custom/lights/small/sp50_g2", 0) --  50 -  2
+createGlobalPropertyf("tu154/custom/lights/small/transponder_red", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/transponder_green", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/tks_main_fail", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/tks_contr_fail", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/rls_ready", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/rls_weather", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/stu_roll", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/stu_pitch", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/stu_toga", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/small/at_2", 0) -- AT 2
+createGlobalPropertyf("tu154/custom/lights/small/at_1", 0) -- AT 1
+createGlobalPropertyf("tu154/custom/lights/small/nvu_on", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/nvu_corr", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/nav_1_to", 0) -- NAV 1 
+createGlobalPropertyf("tu154/custom/lights/small/nav_1_from", 0) -- NAV 1 
+createGlobalPropertyf("tu154/custom/lights/small/nav_2_to", 0) -- NAV 2 
+createGlobalPropertyf("tu154/custom/lights/small/nav_2_from", 0) -- NAV 2 
+createGlobalPropertyf("tu154/custom/lights/small/apu_gen_on", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/bus_npk_1", 0) --     3
+createGlobalPropertyf("tu154/custom/lights/small/bus_npk_2", 0) --     1
+createGlobalPropertyf("tu154/custom/lights/small/emerg_inv_115", 0) --  . 115
+createGlobalPropertyf("tu154/custom/lights/small/gen_fail_1", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/gen_fail_2", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/gen_fail_3", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/bus_connected", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/left_bus_use_bat", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/right_bus_use_bat", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/turn_off_bat_1", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/turn_off_bat_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/turn_off_bat_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/turn_off_bat_4", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/vu_on_1", 0) -- 1
+createGlobalPropertyf("tu154/custom/lights/small/vu_on_2", 0) -- 1
+createGlobalPropertyf("tu154/custom/lights/small/left_bus_on_tr2", 0) --     2
+createGlobalPropertyf("tu154/custom/lights/small/right_bus_on_tr1", 0) --     1
+createGlobalPropertyf("tu154/custom/lights/small/pts250_n1", 0) --  250  
+createGlobalPropertyf("tu154/custom/lights/small/pts250_n2", 0) --  250   
+createGlobalPropertyf("tu154/custom/lights/small/throttle_1_fire", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/throttle_2_fire", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/throttle_3_fire", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/oil_meter_1", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/oil_meter_2", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/oil_meter_3", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/starter_high_rpm_1", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/starter_high_rpm_2", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/starter_high_rpm_3", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/fuel_2500", 0) --   2500
+createGlobalPropertyf("tu154/custom/lights/small/fuel_tank1_used", 0) --    1
+createGlobalPropertyf("tu154/custom/lights/small/fuel_tank3_left_fail", 0) --    3 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_tank2_left_fail", 0) --    2 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_tank2_right_fail", 0) --    2 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_tank3_right_fail", 0) --    3 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_left_5", 0) --   5 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_left_6", 0) --   6 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_left_7", 0) --   7 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_left_8", 0) --   8 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_left_9", 0) --   9 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_right_5", 0) --   5 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_right_6", 0) --   6 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_right_7", 0) --   7 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_right_8", 0) --   8 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_right_9", 0) --   9 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_10", 0) --   10
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_11", 0) --   11
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_1", 0) --   1
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_2", 0) --   2
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_3", 0) --   3
+createGlobalPropertyf("tu154/custom/lights/small/fuel_pump_4", 0) --   4
+createGlobalPropertyf("tu154/custom/lights/small/fuel_cut_off_1", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/fuel_cut_off_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/fuel_cut_off_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/fuel_flow_from_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/fuel_flow_from_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/fuel_flow_from_4", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/fuel_flow_auto_fail", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/fuel_reserv_trans_left", 0) --     1 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_reserv_trans_right", 0) --     1 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_porc_reserv", 0) -- 
+createGlobalPropertyf("tu154/custom/lights/small/fuel_level_automat", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_overheat", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_overpress_left", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_overpress_right", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_tail_temp", 0) --    
+createGlobalPropertyf("tu154/custom/lights/small/skv_bleed_fail_1", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_bleed_fail_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_bleed_fail_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_bleed_closed_1", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_bleed_closed_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/skv_bleed_closed_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/apd_work_1", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/apd_work_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/apd_work_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/eng_hydr_fail_1", 0) --    1. 
+createGlobalPropertyf("tu154/custom/lights/small/eng_hydr_fail_2", 0) --    2.  
+createGlobalPropertyf("tu154/custom/lights/small/eng_hydr_fail_3", 0) --    3.  
+createGlobalPropertyf("tu154/custom/lights/small/eng_hydr_fail_4", 0) --    .  
+createGlobalPropertyf("tu154/custom/lights/small/tail_temp_high", 0) -- . .  
+createGlobalPropertyf("tu154/custom/lights/small/lavatory_heat", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/galley_heat", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/msrp_mlp_main", 0) -- .  
+createGlobalPropertyf("tu154/custom/lights/small/msrp_mlp_aux", 0) -- .  
+createGlobalPropertyf("tu154/custom/lights/small/msrp_up2", 0) -- . 2
+createGlobalPropertyf("tu154/custom/lights/small/msrp_mars", 0) -- . 
+createGlobalPropertyf("tu154/custom/lights/small/srd_low_press", 0) --   
+createGlobalPropertyf("tu154/custom/lights/small/srd_overpress", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/soi_work", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/soi_ice_detected", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/antiice_slats", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/antiice_eng_1", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/antiice_eng_2", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/antiice_eng_3", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/antiice_wings", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/close_toilet", 0) --  
+createGlobalPropertyf("tu154/custom/lights/small/pnp_sp_left", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/pnp_vor_left", 0) --  VOR   
+createGlobalPropertyf("tu154/custom/lights/small/pnp_nv_left", 0) --  HB   
+createGlobalPropertyf("tu154/custom/lights/small/pnp_rsbn_left", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/pnp_sp_right", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/pnp_vor_right", 0) --  VOR   
+createGlobalPropertyf("tu154/custom/lights/small/pnp_nv_right", 0) --  HB   
+createGlobalPropertyf("tu154/custom/lights/small/pnp_rsbn_right", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/dme_mile_left", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/dme_km_left", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/dme_mile_right", 0) --     
+createGlobalPropertyf("tu154/custom/lights/small/dme_km_right", 0) --     
+createGlobalPropertyf("tu154/custom/lights/button/absu_zk", 0) --  
+createGlobalPropertyf("tu154/custom/lights/button/absu_reset", 0) --  
+createGlobalPropertyf("tu154/custom/lights/button/absu_nvu", 0) --  
+createGlobalPropertyf("tu154/custom/lights/button/absu_az1", 0) --  1
+createGlobalPropertyf("tu154/custom/lights/button/absu_az2", 0) --  2
+createGlobalPropertyf("tu154/custom/lights/button/absu_app", 0) --  
+createGlobalPropertyf("tu154/custom/lights/button/absu_gz", 0) --  
+createGlobalPropertyf("tu154/custom/lights/button/absu_stab_m", 0) --   
+createGlobalPropertyf("tu154/custom/lights/button/absu_stab_v", 0) --   V
+createGlobalPropertyf("tu154/custom/lights/button/absu_stab_h", 0) --   H
+createGlobalPropertyf("tu154/custom/lights/button/absu_stab", 0) --   H
+createGlobalPropertyf("tu154/custom/lights/button/absu_stab_spd", 0) --   
+createGlobalPropertyf("tu154/custom/lights/button/absu_thro1", 0) --   1
+createGlobalPropertyf("tu154/custom/lights/button/absu_thro2", 0) --   2
+createGlobalPropertyf("tu154/custom/lights/button/absu_thro3", 0) --   3
+createGlobalPropertyf("tu154/custom/lights/button/dejur_contr", 0) --  
+createGlobalPropertyf("tu154/custom/lights/button/sound_off", 0) --  
+createGlobalPropertyf("tu154/custom/lights/button/fire_eng_1", 0) --    1
+createGlobalPropertyf("tu154/custom/lights/button/fire_eng_2", 0) --    2
+createGlobalPropertyf("tu154/custom/lights/button/fire_eng_3", 0) --    3
+createGlobalPropertyf("tu154/custom/lights/button/fire_apu", 0) --   
+createGlobalPropertyf("tu154/custom/lights/button/fire_ng", 0) --   
+createGlobalPropertyf("tu154/custom/lights/button/fire_turn_3", 0) --    3
+createGlobalPropertyf("tu154/custom/lights/button/fire_turn_2", 0) --    2
+createGlobalPropertyf("tu154/custom/lights/button/fire_turn_1", 0) --    1
+createGlobalPropertyi("tu154/custom/lights/white_light_left", 1) --      
+createGlobalPropertyi("tu154/custom/lights/white_light_right", 1) --      
+createGlobalPropertyi("tu154/custom/lights/beacon_light_B", 1) --    
+createGlobalPropertyi("tu154/custom/lights/beacon_light_T", 1) --    
+createGlobalPropertyf("tu154/custom/lights/sard_panel_lit", 0) --   
+createGlobalPropertyf("tu154/custom/lights/nvu_1_active", 0) --    
+createGlobalPropertyf("tu154/custom/lights/nvu_2_active", 0) --    
+createGlobalPropertyf("tu154/custom/lights/oil_qty_work_1", 1) --    
+createGlobalPropertyf("tu154/custom/lights/oil_qty_work_2", 1) --    
+createGlobalPropertyf("tu154/custom/lights/oil_qty_work_3", 1) --    
+createGlobalPropertyi("tu154/custom/rotary/KLN90/3D_L_Angle", 0) --    90
+createGlobalPropertyi("tu154/custom/rotary/KLN90/3D_R_Angle", 0) --    90
+createGlobalPropertyi("tu154/custom/rotary/KLN90/power_knob", 0) --   
+createGlobalPropertyi("tu154/custom/rotary/KLN90/power_knob_angle", 0) --    90
+createGlobalPropertyi("tu154/custom/rotary/KLN90/scan_knob", 0) --   scan
+createGlobalPropertyi("tu154/custom/switchers/wiper_left", 0) --   . -1 - , 0 - , +1 - 
+createGlobalPropertyi("tu154/custom/switchers/wiper_right", 0) --   . -1 - , 0 - , +1 - 
+createGlobalPropertyf("tu154/custom/anim/wiper_angle_left", 0) --     . 0 - 62
+createGlobalPropertyf("tu154/custom/anim/wiper_angle_right", 0) --     . 0 - 62
+createGlobalPropertyi("tu154/custom/switchers/kln_knob_out", 0) --   
+createGlobalPropertyi("tu154/custom/switchers/kln_power_knob", 0) --    
+createGlobalPropertyi("tu154/custom/lights/landing_light_off", 0) --  
+createGlobalPropertyi("tu154/custom/lights/landing_light_off_cap", 0) --  
+createGlobalPropertyf("tu154/custom/lights/gns430_lit", 1) --   
+createGlobalPropertyi("tu154/custom/rotary/GNS430/LB_angle", 0) --     GN430
+createGlobalPropertyi("tu154/custom/rotary/GNS430/LS_angle", 0) --     GN430
+createGlobalPropertyi("tu154/custom/rotary/GNS430/RB_angle", 0) --     GN430
+createGlobalPropertyi("tu154/custom/rotary/GNS430/RS_angle", 0) --     GN430
+createGlobalPropertyf("tu154/custom/asu/rpm", 0.0)  -- ASU (Auxiliary Power Unit) RPM
+createGlobalPropertyf("tu154/custom/asu/press", 0.0)   -- ASU air pressure
+createGlobalPropertyi("tu154/custom/asu/work", 0)  -- ASU operation flag (1 = running)
+createGlobalPropertyf("tu154/custom/anim/asu_show", 0.0)  -- ASU animation state
+-- Pitch servo light (main pitch servo channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_pitch_lt", 0)
+-- -- Roll servo light (main roll servo channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_roll_lt", 0)
+-- -- Yaw servo light (main yaw servo channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_yaw_lt", 0)
+
+-- -- BDG pitch light (backup pitch channel active –  = )
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_pitch_lt", 0)
+-- -- BDG roll light (backup roll channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_roll_lt", 0)
+-- -- BDG yaw light (backup yaw channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_yaw_lt", 0)
+
+-- -- CWS1 light (Control Wheel Steering 1 mode engaged – manual override mode)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/cws1_lt", 0)
+-- -- CWS2 light (Control Wheel Steering 2 mode engaged – alternate override)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/cws2_lt", 0)
+
+-- -- BNS pitch light ( = Main vertical pitch stabilization channel)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bns_p_lt", 0)
+-- -- BAP pitch light ( = automatic pitch hold mode engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bap_p_lt", 0)
+-- -- BAP roll light ( = automatic roll hold mode engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bap_r_lt", 0)
+
+-- -- VKV light ( = lateral guidance mode from navigation source active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/vkv_lt", 0)
+-- -- VU light ( = vertical guidance mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/vu_lt", 0)
+-- -- UTE light ( = approach mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ute_lt", 0)
+
+-- -- STU pitch light ( = pitch stabilizer engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/stu_p_lt", 0)
+-- -- STU roll light ( = roll stabilizer engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/stu_r_lt", 0)
+
+-- -- AT light ( = automatic throttle engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/at_lt", 0)
+-- -- BSN light ( = final approach pitch mode – likely flare/landing logic)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bsn_lt", 0)
+
+-- -- MGV pitch STU light ( = electric trim pitch in STU mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_p_stu_lt", 0)
+-- -- MGV roll STU light (electric trim roll in STU mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_r_stu_lt", 0)
+-- -- MGV pitch SAU light (electric trim pitch in SAU mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_p_sau_lt", 0)
+-- -- MGV roll SAU light (electric trim roll in SAU mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_r_sau_lt", 0)
+
+-- -- KS light ( = course stabilization mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ks_lt", 0)
+-- -- BNS roll light ( roll stabilization channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bns_r_lt", 0)
+
+-- -- Test signal for pitch servo
+-- createGlobalPropertyi("tu154/custom/systems/absu/ppn13/servo_pitch_test_signal", 0)
+-- -- Test signal for roll servo
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_roll_test_signal", 0)
+-- -- Test signal for yaw servo
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_yaw_test_signal", 0)
+
+-- -- Test signal for backup pitch channel (BDG)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_pitch_test_signal", 0)
+-- -- Test signal for backup roll channel (BDG)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_roll_test_signal", 0)
+-- -- Test signal for backup yaw channel (BDG)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_yaw_test_signal", 0)
+
+-- -- Test signal for CWS1 mode (manual override 1)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/cws1_test_signal", 0)
+-- -- Test signal for CWS2 mode (manual override 2)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/cws2_test_signal", 0)
+
+-- -- Test signal for main pitch stabilization channel (BNS)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bns_p_test_signal", 0)
+-- -- Test signal for automatic pitch hold (BAP)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bap_p_test_signal", 0)
+-- -- Test signal for automatic roll hold (BAP)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bap_r_test_signal", 0)
+
+-- -- Test signal for lateral navigation guidance (VKV)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/vkv_test_signal", 0)
+-- -- Test signal for vertical navigation guidance (VU)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/vu_test_signal", 0)
+-- -- Test signal for approach mode (UTE)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ute_test_signal", 0)
+
+-- -- Test signal for pitch stabilization (STU)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/stu_p_test_signal", 0)
+-- -- Test signal for roll stabilization (STU)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/stu_r_test_signal", 0)
+
+-- -- Test signal for auto throttle mode (AT)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/at_test_signal", 0)
+-- -- Test signal for landing logic / flare mode (BSN)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bsn_test_signal", 0)
+
+-- -- Test signal for pitch trim in STU mode
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_p_stu_test_signal", 0)
+-- -- Test signal for roll trim in STU mode
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_r_stu_test_signal", 0)
+
+-- -- Test signal for pitch trim in SAU mode
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_p_sau_test_signal", 0)
+-- -- Test signal for roll trim in SAU mode
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_r_sau_test_signal", 0)
+
+-- -- Test signal for course stabilization mode (KS)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ks_test_signal", 0)
+-- -- Test signal for roll channel of BNS
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bns_r_test_signal", 0)
+
+-- -- ABSU channel 1 indicator light
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ch1_lt", 0)
+-- -- ABSU channel 2 indicator light
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ch2_lt", 0)
+-- -- ABSU channel 3 indicator light
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ch3_lt", 0)
+-- -- ABSU channel 4 indicator light
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ch4_lt", 0)
+
+-- -- ABSU ready light (system operational)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/absu_ready_lt", 0)
+
