@@ -34,7 +34,7 @@ function draw()
 	local yel_up = get(yel_up_img)
 	local red_up = get(red_up_img)
 	
-	for i = 1, 18, 1 do
+	for i = 1, #targets, 1 do
 		
 		local mark = targets[i][4]
 		if mark ~= 0 then
@@ -62,7 +62,8 @@ function draw()
 				local text = targets[i][6]
 				local rate = targets[i][5]
 				
-				local above = sign(targets[i][3])
+				-- Keep level-traffic labels clear of the traffic symbol.
+				local above = targets[i][3] < 0 and -1 or 1
 				
 				if mark == 2 or mark == 1 then
 					sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, {0, 1, 1, 1})

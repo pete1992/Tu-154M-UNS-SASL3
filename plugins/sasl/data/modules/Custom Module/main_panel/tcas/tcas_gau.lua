@@ -111,7 +111,8 @@ function update()
 	vvi_power = power_27 and power_cntr > 3
 	
 	-- brt
-	brightness = (get(vsi_brt) ^ 0.8) * bool2int(vvi_power)
+	local brightness_set = math.max(0, math.min(get(vsi_brt), 1))
+	brightness = (brightness_set ^ 0.8) * bool2int(vvi_power)
 	
 	tcas_power = get(bus115_volt) > 110 and get(tcas_on) == 1 and vvi_power
 	
@@ -191,7 +192,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_climb),
 		visible = function()
-			return ra_mode == 1 and tcas_power
+			return ra_mode == 1 and mode_show ~= -1 and tcas_power
 		end,
 	},
 
@@ -200,7 +201,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_climb_10),
 		visible = function()
-			return ra_mode == 2 and tcas_power
+			return ra_mode == 2 and mode_show ~= -1 and tcas_power
 		end,
 	},
 	
@@ -209,7 +210,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_descend),
 		visible = function()
-			return ra_mode == 3 and tcas_power
+			return ra_mode == 3 and mode_show ~= -1 and tcas_power
 		end,
 	},
 
@@ -218,7 +219,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_descend_10),
 		visible = function()
-			return ra_mode == 4 and tcas_power
+			return ra_mode == 4 and mode_show ~= -1 and tcas_power
 		end,
 	},
 
@@ -227,7 +228,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_maintain_lvl),
 		visible = function()
-			return ra_mode == 5 and tcas_power
+			return ra_mode == 5 and mode_show ~= -1 and tcas_power
 		end,
 	},
 
@@ -236,7 +237,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_not_climb),
 		visible = function()
-			return ra_mode == 6 and tcas_power
+			return ra_mode == 6 and mode_show ~= -1 and tcas_power
 		end,
 	},
 
@@ -245,7 +246,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_not_climb_2),
 		visible = function()
-			return ra_mode == 7 and tcas_power
+			return ra_mode == 7 and mode_show ~= -1 and tcas_power
 		end,
 	},
 
@@ -254,7 +255,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_not_descend),
 		visible = function()
-			return ra_mode == 8 and tcas_power
+			return ra_mode == 8 and mode_show ~= -1 and tcas_power
 		end,
 	},
 
@@ -263,7 +264,7 @@ components = {
 		position = {0, 38, 482, 482},
 		image = get(tcas_scale_not_descend_2),
 		visible = function()
-			return (ra_mode == 9 or mode_show == -1) and tcas_power
+			return ((ra_mode == 9 and mode_show ~= -1) or mode_show == -1) and tcas_power
 		end,
 	},
 	
@@ -344,7 +345,7 @@ components = {
 		position = {30, 455, 115, 22},
 		image = get(below_img),
 		visible = function()
-			return level == -1 and tcas_power
+			return level == -1 and mode_show ~= -1 and tcas_power
 		end,
 	},
 	
