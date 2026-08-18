@@ -22,6 +22,7 @@ T154_sync_lights					= deferred_dataref("tu154/custom/t154cfg/sync_lights", "num
 T154_hide_winglets					= deferred_dataref("tu154/custom/t154cfg/hide_winglets", "number")
 T154_show_winglets					= deferred_dataref("tu154/custom/t154cfg/show_winglets", "number")
 
+
 changewinglets_CMD = deferred_command("t154cfg/changewinglets", "Change winglets CFG", simconfig_change_winglets_CMDhandler)
 changesynclights_CMD = deferred_command("t154cfg/changesynclights", "Change sync lights CFG", simconfig_change_sync_lights_CMDhandler)
 changesyncbaro_CMD = deferred_command("t154cfg/changesyncbaro", "Change sync baro CFG", simconfig_change_sync_baro_CMDhandler)
@@ -29,6 +30,8 @@ changetech_CMD = deferred_command("t154cfg/changetech", "Change tech CFG", simco
 changeautoladder_CMD = deferred_command("t154cfg/changeautoladder", "Autoladder ON/OFF CFG", simconfig_change_autoladder_CMDhandler)
 changeantenna_CMD = deferred_command("t154cfg/changeantenna", "Antenna ON/OFF CFG", simconfig_change_antenna_CMDhandler)
 savecfg_CMD = deferred_command("t154cfg/savecfg", "SAVE CFG", simconfig_save_CMDhandler)
+
+
 
 T154_hide_mil					= 1
 T154_hide_civ					= 0

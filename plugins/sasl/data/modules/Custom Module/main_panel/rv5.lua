@@ -19,7 +19,7 @@ defineProperty("bus115_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt")
 
 -- results
 defineProperty("rv_angle", globalPropertyf("tu154/custom/gauges/alt/radioalt_needle_left"))  -- RV needle
-defineProperty("rv_flag", globalPropertyi("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
+defineProperty("rv_flag", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
 defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))  --    
 
 defineProperty("rv5_dh_signal", globalPropertyi("tu154/custom/misc/rv5_dh_signal_left"))

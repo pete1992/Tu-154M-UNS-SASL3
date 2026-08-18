@@ -1,24 +1,36 @@
+-- needleLit.lua
+-- Generic illuminated rotating needle component.
 
--- default angle
+-- Needle rotation angle.
 defineProperty("angle", 0)
 
--- no image
+-- Texture supplied by the parent component.
 defineProperty("image")
 
-local WHITE = { 1, 1, 1, 1 }
-
 function draw()
-    local imageId = get(image)
-    local w, h = sasl.gl.getTextureSize(imageId)
-    
-    local max = w
-    if h > max then
-        max = h
+    local texture = get(image)
+
+    if not texture then
+        return
     end
 
-    local rw = (w / max) * 100
-    local rh = (h / max) * 100
-    sasl.gl.drawRotatedTexture(imageId, get(angle),
-        (100 - rw) / 2, (100 - rh) / 2, rw, rh, WHITE)
-end
+    local w, h = sasl.gl.getTextureSize(texture)
 
+    if not w or not h or w <= 0 or h <= 0 then
+        return
+    end
+
+    local maxDim = math.max(w, h)
+    local rw = (w / maxDim) * size[1]
+    local rh = (h / maxDim) * size[2]
+
+    sasl.gl.drawRotatedTexture(
+        texture,
+        get(angle),
+        (size[1] - rw) * 0.5,
+        (size[2] - rh) * 0.5,
+        rw,
+        rh,
+        {1, 1, 1, 1}
+    )
+end

@@ -199,6 +199,7 @@ simDR_galley_heat = find_dataref("tu154/custom/lights/small/galley_heat")
 simDR_turn_on_aux = find_dataref("tu154/custom/lights/small/turn_on_aux")
 simDR_tks_contr_fail = find_dataref("tu154/custom/lights/small/tks_contr_fail")
 
+
 simDR_trim_p_light = find_dataref("tu154/custom/lights/trimm_zero_pitch")
 simDR_trim_r_light = find_dataref("tu154/custom/lights/trimm_zero_roll")
 simDR_trim_c_light = find_dataref("tu154/custom/lights/trimm_zero_course")
@@ -324,7 +325,12 @@ simDR_gears_not_ext =  find_dataref("tu154/custom/lights/gears_not_ext")
 simDR_alpha_high =  find_dataref("tu154/custom/lights/alpha_high")
 simDR_g_force_high =  find_dataref("tu154/custom/lights/g_force_high")
 
+
 -- lights list end
+
+
+
+
 
 trim_p_light = deferred_dataref("tu154/custom/lights/trimm_zero_pitch_new", "number")
 trim_r_light = deferred_dataref("tu154/custom/lights/trimm_zero_roll_new", "number")
@@ -621,6 +627,7 @@ light_fuel_pump_right_7 = deferred_dataref("tu154/custom/lights/small/fuel_pump_
 light_fuel_pump_right_8 = deferred_dataref("tu154/custom/lights/small/fuel_pump_right_8_new", "number")
 light_fuel_pump_right_9 = deferred_dataref("tu154/custom/lights/small/fuel_pump_right_9_new", "number")
 
+
 simDR_lamp_test_eng = find_dataref("tu154/custom/buttons/lamp_test_engines")
 simDR_lamp_test_fire = find_dataref("tu154/custom/buttons/lamp_test_fire_panel")
 
@@ -647,6 +654,7 @@ eng_hydr_fail_2 = deferred_dataref("tu154/custom/lights/small/eng_hydr_fail_2_ne
 eng_hydr_fail_3 = deferred_dataref("tu154/custom/lights/small/eng_hydr_fail_3_new", "number")
 eng_hydr_fail_4 = deferred_dataref("tu154/custom/lights/small/eng_hydr_fail_4_new", "number")
 
+
 function smooth_light(orig_lit,new_lit)
     if orig_lit < 0.08 and new_lit < 0.08 then
         return 0
@@ -663,6 +671,12 @@ function smooth_light(orig_lit,new_lit)
         return (new_lit_loc * 0.1)
     end
 end  
+
+
+
+
+
+
 
 function new_lights()
     trim_p_light = smooth_light(simDR_trim_p_light,trim_p_light)
@@ -979,6 +993,7 @@ function new_lights()
     light_fuel_pump_right_8 = smooth_light(simDR_light_fuel_pump_right_8,light_fuel_pump_right_8)
     light_fuel_pump_right_9 = smooth_light(simDR_light_fuel_pump_right_9,light_fuel_pump_right_9) 
 end
+
 
 function new_lights3()
     if simDR_lamp_test_eng > 0 then

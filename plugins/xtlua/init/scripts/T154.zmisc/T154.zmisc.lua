@@ -4,6 +4,7 @@ function tu154_window_slide_l_DRhandler() end
 function tu154_window_slide_r_DRhandler() end
 function tu154_itv_cap_DRhandler() end
 
+
 function deferred_dataref(name,type,notifier)
 	print("Deffered dataref: "..name)
 	dref=XLuaCreateDataRef(name, type,"yes",notifier)
@@ -151,6 +152,7 @@ simDR_buster2 = find_dataref("tu154/custom/switchers/console/buster_on_2")
 simDR_buster3 = find_dataref("tu154/custom/switchers/console/buster_on_3") 
 simDR_busters_cap = find_dataref("tu154/custom/switchers/console/busters_cap") 
 
+
 bkk_1 = find_dataref("tu154/custom/lights/mgv_control_fail")
 bkk_2 = find_dataref("tu154/custom/lights/roll_left_high")
 bkk_3 = find_dataref("tu154/custom/lights/roll_right_high")
@@ -164,6 +166,7 @@ simDR_air_valve_R =  find_dataref("tu154/custom/switchers/airbleed/air_valve_rig
 simDR_air_valve_B =  find_dataref("tu154/custom/switchers/airbleed/air_valve_both")
 simDR_apu_bleed =  find_dataref("tu154/custom/switchers/eng/apu_air_bleed")
 simDR_apu_n1  = find_dataref("tu154/custom/gauges/eng/apu_rpm")
+
 
 simDR_rain2_lit = find_dataref("tu154/custom/anim/rain_glass_2")
 simDR_rain2_1L_lit = find_dataref("tu154/custom/anim/rain_glass_2_w_1_L")
@@ -213,6 +216,9 @@ bkk_roll = find_dataref("tu154/custom/bkk/bkk_roll")
 vvi_fpm = find_dataref("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 cab_alt_new2 =  find_dataref("sim/cockpit2/pressurization/indicators/cabin_altitude_ft")
 
+
+
+
 apu_working =  find_dataref("tu154/custom/elec/gen4_work")
 press_override = find_dataref("sim/operation/override/override_pressurization")
 felt_altitude = find_dataref("sim/cockpit2/oxygen/indicators/pilot_felt_altitude_ft")
@@ -235,10 +241,16 @@ simDR_gen3_work = find_dataref("tu154/custom/elec/gen3_work")
 simDR_gen4_work = find_dataref("tu154/custom/elec/gen4_work") 
 simDR_gen5_work = find_dataref("tu154/custom/elec/gpu_work") 
 
+
+
+
 simDR_lit_test_front = find_dataref("tu154/custom/buttons/lamp_test_front")
 simDR_lamp_test_apu =  find_dataref("tu154/custom/buttons/lamp_test_apu")
 simDR_spoolup =  find_dataref("sim/aircraft/engine/acf_spooltime_turbine")
 simDR_seatbelts = find_dataref("tu154/custom/switchers/ovhd/sign_belts")
+
+
+
 
 gforce_maxn = deferred_dataref("tu154/custom/gauges/misc/gforce_maxn", "number")
 gforce_minn = deferred_dataref("tu154/custom/gauges/misc/gforce_minn", "number")
@@ -312,6 +324,8 @@ gen_fail2 = deferred_dataref("tu154/custom/lights/small/gen_fail_2_new", "number
 gen_fail3 = deferred_dataref("tu154/custom/lights/small/gen_fail_3_new", "number")
 gen_amp_new = deferred_dataref("tu154/custom/gauges/eng/bus115_amp_new", "number")
 gen_volt_new = deferred_dataref("tu154/custom/gauges/eng/bus115_volt_new", "number")
+
+
 
 rpm_thr_loc = deferred_dataref("tu154/custom/rpm_thr_loc", "number")
 
@@ -434,6 +448,8 @@ local gen_delta_amp = 0
 gforce_maxn =  simDR_gforce_max
 gforce_minn =  simDR_gforce_min
 
+
+     
 function gen_correction_hz(fail_to,correct,result)
     if fail_to > 11 then
        gen_correct_delta = result + 120  
@@ -453,6 +469,7 @@ function gen_correction_hz(fail_to,correct,result)
     return correct
 end
 
+
 function smooth_light(orig_lit,new_lit)
     if orig_lit < 0.08 and new_lit < 0.08 then
         return 0
@@ -469,6 +486,7 @@ function smooth_light(orig_lit,new_lit)
         return (new_lit_loc * 0.1)
     end
 end    
+
 
 function aircraft_load()
     if simDR_startuprunning > 0 then
@@ -498,6 +516,7 @@ function aircraft_load()
     simDR_msrp_year_one = 0
     aircraft_loaded = 1
 end
+
 
 function itv_h_m_CMDhandler(phase, duration) 
     if phase == 0 then
@@ -578,6 +597,7 @@ function siv1_CMDhandler(phase, duration)
     end
 end
 
+
 itv_h_m_cmnd	= create_command("t154/itv_h_m", "T154 ITV H minus", itv_h_m_CMDhandler)
 itv_h_p_cmnd	= create_command("t154/itv_h_p", "T154 ITV H plus", itv_h_p_CMDhandler)
 itv_m_m_cmnd	= create_command("t154/itv_m_m", "T154 ITV M minus", itv_m_m_CMDhandler)
@@ -623,6 +643,7 @@ elseif cab_vvi_fin < -0.7 then
       cab_alt_loc = cab_alt_loc - math.abs((cab_vvi_new/8.34) * 0.001) * SIM_PERIOD
 end
     
+    
 if airflow_loc > 50 and airflow_loc < 108 then
     if simDR_on_ground > 0 and start_press > 0 and cab_diff_loc_new < 0.009 then
         slow_boost = 1
@@ -634,6 +655,7 @@ if airflow_loc > 50 and airflow_loc < 108 then
 else
    slow_boost = 0
 end
+
 
 if slow_boost > 0 then
     if cab_vvi_boost < airflow_loc * 0.05 then
@@ -647,8 +669,11 @@ else
     end
 end
     
+   
+
 qfe_mmhg = simDR_qfe * 25.4 
 cabin_press_mm = 760 - ((cab_alt_loc* 1000) / 12)  
+    
     
 if ((cabin_press_mm - qfe_mmhg) *0.00135951) > 0.001 then
         cab_diff_loc_new = (cabin_press_mm - qfe_mmhg) *0.00135951
@@ -660,8 +685,10 @@ end
 
 airflow_delta = airflow - airflow_loc
     
+
 start_press_alt = (760 - simDR_sard_press) * 11.9
     
+ 
 cab_diff_delta = cab_diff_loc_new - cab_diff_new
     
 if cab_diff_delta > 0.0001 then
@@ -670,6 +697,7 @@ elseif cab_diff_delta < 0 then
   cab_diff_new = cab_diff_new - math.abs(cab_diff_delta) * 0.03
 end
 
+    
 cab_alt_delta = cab_alt_loc - cab_alt_new
     
 if cab_alt_delta > 0.0001 then  
@@ -682,6 +710,10 @@ elseif cab_alt_delta < 0 then
  end
 end
    
+    
+    
+    
+
 if airflow_ucmpsd > 0 then
     if (cab_vvi_loc - airflow_power + (airflow_reset * 18.52) - math.abs(cab_vvi_boost) + math.abs(cab_vvi_decomp) - math.abs(airflow_closed)) < 175 and (cab_vvi_loc - airflow_power + (airflow_reset * -18.52) - math.abs(cab_vvi_boost) + math.abs(cab_vvi_decomp) - math.abs(airflow_closed)) > -175 then
         cab_vvi_fin =  cab_vvi_loc - airflow_power + (airflow_reset * -18.52) - math.abs(cab_vvi_boost) + math.abs(cab_vvi_decomp) - math.abs(airflow_closed) + ((vvi_fpm * 0.00508) * 8.42)
@@ -712,6 +744,9 @@ elseif cab_vvi_delta < 0 then
       cab_vvi_new = cab_vvi_new - math.abs(cab_vvi_delta) * 0.022
 end
      
+
+    
+    
 if simDR_failures > 0 then 
     if cab_vvi_new > 60 then
         if felt_timeout_set < 1  then
@@ -738,6 +773,7 @@ if simDR_failures > 0 then
       felt_timeout = felt_timeout - simDR_passed
     end
 end   
+    
     
 simDR_cabin_press_alt_act = cab_alt_corr_loc
 simDR_cabin_press_alt_set = cab_alt_corr_loc
@@ -787,6 +823,7 @@ else
     simDR_cabin_press_alt_set = cab_alt_loc *3280.84
     simDR_cabin_diff = cab_diff_loc_new
 end
+
 
 if press_override > 0 then
     
@@ -908,6 +945,7 @@ else
     cab_vvi_decomp = 0
 end
     
+    
 if cab_vvi_plus > 4 and airflow_ucmpsd < 1 then
         cab_vvi_loc = 13 + (23*simDR_sard_spd)
 elseif cab_vvi_plus < -4 and airflow_ucmpsd < 1 then
@@ -928,6 +966,8 @@ else
    windows_doors = 1
 end
   
+    
+    
 if windows_doors < 1 and cab_diff_loc_new > -0.005 and start_press > 0 then
       if airflow > 40 then
         airflow_ucmpsd = 0
@@ -936,6 +976,8 @@ else
      airflow_ucmpsd = 1
 end   
     
+  
+ 
 if airflow_delta > 6 then
     airflow_loc = airflow_loc + math.abs(airflow_delta) * 0.0125
     cab_alt_timeout = 4
@@ -1000,6 +1042,7 @@ if airflow_ucmpsd < 1 then
         airflow_set = 3
     end
         
+        
     if cab_alt_timeout < 1 then
         if airflow_set > 2 then
               if cab_diff_loc_new > 0.02 and airflow_loc * 0.0006 < cab_diff_loc_new then 
@@ -1027,7 +1070,13 @@ else
    start_press = 0 
 end
      
+  
 end
+
+
+
+
+
 
 function misc()
     
@@ -1037,6 +1086,7 @@ else
   speed_mid_1000 = 0
 end  
     
+
 if simDR_buster1 > 0 and simDR_buster2 > 0 and simDR_buster3 > 0 then
 else
    if buster_cap < 1 then
@@ -1049,6 +1099,10 @@ end
     
 simDR_busters_cap = buster_cap
     
+    
+    
+    
+   
 if simDR_absu_smooth < 1 then
     if simDR_absu_roll_mode2 > 2 and simDR_absu_roll_mode2 < 6 and simDR_absu_roll_mode > 1 then
         simDR_ailrn_size = 0.01    
@@ -1131,6 +1185,7 @@ else
     end
 end
     
+    
 if simDR_absu_roll_mode > 1 then
    simDR_art_roll = 1
 else
@@ -1148,6 +1203,7 @@ else
    gforce_reset_butt_loc = 0
 end 
 
+    
 if simDR_gforce_ind > gforce_maxn then
    gforce_maxn_loc = simDR_gforce_ind - 1
    gforce_maxn_loc2 = gforce_maxn_loc
@@ -1155,6 +1211,8 @@ if simDR_gforce_ind > gforce_maxn then
    gforce_reset_butt = 0.5
  end
 end
+    
+
     
 if gforce_maxn_loc > 0.001 and gforce_maxn_loc > (gforce_maxn_loc2 - gforce_reset_butt_loc) and gforce_maxn > simDR_gforce_ind then
     gforce_maxn_loc = gforce_maxn_loc2 - gforce_reset_butt_loc
@@ -1164,6 +1222,8 @@ if gforce_maxn_loc < 0 then
     gforce_maxn_loc = 0
 end 
     
+ 
+    
 if simDR_gforce_ind < gforce_minn then
    gforce_minn_loc = 1 - simDR_gforce_ind
    gforce_minn_loc2 = gforce_minn_loc
@@ -1171,6 +1231,8 @@ if simDR_gforce_ind < gforce_minn then
    gforce_reset_butt = 0
  end
 end
+    
+
     
 if gforce_minn_loc > 0.001 and gforce_minn_loc > (gforce_minn_loc2 - (gforce_reset_butt_loc * -1)) and simDR_gforce_ind > gforce_minn then
     gforce_minn_loc = gforce_minn_loc2 - (gforce_reset_butt_loc * -1)
@@ -1180,6 +1242,7 @@ if gforce_minn_loc < 0 then
     gforce_minn_loc = 0
 end    
   
+
 if simDR_on_ground > 0 and simDR_gear_blocks > 0 and rpm1 < 10 and rpm2 < 10 and rpm3 < 10 then
     water_level_loc = simDR_water_lvl
 else
@@ -1210,6 +1273,8 @@ else
   cabin12_temp_delta = simDR_cabin2_temp - simDR_cabin1_temp
 end
 
+    
+    
 if simDR_air_usage_L > simDR_air_usage_R then
   air_usage_loc = simDR_air_usage_L * 0.00000175
 else
@@ -1266,6 +1331,8 @@ else
     after_pwup_temp_set = 1
 end
     
+    
+    
 if simDRnvu_calc == 0 then
    simDRnvu_calc = 1
 end
@@ -1284,6 +1351,7 @@ if simDR_absu_pwr < 1 and simDR_lit_test_front < 1 then
     dh_lit = 0
 end       
        
+    
 if simDR_36vl > 5 then
     bus36 = 1
 elseif simDR_36vr > 5 then
@@ -1319,8 +1387,19 @@ else
     test_kmp_1_lit = 0
 end
        
+    
+    
+    
+    
+    
+    
 end
     
+    
+
+    
+
+  
 function misc2()
  
 if bus27 > 0 then
@@ -1334,6 +1413,9 @@ end
 if simDR_lamp_test_apu < 1 and apu_working < 1 then
     apu_pwr_lit = smooth_light(simDR_lamp_test_apu,apu_pwr_lit)
 end
+    
+    
+    
     
 if simDRcrs_np2 > 0 and simDR_36vr > 5 then
         if test_kmp_2 > 0 then
@@ -1361,11 +1443,15 @@ else
     test_kmp_2_lit = 0
 end
     
+     
+    
 nvu_panel = 0
 
 if simDR_cockpit_lights > 0.3 then
     simDR_cockpit_lights = 0.3
 end
+    
+ 
     
 if simDR_altitude < 7000 then
   alt_coeff = math.abs((7000 - simDR_altitude) / 7000)
@@ -1373,6 +1459,7 @@ if simDR_altitude < 7000 then
   alt_coeff = 0.0001
 end
 
+   
 if simDR_rpm_thr[0] > 0 and simDR_rpm_high_1 > 35 then
     if (simDR_rpm_thr[0] - thro_1) > 0.01 then
         thro_1 = thro_1 +0.0005
@@ -1409,6 +1496,8 @@ else
         end
 end
     
+
+    
 temp_abs = math.abs(simDR_oat)
 if simDR_oat < 0 then
     temp_coef = -1
@@ -1430,6 +1519,8 @@ else
     rpm_delta_result = 2.358
 end
 
+ 
+ 
 if simDR_altitude > 50 and in_air_set < 1 then
     in_air = 1
     in_air_set = 1
@@ -1441,6 +1532,8 @@ if simDR_altitude > 50 and in_air_set < 1 then
         crew_vo = 0
     end            
 end
+    
+    
     
 if in_air > 0 and simDR_on_ground < 1 then
     flaps_loc = flaps_lev
@@ -1483,6 +1576,7 @@ if in_air > 0 and simDR_on_ground > 0 then
       in_air = 0
     end  
     
+        
 end
     
 if szt_1 > 0 and sw_sound_szt_1 > 0 then
@@ -1523,6 +1617,7 @@ if szt_2 < 1 and sw_sound_szt_2 < 1 then
     end
 end
     
+
 if szt_3 > 0 and sw_sound_szt_3 > 0 then
     if simDR_sw_sound > -2 then
         simDR_sw_sound = -2
@@ -1570,6 +1665,8 @@ if szt_test == 0 and sw_sound_szt_test < 1 then
     end
 end 
 
+   
+
 if simDR_bus27left > 5 then
     bus27 = 1
 elseif simDR_bus27right > 5 then
@@ -1593,6 +1690,7 @@ end
 if bus27 > 0 then
     simDR_27v_cc = bus27_cc
         
+
     if szt_test == 0 then
         if szt_1_lit > 0 then
            szt_1_lit=szt_1_lit-9*SIM_PERIOD
@@ -1698,6 +1796,9 @@ else
     end  
 end
 
+    
+    
+
 if simDR_fire_switch > 0 then
     if fire_cc < 1 then
        bus27_cc = bus27_cc + 0.8
@@ -1758,6 +1859,7 @@ else
     mfi_r_cc = 0
 end
 
+
 if ubs_pow_l > 0 then
     if ubs_l_cc < 1 then
        bus27_cc = bus27_cc + 0.5
@@ -1782,6 +1884,8 @@ else
     ubs_r_cc = 0
 end
  
+    
+ 
 if simDR_msrp_pwr > 0 then
     if itv_start == 0 then
         itv_start = simDR_time
@@ -1800,6 +1904,7 @@ if simDR_msrp_pwr > 0 then
         itv_hour = 0
     end    
         
+        
 else
     itv_start = 0
     itv_sec_loc = 0
@@ -1813,6 +1918,11 @@ itv_2 = itv_hour - (itv_1*10)
 itv_3 = math.floor(itv_min / 10 ) 
 itv_4 = itv_min - (itv_3*10) 
         
+    
+    
+    
+    
+ 
 if emerg_trim_azs > 0 and sw_sound > 0 then
     if simDR_sw_sound > -2 then
         simDR_sw_sound = -2
@@ -1832,6 +1942,7 @@ if emerg_trim_azs < 1 and sw_sound < 1 then
     end
 end   
     
+    
 if simDR_window_l > 0.25 and simDR_window_l < 0.27 then
     if window_slide_l < 1 then
         simDR_window_l = 0.25
@@ -1844,6 +1955,7 @@ if simDR_window_l > 0.24 and window_slide_l > 0 then
     end
 end
 
+    
 if simDR_window_l == 1 then
  window_slide_l = 0
 end
@@ -1860,6 +1972,7 @@ if simDR_window_r > 0.24 and window_slide_r > 0 then
     end
 end
 
+    
 if simDR_window_r == 1 then
  window_slide_r = 0
 end
@@ -2019,6 +2132,7 @@ simDR_ins_brt[28] = simDR_left_m_d_flood
 simDR_ins_brt[29] = simDR_right_m_d_flood
 simDR_ins_brt[31] = simDR_ovhd_fp_flood
 
+
 if hear_spuon > 0 then
          if simDR_spu_1_source == 1 then
             hear_spu2 = simDR_spu_1_source -1
@@ -2051,6 +2165,8 @@ else
         hear_spu2 = simDR_spu_1_source
 end
 
+    
+ 
 if simDR_anim_ice_L < 0.6 then  
         if bus36 > 0 and simDR_window_heat_l > 0 then
             if window_l_ice_delta < 0.75 then
@@ -2160,6 +2276,8 @@ if apu_warm_up > 0 and simDR_apu_n1 > 90 then
     apu_warm_up = apu_warm_up - 0.01 * SIM_PERIOD
 end
 
+
+
 apu_n1_new = simDR_apu_n1 - (apu_warm_up * 0.25) - (oat_coeff_apu * 0.05)
     
 end
@@ -2167,6 +2285,7 @@ end
 function misc3()
   
     simDR_spoolup = 4.5 + spoolup + spoolup_cooldown
+    
     
     if simDR_oat > -60 and simDR_oat < 40 then
         spoolup = (60 + simDR_oat) * 0.01 * 7.5
@@ -2197,11 +2316,14 @@ function misc3()
         end
     end
     
+    
     if simDR_gen_volt + gen_volt_loc < -120 then
         gen_volt_new = -120
     else
         gen_volt_new = simDR_gen_volt + gen_volt_loc
     end
+    
+    
     
     gen_delta_amp = gen_amp_new - gen_amp_loc
 
@@ -2211,6 +2333,8 @@ function misc3()
       gen_amp_new = gen_amp_new + math.abs(gen_delta_amp) * 8 * SIM_PERIOD
    end
 
+    
+    
      if simDR_gen_amp_sel == 0 then
           gen_amp_loc = simDR_gen_amp
      end
@@ -2239,10 +2363,12 @@ function misc3()
         end
      end
     
+    
      if simDR_gen_amp_sel == 4 then
           gen_amp_loc = simDR_gen_amp
      end
 
+    
      if simDR_gen_fail1 == 0 then
         if gen1_fail_to > -4 then
            gen1_fail_to = gen1_fail_to - 0.2
@@ -2275,6 +2401,7 @@ function misc3()
        end
     end
 
+    
     if simDR_gen_fail2 == 0 then
         if gen2_fail_to > -4 then
             gen2_fail_to = gen2_fail_to - 0.2
@@ -2306,6 +2433,7 @@ function misc3()
          gen2_fail_to = 28.5
        end
     end
+
 
     if simDR_gen_fail3 == 0 then
         if gen3_fail_to > -4 then
@@ -2339,7 +2467,12 @@ function misc3()
        end
     end
     
+    
+  
+    
 end
+
+
 
 function after_physics()
     first_misc()

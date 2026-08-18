@@ -1,92 +1,117 @@
+-- lever_hor.lua
+
 size = {139, 29}
 
--- property table
-defineProperty("value", 0) -- variable for changing
+-- Controlled value.
+defineProperty("value", 0)
 
-defineProperty("minimum", 0) -- minimum for variable, lower position of lever
-defineProperty("maximum", 1) -- maximum for variable, higher position of lever
+-- Lever range.
+defineProperty("minimum", 0)
+defineProperty("maximum", 1)
 
-defineProperty("addFunc") -- variable for changing
+-- Optional function called when the lever is released.
+defineProperty("addFunc")
 
--- images
-defineProperty("back_img") -- background image
-defineProperty("lever_img") -- lever image  
+-- Images.
+defineProperty("back_img")
+defineProperty("lever_img")
 
 local Min = get(minimum)
 local Max = get(maximum)
-local Range = Max - Min  -- define range of used variable
+local Range = Max - Min
+local Travel = size[1] - 30
 
-local mouse_stat = false
-local was_click = false  -- for onMouseHold operate only once
---local v = get(value)
-local inverse = false
-inverse = Max < Min
+local dragging = false
 
--- lever consist of several components
+
+local function setLeverValue(x)
+    if Range == 0 or Travel <= 0 then
+        return
+    end
+
+    if x < 0 then
+        x = 0
+    elseif x > Travel then
+        x = Travel
+    end
+
+    local val = x / Travel * Range + Min
+
+    set(value, val)
+end
+
+
 components = {
-           
-     -- movable lever image
+
+    -- Movable lever image.
     free_texture {
         image = get(lever_img),
+
         position_y = 0,
+
         position_x = function()
-             local a = (get(value) - Min) * (size[1]-30) / Range
-             if a > size[1] - 30 then a = size[1] - 30 end
-             if a < 0 then a = 0 end
-             return a  
+            if Range == 0 then
+                return 0
+            end
+
+            local a = (get(value) - Min) * Travel / Range
+
+            if a > Travel then
+                a = Travel
+            elseif a < 0 then
+                a = 0
+            end
+
+            return a
         end,
+
         width = 30,
-        height = 30, 
-    },
-    
-    -- clicable area for lever
-    interactive {
-       position = { 15, 0, 109, 29 },
-       --[[ 
-       cursor = { 
-            x = 0, 
-            y = 0, 
-            width = 16, 
-            height = 16, 
-            shape = sasl.gl.loadImage("interactive.png")
-        },  
-        --]]
-        onMouseHold = function(comp, x, y, button)
-           mouse_stat = true
-           if x < 0 then x = 0 elseif x > 100 then x = 100 end
-		    local val = x / 100 * Range + Min
-			
-		   if mouse_stat and not was_click then 
-              set(value, val)
-           end
-           was_click = true  -- second automatic click will not cause prewious calculations
-           return true
-        end,
-        
-        onMouseMove = function(comp, x, y, button) 
-           if x < 0 then x = 0 elseif x > 100 then x = 100 end
-		  
-		   local val = x / 100 * Range + Min
-		   if mouse_stat then 
-              set(value, val)
-           end
-           return true 
-        end,
-		
-		onMouseUp = function(comp, x, y, button)
-			if x < 0 then x = 0 elseif x > 100 then x = 100 end
-			local val = x / 100 * Range + Min
-			set(value, val)
-			mouse_stat = false
-			was_click = false
-			addFunc()
-			return true
-        end,
-		
+        height = 30,
     },
 
+    -- Interactive lever area.
+    interactive {
+        position = {15, 0, Travel, 29},
+
+        onMouseDown = function(comp, x, y, button)
+            if button ~= MB_LEFT then
+                return false
+            end
+
+            dragging = true
+            setLeverValue(x)
+
+            return true
+        end,
+
+        onMouseMove = function(comp, x, y, button)
+            if dragging then
+                setLeverValue(x)
+            end
+
+            return true
+        end,
+
+        onMouseUp = function(comp, x, y, button)
+            if button ~= MB_LEFT then
+                return false
+            end
+
+            if dragging then
+                setLeverValue(x)
+                dragging = false
+
+                if addFunc then
+                    addFunc()
+                end
+            end
+
+            return true
+        end,
+    },
 }
 
+
 function draw()
-	drawAll(components)
+    drawAll(components)
 end

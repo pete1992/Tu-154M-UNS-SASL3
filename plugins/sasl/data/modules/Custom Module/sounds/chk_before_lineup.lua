@@ -32,8 +32,8 @@ defineProperty("vbe_pressure", globalPropertyf("tu154/custom/gauges/alt/vbe_pres
 defineProperty("vbe_on_1", globalPropertyi("tu154/custom/switchers/ovhd/vbe_1_on"))
 defineProperty("vbe_on_2", globalPropertyi("tu154/custom/switchers/ovhd/vbe_2_on"))
 
-defineProperty("rv_flag_1", globalPropertyi("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
-defineProperty("rv_flag_2", globalPropertyi("tu154/custom/gauges/alt/radioalt_flag_right"))  -- RV flag
+defineProperty("rv_flag_1", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
+defineProperty("rv_flag_2", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_right"))  -- RV flag
 
 defineProperty("stab_ind", globalPropertyf("tu154/custom/gauges/misc/stab_ind")) --   
 defineProperty("elevator_ind", globalPropertyf("tu154/custom/gauges/misc/elevator_ind")) --   

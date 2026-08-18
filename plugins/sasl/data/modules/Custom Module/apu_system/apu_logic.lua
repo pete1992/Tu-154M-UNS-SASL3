@@ -27,7 +27,7 @@ defineProps({
     { "apu_system_on", "tu154/custom/eng/apu_system_on", globalPropertyi },
     { "apu_fuel_last", "tu154/custom/eng/apu_fuel_last", globalPropertyf }, -- Fuel remaining inside the APU
     -- Fuel quantity
-    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalPropertyf }, -- Fuel weight in tank 1
+    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- Fuel weight in tank 1
     -- APU outputs
     { "apu_air_press", "tu154/custom/eng/apu_air_press", globalPropertyf }, -- Air pressure available for engine start
     { "apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf }, -- Bleed air door position
@@ -39,7 +39,7 @@ defineProps({
     { "fuel_pumps_27_cc", "tu154/custom/elec/fuel_pumps_27_cc", globalPropertyf }, -- 27 V bus load from fuel pumps
     -- APU animations and operating state
     { "apu_doors", "tu154/custom/anim/apu_doors", globalPropertyf }, -- APU door position: 0 closed, 1 open
-    { "apu_burn_fuel", "tu154/custom/elec/apu_burning_fuel", globalPropertyi }, -- APU is running and burning fuel
+    { "apu_burn_fuel", "tu154/custom/elec/apu_burning_fuel", globalPropertyf }, -- APU is running and burning fuel
     -- Engine 2 bleed air
     { "eng_airvalve_2", "tu154/custom/bleed/eng_airvalve_2", globalPropertyf }, -- Engine bleed air valve position
     { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf }, -- Engine 2 high-pressure turbine RPM

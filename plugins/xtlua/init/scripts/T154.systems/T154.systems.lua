@@ -104,6 +104,7 @@ simDR_lamp_test_apu =  find_dataref("tu154/custom/buttons/lamp_test_apu")
 simDR_apu_bleed =   find_dataref("tu154/custom/eng/apu_air_doors")
 simDR_apu_bleed_sw =   find_dataref("tu154/custom/switchers/eng/apu_air_bleed")
 
+
 ---no lights pn5_pn6_pu46 during light test fix ---
 simDR_zk_lit = find_dataref("tu154/custom/lights/button/absu_zk")
 simDR_reset_lit = find_dataref("tu154/custom/lights/button/absu_reset")
@@ -147,7 +148,10 @@ local stu_toga = 0
 local at1 = 0
 local at2 = 0
 
+
 --- end
+
+
 
 local sw_apu_sound = 0
 local apu_bleed_new = 0
@@ -185,6 +189,8 @@ local cg_delta = 0
 local flap_ratio = 0
 local flap_delta = 0
 local gear_ratio = 0
+
+
 
 function land_lights_up_CMDhandler(phase, duration) 
     if phase == 0 then
@@ -226,6 +232,9 @@ function land_lights_down_CMDhandler(phase, duration)
         end
     end
 end
+
+
+
 
 function absu_turn_left_CMDhandler(phase, duration) 
     if phase == 0 then
@@ -317,6 +326,7 @@ function checklist_next_CMDhandler(phase, duration)
     end   	
 end
 
+
 checklist_next_cmnd	= create_command("t154/checklist_next", "T154 Checklist next", checklist_next_CMDhandler)
 absu_roll_left_cmnd	= create_command("t154/absu_roll_left", "T154 ABSU Roll left", absu_turn_left_CMDhandler)
 absu_roll_right_cmnd	= create_command("t154/absu_roll_right", "T154 ABSU Roll right", absu_turn_right_CMDhandler)
@@ -327,8 +337,10 @@ absu_nvu_cmnd	= create_command("t154/absu_nvu", "T154 ABSU NVU", absu_nvu_CMDhan
 lights_up_cmnd	= create_command("t154/lights_up", "T154 Lights up", land_lights_up_CMDhandler)
 lights_down_cmnd	= create_command("t154/lights_down", "T154 Lights down", land_lights_down_CMDhandler)
 
+
 function systems()
 
+    
 if simDR_lit_test_front > 0 then
     simDR_zk_lit = zk_lit
     simDR_reset_lit = reset_lit
@@ -398,6 +410,7 @@ else
     end
 end
     
+ 
 simDR_gpss = 2 
 if simDRgeartestup > 0 then
     simDR_but_sound = 1
@@ -461,10 +474,12 @@ if blocks_wait > 0 then
         end
 end 
 
+    
 if wait > 0 then 
         wait = wait - simDR_passed
 end   
     
+
 if lights == 1 and wait < 0.1 and lights_set > 0 then
     simDR_light_l_ext = 1
     simDR_light_r_ext = 1
@@ -492,6 +507,7 @@ else
     gear_ratio = 0
 end
     
+
 if simDR_spd > 126 and simDR_spd < 227 then        
   spd_delta = 226 - simDR_spd
 else
@@ -519,6 +535,7 @@ else
     cg_delta = 0
 end
     
+
 if flap_ratio < 35 then
         flap_delta = (35 - flap_ratio) * 0.05
 else
@@ -549,16 +566,19 @@ if flap_ratio > 36 then
 end
 simDR_flaps2_cd = simDR_flaps_cd + 0.01
     
+    
         --15 - 0.078 0.088
         --28 - 0.047 0.057
         --36 - 0.098 0.108
         --45 - 0.100 0.110
     
+
 if simDR_apu_working > 0 then
     apu_tr_n = 0
     apu_was_run = 1
 end
  
+
 if apu_was_run < 1 then
     if simDR_apu_oilt < 5 then
         simDR_apu_oilt = 5
@@ -608,9 +628,11 @@ else
     apu_tr_n_set = 0
 end
     
+
 if simDR_checklist_select > 0 then
   checklist_num = simDR_checklist_select
 end   
+    
     
 if simDR_diss_cc > 0 and diss_timer_start > 0 then
     if diss_timer == 0 then
@@ -645,6 +667,7 @@ if simDR_diss_cc < 1 then
         diss_timer_start = 1
 end
     
+
 if simDR_hyd1_press < 30 and simDR_hyd2_press < 30 and simDR_hyd3_press < 30 then
         if simDR_yoke_p > 0.2 then
             simDR_yoke_p = 0.2 
@@ -675,6 +698,7 @@ if simDR_at_mode < 4 then
         end
 end
   
+
 if simDR_36vl > 5 then
     bus36 = 1
 elseif simDR_36vr > 5 then
@@ -684,6 +708,7 @@ else
 end
 
 if bus36 > 0 then
+    
     
     if simDR_cab_light[3] < 1 then
         simDR_cab_light[3] = 1
@@ -725,6 +750,7 @@ else
         simDRsp50_g2 = 0
 end
     
+
 if simDR_on_ground > 0 then
     simDR_elev_load = simDR_elev_load * 0.18
     simDR_alrn_load = simDR_alrn_load * 0.18
@@ -737,6 +763,7 @@ if simDR_on_ground > 0 then
         simDR_pitch_trim = current_pitch_trim_stu
     end
 end     
+
 
 if simDRgs_flag1 < 1 then
         gs_fl = 0

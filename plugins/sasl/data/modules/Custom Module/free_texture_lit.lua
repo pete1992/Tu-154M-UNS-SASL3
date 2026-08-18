@@ -1,13 +1,25 @@
+-- free_texture_lit.lua
+-- Generic illuminated texture drawing component.
 
--- no default texture
 defineProperty("image")
 defineProperty("position_x", 0)
 defineProperty("position_y", 0)
 defineProperty("width", 100)
 defineProperty("height", 100)
-local WHITE = { 1, 1, 1, 1 }
 
 function draw()
-    sasl.gl.drawTexture(get(image), get(position_x), get(position_y), get(width), get(height), WHITE)
-end
+    local texture = get(image)
 
+    if not texture then
+        return
+    end
+
+    sasl.gl.drawTexture(
+        texture,
+        get(position_x),
+        get(position_y),
+        get(width),
+        get(height),
+        {1, 1, 1, 1}
+    )
+end

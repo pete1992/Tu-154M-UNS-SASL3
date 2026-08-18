@@ -1,149 +1,94 @@
--- digitstapeSmoothLit.lua
--- Generic illuminated smooth rolling digit tape component.
-
+-- no image by default
 defineProperty("image")
+
+-- image to display over digits (for 3d effect)
 defineProperty("overlayImage")
+
+-- default value
 defineProperty("value", 0)
+
+-- maximum digits
 defineProperty("digits", 1)
+
+-- maximum digits
 defineProperty("fractional", 0)
+
+-- allow non-round values
 defineProperty("allowNonRound", false)
+
+-- enable of disable value display
 defineProperty("valueEnabler", true)
+
+-- show leading zeros
 defineProperty("showLeadingZeros", false)
+
+-- show sign instead of first digit
 defineProperty("showSign", false)
 
+local WHITE = { 1, 1, 1, 1 }
+
 function draw()
-    local img = get(image)
-
-    if not img then
-        return
-    end
-
-    local imgWidth, imgHeight = sasl.gl.getTextureSize(img)
-
-    if not imgWidth or not imgHeight or imgWidth <= 0 or imgHeight <= 0 then
-        return
-    end
-
-    local value = get(value)
     local sign = get(showSign)
     local leading = get(showLeadingZeros)
     local digitsNum = get(digits)
     local frac = get(fractional)
-
-    if digitsNum < 1 then
-        return
-    end
-
-    if frac < 0 then
-        frac = 0
-    end
-
     local symbolsNum = digitsNum
-
-    if frac > 0 then
+    if 0 < frac then
         symbolsNum = symbolsNum + 1
     end
-
     local digitWidth = 100 / symbolsNum
-    local digitTileWidth = imgWidth
-    local digitTileHeight = imgHeight / 14
-    local v = math.abs(value) * (10 ^ frac)
 
-    -- Preserve the original inverted allowNonRound behavior.
+    local v = math.abs(get(value)) * (10 ^ frac)
     if get(allowNonRound) then
         v = math.floor(v + 0.5)
     end
-
     local pos = 100 - digitWidth
+    local digitHeight = 0.0714285714286
+    local img = get(image)
     local overlayImg = get(overlayImage)
+    local textureWidth, textureHeight = sasl.gl.getTextureSize(img)
 
-    if frac > 0 then
-        local sourceY = 13 * digitTileHeight
-
-        sasl.gl.drawTexturePart(
-            img,
-            pos - digitWidth * frac,
-            0,
-            digitWidth,
-            100,
-            0,
-            sourceY,
-            digitTileWidth,
-            digitTileHeight,
-            {1, 1, 1, 1}
-        )
+    if 0 < frac then
+        local y = (12 + 1) * digitHeight
+        sasl.gl.drawTexturePart(img, pos - digitWidth * frac, 0, digitWidth, 100,
+            0, y * textureHeight, textureWidth, digitHeight * textureHeight, WHITE)
     end
 
     if get(valueEnabler) then
         local prevDigit = 0
-        local visibleDigits = digitsNum
-
         if sign then
-            visibleDigits = visibleDigits - 1
+            digitsNum = digitsNum - 1
         end
-
-        for i = 1, visibleDigits do
+        for i = 1, digitsNum do
             local digit = v % 10
-
             if i > 1 then
-                digit = math.floor(v % 10) + math.max(prevDigit - 9, 0)
-            end
-
+				digit = math.floor(v % 10) + math.max(math.max((prevDigit  - 9), 0), 0)
+			end
+			--[[if 9.5 < prevDigit then
+                digit = digit + 1
+            end--]]
             prevDigit = digit
             v = math.floor(v / 10)
-
-            local sourceY = (11 - digit) * digitTileHeight
-
-            sasl.gl.drawTexturePart(
-                img,
-                pos,
-                0,
-                digitWidth,
-                100,
-                0,
-                sourceY,
-                digitTileWidth,
-                digitTileHeight,
-                {1, 1, 1, 1}
-            )
-
+            local y = (10 - digit + 1) * digitHeight
+            sasl.gl.drawTexturePart(img, pos, 0, digitWidth, 100,
+                0, y * textureHeight, textureWidth, digitHeight * textureHeight, WHITE)
             pos = pos - digitWidth
-
             if frac == i then
                 pos = pos - digitWidth
             end
-
-            if i > frac and not leading and v == 0 then
+            if (i > frac) and (not leading) and (0 == v) then
                 break
             end
         end
-
-        if sign and value < 0 then
-            local sourceY = 14 * digitTileHeight
-
-            sasl.gl.drawTexturePart(
-                img,
-                pos,
-                0,
-                digitWidth,
-                100,
-                0,
-                sourceY,
-                digitTileWidth,
-                digitTileHeight,
-                {1, 1, 1, 1}
-            )
+        if sign and (0 > get(value)) then
+            local y = (13 + 1) * digitHeight
+            sasl.gl.drawTexturePart(img, pos, 0, digitWidth, 100,
+                0, y * textureHeight, textureWidth, digitHeight * textureHeight, WHITE)
         end
     end
-
+        
     if overlayImg then
-        sasl.gl.drawTexture(
-            overlayImg,
-            0,
-            0,
-            100,
-            100,
-            {1, 1, 1, 1}
-        )
+        sasl.gl.drawTexture(overlayImg, 0, 0, 100, 100, WHITE)
     end
 end
+

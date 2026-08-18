@@ -47,6 +47,7 @@ if _VERSION >= "Lua 5.3" then
 	add_known_module("utf8", "utf8 module")
 end
 
+
 local m_user_known_tables = {}
 
 local m_known_functions = {}
@@ -90,6 +91,8 @@ for _, name in ipairs{
 		m_known_functions[_G[name]] = name
 	end
 end
+
+
 
 local m_user_known_functions = {}
 
@@ -280,6 +283,7 @@ function Dumper:DumpLocals (level)
 		name, value = self.getlocal(level, i)
 	end
 end
+
 
 ---
 -- Public:

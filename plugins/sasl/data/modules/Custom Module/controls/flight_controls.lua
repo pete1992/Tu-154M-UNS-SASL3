@@ -51,11 +51,11 @@ defineProps({
     { "control_force_pos", "tu154/custom/controls/control_force_pos", globalPropertyf }, -- Elevator force-loader position: 0 disconnected, 1 engaged.
     { "control_force_pos_rud", "tu154/custom/controls/control_force_pos_rud", globalPropertyf }, -- Rudder force-loader position: 0 disconnected, 1 engaged.
     { "contr_force_set", "tu154/custom/controll/contr_force_set", globalPropertyi }, -- Force-loader selector: -1 flight, 0 automatic, +1 takeoff/landing.
-    { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalPropertyf },
-    { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalPropertyf },
-    { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalPropertyf }, -- Front gear vertical tire deflection.
-    { "gear2_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalPropertyf }, -- Left main gear vertical tire deflection.
-    { "gear3_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalPropertyf }, -- Right main gear vertical tire deflection.
+    { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty },
+    { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty },
+    { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, -- Front gear vertical tire deflection.
+    { "gear2_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, -- Left main gear vertical tire deflection.
+    { "gear3_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, -- Right main gear vertical tire deflection.
 
     -- Wing control surfaces
     { "ail_L", "sim/flightmodel/controls/wing3l_ail1def", globalPropertyf }, -- Left aileron deflection in degrees; positive is trailing-edge down.
@@ -90,8 +90,8 @@ defineProps({
     { "yoke_roll", "tu154/custom/controlls/yoke_roll", globalPropertyf }, -- Cockpit yoke roll animation.
     { "pedals_turn", "tu154/custom/controlls/pedals", globalPropertyf }, -- Cockpit pedal animation.
     { "spoilers_lever", "tu154/custom/controlls/spoilers_lever", globalPropertyf }, -- Cockpit spoiler lever animation.
-    { "revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalPropertyf }, -- Left engine thrust reverser deployment ratio.
-    { "revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalPropertyf }, -- Right engine thrust reverser deployment ratio.
+    { "revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalProperty }, -- Left engine thrust reverser deployment ratio.
+    { "revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalProperty }, -- Right engine thrust reverser deployment ratio.
     { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, -- Engine 1 high-pressure spool RPM.
     { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf }, -- Engine 3 high-pressure spool RPM.
 
@@ -106,8 +106,8 @@ defineProps({
     { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, -- PTS-250 bus 2 voltage.
 
     -- Spoiler deployment sources
-    { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalPropertyf },
-    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalPropertyf },
+    { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
+    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
     { "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf }, -- Engine 1 throttle animation.
     { "anim_rud2", "tu154/custom/controlls/throttle_2", globalPropertyf }, -- Engine 2 throttle animation.
     { "anim_rud3", "tu154/custom/controlls/throttle_3", globalPropertyf }, -- Engine 3 throttle animation.

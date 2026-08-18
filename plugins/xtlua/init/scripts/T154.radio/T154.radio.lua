@@ -27,6 +27,10 @@ simDR_com1_freq_stby = find_dataref("sim/cockpit2/radios/actuators/com1_standby_
 
 simDR_sw_sound = find_dataref("tu154/custom/switchers/console/nvu_corr_on")
 
+
+
+
+
 simCMD_com1_actv_fine_up    = find_command("sim/radios/actv_com1_fine_up_833")
 simCMD_com1_actv_fine_dn    = find_command("sim/radios/actv_com1_fine_down_833")
 simCMD_com1_stby_fine_up    = find_command("sim/radios/stby_com1_fine_up_833")
@@ -36,6 +40,7 @@ simCMD_nav1_fine_up    = find_command("sim/radios/actv_nav1_fine_up")
 simCMD_nav1_fine_dn    = find_command("sim/radios/actv_nav1_fine_down")
 simCMD_nav2_fine_up    = find_command("sim/radios/actv_nav2_fine_up")
 simCMD_nav2_fine_dn    = find_command("sim/radios/actv_nav2_fine_down")
+
 
 vhf1_100_mode = deferred_dataref("tu154/custom/radios/vhf1_100mode", "number")
 vhf2_100_mode = deferred_dataref("tu154/custom/radios/vhf2_100mode", "number")
@@ -58,6 +63,13 @@ local vhf2_freq = 0
 local vhf2_freq_set = 0
 vhf1_ps = 1
 vhf2_ps = 1
+
+
+
+ 
+
+
+
 
 function com1_actv_dial_up_CMDhandler(phase, duration)
 
@@ -158,6 +170,7 @@ function com1_stby_dial_up_CMDhandler(phase, duration)
                 vhf2_fast = vhf2_fast +0.15
             end
             
+            
             if vhf1_100_mode > 0 then
                   if simDR_com1_khz < 901 then
                     simDR_com1_khz = math.ceil(simDR_com1_khz* 0.01) * 100
@@ -172,6 +185,7 @@ function com1_stby_dial_up_CMDhandler(phase, duration)
                     simDR_com1_stby_khz = 0
                   end
             end
+            
             
         else
             if simDR_bus27right > 5 and simDR_vhf1 > 0 then
@@ -182,6 +196,7 @@ function com1_stby_dial_up_CMDhandler(phase, duration)
                 vhf1_fast = vhf1_fast +0.15
             end
             
+            
             if vhf2_100_mode > 0 then
                   if simDR_com1_khz < 901 then
                     simDR_com1_khz = math.ceil(simDR_com1_khz* 0.01) * 100
@@ -196,6 +211,7 @@ function com1_stby_dial_up_CMDhandler(phase, duration)
                     simDR_com1_stby_khz = 0
                   end
             end
+            
             
         end
     end
@@ -213,6 +229,7 @@ function com1_stby_dial_dn_CMDhandler(phase, duration)
                 vhf2_fast = vhf2_fast +0.2
             end
             
+            
             if vhf1_100_mode > 0 then
                   simDR_com1_khz = math.floor(simDR_com1_khz* 0.01) * 100
             end
@@ -228,6 +245,7 @@ function com1_stby_dial_dn_CMDhandler(phase, duration)
             if vhf1_fast < 1 then
                 vhf1_fast = vhf1_fast +0.2
             end
+            
             
             if vhf2_100_mode > 0 then
                   simDR_com1_khz = math.floor(simDR_com1_khz* 0.01) * 100
@@ -282,6 +300,7 @@ function nav2_dial_dn_CMDhandler(phase, duration)
 
 end
 
+
 vhf_actv_up_cmnd	= create_command("t154/vhf/actv_fine_up", "T154 VHF actv fine up", com1_actv_dial_up_CMDhandler)
 vhf_actv_dn_cmnd	= create_command("t154/vhf/actv_fine_dn", "T154 VHF actv fine dn", com1_actv_dial_dn_CMDhandler)
 vhf_stby_up_cmnd	= create_command("t154/vhf/stby_fine_up", "T154 VHF stby fine up", com1_stby_dial_up_CMDhandler)
@@ -290,6 +309,7 @@ nav1_up_cmnd	= create_command("t154/nav/nav1_fine_up", "T154 NAV1 fine up", nav1
 nav1_dn_cmnd	= create_command("t154/nav/nav1_fine_dn", "T154 NAV1 fine dn", nav1_dial_dn_CMDhandler)
 nav2_up_cmnd	= create_command("t154/nav/nav2_fine_up", "T154 NAV2 fine up", nav2_dial_up_CMDhandler)
 nav2_dn_cmnd	= create_command("t154/nav/nav2_fine_dn", "T154 NAV2 fine dn", nav2_dial_dn_CMDhandler)
+
 
 function vhf()
 
@@ -320,6 +340,7 @@ end
     if vhf2_fast > 1 and vhf2_100_mode < 1 then
       vhf2_100_mode = 1
     end
+    
     
 if vhf1_ap > 0 and sw_sound > 0 then
     if simDR_sw_sound > -2 then
@@ -395,6 +416,7 @@ if vhf2_ps < 1 and sw_sound3 < 1 then
     end
 end
  
+    
 if simDR_bus27left > 5 and simDR_vhf1 > 0 then   
     if simDR_spu1 == 0 and simDR_com1_freq == 121500 then
         vhf1_ap_lit = 1
@@ -407,6 +429,7 @@ else
     vhf1_ap_lit = 0 
 end        
         
+        
 if simDR_bus27right > 5 and simDR_vhf2 > 0 then   
     if simDR_spu1 == 1 and simDR_com1_freq == 121500 then
         vhf2_ap_lit = 1
@@ -418,6 +441,7 @@ if simDR_bus27right > 5 and simDR_vhf2 > 0 then
 else
     vhf2_ap_lit = 0
 end 
+    
     
 end
 

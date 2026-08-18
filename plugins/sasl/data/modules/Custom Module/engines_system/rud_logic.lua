@@ -14,19 +14,19 @@ defineProps({
     -- Engine 3 throttle input synchronized through SmartCopilot
     { "tro_comm_3", "tu154/custom/SC/engine/ENGN_thro_2", globalPropertyf },
     -- Engine 1 effective throttle position
-    { "sim_rud_1", "sim/flightmodel/engine/ENGN_thro_use[0]", globalPropertyf },
+    { "sim_rud_1", "sim/flightmodel/engine/ENGN_thro_use[0]", globalProperty },
     -- Engine 2 effective throttle position
-    { "sim_rud_2", "sim/flightmodel/engine/ENGN_thro_use[1]", globalPropertyf },
+    { "sim_rud_2", "sim/flightmodel/engine/ENGN_thro_use[1]", globalProperty },
     -- Engine 3 effective throttle position
-    { "sim_rud_3", "sim/flightmodel/engine/ENGN_thro_use[2]", globalPropertyf },
+    { "sim_rud_3", "sim/flightmodel/engine/ENGN_thro_use[2]", globalProperty },
     -- Left engine thrust-reverser deployment ratio
-    { "revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalPropertyf },
+    { "revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalProperty },
     -- Right engine thrust-reverser deployment ratio
-    { "revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalPropertyf },
+    { "revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalProperty },
     -- Left engine propeller mode used for reverser control
-    { "eng_modL", "sim/flightmodel/engine/ENGN_propmode[0]", globalPropertyf },
+    { "eng_modL", "sim/flightmodel/engine/ENGN_propmode[0]", globalProperty },
     -- Right engine propeller mode used for reverser control
-   { "eng_modR", "sim/flightmodel/engine/ENGN_propmode[2]", globalPropertyf },
+   { "eng_modR", "sim/flightmodel/engine/ENGN_propmode[2]", globalProperty },
     -- Engine 1 cockpit throttle animation
     { "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf },
     -- Engine 2 cockpit throttle animation

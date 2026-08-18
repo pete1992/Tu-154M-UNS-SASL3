@@ -6,143 +6,51 @@ defineProperty("cl2", globalPropertyf("sim/aircraft/controls/acf_flap2_cl"))
 defineProperty("cd2", globalPropertyf("sim/aircraft/controls/acf_flap2_cd"))
 defineProperty("cm2", globalPropertyf("sim/aircraft/controls/acf_flap2_cm"))
 
---[[
-sim/aircraft/controls/acf_flap_cl	float	y
-sim/aircraft/controls/acf_flap_cd	float	y
-sim/aircraft/controls/acf_flap_cm	float	y
-sim/aircraft/controls/acf_flap2_cl	float	y
-sim/aircraft/controls/acf_flap2_cd	float	y
-sim/aircraft/controls/acf_flap2_cm	float	y
---]]
-defineProperty("flap", globalPropertyf("sim/flightmodel/controls/flaprat"))
-defineProperty("alt", globalPropertyf("sim/flightmodel/position/y_agl"))
---defineProperty("yd", globalPropertyf("sim/cockpit2/switches/yaw_damper_on"))
+defineProperty("flap_inn_L", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def"))
+defineProperty("flap_inn_R", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def"))
+defineProperty("flap_mid_L", globalPropertyf("sim/flightmodel/controls/wing2l_fla2def"))
+defineProperty("flap_mid_R", globalPropertyf("sim/flightmodel/controls/wing2r_fla2def"))
 
-defineProperty("flap_inn_L", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def")) -- inner flaps left
-defineProperty("flap_inn_R", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def")) -- inner flaps right
 
-defineProperty("flap_mid_L", globalPropertyf("sim/flightmodel/controls/wing2l_fla2def")) -- middle flaps left
-defineProperty("flap_mid_R", globalPropertyf("sim/flightmodel/controls/wing2r_fla2def")) -- middle flaps right
+-- Tu-154M v4.2.6: same coupled correction as flap_aero.lua.
+-- This temporary variant intentionally writes exactly the same six outputs,
+-- so the two components cannot fight each other when both are loaded.
+local FLAP1_CL = 1.029
+local FLAP1_CD = 0.064
 
--- sim/version/xplane_internal_version
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-
---print("new flaps")
-
-local flap1_cl_tbl = {
-{-10, 1.029},
-{0, 1.0},
-{15, 1.0}, -- 1.4
-{28, 1.1},
-{36, 1.25},
-{45, 1.35},
-{100, 1.2}
-}
-
-local flap2_cl_tbl = {
-{-10, 1.189},
-{0, 1.1},
-{13, 1.1}, -- 1.5
-{25, 1.3},
-{32, 1.45},
-{40, 1.55},
-{100, 1.4}
-}
-
--- XP 11
-local XP11 = get(xp_version) > 11000
-
-if XP11 then
-
-	flap1_cl_tbl = {
-	{-10, 1.029},
-	{0, 1.0},
-	{15, 1.0}, -- 1.4
-	{28, 1.1},
-	{36, 1.15},
-	{45, 1.25},
-	{100, 1.2}
-	}
-
-	flap2_cl_tbl = {
-	{-10, 1.189},
-	{0, 1.1},
-	{13, 1.1}, -- 1.5
-	{25, 1.3},
-	{32, 1.35},
-	{40, 1.45},
-	{100, 1.4}
-	}
-
-end
-
-local flap1_cd_tbl = {
-{-10, 0.064},
-{0, 0.064},
-{15, 0.064},
---{28, 1.1},
-{36, 0.085},
-{45, 0.07},
-{100, 0.06}
-}
-
-local flap2_cd_tbl = {
-{-10, 0.074},
-{0, 0.074},
-{13, 0.074},
---{25, 1.3},
-{32, 0.1},
-{40, 0.08},
-{100, 0.07}
-}
+local FLAP2_CL = 1.165
+local FLAP2_CD = 0.068
 
 local flap1_cm_tbl = {
-{-10, 0},
-{0, -0.15},
-{15, -0.2}, -- -0.13
-{28, -0.17},
---{36, -0.2},
-{45, -0.2},
-{100, -0.2}
+	{-10, -0.4480},
+	{0,   -0.4480},
+	{15,  -0.4480},
+	{28,  -0.3490},
+	{36,  -0.4102},
+	{45,  -0.3762},
+	{100, -0.3762}
 }
 
 local flap2_cm_tbl = {
-{-10, -0.2},
-{0, -0.1}, -- 0
-{13, -0.3}, -- 15
-{25, -0.25}, -- 28,
---{32, -0.3}, -- 36
-{40, -0.3}, -- 45
-{100, -0.3}
+	{-10, -0.5071},
+	{0,   -0.5071},
+	{13,  -0.5071},
+	{25,  -0.3950},
+	{32,  -0.4642},
+	{40,  -0.4257},
+	{100, -0.4257}
 }
 
-function update()
-	
-	local flap_inn = get(flap_inn_L)
-	local flap_out = get(flap_mid_L)
-	
-	local flap1_cl = interpolate(flap1_cl_tbl, flap_inn)
-	local flap2_cl = interpolate(flap2_cl_tbl, flap_out)
 
-	local flap1_cd = interpolate(flap1_cd_tbl, flap_inn)
-	local flap2_cd = interpolate(flap2_cd_tbl, flap_out)
-	
-	local flap1_cm = interpolate(flap1_cm_tbl, flap_inn)
-	local flap2_cm = interpolate(flap2_cm_tbl, flap_out)
-	
-	local agl = get(alt)
-	if agl < 5 and XP11 then
-		flap1_cl = flap1_cl * (1 - (5 - agl) * 0.04)
-		flap2_cl = flap2_cl * (1 - (5 - agl) * 0.04)
-	end
-	
-	set(cl, flap1_cl)
-	set(cl2, flap2_cl)
-	
-	set(cd, flap1_cd)
-	set(cd2, flap2_cd)
-	
-	set(cm, flap1_cm)
-	set(cm2, flap2_cm)
-	
+function update()
+	local flap_inn = 0.5 * (get(flap_inn_L) + get(flap_inn_R))
+	local flap_mid = 0.5 * (get(flap_mid_L) + get(flap_mid_R))
+
+	set(cl, FLAP1_CL)
+	set(cd, FLAP1_CD)
+	set(cm, interpolate(flap1_cm_tbl, flap_inn))
+
+	set(cl2, FLAP2_CL)
+	set(cd2, FLAP2_CD)
+	set(cm2, interpolate(flap2_cm_tbl, flap_mid))
 end

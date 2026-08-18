@@ -84,7 +84,7 @@ defineProps({
     -- APU control
     { "apu_main_switch", "tu154/custom/switchers/eng/apu_main_switch", globalPropertyi },
     -- Ground detection
-    { "gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalPropertyf },
+    { "gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
     -- 27 V bus results
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },

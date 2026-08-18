@@ -1,3 +1,4 @@
+-- lights_commands.lua
 --[[
 Changelog
 - Grouped all property bindings through a local defineProps() helper while preserving all existing property names, Dataref paths, constructors, and their original order.

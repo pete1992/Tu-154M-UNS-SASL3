@@ -25,6 +25,7 @@ btn_mode_l = deferred_dataref("tu154/custom/gauges/alt/vbe_cm_l_btn_mode", "numb
 vbe_test_l = deferred_dataref("tu154/custom/gauges/alt/vbe_cm_l_test", "number")
 vbe_test_l2 = deferred_dataref("tu154/custom/gauges/alt/vbe_cm_l_test2", "number")
 
+
 simDR_on_ground = find_dataref("sim/flightmodel/failures/onground_all") 
 simDR_vbe_alt_r	= find_dataref("tu154/custom/gauges/alt/vbe_alt_right")
 simDR_vbe_press_r = find_dataref("tu154/custom/gauges/alt/vbe_press_right")
@@ -43,6 +44,7 @@ vbe_test_r2 = deferred_dataref("tu154/custom/gauges/alt/vbe_cm_r_test2", "number
 vbe_mode_l= deferred_dataref("tu154/custom/gauges/alt/vbe_mode_left_new", "number")
 vbe_mode_r= deferred_dataref("tu154/custom/gauges/alt/vbe_mode_right_new", "number")
 
+
 local f_level_lm = 0
 local altitude_current_l = 0
 local altitude_diff_l = 0
@@ -58,6 +60,8 @@ local self_test_r = 0
 local start_reset_mod_timer_r = 0
 local vbe_press_was_l = 0
 
+
+
 function vbecm_button_1_CMDhandler(phase, duration)
     if phase == 0 then
         if simDR_bus27left > 0 and simDR_vbe_on_l > 0 and start_self_test_l < 1 and self_test_l < 1 then
@@ -71,11 +75,13 @@ function vbecm_button_1_CMDhandler(phase, duration)
             end
         end    
             
+	
     end   	
 end	
 
 function vbecm_button_2_CMDhandler(phase, duration)
     if phase == 0 then
+        
         
         if simDR_bus27left > 0 and simDR_vbe_on_l > 0 and start_self_test_l < 1 and self_test_l < 1  then
             start_reset_mod_timer_l = 0
@@ -210,6 +216,7 @@ function vbecm_button_3_CMDhandler(phase, duration)
     end
 end	
 
+
 function vbecm_button_1_r_CMDhandler(phase, duration)
     if phase == 0 then
         if simDR_bus27right > 0 and simDR_vbe_on_r > 0 and start_self_test_r < 1 and self_test_r < 1 then
@@ -227,6 +234,7 @@ end
 
 function vbecm_button_2_r_CMDhandler(phase, duration)
     if phase == 0 then
+        
         
         if simDR_bus27right > 0 and simDR_vbe_on_r > 0 and start_self_test_r < 1 and self_test_r < 1 then
             start_reset_mod_timer_r = 0
@@ -359,6 +367,7 @@ function vbecm_button_3_r_CMDhandler(phase, duration)
     end
 end	
 
+    
 function vbecm_button_23_CMDhandler(phase, duration)
     if phase == 0 then
         if simDR_bus27left > 0 and simDR_vbe_on_l > 0 and start_self_test_l < 1 and self_test_l < 1 then
@@ -380,15 +389,22 @@ function vbecm_button_23_r_CMDhandler(phase, duration)
     end   	
 end
 
+
 vbe_btn1_cmnd_l	= create_command("vbecm_l/vbe_btn1_cmnd", "VBE-CM BTN1", vbecm_button_1_CMDhandler)
 vbe_btn2_cmnd_l	= create_command("vbecm_l/vbe_btn2_cmnd", "VBE-CM BTN2", vbecm_button_2_CMDhandler)
 vbe_btn3_cmnd_l	= create_command("vbecm_l/vbe_btn3_cmnd", "VBE-CM BTN3", vbecm_button_3_CMDhandler)
 vbe_btn23_cmnd_l = create_command("vbecm_l/vbe_btn23_cmnd", "VBE-CM BTN2 + BTN3", vbecm_button_23_CMDhandler)
 
+
 vbe_btn1_cmnd_r	= create_command("vbecm_r/vbe_btn1_cmnd", "VBE-CM R BTN1", vbecm_button_1_r_CMDhandler)
 vbe_btn2_cmnd_r	= create_command("vbecm_r/vbe_btn2_cmnd", "VBE-CM R BTN2", vbecm_button_2_r_CMDhandler)
 vbe_btn3_cmnd_r	= create_command("vbecm_r/vbe_btn3_cmnd", "VBE-CM R BTN3", vbecm_button_3_r_CMDhandler)
 vbe_btn23_cmnd_r = create_command("vbecm_r/vbe_btn23_cmnd", "VBE-CM R BTN2 + BTN3", vbecm_button_23_r_CMDhandler)
+
+
+
+
+
 
 function mode_reset()
     if btn_mode_l == 5 and simDR_on_ground < 1 then
@@ -398,6 +414,8 @@ function mode_reset()
         btn_mode_r = 0
     end
 
+    
+    
     if btn_mode_l > 0 then
             start_reset_mod_timer_l = start_reset_mod_timer_l + simDR_passed
             if start_reset_mod_timer_l > 13 then
@@ -413,6 +431,7 @@ function mode_reset()
 end
 
 function self_test()
+    
     
     if simDR_vbe_on_l < 1 then
         start_self_test_l = 1
@@ -430,6 +449,7 @@ function self_test()
             simDR_brt_l = 0
     end
     
+    
     if self_test_l > 0 and simDR_vbe_on_l > 0 and simDR_bus27left > 0 then
         if vbe_test_l2 < 1 then
             vbe_test_l2 = vbe_test_l2 + 0.005
@@ -439,6 +459,7 @@ function self_test()
                 btn_mode_l = 0
         end
     end
+    
     
     if start_self_test_l > 0 and simDR_vbe_on_l > 0 and simDR_bus27left > 0 then
         if vbe_test_l2 < 1.5 then
@@ -461,6 +482,10 @@ function self_test()
         end
         
     end
+    
+    
+    
+    
     
     if simDR_vbe_on_r < 1 then
         start_self_test_r = 1
@@ -537,6 +562,7 @@ function altitudes_calc()
         end
 	end 
     
+    
     if vbe_mode_l == 0 and self_test_l < 1 then
         if  simDR_vbe_fl_l > 0 then
             simDR_vbe_fl_l = math.floor(simDR_vbe_fl_l * 0.01) *100
@@ -555,6 +581,7 @@ function altitudes_calc()
 	   needle_angle_l = 36
     end
        brt_l = simDR_brt_l * 100
+    
     
     if vbe_mode_r == 0 then 
         if simDR_vbe_alt_r > 0 and self_test_r < 1 then
@@ -597,6 +624,7 @@ function altitudes_calc()
     brt_r = simDR_brt_r * 100
 
 end
+
 
 function border_draw()
         

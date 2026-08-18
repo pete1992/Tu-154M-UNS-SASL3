@@ -4,6 +4,7 @@ function deferred_dataref(name,type,notifier)
 	return wrap_dref_any(dref,type) 
 end
 
+
 simDR_failures = find_dataref("tu154/custom/failures/failures_enabled")
 simDR_rpm_low_1 = find_dataref("tu154/custom/gauges/engine/rpm_low_1")
 simDR_rpm_low_2 = find_dataref("tu154/custom/gauges/engine/rpm_low_2")
@@ -45,11 +46,14 @@ simDR_var_right = find_dataref("tu154/custom/switchers/ovhd/var_right")
 simDR_start_apu = find_dataref("tu154/custom/lights/apu/start_apu")
 simDR_lamp_test_apu =  find_dataref("tu154/custom/buttons/lamp_test_apu")
 
+
+
 ----- show_actual_fuel
 
 simDR_load_panel = find_dataref("tu154/custom/panels/show_load_panel")
 
 -----
+
 
 simDR_light_fuel_pump_1 = find_dataref("tu154/custom/lights/small/fuel_pump_1")
 simDR_light_fuel_pump_2 = find_dataref("tu154/custom/lights/small/fuel_pump_2")
@@ -109,6 +113,7 @@ simDR_payload_cabin = find_dataref("tu154/custom/payload/cabin_num")
 simDR_srd_buzzer = find_dataref("tu154/custom/switchers/eng/srd_buzzer")
 simDR_srd_buzzer_cap = find_dataref("tu154/custom/switchers/eng/srd_buzzer_cap")
 
+
 simDR_cg = find_dataref("sim/flightmodel/misc/cgz_ref_to_default")
 simDR_tank1 = find_dataref("tu154/custom/payload/tank_1")
 simDR_tank2_l = find_dataref("tu154/custom/payload/tank_2L")
@@ -127,6 +132,7 @@ simDR_door_cargo1 = find_dataref("sim/cockpit2/switches/custom_slider_on[2]")
 simDR_door_cargo2 = find_dataref("sim/cockpit2/switches/custom_slider_on[3]")
 simDR_door_kitchen = find_dataref("sim/cockpit2/switches/custom_slider_on[6]")
 simDR_catering_anim = find_dataref("tu154/custom/anim/catering_tanker")
+
 
 rpm1_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_1_new", "number")
 rpm2_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_2_new", "number")
@@ -166,6 +172,7 @@ simDR_kus_right = find_dataref("tu154/custom/gauges/speed/kus_ias_right")
 simDR_tas_right = find_dataref("tu154/custom/gauges/speed/kus_tas_right")
 simDR_ias_right = find_dataref("tu154/custom/gauges/speed/ias_right")
 simDR_ias_y_right = find_dataref("tu154/custom/gauges/speed/ias_yellow_right")
+
 
 local ias_y_left_corr = 0
 local kus_left_corr = 0
@@ -250,7 +257,12 @@ local brake_temp_loc_r = 0
 local vna33_off = 0
 local vna0_off = 0
 
+
+
+
 function refueling()
+    
+    
     
        if simDR_on_ground > 0 then
            if simDR_payload_set > 0 then
@@ -276,6 +288,9 @@ function refueling()
             
             if fuel_was_set > 0 then
             
+                
+
+                
                 if (simDR_payload_cargo1 + simDR_payload_cargo2 +simDR_payload_cargo3) - cargo_load > 0 then
                     cargo_req = (simDR_payload_cargo1 + simDR_payload_cargo2 +simDR_payload_cargo3) - cargo_load
                 else
@@ -343,6 +358,7 @@ function refueling()
             fueling_cpmlt = tank1_cmplt + tank2_r_cmplt + tank2_l_cmplt + tank3_r_cmplt + tank3_l_cmplt + tank4_cmplt
             loading_cmplt = cargo_cmplt+pax_cmplt
             
+        
             if start_loading > 0 then
                 if simDR_cg_pos_act > simDR_cg_pos_to then
                    simDR_cg_pos_met = simDR_cg_pos_met - 0.0001
@@ -363,6 +379,7 @@ function refueling()
                 pax_req = 0
             end
                
+            
             if fueling_cpmlt == 6 and start_refueling > 0 then
                 start_refueling = 0
                 if simDR_fuel_tanker > 0 then
@@ -441,7 +458,9 @@ function refueling()
                 pax_cmplt = 0
             end
               
+                
             if start_refueling > 0 then
+                
                 
                 if simDR_fuel_tanks[0] > (tank1_req -1) and tank1_cmplt < 1 then
                     tank1_cmplt = 1
@@ -461,6 +480,7 @@ function refueling()
                 if simDR_fuel_tanks[5] > (tank3_l_req -1) and tank3_l_cmplt < 1 then
                     tank3_l_cmplt = 1
                 end
+                    
                     
                 if simDR_gear_blocks < 1 then
                     simDR_gear_blocks = 1
@@ -550,6 +570,7 @@ function refueling()
             end
        end
 end
+
 
 function m_misc()
 if simDR_srd_buzzer_cap < 1 then
@@ -691,6 +712,8 @@ end
         pump_test = 3
     end
     
+    
+
     if simDR_bus27left > 5 then
         bus27 = 1
     elseif simDR_bus27right > 5 then
@@ -707,6 +730,7 @@ end
         bus36 = 0
     end   
        
+ 
     if simDR_failures > 0 then 
         if simDR_oat < 0 and simDR_door_fan_temp < 40 and simDR_altitude > 2450 then
             if doors_icing < 100 then
@@ -735,8 +759,11 @@ end
             end
         end
 
+
+
         simDR_brake_heat_left = brake_temp_loc_l
         simDR_brake_heat_right = brake_temp_loc_r   
+
 
         if simDR_brake_l > 0 and simDR_gs > 1 and simDR_on_ground > 0 then
             if brake_temp < 1200 then
@@ -749,6 +776,7 @@ end
                 brake_temp_loc_r = brake_temp_loc_r + (simDR_brake_r * 0.015 * simDR_gs)
             end
         end
+
 
         if simDR_oat < brake_temp_loc_l then
             if gears > 0 then
@@ -790,6 +818,7 @@ end
             end
         end
 
+
         if bus36 > 0 and simDR_gear_fan > 0 and simDR_on_ground > 0 then
             if brake_temp_loc_l > simDR_oat then
                 brake_temp_loc_l = brake_temp_loc_l - 0.03
@@ -800,6 +829,7 @@ end
                 brake_temp_loc_r = brake_temp_loc_r - 0.03
             end
         end
+
 
         if brake_temp_loc_l > 450 then  
             if simDR_brake_l > 1 - (1 - ((1450 - brake_temp_loc_l)*0.001)) then 
@@ -812,6 +842,8 @@ end
             end
         end
 
+
+
         if simDR_gear1 < 0.01 and simDR_gear2 < 0.01 and simDR_gear3 < 0.01 then
             gears = 0
         else
@@ -822,6 +854,11 @@ end
         brake_temp_loc_l = 0
         doors_icing = 0
     end
+            
+    
+    
+    
+            
             
     if simDR_rpm_low_1 > 3.85 then 
             rpm1_low_loc = simDR_rpm_low_1 + rpm1_correct
@@ -841,6 +878,7 @@ end
             rpm3_low_loc = simDR_rpm_low_3
     end 
 
+        
     if simDR_light_test_eng < 1 then
         
         if simDR_rpm_high_1 > 50 and simDR_rpm_high_1 < 76.5 and simDR_oilmeter_1_lit > 0 then
@@ -889,6 +927,7 @@ end
             simDR_vna33_2_lit = 0
         end
             
+        
         if simDR_rpm_high_3 < vna33_off and simDR_oilmeter_3_lit > 0 then
           if simDR_day_night_lit < 1 then
             simDR_vna33_3_lit = 1
@@ -918,6 +957,7 @@ end
             simDR_vna0_2_lit = 0
         end
             
+        
         if simDR_rpm_high_3 < vna0_off and simDR_oilmeter_3_lit > 0 then
           if simDR_day_night_lit < 1 then
             simDR_vna0_3_lit = 1
@@ -927,6 +967,10 @@ end
         else
             simDR_vna0_3_lit = 0
         end
+        
+        
+        
+        
         
         if simDR_rpm_high_1 > 75 then
             if rpm1_correct < 3.85 and simDR_rpm_low_1 < 75 then

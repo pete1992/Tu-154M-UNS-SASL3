@@ -74,9 +74,9 @@ defineProps({
     { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", XP11 and globalPropertyf or globalProperty },
     { "eng4_N1", "tu154/custom/eng/apu_n1", globalPropertyf },
     -- X-Plane generator switches
-    { "sim_gen1_on", "sim/cockpit/electrical/generator_on[0]", globalPropertyi },
-    { "sim_gen2_on", "sim/cockpit/electrical/generator_on[1]", globalPropertyi },
-    { "sim_gen3_on", "sim/cockpit/electrical/generator_on[2]", globalPropertyi },
+    { "sim_gen1_on", "sim/cockpit/electrical/generator_on[0]",XP11 and globalPropertyi or globalProperty },
+    { "sim_gen2_on", "sim/cockpit/electrical/generator_on[1]", XP11 and globalPropertyi or globalProperty },
+    { "sim_gen3_on", "sim/cockpit/electrical/generator_on[2]", XP11 and globalProperty or globalProperty },
     { "sim_gen4_on", "sim/cockpit2/electrical/APU_generator_on", globalPropertyi },
     -- Generator failure flags
     { "sim_gen1_fail", "sim/operation/failures/rel_genera0", globalPropertyi },

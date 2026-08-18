@@ -6,6 +6,7 @@ function deferred_dataref(name,type,notifier)
 	return wrap_dref_any(dref,type) 
 end
 
+
 simDR_rsbn_azi					= find_dataref("tu154/custom/rsbn/azimuth")
 simDR_passed                    = find_dataref("sim/operation/misc/frame_rate_period")
 simDR_time                    = find_dataref("sim/time/zulu_time_sec")
@@ -25,6 +26,9 @@ local rsbn_current_dist = 0
 local rsbn_current_azi = 0
 local rsbn_change_time = 0
 local rsbn_started = 0
+
+
+
 
 function rsbn_l_CMDhandler(phase, duration)
     if phase == 0 then
@@ -66,11 +70,21 @@ function rsbn_r_CMDhandler(phase, duration)
     end  	
 end
 
+
 rsbn_cmnd_l	= create_command("rsbn/channel_l", "RSBN CH L", rsbn_l_CMDhandler)
 rsbn_cmnd_r	= create_command("rsbn/channel_r", "RSBN CH R", rsbn_r_CMDhandler)
 
+
+
+
+
+
 function tu154_rsbn()
     
+    
+ 
+        
+        
     if simDR_rsbn_azi < 0 then
         tu154_real_azimuth = 360 + simDR_rsbn_azi
     else
@@ -80,6 +94,7 @@ function tu154_rsbn()
     simDR_rsbn_1 = rsbn_channel - (simDR_rsbn_10 * 10)
     
 end
+
 
 function rsbn_reset()
 
@@ -116,6 +131,8 @@ function rsbn_reset()
     end
     
 end
+
+
 
 function after_physics()
 tu154_rsbn()

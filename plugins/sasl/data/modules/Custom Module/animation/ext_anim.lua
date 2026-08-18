@@ -101,90 +101,64 @@ defineProps({
     ---------------------
     
     -- Slider 
-    {"slider_1", "sim/cockpit2/switches/custom_slider_on[0]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_2", "sim/cockpit2/switches/custom_slider_on[1]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_3", "sim/cockpit2/switches/custom_slider_on[2]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_4", "sim/cockpit2/switches/custom_slider_on[3]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_5", "sim/cockpit2/switches/custom_slider_on[4]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_6", "sim/cockpit2/switches/custom_slider_on[5]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_7", "sim/cockpit2/switches/custom_slider_on[6]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_8", "sim/cockpit2/switches/custom_slider_on[7]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_9", "sim/cockpit2/switches/custom_slider_on[8]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_10", "sim/cockpit2/switches/custom_slider_on[9]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_11", "sim/cockpit2/switches/custom_slider_on[10]", 
-		XP11 and globalPropertyf or globalProperty },
-    {"slider_12", "sim/cockpit2/switches/custom_slider_on[11]", 
-		XP11 and globalPropertyf or globalProperty }, 
+    {"slider_1", "sim/cockpit2/switches/custom_slider_on[0]", globalProperty },
+    {"slider_2", "sim/cockpit2/switches/custom_slider_on[1]", globalProperty },
+    {"slider_3", "sim/cockpit2/switches/custom_slider_on[2]", globalProperty },
+    {"slider_4", "sim/cockpit2/switches/custom_slider_on[3]", globalProperty },
+    {"slider_5", "sim/cockpit2/switches/custom_slider_on[4]", globalProperty },
+    {"slider_6", "sim/cockpit2/switches/custom_slider_on[5]", globalProperty },
+    {"slider_7", "sim/cockpit2/switches/custom_slider_on[6]", globalProperty },
+    {"slider_8", "sim/cockpit2/switches/custom_slider_on[7]", globalProperty },
+    {"slider_9", "sim/cockpit2/switches/custom_slider_on[8]", globalProperty },
+    {"slider_10", "sim/cockpit2/switches/custom_slider_on[9]", globalProperty },
+    {"slider_11", "sim/cockpit2/switches/custom_slider_on[10]", globalProperty },
+    {"slider_12", "sim/cockpit2/switches/custom_slider_on[11]", globalProperty }, 
 	-- right tank fuel weight
-    {"tank3R_w", "sim/flightmodel/weight/m_fuel[4]", 
-		XP11 and globalPropertyf or globalProperty }, 
+    {"tank3R_w", "sim/flightmodel/weight/m_fuel[4]", globalProperty }, 
 	-- left tank fuel weight
-    {"tank3L_w", "sim/flightmodel/weight/m_fuel[5]", 
-		XP11 and globalPropertyf or globalProperty }, 
+    {"tank3L_w", "sim/flightmodel/weight/m_fuel[5]", globalProperty }, 
 	-- actual steering angle
     {"tire_steer_actual_deg", "sim/flightmodel2/gear/tire_steer_actual_deg[0]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 	-- gear deploy ratio 1
     {"deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", 
-		XP11 and globalPropertyf or globalProperty },
+	globalProperty },
 	-- gear deploy ratio 2
     {"deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 	-- gear deploy ratio 3
     {"deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 	-- gear strut compression 1
     {"deflection_mtr_1", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 	-- gear strut compression 2
     {"deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 	-- gear strut compression 3
     {"deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 	-- wing tip deflection
     {"wing_tip_defl", "sim/flightmodel2/wing/wing_tip_deflection_deg[0]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 	-- eagle claw angle left
     {"EC_L", "sim/flightmodel2/gear/eagle_claw_angle_deg[1]", 
-		XP11 and globalPropertyf or globalProperty },
+	globalProperty },
 	-- eagle claw angle right
     {"EC_R", "sim/flightmodel2/gear/eagle_claw_angle_deg[2]", 
-		XP11 and globalPropertyf or globalProperty },
+	globalProperty },
 	-- left thrust reverser
     {"revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 	-- right thrust reverser
     {"revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", 
-		XP11 and globalPropertyf or globalProperty }, 
+	globalProperty }, 
 })
 
 -- Global helpers required by this script
-function bool2int(var)
-    if var then return 1 else return 0 end
-end
-
-function line(x, x1, y1, x2, y2)
-    if x2 - x1 ~= 0 then
-        return (x - x1) * (y2 - y1) / (x2 - x1) + y1
-    else
-        return 0
-    end
-end
-
 local function playPanelSample(sample)
     if XP11 then
-        sasl.al.playSample(sample, false)
+        sasl.al.playSample(sample, 0)
     else
         sasl.al.playSample(sample, false)
     end

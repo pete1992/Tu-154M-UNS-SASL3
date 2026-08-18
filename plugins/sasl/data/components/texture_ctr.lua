@@ -1,33 +1,11 @@
--- texture_ctr.lua
--- Generic texture component with adjustable opacity.
+-- draw texture
 
--- Texture supplied by the parent component.
+-- no default texture
 defineProperty("image")
-
--- Texture opacity.
 defineProperty("alpha", 1)
 
 function draw()
-    local texture = get(image)
-
-    if not texture then
-        return
-    end
-
-    local a = get(alpha)
-
-    if a < 0 then
-        a = 0
-    elseif a > 1 then
-        a = 1
-    end
-
-    sasl.gl.drawTexture(
-        texture,
-        0,
-        0,
-        size[1],
-        size[2],
-        {1, 1, 1, a}
-    )
+	local a = get(alpha)
+    sasl.gl.drawTexture(get(image), 0, 0, 100, 100, { a, a, a, 1 })
 end
+

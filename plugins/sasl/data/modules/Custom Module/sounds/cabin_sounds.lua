@@ -69,8 +69,8 @@ defineProps({
     { "air_usage_L", "tu154/custom/bleed/air_usage_L", globalPropertyf },
     { "air_usage_R", "tu154/custom/bleed/air_usage_R", globalPropertyf },
     -- Landing gear and ground roll
-    { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalPropertyf },
-    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalPropertyf },
+    { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
+    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
     { "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf },
     -- Flaps
     { "flaps_lever", "tu154/custom/controll/flaps_lever", globalPropertyf },

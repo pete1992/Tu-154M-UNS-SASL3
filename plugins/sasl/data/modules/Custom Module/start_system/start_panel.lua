@@ -1,143 +1,207 @@
--- this is start-up panel
+--[[
+Changelog
+- Grouped the original SASL property bindings through defineProps() while preserving names, Dataref paths and order.
+- Moved all property comments above their entries and replaced Russian comments with English comments.
+- Corrected apd_working_1, apd_working_2 and apd_working_3 from globalPropertyf to globalPropertyi to match their creator definitions.
+- Added local X-Plane 11 / X-Plane 12-compatible panel-sound playback.
+- Replaced sum-based switch and button sound detection with direct state comparison so opposite simultaneous changes cannot cancel each other.
+- Replaced individual *_last locals with compact persistent state tables.
+- Added SmartCopilot ownership for cap-forced switch writes, lamps and starter-pressure output; panel sounds remain local.
+- Clamped panel lamp brightness to the valid 0..1 range using the project-wide clamp() helper.
+- Reduced repeated bus-voltage reads.
+- Preserved the starter-cap behavior, starter-mode exception, 36 V power condition and starter-pressure gauge response.
+]]
 
--- controls and gauges
-defineProperty("starter_press", globalPropertyf("tu154/custom/gauges/eng/starter_press")) --    
+-- Added for X-Plane 11 / X-Plane 12 compatibility.
+defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
+local XP11 = get(xp_version) > 120000
 
-defineProperty("starter_cap", globalPropertyi("tu154/custom/switchers/eng/starter_cap")) --   
-defineProperty("starter_switch", globalPropertyi("tu154/custom/switchers/eng/starter_switch")) --  
-defineProperty("starter_eng_select", globalPropertyi("tu154/custom/switchers/eng/starter_eng_select")) --  
-defineProperty("starter_mode", globalPropertyi("tu154/custom/switchers/eng/starter_mode")) --  
+-- Start-up panel logic.
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("starter_start", globalPropertyi("tu154/custom/buttons/eng/starter_start")) --  
-defineProperty("starter_stop", globalPropertyi("tu154/custom/buttons/eng/starter_stop")) --  
+defineProps({
+    -- Starter-system pressure gauge
+    { "starter_press", "tu154/custom/gauges/eng/starter_press", globalPropertyf },
+    -- Starter-panel guard
+    { "starter_cap", "tu154/custom/switchers/eng/starter_cap", globalPropertyi },
+    -- Starter power switch
+    { "starter_switch", "tu154/custom/switchers/eng/starter_switch", globalPropertyi },
+    -- Engine selector
+    { "starter_eng_select", "tu154/custom/switchers/eng/starter_eng_select", globalPropertyi },
+    -- Starter mode selector
+    { "starter_mode", "tu154/custom/switchers/eng/starter_mode", globalPropertyi },
+    -- Starter start button
+    { "starter_start", "tu154/custom/buttons/eng/starter_start", globalPropertyi },
+    -- Starter stop button
+    { "starter_stop", "tu154/custom/buttons/eng/starter_stop", globalPropertyi },
+    -- In-flight start button, engine 1
+    { "flight_start_1", "tu154/custom/buttons/eng/flight_start_1", globalPropertyi },
+    -- In-flight start button, engine 2
+    { "flight_start_2", "tu154/custom/buttons/eng/flight_start_2", globalPropertyi },
+    -- In-flight start button, engine 3
+    { "flight_start_3", "tu154/custom/buttons/eng/flight_start_3", globalPropertyi },
+    -- Reserve fuel-pump test button
+    { "reserv_pump_test", "tu154/custom/buttons/eng/reserv_pump_test", globalPropertyi },
+    -- APD operating lamp, engine 1
+    { "apd_work_1", "tu154/custom/lights/small/apd_work_1", globalPropertyf },
+    -- APD operating lamp, engine 2
+    { "apd_work_2", "tu154/custom/lights/small/apd_work_2", globalPropertyf },
+    -- APD operating lamp, engine 3
+    { "apd_work_3", "tu154/custom/lights/small/apd_work_3", globalPropertyf },
+    -- Left 27 V bus voltage
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    -- Right 27 V bus voltage
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+    -- Left 36 V bus voltage
+    { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
+    -- Right 36 V bus voltage
+    { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf },
+    -- Frame duration
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    -- Starter-system pressure source
+    { "starter_pressure", "tu154/custom/start/starter_pressure", globalPropertyf },
+    -- APD operating state, engine 1
+    { "apd_working_1", "tu154/custom/start/apd_working_1", globalPropertyi },
+    -- APD operating state, engine 2
+    { "apd_working_2", "tu154/custom/start/apd_working_2", globalPropertyi },
+    -- APD operating state, engine 3
+    { "apd_working_3", "tu154/custom/start/apd_working_3", globalPropertyi },
+    -- SmartCopilot master state: 0 unavailable, 1 slave, 2 master
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+})
 
-defineProperty("flight_start_1", globalPropertyi("tu154/custom/buttons/eng/flight_start_1")) --   
-defineProperty("flight_start_2", globalPropertyi("tu154/custom/buttons/eng/flight_start_2")) --   
-defineProperty("flight_start_3", globalPropertyi("tu154/custom/buttons/eng/flight_start_3")) --   
+-- Panel sounds
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
+local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 
-defineProperty("reserv_pump_test", globalPropertyi("tu154/custom/buttons/eng/reserv_pump_test")) --    
+local function playPanelSample(sample)
+    if XP11 then
+        sasl.al.playSample(sample, 0)
+    else
+        sasl.al.playSample(sample, false)
+    end
+end
 
--- lamps
-defineProperty("apd_work_1", globalPropertyf("tu154/custom/lights/small/apd_work_1")) --  
-defineProperty("apd_work_2", globalPropertyf("tu154/custom/lights/small/apd_work_2")) --  
-defineProperty("apd_work_3", globalPropertyf("tu154/custom/lights/small/apd_work_3")) --  
+-- Persistent sound states.
+-- Entry format: { property, last_value }
+local SWITCH_STATE = {
+    { starter_switch, get(starter_switch) },
+    { starter_eng_select, get(starter_eng_select) },
+    { starter_mode, get(starter_mode) },
+}
 
--- sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
-defineProperty("bus36_volt_left", globalPropertyf("tu154/custom/elec/bus36_volt_left")) --   36 
-defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right")) --   36 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local CAP_STATE = {
+    { starter_cap, get(starter_cap) },
+}
 
-defineProperty("starter_pressure", globalPropertyf("tu154/custom/start/starter_pressure")) --    
+local BUTTON_STATE = {
+    { starter_start, get(starter_start) },
+    { starter_stop, get(starter_stop) },
+    { flight_start_1, get(flight_start_1) },
+    { flight_start_2, get(flight_start_2) },
+    { flight_start_3, get(flight_start_3) },
+    { reserv_pump_test, get(reserv_pump_test) },
+}
 
-defineProperty("apd_working_1", globalPropertyf("tu154/custom/start/apd_working_1")) --   
-defineProperty("apd_working_2", globalPropertyf("tu154/custom/start/apd_working_2")) --   
-defineProperty("apd_working_3", globalPropertyf("tu154/custom/start/apd_working_3")) --   
+local function stateChanged(state)
+    local changed = false
 
--- sounds
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
-local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+    for i = 1, #state do
+        local entry = state[i]
+        local value = get(entry[1])
 
-local passed = 0
+        if value ~= entry[2] then
+            changed = true
+        end
 
-local starter_cap_last = get(starter_cap)
+        entry[2] = value
+    end
 
-local starter_switch_last = get(starter_switch)
-local starter_eng_select_last = get(starter_eng_select)
-local starter_mode_last = get(starter_mode)
+    return changed
+end
 
-local starter_start_last = get(starter_start)
-local starter_stop_last = get(starter_stop)
-local flight_start_1_last = get(flight_start_1)
-local flight_start_2_last = get(flight_start_2)
-local flight_start_3_last = get(flight_start_3)
+local function check_controls(MASTER)
+    if stateChanged(CAP_STATE) then
+        playPanelSample(cap_sound)
+    end
 
-local reserv_pump_test_last = get(reserv_pump_test)
+    if stateChanged(SWITCH_STATE) then
+        playPanelSample(switcher_sound)
+    end
 
-local function check_controls()
+    if stateChanged(BUTTON_STATE) then
+        playPanelSample(button_sound)
+    end
 
-	local starter_cap_sw = get(starter_cap)
-	
-	local starter_switch_sw = get(starter_switch)
-	local starter_eng_select_sw = get(starter_eng_select)
-	local starter_mode_sw = get(starter_mode)
-	
-	----------------
-	if starter_cap_sw - starter_cap_last ~= 0 then sasl.al.playSample(cap_sound, false) end
-	
-	if starter_cap_sw == 0 then
-		set(starter_switch, 0)
-		set(starter_eng_select, 0)
-		--set(starter_mode, 0)
-	
-	end
-	----------------
-	local switch_change = starter_switch_sw + starter_eng_select_sw + starter_mode_sw
-	
-	switch_change = switch_change - starter_switch_last - starter_eng_select_last - starter_mode_last
-	
-	if switch_change ~= 0 then sasl.al.playSample(switcher_sound, false) end
-	
-	----------------
-	local starter_start_sw = get(starter_start)
-	local starter_stop_sw = get(starter_stop)
-	local flight_start_1_sw = get(flight_start_1)
-	local flight_start_2_sw = get(flight_start_2)
-	local flight_start_3_sw = get(flight_start_3)
-	local reserv_pump_test_sw = get(reserv_pump_test)
-	
-	local button_change = starter_start_sw + starter_stop_sw + flight_start_1_sw + flight_start_2_sw + flight_start_3_sw + reserv_pump_test_sw
-	
-	button_change = button_change - starter_start_last - starter_stop_last - flight_start_1_last - flight_start_2_last - flight_start_3_last - reserv_pump_test_last
-	
-	if button_change ~= 0 then sasl.al.playSample(button_sound, false) end
-	
-	starter_cap_last = starter_cap_sw
-	
-	starter_switch_last = starter_switch_sw
-	starter_eng_select_last = starter_eng_select_sw
-	starter_mode_last = starter_mode_sw
-	
-	starter_start_last = starter_start_sw
-	starter_stop_last = starter_stop_sw
-	flight_start_1_last = flight_start_1_sw
-	flight_start_2_last = flight_start_2_sw
-	flight_start_3_last = flight_start_3_sw
-	reserv_pump_test_last = reserv_pump_test_sw
-	
+    if not MASTER then
+        return
+    end
+
+    if get(starter_cap) == 0 then
+        set(starter_switch, 0)
+        set(starter_eng_select, 0)
+
+        -- Intentionally preserved from the original script.
+        -- set(starter_mode, 0)
+    end
 end
 
 local function lamps()
-	--local test_btn = get(test_lamps)
-	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
-	
-	local apd_work_1_brt = get(apd_working_1) * lamps_brt 
-	set(apd_work_1, apd_work_1_brt)	
-	
-	local apd_work_2_brt = get(apd_working_2) * lamps_brt 
-	set(apd_work_2, apd_work_2_brt)	
-	
-	local apd_work_3_brt = get(apd_working_3) * lamps_brt 
-	set(apd_work_3, apd_work_3_brt)	
-	
+    local bus_left = get(bus27_volt_left)
+    local bus_right = get(bus27_volt_right)
+
+    local lamps_brt = clamp(
+        (math.max(bus_left, bus_right) - 10) / 18.5,
+        0,
+        1
+    )
+
+    set(apd_work_1, get(apd_working_1) * lamps_brt)
+    set(apd_work_2, get(apd_working_2) * lamps_brt)
+    set(apd_work_3, get(apd_working_3) * lamps_brt)
 end
 
 local start_press_act = 0
 
-function update()
+local function updateStarterPressure(dt, MASTER)
+    local bus_left = get(bus36_volt_left)
+    local bus_right = get(bus36_volt_right)
 
-	passed = get(frame_time)
-	check_controls()
-	lamps()
-	
-	local start_press = 0
-	if get(bus36_volt_left) > 30 and get(bus36_volt_right) > 30 then start_press = get(starter_pressure) end
-	start_press_act = start_press_act + (start_press - start_press_act) * passed * 2
-	
-	set(starter_press, start_press_act)
-	
+    local start_press = 0
+
+    if bus_left > 30 and bus_right > 30 then
+        start_press = get(starter_pressure)
+    end
+
+    -- Preserve the original gauge response.
+    start_press_act =
+        start_press_act
+        + (start_press - start_press_act) * dt * 2
+
+    if MASTER then
+        set(starter_press, start_press_act)
+    end
 end
 
+function update()
+    local dt = get(frame_time)
+    local MASTER = get(ismaster) ~= 1
+
+    -- Panel sounds remain local on all SmartCopilot instances.
+    check_controls(MASTER)
+
+    if MASTER then
+        lamps()
+    end
+
+    -- Internal pressure state continues to track on every instance so an
+    -- ownership change does not start from a stale gauge state.
+    updateStarterPressure(dt, MASTER)
+end

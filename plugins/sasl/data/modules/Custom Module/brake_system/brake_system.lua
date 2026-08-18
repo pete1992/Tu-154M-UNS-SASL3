@@ -59,11 +59,11 @@ local termo_coef = {
 {1000000, 500}
 }
 
-local joy_work_L = globalPropertyi("sim/joystick/joy_mapped_axis_avail[6]")
-local joy_work_R = globalPropertyi("sim/joystick/joy_mapped_axis_avail[7]")
+local joy_work_L = globalProperty("sim/joystick/joy_mapped_axis_avail[6]")
+local joy_work_R = globalProperty("sim/joystick/joy_mapped_axis_avail[7]")
 
-local joy_value_L = globalPropertyf("sim/joystick/joy_mapped_axis_value[6]")
-local joy_value_R = globalPropertyf("sim/joystick/joy_mapped_axis_value[7]")
+local joy_value_L = globalProperty("sim/joystick/joy_mapped_axis_value[6]")
+local joy_value_R = globalProperty("sim/joystick/joy_mapped_axis_value[7]")
 
 -- now we need to find axies of brakes on pedals, if there are any
 

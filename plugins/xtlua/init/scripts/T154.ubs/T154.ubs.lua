@@ -21,12 +21,14 @@ srpbz = find_dataref("tu154/custom/kontur/srpbz")
 nodata = deferred_dataref("tu154/custom/kontur/nodata", "number")
 nodata_r = deferred_dataref("tu154/custom/kontur/nodata_r", "number")
 
+
 local no_swc = 0
 local no_rls = 0
 local no_tcas = 0
 local no_taws = 0
 local no_nav_l = 0
 local no_nav_r = 0
+
 
 function ubs_ovhd_onoff_l_CMDhandler(phase, duration)
      if phase == 0 then
@@ -58,11 +60,14 @@ function ubs_ovhd_onoff_r_CMDhandler(phase, duration)
     end    	
 end	
 
+
 UBS_L_ON_func	= create_command("ubs/ovhd_onoff_l", "UBS L OVHD ONOFF", ubs_ovhd_onoff_l_CMDhandler)
 UBS_R_ON_func	= create_command("ubs/ovhd_onoff_r", "UBS R OVHD ONOFF", ubs_ovhd_onoff_r_CMDhandler)
 
+
 function kontur_nodata_items()
 
+    
     if uns1_on < 1 then
         no_nav_l = 1
     else
@@ -94,6 +99,7 @@ function kontur_nodata_items()
     weather_lit = 0
     end
     
+
  ----- no tcas
 
     if simDRtcasmode == 100 then
@@ -101,6 +107,7 @@ function kontur_nodata_items()
     else
     no_tcas = 0
     end
+    
     
 ----- no taws
     
@@ -112,10 +119,16 @@ function kontur_nodata_items()
     no_taws = 0
     end
     
+    
+    
+    
+
 end
+
 
 function kontur_nodata_l()
 
+    
     if no_swc == 1 and no_rls == 1 and no_tcas == 1 and no_taws == 1 and no_nav_l == 1 then
       nodata = 15
     end
@@ -232,6 +245,7 @@ function kontur_nodata_l()
       nodata = 28
     end
 
+    
 end
 
 function kontur_nodata_r()
@@ -352,7 +366,10 @@ function kontur_nodata_r()
       nodata_r = 28
     end
 
+
+
 end
+
 
 run_at_interval(kontur_nodata_l, 1.5)
 run_at_interval(kontur_nodata_r, 1.5)

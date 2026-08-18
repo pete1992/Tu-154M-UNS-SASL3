@@ -1,10 +1,13 @@
 function tu154_kontur_weather_sys_DRhandler() end
 
+
+
 function deferred_dataref(name,type,notifier)
 	print("Deffered dataref: "..name)
 	dref=XLuaCreateDataRef(name, type,"yes",notifier)
 	return wrap_dref_any(dref,type) 
 end
+
 
 function decToDms_lat(dec_lat)
 	local abs_dec_lat = math.abs(dec_lat)
@@ -29,6 +32,14 @@ function decToDms_long(dec_long)
     if degrees_long < 100 then dlz = "0" end
 	return ew .. dlz .. degrees_long ..",".. mins_long ..".".. secs_round_long
 end
+
+
+
+
+
+
+
+
 
 simDR_startuprunning = find_dataref("sim/operation/prefs/startup_running")
 simDR_gs					= find_dataref("sim/flightmodel/position/groundspeed")
@@ -92,6 +103,7 @@ simDR_radioalt					= find_dataref("sim/cockpit2/gauges/indicators/radio_altimete
 simDR_vvi					= find_dataref("tu154/custom/gauges/vvi_left")
 simDR_vvi_rv					= find_dataref("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 
+
 kntr_1_brt_sw		= deferred_dataref("tu154/custom/kontur/kntr_1_brt_sw", "number")
 kntr_2_brt_sw		= deferred_dataref("tu154/custom/kontur/kntr_2_brt_sw", "number")
 z_bok = deferred_dataref("tu154/custom/kontur/zbok", "number")
@@ -147,6 +159,7 @@ uns2_on					= deferred_dataref("tu154/custom/uns2_on", "number")
 gmk_crs					= deferred_dataref("tu154/custom/kontur/course_gmk", "number")
 fpu_crs					= deferred_dataref("tu154/custom/kontur/course_fpu", "number")
 
+
 kontur_button_lit_l = deferred_dataref("tu154/custom/kontur/button_lights_l", "number")
 kontur_dist_mode_l = deferred_dataref("tu154/custom/kontur/dist_mode_l", "number")
 kontur_info_knob1_l = deferred_dataref("tu154/custom/kontur/info_knob1_l", "number")
@@ -158,6 +171,8 @@ kontur_info_knob1_r = deferred_dataref("tu154/custom/kontur/info_knob1_r", "numb
 kontur_info_knob2_r = deferred_dataref("tu154/custom/kontur/info_knob2_r", "number")
 
 kontur_zbok_test = deferred_dataref("tu154/custom/kontur/zbok_test", "number")
+
+
 
 lat_string = deferred_dataref("tu154/custom/kontur/latitude", "string")
 long_string = deferred_dataref("tu154/custom/kontur/longitude", "string")
@@ -196,6 +211,7 @@ kntr_1_brt_sw = 0.7
 kntr_2_brt_sw = 0.7
 simDR_kontur_1_brt = 0.6
 simDR_kontur_2_brt = 0.6
+
 
 function kontur_onoff_button_l_CMDhandler(phase, duration)
     if phase == 0 then
@@ -258,6 +274,7 @@ function kontur_rls_button_l_CMDhandler(phase, duration)
     end
     end   	
 end	
+
 
 function kontur_nav_button_l_CMDhandler(phase, duration)
     if phase == 0 then
@@ -442,6 +459,7 @@ function kontur_btn1_button_l_CMDhandler(phase, duration)
             end
         end
 
+        
     if kontur_pow_l > 0 and simDR_bus27left > 0 and kontur_onoff_l < 1 and kontur_test_start_l > 0 then
         if kontur_test_timer_l > 17 then
             kontur_test_timer_l = 0
@@ -505,6 +523,8 @@ function kontur_btn2_button_l_CMDhandler(phase, duration)
     end   	
 end	
 
+
+
 function kontur_btn3_button_l_CMDhandler(phase, duration)
      if phase == 0 then
         if info_page_l > 0 then
@@ -563,6 +583,7 @@ function kontur_btn3_button_l_CMDhandler(phase, duration)
     end    	
 end	
 
+
 function kontur_info_button_l_CMDhandler(phase, duration)
     if phase == 0 then
         if kontur_nav_l > 0 and kontur_nav_menu_l < 1 then
@@ -609,8 +630,10 @@ function kontur_info_button_l_CMDhandler(phase, duration)
             end
         end
 	
+        
     end   	
 end
+
 
 function kontur_onoff_button_r_CMDhandler(phase, duration)
     if phase == 0 then
@@ -674,6 +697,7 @@ function kontur_rls_button_r_CMDhandler(phase, duration)
         end
     end     	
 end	
+
 
 function kontur_nav_button_r_CMDhandler(phase, duration)
     if phase == 0 then
@@ -975,6 +999,7 @@ function kontur_btn3_button_r_CMDhandler(phase, duration)
     end    	
 end	
 
+
 function kontur_info_button_r_CMDhandler(phase, duration)
     if phase == 0 then
         if kontur_nav_r > 0 and kontur_nav_menu_r < 1 then
@@ -1073,6 +1098,8 @@ function kontur_ovhd_onoff_r_CMDhandler(phase, duration)
     end    	
 end	
 
+
+
 KONTUR_ONOFF_btn_l	= create_command("kontur/onoff_btn_l", "Kontur L ONOFF Button", kontur_onoff_button_l_CMDhandler)
 KONTUR_RLS_btn_l	= create_command("kontur/rls_btn_l", "Kontur L RLS Button", kontur_rls_button_l_CMDhandler)
 KONTUR_NAV_btn_l	= create_command("kontur/nav_btn_l", "Kontur L NAV Button", kontur_nav_button_l_CMDhandler)
@@ -1097,6 +1124,7 @@ KONTUR_BTN3_btn_r	= create_command("kontur/btn3_btn_r", "Kontur R BTN3 Button", 
 KONTUR_INFO_btn_r	= create_command("kontur/info_btn_r", "Kontur R INFO Button", kontur_info_button_r_CMDhandler)
 KONTUR_L_ON_func	= create_command("kontur/ovhd_onoff_l", "Kontur L OVHD ONOFF", kontur_ovhd_onoff_l_CMDhandler)
 KONTUR_R_ON_func	= create_command("kontur/ovhd_onoff_r", "Kontur R OVHD ONOFF", kontur_ovhd_onoff_r_CMDhandler)
+
 
 function aircraft_load()
     simDR_efis_1_fix					= 0
@@ -1127,6 +1155,9 @@ function aircraft_load()
     kontur_button_lit_r = 0.3
 end
 
+
+
+
 function kontur_left()
     
  if simDR_bus27left < 1 then
@@ -1139,6 +1170,8 @@ function kontur_left()
         kontur_pow_l_lit  = 0
  end
     
+    
+   
 if kontur_nav_menu_l > 0 then
    if (kontur_info_knob2_l - info_knob2_l_loc) > 9.9 then
         if kontur_nav_l > 0 then
@@ -1159,6 +1192,7 @@ if kontur_nav_menu_l > 0 then
        info_knob2_l_loc = kontur_info_knob2_l
     end
 end
+
 
 if kontur_nav_menu_l == 1 then
     if (kontur_info_knob1_l - info_knob1_l_loc) > 9.9 then
@@ -1186,6 +1220,8 @@ end
 if kontur_nav_menu_l > 2 and kontur_nav_l < 1 then
     kontur_nav_menu_l = 2
 end
+    
+    
     
     if kontur_taws_l > 0 then
         if simDR_taws_mode > 0 and simDR_taws_mode < 3 then
@@ -1234,6 +1270,9 @@ end
         end  
     end
         
+        
+    
+    
     if kontur_wx_l > 0 and wx_taws_sw_l == 2 then
         wx_taws_sw_l = 1
         kontur_taws_l = 0
@@ -1327,6 +1366,8 @@ end
     end
     end
     
+    
+    
     if weather_mode > 0 and weather_sys > 0 and simDR_36v > 0 and kontur_wx_test_l == -1 and kontur_wx_l > 1 then
         if kontur_wx_l > 2 and nostab_l < 1 then
             simDR_efis_1_wxr = 1
@@ -1356,6 +1397,8 @@ function kontur_right()
     kontur_pow_r_lit = 0
  end   
     
+    
+    
 if kontur_nav_menu_r > 0 then
    if (kontur_info_knob2_r - info_knob2_r_loc) > 9.9 then
         if kontur_nav_r > 0 then
@@ -1376,6 +1419,7 @@ if kontur_nav_menu_r > 0 then
        info_knob2_r_loc = kontur_info_knob2_r
     end
 end
+
 
 if kontur_nav_menu_r == 1 then
     if (kontur_info_knob1_r - info_knob1_r_loc) > 9.9 then
@@ -1404,6 +1448,7 @@ if kontur_nav_menu_r > 2 and kontur_nav_r < 1 then
     kontur_nav_menu_r = 2
 end
     
+    
     if kontur_taws_r > 0 then
         if simDR_taws_mode > 0 and simDR_taws_mode < 3 then
         kontur_taws_r = simDR_taws_mode
@@ -1412,6 +1457,7 @@ end
         end
         end
     end
+    
     
     if kontur_pow_r > 0 and simDR_bus27right > 0 and kontur_onoff_r < 1 then
      kontur_pow_r_lit = 1
@@ -1451,6 +1497,7 @@ end
         end
     end
     
+    
     if kontur_wx_r > 0 and wx_taws_sw_r == 2 then
         wx_taws_sw_r = 1
         kontur_taws_r = 0
@@ -1467,7 +1514,18 @@ end
         wx_taws_sw_r = 1
     end
     
+    
+    
 end
+
+
+
+
+
+
+
+
+
 
 function kontur_data()
  
@@ -1500,6 +1558,7 @@ end
         
 fpu_crs = gmk_crs + simDR_diss_slipe
 
+ 
 if simDRcrs_flag1 < 1 then
         diff_crs = simDRcrs_plank1 * 5
         crs_fl = 1
@@ -1522,6 +1581,7 @@ else
         gs_fl = 0
 end
     
+
 if weather_sys > 0 and simDR_36v > 0 then
     weather_lit = 1
 else
@@ -1593,11 +1653,13 @@ else
   vvi_rv = 0
 end
       
+    
     if kontur_pow_l > 0 then
         simDR_srpbz_brightness = simDR_kontur_1_brt
     elseif kontur_pow_r > 0 then
         simDR_srpbz_brightness = simDR_kontur_2_brt
     end
+    
     
     if kontur_tcas_l > 0 then
         if kontur_taws_l < 2 and kontur_taws_r < 2 then
@@ -1616,10 +1678,14 @@ end
             simDR_tcas_on = 0
         end
             
+        
+        
     else
             simDR_tcas_on = 0
             simDR_efis_1_mode = 2
     end
+    
+        
     
     if simDR_weather_alpha > 0.4 and kontur_taws_l > 0 and kontur_wx_r > 0 then
     simDR_weather_alpha = 0.4
@@ -1651,6 +1717,7 @@ end
     else
         simDR_taws_dist = 0
     end
+    
     
     if kontur_nav_l > 0 and uns1_on > 0 then
     simDR_fms_line = 0
@@ -1693,6 +1760,7 @@ end
             end
     end   
     
+    
     -- calculate xtrack
     relative_brg = (simDR_dtk - simDR_bear + 360) % 360
     if relative_brg > 180 then
@@ -1713,10 +1781,19 @@ end
         end
     end
     
+    
+    
+    
     z_bok_nm = kontur_zbok_test
     z_bok = kontur_zbok_test * 1.852
     
+    
+    
+    
 end  
+
+
+
 
 function after_physics()
     kontur_left()

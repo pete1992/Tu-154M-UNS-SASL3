@@ -1100,7 +1100,6 @@ createGlobalPropertyf("tu154/custom/lights/msg_lamp", 0) -- MSG
 createGlobalPropertyf("tu154/custom/lights/wpt_lamp", 0) -- WPT
 createGlobalPropertyf("tu154/custom/lights/stuard_call", 0) --  
 createGlobalPropertyf("tu154/custom/lights/mgv_control_fail", 0) --   
-createGlobalPropertyf("tu154/custom/lights/sns_lamp", 0) -- 
 createGlobalPropertyf("tu154/custom/lights/correct_on", 0) --  
 createGlobalPropertyf("tu154/custom/lights/change_ch_o", 0) --  
 createGlobalPropertyf("tu154/custom/lights/warning_terrain", 0) --  

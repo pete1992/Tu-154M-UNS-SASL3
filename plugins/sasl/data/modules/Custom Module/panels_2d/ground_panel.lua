@@ -15,18 +15,18 @@ defineProperty("asu_work", globalPropertyf("tu154/custom/asu/work"))
 defineProperty("hide_rus_objects", globalPropertyi("tu154/custom/lang/hide_rus_objects")) --    
 defineProperty("hide_eng_objects", globalPropertyi("tu154/custom/lang/hide_eng_objects")) --    
 defineProperty("sounds_volume", globalPropertyi("tu154/custom/sounds_voulme")) --   
-defineProperty("slider_1", globalPropertyi("sim/cockpit2/switches/custom_slider_on[0]")) -- window L
-defineProperty("slider_2", globalPropertyi("sim/cockpit2/switches/custom_slider_on[1]")) -- window R
-defineProperty("slider_3", globalPropertyi("sim/cockpit2/switches/custom_slider_on[2]")) -- cargo 1
-defineProperty("slider_4", globalPropertyi("sim/cockpit2/switches/custom_slider_on[3]")) -- cargo 2
-defineProperty("slider_5", globalPropertyi("sim/cockpit2/switches/custom_slider_on[4]")) -- pax door 1
-defineProperty("slider_6", globalPropertyi("sim/cockpit2/switches/custom_slider_on[5]")) -- pax door 2
-defineProperty("slider_7", globalPropertyi("sim/cockpit2/switches/custom_slider_on[6]")) -- kitchen door
-defineProperty("slider_8", globalPropertyi("sim/cockpit2/switches/custom_slider_on[7]")) --
-defineProperty("slider_9", globalPropertyi("sim/cockpit2/switches/custom_slider_on[8]")) -- yokes
-defineProperty("slider_10", globalPropertyi("sim/cockpit2/switches/custom_slider_on[9]")) -- 
-defineProperty("slider_11", globalPropertyi("sim/cockpit2/switches/custom_slider_on[10]")) -- 
-defineProperty("slider_12", globalPropertyi("sim/cockpit2/switches/custom_slider_on[11]")) -- 
+defineProperty("slider_1", globalProperty("sim/cockpit2/switches/custom_slider_on[0]")) -- window L
+defineProperty("slider_2", globalProperty("sim/cockpit2/switches/custom_slider_on[1]")) -- window R
+defineProperty("slider_3", globalProperty("sim/cockpit2/switches/custom_slider_on[2]")) -- cargo 1
+defineProperty("slider_4", globalProperty("sim/cockpit2/switches/custom_slider_on[3]")) -- cargo 2
+defineProperty("slider_5", globalProperty("sim/cockpit2/switches/custom_slider_on[4]")) -- pax door 1
+defineProperty("slider_6", globalProperty("sim/cockpit2/switches/custom_slider_on[5]")) -- pax door 2
+defineProperty("slider_7", globalProperty("sim/cockpit2/switches/custom_slider_on[6]")) -- kitchen door
+defineProperty("slider_8", globalProperty("sim/cockpit2/switches/custom_slider_on[7]")) --
+defineProperty("slider_9", globalProperty("sim/cockpit2/switches/custom_slider_on[8]")) -- yokes
+defineProperty("slider_10", globalProperty("sim/cockpit2/switches/custom_slider_on[9]")) -- 
+defineProperty("slider_11", globalProperty("sim/cockpit2/switches/custom_slider_on[10]")) -- 
+defineProperty("slider_12", globalProperty("sim/cockpit2/switches/custom_slider_on[11]")) -- 
 defineProperty("gear_blocks", globalPropertyi("tu154/custom/anim/gear_blocks")) --   
 defineProperty("sensors_caps", globalPropertyi("tu154/custom/anim/sensors_caps")) --   
 defineProperty("engine_caps", globalPropertyi("tu154/custom/anim/engine_caps")) --   

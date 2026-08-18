@@ -30,6 +30,8 @@ simDR_tank4 = find_dataref("tu154/custom/payload/tank_4")
 simDR_fuel_tanks = find_dataref("sim/flightmodel/weight/m_fuel") 
 simDR_set_cg = find_dataref("tu154/custom/payload/load_fast_btn") 
 
+
+
 pass_count = deferred_dataref("tu154/custom/t154_efb/pass_count", "number")
 pass_weight = deferred_dataref("tu154/custom/t154_efb/pass_weight", "number")
 cargo_weight = deferred_dataref("tu154/custom/t154_efb/cargo_weight", "number")
@@ -49,6 +51,7 @@ efb_timer_start = deferred_dataref("tu154/custom/t154_efb/timer_start", "number"
 efb_power_btn = deferred_dataref("tu154/custom/t154_efb/power_btn", "number")
 efb_enabled = deferred_dataref("tu154/custom/t154_efb/enabled", "number")
 avitab_enbl = find_dataref("avitab/panel_enabled") 
+
 
 efb_fc_dist_osn = find_dataref("tu154/custom/payload/main_dist")
 efb_fc_dist_osn_nm = deferred_dataref("tu154/custom/payload/main_dist_nm", "number")
@@ -71,8 +74,11 @@ fuel_alt = deferred_dataref("tu154/custom/t154_efb/fc_alt", "number")
 fc_ete_h = deferred_dataref("tu154/custom/t154_efb/fc_ete_h", "number")
 fc_ete_m = deferred_dataref("tu154/custom/t154_efb/fc_ete_m", "number")
 
+
+
 length_razb_28 = deferred_dataref("tu154/custom/t154_efb/length_razb_28", "number")
 length_razb_15 = deferred_dataref("tu154/custom/t154_efb/length_razb_15", "number")
+
 
 simDR_VR_15 = find_dataref("tu154/custom/speeds/vr_15")
 simDR_VR_28 = find_dataref("tu154/custom/speeds/vr_28")
@@ -93,8 +99,12 @@ probeg_28 = deferred_dataref("tu154/custom/t154_efb/probeg_28", "number")
 probeg_36 = deferred_dataref("tu154/custom/t154_efb/probeg_36", "number")
 probeg_45 = deferred_dataref("tu154/custom/t154_efb/probeg_45", "number")
 
+
+
 simDR_magnetic_heading = find_dataref("sim/cockpit2/gauges/indicators/compass_heading_deg_mag")
 simDR_volume = find_dataref("tu154/custom/sounds_voulme")
+
+
 
 payload_set_slow = deferred_dataref("tu154/custom/payload/load_slow_btn_new", "number")
 
@@ -168,6 +178,7 @@ local pwr_loc = 0
 local ct_t = 0
 local ct_nf = 0
 local bcax = 5.28
+
 
 local pos1 =0
 local pos2 =0
@@ -243,6 +254,10 @@ efb_power_mode = 2
 qfe_qnh = 1013
 qfe_elev = 0
 
+
+
+
+
 function efb_qfe_calc()
     qfe_elev_m = qfe_elev *0.3048
     qfe_hpa = qfe_qnh - qfe_elev/27
@@ -250,7 +265,11 @@ function efb_qfe_calc()
     qfe_mmhg = qfe_hpa *0.75006
 end
 
+
 function efb_config()
+    
+    
+    
     
     if hid_mil_gnd == 1 and hid_civ_gnd == 1 and hid_def_gnd == 0 then
         ground_veh_type = 0
@@ -262,6 +281,9 @@ function efb_config()
         ground_veh_type = 2
     end
     
+    
+    
+    
     ground_stuff = fortoch_l+fortoch_r+cargo_door_1+cargo_door_2+door_1+door_2+kitch_door+ladder_1+ladder_2+sensor_caps+gear_blocks+engine_caps+gpu_present+fuel_tanker_call+catering_call
     
     if ground_stuff > 0 then
@@ -270,7 +292,9 @@ function efb_config()
         remove_all_gnd = 0
     end
     
+    
 end
+
 
 function efb_land_calc()
     weight_corr = (60000 - simDR_weight_act)/435
@@ -287,6 +311,7 @@ function efb_land_calc()
     probeg_45 = math.ceil(((vapp_45*0.277778) * (vapp_45*0.277778))/(2*11.8*((tyag_vor/6.673*0.00000000001)+0.02))*0.01)*10
 end
 
+
 function efb_to_calc()
     clean_speed=simDR_V2_15*1.32
     tyag_vor = 31500/(simDR_weight_act*9.80665)
@@ -294,9 +319,12 @@ function efb_to_calc()
     length_razb_28 = math.ceil(((simDR_VR_28*0.277778) * (simDR_VR_28*0.277778))/(2*9.8*((tyag_vor/6.673*0.00000000001)+0.02))*0.01)*10
 end
 
+
 function efb_fuel_calc()
     
+    
 if fuel_for_load > 0 then
+        
         
             simDR_tank1 = 0
             simDR_tank4 = 0
@@ -351,6 +379,7 @@ elseif step_fl_2 > 0 then
             step_fl_4 = 0
 end
 
+
 if fuel_for_load > 11600 and step_fl_3 > 0 then
             simDR_tank2_l = 9500
             simDR_tank2_r = 9500
@@ -377,14 +406,18 @@ end
          
 end
     
+    
 ete_clb = efb_fc_fl_osn/36.3
 ete_crz = (dist_crz/crz_gnd_spd)*60
 ete_des = efb_fc_fl_osn/25.3333333333
     
+    
 ete_mins = ete_clb+ete_crz+ete_des 
+    
     
 fc_ete_h = math.floor(ete_mins/60)
 fc_ete_m = math.floor(ete_mins - fc_ete_h*60)
+    
     
 landing_weight = nofuel_weight+efb_fc-fuel_main
 efb_fc_dist_osn_nm = math.floor((efb_fc_dist_osn *0.539957*0.1))*10
@@ -399,6 +432,7 @@ takeoff_weight_loc = nofuel_weight+efb_fc
 dist_clb_weight = (80000-takeoff_weight_loc)/400
 dist_clb = (efb_fc_fl_osn*0.25)-(390/efb_fc_fl_osn*20)+dist_clb_weight
 dist_des = (efb_fc_fl_osn/1.7)
+
 
 if (efb_fc_fl_osn * 3 < 900) then
    crz_gnd_spd = efb_fc_fl_osn * 3+efb_fc_wind_corr
@@ -421,6 +455,7 @@ else
    crz_gnd_spd_alt = 900+efb_fc_wind_corr_alt
 end
 
+
 dist_clb_alt = (efb_fc_fl_alt*0.45)-(390/efb_fc_fl_alt*20)+dist_clb_weight_alt
 dist_des_alt = (efb_fc_fl_alt/1.7)
 dist_crz_alt = efb_fc_dist_alt - dist_clb_alt - dist_des_alt
@@ -428,6 +463,7 @@ fuel_clb_alt = efb_fc_fl_alt*7.1
 fuel_crz_alt = (dist_crz_alt/crz_gnd_spd_alt)*4700
 fuel_des_alt = efb_fc_fl_alt*2
 fuel_alt = math.ceil((fuel_clb_alt+fuel_crz_alt+fuel_des_alt)*0.01)*100
+
 
 if (fuel_main+fuel_alt+efb_fc_nav_res+efb_fc_taxi) < 12750 then
     efb_fc = 12750
@@ -439,8 +475,11 @@ end
     
 end
 
+
+
 function efb_payload()
     
+
 pax1_weight = simDR_payload_pax1 * 75
 pax2_weight = simDR_payload_pax2 * 75
 pax3_weight = simDR_payload_pax3 * 75
@@ -472,6 +511,10 @@ ct_nf = pos11/nofuel_weight
 cax_to = (((1.57+ct_t) + 0.982)/ 5.285) *100
 cax_nf = (((1.57+ct_nf) + 0.982)/ 5.285) *100
     
+    
+    
+
+    
 pass_count = simDR_payload_pax1+simDR_payload_pax2+simDR_payload_pax3+simDR_payload_pax4+simDR_payload_pax5
 pass_weight = pass_count * 75
 cargo_weight = simDR_payload_cargo1+simDR_payload_cargo2
@@ -481,7 +524,9 @@ nofuel_weight = empty_weight + commerc_weight
 fuel_weight = simDR_tank1 + simDR_tank4 + simDR_tank2_l + simDR_tank2_r + simDR_tank3_l + simDR_tank3_r
 takeoff_weight = nofuel_weight + fuel_weight
     
+    
 end
+
 
 function efb_pwr()
     
@@ -522,6 +567,7 @@ function efb_pwr()
     simDR_avitab_pwr = efb_power
 end
 
+
 function efb_misc()
     
     local currentDate  = os.date("*t")
@@ -532,6 +578,7 @@ function efb_misc()
        show_des_calc_notify = 0
       end
     end
+    
     
     if efb_popup_folder > 0 then
       if efb_page_folder_set < 1 then
@@ -600,6 +647,7 @@ function efb_misc()
            efb_timer_start = 0
     end
     
+    
     if efb_timer_start > 2 and efb_timer_start < 3 and efb_power < 1 then
        efb_power = 1
     end
@@ -612,6 +660,7 @@ function efb_misc()
     end
 
 end
+
 
 function efb_battery()
     if efb_power_mode == 2 then
@@ -649,6 +698,9 @@ function efb_battery()
     end
     
 end
+
+
+
 
 function btn1_CMDhandler(phase, duration)
     if phase == 0 then
@@ -692,6 +744,7 @@ function btn1_CMDhandler(phase, duration)
             catering_call = 0
         end
         
+
         if efb_page == 21 then
             if simDR_altitude > 3000 then
                 alt_feet = simDR_altitude*3.28084
@@ -899,6 +952,9 @@ function btn5_CMDhandler(phase, duration)
     end   	
 end	
 
+
+
+
 function vol_up_CMDhandler(phase, duration)
     if phase == 0 then
         if simDR_volume < 1000 then
@@ -939,6 +995,13 @@ function vol_dn_CMDhandler(phase, duration)
     end
 end	
 
+
+
+
+
+
+
+
 btn1_cmd = create_command("t154_efb/btn1", "EFB BTN1", btn1_CMDhandler)
 btn2_cmd = create_command("t154_efb/btn2", "EFB BTN2", btn2_CMDhandler)
 btn3_cmd = create_command("t154_efb/btn3", "EFB BTN3", btn3_CMDhandler)
@@ -946,6 +1009,8 @@ btn4_cmd = create_command("t154_efb/btn4", "EFB BTN4", btn4_CMDhandler)
 btn5_cmd = create_command("t154_efb/btn5", "EFB BTN5", btn5_CMDhandler)
 vol_up_cmd = create_command("t154_efb/vol_up", "EFB volume up", vol_up_CMDhandler)
 vol_dn_cmd = create_command("t154_efb/vol_dn", "EFB volume dn", vol_dn_CMDhandler)
+
+
 
 function after_physics()
     efb_config()

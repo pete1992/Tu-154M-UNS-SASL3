@@ -193,9 +193,9 @@ defineProps({
     {"absu_pitch_trimm",    "tu154/custom/absu/absu_pitch_trimm",   globalPropertyi}, -- ABSU trim command: +1 up, -1 down
 
     -- engines N1
-    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalPropertyf}, -- Engine 1 N1
-    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalPropertyf}, -- Engine 2 N1
-    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalPropertyf}, -- Engine 3 N1
+    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty}, -- Engine 1 N1
+    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty}, -- Engine 2 N1
+    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty}, -- Engine 3 N1
 
     -- ABSU internal lamp signals (logic inputs)
     {"damp_roll_lamp",     "tu154/custom/absu/damp_roll_lamp",   globalPropertyi},

@@ -7,7 +7,7 @@ defineProperty("bitmap", false)
 defineProperty("font")
 defineProperty("font_size", 24)
 
-local fallback_font = sasl.gl.loadFont("AVIA.ttf")
+local fallback_font = sasl.gl.loadFont("avia.ttf")
 
 local function isEnabled(value)
     return value == true or value == 1

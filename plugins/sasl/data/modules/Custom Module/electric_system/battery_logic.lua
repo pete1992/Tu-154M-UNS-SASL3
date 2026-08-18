@@ -21,10 +21,10 @@ defineProps({
     {"bus_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf}, -- 27V bus voltage (left)
     {"cockpit_temp", "tu154/custom/thermo/cockpit_temp", globalPropertyf}, -- Cockpit temperature (°C)
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- Simulation frame time (s)
-    {"sim_bat_on", "sim/cockpit2/electrical/battery_on[0]", globalPropertyf}, -- X-Plane main battery switch (array [0])
+	{ "sim_bat_on", "sim/cockpit2/electrical/battery_on[0]", globalProperty },
 })
 
-defineProperty("ismaster",     globalPropertyf("scp/api/ismaster"))                   -- Smartcopilot master/slave state
+defineProperty("ismaster", globalPropertyf("scp/api/ismaster"))                   -- Smartcopilot master/slave state
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1"))               -- Smartcopilot control flag
 
 -- Battery charge/discharge and temperature logic

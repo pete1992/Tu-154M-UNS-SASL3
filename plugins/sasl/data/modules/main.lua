@@ -1,36 +1,31 @@
 print("This is the Tu154M 2.0.8")
-size = { 2048, 2048 }
+size = { 4096, 4096 }
 print("Lua version is", _VERSION)
 
-if jit and jit.os ~= "Windows" then
-	jit.off()
-	jit.flush()
-	print("LuaJIT disabled")
-end
+
+
+panelWidth3d = 4096
+panelHeight3d = 4096
 
 sasl.options.set3DRendering(true)
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
 sasl.options.setRenderingMode2D(SASL_RENDER_2D_MULTIPASS)
 sasl.options.setUpdateDrawingReady (true)
-addSearchPath(moduleDirectory .. "/Custom Module/KLN90/")
 addSearchResourcesPath(moduleDirectory .. "/Custom Module/panels_2d/")
 addSearchResourcesPath(moduleDirectory .. "/Custom Module/texture/")
+addSearchPath(moduleDirectory .. "/Custom Module/KLN90/")
 addSearchPath(moduleDirectory .. "/Custom Module/Custom Sounds")
 addSearchPath(moduleDirectory .. "/Custom Module/gui")
 addSearchPath(moduleDirectory .. "/Custom Module")
 addSearchPath(moduleDirectory .. "/Custom Module/main_panel")
 addSearchPath(moduleDirectory .. "/Custom Module/main_panel/taws")
---include("dataref_creator_4.lua")
-
 sasl.gl.setRenderTextPixelAligned(true )
-
 -- 3D panel issue workaround
-fixedPanelWidth = 2048
-fixedPanelHeight = 2048
+
 
 math.randomseed(os.time()) -- randomise random :)
-
+-- Xplane Versionsabfrage
 xplane_version = globalProperty("sim/version/xplane_internal_version")
 
 -- global functions
@@ -38,6 +33,7 @@ xplane_version = globalProperty("sim/version/xplane_internal_version")
 local floor = math.floor
 local interpHint = setmetatable({}, { __mode = "k" })
 
+-- fastInterpolate
 function fastInterpolate(tbl, x)
     local n = #tbl
     if n < 2 then return 0 end
@@ -70,8 +66,7 @@ function fastInterpolate(tbl, x)
     return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
 end
 
-
-
+-- clamp
 function clamp(x, lo, hi)
     if x ~= x then return lo end
     if x < lo then return lo end
@@ -79,6 +74,7 @@ function clamp(x, lo, hi)
     return x
 end
 
+-- safeClamp
 function safeClamp(value, min_val, max_val, default)
     if type(value) ~= "number" or value ~= value then
         return default or 0
@@ -86,6 +82,7 @@ function safeClamp(value, min_val, max_val, default)
     return clamp(value, min_val, max_val)
 end
 
+-- interpolate
 function interpolate(tbl, value)
     local lastActual = 0
     local lastReference = 0
@@ -109,10 +106,12 @@ function interpolate(tbl, value)
     return value - lastActual + lastReference
 end
 
+-- bool2int
 function bool2int(var)
     return var and 1 or 0
 end
 
+-- line
 function line(x, x1, y1, x2, y2)
     if x2 == x1 then
         return y1
@@ -120,10 +119,12 @@ function line(x, x1, y1, x2, y2)
     return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
 end
 
+-- map
 function map(value, x1, x2, y1, y2)
     return line(value, x1, y1, x2, y2)
 end
 
+-- isILS
 function isILS(freq)
     if type(freq) ~= "number" or freq ~= freq then
         return false
@@ -136,12 +137,14 @@ function isILS(freq)
     ) % 2 == 1
 end
 
+-- sign
 function sign(x)
     if x > 0 then return 1 end
     if x < 0 then return -1 end
     return 0
 end
 
+-- rotaryFill
 local function rotaryFill(digitTable, procNum, digitsNum, INT, wrapDigits)
     if procNum ~= procNum then
         procNum = 0
@@ -167,11 +170,11 @@ local function rotaryFill(digitTable, procNum, digitsNum, INT, wrapDigits)
         if neg and d ~= 0 then
             d = -d
         end
-
         digitTable[i] = d
     end
 end
 
+-- rotaryDigits
 function rotaryDigits(procNum, digitsNum, signed, negSHift, INT)
     if signed == nil then signed = false end
     if negSHift == nil then negSHift = -1 end
@@ -194,6 +197,7 @@ function rotaryDigits(procNum, digitsNum, signed, negSHift, INT)
     return digitTable
 end
 
+-- rotaryDigits2
 function rotaryDigits2(procNum, digitsNum, signed, negSHift, INT)
     if signed == nil then signed = false end
     if negSHift == nil then negSHift = -1 end
@@ -217,6 +221,7 @@ function rotaryDigits2(procNum, digitsNum, signed, negSHift, INT)
     return digitTable
 end
 
+-- limit
 function limit(value, vmin, vmax)
     if not vmin then vmin = 0 end
     if not vmax then vmax = 1 end
@@ -228,6 +233,7 @@ function limit(value, vmin, vmax)
     return value
 end
 
+-- mapLim
 function mapLim(value, x1, x2, y1, y2)
     local limMin = y1
     local limMax = y2
@@ -241,6 +247,7 @@ function mapLim(value, x1, x2, y1, y2)
     )
 end
 
+-- tabMax
 function tabMax(tab, num)
     if not tab then
         return nil, nil
@@ -263,6 +270,7 @@ function tabMax(tab, num)
     return result, id
 end
 
+-- tabMin
 function tabMin(tab, num)
     if not tab then
         return nil, nil
@@ -285,6 +293,7 @@ function tabMin(tab, num)
     return result, id
 end
 
+-- tabMean
 function tabMean(tab, num)
     if not tab then
         return nil, nil
@@ -303,6 +312,7 @@ function tabMean(tab, num)
     return result / num
 end
 
+-- tabSumm
 function tabSumm(tab)
     if not tab or #tab == 0 then
         return nil
@@ -314,6 +324,7 @@ function tabSumm(tab)
     return summ
 end
 
+-- tabShuffle
 function tabShuffle(tab)
     if not tab or #tab == 0 then
         return false
@@ -325,6 +336,7 @@ function tabShuffle(tab)
     return true
 end
 
+-- tabPrint
 function tabPrint(tab)
     if not tab or #tab == 0 then
         return false
@@ -335,6 +347,7 @@ function tabPrint(tab)
     return true
 end
 
+-- tabPrintRow
 function tabPrintRow(tab)
     if not tab or #tab == 0 then
         return false
@@ -347,11 +360,11 @@ function tabPrintRow(tab)
     return true
 end
 
+-- around 
 function around(value, minVal, maxVal, round)
     if not round then
         round = maxVal - minVal
     end
-    -- Prevent invalid ranges from causing endless wrapping.
     if value ~= value or not round or round <= 0 then
         return value
     end
@@ -360,8 +373,6 @@ function around(value, minVal, maxVal, round)
     end
     local wrapped =
         minVal + (value - minVal) % round
-    -- Preserve the inclusive upper bound behavior.
-    -- Example: around(720, 0, 360) returns 360.
     if value > maxVal and wrapped == minVal then
         wrapped = minVal + round
     end
@@ -369,15 +380,14 @@ function around(value, minVal, maxVal, round)
 end
 
 components = {
-	dataref_creator_1 {}, -- main datarefs. controls and indicatios
-	dataref_creator_2 {}, -- internal datarefs
-	dataref_creator_3 {}, -- failures datarefs
-	dataref_creator_4 {},
-	save_state {}, -- safe current state
+	dataref_creator_1 {},
+	dataref_creator_2 {},
+	dataref_creator_3 {},
+	dataref_creator_4 {}, --all newly created Datarefs are here
+	save_state {},
 	time_logic {},
 	flap_aero {},
-	-- gauges and systems
-	main_panel { -- panel for simulated 2D gauges
+	main_panel {
 		position = {0, 0, 2048, 2048},
 	}, 
 	overhead {},

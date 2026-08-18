@@ -18,52 +18,6 @@ local function defineProps(defs)
     end
 end
 
--- Math helpers
-local function sign(x)
-    if x > 0 then return 1 end
-    if x < 0 then return -1 end
-    return 0
-end
-
---[[  If your project defines isILS elsewhere, you can remove this.
-      Keeping it here avoids runtime errors where it's used below. ]]
-local function isILS(freq_hz)
-    local f = freq_hz
-    if f > 1000 and f < 200000 then f = f / 100 end
-    return f >= 108.10 and f <= 111.95
-end
-
-local function line(x, x1, y1, x2, y2)
-    if x2 == x1 then return y1 end
-    return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
-end
-
--- Keep semantics aligned with project-wide helper usage
-local function bool2int(v) return v and 1 or 0 end
-
--- Improved input validation and protection
-
--- Optimized interpolation function
-local function fastInterpolate(tbl, x)
-    if #tbl < 2 then return 0 end
-    local low, high = 1, #tbl
-    while low < high do
-        local mid = math.floor((low + high) / 2)
-        if tbl[mid][1] <= x then
-            low = mid + 1
-        else
-            high = mid
-        end
-    end
-    local i = math.max(1, low - 1)
-    if i >= #tbl then return tbl[#tbl][2] end
-    if i < 1 then return tbl[1][2] end
-    local x1, y1 = tbl[i][1], tbl[i][2]
-    local x2, y2 = tbl[i + 1][1], tbl[i + 1][2]
-    if x2 == x1 then return y1 end
-    return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
-end
-
 -----------------------------------------------------------------------
 -- Bulk DataRef definitions
 -----------------------------------------------------------------------
@@ -89,7 +43,7 @@ defineProps({
 	{"hydro_ra56_elev_3", "tu154/custom/switchers/eng/hydro_ra56_elev_3", globalPropertyi},
 	-- ABSU panel controls
 	{"absu_turn_handle", "tu154/custom/switchers/console/absu_turn_handle", globalPropertyi},
-	{"absu_pitch_wheel", "tu154/custom/switchers/console/absu_pitch_wheel", globalPropertyi},
+	{"absu_pitch_wheel", "tu154/custom/switchers/console/absu_pitch_wheel", globalPropertyf},
 	{"absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi},
 	{"ZK_select", "tu154/custom/switchers/ZK_select", globalPropertyi},
 	{"absu_smooth_on", "tu154/custom/switchers/console/absu_smooth_on", globalPropertyi},
@@ -172,12 +126,12 @@ defineProps({
 	{"dh_set", "tu154/custom/gauges/alt/radioalt_dh_left", globalPropertyf},
 	{"rv_angle", "tu154/custom/gauges/alt/radioalt_needle_left", globalPropertyf},
 	-- Gears and flaps
-	{"gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalPropertyf},
-	{"gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalPropertyf},
-	{"gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalPropertyf},
+	{"gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty},
+	{"gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty},
+	{"gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty},
 	{"flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf},
 	{"flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf},
-	{"gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalPropertyf},
+	{"gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty},
 	-- ABSU indicators and flags
 	{"absu_roll_ind", "tu154/custom/absu/absu_roll_ind", globalPropertyf},
 	{"absu_pitch_ind", "tu154/custom/absu/absu_pitch_ind", globalPropertyf},
@@ -994,46 +948,39 @@ function pitch_holder(pitch_hold, S)
             set(absu_pitch_trimm, 0)
         end
     end
-
     return new_pitch_act
 end
 
 -- manipulates ailerons by a given roll angle
 function roll_holder(roll_hold, S)
-    local P = (roll_hold - S.roll_now)
-
-    local roll_W  = get(roll_rate)
-    local roll_W2 = get(roll_acc)
-    if get(absu_damp_roll_fail) == 1 then roll_W = 0; roll_W2 = 0 end
-
-    local roll_stab_coef = PID_PARAMS.ROLL.Kp
-    if S.mach < 0.5 then 
-        roll_stab_coef = line(S.mach, 0.5, PID_PARAMS.ROLL.Kp, 0, PID_PARAMS.ROLL.Kp * 2) 
-    end
-
-    local PID = P * roll_stab_coef - roll_W * PID_PARAMS.ROLL.Kd * (0.5 + 0.01 * math.abs(roll_W2) / (0.01 * math.abs(roll_W2) + 1))
-    local new_roll_act = S.roll_act + (PID - S.roll_act) * S.passed * 5
-    new_roll_act = safeClamp(new_roll_act, -S.ail_lim, S.ail_lim, 0)
-    return new_roll_act
+	local P = (roll_hold - S.roll_now)
+	local roll_W  = get(roll_rate)
+	local roll_W2 = get(roll_acc)
+	if get(absu_damp_roll_fail) == 1 then roll_W = 0; roll_W2 = 0 end
+	
+	local roll_stab_coef = PID_PARAMS.ROLL.Kp
+	if S.mach < 0.5 then 
+	    roll_stab_coef = line(S.mach, 0.5, PID_PARAMS.ROLL.Kp, 0, PID_PARAMS.ROLL.Kp * 2) 
+	end
+	
+	local PID = P * roll_stab_coef - roll_W * PID_PARAMS.ROLL.Kd * (0.5 + 0.01 * math.abs(roll_W2) / (0.01 * math.abs(roll_W2) + 1))
+	local new_roll_act = S.roll_act + (PID - S.roll_act) * S.passed * 5
+	new_roll_act = safeClamp(new_roll_act, -S.ail_lim, S.ail_lim, 0)
+	return new_roll_act
 end
 
 function yaw_holder(S)
     local P  = get(slip) * (1 - get(absu_damp_yaw_fail))
     local KP = 0.01
-
     local K_I = 0
     local yaw_I = S.yaw_I + P * S.passed * K_I
     yaw_I = yaw_I - sign(yaw_I) * S.passed * 0.1
     yaw_I = safeClamp(yaw_I, -0.1, 0.1, 0)
-
     local D = 0
     if S.passed > 0 then D = (P - S.yaw_P_last) / S.passed end
     local K_D = 0.01
-
     local PID = P * KP + yaw_I + D * K_D
-
     local new_yaw_act = S.yaw_act + (PID - S.yaw_act) * S.passed * 5
     new_yaw_act = safeClamp(new_yaw_act, -0.4, 0.4, 0)
-
     return new_yaw_act, yaw_I, P
 end

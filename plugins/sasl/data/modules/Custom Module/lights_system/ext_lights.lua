@@ -33,22 +33,22 @@ defineProps({
     { "sim_nav_light", "sim/cockpit2/switches/navigation_lights_on", globalPropertyf },
     { "sim_beacon", "sim/cockpit2/switches/beacon_on", globalPropertyf },
     { "sim_strobes", "sim/cockpit2/switches/strobe_lights_on", globalPropertyf },
-    { "sim_lan_FL", "sim/cockpit2/switches/landing_lights_switch[7]", globalPropertyf },
-    { "sim_lan_FR", "sim/cockpit2/switches/landing_lights_switch[6]", globalPropertyf },
-    { "sim_lan_WL", "sim/cockpit2/switches/landing_lights_switch[5]", globalPropertyf },
-    { "sim_lan_WR", "sim/cockpit2/switches/landing_lights_switch[4]", globalPropertyf },
-    { "sim_NW_L", "sim/cockpit2/switches/landing_lights_switch[9]", globalPropertyf },
-    { "sim_NW_R", "sim/cockpit2/switches/landing_lights_switch[8]", globalPropertyf },
+    { "sim_lan_FL", "sim/cockpit2/switches/landing_lights_switch[7]", globalProperty },
+    { "sim_lan_FR", "sim/cockpit2/switches/landing_lights_switch[6]", globalProperty },
+    { "sim_lan_WL", "sim/cockpit2/switches/landing_lights_switch[5]", globalProperty },
+    { "sim_lan_WR", "sim/cockpit2/switches/landing_lights_switch[4]", globalProperty },
+    { "sim_NW_L", "sim/cockpit2/switches/landing_lights_switch[9]", globalProperty },
+    { "sim_NW_R", "sim/cockpit2/switches/landing_lights_switch[8]", globalProperty },
     { "sim_spot", "sim/cockpit2/switches/spot_light_on", globalPropertyf },
-    { "sim_anticollision_light", "sim/cockpit2/switches/anticollision_light_switch[0]", globalPropertyf },
+  --  { "sim_anticollision_light", "sim/cockpit2/switches/anticollision_light_switch[0]", globalProperty },
     -- Legacy custom anti-collision output binding remains intentionally disabled:
     -- defineProperty("anticoll_light", globalPropertyi("tu154/custom/lights/anticoll_light"))
-    { "sim_logo", "sim/cockpit2/switches/generic_lights_switch[0]", globalPropertyf },
-    { "sim_wings_L", "sim/cockpit2/switches/generic_lights_switch[1]", globalPropertyf },
-    { "sim_wings_R", "sim/cockpit2/switches/generic_lights_switch[2]", globalPropertyf },
-    { "sim_cargo_1", "sim/cockpit2/switches/generic_lights_switch[3]", globalPropertyf },
-    { "sim_cargo_2", "sim/cockpit2/switches/generic_lights_switch[4]", globalPropertyf },
-    { "sim_lan_brt", "sim/flightmodel2/lights/landing_lights_brightness_ratio[1]", globalPropertyf },
+    { "sim_logo", "sim/cockpit2/switches/generic_lights_switch[0]", globalProperty },
+    { "sim_wings_L", "sim/cockpit2/switches/generic_lights_switch[1]", globalProperty },
+    { "sim_wings_R", "sim/cockpit2/switches/generic_lights_switch[2]", globalProperty },
+    { "sim_cargo_1", "sim/cockpit2/switches/generic_lights_switch[3]", globalProperty },
+    { "sim_cargo_2", "sim/cockpit2/switches/generic_lights_switch[4]", globalProperty },
+    { "sim_lan_brt", "sim/flightmodel2/lights/landing_lights_brightness_ratio[1]", globalProperty },
     { "sim_landing", "sim/cockpit/electrical/landing_lights_on", globalPropertyi },
 
     -- Animation and custom light outputs.
@@ -58,12 +58,12 @@ defineProps({
     { "white_light_right", "tu154/custom/lights/white_light_right", globalPropertyi },
     { "beacon_light_B", "tu154/custom/lights/beacon_light_B", globalPropertyi },
     { "beacon_light_T", "tu154/custom/lights/beacon_light_T", globalPropertyi },
-    { "gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalPropertyf },
-    { "deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", globalPropertyf },
-    { "lamp_deploy_FL", "sim/aircraft/parts/acf_gear_deploy[3]", globalPropertyf },
-    { "lamp_deploy_FR", "sim/aircraft/parts/acf_gear_deploy[4]", globalPropertyf },
-    { "lamp_deploy_WL", "sim/aircraft/parts/acf_gear_deploy[5]", globalPropertyf },
-    { "lamp_deploy_WR", "sim/aircraft/parts/acf_gear_deploy[6]", globalPropertyf },
+    { "gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
+    { "deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", globalProperty },
+    { "lamp_deploy_FL", "sim/aircraft/parts/acf_gear_deploy[3]", globalProperty },
+    { "lamp_deploy_FR", "sim/aircraft/parts/acf_gear_deploy[4]", globalProperty },
+    { "lamp_deploy_WL", "sim/aircraft/parts/acf_gear_deploy[5]", globalProperty },
+    { "lamp_deploy_WR", "sim/aircraft/parts/acf_gear_deploy[6]", globalProperty },
 
     -- Controls.
     { "nav_lights_set", "tu154/custom/lights/nav_lights_set", globalPropertyf },
@@ -94,7 +94,6 @@ defineProps({
     { "lan_lamp_fail_WR", "tu154/custom/failures/lan_lamp_fail_WR", globalPropertyi },
     { "rel_lites_nav", "sim/operation/failures/rel_lites_nav", globalPropertyi },
     { "rel_lites_beac", "sim/operation/failures/rel_lites_beac", globalPropertyi },
-    { "sim_lights_switch", "sim/cockpit2/switches/landing_lights_switch", globalPropertyi },
 })
 
 -- Preserve original initialization behavior.
@@ -110,7 +109,7 @@ local nav_counter = 0
 
 local lan_light_counter_L = 0
 local lan_light_counter_R = 0
-local anticoll_counter = 0
+--local anticoll_counter = 0
 
 function update()
     local passed = get(frame_time)
@@ -311,9 +310,9 @@ function update()
 
     -- Virtual Airlines compatibility workaround.
     if lan_light_WL + lan_light_WR + lan_light_FL + lan_light_FR > 0 then
-        set(sim_lights_switch, 1)
+        set(sim_landing, 1)
     else
-        set(sim_lights_switch, 0)
+        set(sim_landing, 0)
     end
 
     set(ext_light_cc_left, current_L)

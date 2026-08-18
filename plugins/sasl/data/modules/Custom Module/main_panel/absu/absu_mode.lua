@@ -16,7 +16,7 @@ defineProperty("absu_pitch_ch_on", globalPropertyi("tu154/custom/switchers/conso
 defineProperty("absu_smooth_on", globalPropertyi("tu154/custom/switchers/console/absu_smooth_on")) --  " "
 
 defineProperty("absu_turn_handle", globalPropertyi("tu154/custom/switchers/console/absu_turn_handle")) --  
-defineProperty("absu_pitch_wheel", globalPropertyi("tu154/custom/switchers/console/absu_pitch_wheel")) --  , 
+defineProperty("absu_pitch_wheel", globalPropertyf("tu154/custom/switchers/console/absu_pitch_wheel")) --  , 
 
 defineProperty("hydro_ra56_rud_1", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_1")) --  56 
 defineProperty("hydro_ra56_rud_2", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_2")) --  56 
@@ -93,7 +93,7 @@ defineProperty("svs_on", globalPropertyi("tu154/custom/switchers/ovhd/svs_on")) 
 defineProperty("svs_fail", globalPropertyi("sim/operation/failures/rel_adc_comp"))  -- static fail
 
 defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))  --    
-defineProperty("rv_flag", globalPropertyi("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
+defineProperty("rv_flag", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
 
 defineProperty("absu_course_out", globalPropertyi("tu154/custom/absu_course_out")) -- flying outside the course limits
 defineProperty("absu_gs_out", globalPropertyi("tu154/custom/absu_gs_out")) -- flying outside the course limits

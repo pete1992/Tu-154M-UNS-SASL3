@@ -1,40 +1,59 @@
--- general two-state toggable button
+-- switch_lit.lua
+-- Generic two-state illuminated switch component.
 
--- image used when button in "ON" state
+-- Image displayed when the switch is on.
 defineProperty("btnOn")
 
--- image used when button in "OFF" state
+-- Image displayed when the switch is off.
 defineProperty("btnOff")
 
--- function called to get button state
+-- Read-only state supplied by the parent component.
 defineProperty("state")
 
-components = {
+-- Cursor resource.
+local cursorImg = loadImage("interactive.png")
 
-    -- "on" state texture
+local function isOn()
+    local value = get(state)
+
+    if type(value) == "number" then
+        return value ~= 0
+    end
+
+    return value == true
+end
+
+components = {
+    -- On-state texture.
     textureLit {
         image = btnOn,
-        visible = function() return get(state); end,
-    };
-    
-    -- "off" state texture
+        visible = function()
+            return isOn()
+        end,
+    },
+
+    -- Off-state texture.
     textureLit {
         image = btnOff,
-        visible = function() return not get(state); end,
-    };
+        visible = function()
+            return not isOn()
+        end,
+    },
 
-    -- interactive area
+    -- Cursor area. Mouse callbacks are intentionally handled by the parent
+    -- switch_lit instance so functional state properties remain read-only.
     interactive {
+        position = {0, 0, size[1], size[2]},
         cursor = {
             x = 8,
             y = 26,
             width = 16,
             height = 16,
-            shape = sasl.gl.loadImage("interactive.png"),
+            shape = cursorImg,
         },
-    };
+    },
 }
 
 function draw()
-	drawAll(components)
+    drawAll(components)
 end

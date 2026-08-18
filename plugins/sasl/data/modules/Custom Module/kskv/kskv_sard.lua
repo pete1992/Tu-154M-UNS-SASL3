@@ -56,13 +56,13 @@ defineProps({
     -- Current pressurization state
     { "cabin_alt_now_ft", "sim/cockpit2/pressurization/indicators/cabin_altitude_ft", globalPropertyf },
     { "pressure_diff_psi", "sim/cockpit2/pressurization/indicators/pressure_diffential_psi", globalPropertyf },
-    { "acf_has_press_controls", "sim/aircraft/view/acf_has_press_controls", globalPropertyf },
+ --   { "acf_has_press_controls", "sim/aircraft/view/acf_has_press_controls", globalPropertyf },
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
     { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
-set(acf_has_press_controls, 1)
+-- set(acf_has_press_controls, 1)
 
 local press_alt_tbl = {
     { -100000, 1000000 }, -- Lower guard point for interpolation.

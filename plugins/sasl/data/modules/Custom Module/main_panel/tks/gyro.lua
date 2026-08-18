@@ -82,9 +82,9 @@ defineProps({
 	{ "ga_heat_cc", "tu154/custom/tks/ga_heat_cc", globalPropertyf },
 
 	-- Engines
-	{ "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalPropertyf },
-	{ "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalPropertyf },
-	{ "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalPropertyf },
+	{ "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty },
+	{ "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty },
+	{ "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty },
 })
 
 -----------------------------------------------------------------------

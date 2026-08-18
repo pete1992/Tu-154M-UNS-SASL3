@@ -34,9 +34,12 @@ autoladd_call = deferred_dataref("tu154/custom/t154gnd/autoladd_call", "number")
 trap1_lit = deferred_dataref("tu154/custom/t154gnd/trap1_lit", "number")
 trap2_lit = deferred_dataref("tu154/custom/t154gnd/trap2_lit", "number")
 
+
 local will_change = 0
 ladd1 = 28
 ladd2 = 28
+
+
 
 function stremyanka_call_CMDhandler(phase, duration)
      if phase == 0 then
@@ -134,6 +137,7 @@ function autolestnica_call_CMDhandler(phase, duration)
         end
      end
 end
+
 
 call_stremyanka	= create_command("t154gnd/call_stremyanka", "Call Stremyanka", stremyanka_call_CMDhandler)
 call_lestnica	= create_command("t154gnd/call_lestnica", "Call Lestnica", lestnica_call_CMDhandler)
@@ -332,9 +336,16 @@ function misc_gnd()
          end
     end
    
+    
 end
 
 function after_physics()
     misc_gnd()
 end
 
+
+
+
+
+
+   

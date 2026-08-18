@@ -1,26 +1,46 @@
--- scrollable tape
+-- tape_lit.lua
+-- Generic illuminated scrollable texture tape component.
 
--- tape image
+-- Texture supplied by the parent component.
 defineProperty("image")
 
--- size of visible area
-defineProperty("window", { 1.0, 1.0 } )
+-- Visible texture area in normalized texture coordinates.
+defineProperty("window", {1.0, 1.0})
 
--- amount to scroll horizontal
+-- Horizontal source offset in normalized texture coordinates.
 defineProperty("scrollX", 0)
 
--- amount to scroll vertically
+-- Vertical source offset in normalized texture coordinates.
 defineProperty("scrollY", 0)
 
-local WHITE = { 1, 1, 1, 1 }
-
--- draw tape
 function draw()
-    local sz = get(window)
-    local imageId = get(image)
-    local textureWidth, textureHeight = sasl.gl.getTextureSize(imageId)
-    sasl.gl.drawTexturePart(imageId, 0, 0, 100, 100,
-        get(scrollX) * textureWidth, get(scrollY) * textureHeight,
-        sz[1] * textureWidth, sz[2] * textureHeight, WHITE)
-end
+    local texture = get(image)
 
+    if not texture then
+        return
+    end
+
+    local texWidth, texHeight = sasl.gl.getTextureSize(texture)
+    if not texWidth or not texHeight or texWidth <= 0 or texHeight <= 0 then
+        return
+    end
+
+    local windowSize = get(window)
+    local sourceX = get(scrollX) * texWidth
+    local sourceY = get(scrollY) * texHeight
+    local sourceWidth = windowSize[1] * texWidth
+    local sourceHeight = windowSize[2] * texHeight
+
+    sasl.gl.drawTexturePart(
+        texture,
+        0,
+        0,
+        size[1],
+        size[2],
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        {1, 1, 1, 1}
+    )
+end

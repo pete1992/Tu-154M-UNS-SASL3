@@ -2,21 +2,18 @@
 --defineProperty("weel_switch", globalPropertyi("tu154/custom/xap/An24_gauges/noseweel"))
 defineProperty("nosewheel_turn_enable", globalPropertyi("tu154/custom/switchers/nosewheel_turn_enable")) --      
 defineProperty("nosewheel_turn_sel", globalPropertyi("tu154/custom/switchers/nosewheel_turn_sel")) --     . 0 - 10, 1 - 63
-
 defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
 defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
-
 defineProperty("gs_press_2", globalPropertyf("tu154/custom/hydro/gs_press_2")) --   2
-
 defineProperty("have_pedals", globalPropertyi("tu154/custom/have_pedals"))
 
-tiller_avail = globalPropertyi("sim/joystick/joy_mapped_axis_avail[37]") -- index 37 is nosewheel tiller
-tiller_val = globalPropertyf("sim/joystick/joy_mapped_axis_value[37]") -- "1 + because Lua tables start with 1"
+tiller_avail = globalProperty("sim/joystick/joy_mapped_axis_avail[37]") -- index 37 is nosewheel tiller
+tiller_val = globalProperty("sim/joystick/joy_mapped_axis_value[37]") -- "1 + because Lua tables start with 1"
 
 joy_yaw = globalPropertyf("sim/cockpit2/controls/yoke_heading_ratio") -- yaw position of joystick
 
-tire_steer_command_deg = globalPropertyf("sim/flightmodel2/gear/tire_steer_command_deg[0]")
-tire_steer_actual_deg = globalPropertyf("sim/flightmodel2/gear/tire_steer_actual_deg[0]")
+tire_steer_command_deg = globalProperty("sim/flightmodel2/gear/tire_steer_command_deg[0]")
+tire_steer_actual_deg = globalProperty("sim/flightmodel2/gear/tire_steer_actual_deg[0]")
 
 pushback = globalPropertyi("bp/connected")
 override_wheel_steer = globalPropertyi("sim/operation/override/override_wheel_steer")

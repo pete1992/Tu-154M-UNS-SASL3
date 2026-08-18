@@ -37,6 +37,7 @@ srpbz_rppz_lit = deferred_dataref("tu154/custom/kontur/srpbz_rppz_lit", "number"
 srpbz_sppz_lit = deferred_dataref("tu154/custom/kontur/srpbz_sppz_lit", "number")
 srpbz_test_lit = deferred_dataref("tu154/custom/kontur/srpbz_test_lit", "number")
 
+
 local srpbz_start = 0
 local srpbz_timer = 0
 local volt_36 = 0
@@ -49,6 +50,7 @@ local sppz_test_set = 0
 local vbe_on = 0
 local var_on = 0
 srpbz_lit_set = 0.7
+
 
 function dis_sound_CMDhandler(phase, duration) 
     if phase == 0 then
@@ -132,12 +134,18 @@ function srpbz_ovhd_onoff_CMDhandler(phase, duration)
     end    	
 end
 
+
 dis_sound_cmnd	= create_command("egpws/dis_sound", "EGPWS Disable sound", dis_sound_CMDhandler)
 dis_gear_cmnd	= create_command("egpws/dis_gear", "EGPWS Disable gear", dis_gear_CMDhandler)
 dis_flaps_cmnd	= create_command("egpws/dis_flaps", "EGPWS Disable flaps", dis_flaps_CMDhandler)
 dis_rppz_cmnd	= create_command("egpws/dis_rppz", "EGPWS Disable rppz", dis_rppz_CMDhandler)
 dis_gs_cmnd	= create_command("egpws/dis_gs", "EGPWS Disable GS", dis_gs_CMDhandler)
 srpbz_onoff_cmnd	= create_command("srpbz/onoff", "SRPBZ ON/OFF", srpbz_ovhd_onoff_CMDhandler)
+
+
+
+
+
 
 function egpws()
     
@@ -200,6 +208,7 @@ function egpws()
                 rppz_lit_on = 1
             end
         
+        
             if simDR_taws_mode == 4 then
                 sppz_lit_on = 1
             elseif vbe_on > 0 and var_on > 0 and simDR_svs > 0 then            
@@ -219,6 +228,8 @@ function egpws()
                 end
             end
         
+            
+            
             if simDR_rv2 > 0 and egpws_started > 0 and egpws_on < 1 then
                         simDR_taws_mode = 1
                         egpws_on = 1
@@ -334,7 +345,13 @@ function egpws()
         simDR_alarm = 1
     end
     
+    
+
 end
+
+
+
+
 
 function after_physics()
     egpws()

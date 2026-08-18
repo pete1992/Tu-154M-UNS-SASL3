@@ -1,25 +1,31 @@
 -- lever.lua
--- Generic vertical lever component.
 
 size = {30, 120}
 
+-- Controlled values.
 defineProperty("value", {0})
+
+-- Lever range.
 defineProperty("minimum", 0)
 defineProperty("maximum", 1)
+
+-- Number of values controlled by this lever.
 defineProperty("lever_count", 1)
 
+-- Images.
 defineProperty("back_img")
 defineProperty("lever_img")
-
-local cursor_img = sasl.gl.loadImage("interactive.png")
 
 local Min = get(minimum)
 local Max = get(maximum)
 local Range = Max - Min
 local Count = get(lever_count)
-local v = get(value)
 
-local mouse_down = false
+local v = get(value)
+local dragging = false
+
+local cursor_img = sasl.gl.loadImage("interactive.png")
+
 
 local function setLeverValue(y)
     if Range == 0 then
@@ -39,10 +45,15 @@ local function setLeverValue(y)
     end
 end
 
+
 components = {
+
+    -- Movable lever image.
     free_texture {
         image = get(lever_img),
+
         position_x = 0,
+
         position_y = function()
             if Range == 0 then
                 return -10
@@ -58,10 +69,12 @@ components = {
 
             return a - 10
         end,
+
         width = 30,
         height = 30,
     },
 
+    -- Interactive lever area.
     interactive {
         position = {5, 0, 20, 100},
 
@@ -74,28 +87,40 @@ components = {
         },
 
         onMouseDown = function(comp, x, y, button)
-            mouse_down = true
+            if button ~= MB_LEFT then
+                return false
+            end
+
+            dragging = true
             setLeverValue(y)
+
             return true
         end,
 
         onMouseMove = function(comp, x, y, button)
-            if mouse_down then
+            if dragging then
                 setLeverValue(y)
             end
+
             return true
         end,
 
         onMouseUp = function(comp, x, y, button)
-            if mouse_down then
+            if button ~= MB_LEFT then
+                return false
+            end
+
+            if dragging then
                 setLeverValue(y)
             end
 
-            mouse_down = false
+            dragging = false
+
             return true
         end,
     },
 }
+
 
 function draw()
     drawAll(components)

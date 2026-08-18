@@ -29,7 +29,7 @@ defineProperty("tcas_rot_big", globalPropertyi("tu154/custom/switchers/tcas/tcas
 defineProperty("alt_svs", globalPropertyf("tu154/custom/svs/altitude")) -- Altitude by 1013 hpa
 
 defineProperty("rv_angle", globalPropertyf("tu154/custom/gauges/alt/radioalt_needle_left"))  -- RV needle
-defineProperty("rv_flag", globalPropertyi("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
+defineProperty("rv_flag", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
 defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))  --    
 defineProperty("screen_mode", globalPropertyi("tu154/custom/tcas/screen_mode"))  --   . 0 =  , -1 = , 1 = test
 
@@ -127,9 +127,9 @@ defineProperty("acf_19_x", globalPropertyf("sim/multiplayer/position/plane19_x")
 defineProperty("acf_19_y", globalPropertyf("sim/multiplayer/position/plane19_y"))  -- x
 defineProperty("acf_19_z", globalPropertyf("sim/multiplayer/position/plane19_z"))  -- x
 
-defineProperty("acf_20_x", globalPropertyf("sim/multiplayer/position/plane20_x"))  -- x
-defineProperty("acf_20_y", globalPropertyf("sim/multiplayer/position/plane20_y"))  -- x
-defineProperty("acf_20_z", globalPropertyf("sim/multiplayer/position/plane20_z"))  -- x
+-- defineProperty("acf_20_x", globalPropertyf("sim/multiplayer/position/plane20_x"))  -- x
+-- defineProperty("acf_20_y", globalPropertyf("sim/multiplayer/position/plane20_y"))  -- x
+-- defineProperty("acf_20_z", globalPropertyf("sim/multiplayer/position/plane20_z"))  -- x
 
 -- local aircraft coordinates
 defineProperty("pos_x", globalPropertyf("sim/flightmodel/position/local_x")) -- longtitude. positive from W to E
@@ -295,9 +295,9 @@ local function refresh_data()
 			acf_local_tbl[19][2] = get(acf_19_y)
 			acf_local_tbl[19][3] = get(acf_19_z)
 			
-			acf_local_tbl[20][1] = get(acf_20_x)
-			acf_local_tbl[20][2] = get(acf_20_y)
-			acf_local_tbl[20][3] = get(acf_20_z)
+			-- acf_local_tbl[20][1] = get(acf_20_x)
+			-- acf_local_tbl[20][2] = get(acf_20_y)
+			-- acf_local_tbl[20][3] = get(acf_20_z)
 			
 			-- recalculate relative table	
 			local local_x = get(pos_x) -- longtitude. positive from W to E

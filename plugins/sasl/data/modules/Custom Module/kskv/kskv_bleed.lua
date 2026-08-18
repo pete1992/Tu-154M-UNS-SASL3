@@ -49,7 +49,7 @@ defineProps({
 	{"psvp_fail_left", "tu154/custom/failures/psvp_fail_left", globalPropertyi},
 	{"psvp_fail_right", "tu154/custom/failures/psvp_fail_right", globalPropertyi},
 	-- Gear / misc
-	{"gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalPropertyf},
+	{"gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty},
 	-- Outputs
 	{"air_usage_L", "tu154/custom/bleed/air_usage_L", globalPropertyf},
 	{"air_usage_R", "tu154/custom/bleed/air_usage_R", globalPropertyf},
@@ -63,9 +63,9 @@ defineProps({
 	-- Start system
 	{"start_sys_work", "tu154/custom/start/start_sys_work", globalPropertyf},
 	-- Sim actuators (SOVs)
-	{"engine_bleed_sov_1", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]", globalPropertyf},
-	{"engine_bleed_sov_2", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]", globalPropertyf},
-	{"engine_bleed_sov_3", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[2]", globalPropertyf},
+	{"engine_bleed_sov_1", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]", globalProperty},
+	{"engine_bleed_sov_2", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]", globalProperty},
+	{"engine_bleed_sov_3", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[2]", globalProperty},
 	-- Time
 	{"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
 })

@@ -1,3 +1,5 @@
+-- main_panel.lua
+
 --[[
 Changelog
 - Translated all Russian comments to English.
@@ -7,7 +9,7 @@ Changelog
 - Changed right RV-5 test button and power switch from globalPropertyf() to globalPropertyi().
 - Changed right RV-5 flag from globalPropertyi() to globalPropertyf().
 - Preserved component order, component names, Dataref paths, positions, arguments, and all other runtime behavior.
-]]
+--]]
 
 -- Main panel layout for panel.png gauges and 2D popup panels.
 

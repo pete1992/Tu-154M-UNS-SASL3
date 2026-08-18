@@ -41,7 +41,7 @@ defineProperty("door5", globalPropertyf("tu154/custom/lights/cargo_back_door")) 
 defineProperty("msrp_27_L_cc", globalPropertyf("tu154/custom/msrp/msrp_27_L_cc")) --   
 defineProperty("msrp_27_R_cc", globalPropertyf("tu154/custom/msrp/msrp_27_R_cc")) --   
 
-defineProperty("rv_flag", globalPropertyi("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
+defineProperty("rv_flag", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
 
 defineProperty("pump_tank2_left", globalPropertyi("tu154/custom/switchers/fuel/pump_tank2_left")) --   2
 defineProperty("pump_tank2_right", globalPropertyi("tu154/custom/switchers/fuel/pump_tank2_right")) --   2

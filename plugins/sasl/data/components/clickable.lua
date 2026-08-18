@@ -1,4 +1,4 @@
--- clickable.lua
+-- interactive.lua
 -- Auxiliary mouse input helper component.
 -- Use only when standard component mouse callbacks are insufficient.
 
@@ -10,12 +10,10 @@ defineProperty("doubleClick")
 defineProperty("mouseDrag")
 defineProperty("mouseWheel")
 
-
 local function isEnabled()
     local value = get(enabled)
     return value == true or value == 1
 end
-
 
 function update()
     if not isEnabled() then

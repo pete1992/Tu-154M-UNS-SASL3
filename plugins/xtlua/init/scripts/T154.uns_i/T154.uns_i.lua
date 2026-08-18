@@ -4,6 +4,7 @@ function deferred_dataref(name,type,notifier)
 	return wrap_dref_any(dref,type) 
 end
 
+
 simDR_gps_power = find_dataref("sim/cockpit2/radios/actuators/gps_power")
 simDR_bus27left = find_dataref("tu154/custom/elec/bus27_volt_left")
 simDR_bus27right = find_dataref("tu154/custom/elec/bus27_volt_right")
@@ -17,6 +18,7 @@ simDR_uns_brt = find_dataref("sim/cockpit2/switches/instrument_brightness_ratio"
 uns1_on = find_dataref("tu154/custom/uns1_on")
 uns2_on = find_dataref("tu154/custom/uns2_on")
 
+
 uns_brt_l = deferred_dataref("tu154/custom/uns/brt_l", "number")
 uns_brt_r = deferred_dataref("tu154/custom/uns/brt_r", "number")
 vor1_freq					= deferred_dataref("tu154/custom/uns_vor1_freq", "number")
@@ -28,6 +30,7 @@ local sw_sound = 0
 local sw_sound2 = 0
 local sw_sound3 = 0
 local sw_sound4 = 0
+
 
 function after_physics()
               
@@ -90,6 +93,7 @@ function after_physics()
         end
     end
     
+    
     if uns1_on > 0 and sw_sound3 < 1 then
         if simDR_sw_sound > -2 then
             simDR_sw_sound = -2
@@ -126,6 +130,9 @@ function after_physics()
             sw_sound4 = 0
         end
     end
+    
+    
+    
     
     if simDR_vor1_m_a > 0 and vor1_auto > 0 and vor1_freq > 1000 then
         simDR_radio_nav1 = vor1_freq

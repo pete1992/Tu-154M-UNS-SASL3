@@ -533,10 +533,8 @@ local function caps_check()
 	-- check switchers position under their caps
 	--if skv_faster_work_cap_sw == 0 then set(skv_faster_work, 0) end
 	if dubler_on_cap_sw == 0 then set(dubler_on, 0) end
-	if emerg_decompress_cap_sw == 0 then set(emerg_decompress) end
-	
+	if emerg_decompress_cap_sw == 0 then set(emerg_decompress, 0) end
 	if sard_disable_cap_sw == 0 then set(sard_disable, 0) end
-	
 end
 
 local sim_start_timer = 0

@@ -1,6 +1,6 @@
 if pcall(
 	function()
-		local STP_chunk = XLuaGetCode("StackTracePlus.lua")
+		local STP_chunk = XLuaGetCode("../../StackTracePlus.lua")
 		local STP = STP_chunk()
 		debug.traceback = STP.stacktrace
 	end)
@@ -26,6 +26,7 @@ end
 --------------------------------------------------------------------------------
 -- This code creates property objects (or MT-enhanced tables) for arrays that
 -- let authors work with 
+
 
 function dref_array_read(table,key)
 	idx = tonumber(key)
@@ -53,6 +54,8 @@ function wrap_dref_array(in_dref, dim)
 	return dr
 end
 
+
+
 function wrap_dref_number(in_dref)
 	return {
 		__get = function(self)
@@ -76,6 +79,8 @@ function wrap_dref_string(in_dref)
 		dref = in_dref
 	}
 end
+
+
 
 function wrap_dref_any_deferred(in_dref)
 	--[[
@@ -307,6 +312,7 @@ function seems_like_object(p)
 	end
 end
 
+
 function namespace_ipairs(table, i)
 	local function namespace_iter(table, i)
 		i = i + 1
@@ -331,6 +337,7 @@ function namespace_len(table)
 	return count
 end
   
+
 function namespace_pairs(table, key, value)
 	local function namespace_next(table, index)
 		ftable = rawget(table,'functions')

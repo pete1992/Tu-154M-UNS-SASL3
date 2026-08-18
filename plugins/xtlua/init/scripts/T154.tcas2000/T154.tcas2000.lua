@@ -22,6 +22,7 @@ simDR_10_dn	= find_command("sim/radios/transponder_10_down")
 simDR_1_up	= find_command("sim/radios/transponder_1_up")
 simDR_1_dn	= find_command("sim/radios/transponder_1_down")
 
+
 lit_atc = deferred_dataref("tu154/custom/tcas2000/lit_atc", "number")
 lit_fid = deferred_dataref("tu154/custom/tcas2000/lit_fid", "number")
 lit_xpndr = deferred_dataref("tu154/custom/tcas2000/lit_xpndr", "number")
@@ -35,6 +36,10 @@ line = deferred_dataref("tu154/custom/tcas2000/line", "string")
 
 local atcfid = 0
 local ent = 0
+
+
+
+
 
 function tcas2000_l1_up_CMDhandler(phase, duration)
     if phase == 0 then
@@ -163,6 +168,14 @@ function tcas2000_ent_CMDhandler(phase, duration)
     end   	
 end	
 
+
+
+
+
+
+
+
+
 l_1_up	= create_command("tcas2000/l1_up", "TCAS2000 L1 u", tcas2000_l1_up_CMDhandler)
 l_1_dn	= create_command("tcas2000/l1_dn", "TCAS2000 L1 d", tcas2000_l1_dn_CMDhandler)
 l_2_up	= create_command("tcas2000/l2_up", "TCAS2000 L2 u", tcas2000_l2_up_CMDhandler)
@@ -173,6 +186,12 @@ r_2_up	= create_command("tcas2000/r2_up", "TCAS2000 R2 u", tcas2000_r2_up_CMDhan
 r_2_dn	= create_command("tcas2000/r2_dn", "TCAS2000 R2 d", tcas2000_r2_dn_CMDhandler)
 mode_com	= create_command("tcas2000/mode", "TCAS2000 ATC/FID", tcas2000_mode_CMDhandler)
 ent_com	= create_command("tcas2000/ent", "TCAS2000 ENT", tcas2000_ent_CMDhandler)
+
+
+
+
+
+
 
 function tcas()
     
@@ -186,6 +205,8 @@ function tcas()
         simDR_tcas_sw_mod = mode
     
     if simDR_tcas_disp_mod < 100 then
+        
+        
         
         if atcfid == 0 then
             if ent < 1 then
@@ -256,7 +277,11 @@ function tcas()
             lit_xpndr = 1
         end
                
+                        
+        
+        
     end
+    
     
 end
 

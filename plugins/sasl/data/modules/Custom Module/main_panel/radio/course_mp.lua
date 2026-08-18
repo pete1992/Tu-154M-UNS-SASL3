@@ -19,7 +19,7 @@ defineProperty("dme_fail", globalPropertyi("tu154/custom/failures/dme1_fail")) -
 
 defineProperty("distance", globalPropertyf("sim/cockpit2/radios/indicators/nav1_dme_distance_nm"))  -- distance in NM
 
-defineProperty("obs", globalPropertyi("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")) -- OBS course
+defineProperty("obs", globalPropertyf("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")) -- OBS course
 
 -- controls
 defineProperty("sd75_on", globalPropertyi("tu154/custom/switchers/ovhd/sd75_1_on")) -- switch on

@@ -71,15 +71,15 @@ defineProperty("engine_caps", globalPropertyi("tu154/custom/anim/engine_caps")) 
 defineProperty("gear_blocks", globalPropertyi("tu154/custom/anim/gear_blocks")) --   
 defineProperty("sensors_caps", globalPropertyi("tu154/custom/anim/sensors_caps")) --   
 
-defineProperty("slider_3", globalPropertyi("sim/cockpit2/switches/custom_slider_on[2]")) -- cargo 1
-defineProperty("slider_4", globalPropertyi("sim/cockpit2/switches/custom_slider_on[3]")) -- cargo 2
-defineProperty("slider_5", globalPropertyi("sim/cockpit2/switches/custom_slider_on[4]")) -- pax door 1
-defineProperty("slider_6", globalPropertyi("sim/cockpit2/switches/custom_slider_on[5]")) -- pax door 2
-defineProperty("slider_7", globalPropertyi("sim/cockpit2/switches/custom_slider_on[6]")) -- kitchen door
+defineProperty("slider_3", globalProperty("sim/cockpit2/switches/custom_slider_on[2]")) -- cargo 1
+defineProperty("slider_4", globalProperty("sim/cockpit2/switches/custom_slider_on[3]")) -- cargo 2
+defineProperty("slider_5", globalProperty("sim/cockpit2/switches/custom_slider_on[4]")) -- pax door 1
+defineProperty("slider_6", globalProperty("sim/cockpit2/switches/custom_slider_on[5]")) -- pax door 2
+defineProperty("slider_7", globalProperty("sim/cockpit2/switches/custom_slider_on[6]")) -- kitchen door
 
-defineProperty("sim_gen1_on", globalPropertyi("sim/cockpit/electrical/generator_on[0]"))
-defineProperty("sim_gen2_on", globalPropertyi("sim/cockpit/electrical/generator_on[1]"))
-defineProperty("sim_gen3_on", globalPropertyi("sim/cockpit/electrical/generator_on[2]"))
+defineProperty("sim_gen1_on", globalProperty("sim/cockpit/electrical/generator_on[0]"))
+defineProperty("sim_gen2_on", globalProperty("sim/cockpit/electrical/generator_on[1]"))
+defineProperty("sim_gen3_on", globalProperty("sim/cockpit/electrical/generator_on[2]"))
 
 defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
 defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
@@ -150,62 +150,6 @@ defineProperty("elevator_R", globalPropertyf("sim/flightmodel/controls/hstab2_el
 
 local flight_status = 0 
 local flight_status_last = 10
-
---[[
-0 -   :
-	  
-1 -   :
-	  0
-	  
-	-- 
-	
-2 - :
-	  
-	 +
-	 
-3 - :
-	  2  7  6
-	 +
-	   
-	   4
-	 .  150
-	
-4 - :
-	   
-	  550
-	  430
-	   +-4
-	
-5 - :
-	  4  3
-	   
-	   -4
-	
-6 - :
-	   
-	  400
-	  -3
-	
-7 -    :
-	  6
-	   
-	  150
-	   3
-	 +
-	
-8 -  :
-	  6
-	  
-	   +   
-	
-9 -  :
-	  8
-	  
-0 -    :
-	  9
-	  
---]]
-
 local reset_timer = 0
 
 function regular_talk()

@@ -31,12 +31,10 @@ defineProps({
 	{ "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
 	{ "gforce_fwd", "sim/flightmodel2/misc/gforce_axil", globalPropertyf },
 	{ "gforce_side", "sim/flightmodel2/misc/gforce_side", globalPropertyf },
-
 	-- Electrical / failure
 	{ "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
 	{ "bus36_volt", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf },
 	{ "fail", "tu154/custom/failures/tks_km1_fail", globalPropertyf },
-
 	-- Gauge controls / outputs
 	{ "km5_knob", "tu154/custom/gauges/eng/km5_knob_1", globalPropertyf },
 	{ "km5_scale", "tu154/custom/gauges/eng/km5_scale_1", globalPropertyf },
@@ -51,7 +49,6 @@ defineProps({
 local mag_course = get(mag_psi)
 local needle_act = math.random(-180, 180)
 set(km5_needle, needle_act)
-
 local course = 0
 local cur_dev_sign = math.random(0, 1) * 2 - 1
 local cur_dev_act = 0
@@ -84,13 +81,10 @@ end
 function update()
 	local passed = get(frame_time)
 	local MASTER = get(ismaster) ~= 1
-
 	local bus36_v = get(bus36_volt)
 	local bus27_v = get(bus27_volt)
 	local fail_val = get(fail)
-
 	local power = bus36_v > 30 and bus27_v > 13 and fail_val == 0
-
 	-- Knob normalization (preserve while-loop behavior)
 	local knob = get(km5_knob)
 	knob = normalizeDelta180(knob)
@@ -122,7 +116,6 @@ function update()
 				needle_act = needle_act + cur_dif * passed * 10
 			end
 		end
-
 		set(km5_needle, needle_act)
 	end
 
@@ -131,7 +124,6 @@ function update()
 	end
 
 	course = normalize180(course)
-
 	set(course_mk, course)
 	set(km5_cc, bool2int(power))
 end

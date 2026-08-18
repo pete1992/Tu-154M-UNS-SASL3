@@ -1,3 +1,4 @@
+-- light_panel.lua
 --[[
 Changelog
 - Grouped all property bindings through a local defineProps() helper while preserving all existing property names, Dataref paths, constructors, and their original order.
@@ -13,6 +14,9 @@ Changelog
 ]]
 
 -- Panel logic for the lighting system.
+
+defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
+local XP11 = get(xp_version) > 120000
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -49,14 +53,17 @@ defineProps({
     { "sign_exit", "tu154/custom/switchers/ovhd/sign_exit", globalPropertyi },
     { "landing_light_off", "tu154/custom/lights/landing_light_off", globalPropertyi },
     { "landing_light_off_cap", "tu154/custom/lights/landing_light_off_cap", globalPropertyi },
-    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalPropertyf },
-    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalPropertyf },
-    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalPropertyf },
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    
+    -- ======== Arrays ======== --
+    
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", 
+		XP11 and globalPropertyf or globalProperty },
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", 
+		XP11 and globalPropertyf or globalProperty },
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", 
+		XP11 and globalPropertyf or globalProperty },
 })
-
--- Added for X-Plane 11 / X-Plane 12 sound API compatibility.
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
 
 -- Previous control states used for sound detection.
 local mid_left_panel_last = get(mid_left_panel_int_set)
@@ -91,14 +98,12 @@ local lights_cap_last = get(landing_light_off_cap)
 local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
 local rotary_sound = sasl.al.loadSample('Custom Sounds/rot_click_big.wav')
 local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local nosmoke_sound = sasl.al.loadSample('Custom Sounds/nosmoke.wav')
 local seatbelt_sound = sasl.al.loadSample('Custom Sounds/seatbelt.wav')
-local nosmoke_sound= sasl.al.loadSample('Custom Sounds/nosmoke.wav')
-
-local XP11 = get(xp_version) > 120000
 
 local function playPanelSample(sample)
     if XP11 then
-        sasl.al.playSample(sample, false)
+        sasl.al.playSample(sample, 0)
     else
         sasl.al.playSample(sample, false)
     end
@@ -117,13 +122,11 @@ local function reset_switchers()
         set(sign_belts, 0)
         set(sign_nosmoke, 0)
         set(sign_exit, 0)
-
         -- Keep landing-light controls in a defined cold-and-dark state.
         set(landing_ext_set_L, 0)
         set(landing_ext_set_R, 0)
         set(landing_mode_set_L, 0)
         set(landing_mode_set_R, 0)
-
         -- Synchronize cached states so the automatic reset remains silent.
         nav_lights_last = 0
         strobe_last = 0
@@ -233,13 +236,13 @@ function update()
     if lights_cap ~= lights_cap_last then
         playPanelSample(cap_sound)
     end
-	
-	if sign_belts_sw == 1 and sign_belts_last ~= 1 then
-		playPanelSample(seatbelt_sound)
+
+	if sign_nosmoke_sw ~= sign_nosmoke_last then
+  	 playPanelSample(nosmoke_sound)
 	end
-	
-	if sign_nosmoke_sw == 1 and sign_nosmoke_last ~= 1 then
-		playPanelSample(nosmoke_sound)
+		
+	if sign_belts_sw ~= sign_belts_last then
+   	playPanelSample(seatbelt_sound)
 	end
 
     -- Save current states for the next frame.
@@ -248,7 +251,6 @@ function update()
     right_panel_last = right_panel
     mid_right_panel_last = mid_right_panel
     ovhd_panel_last = ovhd_panel
-
     cabinl_flood_last = cabinl_flood
     azs_panel_flood_last = azs_panel_flood
     cargo_1_last = cargo_1
@@ -256,23 +258,19 @@ function update()
     tech_light_last = tech_light
     gear_nacelle_last = gear_nacelle
     day_night_last = day_night
-
     nav_lights_last = nav_lights
     strobe_last = strobe
     wing_light_left_last = wing_light_left
     wing_light_right_last = wing_light_right
     tail_light_last = tail_light
-
     landing_ext_last_L = landing_ext_L
     landing_ext_last_R = landing_ext_R
     landing_mode_last_L = landing_mode_L
     landing_mode_last_R = landing_mode_R
     light_signal_last = light_signal
-
     sign_belts_last = sign_belts_sw
     sign_nosmoke_last = sign_nosmoke_sw
     sign_exit_last = sign_exit_sw
-
     lights_off_last = lights_off
     lights_cap_last = lights_cap
 end

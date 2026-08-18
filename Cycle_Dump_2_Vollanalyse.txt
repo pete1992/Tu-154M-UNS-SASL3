@@ -1,0 +1,112 @@
+Tu-154M – Vollauswertung Cycle Dump(2)
+==========================================
+
+1. Identifikation des Laufzeitsatzes
+------------------------------------
+Alle 70 Flächenelemente und 93 aerodynamischen Summenblöcke wurden gelesen.
+Die fünf Laufzeitnamen sind:
+
+- wing.afl
+- wing_tip.afl
+- hstab.afl
+- vstab.afl
+- NACA 0009 (symmetrical).afl
+
+Der letzte Name ist laut tu154.acf absichtlich den Flügeln 20 bis 23
+zugeordnet. Die umbenannte Polare ist damit korrekt eingebunden.
+
+Mittlere/maximale absolute Lookup-Abweichung gegenüber dem installierten
+korrekten Satz; die verbleibenden Differenzen entstehen durch die im Dump auf
+0,1° gerundete Lookup-alpha-Angabe:
+
+- wing.afl: CL 0,001942/0,004360; CD 0,000030/0,000050;
+  Cm 0,000390/0,000900
+- wing_tip.afl: CL 0,002512/0,004343; CD 0,000029/0,000049;
+  Cm 0,000341/0,000616
+- hstab.afl: CL 0,000295/0,000410; CD 0,000032/0,000040;
+  Cm 0,000012/0,000024
+- vstab.afl: CL 0,000100/0,000100; CD 0,000030/0,000040;
+  Cm 0,000000/0,000000
+- umbenannte NACA-Datei: CL 0,000000/0,000000;
+  CD 0,000025/0,000034; Cm 0,000000/0,000000
+
+Die alternative v4.2.4-Datei mit zusätzlicher Cm-Verschiebung weicht allein
+beim Wing/Tip-Cm im Mittel um ungefähr 0,0528 ab und wurde im Test eindeutig
+nicht verwendet.
+
+2. Flugzustand
+--------------
+- Zeit 597,53 s
+- Höhe 4.204 m; 175,3 m/s; Mach 0,5415
+- alpha 3,2°; Nicklage 2,5°; Nickrate 0,0°/s
+- Masse 80.129,5 kg; Lastvielfaches 0,9999 g
+- CG -0,22 m vom Referenzpunkt
+- Pitch-Input 0,0000
+- Fahrwerk/Klappen eingefahren; Stabi-Zusatzwinkel 0,0°
+- Triebwerksschub 11,0 kN je Triebwerk
+- Elevator -1,4°; Dump-Konvention positiv down, also 1,4° nose-up
+
+3. Flächengruppen
+-----------------
+Gruppe / Anzahl / Fläche / Lift / Widerstand / direktes Moment /
+Beitrag zum Flugzeug-Nickmoment:
+
+- Flügel 1: 20 / 104,54 m2 / +431,8 kN / +14,5 kN /
+  -1.359,3 kN m / +145,3 kN m
+- Flügel 2: 16 / 69,72 m2 / +224,0 kN / +7,1 kN /
+  -330,3 kN m / -650,1 kN m
+- Flügel 3: 16 / 27,92 m2 / +78,1 kN / +2,6 kN /
+  -48,0 kN m / -522,5 kN m
+- Flügel 4: 2 / 0,78 m2 / +0,6 kN / +0,1 kN /
+  -0,4 kN m / -5,2 kN m
+- Höhenleitwerk: 6 / 37,28 m2 / -49,8 kN / +2,3 kN /
+  +40,4 kN m / +1.005,6 kN m
+- Seitenleitwerk: 6 / 28,15 m2 / 0,0 kN / +1,2 kN /
+  0,0 kN m / +4,0 kN m
+- Sonstige Flügel: 4 / 2,45 m2 / 0,0 kN / +0,2 kN /
+  0,0 kN m / -0,3 kN m
+
+Die Nullkräfte von Seitenleitwerk und sonstigen Flügeln bei beta 0° bestätigen
+die beabsichtigte Symmetrie des verwendeten Satzes.
+
+4. Nickmomentbilanz
+-------------------
+- nach allen Hauptflügeln: -1.032,5 kN m
+- Höhenleitwerk-Beitrag: +1.005,6 kN m
+- nach Höhenleitwerk: -26,8 kN m
+- finales aerodynamisches Moment: +264,1 kN m
+- finales Triebwerksmoment: -9,3 kN m
+- finales Gesamtmoment vor asymmetrischer Beladung: +0,356 kN m
+
+Der Lauf befindet sich damit praktisch exakt im Momentengleichgewicht.
+
+5. Höhenleitwerk
+----------------
+- Downwash 1,2 bis 1,8°
+- Wing-plane-alpha 1,8 bis 2,6°
+- geometrischer alpha -1,2 bis -0,4°
+- finales CL -0,1938 bis -0,1243
+- Gesamt-Abtrieb -49,8 kN
+- Elevator -1,4° nose-up
+
+Der Elevator liegt innerhalb des gewünschten normalen Bereichs 0 bis 10°
+nose-up und hat in beide Richtungen sehr große Reserve zu +25° up/-20° down.
+
+6. Stabilität
+-------------
+X-Plane ermittelt beim 1°-Pitch-Offset:
+
+- Moment -9.207 N m/Grad
+- Cm-alpha -0,0007/Grad bzw. -0,0414/rad
+
+Das negative Vorzeichen bedeutet am Testpunkt statische Längsstabilität. Der
+vorherige Dump mit dem anderen Laufzeitsatz lag dagegen leicht positiv bzw.
+nahe neutral. Auch deshalb ist keine weitere Cm-Korrektur sinnvoll.
+
+7. Entscheidung
+---------------
+Keine aerodynamische Neuberechnung und keine weitere Koeffizientenänderung.
+Der getestete Satz erreicht das Trimziel, hält die symmetrischen Nullkräfte
+und besitzt am Referenzpunkt eine negative Pitch-Stabilitätsableitung. Das
+verifizierte Paket ändert nur Kennzeichnung und korrekten Laufzeit-Dateinamen;
+seine Polaren bleiben exakt wie im erfolgreichen Test.

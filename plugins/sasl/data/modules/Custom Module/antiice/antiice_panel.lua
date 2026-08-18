@@ -43,9 +43,9 @@ defineProperty("stab_heat_t", globalPropertyf("tu154/custom/antiice/stab_heat_t"
 defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
 defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
 
-defineProperty("ice_inlet_heat_1", globalPropertyi("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[0]"))
-defineProperty("ice_inlet_heat_2", globalPropertyi("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[1]"))
-defineProperty("ice_inlet_heat_3", globalPropertyi("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[2]"))
+defineProperty("ice_inlet_heat_1", globalProperty("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[0]"))
+defineProperty("ice_inlet_heat_2", globalProperty("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[1]"))
+defineProperty("ice_inlet_heat_3", globalProperty("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[2]"))
 
 defineProperty("eng_heat_open_1", globalPropertyi("tu154/custom/antiice/eng_heat_open_1")) --    
 defineProperty("eng_heat_open_2", globalPropertyi("tu154/custom/antiice/eng_heat_open_2")) --    

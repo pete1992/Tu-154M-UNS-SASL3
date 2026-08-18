@@ -10,23 +10,7 @@
 
   <p align="center">
     The community continuation of Tu-154 by Felis for X-Plane
-    <br />
-    <a href="https://github.com/Unicode4all/Tu-154/releases"><strong>Download»</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/Unicode4all/Tu-154/issues">Report Bug or Request Feature</a>
-    ·
-    <a href="https://github.com/Unicode4all/Tu-154/discussions">Discuss</a>
-    ·
-    <a href="https://github.com/Unicode4all/Tu-154/projects?query=is%3Aopen">Roadmaps</a>
-  </p>
 </div>
-
-## Installation
-
-Download the latest release from [releases page](https://github.com/Unicode4all/Tu-154/releases) and unpack into Aircraft directory.
-<br />
-Download [KLN Navdata](https://drive.google.com/file/d/1_Ro6RVtsKbGzmen8Wdxh_QG8D-FOQfaG/view) and unpack it into your root X-Plane directory so it looks like `X-Plane 11/KLN 90B Navdata`
 
 ## Contributing
 

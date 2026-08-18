@@ -10,68 +10,51 @@ defineProperty("nvu_turn_sel", globalPropertyi("tu154/custom/switchers/console/n
 defineProperty("nvu_power_on", globalPropertyi("tu154/custom/switchers/console/nvu_power_on")) --  
 defineProperty("nvu_calc_on", globalPropertyi("tu154/custom/switchers/console/nvu_calc_on")) --  
 defineProperty("nvu_corr_on", globalPropertyi("tu154/custom/switchers/console/nvu_corr_on")) --  
-
 defineProperty("nvu_left_btn", globalPropertyi("tu154/custom/buttons/nvu/nvu_left_btn")) --   
 defineProperty("nvu_ctr_btn", globalPropertyi("tu154/custom/buttons/nvu/nvu_ctr_btn")) --   
 defineProperty("nvu_right_btn", globalPropertyi("tu154/custom/buttons/nvu/nvu_right_btn")) --   
-
 defineProperty("zpu_1_left_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_1_left_btn")) --   
 defineProperty("zpu_1_ctr_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_1_ctr_btn")) --   
 defineProperty("zpu_1_right_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_1_right_btn")) --   
-
 defineProperty("zpu_2_left_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_2_left_btn")) --   
 defineProperty("zpu_2_ctr_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_2_ctr_btn")) --   
 defineProperty("zpu_2_right_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_2_right_btn")) --   
-
 -- internal datarefs
 defineProperty("current_Z1", globalPropertyf("tu154/custom/nvu/current_Z1")) -- Z1
 defineProperty("current_S1", globalPropertyf("tu154/custom/nvu/current_S1")) -- S1
 defineProperty("next_Z1", globalPropertyf("tu154/custom/nvu/next_Z1")) -- Z1
 defineProperty("next_S1", globalPropertyf("tu154/custom/nvu/next_S1")) -- S1
-
 defineProperty("current_Z2", globalPropertyf("tu154/custom/nvu/current_Z2")) -- Z2
 defineProperty("current_S2", globalPropertyf("tu154/custom/nvu/current_S2")) -- S2
 defineProperty("next_Z2", globalPropertyf("tu154/custom/nvu/next_Z2")) -- Z2
 defineProperty("next_S2", globalPropertyf("tu154/custom/nvu/next_S2")) -- S2
-
 defineProperty("zpu1", globalPropertyf("tu154/custom/nvu/zpu1")) -- ZPU1
 defineProperty("zpu2", globalPropertyf("tu154/custom/nvu/zpu2")) -- ZPU2
-
 -- gauges
 defineProperty("map_angle", globalPropertyf("tu154/custom/gauges/console/map_angle")) --  
-
 defineProperty("obs_1", globalPropertyf("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")) -- OBS course
 defineProperty("obs_2", globalPropertyf("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot")) -- OBS course
 defineProperty("nav_course_1", globalPropertyf("tu154/custom/rotary/console/nav_1_course")) --   
 defineProperty("nav_course_2", globalPropertyf("tu154/custom/rotary/console/nav_2_course")) --   
-
 -- lamps
 defineProperty("nvu_on_lit", globalPropertyf("tu154/custom/lights/small/nvu_on")) --  
 defineProperty("nvu_corr_lit", globalPropertyf("tu154/custom/lights/small/nvu_corr")) --  
-
 defineProperty("nvu_1_active", globalPropertyf("tu154/custom/lights/nvu_1_active")) --    
 defineProperty("nvu_2_active", globalPropertyf("tu154/custom/lights/nvu_2_active")) --    
-
 defineProperty("nav_1_to_lit", globalPropertyf("tu154/custom/lights/small/nav_1_to"))
 defineProperty("nav_1_from_lit", globalPropertyf("tu154/custom/lights/small/nav_1_from"))
-
 defineProperty("nav_2_to_lit", globalPropertyf("tu154/custom/lights/small/nav_2_to"))
 defineProperty("nav_2_from_lit", globalPropertyf("tu154/custom/lights/small/nav_2_from"))
-
 -- DISS
 defineProperty("wind_set", globalPropertyf("tu154/custom/rotary/console/wind_set")) --  
-
 defineProperty("wind_course_left", globalPropertyi("tu154/custom/button/console/wind_course_left")) --     
 defineProperty("wind_course_ctr", globalPropertyi("tu154/custom/button/console/wind_course_ctr")) --     
 defineProperty("wind_course_right", globalPropertyi("tu154/custom/button/console/wind_course_right")) --     
-
 defineProperty("wind_spd_left", globalPropertyi("tu154/custom/button/console/wind_spd_left")) --     
 defineProperty("wind_spd_ctr", globalPropertyi("tu154/custom/button/console/wind_spd_ctr")) --     
 defineProperty("wind_spd_right", globalPropertyi("tu154/custom/button/console/wind_spd_right")) --     
-
 defineProperty("diss_wind_course", globalPropertyf("tu154/custom/nvu/diss_wind_course")) --    
 defineProperty("diss_wind_spd", globalPropertyf("tu154/custom/nvu/diss_wind_spd")) --    
-
 defineProperty("diss_abs_angle_1", globalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_1")) --   
 defineProperty("diss_abs_angle_10", globalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_10")) --   
 defineProperty("diss_abs_angle_100", globalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_100")) --   
@@ -82,36 +65,28 @@ defineProperty("diss_minus_angle_10", globalPropertyf("tu154/custom/gauges/misc/
 defineProperty("diss_wind_spd_1", globalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_1")) --   
 defineProperty("diss_wind_spd_10", globalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_10")) --   
 defineProperty("diss_wind_spd_100", globalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_100")) --   
-
 -- images
 defineProperty("bg_img", sasl.gl.loadImage("nvu_tex.png", 0, 0, 636, 786))
 defineProperty("bg_img_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 0, 0, 636, 786))
-
 defineProperty("small_lamp", sasl.gl.loadImage("overhead_tex.png", 1825, 299, 19, 19))
 defineProperty("sw_dn_img", sasl.gl.loadImage("overhead_tex.png", 1831, 15, 39, 100))
 defineProperty("sw_up_img", sasl.gl.loadImage("overhead_tex.png", 1871, 12, 39, 100))
 defineProperty("sw_ctr_img", sasl.gl.loadImage("overhead_tex.png", 1916, 42, 36, 36))
-
 defineProperty("big_scale", sasl.gl.loadImage("nvu_tex.png", 644, 5, 176, 176))
 defineProperty("small_scale", sasl.gl.loadImage("nvu_tex.png", 836, 42, 102, 102))
 defineProperty("handle_img", sasl.gl.loadImage("nvu_tex.png", 955, 68, 45, 45))
 defineProperty("switch_img", sasl.gl.loadImage("nvu_tex.png", 648, 209, 42, 70))
-
 defineProperty("white_digits", sasl.gl.loadImage("white_digits.png", 12, 0, 40, 784))
 defineProperty("white_digits_scale", sasl.gl.loadImage("white_digits_scale.png", 12, 0, 40, 784))
 defineProperty("yellow_digits", sasl.gl.loadImage("yellow_digits.png", 12, 0, 40, 784))
-
 defineProperty("sign_plane", sasl.gl.loadImage("nvu_tex.png", 741, 216, 88, 18))
 defineProperty("sign_point", sasl.gl.loadImage("nvu_tex.png", 741, 243, 88, 18))
 defineProperty("sign_beacon", sasl.gl.loadImage("nvu_tex.png", 741, 271, 88, 18))
-
 defineProperty("sign_plane_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 741, 216, 88, 18))
 defineProperty("sign_point_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 741, 243, 88, 18))
 defineProperty("sign_beacon_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 741, 271, 88, 18))
-
 defineProperty("sign_I", sasl.gl.loadImage("nvu_tex.png", 741, 297, 26, 31))
 defineProperty("sign_II", sasl.gl.loadImage("nvu_tex.png", 777, 297, 26, 31))
-
 defineProperty("black_plank", sasl.gl.loadImage("nvu_tex.png", 850, 216, 60, 30))
 
 local RUS = true

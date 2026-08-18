@@ -11,12 +11,12 @@ defineProperty("tank3L_w", globalProperty("sim/flightmodel/weight/m_fuel[5]")) -
 defineProperty("tank_all", globalPropertyf("sim/flightmodel/weight/m_fuel_total")) -- total fuel weight
 
 -- fuel tanks pumps control
-defineProperty("tank1_pump", globalPropertyi("sim/cockpit2/fuel/fuel_tank_pump_on[0]"))
-defineProperty("tank4_pump", globalPropertyi("sim/cockpit2/fuel/fuel_tank_pump_on[1]"))
-defineProperty("tank2R_pump", globalPropertyi("sim/cockpit2/fuel/fuel_tank_pump_on[2]"))
-defineProperty("tank2L_pump", globalPropertyi("sim/cockpit2/fuel/fuel_tank_pump_on[3]"))
-defineProperty("tank3R_pump", globalPropertyi("sim/cockpit2/fuel/fuel_tank_pump_on[4]"))
-defineProperty("tank3L_pump", globalPropertyi("sim/cockpit2/fuel/fuel_tank_pump_on[5]"))
+defineProperty("tank1_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[0]"))
+defineProperty("tank4_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[1]"))
+defineProperty("tank2R_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[2]"))
+defineProperty("tank2L_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[3]"))
+defineProperty("tank3R_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[4]"))
+defineProperty("tank3L_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[5]"))
 
 defineProperty("fuel_trans", globalPropertyi("tu154/custom/switchers/fuel/fuel_trans")) --   
 defineProperty("fuel_porc", globalPropertyi("tu154/custom/switchers/fuel/fuel_porc")) --  
@@ -34,7 +34,7 @@ defineProperty("pump_tank1_4_work", globalPropertyi("tu154/custom/fuel/pump_tank
 
 defineProperty("reserv_trans", globalPropertyi("tu154/custom/fuel/reserv_trans"))
 
-defineProperty("apu_burn_fuel", globalPropertyi("tu154/custom/elec/apu_burning_fuel")) --     
+defineProperty("apu_burn_fuel", globalPropertyf("tu154/custom/elec/apu_burning_fuel")) --     
 
 -- fuel flow per engine
 defineProperty("ENGN_FF_1", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]")) -- FF from sim kg/second

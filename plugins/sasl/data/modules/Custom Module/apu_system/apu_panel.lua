@@ -72,9 +72,9 @@ defineProps({
     -- Default X-Plane APU bridge
     { "APU_generator_on", "sim/cockpit2/electrical/APU_generator_on", globalPropertyi }, -- APU generator state
     { "APU_starter_switch", "sim/cockpit2/electrical/APU_starter_switch", globalPropertyi }, -- APU starter switch state
-    { "APU_N1_percent", "sim/cockpit2/electrical/APU_N1_percent", globalPropertyi }, -- Default simulator APU N1
+    { "APU_N1_percent", "sim/cockpit2/electrical/APU_N1_percent", globalPropertyf }, -- Default simulator APU N1
     { "APU_running", "sim/cockpit2/electrical/APU_running", globalPropertyi }, -- Default simulator APU running state
-    { "acf_has_APU_switch", "sim/aircraft/overflow/acf_has_APU_switch", globalPropertyi },
+--    { "acf_has_APU_switch", "sim/aircraft/overflow/acf_has_APU_switch", globalPropertyi }, 
     { "rel_APU_press", "sim/operation/failures/rel_APU_press", globalPropertyi },
     { "bleed_air_mode", "sim/cockpit2/pressurization/actuators/bleed_air_mode", globalPropertyi }, -- 0 off, 1 left, 2 both, 3 right, 4 APU, 5 auto
     -- Aircraft and camera coordinates
@@ -106,7 +106,7 @@ local function default_APU()
     local has_power = bus27_left > 10 or bus27_right > 10
 
     set(rel_APU_press, 0)
-    set(acf_has_APU_switch, 1)
+    -- set(acf_has_APU_switch, 1)
     set(APU_generator_on, 1)
     set(bleed_air_mode, 4)
 

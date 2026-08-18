@@ -5,27 +5,14 @@ size = {2048, 2048}
 defineProperty("outer_marker", globalPropertyi("sim/cockpit/misc/outer_marker_lit"))   -- runway markers
 defineProperty("middle_marker", globalPropertyi("sim/cockpit/misc/middle_marker_lit"))
 defineProperty("inner_marker", globalPropertyi("sim/cockpit/misc/inner_marker_lit"))
-
 defineProperty("alt", globalPropertyf("sim/flightmodel/position/y_agl"))
 defineProperty("mrp_mode", globalPropertyi("tu154/custom/switchers/ovhd/sp50_nav_mode")) -- 0 - landing, 1 = navigation
---defineProperty("marker_audio", globalPropertyi("sim/cockpit/radios/gear_audio_working"))
-
---[[
-tu154/custom/switchers/ovhd/sp50_mode	int	 50. 0 - ILS, 1 - Katet, 2 - SP-50	0
-tu154/custom/switchers/ovhd/sp50_nav_mode	int	 50.  - 	0
-
---]]
-
--- power
 defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
 defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
-
 defineProperty("mrp_cc", globalPropertyf("tu154/custom/xap/An24_gauges/mrp_cc"))
-
 -- sfail
-defineProperty("sim_fail", globalPropertyi("sim/operation/sim_failures/rel_marker"))
+defineProperty("sim_fail", globalPropertyi("sim/operation/failures/rel_marker"))
 defineProperty("mrp_fail", globalPropertyi("tu154/custom/failures/mrp_fail"))
-
 -- lamps
 defineProperty("marker_1", globalPropertyf("tu154/custom/lights/marker_1")) -- marker 1
 defineProperty("marker_2", globalPropertyf("tu154/custom/lights/marker_2")) -- marker 2

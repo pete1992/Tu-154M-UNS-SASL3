@@ -36,7 +36,7 @@ components = {
 		nav_deg = globalPropertyf("sim/cockpit2/radios/indicators/nav2_relative_bearing_deg"), -- nav1 bearing
 		sim_fail = globalPropertyi("sim/operation/failures/rel_nav2"), -- fail
 		distance = globalPropertyf("sim/cockpit2/radios/indicators/nav2_dme_distance_nm"),  -- distance in NM
-		obs = globalPropertyi("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot"), -- OBS course
+		obs = globalPropertyf("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot"), -- OBS course
 		nav_fail = globalPropertyi("tu154/custom/failures/nav2_fail"), -- fail
 		dme_fail = globalPropertyi("tu154/custom/failures/dme2_fail"), -- fail
 		-- controls

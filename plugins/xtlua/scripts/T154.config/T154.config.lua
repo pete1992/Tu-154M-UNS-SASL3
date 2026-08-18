@@ -14,6 +14,7 @@ dofile("json/json.lua")
 
 simDR_livery_path			= find_dataref("sim/aircraft/view/acf_livery_path")
 
+
 --*************************************************************************************--
 --** 				        CREATE READ-WRITE CUSTOM DATAREFS                        **--
 --*************************************************************************************--
@@ -51,6 +52,7 @@ simDR_right_pnppkp_lit = find_dataref("tu154/custom/switchers/airbleed/skv_faste
 --*************************************************************************************--
 simConfigData = {}
 
+
 function simconfig_values()
 	return {
 			SIM = {
@@ -63,6 +65,7 @@ function simconfig_values()
 			}
 	}
 end
+
 
 function winglets_func()
     if T154_hide_winglets > 0 then
@@ -97,6 +100,7 @@ function baro_sync()
     end
 end
 
+
 function antenna()
     -- Intentionally left empty.
 end
@@ -121,6 +125,7 @@ function simconfig_save_CMDhandler(phase, duration)
     end
 end
 
+
 function doneNewSimConfig()
 	T154_newsimconfig_data=0
 end
@@ -130,6 +135,7 @@ function pushSimConfig(values)
 	T154_newsimconfig_data=1
 	run_after_time(doneNewSimConfig, 1)
 end
+
 
 function simconfig_change_gtech_CMDhandler(phase, duration)
     if phase == 0 then
@@ -246,6 +252,9 @@ changeautoladder_CMD = deferred_command("t154cfg/changeautoladder", "Autoladder 
 changeantenna_CMD = deferred_command("t154cfg/changeantenna", "Antenna ON/OFF CFG", simconfig_change_antenna_CMDhandler)
 savecfg_CMD = deferred_command("t154cfg/savecfg", "SAVE CFG", simconfig_save_CMDhandler)
 
+
+
+
 function set_loaded_configs()
 	
 	if simConfigData["data"].SIM.ground == 0 then
@@ -300,6 +309,8 @@ function set_loaded_configs()
 	T154_newsimconfig_data = 0
 end
 
+
+
 function aircraft_simConfig()
 	local file_location = simDR_livery_path.."T154_config.dat"
 	--print("File = "..file_location)
@@ -325,6 +336,7 @@ end
 
 simConfigData["data"]=simconfig_values()
 
+
 function flight_start()
 	local refreshLivery=simDR_livery_path
 	T154_simconfig_data=json.encode(simConfigData["data"]["values"]) --make the simConfig data available to other modules
@@ -332,6 +344,8 @@ function flight_start()
 	run_after_time(aircraft_simConfig, 1)  --Load specific simConfig data for current livery
     local livery_path =simDR_livery_path
 end
+
+
 
 function livery_change()
 	--print("livery load")
@@ -342,6 +356,7 @@ function livery_change()
 end
 
 local setSimConfig=false
+
 
 function hasSimConfig()
 	if T154_newsimconfig_data==1 then
@@ -354,6 +369,9 @@ function hasSimConfig()
 	end
 	return setSimConfig
 end
+
+
+
 
 function after_physics()
 	--Keep the structure fresh

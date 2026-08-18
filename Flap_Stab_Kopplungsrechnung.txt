@@ -1,0 +1,72 @@
+Tu-154M v4.2.6 – Flap/Stab-Kopplungsrechnung
+=================================================
+
+Grundlage
+---------
+- korrekte v4.2.3-AFL-Tabellen, bestätigt durch Cycle Dump(2)
+- ACF: Flap 1 auf Wing-1-Elementen 2–7; Flap 2 auf allen acht
+  Wing-2-Elementen
+- Referenz-MAC 17,34 ft
+- Stabilizer: F 0/3/5,5°, C 0/1,5/3°, A 0/0/0°
+- Elevatorgrenzen +25° up / -20° down
+- NACA-0009-Höhenleitwerk und reale Leitwerksfläche/-hebel
+
+Clean-Anker aus Cycle Dump(2)
+-----------------------------
+Mach 0,5415, alpha 3,2°, Stab-Zusatzwinkel 0°, Elevator 1,4° nose-up,
+Nickrate 0,0°/s und finales Restmoment +356,3 N m. Weil der Flap-Ausschlag
+clean null ist, ändert die neue Cm-Kennlinie diesen Zustand nicht.
+
+Rechenverfahren
+---------------
+Für jede Klappe wird der lokale CL-Kraftarm und das direkte Profilmoment über
+die tatsächlich beflappten ACF-Elemente auf S*MAC normiert. Die beiden
+Klappenmomente werden mit ihrem jeweiligen Ist-Ausschlag skaliert. Der
+Stabilizer-Beitrag wird aus der NACA-0009-Polare, Leitwerksvolumen und
+endlicher Spannweite bestimmt. Für jede Raste wird zunächst der Cm-Faktor
+bestimmt, der C exakt neutralisieren würde. Verwendet werden 80 Prozent der
+Differenz zum bisherigen Faktor, um eine kleine stabile Restwirkung zu
+behalten.
+
+Exakte Neutralfaktoren für C
+----------------------------
+- 15°/13°, Stab 1,5°: 1,6420
+- 28°/25°, Stab 1,5°: 1,2238
+- 36°/32°, Stab 3,0°: 1,4821
+- 45°/40°, Stab 3,0°: 1,3386
+
+Verwendete 80-Prozent-Faktoren
+------------------------------
+- 15°/13°: 1,5136
+- 28°/25°: 1,1790
+- 36°/32°: 1,3857
+- 45°/40°: 1,2709
+
+Auf die bisherigen Cm -0,296/-0,335 angewandt ergeben sich die gelieferten
+Tabellenwerte. 451 Zwischenpunkte von 0 bis 45° wurden geprüft.
+
+Kontinuierliche Kopplungshülle
+------------------------------
+Selector F:
+- zusätzliche Elevatoranforderung 0 bis 2,92° nose-down
+- größtes Rest-Cm +0,05095
+
+Selector C:
+- zusätzliche Elevatoranforderung 0 bis 0,90° nose-down
+- größtes Rest-Cm +0,01569
+
+Selector A:
+- zusätzliche Elevatoranforderung 0 bis 3,03° nose-up
+- größtes Rest-Cm -0,05311
+
+Rastenwerte C
+-------------
+- 0°/0°, Stab 0°:      0,00° Zusatz-Elevator
+- 15°/13°, Stab 1,5°:  0,49° nose-down
+- 28°/25°, Stab 1,5°:  0,32° nose-down
+- 36°/32°, Stab 3,0°:  0,90° nose-down
+- 45°/40°, Stab 3,0°:  0,79° nose-down
+
+Die Zahlen beschreiben nur die Änderung durch die gekoppelte Klappen-/Stab-
+Fahrt. Die normale Flugzustands-Trimmung kommt hinzu. Der Clean-Anker bleibt
+die im Dump gemessene 1,4° nose-up-Anforderung.

@@ -47,6 +47,7 @@ function tu154_vor_auto()
           end
     end
     
+    
 if vor1_closest_index>0 then
     n=vor1_closest_index
     if vor1_auto > 0 then

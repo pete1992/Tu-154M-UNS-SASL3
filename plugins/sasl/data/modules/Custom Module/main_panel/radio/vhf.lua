@@ -67,7 +67,6 @@ function update()
 	local MHz = math.floor(freq / 1000)
 	local kHz = freq % 1000
 	local out = kHz % 1000
-	--if out == 20 or out == 45 or out == 70 or out == 95 then kHz = kHz + right_knob * 5 end
 	
 	MHz = around(MHz, 118, 136, 18)
 	kHz = around(kHz, 0, 995, 1000)

@@ -8,6 +8,7 @@ end
 
 simDR_front_lamp_test = find_dataref("tu154/custom/buttons/lamp_test_front")
 
+
 --lamp tests end
 
 -- other
@@ -21,16 +22,24 @@ simDR_torud_ratio = find_dataref("tu154/custom/controls/control_force_pos_rud")
 simDR_bus27left = find_dataref("tu154/custom/elec/bus27_volt_left")
 simDR_bus27right = find_dataref("tu154/custom/elec/bus27_volt_right")
 
+
+
+
 -- other end
 
 -- lights list
+
 
 simDR_stab_work =  find_dataref("tu154/custom/lights/stab_work")
 simDR_slats_extended =  find_dataref("tu154/custom/lights/slats_extended")
 simDR_to_rudder =  find_dataref("tu154/custom/lights/to_rudder")
 simDR_to_elevator =  find_dataref("tu154/custom/lights/to_elevator")
 
+
 -- lights list end
+
+
+
 
 to_rudder =  deferred_dataref("tu154/custom/lights/to_rudder_new", "number")
 to_elevator =  deferred_dataref("tu154/custom/lights/to_elevator_new", "number")
@@ -56,7 +65,10 @@ local ping_pong_torud_round = 0
 local ping_pong_toelev = 0
 local ping_pong_toelev_round = 0
 
+
+
 function blinks_lights()
+    
     
     if simDR_bus27left > 5 then
         bus27 = 1
@@ -65,6 +77,7 @@ function blinks_lights()
     else
         bus27 = 0
     end 
+    
     
   slats_delta = simDR_slats_ratio - slats_loc
   stab_delta = simDR_stab_ratio - stab_loc
@@ -75,11 +88,13 @@ function blinks_lights()
      slats_loc = slats_loc - math.abs(slats_delta) * 0.015
   end
     
+    
   if stab_delta > 0 then
      stab_loc = stab_loc + math.abs(stab_delta) * 0.035
   else
      stab_loc = stab_loc - math.abs(stab_delta) * 0.035
   end
+    
     
   if stab_delta > 0.04 and bus27 > 0 then
         if ping_pong_stab < 10 and ping_pong_stab_round < 1 then
@@ -207,7 +222,9 @@ function blinks_lights()
         lit_toelev_blinks = 0
     end
     
+    
 end
+
 
 function wave_func(sin_wave,round)
   if round == 0 then
@@ -228,6 +245,9 @@ function round_func(sin_wave,round)
   end 
   return round
 end
+
+
+
 
 function smooth_light_blink(orig_lit,new_lit,blink_mod)
     if orig_lit == 0 and new_lit == 0 and blink_mod == 0 then
@@ -256,12 +276,19 @@ function smooth_light_blink(orig_lit,new_lit,blink_mod)
     end
 end  
 
+
+
+
+
+
+
 function new_lights()
     slats_extended =  smooth_light_blink(simDR_slats_extended,slats_extended,lit_slats_blinks)
     stab_work =  smooth_light_blink(simDR_stab_work,stab_work,lit_stab_blinks)
     to_rudder =  smooth_light_blink(simDR_to_rudder,to_rudder,lit_torud_blinks)
     to_elevator =  smooth_light_blink(simDR_to_elevator,to_elevator,lit_toelev_blinks)
 end
+
 
 function after_physics()
     new_lights()
