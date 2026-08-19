@@ -1,6 +1,7 @@
 -- this is VHF radio
 size = {420, 90}
 
+
 defineProperty("num", 0)
 -- Smart Copilot
 defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
@@ -37,8 +38,9 @@ local function rotary()
 	rot_summ_last = summ
 end
 
--- variables for separate manipulations
 
+
+-- variables for separate manipulations
 local freq_100 = 0  -- digits before period
 local freq_10 = 0  -- digits after period
 local freq_10_show = 0
@@ -56,10 +58,8 @@ function update()
 	local right_knob = get(vhf_right)
 	left_knob = around(left_knob, -10, 26, 36)
 	right_knob = around(right_knob, -10, 26, 36)
-	
 	set(vhf_left, left_knob)
 	set(vhf_right, right_knob)
-	
 	local freq = get(frequency)
 	-- set standby frequency as the main here
 	if (get(num) == 0 and get(spu_source) == 1) or (get(num) == 1 and get(spu_source) == 0) then freq = get(freq_sby) end
@@ -85,13 +85,11 @@ if MASTER then
 			kHz = kHz + 5 * knob_diff_R
 		end	
 	end
-	
 	MHz = around(MHz, 118, 136, 18)
 	kHz = around(kHz, 0, 995, 1000)
 	if (get(num) == 0 and get(spu_source) == 1) or (get(num) == 1 and get(spu_source) == 0) then set(freq_sby, MHz * 1000 + kHz) 
 	else set(frequency, MHz * 1000 + kHz) end
 end
-	
 	freq_show = string.format("%.3f", freq/1000)
 	set(com_power, bool2int(power))
 	set(vhf_cc, bool2int(power) * 1.2)
@@ -101,19 +99,27 @@ end
 
 function onModuleDone()
 	set(com_power, 1)
-
 end
 
-components = {
-	text_draw {
-		position = {35, 20, 160, 140},
-		color = {0.2, 1, 0.2, 1},
-		font = text_font,
-		visible = function()
-			return power
-		end,
-		text = function()
-			return freq_show
-		end,
-	},
-}
+local font_scale = 1.5
+local text_x = 35
+local text_y = 20
+
+function draw()
+    if not power then
+        return
+    end
+    sasl.gl.saveGraphicsContext()
+    sasl.gl.setTranslateTransform(text_x, text_y)
+    sasl.gl.setScaleTransform(font_scale, font_scale)
+
+    sasl.gl.drawBitmapText(
+        text_font,
+        0,
+        0,
+        freq_show,
+        TEXT_ALIGN_LEFT,
+        {0.2, 1, 0.2, 1}
+    )
+    sasl.gl.restoreGraphicsContext()
+end

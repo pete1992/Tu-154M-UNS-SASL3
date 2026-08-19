@@ -29,7 +29,23 @@ math.randomseed(os.time()) -- randomise random :)
 xplane_version = globalProperty("sim/version/xplane_internal_version")
 
 -- global functions
+function drawBitmapTextScaled(font, x, y, text, alignment, color, scale)
+    scale = scale or 1
+    sasl.gl.saveGraphicsContext()
+    sasl.gl.setTranslateTransform(x, y)
+    sasl.gl.setScaleTransform(scale, scale)
+    sasl.gl.drawBitmapText(
+        font,
+        0,
+        0,
+        text,
+        alignment,
+        color
+    )
+    sasl.gl.restoreGraphicsContext()
+end
 
+-- alias 
 local floor = math.floor
 local interpHint = setmetatable({}, { __mode = "k" })
 
