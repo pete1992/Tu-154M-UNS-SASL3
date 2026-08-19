@@ -580,7 +580,7 @@ end
 vvi_left_ms = simDR_vvi_left * 0.00508
 vvi_right_ms = simDR_vvi_right * 0.00508
     
-if simDR_bus27left > 0 and simDR_var_left > 0 then
+if simDR_bus27left > 0 then
     vvi_left_delta = vvi_left_ms - vvi_left
     if vvi_left_test < 8 then
         if vvi_left_delta > 0 then
@@ -596,7 +596,7 @@ else
    vvi_left = 30
    vvi_left_test = 10
 end
-if simDR_bus27right > 0 and simDR_var_right > 0 then
+if simDR_bus27right > 0 then
     vvi_right_delta = vvi_right_ms - vvi_right
     if vvi_right_test < 8 then
         if vvi_right_delta > 0 then
