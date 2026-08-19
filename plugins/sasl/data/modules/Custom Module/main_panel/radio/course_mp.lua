@@ -1,91 +1,68 @@
--- this is CourseMP panels and logic
+-- course_mp.lua
+-- CourseMP VOR/DME panel and navigation logic.
 
 size = {420, 90}
 
--- sources
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        defineProperty(def[1], def[3](def[2]))
+    end
+end
 
-defineProperty("frequency", globalPropertyf("sim/cockpit2/radios/actuators/nav1_frequency_hz"))  -- set the frequency
-
-defineProperty("v_plank", globalPropertyf("sim/cockpit2/radios/indicators/nav1_hdef_dots_pilot")) -- horizontal deflection on course
-defineProperty("h_plank", globalPropertyf("sim/cockpit2/radios/indicators/nav1_vdef_dots_pilot")) -- vertical deflection on glideslope
-defineProperty("cr_flag", globalPropertyf("sim/cockpit2/radios/indicators/nav1_flag_from_to_pilot")) -- Nav-To-From indication, nav1, pilot, 0 is flag, 1 is to, 2 is from.
-defineProperty("gs_flag", globalPropertyf("sim/cockpit/radios/nav1_CDI"))  -- glideslope flag. 0 - flag is shown
-defineProperty("nav_deg", globalPropertyf("sim/cockpit2/radios/indicators/nav1_relative_bearing_deg")) -- nav1 bearing
-defineProperty("sim_fail", globalPropertyi("sim/operation/failures/rel_nav1")) -- fail
-
-defineProperty("nav_fail", globalPropertyi("tu154/custom/failures/nav1_fail")) -- fail
-defineProperty("dme_fail", globalPropertyi("tu154/custom/failures/dme1_fail")) -- fail
-
-defineProperty("distance", globalPropertyf("sim/cockpit2/radios/indicators/nav1_dme_distance_nm"))  -- distance in NM
-
-defineProperty("obs", globalPropertyf("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")) -- OBS course
-
--- controls
-defineProperty("sd75_on", globalPropertyi("tu154/custom/switchers/ovhd/sd75_1_on")) -- switch on
-defineProperty("curs_np_on", globalPropertyi("tu154/custom/switchers/ovhd/curs_np_on_1")) -- switch on
-
-defineProperty("nav_mode", globalPropertyi("tu154/custom/switchers/nav_1_mode")) --  1.  - VOR-DME
-defineProperty("nav_man_auto", globalPropertyi("tu154/custom/switchers/nav_1_man_auto")) --   - 
-defineProperty("nav_mile_km", globalPropertyi("tu154/custom/switchers/nav_1_mile_km")) --   - 
-defineProperty("nav_left", globalPropertyi("tu154/custom/rotary/ovhd/nav_1_left")) --  
-defineProperty("nav_right", globalPropertyi("tu154/custom/rotary/ovhd/nav_1_right")) --  
-defineProperty("nav_but_1", globalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_1")) --  1
-defineProperty("nav_but_2", globalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_2")) --  2
-defineProperty("nav_but_3", globalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_3")) --  3
-
-defineProperty("nav_course", globalPropertyi("tu154/custom/rotary/console/nav_1_course")) --   
-
-defineProperty("test_lamps", globalPropertyi("tu154/custom/buttons/lamp_test_front")) --    
-
--- other sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
-
-defineProperty("bus36_volt", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_2"))
-defineProperty("bus115_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-
-defineProperty("nav_pow_cc", globalPropertyf("tu154/custom/radio/nav1_pow_cc")) --    
-
--- results
-defineProperty("vor_dme", globalPropertyf("tu154/custom/radio/vor_dme_1")) -- distance
-defineProperty("vor_bear", globalPropertyf("tu154/custom/radio/vor_bear_1"))
-
-defineProperty("nav_cs", globalPropertyf("tu154/custom/radio/nav1_cs"))
-defineProperty("nav_gs", globalPropertyf("tu154/custom/radio/nav1_gs"))
-
-defineProperty("nav_cs_flag", globalPropertyi("tu154/custom/radio/nav1_cs_flag"))
-defineProperty("nav_gs_flag", globalPropertyi("tu154/custom/radio/nav1_gs_flag"))
-
-defineProperty("nav_course_1", globalPropertyf("tu154/custom/rotary/console/nav_1_course_1"))
-defineProperty("nav_course_10", globalPropertyf("tu154/custom/rotary/console/nav_1_course_10"))
-defineProperty("nav_course_100", globalPropertyf("tu154/custom/rotary/console/nav_1_course_100"))
-
--- lamps
-defineProperty("nav_to_lit", globalPropertyf("tu154/custom/lights/small/nav_1_to"))
-defineProperty("nav_from_lit", globalPropertyf("tu154/custom/lights/small/nav_1_from"))
-
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+defineProps({
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    {"frequency", "sim/cockpit2/radios/actuators/nav1_frequency_hz", globalPropertyf},
+    {"v_plank", "sim/cockpit2/radios/indicators/nav1_hdef_dots_pilot", globalPropertyf},
+    {"h_plank", "sim/cockpit2/radios/indicators/nav1_vdef_dots_pilot", globalPropertyf},
+    {"cr_flag", "sim/cockpit2/radios/indicators/nav1_flag_from_to_pilot", globalPropertyf},
+    {"gs_flag", "sim/cockpit/radios/nav1_CDI", globalPropertyf},
+    {"nav_deg", "sim/cockpit2/radios/indicators/nav1_relative_bearing_deg", globalPropertyf},
+    {"sim_fail", "sim/operation/failures/rel_nav1", globalPropertyi},
+    {"nav_fail", "tu154/custom/failures/nav1_fail", globalPropertyi},
+    {"dme_fail", "tu154/custom/failures/dme1_fail", globalPropertyi},
+    {"distance", "sim/cockpit2/radios/indicators/nav1_dme_distance_nm", globalPropertyf},
+    {"obs", "sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot", globalPropertyf},
+    {"sd75_on", "tu154/custom/switchers/ovhd/sd75_1_on", globalPropertyi},
+    {"curs_np_on", "tu154/custom/switchers/ovhd/curs_np_on_1", globalPropertyi},
+    {"nav_mode", "tu154/custom/switchers/nav_1_mode", globalPropertyi},
+    {"nav_man_auto", "tu154/custom/switchers/nav_1_man_auto", globalPropertyi},
+    {"nav_mile_km", "tu154/custom/switchers/nav_1_mile_km", globalPropertyi},
+    {"nav_left", "tu154/custom/rotary/ovhd/nav_1_left", globalPropertyi},
+    {"nav_right", "tu154/custom/rotary/ovhd/nav_1_right", globalPropertyi},
+    {"nav_but_1", "tu154/custom/buttons/ovhd/nav_1_but_1", globalPropertyi},
+    {"nav_but_2", "tu154/custom/buttons/ovhd/nav_1_but_2", globalPropertyi},
+    {"nav_but_3", "tu154/custom/buttons/ovhd/nav_1_but_3", globalPropertyi},
+    {"nav_course", "tu154/custom/rotary/console/nav_1_course", globalPropertyi},
+    {"test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi},
+    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
+    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
+    {"bus36_volt", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf},
+    {"bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf},
+    {"nav_pow_cc", "tu154/custom/radio/nav1_pow_cc", globalPropertyf},
+    {"vor_dme", "tu154/custom/radio/vor_dme_1", globalPropertyf},
+    {"vor_bear", "tu154/custom/radio/vor_bear_1", globalPropertyf},
+    {"nav_cs", "tu154/custom/radio/nav1_cs", globalPropertyf},
+    {"nav_gs", "tu154/custom/radio/nav1_gs", globalPropertyf},
+    {"nav_cs_flag", "tu154/custom/radio/nav1_cs_flag", globalPropertyi},
+    {"nav_gs_flag", "tu154/custom/radio/nav1_gs_flag", globalPropertyi},
+    {"nav_course_1", "tu154/custom/rotary/console/nav_1_course_1", globalPropertyf},
+    {"nav_course_10", "tu154/custom/rotary/console/nav_1_course_10", globalPropertyf},
+    {"nav_course_100", "tu154/custom/rotary/console/nav_1_course_100", globalPropertyf},
+    {"nav_to_lit", "tu154/custom/lights/small/nav_1_to", globalPropertyf},
+    {"nav_from_lit", "tu154/custom/lights/small/nav_1_from", globalPropertyf},
+    {"ismaster", "scp/api/ismaster", globalPropertyf},
+})
 
 local rot_small_sound = sasl.al.loadSample('Custom Sounds/cursmp.wav')
 local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
-local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
 local switcher_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
-
+local text_font = sasl.gl.loadFont("digibold.ttf")
+sasl.gl.setFontGlyphSpacingFactor(text_font, 1.5)
+local FONT_SIZE = 58
+local TEXT_X = 87
+local TEXT_Y = 32
+local TEXT_COLOR = {1, 0.3, 0.2, 1}
 sasl.al.setSampleGain(rot_small_sound, 700)
-
--- returns true if current beacon is ILS
-function isIls(freq)
-    --local freq = get(frequency)
-    if (10810 > freq) or (11195 < freq) then
-        return false
-    end
-    local v, f = math.modf(freq / 100)
-	v = math.floor(f * 10 + 0.001)
-    return 1 == (v % 2)
-end
 
 local rot_summ_last = 0
 
@@ -133,7 +110,7 @@ end
 
 local function lamps(flag)
 	
-	local test_btn = get(test_lamps) * math.max(get(bus27_volt_right) - 10 / 18.5, 0)
+	local test_btn = get(test_lamps) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
 	--local day_night = 1 - get(day_night_set) * 0.25
 	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
 
@@ -145,14 +122,12 @@ local function lamps(flag)
 	
 end
 
-local text_font = sasl.gl.loadBitmapFont('digital7_it.fnt')
+
 
 -- variables for separate manipulations
 
 local freq_100 = 0  -- digits before period
 local freq_10 = 0  -- digits after period
-
-local freq_10_show = 0
 
 local freq_show = ""
 
@@ -170,7 +145,6 @@ local dir_ran = 1
 local course = 0 --get(v_plank)
 local glidesl = 0 --get(h_plank)
 
-local obs_actual = 0
 local obs_knob_last = 0
 local obs_now = get(obs)
 
@@ -193,17 +167,10 @@ function update()
 	
 	set(nav_pow_cc, bool2int(power))
 	
-	-- calculate separate digits
-	freq_100 = math.floor(freq / 100)  -- cut off last two digits
-	freq_10 = freq - freq_100 * 100  -- cut off first digits 
-   
-	---local freq_last = freq_10 - math.floor(freq_10 / 10) * 10 
-
-	freq_10_show = freq_10 * 10-- + freq_last
-	if freq_10_show == 0 then freq_10_show = "000"
-	elseif freq_10_show < 100 then freq_10_show = "0"..freq_10_show end
-
-	freq_show = freq_100.."."..freq_10_show
+	-- Split NAV frequency into MHz and 0.01 MHz units.
+	freq_100 = math.floor(freq / 100)
+	freq_10 = freq - freq_100 * 100
+	freq_show = string.format("%d.%03d", freq_100, math.floor(freq_10 * 10 + 0.5))
 	
 	-- knobs cycle
 	local left_knob = get(nav_left)
@@ -287,7 +254,7 @@ end
 	-- bearing calculations
 	local bear = get(nav_deg)
 	
-	if bear > 90.01 or bear < 89.99 and power and not FAIL then -- compas
+	if (bear > 90.01 or bear < 89.99) and power and not FAIL then -- valid bearing
 		bearing = bear + (math.random() - 0.49999) * 30 * passed
 
 	elseif power and not FAIL then -- no signal
@@ -383,18 +350,11 @@ if MASTER then
 	
 	obs_now = math.floor(obs_now)
 	
-	--if obs_now > 360 then obs_now = obs_now - 360 
-	--elseif obs_now < 0 then obs_now = obs_now + 360 end
-	
 	set(obs, obs_now)
 
 end
 	
-	-- set numbers
-	--local obs_1 = obs_now % 10
-	--local obs_10 = math.floor((obs_now % 100) * 0.1) + math.max(math.max((obs_1  - 9), 0), 0)
-	--local obs_100 = math.floor((obs_now % 1000) * 0.01) + math.max(math.max((obs_10 - 9), 0), 0)
-
+	-- Set OBS display digits.
 	local obs_1 = math.floor(obs_now % 10)
 	local obs_10 = math.floor((obs_now % 100) * 0.1)
 	local obs_100 = math.floor((obs_now % 1000) * 0.01)
@@ -403,24 +363,23 @@ end
 	set(nav_course_10, obs_10)
 	set(nav_course_1, obs_1)	
 
-	--print(get(obs).."  "..obs_100..obs_10..obs_1)
 
 end
 
-components = {
+function draw()
+    if not power then
+        return
+    end
 
-	text_draw {
-		position = {35, 20, 160, 140},
-		color = {1, 0.3, 0.2, 1},
-		font = text_font,
-		visible = function()
-			return power
-		end,
-		text = function()
-			return freq_show
-		end,
-	
-	},
-
-}
-
+    sasl.gl.drawText(
+        text_font,
+        TEXT_X,
+        TEXT_Y,
+        freq_show,
+        FONT_SIZE,
+        false,
+        false,
+        TEXT_ALIGN_LEFT,
+        TEXT_COLOR
+    )
+end
