@@ -26,7 +26,8 @@ defineProperty("gear3_deploy", globalProperty("sim/aircraft/parts/acf_gear_deplo
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
 
 -- images
-defineProperty("scale_side_img", sasl.gl.loadImage("taws_scale_2.png", 0, 0, 1000, 770))
+-- SASL crop coordinates start at the lower-left; the TAWS artwork occupies the upper 770 px of the 1024 px texture.
+defineProperty("scale_side_img", sasl.gl.loadImage("taws_scale_2.png", 0, 254, 1000, 770))
 
 local rows = 60
 
