@@ -1,6 +1,6 @@
 [TU154 INFO]: Initializing...
-[TU154 INFO]: [DISPLAY] Main Screen Bounds: 0, 0, 2560, 1440
-[TU154 INFO]: Path to module: I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3-main/plugins/sasl/data/modules/main.lua
+[TU154 INFO]: [DISPLAY] Monitor 0: 0, 0, 2560, 1440
+[TU154 INFO]: Path to module: I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/main.lua
 [TU154 INFO]: Loading module...
 [TU154 INFO]: [LUA]: loading	module
 [TU154 INFO]: [LUA]: "module"	This is the Tu154M 2.0.8
@@ -90,9 +90,6 @@
 [TU154 INFO]: [LUA]: loading	radio
 [TU154 INFO]: [LUA]: loading	vhf
 [TU154 INFO]: [LUA]: loading	course_mp
-[TU154 DEBUG]: [LUA]: "sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot": Casting float to int
-[TU154 DEBUG]: [LUA]: "sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot": Casting float to int
-[TU154 DEBUG]: [LUA]: "sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot": Casting float to int
 [TU154 INFO]: [LUA]: loading	ark15
 [TU154 INFO]: [LUA]: loading	dme
 [TU154 INFO]: [LUA]: loading	spu
@@ -105,9 +102,7 @@
 [TU154 INFO]: [LUA]: loading	absu_commands
 [TU154 INFO]: [LUA]: loading	absu_panel
 [TU154 INFO]: [LUA]: loading	absu_mode
-[TU154 DEBUG]: [LUA]: "tu154/custom/switchers/console/absu_pitch_wheel": Casting float to int
 [TU154 INFO]: [LUA]: loading	absu_controls
-[TU154 DEBUG]: [LUA]: "tu154/custom/switchers/console/absu_pitch_wheel": Casting float to int
 [TU154 INFO]: [LUA]: loading	absu_at
 [TU154 INFO]: [LUA]: loading	absu_indicator
 [TU154 INFO]: [LUA]: loading	absu_fails
@@ -139,9 +134,7 @@
 [TU154 INFO]: [LUA]: loading	light_fails
 [TU154 INFO]: [LUA]: loading	apu_system
 [TU154 INFO]: [LUA]: loading	apu_logic
-[TU154 DEBUG]: [LUA]: "tu154/custom/elec/apu_burning_fuel": Casting float to int
 [TU154 INFO]: [LUA]: loading	apu_panel
-[TU154 DEBUG]: [LUA]: "sim/cockpit2/electrical/APU_N1_percent": Casting float to int
 [TU154 INFO]: [LUA]: loading	engines_system
 [TU154 INFO]: [LUA]: loading	engines_panel
 [TU154 INFO]: [LUA]: loading	engine_gauges
@@ -151,7 +144,6 @@
 [TU154 INFO]: [LUA]: loading	fuel_system
 [TU154 INFO]: [LUA]: loading	fuel_panel
 [TU154 INFO]: [LUA]: loading	fuel_tanks
-[TU154 DEBUG]: [LUA]: "tu154/custom/elec/apu_burning_fuel": Casting float to int
 [TU154 INFO]: [LUA]: loading	fuel_pumps
 [TU154 INFO]: [LUA]: loading	fuel_engines
 [TU154 INFO]: [LUA]: loading	fuel_fails
@@ -228,7 +220,7 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.4151
+[TU154 INFO]: Scripts loading time: 0.4440
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
@@ -252,6 +244,536 @@
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
+[TU154 INFO]: [LUA]: "msrp_logic"	MSRP: cannot create file I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/Custom Module/black_box/20_08_26_000.bbox. Check the black_box directory and its permissions.
 [TU154 INFO]: Disabling...
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended
 [TU154 INFO]: [LUA]: "flight_controls"	flight controls released
