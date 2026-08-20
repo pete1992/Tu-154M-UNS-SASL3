@@ -33233,7 +33233,7 @@ ATTR_manip_wheel 0.080000
 TRIS 1068 6
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 4.000000 tu154/custom/switchers/ovhd/transponder_mode
+ANIM_hide 0.000000 0.000000 tu154/custom/switchers/ovhd/transponder_mode
 ATTR_cockpit
 TRIS 1074 6
 ANIM_end

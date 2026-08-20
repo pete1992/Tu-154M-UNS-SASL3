@@ -360,7 +360,7 @@ components = {
             return vvi_ang_act
         end,
         visible = function()
-            return true
+            return false
         end,
     },
 
