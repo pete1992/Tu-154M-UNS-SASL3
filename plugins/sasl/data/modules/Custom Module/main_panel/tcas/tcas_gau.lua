@@ -360,7 +360,10 @@ components = {
             return vvi_ang_act
         end,
         visible = function()
-            return true
+            -- 3D cockpit TCAS needles are drawn by ACF images (TCAS/arrow-1)
+            -- driven by xTLua VVI datarefs. Disable SASL needle rendering here
+            -- to prevent the overlapping black bar artifact.
+            return false
         end,
     },
 
