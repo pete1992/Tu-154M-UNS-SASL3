@@ -15075,11 +15075,11 @@ ATTR_no_cull
 TRIS 30066 600
 ATTR_cull
 TRIS 30666 210
-ATTR_light_level 0.000000 1.000000 tu154/custom/lights/front_panel_flood
+ATTR_light_level 0.000000 1.000000 sim/custom/lights/front_panel_flood
 TRIS 30876 390
 ANIM_begin
-ANIM_hide 0.000000 0.100000 tu154/custom/switchers/spu_3_power
-ATTR_light_level 0.000000 1.000000 tu154/custom/lights/left_panel_int
+ANIM_hide 0.000000 0.100000 sim/custom/switchers/spu_3_power
+ATTR_light_level 0.000000 1.000000 sim/custom/lights/left_panel_int
 ATTR_hard 
 TRIS 31266 12
 ANIM_end

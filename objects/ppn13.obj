@@ -7,7 +7,7 @@ GLOBAL_specular 1.0
 TEXTURE ppn13_Base.png
 TEXTURE_NORMAL ppn13_Base_NRM.png
 TEXTURE_LIT ppn13_Base_LIT.png
-
+NORMAL_METALNESS
 POINT_COUNTS 16340 0 0 54855
 VT 0.844772 -1.146606 -19.774109 -0.754791 0.655975 0.000000 0.371765 0.184891
 VT 0.845169 -1.146210 -19.775101 -0.696716 0.698486 -0.163422 0.374924 0.184891
@@ -21843,115 +21843,115 @@ ATTR_layer_group objects 0
 ATTR_hard 
 ATTR_no_cull
 TRIS 0 1266
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/servo_pitch_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/servo_pitch_lt 1000.000000
 TRIS 1266 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/ch1_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/ch1_lt 1000.000000
 TRIS 1440 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/servo_roll_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/servo_roll_lt 1000.000000
 TRIS 1614 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/servo_yaw_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/servo_yaw_lt 1000.000000
 TRIS 1788 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/bdg_pitch_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/bdg_pitch_lt 1000.000000
 TRIS 1962 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/bdg_roll_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/bdg_roll_lt 1000.000000
 TRIS 2136 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/bdg_yaw_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/bdg_yaw_lt 1000.000000
 TRIS 2310 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/cws1_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/cws1_lt 1000.000000
 TRIS 2484 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/cws2_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/cws2_lt 1000.000000
 TRIS 2658 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/bns_p_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/bns_p_lt 1000.000000
 TRIS 2832 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/bap_p_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/bap_p_lt 1000.000000
 TRIS 3006 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/bap_r_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/bap_r_lt 1000.000000
 TRIS 3180 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/vkv_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/vkv_lt 1000.000000
 TRIS 3354 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/vu_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/vu_lt 1000.000000
 TRIS 3528 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/ute_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/ute_lt 1000.000000
 TRIS 3702 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/stu_p_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/stu_p_lt 1000.000000
 TRIS 3876 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/stu_r_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/stu_r_lt 1000.000000
 TRIS 4050 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/at_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/at_lt 1000.000000
 TRIS 4224 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/bsn_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/bsn_lt 1000.000000
 TRIS 4398 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/mgv_p_stu_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/mgv_p_stu_lt 1000.000000
 TRIS 4572 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/mgv_r_stu_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/mgv_r_stu_lt 1000.000000
 TRIS 4746 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/mgv_p_sau_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/mgv_p_sau_lt 1000.000000
 TRIS 4920 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/mgv_r_sau_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/mgv_r_sau_lt 1000.000000
 TRIS 5094 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/ks_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/ks_lt 1000.000000
 TRIS 5268 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/bns_r_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/bns_r_lt 1000.000000
 TRIS 5442 174
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/absu_ready_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/absu_ready_lt 1000.000000
 TRIS 5616 174
 ATTR_light_level_reset
 TRIS 5790 32988
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 tu154/custom/manipulators/buttons/absu/ppn13_ack_anim
+ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 sim/custom/manipulators/buttons/absu/ppn13_ack_anim
 ATTR_no_hard
 TRIS 38778 858
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 tu154/custom/manipulators/buttons/absu/ppn13_lookup_anim
+ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 sim/custom/manipulators/buttons/absu/ppn13_lookup_anim
 ATTR_hard 
 TRIS 39636 858
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 tu154/custom/manipulators/buttons/absu/ppn13_snp_anim
+ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 sim/custom/manipulators/buttons/absu/ppn13_snp_anim
 TRIS 40494 858
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001834 0.000000 0.000000 1.000000 tu154/custom/manipulators/buttons/absu/ppn13_poweroff_anim
+ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001834 0.000000 0.000000 1.000000 sim/custom/manipulators/buttons/absu/ppn13_poweroff_anim
 TRIS 41352 858
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001834 0.000000 0.000000 1.000000 tu154/custom/manipulators/buttons/absu/ppn13_t2_anim
+ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001834 0.000000 0.000000 1.000000 sim/custom/manipulators/buttons/absu/ppn13_t2_anim
 TRIS 42210 858
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 tu154/custom/manipulators/buttons/absu/ppn13_t1_anim
+ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 sim/custom/manipulators/buttons/absu/ppn13_t1_anim
 TRIS 43068 858
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 tu154/custom/manipulators/buttons/absu/ppn13_t3_anim
+ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 sim/custom/manipulators/buttons/absu/ppn13_t3_anim
 TRIS 43926 858
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 tu154/custom/manipulators/buttons/absu/ppn13_flt_anim
+ANIM_trans 0.000000 0.000000 0.000000 0.002185 0.001833 0.000000 0.000000 1.000000 sim/custom/manipulators/buttons/absu/ppn13_flt_anim
 TRIS 44784 858
 ANIM_end
 ANIM_begin
 ANIM_trans 0.841795 -1.143219 -19.807823 0.841795 -1.143219 -19.807823 0.000000 0.000000 none
-ANIM_rotate -0.000172 0.000909 1.000000 0.000000 75.000000 0.000000 1.000000 tu154/custom/manipulators/switches/absu/ppn13_test_svk_anim
+ANIM_rotate -0.000172 0.000909 1.000000 0.000000 75.000000 0.000000 1.000000 sim/custom/manipulators/switches/absu/ppn13_test_svk_anim
 ANIM_trans -0.841795 1.143219 19.807823 -0.841795 1.143219 19.807823 0.000000 0.000000 none
 TRIS 45642 1098
 ANIM_end
 ANIM_begin
 ANIM_trans 0.841795 -1.143219 -19.783024 0.841795 -1.143219 -19.783024 0.000000 0.000000 none
-ANIM_rotate -0.000172 0.000909 1.000000 0.000000 75.000000 0.000000 1.000000 tu154/custom/manipulators/switches/absu/ppn13_test_absu_anim
+ANIM_rotate -0.000172 0.000909 1.000000 0.000000 75.000000 0.000000 1.000000 sim/custom/manipulators/switches/absu/ppn13_test_absu_anim
 ANIM_trans -0.841795 1.143219 19.783024 -0.841795 1.143219 19.783024 0.000000 0.000000 none
 TRIS 46740 1098
 ANIM_end
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/ch2_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/ch2_lt 1000.000000
 TRIS 47838 54
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/ch3_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/ch3_lt 1000.000000
 TRIS 47892 54
-ATTR_light_level 0.000000 1.000000 tu154/custom/systems/absu/ppn13/ch4_lt 1000.000000
+ATTR_light_level 0.000000 1.000000 sim/custom/systems/absu/ppn13/ch4_lt 1000.000000
 TRIS 47946 414
 ANIM_begin
 ANIM_trans 0.847012 -1.147873 -19.827030 0.847012 -1.147873 -19.827030 0.000000 0.000000 none
-ANIM_rotate -0.000003 0.000017 1.000000 0.000000 120.000000 0.000000 1.000000 tu154/custom/manipulators/caps/ppn13_lid
+ANIM_rotate -0.000003 0.000017 1.000000 0.000000 120.000000 0.000000 1.000000 sim/custom/manipulators/caps/ppn13_lid
 ANIM_trans -0.847012 1.147873 19.827030 -0.847012 1.147873 19.827030 0.000000 0.000000 none
 ATTR_light_level_reset
 TRIS 48360 6495

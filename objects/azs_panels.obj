@@ -524,187 +524,187 @@ LIGHT_PARAM airplane_inst_sp 0.637450 -0.770860 -19.388500 5.60 5.35 2.25 23.00 
 LIGHT_PARAM airplane_inst_sp 0.742690 -1.033480 -20.314699 5.60 5.35 2.25 23.00 0.25 0.00 -2.50 0.00 0.20
 ANIM_end
 ANIM_begin
-ANIM_hide -300.000000 0.000000 tu154/custom/elec/bus36_volt_left
+ANIM_hide -300.000000 0.000000 sim/custom/elec/bus36_volt_left
 ANIM_begin
-ANIM_hide 0.000000 0.100000 tu154/custom/lights/ark1_left_lit
+ANIM_hide 0.000000 0.100000 sim/custom/lights/ark1_left_lit
 LIGHT_PARAM airplane_inst_sp -0.205569 -1.038285 -21.106522 7.20 4.30 1.10 3.70 0.05 0.00 -0.06 -1.00 0.90
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.100000 tu154/custom/lights/ark1_right_lit
+ANIM_hide 0.000000 0.100000 sim/custom/lights/ark1_right_lit
 LIGHT_PARAM airplane_inst_sp -0.131079 -1.038285 -21.106522 7.20 4.30 1.10 3.70 0.05 0.00 -0.06 -1.00 0.90
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.100000 tu154/custom/lights/ark2_left_lit
+ANIM_hide 0.000000 0.100000 sim/custom/lights/ark2_left_lit
 LIGHT_PARAM airplane_inst_sp 0.131501 -1.038285 -21.106522 7.20 4.30 1.10 3.70 0.05 0.00 -0.06 -1.00 0.90
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.100000 tu154/custom/lights/ark2_right_lit
+ANIM_hide 0.000000 0.100000 sim/custom/lights/ark2_right_lit
 LIGHT_PARAM airplane_inst_sp 0.205991 -1.038285 -21.106522 7.20 4.30 1.10 3.70 0.05 0.00 -0.06 -1.00 0.90
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.655000 tu154/custom/switchers/spu_4_mode
+ANIM_hide 0.000000 0.655000 sim/custom/switchers/spu_4_mode
 LIGHT_PARAM airplane_inst_sp 0.489807 -0.779999 -19.491501 7.20 4.30 1.40 4.70 0.40 0.60 -0.90 0.80 0.20
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.155000 tu154/custom/lights/cabinl_flood_set
+ANIM_hide 0.000000 0.155000 sim/custom/lights/cabinl_flood_set
 LIGHT_PARAM airplane_inst_sp 0.000000 -0.786476 -20.166800 1.60 1.35 1.25 0.70 4.25 0.00 -2.50 0.00 0.00
 LIGHT_PARAM airplane_inst_sp 0.000000 0.247090 -20.166800 1.60 1.35 1.25 0.70 4.25 0.00 -2.50 0.00 0.00
 ANIM_end
 ANIM_end
 ANIM_begin
-ANIM_hide -300.000000 -0.100000 tu154/custom/elec/bus27_volt_left
+ANIM_hide -300.000000 -0.100000 sim/custom/elec/bus27_volt_left
 ANIM_begin
-ANIM_hide 0.000000 0.655000 tu154/custom/switchers/spu_2_mode
+ANIM_hide 0.000000 0.655000 sim/custom/switchers/spu_2_mode
 LIGHT_PARAM airplane_inst_sp -1.058850 -1.630090 -20.726200 7.20 4.30 1.40 4.70 0.40 0.40 -2.50 -1.10 0.20
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.655000 tu154/custom/switchers/eng/hydro_trimm_rud_1_cap
+ANIM_hide 0.000000 0.655000 sim/custom/switchers/eng/hydro_trimm_rud_1_cap
 LIGHT_PARAM airplane_inst_sp 0.811332 -1.241311 -20.281374 7.20 4.30 1.40 4.70 0.40 0.00 -0.25 -2.00 0.20
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.655000 tu154/custom/switchers/spu_3_mode
+ANIM_hide 0.000000 0.655000 sim/custom/switchers/spu_3_mode
 LIGHT_PARAM airplane_inst_sp 1.015270 -1.631560 -20.724400 7.20 4.30 1.40 4.70 0.40 -0.40 -2.50 -1.10 0.20
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.655000 tu154/custom/switchers/ovhd/sp50_dme_rsbn
+ANIM_hide 0.000000 0.655000 sim/custom/switchers/ovhd/sp50_dme_rsbn
 LIGHT_PARAM airplane_inst_sp 0.389620 -1.442800 -20.523701 7.20 4.30 1.40 4.70 0.40 0.00 -2.50 1.10 0.20
 ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_hide 0.000000 0.000000 sim/cockpit/electrical/avionics_on
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/kontur/light/left_power
+ANIM_hide 0.000000 0.000000 sim/custom/kontur/light/left_power
 LIGHT_PARAM airplane_inst_sp -0.038187 -1.591230 -21.602699 1.00 1.00 1.20 14.00 0.08 0.00 0.00 0.00 1.00
 LIGHT_PARAM airplane_inst_sp -0.002187 -1.591230 -21.602699 1.00 1.00 1.20 14.00 0.08 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/kontur/light/right_power
+ANIM_hide 0.000000 0.000000 sim/custom/kontur/light/right_power
 LIGHT_PARAM airplane_inst_sp 0.237350 -1.591230 -21.602699 1.00 1.00 1.20 15.00 0.08 0.00 0.00 0.00 1.00
 LIGHT_PARAM airplane_inst_sp 0.201350 -1.591230 -21.602699 1.00 1.00 1.20 15.00 0.08 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/uns/brt_l
+ANIM_hide 0.000000 0.000000 sim/custom/uns/brt_l
 LIGHT_PARAM airplane_inst_sp 0.000000 -1.985160 -21.127701 1.00 1.00 1.20 17.00 0.08 0.00 0.00 0.00 1.00
 LIGHT_PARAM airplane_inst_sp -0.038000 -1.985160 -21.127701 1.00 1.00 1.20 17.00 0.08 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/uns/brt_r
+ANIM_hide 0.000000 0.000000 sim/custom/uns/brt_r
 LIGHT_PARAM airplane_inst_sp 0.106380 -1.985160 -21.127701 1.00 1.00 1.20 16.00 0.08 0.00 0.00 0.00 1.00
 LIGHT_PARAM airplane_inst_sp 0.142380 -1.985160 -21.127701 1.00 1.00 1.20 16.00 0.08 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/switchers/ovhd/var_left
+ANIM_hide 0.000000 0.000000 sim/custom/switchers/ovhd/var_left
 LIGHT_PARAM airplane_inst_sp -0.389700 -1.560640 -21.588100 1.80 1.80 2.00 1.00 0.05 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/switchers/ovhd/var_right
+ANIM_hide 0.000000 0.000000 sim/custom/switchers/ovhd/var_right
 LIGHT_PARAM airplane_inst_sp 0.616680 -1.620730 -21.577700 1.80 1.80 2.00 1.00 0.05 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/kontur/light/left_power
+ANIM_hide 0.000000 0.000000 sim/custom/kontur/light/left_power
 LIGHT_PARAM airplane_inst_sp -0.076010 -1.540510 -21.610300 0.40 3.60 0.40 1.00 0.02 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/kontur/light/right_power
+ANIM_hide 0.000000 0.000000 sim/custom/kontur/light/right_power
 LIGHT_PARAM airplane_inst_sp 0.163320 -1.540510 -21.610300 0.40 3.60 0.40 1.00 0.02 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/radios/vhf1_ap_lit
+ANIM_hide 0.000000 0.000000 sim/custom/radios/vhf1_ap_lit
 LIGHT_PARAM airplane_inst_sp 0.041130 -1.062010 -21.142599 3.60 0.40 0.40 1.00 0.02 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/radios/vhf2_ap_lit
+ANIM_hide 0.000000 0.000000 sim/custom/radios/vhf2_ap_lit
 LIGHT_PARAM airplane_inst_sp 0.041130 -1.085310 -21.222401 3.60 0.40 0.40 1.00 0.02 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_zk
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_zk
 LIGHT_PARAM airplane_inst_sp -0.172834 -1.958210 -21.365499 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_reset
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_reset
 LIGHT_PARAM airplane_inst_sp -0.112703 -1.958210 -21.365801 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_nvu
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_nvu
 LIGHT_PARAM airplane_inst_sp -0.171999 -1.969440 -21.331100 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_az1
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_az1
 LIGHT_PARAM airplane_inst_sp -0.141505 -1.969440 -21.331100 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_az2
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_az2
 LIGHT_PARAM airplane_inst_sp -0.112208 -1.969440 -21.331100 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_app
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_app
 LIGHT_PARAM airplane_inst_sp -0.172311 -2.003910 -21.226900 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_gz
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_gz
 LIGHT_PARAM airplane_inst_sp -0.112039 -2.003910 -21.226101 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_stab_m
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_stab_m
 LIGHT_PARAM airplane_inst_sp -0.182150 -2.022460 -21.105801 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_stab_v
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_stab_v
 LIGHT_PARAM airplane_inst_sp -0.147950 -2.022460 -21.105801 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_stab_h
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_stab_h
 LIGHT_PARAM airplane_inst_sp -0.113750 -2.022460 -21.105801 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_thro1
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_thro1
 LIGHT_PARAM airplane_inst_sp 0.117015 -2.006240 -21.218500 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_thro2
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_thro2
 LIGHT_PARAM airplane_inst_sp 0.142828 -2.006240 -21.218500 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_thro3
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_thro3
 LIGHT_PARAM airplane_inst_sp 0.169490 -2.006240 -21.218500 3.60 3.60 1.80 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/absu_stab_spd
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/absu_stab_spd
 LIGHT_PARAM airplane_inst_sp 0.136753 -1.975300 -21.315599 1.20 1.80 1.60 1.00 0.04 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/fire_turn_1
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/fire_turn_1
 LIGHT_PARAM airplane_inst_sp 0.802030 -1.097060 -19.566099 3.60 3.60 1.80 1.00 0.03 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/fire_turn_2
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/fire_turn_2
 LIGHT_PARAM airplane_inst_sp 0.781290 -1.072750 -19.566099 3.60 3.60 1.80 1.00 0.03 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/fire_turn_3
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/fire_turn_3
 LIGHT_PARAM airplane_inst_sp 0.760740 -1.048750 -19.566099 3.60 3.60 1.80 1.00 0.03 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/fire_eng_1
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/fire_eng_1
 LIGHT_PARAM airplane_inst_sp 0.823000 -1.121880 -19.658199 3.60 3.60 1.80 1.00 0.03 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/fire_eng_2
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/fire_eng_2
 LIGHT_PARAM airplane_inst_sp 0.823000 -1.121880 -19.627300 3.60 3.60 1.80 1.00 0.03 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/fire_eng_3
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/fire_eng_3
 LIGHT_PARAM airplane_inst_sp 0.823000 -1.121880 -19.596300 3.60 3.60 1.80 1.00 0.03 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/fire_apu
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/fire_apu
 LIGHT_PARAM airplane_inst_sp 0.817200 -1.115080 -19.534000 3.60 3.60 1.80 1.00 0.03 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/lights/button/fire_ng
+ANIM_hide 0.000000 0.000000 sim/custom/lights/button/fire_ng
 LIGHT_PARAM airplane_inst_sp 0.836800 -1.138020 -19.499300 3.60 3.60 1.80 1.00 0.03 0.00 0.00 0.00 1.00
 ANIM_end
 ANIM_end
-ATTR_light_level 0.000000 1.000000 tu154/custom/lights/azs_panel_flood
+ATTR_light_level 0.000000 1.000000 sim/custom/lights/azs_panel_flood
 ATTR_shiny_rat 0.500000
 TRIS 0 588

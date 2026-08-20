@@ -2888,7 +2888,7 @@ IDX10 2321 2320 1979 2317 2322 2320 2319 1978 2322 2318
 IDX10 2323 2324 2325 2324 1909 2316 2326 2324 2323 1907
 IDX 2326
 IDX 1908
-ATTR_light_level 0.000000 1.000000 tu154/custom/lights/ark1_all_lit
+ATTR_light_level 0.000000 1.000000 sim/custom/lights/ark1_all_lit
 TRIS 0 18
 ATTR_no_cull
 TRIS 18 12
@@ -2898,7 +2898,7 @@ ATTR_no_cull
 TRIS 1524 12
 ATTR_cull
 TRIS 1536 18
-ATTR_light_level 0.000000 1.000000 tu154/custom/lights/ark2_all_lit
+ATTR_light_level 0.000000 1.000000 sim/custom/lights/ark2_all_lit
 TRIS 1554 786
 ATTR_no_cull
 TRIS 2340 12
@@ -2908,7 +2908,7 @@ ATTR_no_cull
 TRIS 2388 12
 ATTR_cull
 TRIS 2400 708
-ATTR_light_level 0.000000 1.000000 tu154/custom/lights/ovhd_panel_int
+ATTR_light_level 0.000000 1.000000 sim/custom/lights/ovhd_panel_int
 TRIS 3108 822
 ATTR_no_cull
 TRIS 3930 6

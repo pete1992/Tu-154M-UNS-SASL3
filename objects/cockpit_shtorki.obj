@@ -4899,59 +4899,59 @@ IDX 4084
 IDX 4083
 IDX 4085
 ANIM_begin
-ANIM_hide 0.000000 0.900000 tu154/custom/switchers/eng/hydro_trimm_rud_2_cap
+ANIM_hide 0.000000 0.900000 sim/custom/switchers/eng/hydro_trimm_rud_2_cap
 ATTR_hard 
 ATTR_manip_command_axis arrow 0.000000 1.000000 1.000000 sim/lights/landing_lights_on sim/lights/landing_lights_off 
 TRIS 0 828
 ANIM_end
 ANIM_begin
-ANIM_hide 0.100000 1.100000 tu154/custom/anim/cockpit_window_right
-ANIM_hide 0.000000 0.900000 tu154/custom/switchers/eng/emerg_gen_on_2
+ANIM_hide 0.100000 1.100000 sim/custom/anim/cockpit_window_right
+ANIM_hide 0.000000 0.900000 sim/custom/switchers/eng/emerg_gen_on_2
 TRIS 828 852
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 1.900000 tu154/custom/switchers/spu_4_mode
+ANIM_hide 0.000000 1.900000 sim/custom/switchers/spu_4_mode
 TRIS 1680 678
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.900000 tu154/custom/switchers/spu_4_mode
-ANIM_hide 1.100000 5.000000 tu154/custom/switchers/spu_4_mode
+ANIM_hide 0.000000 0.900000 sim/custom/switchers/spu_4_mode
+ANIM_hide 1.100000 5.000000 sim/custom/switchers/spu_4_mode
 TRIS 2358 678
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.900000 tu154/custom/switchers/spu_4_source
-ANIM_hide 1.100000 5.000000 tu154/custom/switchers/spu_4_source
+ANIM_hide 0.000000 0.900000 sim/custom/switchers/spu_4_source
+ANIM_hide 1.100000 5.000000 sim/custom/switchers/spu_4_source
 TRIS 3036 690
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 1.900000 tu154/custom/switchers/spu_4_source
+ANIM_hide 0.000000 1.900000 sim/custom/switchers/spu_4_source
 TRIS 3726 708
 ANIM_end
 ANIM_begin
-ANIM_hide 0.100000 1.000000 tu154/custom/anim/cockpit_window_left
-ANIM_hide 0.000000 0.900000 tu154/custom/switchers/eng/emerg_gen_on_2_cap
+ANIM_hide 0.100000 1.000000 sim/custom/anim/cockpit_window_left
+ANIM_hide 0.000000 0.900000 sim/custom/switchers/eng/emerg_gen_on_2_cap
 TRIS 4434 852
 ANIM_end
 ANIM_begin
-    ANIM_trans_begin tu154/custom/anim/cockpit_window_left
+    ANIM_trans_begin sim/custom/anim/cockpit_window_left
         ANIM_trans_key 0.0   -0.8299 -1.4926 -21.6419
 		ANIM_trans_key	0.2	  -0.8299   -1.4926  -21.6419
 		ANIM_trans_key	0.4	  -0.8299   -1.4926  -21.6419
         ANIM_trans_key 1.0   -0.9768 -1.5413 -21.2538
     ANIM_trans_end
-    ANIM_rotate_begin 0 0 1 tu154/custom/anim/cockpit_window_left
+    ANIM_rotate_begin 0 0 1 sim/custom/anim/cockpit_window_left
         ANIM_rotate_key 0.0   0.00
 		ANIM_rotate_key	0.2	  0.00
 		ANIM_rotate_key	0.4	  5.34
         ANIM_rotate_key 1.0   5.51
     ANIM_rotate_end
-    ANIM_rotate_begin 0 1 0 tu154/custom/anim/cockpit_window_left
+    ANIM_rotate_begin 0 1 0 sim/custom/anim/cockpit_window_left
         ANIM_rotate_key 0.0   -0.00
 		ANIM_rotate_key	0.2	 -0.00
 		ANIM_rotate_key	0.4	  7.55
         ANIM_rotate_key 1.0   7.84
     ANIM_rotate_end
-    ANIM_rotate_begin 1 0 0 tu154/custom/anim/cockpit_window_left
+    ANIM_rotate_begin 1 0 0 sim/custom/anim/cockpit_window_left
         ANIM_rotate_key 0.0   0.00
 		ANIM_rotate_key	0.2	  0.00
         ANIM_rotate_key 0.4   3.24
@@ -4959,32 +4959,32 @@ ANIM_begin
     ANIM_rotate_end
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.100000 tu154/custom/switchers/eng/emerg_gen_on_3
+ANIM_hide 0.000000 0.100000 sim/custom/switchers/eng/emerg_gen_on_3
 TRIS 5286 840
 ANIM_end
 ANIM_begin
-    ANIM_trans_begin tu154/custom/anim/cockpit_window_right
+    ANIM_trans_begin sim/custom/anim/cockpit_window_right
 		ANIM_trans_key	0	   0.8303   -1.4926  -21.6419
 		ANIM_trans_key	0.2	   0.8303   -1.4926  -21.6419
 		ANIM_trans_key	0.4	   0.8303   -1.4926  -21.6419
 		ANIM_trans_key	1	   0.9771   -1.5413  -21.2538
     ANIM_trans_end
 
-    ANIM_rotate_begin 0 0 1 tu154/custom/anim/cockpit_window_right
+    ANIM_rotate_begin 0 0 1 sim/custom/anim/cockpit_window_right
 		ANIM_rotate_key	0	  0.00
 		ANIM_rotate_key	0.2	  0.00
 		ANIM_rotate_key	0.4	 -5.34
 		ANIM_rotate_key	1	 -5.51
     ANIM_rotate_end
 
-    ANIM_rotate_begin 0 1 0 tu154/custom/anim/cockpit_window_right
+    ANIM_rotate_begin 0 1 0 sim/custom/anim/cockpit_window_right
 		ANIM_rotate_key	0	 -0.00
 		ANIM_rotate_key	0.2	 -0.00
 		ANIM_rotate_key	0.4	 -7.55
 		ANIM_rotate_key	1	 -7.84
     ANIM_rotate_end
 
-    ANIM_rotate_begin 1 0 0 tu154/custom/anim/cockpit_window_right
+    ANIM_rotate_begin 1 0 0 sim/custom/anim/cockpit_window_right
 		ANIM_rotate_key	0	  0.00
 		ANIM_rotate_key	0.2	  0.00
 		ANIM_rotate_key	0.4	  3.24
@@ -4992,10 +4992,10 @@ ANIM_begin
     ANIM_rotate_end
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.900000 tu154/custom/switchers/eng/emerg_gen_on_1_cap
+ANIM_hide 0.000000 0.900000 sim/custom/switchers/eng/emerg_gen_on_1_cap
 TRIS 6126 840
 ANIM_end
 ANIM_begin
-ANIM_hide 0.100000 1.100000 tu154/custom/switchers/eng/emerg_gen_on_1
+ANIM_hide 0.100000 1.100000 sim/custom/switchers/eng/emerg_gen_on_1
 TRIS 6966 1032
 ANIM_end

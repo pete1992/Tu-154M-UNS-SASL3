@@ -2,6 +2,7 @@ I
 800
 OBJ
 
+
 TEXTURE cockpit_side_panel_RUS.png
 TEXTURE_NORMAL	cockpit_side_panel_RUS_NML.png
 GLOBAL_specular 1.0
@@ -299,6 +300,6 @@ IDX 233
 IDX 232
 TRIS 0 75
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.002295 -0.003278 0.000000 1.000000 tu154/custom/controll/stab_man_cap
+ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.002295 -0.003278 0.000000 1.000000 sim/custom/controll/stab_man_cap
 TRIS 75 384
 ANIM_end

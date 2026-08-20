@@ -5066,43 +5066,43 @@ IDX 3966
 IDX 3990
 ANIM_begin
 ANIM_end
-ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
+ATTR_light_level 0.000000 1.000000 sim/custom/light/no_LIT
 TRIS 0 102
-ATTR_light_level 0.000000 1.000000 tu154/custom/tcas2000/lit
+ATTR_light_level 0.000000 1.000000 sim/custom/tcas2000/lit
 ATTR_hard 
 TRIS 102 2295
 ANIM_begin
 ANIM_trans 0.176478 -1.699288 -21.598211 0.176478 -1.699288 -21.598211 0.000000 0.000000 none
-ANIM_rotate 0.000000 -0.992547 0.121866 30.000000 -30.000000 0.000000 1.000000 tu154/custom/kontur/weather_sys
+ANIM_rotate 0.000000 -0.992547 0.121866 30.000000 -30.000000 0.000000 1.000000 sim/custom/kontur/weather_sys
 ANIM_trans -0.176478 1.699288 21.598211 -0.176478 1.699288 21.598211 0.000000 0.000000 none
 ATTR_light_level_reset
 TRIS 2397 168
 ANIM_end
 ANIM_begin
 ANIM_trans 0.283020 -1.855850 -21.563601 0.283020 -1.855850 -21.563601 0.000000 0.000000 none
-ANIM_rotate 0.000000 -0.139148 -0.990272 0.000000 280.000000 0.000000 1.000000 tu154/custom/kontur/srpbz_lit_set
+ANIM_rotate 0.000000 -0.139148 -0.990272 0.000000 280.000000 0.000000 1.000000 sim/custom/kontur/srpbz_lit_set
 ANIM_trans -0.283020 1.855850 21.563601 -0.283020 1.855850 21.563601 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
+ATTR_light_level 0.000000 1.000000 sim/custom/light/no_LIT
 ATTR_no_hard
 TRIS 2565 240
 ANIM_end
 ANIM_begin
 ANIM_trans 0.177049 -1.725940 -21.578943 0.177049 -1.725940 -21.578943 0.000000 0.000000 none
-ANIM_rotate 0.000000 -0.139148 -0.990272 0.000000 280.000000 0.000000 1.000000 tu154/custom/wx2000_gain
+ANIM_rotate 0.000000 -0.139148 -0.990272 0.000000 280.000000 0.000000 1.000000 sim/custom/wx2000_gain
 ANIM_trans -0.177049 1.725940 21.578943 -0.177049 1.725940 21.578943 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/weather_lit
+ATTR_light_level 0.000000 1.000000 sim/custom/kontur/weather_lit
 ATTR_hard 
 TRIS 2805 174
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 tu154/custom/buttons/tcas/tcas_ident_btn
-ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
+ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 sim/custom/buttons/tcas/tcas_ident_btn
+ATTR_light_level 0.000000 1.000000 sim/custom/light/no_LIT
 ATTR_no_hard
 TRIS 2979 102
 ANIM_end
 ANIM_begin
 ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000080 -0.000567 0.000000 1.000000 CMND=tcas2000/mode
-ATTR_light_level 0.000000 1.000000 tu154/custom/tcas2000/lit
+ATTR_light_level 0.000000 1.000000 sim/custom/tcas2000/lit
 ATTR_hard 
 TRIS 3081 177
 ATTR_no_cull
@@ -5115,23 +5115,23 @@ ATTR_cull
 TRIS 3270 177
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 tu154/custom/buttons/ovhd/egpws_control
-ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/srpbz_test_lit
+ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 sim/custom/buttons/ovhd/egpws_control
+ATTR_light_level 0.000000 1.000000 sim/custom/kontur/srpbz_test_lit
 TRIS 3447 177
 ANIM_end
 ANIM_begin
-ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 tu154/custom/switchers/ovhd/egpws_mode
-ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
+ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 sim/custom/switchers/ovhd/egpws_mode
+ATTR_light_level 0.000000 1.000000 sim/custom/light/no_LIT
 ATTR_no_hard
 TRIS 3624 192
 ANIM_begin
-ANIM_hide 1.000000 5.000000 tu154/custom/switchers/ovhd/egpws_mode
-ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/srpbz_lit
+ANIM_hide 1.000000 5.000000 sim/custom/switchers/ovhd/egpws_mode
+ATTR_light_level 0.000000 1.000000 sim/custom/kontur/srpbz_lit
 ATTR_hard 
 TRIS 3816 12
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/switchers/ovhd/egpws_mode
+ANIM_hide 0.000000 0.000000 sim/custom/switchers/ovhd/egpws_mode
 TRIS 3828 12
 ANIM_end
 ANIM_end
@@ -5139,7 +5139,7 @@ ANIM_begin
 ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 CMND=egpws/dis_gs
 TRIS 3840 186
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/egpws/dis_gs
+ANIM_hide 0.000000 0.000000 sim/custom/egpws/dis_gs
 TRIS 4026 9
 ANIM_end
 ANIM_end
@@ -5147,7 +5147,7 @@ ANIM_begin
 ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 CMND=egpws/dis_rppz
 TRIS 4035 186
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/egpws/dis_rppz
+ANIM_hide 0.000000 0.000000 sim/custom/egpws/dis_rppz
 TRIS 4221 9
 ANIM_end
 ANIM_end
@@ -5155,7 +5155,7 @@ ANIM_begin
 ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 CMND=egpws/dis_gear
 TRIS 4230 186
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/egpws/dis_gear
+ANIM_hide 0.000000 0.000000 sim/custom/egpws/dis_gear
 TRIS 4416 9
 ANIM_end
 ANIM_end
@@ -5163,7 +5163,7 @@ ANIM_begin
 ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 CMND=egpws/dis_flaps
 TRIS 4425 186
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/egpws/dis_flaps
+ANIM_hide 0.000000 0.000000 sim/custom/egpws/dis_flaps
 TRIS 4611 9
 ANIM_end
 ANIM_end
@@ -5171,15 +5171,15 @@ ANIM_begin
 ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000139 -0.000990 0.000000 1.000000 CMND=egpws/dis_sound
 TRIS 4620 186
 ANIM_begin
-ANIM_hide 0.000000 0.000000 tu154/custom/egpws/dis_sound
+ANIM_hide 0.000000 0.000000 sim/custom/egpws/dis_sound
 TRIS 4806 9
 ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans 0.221542 -1.709266 -21.582235 0.221542 -1.709266 -21.582235 0.000000 0.000000 none
-ANIM_rotate 0.000000 -0.139148 -0.990272 -8.000000 35.000000 0.000000 1.000000 tu154/custom/kontur/weather_mode
+ANIM_rotate 0.000000 -0.139148 -0.990272 -8.000000 35.000000 0.000000 1.000000 sim/custom/kontur/weather_mode
 ANIM_trans -0.221542 1.709266 21.582235 -0.221542 1.709266 21.582235 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/weather_lit
+ATTR_light_level 0.000000 1.000000 sim/custom/kontur/weather_lit
 ATTR_no_cull
 TRIS 4815 6
 ATTR_cull
@@ -5187,19 +5187,19 @@ TRIS 4821 237
 ANIM_end
 ANIM_begin
 ANIM_trans 0.179182 -1.802260 -21.575100 0.179182 -1.802260 -21.575100 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 -0.139148 -0.990272 tu154/custom/tcas/level_mode
+ANIM_rotate_begin 0.000000 -0.139148 -0.990272 sim/custom/tcas/level_mode
 ANIM_rotate_key -1.000000 -30.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 30.000000
 ANIM_rotate_end
 ANIM_trans -0.179182 1.802260 21.575100 -0.179182 1.802260 21.575100 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
+ATTR_light_level 0.000000 1.000000 sim/custom/light/no_LIT
 ATTR_no_hard
 TRIS 5058 246
 ANIM_end
 ANIM_begin
 ANIM_trans 0.187861 -1.771850 -21.579500 0.187861 -1.771850 -21.579500 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 -0.139148 -0.990272 tu154/custom/tcas/range_set
+ANIM_rotate_begin 0.000000 -0.139148 -0.990272 sim/custom/tcas/range_set
 ANIM_rotate_key 0.000000 -30.000000
 ANIM_rotate_key 1.000000 -30.000000
 ANIM_rotate_key 2.000000 0.000000
@@ -5210,7 +5210,7 @@ TRIS 5304 246
 ANIM_end
 ANIM_begin
 ANIM_trans 0.272835 -1.770650 -21.573099 0.272835 -1.770650 -21.573099 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 -0.139171 -0.990268 tu154/custom/switchers/tcas/tcas_mode
+ANIM_rotate_begin 0.000000 -0.139171 -0.990268 sim/custom/switchers/tcas/tcas_mode
 ANIM_rotate_key -1.000000 0.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 28.000000
@@ -5225,39 +5225,39 @@ TRIS 6009 18
 ANIM_end
 ANIM_begin
 ANIM_trans 0.202220 -1.799390 -21.577801 0.202220 -1.799390 -21.577801 0.000000 0.000000 none
-ANIM_rotate 0.000000 0.139173 0.990268 -0.000000 1.000000 0.000000 1.000000 tu154/custom/tcas2000/l1
+ANIM_rotate 0.000000 0.139173 0.990268 -0.000000 1.000000 0.000000 1.000000 sim/custom/tcas2000/l1
 ANIM_trans -0.202220 1.799390 21.577801 -0.202220 1.799390 21.577801 0.000000 0.000000 none
 ATTR_cull
 TRIS 6027 174
 ANIM_end
 ANIM_begin
 ANIM_trans 0.202220 -1.799390 -21.577801 0.202220 -1.799390 -21.577801 0.000000 0.000000 none
-ANIM_rotate 0.000000 0.139173 0.990268 -0.000000 1.000000 0.000000 1.000000 tu154/custom/tcas2000/l2
+ANIM_rotate 0.000000 0.139173 0.990268 -0.000000 1.000000 0.000000 1.000000 sim/custom/tcas2000/l2
 ANIM_trans -0.202220 1.799390 21.577801 -0.202220 1.799390 21.577801 0.000000 0.000000 none
 TRIS 6201 174
 ANIM_end
 ANIM_begin
 ANIM_trans 0.245037 -1.799390 -21.577801 0.245037 -1.799390 -21.577801 0.000000 0.000000 none
-ANIM_rotate 0.000000 0.139173 0.990268 -0.000000 1.000000 0.000000 1.000000 tu154/custom/tcas2000/r2
+ANIM_rotate 0.000000 0.139173 0.990268 -0.000000 1.000000 0.000000 1.000000 sim/custom/tcas2000/r2
 ANIM_trans -0.245037 1.799390 21.577801 -0.245037 1.799390 21.577801 0.000000 0.000000 none
 TRIS 6375 174
 ANIM_end
 ANIM_begin
 ANIM_trans 0.245037 -1.799390 -21.577801 0.245037 -1.799390 -21.577801 0.000000 0.000000 none
-ANIM_rotate 0.000000 0.139173 0.990268 -0.000000 1.000000 0.000000 1.000000 tu154/custom/tcas2000/r1
+ANIM_rotate 0.000000 0.139173 0.990268 -0.000000 1.000000 0.000000 1.000000 sim/custom/tcas2000/r1
 ANIM_trans -0.245037 1.799390 21.577801 -0.245037 1.799390 21.577801 0.000000 0.000000 none
 TRIS 6549 174
 ANIM_end
-ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/weather_lit
+ATTR_light_level 0.000000 1.000000 sim/custom/kontur/weather_lit
 ATTR_hard 
 TRIS 6723 1875
 ATTR_no_cull
 TRIS 8598 6
-ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/srpbz_rppz_lit
+ATTR_light_level 0.000000 1.000000 sim/custom/kontur/srpbz_rppz_lit
 ATTR_cull
 TRIS 8604 9
-ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/srpbz_sppz_lit
+ATTR_light_level 0.000000 1.000000 sim/custom/kontur/srpbz_sppz_lit
 TRIS 8613 9
-ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
+ATTR_light_level 0.000000 1.000000 sim/custom/light/no_LIT
 ATTR_no_hard
 TRIS 8622 1776

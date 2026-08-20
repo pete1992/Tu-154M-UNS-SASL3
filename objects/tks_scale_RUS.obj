@@ -63,8 +63,8 @@ IDX 36
 IDX 2
 ANIM_begin
 ANIM_trans 0.168000 -1.010339 -20.964199 0.168000 -1.010339 -20.964199 0.000000 0.000000 none
-ANIM_rotate 0.000000 -0.950883 0.309549 0.000000 160.000000 0.000000 90.000000 tu154/custom/rotary/ovhd/tks_lat_set
+ANIM_rotate 0.000000 -0.950883 0.309549 0.000000 160.000000 0.000000 90.000000 sim/custom/rotary/ovhd/tks_lat_set
 ANIM_trans -0.168000 1.010339 20.964199 -0.168000 1.010339 20.964199 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154/custom/lights/ovhd_panel_int
+ATTR_light_level 0.000000 1.000000 sim/custom/lights/ovhd_panel_int
 TRIS 0 108
 ANIM_end
