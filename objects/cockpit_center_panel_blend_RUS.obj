@@ -10558,7 +10558,7 @@ IDX10 8363 8452 8454 8357 8357 8454 8359 8451 8452 8352
 IDX 8352
 IDX 8452
 IDX 8465
-ATTR_light_level 0.000000 1.000000 sim/custom/lights/mid_left_panel_int
+ATTR_light_level 0.000000 1.000000 tu154/custom/lights/mid_left_panel_int
 TRIS 0 7293
 LINES 7293 80
 TRIS 7373 11886

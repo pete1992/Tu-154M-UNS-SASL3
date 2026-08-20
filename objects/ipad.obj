@@ -4907,18 +4907,18 @@ ANIM_begin
 ANIM_end
 ANIM_end
 ANIM_begin
-ANIM_hide 1.000000 1.000000 sim/custom/t154_efb/enabled
+ANIM_hide 1.000000 1.000000 tu154/custom/t154_efb/enabled
 TRIS 0 981
 ANIM_end
 ANIM_begin
-ANIM_trans_begin sim/custom/anim/cockpit_window_left
+ANIM_trans_begin tu154/custom/anim/cockpit_window_left
 ANIM_trans_key 0.000000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.200000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.400000 0.000000 0.000000 0.000000
 ANIM_trans_key 1.000000 -0.146900 -0.048700 0.388100
 ANIM_trans_end
 ANIM_trans -0.816234 -1.492600 -21.641899 -0.816234 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.013665 0.000000 0.999907 sim/custom/anim/cockpit_window_left
+ANIM_rotate_begin 0.013665 0.000000 0.999907 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 5.340000
@@ -4926,7 +4926,7 @@ ANIM_rotate_key 1.000000 5.510000
 ANIM_rotate_end
 ANIM_trans 0.816234 1.492600 21.641899 0.816234 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans -0.829900 -1.492600 -21.641899 -0.829900 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 sim/custom/anim/cockpit_window_left
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 -0.000000
 ANIM_rotate_key 0.200000 -0.000000
 ANIM_rotate_key 0.400000 7.550000
@@ -4934,7 +4934,7 @@ ANIM_rotate_key 1.000000 7.840000
 ANIM_rotate_end
 ANIM_trans 0.829900 1.492600 21.641899 0.829900 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans -0.802567 -1.492600 -21.641899 -0.802567 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 1.000000 0.000000 0.000000 sim/custom/anim/cockpit_window_left
+ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 3.240000
@@ -4942,20 +4942,20 @@ ANIM_rotate_key 1.000000 -0.000000
 ANIM_rotate_end
 ANIM_trans 0.802567 1.492600 21.641899 0.802567 1.492600 21.641899 0.000000 0.000000 none
 ANIM_begin
-ANIM_hide 0.000000 0.000000 sim/custom/t154_efb/enabled
+ANIM_hide 0.000000 0.000000 tu154/custom/t154_efb/enabled
 TRIS 981 8634
 ANIM_end
 ANIM_end
 ANIM_begin
-ANIM_hide 0.000000 0.000000 sim/custom/t154_efb/cable_connect
-ANIM_trans_begin sim/custom/anim/cockpit_window_left
+ANIM_hide 0.000000 0.000000 tu154/custom/t154_efb/cable_connect
+ANIM_trans_begin tu154/custom/anim/cockpit_window_left
 ANIM_trans_key 0.000000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.200000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.400000 0.000000 0.000000 0.000000
 ANIM_trans_key 1.000000 -0.146900 -0.048700 0.388100
 ANIM_trans_end
 ANIM_trans -0.816234 -1.492600 -21.641899 -0.816234 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.013665 0.000000 0.999907 sim/custom/anim/cockpit_window_left
+ANIM_rotate_begin 0.013665 0.000000 0.999907 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 5.340000
@@ -4963,7 +4963,7 @@ ANIM_rotate_key 1.000000 5.510000
 ANIM_rotate_end
 ANIM_trans 0.816234 1.492600 21.641899 0.816234 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans -0.829900 -1.492600 -21.641899 -0.829900 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 sim/custom/anim/cockpit_window_left
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 -0.000000
 ANIM_rotate_key 0.200000 -0.000000
 ANIM_rotate_key 0.400000 7.550000
@@ -4971,7 +4971,7 @@ ANIM_rotate_key 1.000000 7.840000
 ANIM_rotate_end
 ANIM_trans 0.829900 1.492600 21.641899 0.829900 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans -0.802567 -1.492600 -21.641899 -0.802567 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 1.000000 0.000000 0.000000 sim/custom/anim/cockpit_window_left
+ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 3.240000
@@ -4979,7 +4979,7 @@ ANIM_rotate_key 1.000000 -0.000000
 ANIM_rotate_end
 ANIM_trans 0.802567 1.492600 21.641899 0.802567 1.492600 21.641899 0.000000 0.000000 none
 ANIM_begin
-ANIM_hide 0.000000 0.000000 sim/custom/t154_efb/enabled
+ANIM_hide 0.000000 0.000000 tu154/custom/t154_efb/enabled
 TRIS 9615 1848
 ANIM_end
 ANIM_end

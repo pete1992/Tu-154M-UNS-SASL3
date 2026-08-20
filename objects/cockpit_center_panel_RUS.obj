@@ -16527,7 +16527,7 @@ ANIM_begin
 ANIM_end
 ANIM_begin
 ANIM_end
-ATTR_light_level 0.000000 1.000000 sim/custom/lights/mid_left_panel_int
+ATTR_light_level 0.000000 1.000000 tu154/custom/lights/mid_left_panel_int
 TRIS 0 120
 ATTR_light_level_reset
 TRIS 120 1140
@@ -16535,12 +16535,12 @@ ATTR_no_cull
 TRIS 1260 306
 ATTR_cull
 TRIS 1566 7785
-ATTR_light_level 0.000000 1.000000 sim/custom/light/no_LIT
+ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
 TRIS 9351 708
 ATTR_light_level_reset
 ATTR_hard 
 TRIS 10059 84
-ATTR_light_level 0.000000 1.000000 sim/custom/uns/brt_r
+ATTR_light_level 0.000000 1.000000 tu154/custom/uns/brt_r
 ATTR_no_hard
 TRIS 10143 8994
 ATTR_no_cull
@@ -16551,7 +16551,7 @@ ATTR_no_cull
 TRIS 21351 840
 ATTR_cull
 TRIS 22191 264
-ATTR_light_level 0.000000 1.000000 sim/custom/uns/brt_l
+ATTR_light_level 0.000000 1.000000 tu154/custom/uns/brt_l
 TRIS 22455 9255
 ATTR_no_cull
 TRIS 31710 840

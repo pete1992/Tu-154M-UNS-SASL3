@@ -10,7 +10,7 @@ panelHeight3d = 4096
 sasl.options.set3DRendering(true)
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
-sasl.options.setRenderingMode2D(SASL_RENDER_2D_DEFAULT)
+sasl.options.setRenderingMode2D(SASL_RENDER_2D_MULTIPASS)
 sasl.options.setUpdateDrawingReady (true)
 --addSearchResourcesPath(moduleDirectory .. "/Custom Module/panels_2d/")
 addSearchResourcesPath(moduleDirectory .. "/Custom Module/texture/")
