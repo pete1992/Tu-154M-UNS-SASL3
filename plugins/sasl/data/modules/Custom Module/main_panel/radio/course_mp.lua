@@ -56,11 +56,13 @@ defineProps({
 local rot_small_sound = sasl.al.loadSample('Custom Sounds/cursmp.wav')
 local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 local switcher_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+
+-- 
 local text_font = sasl.gl.loadFont("digibold.ttf")
 sasl.gl.setFontGlyphSpacingFactor(text_font, 1.5)
 local FONT_SIZE = 58
-local TEXT_X = 87
-local TEXT_Y = 32
+local TEXT_X = 88
+local TEXT_Y = 30
 local TEXT_COLOR = {1, 0.3, 0.2, 1}
 sasl.al.setSampleGain(rot_small_sound, 700)
 
