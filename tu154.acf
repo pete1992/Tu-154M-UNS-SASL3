@@ -57257,13 +57257,13 @@ P acf/_elec_drive_eta 1.0
 P acf/_elec_fuelP 40.0
 P acf/_elec_regen_eta 0.0
 P acf/_elec_regen_rat 0.0
-P acf/_elev1_cratR 0.280000001
-P acf/_elev1_cratT 0.230000004
-P acf/_elev1_dn 22.0
+P acf/_elev1_cratR 0.308000001
+P acf/_elev1_cratT 0.253000004
+P acf/_elev1_dn 20.0
 P acf/_elev1_max_sweep_rat 1.0
 P acf/_elev1_rat1 1.0
 P acf/_elev1_rat2 1.0
-P acf/_elev1_up 27.500000000
+P acf/_elev1_up 25.0
 P acf/_elev1_v1 0.0
 P acf/_elev1_v2 0.0
 P acf/_elev2_cratR 0.0
