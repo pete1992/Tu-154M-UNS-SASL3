@@ -17,6 +17,13 @@
 -- - Verified the retraction ground interlock remains tied to X-Plane gear index 1,
 --   which represents the right main gear in this aircraft.
 
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
+
+
 defineProps({
     -- Hydraulics
     {"gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf},

@@ -11,3 +11,6 @@ createGlobalPropertyf("RXP/radios/indicators/hsi_flag_from_to_pilot", 0)
 createGlobalPropertyf("tu154/custom/xap/An24_gauges/mrp_cc", 0)
 createGlobalPropertyi("tu154/custom/tcas/vvi_left_new",0)
 createGlobalPropertyi("tu154/custom/failures/apu_pta6_fail", 0) -- PTA-6A tachometer converter failure
+createGlobalPropertyf("tu154/custom/anim/tiller_pos", 0)
+createGlobalPropertyi("tu154/custom/hydro/nosewheel_turn_power", 0)
+

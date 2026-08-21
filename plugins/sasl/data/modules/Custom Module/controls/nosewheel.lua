@@ -18,6 +18,14 @@ Changelog
   steering toggle command.
 ]]
 
+
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
+
+
 -- Nosewheel steering limits.
 local MAX_TILLER_ANGLE = 63
 local MAX_RUDDER_ANGLE = 63
