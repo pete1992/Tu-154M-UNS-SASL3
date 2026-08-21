@@ -12,6 +12,11 @@ Changelog
 - Kept all aircraft-system thresholds and normal operating behaviour unchanged.
 ]]
 
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 -- Flight controls panel.
 
 local max = math.max
