@@ -1,3 +1,4 @@
+-- current_counter.lua
 --[[
 Changelog
 - Grouped all 77 Dataref bindings through defineProps().

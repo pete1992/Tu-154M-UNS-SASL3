@@ -1,13 +1,10 @@
 --[[
 Changelog
-- Grouped all SASL property bindings through the local defineProps() initialization helper.
-- Preserved all property names, Dataref paths, constructors, and binding order.
-- Replaced Russian comments with English comments.
-- Fixed control sound detection so simultaneous opposite switch or button changes cannot cancel each other out.
-- Replaced exact APU bleed-air door endpoint comparisons with threshold-based open/closed states.
-- Reduced repeated Dataref reads inside per-frame functions by caching values locally.
-- Simplified the default X-Plane APU bridge without changing its intended behavior.
-- Preserved all gauge curves, warning thresholds, smoothing factors, lamp latching behavior, and unused bindings.
+- Uses the project-wide defineProps() helper instead of defining a local copy.
+- Added a dedicated PTA-6A tachometer-converter failure input.
+- Connected the PTA-6A FAIL annunciator to the real failure state and lamp test.
+- Preserved all existing APU gauge curves, warning thresholds, smoothing factors, lamp latching, control sounds, and simulator bridge behavior.
+- Preserved the existing APU starter, generator, oil-temperature, EGT, residual-fuel, general, and bleed-air failure bindings.
 ]]
 
 -- APU panel logic.
@@ -87,6 +84,7 @@ defineProps({
     -- Failures
     { "apu_start_fail", "tu154/custom/failures/apu_start_fail", globalPropertyi }, -- Starter failure
     { "apu_gen_fail", "tu154/custom/failures/apu_gen_fail", globalPropertyi }, -- Generator failure
+    { "apu_pta6_fail", "tu154/custom/failures/apu_pta6_fail", globalPropertyi }, -- PTA-6A tachometer converter failure
     { "apu_fail_oilt", "tu154/custom/failures/apu_fail_oilt", globalPropertyi }, -- Oil-temperature failure
     { "apu_fail_egt", "tu154/custom/failures/apu_fail_egt", globalPropertyi }, -- EGT failure
     { "apu_fail_fuel_left", "tu154/custom/failures/apu_fail_fuel_left", globalPropertyi }, -- Residual-fuel start failure
@@ -274,8 +272,9 @@ local function lamps()
     set(high_temp, math.max(high_temp_sign * lamps_brt, test_btn))
     set(high_rpm, math.max(high_rpm_sign * lamps_brt, test_btn))
 
-    -- PTA-6A failure indication is currently driven only by the lamp test.
-    set(pta6_fail, math.max(0, test_btn))
+    -- PTA-6A tachometer-converter failure indication.
+    local pta6_fail_brt = get(apu_pta6_fail) == 1 and main_sw and 1 or 0
+    set(pta6_fail, math.max(pta6_fail_brt * lamps_brt, test_btn))
 
     local doors_open_brt = apu_doors_open and 1 or 0
     set(doors_open, math.max(doors_open_brt * lamps_brt, test_btn))

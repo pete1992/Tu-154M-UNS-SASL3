@@ -99,11 +99,55 @@ defineProps({
     {"ismaster", "scp/api/ismaster", globalPropertyf},
 })
 
-local black_box_dir = moduleDirectory .. "/Custom Module/black_box"
+local black_box_dir = moduleDirectory .. "/../../../../black_box"
 local filename = black_box_dir .. "/default_file.bbox"
 local panel_numbers = "0"
 local initialized_filename = nil
 local save_timer = 0
+local black_box_dir_ready = false
+
+local function ensureBlackBoxDirectory()
+    if black_box_dir_ready then
+        return true
+    end
+
+    local probe_path = black_box_dir .. "/.msrp_write_test"
+    local probe = io.open(probe_path, "w")
+
+    if probe then
+        probe:close()
+        os.remove(probe_path)
+        black_box_dir_ready = true
+        return true
+    end
+
+    if not os or not os.execute then
+        print("MSRP: black_box directory is missing and os.execute is unavailable: " .. black_box_dir)
+        return false
+    end
+
+    local os_name = sasl and sasl.getOS and sasl.getOS() or ""
+
+    if os_name == "Windows" then
+        local windows_path = black_box_dir:gsub("/", "\\")
+        os.execute('mkdir "' .. windows_path .. '" >nul 2>&1')
+    else
+        local quoted_path = "'" .. black_box_dir:gsub("'", "'\\''") .. "'"
+        os.execute("mkdir -p " .. quoted_path .. " >/dev/null 2>&1")
+    end
+
+    probe = io.open(probe_path, "w")
+
+    if not probe then
+        print("MSRP: cannot create or write to black_box directory: " .. black_box_dir)
+        return false
+    end
+
+    probe:close()
+    os.remove(probe_path)
+    black_box_dir_ready = true
+    return true
+end
 
 local HEADER_NAMES = {
     "Sim time",
@@ -401,6 +445,10 @@ local function createFileName()
 end
 
 local function ensureFile()
+    if not ensureBlackBoxDirectory() then
+        return false
+    end
+
     if initialized_filename == filename then
         return true
     end

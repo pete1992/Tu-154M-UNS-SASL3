@@ -83,28 +83,28 @@ sasl.registerCommandHandler(flaps_cmd_up, 0, flaps_up_handler)
 sasl.registerCommandHandler(flaps_cmd_down, 0, flaps_down_handler)
 
 flap_lever_tbl = {
-{-50000, 0},
-{0, 0},
-{0.20, 15},
-{0.25, 15}, -- stop pos
-{0.30, 15},
-{0.45, 28},
-{0.50, 28}, -- stop pos
-{0.55, 28},
-{0.70, 36},
-{0.75, 36}, -- stop pos
-{0.80, 36},
-{0.95, 45},
-{1.00, 45}, -- stop pos
-{10000, 45}
+	{	-50000, 0  },
+	{	0, 0		   },
+	{	0.20, 15	},
+	{	0.25, 15	}, -- stop pos
+	{	0.30, 15	},
+	{	0.45, 28	},
+	{	0.50, 28	}, -- stop pos
+	{	0.55, 28	},
+	{	0.70, 36	},
+	{	0.75, 36	}, -- stop pos
+	{	0.80, 36	},
+	{	0.95, 45	},
+	{	1.00, 45	 }, -- stop pos
+	{	10000, 45  }
 }
 
 local mid_flap_tbl = {
-{0, 0},
-{15, 13},
-{28, 25},
-{36, 32},
-{45, 40}
+	{0, 0},
+	{15, 13},
+	{28, 25},
+	{36, 32},
+	{45, 40}
 }
 
 local flaps_pos_L_cmd = get(flap_inn_L)
@@ -351,6 +351,5 @@ if MASTER then
 	set(ctr_115_1_cc, CC_115_1)
 	set(ctr_115_3_cc, CC_115_3)
 	
-end	
-
+	end
 end

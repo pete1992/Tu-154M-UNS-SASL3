@@ -247,7 +247,6 @@ if MASTER then
 				set(apu_fail_egt, 1)
 			end
 		end
-		
 		apu_burning_fuel = 1
 	elseif fuel_press < 0.5 then
 		apu_burning_fuel = 0

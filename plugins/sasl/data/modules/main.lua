@@ -1,9 +1,6 @@
 print("This is the Tu154M 2.0.8")
 size = { 4096, 4096 }
 print("Lua version is", _VERSION)
-
-
-
 panelWidth3d = 4096
 panelHeight3d = 4096
 
@@ -12,9 +9,7 @@ sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
 sasl.options.setRenderingMode2D(SASL_RENDER_2D_MULTIPASS)
 sasl.options.setUpdateDrawingReady (true)
---addSearchResourcesPath(moduleDirectory .. "/Custom Module/panels_2d/")
 addSearchResourcesPath(moduleDirectory .. "/Custom Module/texture/")
---addSearchPath(moduleDirectory .. "/Custom Module/KLN90/")
 addSearchPath(moduleDirectory .. "/Custom Module/Custom Sounds")
 addSearchPath(moduleDirectory .. "/Custom Module/gui")
 addSearchPath(moduleDirectory .. "/Custom Module")

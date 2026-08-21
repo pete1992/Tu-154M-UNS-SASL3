@@ -4,7 +4,7 @@
 Changelog
 - Grouped all 29 existing Dataref bindings through defineProps() while preserving property names, paths, constructors, and original binding order.
 - Added X-Plane internal version detection for XP11/XP12-compatible sasl.al.playSample() calls.
-- Reduced all electric trim rates to 65% of the previous values through one TRIM_SPEED_SCALE constant.
+- Reduced all electric trim rates to 110% of the previous values through one TRIM_SPEED_SCALE constant.
 - Preserved the original 1.25 pitch-trim speed asymmetry below neutral.
 - Cached electrical power, trim controls, failures, and trim positions once per frame.
 - Replaced manual limit code with clamp() calls for readability.
@@ -76,8 +76,8 @@ local SAMPLES = {
     center = sasl.al.loadSample("Custom Sounds/trimm_ctr.wav"),
 }
 
--- Global trim-speed tuning. 0.65 = 65% of the original speed.
-local TRIM_SPEED_SCALE = 0.65
+-- Global trim-speed tuning. 1.10 = 110% of the original speed.
+local TRIM_SPEED_SCALE = 1.10
 
 local PITCH_LIMIT = 0.80
 local ROLL_LIMIT = 0.24
