@@ -1,0 +1,86 @@
+[GTN_650_1]
+; comma separated list of render targets.
+drawto = WINDOW, PANELS
+FuelType = JETA
+; connects to: 'PFC_GTN' or any '#PID' (#D067 for PFC_GTN)
+; no value connects to first found, 'OFF' disables connection.
+HardwareDevice = 
+; hardware selector number or -1 to disable.
+HardwareIdx = -1
+LinkCrs = true
+LinkSimGps = false
+; comma separated list of read only settings.
+locked = 
+; is the master device if true.
+MasterDevice = false
+; aviation db: 0: nav_db2_grm, 1: nav_db2, 2: nav_heli_db2_grmn, 3: nav_heli_db2
+NavDbType = 1
+PowerKnob = NONE
+PowerSource = ALWAYS_ON
+UseCrossFill = false
+UseSimGpsCmds = true
+AutoSavePln = true
+LinkObs = true
+UseTransponder = false
+UseRyanTcad = false
+AutoNavSource = 1
+AFMS.vnav_trans_altitude = 50
+LinkVor = true
+AutoGpsSource = 1
+AutoCdiSrc = true
+RadiosPair = 2
+UseAudioPanel = false
+
+[GTN_650_1.WINDOW]
+; auto hide in external view if true.
+autohide = false
+; screen only border color (#RGB or #RGBA).
+border.rgba = #000000
+; screen only border size (pixels).
+border.size = 0
+; display position and dimension (left,top,width,height)
+frame.rect = 1499,1080,422,178
+; display type: WINDOW,PANEL2D,PANEL3D,PANELS
+frame.type = WINDOW
+; freeze display position if true.
+locked = false
+; show screen only gauge if true.
+nobezel = false
+; left mouse button on the screen toggles popup window if true (requires SHIFT+left mouse button).
+popleft = false
+; right mouse button on the screen toggles popup window if true (requires XP11.1).
+popright = false
+; display mouse tooltips if true.
+tooltips = false
+; display as popout window if true (requires XP11.1).
+undocked = false
+; enable mouse clickspots if true, disable if false (use SHIFT to override)
+usemouse = true 
+; display window if true.
+visible = false
+; VR mode position and dimension (left,top,width,height) (requires XP11.20)
+vrmode.rect = 0,0,415,175
+
+[GTN_650_1.PANELS]
+; screen only border color (#RGB or #RGBA).
+border.rgba = #000000
+; screen only border size (pixels).
+border.size = 0
+; display position and dimension (left,top,width,height)
+frame.rect = 0,0,0,0
+; display type: WINDOW,PANEL2D,PANEL3D,PANELS
+frame.type = PANELS
+; show screen only gauge if true.
+nobezel = true
+; left mouse button on the screen toggles popup window if true (requires SHIFT+left mouse button).
+popleft = false
+; right mouse button on the screen toggles popup window if true (requires XP11.1).
+popright = true
+; enable mouse clickspots if true, disable if false (use SHIFT to override)
+usemouse = true
+; display window if true.
+visible = false
+
+[GTN]
+; comma separated list of gauges
+gauges = GTN_650_1
