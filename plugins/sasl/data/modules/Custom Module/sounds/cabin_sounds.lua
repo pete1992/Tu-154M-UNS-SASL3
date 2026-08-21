@@ -127,19 +127,15 @@ local STATE = {
     roll_last = get(roll_main_mode),
     pitch_last = get(pitch_main_mode),
     stu_last = get(stu_mode),
-
     invert_counter = 0,
-
     short_siren_timer = 0,
     short_speaker_timer = 0,
     long_speaker_timer = 0, -- Preserved legacy state.
-
     srd_buzzer_last = 0,
     fuel_buzzer_last = 0,
     srd_cap_last = 0,
     fuel_cap_last = 0,
     button_last = 0,
-
     fail_counter = 0,
     check_time = math.random(15, 30),
 }
