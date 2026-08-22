@@ -1,89 +1,98 @@
--- this is ABSU 2D panel
+-- ABSU 2D panel.
+-- SASL 3 native component.
+--
+-- Porting notes:
+-- - DataRef bindings are grouped through a file-local defineProps() helper.
+-- - Removed unused frame_time and absu_stab_lamp bindings.
+-- - Restored single-click mouse semantics for switches/selectors.
+-- - Child components are explicitly updated and drawn because this component
+--   defines its own update() and draw() callbacks.
 
 size = {917, 597}
 
-defineProperty("hide_eng_objects", globalPropertyi("tu154/custom/lang/hide_eng_objects")) --    . 1 = RUS
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        defineProperty(def[1], def[3](def[2]))
+    end
+end
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+defineProps({
+    -- Language and panel state.
+    {"hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi}, -- 1 = Russian textures.
+    {"show_absu_panel", "tu154/custom/panels/show_absu_panel", globalPropertyi},
 
-defineProperty("show_absu_panel",globalPropertyi("tu154/custom/panels/show_absu_panel")) --   
--- gauges
-defineProperty("absu_roll_mode", globalPropertyi("tu154/custom/gauges/console/absu_roll_mode")) --   . 0 - , 1 - , 2 - 
-defineProperty("absu_pitch_mode", globalPropertyi("tu154/custom/gauges/console/absu_pitch_mode")) --   . 0 - , 1 - , 2 - 
+    -- ABSU mode indication.
+    {"absu_roll_mode", "tu154/custom/gauges/console/absu_roll_mode", globalPropertyi}, -- 0 = off, 1 = yoke, 2 = stabilization.
+    {"absu_pitch_mode", "tu154/custom/gauges/console/absu_pitch_mode", globalPropertyi}, -- 0 = off, 1 = yoke, 2 = stabilization.
 
--- controls
-defineProperty("absu_zpu_sel", globalPropertyi("tu154/custom/switchers/console/absu_zpu_sel")) --  .  - 
-defineProperty("absu_nav_on", globalPropertyi("tu154/custom/switchers/console/absu_nav_on")) --  
-defineProperty("absu_landing_on", globalPropertyi("tu154/custom/switchers/console/absu_landing_on")) --  
-defineProperty("absu_needles_on", globalPropertyi("tu154/custom/switchers/console/absu_needles_on")) -- 
-defineProperty("absu_speed_mode", globalPropertyi("tu154/custom/switchers/console/absu_speed_mode")) --  . 0 - , 1 - , 2 - 1, 3 - 2, 4 - 
-defineProperty("absu_speed_change", globalPropertyi("tu154/custom/switchers/console/absu_speed_change")) --   . 
-defineProperty("absu_speed_off", globalPropertyi("tu154/custom/switchers/console/absu_speed_off")) --  1  2
-defineProperty("absu_speed_prepare", globalPropertyi("tu154/custom/switchers/console/absu_speed_prepare")) -- 
-defineProperty("absu_speed_us_right_left", globalPropertyi("tu154/custom/switchers/console/absu_speed_us_right_left")) -- 
+    -- Controls.
+    {"absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi}, -- ZPU selector: left/right.
+    {"absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi},
+    {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi},
+    {"absu_needles_on", "tu154/custom/switchers/console/absu_needles_on", globalPropertyi},
+    {"absu_speed_mode", "tu154/custom/switchers/console/absu_speed_mode", globalPropertyi}, -- STU: 0 off, 1 NVU, 2 AZ1, 3 AZ2, 4 APP.
+    {"absu_speed_change", "tu154/custom/switchers/console/absu_speed_change", globalPropertyi},
+    {"absu_speed_off", "tu154/custom/switchers/console/absu_speed_off", globalPropertyi},
+    {"absu_speed_prepare", "tu154/custom/switchers/console/absu_speed_prepare", globalPropertyi},
+    {"absu_speed_us_right_left", "tu154/custom/switchers/console/absu_speed_us_right_left", globalPropertyi},
+    {"absu_roll_ch_on", "tu154/custom/switchers/console/absu_roll_ch_on", globalPropertyi},
+    {"absu_pitch_ch_on", "tu154/custom/switchers/console/absu_pitch_ch_on", globalPropertyi},
+    {"absu_smooth_on", "tu154/custom/switchers/console/absu_smooth_on", globalPropertyi},
+    {"absu_turn_handle", "tu154/custom/switchers/console/absu_turn_handle", globalPropertyi},
+    {"absu_pitch_wheel", "tu154/custom/switchers/console/absu_pitch_wheel", globalPropertyf},
+    {"absu_pitch_wheel_dir", "tu154/custom/switchers/console/absu_pitch_wheel_dir", globalPropertyi},
 
-defineProperty("absu_roll_ch_on", globalPropertyi("tu154/custom/switchers/console/absu_roll_ch_on")) --   
-defineProperty("absu_pitch_ch_on", globalPropertyi("tu154/custom/switchers/console/absu_pitch_ch_on")) --   
-defineProperty("absu_smooth_on", globalPropertyi("tu154/custom/switchers/console/absu_smooth_on")) --  " "
+    -- Pushbuttons.
+    {"absu_zk", "tu154/custom/buttons/console/absu_zk", globalPropertyi},
+    {"absu_reset", "tu154/custom/buttons/console/absu_reset", globalPropertyi},
+    {"absu_nvu", "tu154/custom/buttons/console/absu_nvu", globalPropertyi},
+    {"absu_az1", "tu154/custom/buttons/console/absu_az1", globalPropertyi},
+    {"absu_az2", "tu154/custom/buttons/console/absu_az2", globalPropertyi},
+    {"absu_app", "tu154/custom/buttons/console/absu_app", globalPropertyi},
+    {"absu_gs", "tu154/custom/buttons/console/absu_gs", globalPropertyi},
+    {"absu_stab_m", "tu154/custom/buttons/console/absu_stab_m", globalPropertyi},
+    {"absu_stab_v", "tu154/custom/buttons/console/absu_stab_v", globalPropertyi},
+    {"absu_stab_h", "tu154/custom/buttons/console/absu_stab_h", globalPropertyi},
+    {"absu_stab", "tu154/custom/buttons/console/absu_stab", globalPropertyi},
+    {"absu_arrest", "tu154/custom/buttons/console/absu_arrest", globalPropertyi},
+    {"absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi},
+    {"absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2", globalPropertyi},
+    {"absu_stab_speed", "tu154/custom/buttons/console/absu_stab_speed", globalPropertyi},
+    {"absu_throt_off_1", "tu154/custom/buttons/console/absu_throt_off_1", globalPropertyi},
+    {"absu_throt_off_2", "tu154/custom/buttons/console/absu_throt_off_2", globalPropertyi},
+    {"absu_throt_off_3", "tu154/custom/buttons/console/absu_throt_off_3", globalPropertyi},
 
-defineProperty("absu_turn_handle", globalPropertyi("tu154/custom/switchers/console/absu_turn_handle")) --  
-defineProperty("absu_pitch_wheel", globalPropertyf("tu154/custom/switchers/console/absu_pitch_wheel")) --  , 
-defineProperty("absu_pitch_wheel_dir", globalPropertyi("tu154/custom/switchers/console/absu_pitch_wheel_dir")) --  , 
+    -- Safety caps.
+    {"absu_arrest_cap", "tu154/custom/buttons/console/absu_arrest_cap", globalPropertyi},
+    {"absu_smooth_on_cap", "tu154/custom/switchers/console/absu_smooth_on_cap", globalPropertyi},
+    {"absu_speed_prepare_cap", "tu154/custom/switchers/console/absu_speed_prepare_cap", globalPropertyi},
+    {"absu_speed_off_cap", "tu154/custom/switchers/console/absu_speed_off_cap", globalPropertyi},
 
--- buttons
-defineProperty("absu_zk", globalPropertyi("tu154/custom/buttons/console/absu_zk")) --     
-defineProperty("absu_reset", globalPropertyi("tu154/custom/buttons/console/absu_reset")) --      
-defineProperty("absu_nvu", globalPropertyi("tu154/custom/buttons/console/absu_nvu")) --     
-defineProperty("absu_az1", globalPropertyi("tu154/custom/buttons/console/absu_az1")) --   1   
-defineProperty("absu_az2", globalPropertyi("tu154/custom/buttons/console/absu_az2")) --   2   
-defineProperty("absu_app", globalPropertyi("tu154/custom/buttons/console/absu_app")) --     
-defineProperty("absu_gs", globalPropertyi("tu154/custom/buttons/console/absu_gs")) --     
-defineProperty("absu_stab_m", globalPropertyi("tu154/custom/buttons/console/absu_stab_m")) --  M   
-defineProperty("absu_stab_v", globalPropertyi("tu154/custom/buttons/console/absu_stab_v")) --  V   
-defineProperty("absu_stab_h", globalPropertyi("tu154/custom/buttons/console/absu_stab_h")) --  H   
-defineProperty("absu_stab", globalPropertyi("tu154/custom/buttons/console/absu_stab")) --     
+    -- Button lamps.
+    {"absu_zk_lamp", "tu154/custom/lights/button/absu_zk", globalPropertyf},
+    {"absu_reset_lamp", "tu154/custom/lights/button/absu_reset", globalPropertyf},
+    {"absu_nvu_lamp", "tu154/custom/lights/button/absu_nvu", globalPropertyf},
+    {"absu_az1_lamp", "tu154/custom/lights/button/absu_az1", globalPropertyf},
+    {"absu_az2_lamp", "tu154/custom/lights/button/absu_az2", globalPropertyf},
+    {"absu_app_lamp", "tu154/custom/lights/button/absu_app", globalPropertyf},
+    {"absu_gz_lamp", "tu154/custom/lights/button/absu_gz", globalPropertyf},
+    {"absu_stab_m_lamp", "tu154/custom/lights/button/absu_stab_m", globalPropertyf},
+    {"absu_stab_v_lamp", "tu154/custom/lights/button/absu_stab_v", globalPropertyf},
+    {"absu_stab_h_lamp", "tu154/custom/lights/button/absu_stab_h", globalPropertyf},
+    {"absu_stab_spd_lamp", "tu154/custom/lights/button/absu_stab_spd", globalPropertyf},
+    {"absu_thro1_lamp", "tu154/custom/lights/button/absu_thro1", globalPropertyf},
+    {"absu_thro2_lamp", "tu154/custom/lights/button/absu_thro2", globalPropertyf},
+    {"absu_thro3_lamp", "tu154/custom/lights/button/absu_thro3", globalPropertyf},
 
-defineProperty("absu_arrest", globalPropertyi("tu154/custom/buttons/console/absu_arrest")) --   
-defineProperty("absu_speed_test_1", globalPropertyi("tu154/custom/buttons/console/absu_speed_test_1")) --    
-defineProperty("absu_speed_test_2", globalPropertyi("tu154/custom/buttons/console/absu_speed_test_2")) --    
+    -- Small status lamps.
+    {"stu_roll_lamp", "tu154/custom/lights/small/stu_roll", globalPropertyf},
+    {"stu_pitch_lamp", "tu154/custom/lights/small/stu_pitch", globalPropertyf},
+    {"stu_toga_lamp", "tu154/custom/lights/small/stu_toga", globalPropertyf},
+    {"at_1_lamp", "tu154/custom/lights/small/at_1", globalPropertyf},
+    {"at_2_lamp", "tu154/custom/lights/small/at_2", globalPropertyf},
+})
 
-defineProperty("absu_stab_speed", globalPropertyi("tu154/custom/buttons/console/absu_stab_speed")) --  C   
-defineProperty("absu_throt_off_1", globalPropertyi("tu154/custom/buttons/console/absu_throt_off_1")) --   1   
-defineProperty("absu_throt_off_2", globalPropertyi("tu154/custom/buttons/console/absu_throt_off_2")) --   2   
-defineProperty("absu_throt_off_3", globalPropertyi("tu154/custom/buttons/console/absu_throt_off_3")) --   3   
-
--- caps
-defineProperty("absu_arrest_cap", globalPropertyi("tu154/custom/buttons/console/absu_arrest_cap")) --    
-defineProperty("absu_smooth_on_cap", globalPropertyi("tu154/custom/switchers/console/absu_smooth_on_cap")) --  " "
-defineProperty("absu_speed_prepare_cap", globalPropertyi("tu154/custom/switchers/console/absu_speed_prepare_cap")) -- 
-defineProperty("absu_speed_off_cap", globalPropertyi("tu154/custom/switchers/console/absu_speed_off_cap")) --  1  2
-
--- lamps
-defineProperty("absu_zk_lamp", globalPropertyf("tu154/custom/lights/button/absu_zk")) --  
-defineProperty("absu_reset_lamp", globalPropertyf("tu154/custom/lights/button/absu_reset")) --  
-defineProperty("absu_nvu_lamp", globalPropertyf("tu154/custom/lights/button/absu_nvu")) --  
-defineProperty("absu_az1_lamp", globalPropertyf("tu154/custom/lights/button/absu_az1")) --  
-defineProperty("absu_az2_lamp", globalPropertyf("tu154/custom/lights/button/absu_az2")) --  
-defineProperty("absu_app_lamp", globalPropertyf("tu154/custom/lights/button/absu_app")) --  
-defineProperty("absu_gz_lamp", globalPropertyf("tu154/custom/lights/button/absu_gz")) --  
-defineProperty("absu_stab_m_lamp", globalPropertyf("tu154/custom/lights/button/absu_stab_m")) --  
-defineProperty("absu_stab_v_lamp", globalPropertyf("tu154/custom/lights/button/absu_stab_v")) --  
-defineProperty("absu_stab_h_lamp", globalPropertyf("tu154/custom/lights/button/absu_stab_h")) --  
-defineProperty("absu_stab_lamp", globalPropertyf("tu154/custom/lights/button/absu_stab")) --  
-defineProperty("absu_stab_spd_lamp", globalPropertyf("tu154/custom/lights/button/absu_stab_spd")) --  
-defineProperty("absu_thro1_lamp", globalPropertyf("tu154/custom/lights/button/absu_thro1")) --  
-defineProperty("absu_thro2_lamp", globalPropertyf("tu154/custom/lights/button/absu_thro2")) --  
-defineProperty("absu_thro3_lamp", globalPropertyf("tu154/custom/lights/button/absu_thro3")) --  
-
-defineProperty("stu_roll_lamp", globalPropertyf("tu154/custom/lights/small/stu_roll")) -- 
-defineProperty("stu_pitch_lamp", globalPropertyf("tu154/custom/lights/small/stu_pitch")) -- 
-defineProperty("stu_toga_lamp", globalPropertyf("tu154/custom/lights/small/stu_toga")) -- 
-
-defineProperty("at_1_lamp", globalPropertyf("tu154/custom/lights/small/at_1")) --  1
-defineProperty("at_2_lamp", globalPropertyf("tu154/custom/lights/small/at_2")) --  2
-
--- load images ENG
+-- English texture resources.
 defineProperty("bg_img", sasl.gl.loadImage("absu_bk.png"))
 
 defineProperty("contr_off_img", sasl.gl.loadImage("absu_ess.png", 6, 342, 85, 69))
@@ -125,7 +134,7 @@ defineProperty("black_cap_open", sasl.gl.loadImage("absu_ess.png", 374, 114, 56,
 
 defineProperty("small_lamp", sasl.gl.loadImage("absu_ess.png", 167, 9, 31, 31))
 
--- load images RUS
+-- Russian texture resources.
 defineProperty("bg_img_RUS", sasl.gl.loadImage("absu_bk_RUS.png"))
 
 defineProperty("contr_off_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 6, 342, 85, 69))
@@ -145,44 +154,11 @@ defineProperty("off_3_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 361, 
 
 defineProperty("arrest_cap_closed_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 244, 11, 55, 92))
 
-local RUS = true
-
--- test
-
---[[
-local lang_last = RUS
-
-local bg_image = sasl.gl.loadImage("absu_bk_RUS.png")
-
-local function changeBG()
-  if RUS then
-   
-    bg_image = sasl.gl.loadImage("absu_bk_RUS.png") -- load a new one
-	
-	print(bg_image)
-  else
-    
-    bg_image = sasl.gl.loadImage("absu_bk.png") -- load a new one
-	
-	print(bg_image)
-  end
-  
-end
-
---]]
+local RUS = get(hide_eng_objects) == 1
 
 function update()
-
-	RUS = get(hide_eng_objects) == 1
- --[[
-	-- test
-	if lang_last ~= RUS then
-		--changeBG() -- change background on changing the language
-		lang_last = RUS
-	end
- 
---]]	
- 
+    RUS = get(hide_eng_objects) == 1
+    updateAll(components)
 end
 
 components = {
@@ -536,7 +512,7 @@ components = {
 		state = function()
 			return get(absu_nav_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(absu_nav_on, 1 - get(absu_nav_on))
 			return true
 		end,
@@ -550,7 +526,7 @@ components = {
 		state = function()
 			return get(absu_landing_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(absu_landing_on, 1 - get(absu_landing_on))
 			return true
 		end,
@@ -564,7 +540,7 @@ components = {
 		state = function()
 			return get(absu_needles_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(absu_needles_on, 1 - get(absu_needles_on))
 			return true
 		end,
@@ -578,7 +554,7 @@ components = {
 		state = function()
 			return get(absu_roll_ch_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(absu_roll_ch_on, 1 - get(absu_roll_ch_on))
 			return true
 		end,
@@ -592,7 +568,7 @@ components = {
 		state = function()
 			return get(absu_pitch_ch_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(absu_pitch_ch_on, 1 - get(absu_pitch_ch_on))
 			return true
 		end,
@@ -606,7 +582,7 @@ components = {
 		state = function()
 			return get(absu_smooth_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(absu_smooth_on, 1 - get(absu_smooth_on))
 			return true
 		end,
@@ -623,7 +599,7 @@ components = {
 		state = function()
 			return get(absu_speed_prepare) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(absu_speed_prepare, 1 - get(absu_speed_prepare))
 			return true
 		end,
@@ -640,7 +616,7 @@ components = {
 		state = function()
 			return get(absu_speed_us_right_left) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(absu_speed_us_right_left, 1 - get(absu_speed_us_right_left))
 			return true
 		end,
@@ -673,7 +649,7 @@ components = {
 	interactive {
 		position = {714, 148, 28, 50},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			
 			local a = get(absu_speed_off) - 1
 			if a < -1 then a = 0 end
@@ -688,7 +664,7 @@ components = {
 	interactive {
 		position = {714, 198, 28, 50},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			
 			local a = get(absu_speed_off) + 1
 			if a > 1 then a = 0 end
@@ -713,7 +689,7 @@ components = {
 	interactive {
 		position = {115, 458, 85, 85},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(absu_zpu_sel, 1 - get(absu_zpu_sel))
 			
 			return true
@@ -732,7 +708,7 @@ components = {
 	interactive {
 		position = {341, 157, 50, 50},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(absu_turn_handle) - 5
 			if a < -50 then a = -50 end
 			set(absu_turn_handle, a)
@@ -743,7 +719,7 @@ components = {
 	interactive {
 		position = {403, 157, 50, 50},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(absu_turn_handle) + 5
 			if a > 50 then a = 50 end
 			set(absu_turn_handle, a)
@@ -754,7 +730,7 @@ components = {
 	interactive {
 		position = {372, 217, 50, 50},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(absu_turn_handle, 0)
 			
 			return true
@@ -1043,7 +1019,7 @@ components = {
 	interactive {
 		position = {783, 443, 40, 80},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(absu_speed_mode) - 1
 			if a < 0 then a = 0 end
 			set(absu_speed_mode, a)
@@ -1054,7 +1030,7 @@ components = {
 	interactive {
 		position = {823, 443, 40, 80},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(absu_speed_mode) + 1
 			if a > 4 then a = 4 end
 			set(absu_speed_mode, a)
@@ -1243,7 +1219,7 @@ components = {
 	interactive {
 		position = {size[1] - 30, size[2] - 30, 30, 30 },
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_absu_panel, 0)
 			
 			return true
