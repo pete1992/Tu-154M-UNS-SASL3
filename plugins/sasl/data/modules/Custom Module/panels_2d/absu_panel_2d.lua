@@ -95,64 +95,71 @@ defineProps({
 -- English texture resources.
 defineProperty("bg_img", sasl.gl.loadImage("absu_bk.png"))
 
-defineProperty("contr_off_img", sasl.gl.loadImage("absu_ess.png", 6, 342, 85, 69))
-defineProperty("contr_stab_img", sasl.gl.loadImage("absu_ess.png", 6, 412, 85, 69))
+-- The atlas coordinates were authored from the PNG's top edge.  SASL 3 crops
+-- from the bottom edge, so every sprite row must be converted before loading.
+local ABSU_ATLAS_HEIGHT = 512
+local function absuAtlasY(top, height)
+    return ABSU_ATLAS_HEIGHT - top - height
+end
 
-defineProperty("reset_lamp_img", sasl.gl.loadImage("absu_ess.png", 359, 160, 54, 54))
-defineProperty("zk_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 160, 54, 54))
-defineProperty("nvu_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 217, 54, 54))
-defineProperty("az1_lamp_img", sasl.gl.loadImage("absu_ess.png", 301, 217, 54, 54))
-defineProperty("az2_lamp_img", sasl.gl.loadImage("absu_ess.png", 360, 217, 54, 54))
-defineProperty("app_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 273, 54, 54))
-defineProperty("gs_lamp_img", sasl.gl.loadImage("absu_ess.png", 360, 273, 54, 54))
-defineProperty("m_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 330, 54, 54))
-defineProperty("v_lamp_img", sasl.gl.loadImage("absu_ess.png", 302, 330, 54, 54))
-defineProperty("h_lamp_img", sasl.gl.loadImage("absu_ess.png", 361, 330, 54, 54))
-defineProperty("stab_lamp_img", sasl.gl.loadImage("absu_ess.png", 302, 273, 54, 54))
-defineProperty("off_1_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, 388, 54, 54))
-defineProperty("off_2_lamp_img", sasl.gl.loadImage("absu_ess.png", 303, 388, 54, 54))
-defineProperty("off_3_lamp_img", sasl.gl.loadImage("absu_ess.png", 361, 388, 54, 54))
+defineProperty("contr_off_img", sasl.gl.loadImage("absu_ess.png", 6, absuAtlasY(342, 69), 85, 69))
+defineProperty("contr_stab_img", sasl.gl.loadImage("absu_ess.png", 6, absuAtlasY(412, 69), 85, 69))
 
-defineProperty("sw_dn_img", sasl.gl.loadImage("absu_ess.png", 86, 7, 32, 110))
-defineProperty("sw_up_img", sasl.gl.loadImage("absu_ess.png", 125, 7, 32, 110))
-defineProperty("sw_ctr_img", sasl.gl.loadImage("absu_ess.png", 165, 88, 36, 36))
+defineProperty("reset_lamp_img", sasl.gl.loadImage("absu_ess.png", 359, absuAtlasY(160, 54), 54, 54))
+defineProperty("zk_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, absuAtlasY(160, 54), 54, 54))
+defineProperty("nvu_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, absuAtlasY(217, 54), 54, 54))
+defineProperty("az1_lamp_img", sasl.gl.loadImage("absu_ess.png", 301, absuAtlasY(217, 54), 54, 54))
+defineProperty("az2_lamp_img", sasl.gl.loadImage("absu_ess.png", 360, absuAtlasY(217, 54), 54, 54))
+defineProperty("app_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, absuAtlasY(273, 54), 54, 54))
+defineProperty("gs_lamp_img", sasl.gl.loadImage("absu_ess.png", 360, absuAtlasY(273, 54), 54, 54))
+defineProperty("m_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, absuAtlasY(330, 54), 54, 54))
+defineProperty("v_lamp_img", sasl.gl.loadImage("absu_ess.png", 302, absuAtlasY(330, 54), 54, 54))
+defineProperty("h_lamp_img", sasl.gl.loadImage("absu_ess.png", 361, absuAtlasY(330, 54), 54, 54))
+defineProperty("stab_lamp_img", sasl.gl.loadImage("absu_ess.png", 302, absuAtlasY(273, 54), 54, 54))
+defineProperty("off_1_lamp_img", sasl.gl.loadImage("absu_ess.png", 243, absuAtlasY(388, 54), 54, 54))
+defineProperty("off_2_lamp_img", sasl.gl.loadImage("absu_ess.png", 303, absuAtlasY(388, 54), 54, 54))
+defineProperty("off_3_lamp_img", sasl.gl.loadImage("absu_ess.png", 361, absuAtlasY(388, 54), 54, 54))
 
-defineProperty("switcher_big", sasl.gl.loadImage("absu_ess.png", 0, 0, 78, 124))
-defineProperty("roll_knob", sasl.gl.loadImage("absu_ess.png", 2, 132, 196, 196))
+defineProperty("sw_dn_img", sasl.gl.loadImage("absu_ess.png", 86, absuAtlasY(7, 110), 32, 110))
+defineProperty("sw_up_img", sasl.gl.loadImage("absu_ess.png", 125, absuAtlasY(7, 110), 32, 110))
+defineProperty("sw_ctr_img", sasl.gl.loadImage("absu_ess.png", 165, absuAtlasY(88, 36), 36, 36))
 
-defineProperty("spd_hnd", sasl.gl.loadImage("absu_ess.png", 445, 13, 52, 114))
-defineProperty("wheel_img", sasl.gl.loadImage("absu_ess.png", 212, 0, 21, 512))
+defineProperty("switcher_big", sasl.gl.loadImage("absu_ess.png", 0, absuAtlasY(0, 124), 78, 124))
+defineProperty("roll_knob", sasl.gl.loadImage("absu_ess.png", 2, absuAtlasY(132, 196), 196, 196))
 
-defineProperty("arrest_cap_closed", sasl.gl.loadImage("absu_ess.png", 244, 11, 55, 92))
-defineProperty("arrest_cap_open", sasl.gl.loadImage("absu_ess.png", 243, 115, 55, 37))
+defineProperty("spd_hnd", sasl.gl.loadImage("absu_ess.png", 445, absuAtlasY(13, 114), 52, 114))
+defineProperty("wheel_img", sasl.gl.loadImage("absu_ess.png", 212, absuAtlasY(0, 512), 21, 512))
 
-defineProperty("smooth_cap_closed", sasl.gl.loadImage("absu_ess.png", 315, 14, 47, 89))
-defineProperty("smooth_cap_open", sasl.gl.loadImage("absu_ess.png", 314, 115, 48, 37))
+defineProperty("arrest_cap_closed", sasl.gl.loadImage("absu_ess.png", 244, absuAtlasY(11, 92), 55, 92))
+defineProperty("arrest_cap_open", sasl.gl.loadImage("absu_ess.png", 243, absuAtlasY(115, 37), 55, 37))
 
-defineProperty("black_cap_closed", sasl.gl.loadImage("absu_ess.png", 374, 14, 56, 86))
-defineProperty("black_cap_open", sasl.gl.loadImage("absu_ess.png", 374, 114, 56, 37))
+defineProperty("smooth_cap_closed", sasl.gl.loadImage("absu_ess.png", 315, absuAtlasY(14, 89), 47, 89))
+defineProperty("smooth_cap_open", sasl.gl.loadImage("absu_ess.png", 314, absuAtlasY(115, 37), 48, 37))
 
-defineProperty("small_lamp", sasl.gl.loadImage("absu_ess.png", 167, 9, 31, 31))
+defineProperty("black_cap_closed", sasl.gl.loadImage("absu_ess.png", 374, absuAtlasY(14, 86), 56, 86))
+defineProperty("black_cap_open", sasl.gl.loadImage("absu_ess.png", 374, absuAtlasY(114, 37), 56, 37))
+
+defineProperty("small_lamp", sasl.gl.loadImage("absu_ess.png", 167, absuAtlasY(9, 31), 31, 31))
 
 -- Russian texture resources.
 defineProperty("bg_img_RUS", sasl.gl.loadImage("absu_bk_RUS.png"))
 
-defineProperty("contr_off_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 6, 342, 85, 69))
-defineProperty("contr_stab_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 6, 412, 85, 69))
+defineProperty("contr_off_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 6, absuAtlasY(342, 69), 85, 69))
+defineProperty("contr_stab_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 6, absuAtlasY(412, 69), 85, 69))
 
-defineProperty("reset_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 359, 160, 54, 54))
-defineProperty("zk_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, 160, 54, 54))
-defineProperty("nvu_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, 217, 54, 54))
-defineProperty("az1_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 301, 217, 54, 54))
-defineProperty("az2_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 360, 217, 54, 54))
-defineProperty("app_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, 273, 54, 54))
-defineProperty("gs_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 360, 273, 54, 54))
-defineProperty("stab_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 302, 273, 54, 54))
-defineProperty("off_1_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, 388, 54, 54))
-defineProperty("off_2_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 303, 388, 54, 54))
-defineProperty("off_3_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 361, 388, 54, 54))
+defineProperty("reset_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 359, absuAtlasY(160, 54), 54, 54))
+defineProperty("zk_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, absuAtlasY(160, 54), 54, 54))
+defineProperty("nvu_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, absuAtlasY(217, 54), 54, 54))
+defineProperty("az1_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 301, absuAtlasY(217, 54), 54, 54))
+defineProperty("az2_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 360, absuAtlasY(217, 54), 54, 54))
+defineProperty("app_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, absuAtlasY(273, 54), 54, 54))
+defineProperty("gs_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 360, absuAtlasY(273, 54), 54, 54))
+defineProperty("stab_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 302, absuAtlasY(273, 54), 54, 54))
+defineProperty("off_1_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 243, absuAtlasY(388, 54), 54, 54))
+defineProperty("off_2_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 303, absuAtlasY(388, 54), 54, 54))
+defineProperty("off_3_lamp_img_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 361, absuAtlasY(388, 54), 54, 54))
 
-defineProperty("arrest_cap_closed_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 244, 11, 55, 92))
+defineProperty("arrest_cap_closed_RUS", sasl.gl.loadImage("absu_ess_RUS.png", 244, absuAtlasY(11, 92), 55, 92))
 
 local RUS = get(hide_eng_objects) == 1
 

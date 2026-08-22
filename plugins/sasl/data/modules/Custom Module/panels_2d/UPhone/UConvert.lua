@@ -64,6 +64,7 @@ function update()
 		output2 = input * 1.33322 -- hPa
 
 	end
+	updateAll(components)
 end
 
 -- 0:KG 1:LB 2:KM 3:NM 4:MPS 5:FPM 6:hPA 7:inHg 8:mmHg
@@ -85,7 +86,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		if unit == 0 or unit == 1 then
 		input = input - 100
 		elseif unit == 2 or unit == 3 then
@@ -115,7 +116,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		if unit == 0 or unit == 1 then
 		input = input - 10
 		elseif unit == 2 or unit == 3 then
@@ -145,7 +146,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		if unit == 0 or unit == 1 then
 		input = input + 10
 		elseif unit == 2 or unit == 3 then
@@ -175,7 +176,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		if unit == 0 or unit == 1 then
 		input = input + 100
 		elseif unit == 2 or unit == 3 then
@@ -207,7 +208,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 0
 		unit = 0
 		return true
@@ -231,7 +232,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 0
 		unit = 1
 		return true
@@ -256,7 +257,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 0
 		unit = 2
 		return true
@@ -281,7 +282,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 0
 		unit = 3
 		return true
@@ -305,7 +306,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("interactive.png")
 		},  		
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 0
 		unit = 4
 		return true
@@ -330,7 +331,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 0
 		unit = 5
 		return true
@@ -355,7 +356,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("interactive.png")
 		},  		
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 1013.25
 		unit = 6
 		return true
@@ -380,7 +381,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 29.92
 		unit = 7
 		return true
@@ -404,7 +405,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("interactive.png")
 		},  		
-		onMouseHold = function()
+		onMouseDown = function()
 		input = 760
 		unit = 8
 		return true

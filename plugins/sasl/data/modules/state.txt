@@ -1,5 +1,11 @@
 state = {
     ['legacyPopups'] = {
+        ['payload_panel'] = {
+            [1] = 81;
+            [2] = 326;
+            [3] = 845.6;
+            [4] = 564.00859375;
+        };
         ['camera_panel'] = {
             [1] = 50;
             [2] = 1254;
@@ -48,176 +54,23 @@ state = {
             [3] = 525.196875;
             [4] = 649.0640625;
         };
-        ['payload_panel'] = {
-            [1] = 81;
-            [2] = 326;
-            [3] = 845.6;
-            [4] = 564.00859375;
-        };
     };
     ['contextWindows'] = {
-        ['camera_panel'] = {
-            ['position'] = {
-                [1] = 50;
-                [2] = 50;
-                [3] = 512;
-                [4] = 512;
-            };
+        ['payload_panel'] = {
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
-                    [3] = 512;
-                    [4] = 512;
+                    [3] = 1024;
+                    [4] = 683;
                 };
-                ['visible'] = false;
             };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['visible'] = false;
-        };
-        ['checklist_panel_2d'] = {
             ['position'] = {
-                [1] = 50;
-                [2] = 50;
-                [3] = 240;
-                [4] = 850;
-            };
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 240;
-                    [4] = 850;
-                };
-                ['visible'] = false;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['visible'] = false;
-        };
-        ['ovhd_2d_panel'] = {
-            ['position'] = {
-                [1] = 50;
-                [2] = 0;
-                [3] = 1458;
-                [4] = 1013;
-            };
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 0;
-                    [3] = 1458;
-                    [4] = 1013;
-                };
-                ['visible'] = false;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['visible'] = false;
-        };
-        ['palette'] = {
-            ['position'] = {
-                [1] = 50;
-                [2] = 50;
-                [3] = 251;
-                [4] = 305;
-            };
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 251;
-                    [4] = 305;
-                };
-                ['visible'] = false;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['visible'] = false;
-        };
-        ['absu_2d_panel'] = {
-            ['position'] = {
-                [1] = 50;
-                [2] = 50;
-                [3] = 917;
-                [4] = 597;
-            };
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 917;
-                    [4] = 597;
-                };
-                ['visible'] = false;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['visible'] = false;
-        };
-        ['ground_srv_panel'] = {
-            ['position'] = {
-                [1] = 514;
-                [2] = 224;
-                [3] = 655;
-                [4] = 880;
-            };
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 655;
-                    [4] = 880;
-                };
-                ['visible'] = false;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['visible'] = false;
-        };
-        ['uphone'] = {
-            ['position'] = {
-                [1] = 40;
-                [2] = 20;
-                [3] = 241;
-                [4] = 446;
-            };
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 40;
-                    [2] = 20;
-                    [3] = 241;
-                    [4] = 446;
-                };
-                ['visible'] = false;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['visible'] = false;
-        };
-        ['nvu_2D_panel'] = {
-            ['position'] = {
-                [1] = 50;
-                [2] = 0;
-                [3] = 636;
-                [4] = 786;
-            };
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 0;
-                    [3] = 636;
-                    [4] = 786;
-                };
-                ['visible'] = false;
+                [1] = 956;
+                [2] = 564;
+                [3] = 1024;
+                [4] = 683;
             };
             ['mode'] = {
                 [1] = 0;
@@ -231,10 +84,10 @@ state = {
                 [3] = 1770;
                 [4] = 562;
             };
+            ['visible'] = false;
             ['mode'] = {
                 [1] = 0;
             };
-            ['visible'] = false;
         };
         ['KLN90B'] = {
             ['position'] = {
@@ -243,26 +96,173 @@ state = {
                 [3] = 631;
                 [4] = 208;
             };
+            ['visible'] = false;
+            ['mode'] = {
+                [1] = 0;
+            };
+        };
+        ['camera_panel'] = {
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 512;
+                    [4] = 512;
+                };
+            };
+            ['position'] = {
+                [1] = 50;
+                [2] = 50;
+                [3] = 512;
+                [4] = 512;
+            };
             ['mode'] = {
                 [1] = 0;
             };
             ['visible'] = false;
         };
-        ['payload_panel'] = {
-            ['position'] = {
-                [1] = 956;
-                [2] = 564;
-                [3] = 1024;
-                [4] = 683;
-            };
+        ['checklist_panel_2d'] = {
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
-                    [3] = 1024;
-                    [4] = 683;
+                    [3] = 240;
+                    [4] = 850;
                 };
+            };
+            ['position'] = {
+                [1] = 50;
+                [2] = 50;
+                [3] = 240;
+                [4] = 850;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
+        };
+        ['ovhd_2d_panel'] = {
+            ['initState'] = {
                 ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 0;
+                    [3] = 1458;
+                    [4] = 1013;
+                };
+            };
+            ['position'] = {
+                [1] = 626;
+                [2] = 24;
+                [3] = 1458;
+                [4] = 1013;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
+        };
+        ['palette'] = {
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 251;
+                    [4] = 305;
+                };
+            };
+            ['position'] = {
+                [1] = 50;
+                [2] = 50;
+                [3] = 251;
+                [4] = 305;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
+        };
+        ['absu_2d_panel'] = {
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 917;
+                    [4] = 597;
+                };
+            };
+            ['position'] = {
+                [1] = 283;
+                [2] = 344;
+                [3] = 917;
+                [4] = 597;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
+        };
+        ['ground_srv_panel'] = {
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 655;
+                    [4] = 880;
+                };
+            };
+            ['position'] = {
+                [1] = 1729;
+                [2] = 222;
+                [3] = 655;
+                [4] = 880;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
+        };
+        ['uphone'] = {
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 40;
+                    [2] = 20;
+                    [3] = 241;
+                    [4] = 446;
+                };
+            };
+            ['position'] = {
+                [1] = 40;
+                [2] = 20;
+                [3] = 241;
+                [4] = 446;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
+        };
+        ['nvu_2D_panel'] = {
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 0;
+                    [3] = 636;
+                    [4] = 786;
+                };
+            };
+            ['position'] = {
+                [1] = 50;
+                [2] = 0;
+                [3] = 636;
+                [4] = 786;
             };
             ['mode'] = {
                 [1] = 0;

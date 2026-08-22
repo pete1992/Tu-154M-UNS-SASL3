@@ -9,7 +9,7 @@ defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failur
 defineProperty("have_pedals", globalPropertyi("tu154/custom/have_pedals"))
 --defineProperty("save_state_enabled",globalPropertyi("tu154/custom/save_state_enabled")) --     
 defineProperty("reset_state",globalPropertyi("tu154/custom/reset_state")) --   
-defineProperty("asu_work", globalPropertyf("tu154/custom/asu/work"))
+defineProperty("asu_work", globalPropertyi("tu154/custom/asu/work"))
 
 -- datarefs
 defineProperty("hide_rus_objects", globalPropertyi("tu154/custom/lang/hide_rus_objects")) --    
@@ -51,8 +51,8 @@ defineProperty("zone_6_pr",globalPropertyi("tu154/custom/payload/zone_6"))
 defineProperty("cargo_1_pr",globalPropertyi("tu154/custom/payload/cargo_1"))
 defineProperty("cargo_2_pr",globalPropertyi("tu154/custom/payload/cargo_2"))
 defineProperty("kitchens_pr",globalPropertyi("tu154/custom/payload/kitchens"))
-defineProperty("static_fail_L", globalPropertyi("sim/operation/failures/rel_static"))  -- static fail
-defineProperty("static_fail_R", globalPropertyi("sim/operation/failures/rel_static2"))  -- static fail
+defineProperty("sim_static_fail_L", globalPropertyi("sim/operation/failures/rel_static"))  -- static fail
+defineProperty("sim_static_fail_R", globalPropertyi("sim/operation/failures/rel_static2"))  -- static fail
 defineProperty("rel_pitot", globalPropertyi("sim/operation/failures/rel_pitot")) -- Pitot 1 - Blockage
 defineProperty("rel_pitot2", globalPropertyi("sim/operation/failures/rel_pitot2")) -- Pitot 2 - Blockage
 defineProperty("alpha_fail", globalPropertyi("sim/operation/failures/rel_AOA"))  -- angle of attack fail
@@ -67,22 +67,23 @@ defineProperty("starter_torq", globalPropertyf("sim/aircraft/engine/acf_starter_
 -- custom fails
 defineProperty("pitot_fail1", globalPropertyi("tu154/custom/failures/pitot1")) -- Pitot 1 - Blockage
 defineProperty("pitot_fail2", globalPropertyi("tu154/custom/failures/pitot2")) -- Pitot 2 - Blockage
-defineProperty("static_fail_L", globalPropertyi("tu154/custom/failures/static1"))  -- static fail
-defineProperty("static_fail_R", globalPropertyi("tu154/custom/failures/static2"))  -- static fail
+defineProperty("custom_static_fail_L", globalPropertyi("tu154/custom/failures/static1"))  -- static fail
+defineProperty("custom_static_fail_R", globalPropertyi("tu154/custom/failures/static2"))  -- static fail
 defineProperty("uap_fail", globalPropertyi("tu154/custom/failures/AOA")) -- fail
-local text_font = sasl.gl.loadBitmapFont('basic_font.fnt')
+-- Ground-panel status strings use a compact scalable font.  Verdana at the
+-- generic 24 px default is wider than the fields on this panel.
+local text_font = sasl.gl.loadFont('Verdana.ttf')
 -- load images
 defineProperty("bg_img", sasl.gl.loadImage("ground_tex.png")) -- ENG
 defineProperty("bg_img_rus", sasl.gl.loadImage("ground_tex_RUS.png")) -- ENG
-defineProperty("green_lamp", sasl.gl.loadImage("overhead_tex.png", 1825, 299, 19, 19))
-defineProperty("yellow_lamp", sasl.gl.loadImage("overhead_tex.png", 1825, 333, 19, 19))
-defineProperty("lev_img", sasl.gl.loadImage("absu_ess.png", 432, 160, 30, 29))
-asu_work = globalPropertyi("tu154/custom/asu/work")
-
+-- These atlas Y coordinates are already measured from the bottom edge, as
+-- required by SASL 3.  Flipping them selects transparent pixels.
+defineProperty("green_lamp", sasl.gl.loadImage("overhead_tex.png", 1825, 706, 19, 19))
+defineProperty("lev_img", sasl.gl.loadImage("absu_ess.png", 432, 324, 30, 29))
 -- sim/operation/toggle_yoke
-yokes_cmd = sasl.findCommand("sim/operation/toggle_yoke")
+local yokes_cmd = sasl.findCommand("sim/operation/toggle_yoke")
 
-function yokes_hnd(phase)
+local function yokes_hnd(phase)
 	if 0 == phase then
 		set(slider_9, 1 - get(slider_9))
 	end
@@ -238,14 +239,14 @@ function update()
 	set(fuel_tanker, fuel_tanker_pos)
 	-- set failures for Pitot tubes if blocked
 	if get(sensors_caps) == 1 then
-		set(static_fail_L, 6)
-		set(static_fail_R, 6)
+		set(sim_static_fail_L, 6)
+		set(sim_static_fail_R, 6)
 		set(rel_pitot, 6)
 		set(rel_pitot2, 6)
 		set(alpha_fail, 6)
 	else -- set custom failures into sim
-		set(static_fail_L, get(static_fail_L) * 6)
-		set(static_fail_R, get(static_fail_R) * 6)
+		set(sim_static_fail_L, get(custom_static_fail_L) * 6)
+		set(sim_static_fail_R, get(custom_static_fail_R) * 6)
 		set(rel_pitot, get(pitot_fail1) * 6)
 		set(rel_pitot2, get(pitot_fail2) * 6)
 		set(alpha_fail, get(uap_fail) * 6)
@@ -258,6 +259,7 @@ function update()
 	else
 		failPanelShow = true
 	end
+	updateAll(components)
 end
 components = {
 	-- background
@@ -278,12 +280,14 @@ components = {
 	------------------
 	-- state lamps --
 	------------------
+	-- Red OFF lamps are part of the background texture.  A green sprite is
+	-- overlaid only while the corresponding service or object is active.
 	-- left window
 	textureLit {
 		position = {232, 787, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(slider_1) == 0
+			return get(slider_1) == 1
 		end,
 	},
 	-- pax door 1
@@ -291,7 +295,7 @@ components = {
 		position = {232, 744, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(slider_5) == 0
+			return get(slider_5) == 1
 		end,
 	},	
 	-- sensors caps
@@ -299,7 +303,7 @@ components = {
 		position = {232, 658, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(sensors_caps) == 0
+			return get(sensors_caps) == 1
 		end,
 	},	
 	-- pax door 2
@@ -307,7 +311,7 @@ components = {
 		position = {232, 613, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(slider_6) == 0
+			return get(slider_6) == 1
 		end,
 	},	
 	-- gear blocks
@@ -315,7 +319,7 @@ components = {
 		position = {232, 392, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(gear_blocks) == 0
+			return get(gear_blocks) == 1
 		end,
 	},	
 	-- engine covers
@@ -323,7 +327,7 @@ components = {
 		position = {232, 333, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(engine_caps) == 0
+			return get(engine_caps) == 1
 		end,
 	},	
 	-- right window
@@ -331,20 +335,13 @@ components = {
 		position = {396, 788, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(slider_2) == 0
+			return get(slider_2) == 1
 		end,
 	},	
 	-- GPU
 	textureLit {
 		position = {396, 720, 22,22},
 		image = get(green_lamp),
-		visible = function()
-			return get(gpu_present) == 0
-		end,
-	},		
-	textureLit {
-		position = {396, 720, 22,22},
-		image = get(yellow_lamp),
 		visible = function()
 			return get(gpu_present) == 1
 		end,
@@ -354,7 +351,7 @@ components = {
 		position = {396, 665, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(slider_3) == 0
+			return get(slider_3) == 1
 		end,
 	},
 	-- kitchen door
@@ -362,7 +359,7 @@ components = {
 		position = {396, 619, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(slider_7) == 0
+			return get(slider_7) == 1
 		end,
 	},
 	--  cargo 2
@@ -370,37 +367,23 @@ components = {
 		position = {396, 392, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(slider_4) == 0
+			return get(slider_4) == 1
 		end,
 	},
 	-- ladder 1
 	textureLit {
 		position = {232, 702, 22,22},
-		image = get(yellow_lamp),
-		visible = function()
-			return get(ladder_1_call) == 1
-		end,
-	},
-	textureLit {
-		position = {232, 702, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(ladder_1_call) == 0
+			return get(ladder_1_call) == 1
 		end,
 	},
 	-- ladder 2
 	textureLit {
 		position = {232, 571, 22,22},
-		image = get(yellow_lamp),
-		visible = function()
-			return get(ladder_2_call) == 1
-		end,
-	},
-	textureLit {
-		position = {232, 571, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(ladder_2_call) == 0
+			return get(ladder_2_call) == 1
 		end,
 	},
 	-- asu
@@ -408,44 +391,23 @@ components = {
 		position = { 232, 528, 22, 22 },
 		image = get(green_lamp),
 		visible = function()
-			return get(asu_work) == 0
-		end,
-	},
-	textureLit {
-		position = { 232, 528, 22, 22 },
-		image = get(yellow_lamp),
-		visible = function()
 			return get(asu_work) == 1
 		end,
 	},
 	-- catering
 	textureLit {
 		position = {396, 576, 22,22},
-		image = get(yellow_lamp),
-		visible = function()
-			return get(catering_call) == 1
-		end,
-	},
-	textureLit {
-		position = {396, 576, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(catering_call) == 0
+			return get(catering_call) == 1
 		end,
 	},
 	-- tanker
 	textureLit {
 		position = {396, 531, 22,22},
-		image = get(yellow_lamp),
-		visible = function()
-			return get(fuel_tanker_call) == 1
-		end,
-	},
-	textureLit {
-		position = {396, 531, 22,22},
 		image = get(green_lamp),
 		visible = function()
-			return get(fuel_tanker_call) == 0
+			return get(fuel_tanker_call) == 1
 		end,
 	},
 	---------------------
@@ -621,7 +583,7 @@ components = {
 	-- reset crew button
 	interactive {
 		position = {23, 230, 200, 35},
-		onMouseHold = function() 
+		onMouseDown = function() 
 			if reset_click then
 				set(reset_crew, 0)
 			end
@@ -648,7 +610,7 @@ components = {
    },	
 	interactive {
 		position = {426, 125, 30, 29},
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(sounds_volume) - 100
 			if a < 0 then a = 0 end
 			set(sounds_volume, a)
@@ -658,7 +620,7 @@ components = {
 	},
 	interactive {
 		position = {595, 125, 30, 29},
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(sounds_volume) + 100
 			if a > 1000 then a = 1000 end
 			set(sounds_volume, a)
@@ -674,6 +636,8 @@ components = {
 			else return	"CREW VO DISABLED" end
 		end,
 		font = text_font,
+		font_size = 17,
+		bitmap = false,
 		color = {0,0,0,1},
 		visible = true,
 	},
@@ -698,6 +662,8 @@ components = {
 			--else return	"FAILURES DISABLED" end
 		end,
 		font = text_font,
+		font_size = 17,
+		bitmap = false,
 		color = {0,0,0,1},
 		visible = true,
 	},
@@ -716,6 +682,8 @@ components = {
 		position = {32, 78, 55, 60},
 		text = "NW uses YAW",
 		font = text_font,
+		font_size = 17,
+		bitmap = false,
 		color = {0,0,0,1},
 		visible = function()
 			return get(have_pedals) == 0
@@ -725,6 +693,8 @@ components = {
 		position = {32, 78, 55, 60},
 		text = "NW uses Tiller",
 		font = text_font,
+		font_size = 17,
+		bitmap = false,
 		color = {0,0,0,1},
 		visible = function()
 			return get(have_pedals) == 1
@@ -768,6 +738,8 @@ components = {
 			else return	"KLN90 INSTALLED" end
 		end,
 		font = text_font,
+		font_size = 17,
+		bitmap = false,
 		color = {0,0,0,1},
 		visible = true,
 	},
@@ -797,12 +769,14 @@ components = {
 			return math.floor(get(starter_torq) *100 + 0.5) / 100
 		end,
 		font = text_font,
+		font_size = 17,
+		bitmap = false,
 		color = {0,0,0,1},
 		visible = true,
 	},
 	interactive {
 		position = {426, 47, 30, 29},
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(starter_torq) - 0.01
 			if a < 0.1 then a = 0.1 end
 			set(starter_torq, a)
@@ -812,7 +786,7 @@ components = {
 	},
 	interactive {
 		position = {595, 47, 30, 29},
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(starter_torq) + 0.01
 			if a > 1 then a = 1 end
 			set(starter_torq, a)
@@ -822,7 +796,7 @@ components = {
 	},	
 	interactive {
 		position = {476, 12, 100, 29},
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(starter_torq, 0.2)
 			set(save_state, 1)
 			return true
@@ -832,7 +806,7 @@ components = {
 	-- close button
 	interactive {
 		position = {size[1] - 15, size[2] - 15, 15, 15 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_ground_panel, 0)
 			return true
 		end,

@@ -122,16 +122,6 @@ local Vfl_15_tbl = {
 }
 --]]
 local Vfl_0_tbl = {
-	{70, 305},
-	{75, 315},
-	{80, 325},
-	{85, 335},
-	{90, 345},
-	{95, 355},
-	{100, 365}
-}
-
-local Vfl_0_tbl = {
 	{70, 360},
 	{95, 360},
 	{100, 365}
@@ -348,7 +338,7 @@ function update()
 	set(v1_28, show_V1_28)
 	set(vr_28, show_Vr_28)
 	set(v2_28, show_V2_28)
-	
+	updateAll(components)
 end
 
 components = {
@@ -374,7 +364,7 @@ components = {
 	interactive {
 		position = {size[1]-15, size[2]-15, 15, 15 },
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_palette, 0)
 			return true
 		end,
@@ -384,7 +374,7 @@ components = {
 	interactive {
 		position = {51, 281, 153, 21 },
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			show_side = 1 - show_side
 			return true
 		end,

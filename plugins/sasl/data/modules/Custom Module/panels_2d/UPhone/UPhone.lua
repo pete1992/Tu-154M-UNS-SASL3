@@ -5,7 +5,7 @@ defineProperty("APPS", sasl.gl.loadImage("UPhone.png", 260, 0, 205, 305))
 defineProperty("digitsImage", sasl.gl.loadImage("UPhone.png", 493, 0, 14, 280))
 defineProperty("uphone_subpanel",globalPropertyi("tu154/custom/panels/show_phone")) --   
 
-program = 0
+local program = 0
 
 components = {
 	texture {
@@ -26,7 +26,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		program = 0
 		return true
 		end  
@@ -54,8 +54,9 @@ components = {
 		visible = function()
 		return program == 0
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 		program = 1
+		return true
 		end  
 	},
 	UHUD {
@@ -78,8 +79,9 @@ components = {
 		visible = function()
 		return program == 0
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 		program = 2
+		return true
 		end  
 	},	
 
@@ -102,8 +104,9 @@ components = {
 		visible = function()
 		return program == 0
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 		program = 3
+		return true
 		end  
 	},	
 
@@ -127,8 +130,9 @@ components = {
 		visible = function()
 		return program == 0
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 		program = 4
+		return true
 		end  
 	},	
 	
@@ -151,7 +155,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 		
-		onMouseHold = function()
+		onMouseDown = function()
 		set(uphone_subpanel, 0 )
 		return true
 		end

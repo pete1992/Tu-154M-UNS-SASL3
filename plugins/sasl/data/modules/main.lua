@@ -403,6 +403,7 @@ components = {
 	}, 
 	overhead {},
 	animation {},
+	asu {},
 	electric_system{},
 	lights_system{},
 	apu_system {},

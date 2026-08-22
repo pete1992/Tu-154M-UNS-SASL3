@@ -18,7 +18,7 @@ defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failur
 local runtime_tbl = {}
 
 -- runtime
-runtime_tbl[1] = {"APU", globalPropertyd("tu154/custom/failures/apu_runtime")} --  
+runtime_tbl[1] = {"APU", globalPropertyf("tu154/custom/failures/apu_runtime")} --  
 
 runtime_tbl[2] = {"Eng #1", globalPropertyf("tu154/custom/failures/engine_runtime_1")}
 runtime_tbl[3] = {"Eng #2", globalPropertyf("tu154/custom/failures/engine_runtime_2")}
@@ -362,7 +362,7 @@ function update()
 		
 		lag_time = 1
 	end
-	
+	updateAll(components)
 end
 
 components = {
@@ -403,13 +403,14 @@ components = {
 	interactive {
 		position = {290, 550, 170, 30},
       
-		onMouseHold = function()
+		onMouseDown = function()
 			set(runtime_tbl[1][2], math.random(280,320) * 3600)
 			
 			set(runtime_tbl[2][2], math.random(280,320) * 3600)
 			set(runtime_tbl[3][2], math.random(280,320) * 3600)
 			set(runtime_tbl[4][2], math.random(280,320) * 3600)
 			set(save_state, 1)
+			return true
 		end
 	}, 
 	
@@ -443,10 +444,11 @@ components = {
 	interactive {
 		position = {290, 465, 170, 30},
       
-		onMouseHold = function()
+		onMouseDown = function()
 			set(brakes_tbl[1][2], 1)
 			set(brakes_tbl[2][2], 1)
 			set(save_state, 1)
+			return true
 		end
 	},	
 	
@@ -480,11 +482,12 @@ components = {
 	interactive {
 		position = {290, 390, 170, 30},
       
-		onMouseHold = function()
+		onMouseDown = function()
 			set(liqd_tbl[1][2], math.random() + 26)
 			set(liqd_tbl[2][2], math.random() + 26)
 			set(liqd_tbl[3][2], math.random() + 26)
-			set(save_state, 1)			
+			set(save_state, 1)
+			return true
 		end
 	},
 
@@ -517,7 +520,7 @@ components = {
 	
 	interactive {
 		position = {210, 25, 85, 40},
-   		onMouseHold = fixAll,
+   		onMouseDown = fixAll,
 	}, 
 	
 	--[[
@@ -556,7 +559,7 @@ components = {
 	interactive {
 		position = {size[1] - 30, size[2] - 30, 30, 30 },
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_fail_panel, 0)
 			
 			return true

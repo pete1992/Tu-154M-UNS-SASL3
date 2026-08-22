@@ -12,7 +12,7 @@ defineProperty("value") -- table of heights
 function draw()
 	
 	local runtime = get(drawTable)
-	val = get(value)
+	local val = get(value)
 	
 	local runPos = 0
 	

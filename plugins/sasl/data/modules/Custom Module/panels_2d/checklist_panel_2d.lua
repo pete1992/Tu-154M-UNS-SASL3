@@ -83,7 +83,7 @@ components = {
 	interactive {
 		position = {58, 788, 122, 15},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(side, 1 - get(side))
 			return true
 		end,
@@ -93,7 +93,7 @@ components = {
 	interactive {
 		position = {4, 424, 28, 350},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_1, 1)
 			set(fishka_2, 1)
 			set(fishka_3, 1)
@@ -121,7 +121,7 @@ components = {
 	interactive {
 		position = {4, 57, 28, 350},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_11, 1)
 			set(fishka_12, 1)
 			set(fishka_13, 1)
@@ -148,7 +148,7 @@ components = {
 	interactive {
 		position = {207, 688, 28, 91},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_1, 0)
 			set(fishka_2, 0)
 			set(fishka_3, 0)
@@ -168,7 +168,7 @@ components = {
 	interactive {
 		position = {207, 350, 28, 327},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_4, 0)
 			set(fishka_5, 0)
 			set(fishka_6, 0)
@@ -194,7 +194,7 @@ components = {
 	interactive {
 		position = {207, 48, 28, 289},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_13, 0)
 			set(fishka_14, 0)
 			set(fishka_15, 0)
@@ -221,7 +221,7 @@ components = {
 	interactive {
 		position = {4, 270, 28, 257},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_8, 1)
 			set(fishka_9, 1)
 			set(fishka_10, 1)
@@ -245,7 +245,7 @@ components = {
 	interactive {
 		position = {4, 47, 28, 213},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_15, 1)
 			set(fishka_16, 1)
 			set(fishka_17, 1)
@@ -268,7 +268,7 @@ components = {
 	interactive {
 		position = {207, 462, 28, 315},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_1, 0)
 			set(fishka_2, 0)
 			set(fishka_3, 0)
@@ -294,7 +294,7 @@ components = {
 	interactive {
 		position = {207, 50, 28, 396},
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(fishka_10, 0)
 			set(fishka_11, 0)
 			set(fishka_12, 0)
@@ -608,7 +608,7 @@ components = {
 	interactive {
 		position = {size[1] - 30, size[2] - 30, 30, 30 },
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_checklist_panel, 0)
 			
 			return true

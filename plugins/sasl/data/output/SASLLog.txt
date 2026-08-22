@@ -201,6 +201,7 @@
 [TU154 INFO]: [LUA]: loading	interactive
 [TU154 INFO]: [LUA]: loading	load_panel
 [TU154 INFO]: [LUA]: including	fuel_tables.lua
+[TU154 INFO]: [LUA]: loading	rectangle_ctr_fuel
 [TU154 INFO]: [LUA]: loading	absu_panel_2d
 [TU154 INFO]: [LUA]: loading	switch_lit
 [TU154 INFO]: [LUA]: loading	free_texture_lit
@@ -221,7 +222,7 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.6055
+[TU154 INFO]: Scripts loading time: 0.4211
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
@@ -236,11 +237,14 @@
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
+[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
 [TU154 INFO]: Disabling...
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended
 [TU154 INFO]: [LUA]: "flight_controls"	flight controls released

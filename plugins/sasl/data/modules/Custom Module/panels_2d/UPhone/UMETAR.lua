@@ -15,7 +15,7 @@ local METAR6 = ""
 local name = 0
 local input = ""
 
-function readmetar()
+local function readmetar()
 local filename = "METAR.rwx"
 local file = io.open(filename, "r")
 -- if file exist - read it and fill the variables with new values
@@ -61,6 +61,7 @@ if notLoaded then
 notLoaded = false
 
 end
+updateAll(components)
 end
 
 components = {
@@ -80,7 +81,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "Q")
 		return true
 		end 
@@ -96,7 +97,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "W")
 		return true
 		end 
@@ -112,7 +113,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "E")
 		return true
 		end 
@@ -128,7 +129,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "R")
 		return true
 		end 
@@ -144,7 +145,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "T")
 		return true
 		end 
@@ -160,7 +161,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "Y")
 		return true
 		end 
@@ -176,7 +177,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "U")
 		return true
 		end 
@@ -192,7 +193,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "I")
 		return true
 		end 
@@ -208,7 +209,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "O")
 		return true
 		end 
@@ -224,7 +225,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "P")
 		return true
 		end 
@@ -240,7 +241,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "A")
 		return true
 		end 
@@ -256,7 +257,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "S")
 		return true
 		end 
@@ -272,7 +273,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "D")
 		return true
 		end 
@@ -288,7 +289,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "F")
 		return true
 		end 
@@ -304,7 +305,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "G")
 		return true
 		end 
@@ -320,7 +321,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "H")
 		return true
 		end 
@@ -336,7 +337,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "J")
 		return true
 		end 
@@ -352,7 +353,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "K")
 		return true
 		end 
@@ -368,7 +369,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "L")
 		return true
 		end 
@@ -384,7 +385,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "Z")
 		return true
 		end 
@@ -400,7 +401,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "X")
 		return true
 		end 
@@ -416,7 +417,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "C")
 		return true
 		end 
@@ -432,7 +433,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "V")
 		return true
 		end 
@@ -448,7 +449,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "B")
 		return true
 		end 
@@ -464,7 +465,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "N")
 		return true
 		end 
@@ -480,7 +481,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 		input = string.format("%s%s",input, "M")
 		return true
 		end 
@@ -496,7 +497,7 @@ components = {
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 input = string.sub(input, 1, -2)
 		return true
 		end 
@@ -512,7 +513,7 @@ input = string.sub(input, 1, -2)
 			shape = sasl.gl.loadImage("interactive.png")
 		},  
 
-		onMouseHold = function()
+		onMouseDown = function()
 notLoaded = true
 		return true
 		end 
@@ -528,7 +529,4 @@ function draw()
  sasl.gl.drawBitmapText(font, 10, 129, METAR6, TEXT_ALIGN_LEFT, COLOR_WHITE)
  sasl.gl.drawBitmapText(font, 10, 92, input, TEXT_ALIGN_LEFT, COLOR_WHITE)
 
-end
-function draw()
-	drawAll(components)
 end

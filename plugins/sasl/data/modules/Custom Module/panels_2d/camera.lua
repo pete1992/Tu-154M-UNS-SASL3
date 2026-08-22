@@ -11,7 +11,7 @@ defineProperty("pz", globalPropertyf("sim/graphics/view/pilots_head_z"))
 defineProperty("az", globalPropertyf("sim/graphics/view/pilots_head_the"))
 defineProperty("ax", globalPropertyf("sim/graphics/view/pilots_head_psi"))
 
-cockview2 = sasl.findCommand("sim/view/3d_cockpit_cmnd_look") -- command from X-Plane 10
+local cockview2 = sasl.findCommand("sim/view/3d_cockpit_cmnd_look") -- command from X-Plane 10
 
 -- images
 defineProperty("bg", sasl.gl.loadImage("cam_panel.png"))
@@ -36,6 +36,7 @@ function update()
 		end
 	end
 	a_last = a	
+	updateAll(components)
 
 end
 
@@ -179,7 +180,7 @@ components = {
 	interactive {
 		position = {size[1]-15, size[2]-15, 15, 15 },
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_cam, 0)
 			return true
 		end,

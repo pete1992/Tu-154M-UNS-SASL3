@@ -34,7 +34,7 @@ defineProperty("show_fail_panel",globalPropertyi("tu154/custom/panels/show_fail_
 defineProperty("KLN90visible", globalPropertyi("tu154/custom/xap/KLN90/visible"))
 defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) 
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) 
-defineProperty("control_thro_other", globalPropertyf("tu154/custom/SC/control_thro_other")) 
+defineProperty("control_thro_other", globalPropertyi("tu154/custom/SC/control_thro_other")) 
 
 local initial_window_height = get(window_height)
 

@@ -51,6 +51,7 @@ start = ( (TAS / 3.6) ^ 2 / ( 9.81 * math.tan (bank * math.pi / 180) ) ) * math.
 nas_c = -start * math.cos (math.abs(diff) * math.pi / 180)
 nas_b = start * math.sin(-diff * math.pi / 180)
 end
+updateAll(components)
 end
 
 components = {
@@ -70,7 +71,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		course1 = course1 - 10
 		return true
 		end   
@@ -85,7 +86,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		course1 = course1 - 1
 		return true
 		end   
@@ -112,7 +113,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		course1 = course1 + 1
 		return true
 		end   
@@ -127,7 +128,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		course1 = course1 + 10
 		return true
 		end   
@@ -143,7 +144,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		course2 = course2 - 10
 		return true
 		end   
@@ -158,7 +159,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		course2 = course2 - 1
 		return true
 		end   
@@ -185,7 +186,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		course2 = course2 + 1
 		return true
 		end   
@@ -200,7 +201,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		course2 = course2 + 10
 		return true
 		end   
@@ -216,7 +217,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		bank = bank - 5
 		return true
 		end   
@@ -231,7 +232,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		bank = bank - 1
 		return true
 		end   
@@ -259,7 +260,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		bank = bank + 1
 		return true
 		end   
@@ -274,7 +275,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		bank = bank + 5
 		return true
 		end   
@@ -290,7 +291,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		TAS = TAS - 10
 		return true
 		end   
@@ -305,7 +306,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateleft.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		TAS = TAS - 1
 		return true
 		end   
@@ -331,7 +332,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		TAS = TAS + 1
 		return true
 		end   
@@ -346,7 +347,7 @@ components = {
 			height = 16, 
 			shape = sasl.gl.loadImage("rotateright.png")
 		},  
-		onMouseHold = function()
+		onMouseDown = function()
 		TAS = TAS + 10
 		return true
 		end   

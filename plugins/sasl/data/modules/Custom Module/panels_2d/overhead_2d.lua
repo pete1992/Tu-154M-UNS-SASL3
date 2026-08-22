@@ -192,9 +192,6 @@ defineProperty("heat_ok_1", globalPropertyf("tu154/custom/lights/small/heat_ok_1
 defineProperty("heat_ok_2", globalPropertyf("tu154/custom/lights/small/heat_ok_2")) --    
 defineProperty("heat_ok_3", globalPropertyf("tu154/custom/lights/small/heat_ok_3")) --    
 
-defineProperty("tks_main_fail", globalPropertyf("tu154/custom/lights/small/tks_main_fail")) --     
-defineProperty("tks_contr_fail", globalPropertyf("tu154/custom/lights/small/tks_contr_fail")) --     
-
 defineProperty("bkk_ok", globalPropertyf("tu154/custom/lights/small/bkk_ok")) --   
 
 defineProperty("transponder_red", globalPropertyf("tu154/custom/lights/small/transponder_red"))
@@ -382,7 +379,7 @@ function update()
 	code_show = d1..d2..d3..d4
 	
 	so72_power = get(transponder_mode) > 0 and get(bus27_volt_left) > 13
-	
+	updateAll(components)
 end
 
 components = {
@@ -555,7 +552,7 @@ components = {
 		state = function()
 			return get(auasp_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(auasp_on, 1 - get(auasp_on))
 			return true
 		end,
@@ -569,7 +566,7 @@ components = {
 		state = function()
 			return get(agr_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(agr_on, 1 - get(agr_on))
 			return true
 		end,
@@ -583,7 +580,7 @@ components = {
 		state = function()
 			return get(kln_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(kln_on, 1 - get(kln_on))
 			return true
 		end,
@@ -597,7 +594,7 @@ components = {
 		state = function()
 			return get(rv5_1_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(rv5_1_on, 1 - get(rv5_1_on))
 			return true
 		end,
@@ -611,7 +608,7 @@ components = {
 		state = function()
 			return get(rv5_2_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(rv5_2_on, 1 - get(rv5_2_on))
 			return true
 		end,
@@ -625,7 +622,7 @@ components = {
 		state = function()
 			return get(vhf_1_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_1_on, 1 - get(vhf_1_on))
 			return true
 		end,
@@ -639,7 +636,7 @@ components = {
 		state = function()
 			return get(vhf_2_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_2_on, 1 - get(vhf_2_on))
 			return true
 		end,
@@ -653,7 +650,7 @@ components = {
 		state = function()
 			return get(vbe_2_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vbe_2_on, 1 - get(vbe_2_on))
 			return true
 		end,
@@ -669,7 +666,7 @@ components = {
 		state = function()
 			return get(var_left) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(var_left, 1 - get(var_left))
 			return true
 		end,
@@ -683,7 +680,7 @@ components = {
 		state = function()
 			return get(uvid_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(uvid_on, 1 - get(uvid_on))
 			return true
 		end,
@@ -697,7 +694,7 @@ components = {
 		state = function()
 			return get(eup_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(eup_on, 1 - get(eup_on))
 			return true
 		end,
@@ -711,7 +708,7 @@ components = {
 		state = function()
 			return get(bkk_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(bkk_on, 1 - get(bkk_on))
 			return true
 		end,
@@ -728,7 +725,7 @@ components = {
 		state = function()
 			return get(sau_stu_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(sau_stu_on, 1 - get(sau_stu_on))
 			return true
 		end,
@@ -745,7 +742,7 @@ components = {
 		state = function()
 			return get(pkp_left_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(pkp_left_on, 1 - get(pkp_left_on))
 			return true
 		end,
@@ -762,7 +759,7 @@ components = {
 		state = function()
 			return get(pkp_right_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(pkp_right_on, 1 - get(pkp_right_on))
 			return true
 		end,
@@ -779,7 +776,7 @@ components = {
 		state = function()
 			return get(mgv_contr) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(mgv_contr, 1 - get(mgv_contr))
 			return true
 		end,
@@ -796,7 +793,7 @@ components = {
 		state = function()
 			return get(tks_on_1) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tks_on_1, 1 - get(tks_on_1))
 			return true
 		end,
@@ -810,7 +807,7 @@ components = {
 		state = function()
 			return get(tks_on_2) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tks_on_2, 1 - get(tks_on_2))
 			return true
 		end,
@@ -824,7 +821,7 @@ components = {
 		state = function()
 			return get(tks_heat) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tks_heat, 1 - get(tks_heat))
 			return true
 		end,
@@ -838,7 +835,7 @@ components = {
 		state = function()
 			return get(tks_corr_1) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tks_corr_1, 1 - get(tks_corr_1))
 			return true
 		end,
@@ -852,7 +849,7 @@ components = {
 		state = function()
 			return get(tks_corr_2) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tks_corr_2, 1 - get(tks_corr_2))
 			return true
 		end,
@@ -866,7 +863,7 @@ components = {
 		state = function()
 			return get(curs_pnp_mode_1) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(curs_pnp_mode_1, 1 - get(curs_pnp_mode_1))
 			return true
 		end,
@@ -880,7 +877,7 @@ components = {
 		state = function()
 			return get(curs_pnp_mode_2) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(curs_pnp_mode_2, 1 - get(curs_pnp_mode_2))
 			return true
 		end,
@@ -894,7 +891,7 @@ components = {
 		state = function()
 			return get(svs_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(svs_on, 1 - get(svs_on))
 			return true
 		end,
@@ -908,7 +905,7 @@ components = {
 		state = function()
 			return get(svs_heat) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(svs_heat, 1 - get(svs_heat))
 			return true
 		end,
@@ -922,7 +919,7 @@ components = {
 		state = function()
 			return get(var_right) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(var_right, 1 - get(var_right))
 			return true
 		end,
@@ -936,7 +933,7 @@ components = {
 		state = function()
 			return get(tcas_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tcas_on, 1 - get(tcas_on))
 			return true
 		end,
@@ -950,7 +947,7 @@ components = {
 		state = function()
 			return get(emerg_light_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(emerg_light_on, 1 - get(emerg_light_on))
 			return true
 		end,
@@ -967,7 +964,7 @@ components = {
 		state = function()
 			return get(vbe_1_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vbe_1_on, 1 - get(vbe_1_on))
 			return true
 		end,
@@ -981,7 +978,7 @@ components = {
 		state = function()
 			return get(curs_np_on_1) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(curs_np_on_1, 1 - get(curs_np_on_1))
 			return true
 		end,
@@ -995,7 +992,7 @@ components = {
 		state = function()
 			return get(curs_np_on_2) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(curs_np_on_2, 1 - get(curs_np_on_2))
 			return true
 		end,
@@ -1009,7 +1006,7 @@ components = {
 		state = function()
 			return get(tra_67_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tra_67_on, 1 - get(tra_67_on))
 			return true
 		end,
@@ -1023,7 +1020,7 @@ components = {
 		state = function()
 			return get(rsbn_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(rsbn_on, 1 - get(rsbn_on))
 			return true
 		end,
@@ -1037,7 +1034,7 @@ components = {
 		state = function()
 			return get(rsbn_recon) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(rsbn_recon, 1 - get(rsbn_recon))
 			return true
 		end,
@@ -1051,7 +1048,7 @@ components = {
 		state = function()
 			return get(stabil_ga_main) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(stabil_ga_main, 1 - get(stabil_ga_main))
 			return true
 		end,
@@ -1065,7 +1062,7 @@ components = {
 		state = function()
 			return get(stabil_ga_reserv) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(stabil_ga_reserv, 1 - get(stabil_ga_reserv))
 			return true
 		end,
@@ -1079,7 +1076,7 @@ components = {
 		state = function()
 			return get(micron_1_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(micron_1_on, 1 - get(micron_1_on))
 			return true
 		end,
@@ -1093,7 +1090,7 @@ components = {
 		state = function()
 			return get(micron_2_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(micron_2_on, 1 - get(micron_2_on))
 			return true
 		end,
@@ -1107,7 +1104,7 @@ components = {
 		state = function()
 			return get(spu_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(spu_on, 1 - get(spu_on))
 			return true
 		end,
@@ -1121,7 +1118,7 @@ components = {
 		state = function()
 			return get(sgs_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(sgs_on, 1 - get(sgs_on))
 			return true
 		end,
@@ -1135,7 +1132,7 @@ components = {
 		state = function()
 			return get(sd75_1_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(sd75_1_on, 1 - get(sd75_1_on))
 			return true
 		end,
@@ -1149,7 +1146,7 @@ components = {
 		state = function()
 			return get(sd75_2_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(sd75_2_on, 1 - get(sd75_2_on))
 			return true
 		end,
@@ -1163,7 +1160,7 @@ components = {
 		state = function()
 			return get(mars_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(mars_on, 1 - get(mars_on))
 			return true
 		end,
@@ -1177,7 +1174,7 @@ components = {
 		state = function()
 			return get(diss_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(diss_on, 1 - get(diss_on))
 			return true
 		end,
@@ -1191,7 +1188,7 @@ components = {
 		state = function()
 			return get(diss_mode) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(diss_mode, 1 - get(diss_mode))
 			return true
 		end,
@@ -1205,7 +1202,7 @@ components = {
 		state = function()
 			return get(vent_1) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vent_1, 1 - get(vent_1))
 			return true
 		end,
@@ -1219,7 +1216,7 @@ components = {
 		state = function()
 			return get(vent_2) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vent_2, 1 - get(vent_2))
 			return true
 		end,
@@ -1233,7 +1230,7 @@ components = {
 		state = function()
 			return get(sign_belts) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(sign_belts, 1 - get(sign_belts))
 			return true
 		end,
@@ -1247,7 +1244,7 @@ components = {
 		state = function()
 			return get(sign_nosmoke) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(sign_nosmoke, 1 - get(sign_nosmoke))
 			return true
 		end,
@@ -1261,7 +1258,7 @@ components = {
 		state = function()
 			return get(sign_exit) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(sign_exit, 1 - get(sign_exit))
 			return true
 		end,
@@ -1275,7 +1272,7 @@ components = {
 		state = function()
 			return get(arm406) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(arm406, 1 - get(arm406))
 			return true
 		end,
@@ -1289,7 +1286,7 @@ components = {
 		state = function()
 			return get(ushdb_mode_1) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(ushdb_mode_1, 1 - get(ushdb_mode_1))
 			return true
 		end,
@@ -1303,7 +1300,7 @@ components = {
 		state = function()
 			return get(ushdb_mode_2) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(ushdb_mode_2, 1 - get(ushdb_mode_2))
 			return true
 		end,
@@ -1317,7 +1314,7 @@ components = {
 		state = function()
 			return get(egpws_alarm_1) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			if get(egpws_alarm_1_cap) == 1 then set(egpws_alarm_1, 1 - get(egpws_alarm_1)) end
 			return true
 		end,
@@ -1331,7 +1328,7 @@ components = {
 		state = function()
 			return get(egpws_alarm_2) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			if get(egpws_alarm_2_cap) == 1 then set(egpws_alarm_2, 1 - get(egpws_alarm_2)) end
 			return true
 		end,
@@ -1345,7 +1342,7 @@ components = {
 		state = function()
 			return get(egpws_relief) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(egpws_relief, 1 - get(egpws_relief))
 			return true
 		end,
@@ -1359,7 +1356,7 @@ components = {
 		state = function()
 			return get(egpws_mode) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(egpws_mode, 1 - get(egpws_mode))
 			return true
 		end,
@@ -1513,7 +1510,7 @@ components = {
 	-- click up
 	interactive {
 		position = {126, 584 + 35, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(nvu_calc_set) + 1
 			if a > 1 then a = 0 end
 			set(nvu_calc_set, a)
@@ -1524,7 +1521,7 @@ components = {
 	-- click down
 	interactive {
 		position = {126, 584, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(nvu_calc_set) - 1
 			if a < -1 then a = 0 end
 			set(nvu_calc_set, a)
@@ -1563,7 +1560,7 @@ components = {
 	-- click up
 	interactive {
 		position = {1281, 712 + 35, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(window_heat_1) + 1
 			if a > 1 then a = 0 end
 			set(window_heat_1, a)
@@ -1574,7 +1571,7 @@ components = {
 	-- click down
 	interactive {
 		position = {1281, 712, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(window_heat_1) - 1
 			if a < -1 then a = 0 end
 			set(window_heat_1, a)
@@ -1613,7 +1610,7 @@ components = {
 	-- click up
 	interactive {
 		position = {1335, 712 + 35, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(window_heat_2) + 1
 			if a > 1 then a = 0 end
 			set(window_heat_2, a)
@@ -1624,7 +1621,7 @@ components = {
 	-- click down
 	interactive {
 		position = {1335, 712, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(window_heat_2) - 1
 			if a < -1 then a = 0 end
 			set(window_heat_2, a)
@@ -1663,7 +1660,7 @@ components = {
 	-- click up
 	interactive {
 		position = {1387, 712 + 35, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(window_heat_3) + 1
 			if a > 1 then a = 0 end
 			set(window_heat_3, a)
@@ -1674,7 +1671,7 @@ components = {
 	-- click down
 	interactive {
 		position = {1387, 712, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(window_heat_3) - 1
 			if a < -1 then a = 0 end
 			set(window_heat_3, a)
@@ -1713,7 +1710,7 @@ components = {
 	-- click up
 	interactive {
 		position = {1308, 639 + 35, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(pitot_heat_1) + 1
 			if a > 1 then a = 0 end
 			set(pitot_heat_1, a)
@@ -1765,7 +1762,7 @@ components = {
 	-- click up
 	interactive {
 		position = {1352, 639 + 35, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(pitot_heat_2) + 1
 			if a > 1 then a = 0 end
 			set(pitot_heat_2, a)
@@ -1817,7 +1814,7 @@ components = {
 	-- click up
 	interactive {
 		position = {1397, 639 + 35, 25, 32},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(pitot_heat_3) + 1
 			if a > 1 then a = 0 end
 			set(pitot_heat_3, a)
@@ -1924,7 +1921,7 @@ components = {
 	},	
 	interactive {
 		position = {107, 828 + 50, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(emerg_light_cap, 1 - get(emerg_light_cap))
 			return true
 		end,
@@ -1956,7 +1953,7 @@ components = {
 	},	
 	interactive {
 		position = {1244, 406 + 50, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(egpws_alarm_1_cap, 1 - get(egpws_alarm_1_cap))
 			return true
 		end,
@@ -1988,7 +1985,7 @@ components = {
 	},	
 	interactive {
 		position = {1289, 406 + 50, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(egpws_alarm_2_cap, 1 - get(egpws_alarm_2_cap))
 			return true
 		end,
@@ -2013,7 +2010,7 @@ components = {
 	},	
 	interactive {
 		position = {471, 918 - 15, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(bkk_contr_cap, 1 - get(bkk_contr_cap))
 			return true
 		end,
@@ -2046,7 +2043,7 @@ components = {
 	},	
 	interactive {
 		position = {525, 918 - 15, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(bkk_on_cap, 1 - get(bkk_on_cap))
 			return true
 		end,
@@ -2079,7 +2076,7 @@ components = {
 	},	
 	interactive {
 		position = {590, 918 - 15, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(sau_stu_cap, 1 - get(sau_stu_cap))
 			return true
 		end,
@@ -2111,7 +2108,7 @@ components = {
 	},	
 	interactive {
 		position = {656, 918 - 15, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(pkp_left_cap, 1 - get(pkp_left_cap))
 			return true
 		end,
@@ -2143,7 +2140,7 @@ components = {
 	},	
 	interactive {
 		position = {700, 918 - 15, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(pkp_right_cap, 1 - get(pkp_right_cap))
 			return true
 		end,
@@ -2175,7 +2172,7 @@ components = {
 	},	
 	interactive {
 		position = {743, 918 - 15, 37, 25},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(mgv_contr_cap, 1 - get(mgv_contr_cap))
 			return true
 		end,
@@ -2197,7 +2194,7 @@ components = {
 	},
 	interactive {
 		position = {314, 574, 30, 62},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(rsbn_ch_ten) - 1
 			if a < 0 then a = 0 end
 			set(rsbn_ch_ten, a)
@@ -2206,7 +2203,7 @@ components = {
 	},
 	interactive {
 		position = {314 + 32, 574, 30, 62},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(rsbn_ch_ten) + 1
 			if a > 4 then a = 4 end
 			set(rsbn_ch_ten, a)
@@ -2227,7 +2224,7 @@ components = {
 	
 	interactive {
 		position = {415, 574, 30, 62},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(rsbn_ch_one) - 1
 			if a < 0 then a = 0 end
 			set(rsbn_ch_one, a)
@@ -2236,7 +2233,7 @@ components = {
 	},
 	interactive {
 		position = {415 + 32, 574, 30, 62},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(rsbn_ch_one) + 1
 			if a > 9 then a = 9 end
 			set(rsbn_ch_one, a)
@@ -2315,14 +2312,14 @@ components = {
 	-- left 1
 	interactive {
 		position = {229, 25, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_1_left, get(nav_1_left) - 1)
 			return true
 		end,
 	},	
 	interactive {
 		position = {229 + 30, 25, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_1_left, get(nav_1_left) + 1)
 			return true
 		end,
@@ -2331,14 +2328,14 @@ components = {
 	-- right 1
 	interactive {
 		position = {386, 25, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_1_right, get(nav_1_right) - 1)
 			return true
 		end,
 	},	
 	interactive {
 		position = {386 + 30, 25, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_1_right, get(nav_1_right) + 1)
 			return true
 		end,
@@ -2347,14 +2344,14 @@ components = {
 	-- left 2
 	interactive {
 		position = {1013, 25, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_2_left, get(nav_2_left) - 1)
 			return true
 		end,
 	},	
 	interactive {
 		position = {1013 + 30, 25, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_2_left, get(nav_2_left) + 1)
 			return true
 		end,
@@ -2363,14 +2360,14 @@ components = {
 	-- right 2
 	interactive {
 		position = {1170, 25, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_2_right, get(nav_2_right) - 1)
 			return true
 		end,
 	},	
 	interactive {
 		position = {1170 + 30, 25, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_2_right, get(nav_2_right) + 1)
 			return true
 		end,
@@ -2384,7 +2381,7 @@ components = {
 		state = function()
 			return get(nav_1_mile_km) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_1_mile_km, 1 - get(nav_1_mile_km))
 			return true
 		end,
@@ -2398,7 +2395,7 @@ components = {
 		state = function()
 			return get(nav_2_mile_km) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nav_2_mile_km, 1 - get(nav_2_mile_km))
 			return true
 		end,
@@ -2513,14 +2510,14 @@ components = {
 	-- left 1
 	interactive {
 		position = {630, 207, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_1_left, get(vhf_1_left) - 1)
 			return true
 		end,
 	},	
 	interactive {
 		position = {630 + 30, 207, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_1_left, get(vhf_1_left) + 1)
 			return true
 		end,
@@ -2529,14 +2526,14 @@ components = {
 	-- right 1
 	interactive {
 		position = {771, 207, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_1_right, get(vhf_1_right) - 1)
 			return true
 		end,
 	},	
 	interactive {
 		position = {771 + 30, 207, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_1_right, get(vhf_1_right) + 1)
 			return true
 		end,
@@ -2545,14 +2542,14 @@ components = {
 	-- left 2
 	interactive {
 		position = {630, 51, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_2_left, get(vhf_2_left) - 1)
 			return true
 		end,
 	},	
 	interactive {
 		position = {630 + 30, 51, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_2_left, get(vhf_2_left) + 1)
 			return true
 		end,
@@ -2561,14 +2558,14 @@ components = {
 	-- right 2
 	interactive {
 		position = {771, 51, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_2_right, get(vhf_2_right) - 1)
 			return true
 		end,
 	},	
 	interactive {
 		position = {771 + 30, 51, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(vhf_2_right, get(vhf_2_right) + 1)
 			return true
 		end,
@@ -2583,7 +2580,7 @@ components = {
 	-- left hundreds
 	interactive {
 		position = {313, 340, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_hundr_left) - 1
 			if a < 1 then a = 17 end
 			set(ark_1_hundr_left, a)
@@ -2592,7 +2589,7 @@ components = {
 	},	
 	interactive {
 		position = {313 + 24, 340, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_hundr_left) + 1
 			if a > 17 then a = 1 end
 			set(ark_1_hundr_left, a)
@@ -2602,7 +2599,7 @@ components = {
 	-- left tens
 	interactive {
 		position = {313, 328, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_tens_left) - 1
 			if a < 1 then a = 1 end
 			set(ark_1_tens_left, a)
@@ -2611,7 +2608,7 @@ components = {
 	},	
 	interactive {
 		position = {313 + 24, 328, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_tens_left) + 1
 			if a > 10 then a = 10 end
 			set(ark_1_tens_left, a)
@@ -2621,7 +2618,7 @@ components = {
 	-- left ones
 	interactive {
 		position = {313, 316, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_ones_left) - 1
 			if a < 0 then a = 9 end
 			set(ark_1_ones_left, a)
@@ -2630,7 +2627,7 @@ components = {
 	},	
 	interactive {
 		position = {313 + 24, 316, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_ones_left) + 1
 			if a > 9 then a = 0 end
 			set(ark_1_ones_left, a)
@@ -2641,7 +2638,7 @@ components = {
 	-- right hundreds
 	interactive {
 		position = {313+131, 340, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_hundr_right) - 1
 			if a < 1 then a = 17 end
 			set(ark_1_hundr_right, a)
@@ -2650,7 +2647,7 @@ components = {
 	},	
 	interactive {
 		position = {313+131 + 24, 340, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_hundr_right) + 1
 			if a > 17 then a = 1 end
 			set(ark_1_hundr_right, a)
@@ -2660,7 +2657,7 @@ components = {
 	-- right tens
 	interactive {
 		position = {313+131, 328, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_tens_right) - 1
 			if a < 1 then a = 1 end
 			set(ark_1_tens_right, a)
@@ -2669,7 +2666,7 @@ components = {
 	},	
 	interactive {
 		position = {313+131 + 24, 328, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_tens_right) + 1
 			if a > 10 then a = 10 end
 			set(ark_1_tens_right, a)
@@ -2679,7 +2676,7 @@ components = {
 	-- right ones
 	interactive {
 		position = {313+131, 316, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_ones_right) - 1
 			if a < 0 then a = 9 end
 			set(ark_1_ones_right, a)
@@ -2688,7 +2685,7 @@ components = {
 	},	
 	interactive {
 		position = {313+131 + 24, 316, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_ones_right) + 1
 			if a > 9 then a = 0 end
 			set(ark_1_ones_right, a)
@@ -2704,7 +2701,7 @@ components = {
 		state = function()
 			return get(ark_1_channel) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(ark_1_channel, 1 - get(ark_1_channel))
 			return true
 		end,
@@ -2732,7 +2729,7 @@ components = {
 	},	
 	interactive {
 		position = {419, 412.5, 35, 70},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_mode) - 1
 			if a < 0 then a = 0 end
 			set(ark_1_mode, a)
@@ -2741,7 +2738,7 @@ components = {
 	},
 	interactive {
 		position = {419+35, 412.5, 35, 70},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_1_mode) + 1
 			if a > 3 then a = 3 end
 			set(ark_1_mode, a)
@@ -2758,7 +2755,7 @@ components = {
 	-- left hundreds
 	interactive {
 		position = {313+655, 340, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_hundr_left) - 1
 			if a < 1 then a = 17 end
 			set(ark_2_hundr_left, a)
@@ -2767,7 +2764,7 @@ components = {
 	},	
 	interactive {
 		position = {313+655 + 24, 340, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_hundr_left) + 1
 			if a > 17 then a = 1 end
 			set(ark_2_hundr_left, a)
@@ -2777,7 +2774,7 @@ components = {
 	-- left tens
 	interactive {
 		position = {313+655, 328, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_tens_left) - 1
 			if a < 1 then a = 1 end
 			set(ark_2_tens_left, a)
@@ -2786,7 +2783,7 @@ components = {
 	},	
 	interactive {
 		position = {313+655 + 24, 328, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_tens_left) + 1
 			if a > 10 then a = 10 end
 			set(ark_2_tens_left, a)
@@ -2796,7 +2793,7 @@ components = {
 	-- left ones
 	interactive {
 		position = {313+655, 316, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_ones_left) - 1
 			if a < 0 then a = 9 end
 			set(ark_2_ones_left, a)
@@ -2805,7 +2802,7 @@ components = {
 	},	
 	interactive {
 		position = {313+655 + 24, 316, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_ones_left) + 1
 			if a > 9 then a = 0 end
 			set(ark_2_ones_left, a)
@@ -2816,7 +2813,7 @@ components = {
 	-- right hundreds
 	interactive {
 		position = {313+655+131, 340, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_hundr_right) - 1
 			if a < 1 then a = 17 end
 			set(ark_2_hundr_right, a)
@@ -2825,7 +2822,7 @@ components = {
 	},	
 	interactive {
 		position = {313+655+131 + 24, 340, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_hundr_right) + 1
 			if a > 17 then a = 1 end
 			set(ark_2_hundr_right, a)
@@ -2835,7 +2832,7 @@ components = {
 	-- right tens
 	interactive {
 		position = {313+655+131, 328, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_tens_right) - 1
 			if a < 1 then a = 1 end
 			set(ark_2_tens_right, a)
@@ -2844,7 +2841,7 @@ components = {
 	},	
 	interactive {
 		position = {313+655+131 + 24, 328, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_tens_right) + 1
 			if a > 10 then a = 10 end
 			set(ark_2_tens_right, a)
@@ -2854,7 +2851,7 @@ components = {
 	-- right ones
 	interactive {
 		position = {313+655+131, 316, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_ones_right) - 1
 			if a < 0 then a = 9 end
 			set(ark_2_ones_right, a)
@@ -2863,7 +2860,7 @@ components = {
 	},	
 	interactive {
 		position = {313+655+131 + 24, 316, 24, 12},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_ones_right) + 1
 			if a > 9 then a = 0 end
 			set(ark_2_ones_right, a)
@@ -2879,7 +2876,7 @@ components = {
 		state = function()
 			return get(ark_2_channel) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(ark_2_channel, 1 - get(ark_2_channel))
 			return true
 		end,
@@ -2907,7 +2904,7 @@ components = {
 	},	
 	interactive {
 		position = {419+655, 412.5, 35, 70},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_mode) - 1
 			if a < 0 then a = 0 end
 			set(ark_2_mode, a)
@@ -2916,7 +2913,7 @@ components = {
 	},
 	interactive {
 		position = {419+35+655, 412.5, 35, 70},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(ark_2_mode) + 1
 			if a > 3 then a = 3 end
 			set(ark_2_mode, a)
@@ -2956,7 +2953,7 @@ components = {
 	
 	interactive {
 		position = {1025, 677, 30, 30},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(tks_mode) - 1
 			if a < 0 then a = 1 end
 			set(tks_mode, a)
@@ -2965,7 +2962,7 @@ components = {
 	},	
 	interactive {
 		position = {1025+30, 677, 30, 30},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(tks_mode) + 1
 			if a > 2 then a = 1 end
 			set(tks_mode, a)
@@ -3055,7 +3052,7 @@ components = {
 
 	interactive {
 		position = {941, 622, 35, 35},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tks_user, 1 - get(tks_user))
 			return true
 		end,
@@ -3081,7 +3078,7 @@ components = {
 	
 	interactive {
 		position = {1136, 622, 35, 35},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(tks_source, 1 - get(tks_source))
 			return true
 		end,
@@ -3097,7 +3094,7 @@ components = {
 	},	
 	interactive {
 		position = {1116, 670, 30, 47},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = math.floor(get(tks_lat_set) - 1)
 			if a < -90 then a = -90 end
 			set(tks_lat_set, a)
@@ -3106,7 +3103,7 @@ components = {
 	},	
 	interactive {
 		position = {1116+30, 670, 30, 47},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = math.ceil(get(tks_lat_set) + 1)
 			if a > 90 then a = 90 end
 			set(tks_lat_set, a)
@@ -3208,7 +3205,7 @@ components = {
 
 	interactive {
 		position = {698, 673, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(transponder_mode) - 1
 			if a < 0 then a = 0 end
 			set(transponder_mode, a)
@@ -3218,7 +3215,7 @@ components = {
 
 	interactive {
 		position = {728, 673, 30, 60},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(transponder_mode) + 1
 			if a > 6 then a = 6 end
 			set(transponder_mode, a)
@@ -3348,7 +3345,7 @@ components = {
 		interactive {
 		position = {size[1] - 15, size[2] - 15, 15, 15 },
       
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_ohvd_panel, 0)
 			return true
 		end,

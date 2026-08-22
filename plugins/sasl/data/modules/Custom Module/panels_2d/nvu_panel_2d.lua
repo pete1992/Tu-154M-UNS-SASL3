@@ -34,8 +34,8 @@ defineProperty("zpu2", globalPropertyf("tu154/custom/nvu/zpu2")) -- ZPU2
 defineProperty("map_angle", globalPropertyf("tu154/custom/gauges/console/map_angle")) --  
 defineProperty("obs_1", globalPropertyf("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")) -- OBS course
 defineProperty("obs_2", globalPropertyf("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot")) -- OBS course
-defineProperty("nav_course_1", globalPropertyf("tu154/custom/rotary/console/nav_1_course")) --   
-defineProperty("nav_course_2", globalPropertyf("tu154/custom/rotary/console/nav_2_course")) --   
+defineProperty("nav_course_1", globalPropertyi("tu154/custom/rotary/console/nav_1_course")) --   
+defineProperty("nav_course_2", globalPropertyi("tu154/custom/rotary/console/nav_2_course")) --   
 -- lamps
 defineProperty("nvu_on_lit", globalPropertyf("tu154/custom/lights/small/nvu_on")) --  
 defineProperty("nvu_corr_lit", globalPropertyf("tu154/custom/lights/small/nvu_corr")) --  
@@ -93,6 +93,7 @@ local RUS = true
 
 function update()
 	RUS = get(hide_eng_objects) == 1
+	updateAll(components)
 end
 
 components = {
@@ -903,7 +904,7 @@ components = {
 	
 	interactive {
 		position = {512, 598+80, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = math.ceil(get(map_angle) * 2)/2 - 0.5
 			if a < 0 then a = a + 360 end
 			set(map_angle, a)
@@ -913,7 +914,7 @@ components = {
 	
 	interactive {
 		position = {512+30, 598+80, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = math.floor(get(map_angle) * 2)/2 + 0.5
 			if a > 360 then a = a - 360 end
 			set(map_angle, a)
@@ -923,7 +924,7 @@ components = {
 	
 	interactive {
 		position = {512, 598, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = math.ceil(get(map_angle)) - 5
 			if a < 0 then a = a + 360 end
 			set(map_angle, a)
@@ -933,7 +934,7 @@ components = {
 	
 	interactive {
 		position = {512+30, 598, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = math.floor(get(map_angle)) + 5
 			if a > 360 then a = a - 360 end
 			set(map_angle, a)
@@ -971,7 +972,7 @@ components = {
 	
 	interactive {
 		position = {228, 24, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(obs_1) - 1
 			if a < 1 then a = a + 360 end
 			set(obs_1, a)
@@ -981,7 +982,7 @@ components = {
 	
 	interactive {
 		position = {228+30, 24, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(obs_1) + 1
 			if a > 360 then a = a - 360 end
 			set(obs_1, a)
@@ -1034,7 +1035,7 @@ components = {
 	
 	interactive {
 		position = {228+286, 24, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(obs_2) - 1
 			if a < 1 then a = a + 360 end
 			set(obs_2, a)
@@ -1044,7 +1045,7 @@ components = {
 	
 	interactive {
 		position = {228+30+286, 24, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(obs_2) + 1
 			if a > 360 then a = a - 360 end
 			set(obs_2, a)
@@ -1084,7 +1085,7 @@ components = {
 	
 	interactive {
 		position = {135, 650, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(wind_set) - 0.5
 			if a < -99 then a = -99 end
 			set(wind_set, a)
@@ -1093,7 +1094,7 @@ components = {
 	},	
 	interactive {
 		position = {135+30, 650, 30, 50},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(wind_set) + 0.5
 			if a > 99 then a = 99 end
 			set(wind_set, a)
@@ -1115,7 +1116,7 @@ components = {
 	},	
 	interactive {
 		position = {7+43, 657, 38, 24},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(wind_course_ctr, 1 - get(wind_course_ctr))
 			return true
 		end,
@@ -1145,7 +1146,7 @@ components = {
 	},	
 	interactive {
 		position = {323+43, 657, 38, 24},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(wind_spd_ctr, 1 - get(wind_spd_ctr))
 			return true
 		end,
@@ -1174,7 +1175,7 @@ components = {
 		state = function()
 			return get(nvu_power_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nvu_power_on, 1 - get(nvu_power_on))
 			return true
 		end,
@@ -1188,7 +1189,7 @@ components = {
 		state = function()
 			return get(nvu_calc_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nvu_calc_on, 1 - get(nvu_calc_on))
 			return true
 		end,
@@ -1202,7 +1203,7 @@ components = {
 		state = function()
 			return get(nvu_corr_on) == 1
 		end,
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nvu_corr_on, 1 - get(nvu_corr_on))
 			return true
 		end,
@@ -1226,7 +1227,7 @@ components = {
 	},	
 	interactive {
 		position = {427+49, 467, 38, 24},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(zpu_1_ctr_btn, 1 - get(zpu_1_ctr_btn))
 			return true
 		end,
@@ -1256,7 +1257,7 @@ components = {
 	},	
 	interactive {
 		position = {427+49, 373, 38, 24},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(zpu_2_ctr_btn, 1 - get(zpu_2_ctr_btn))
 			return true
 		end,
@@ -1287,7 +1288,7 @@ components = {
 	},	
 	interactive {
 		position = {428+49, 165, 38, 24},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(nvu_ctr_btn, 1 - get(nvu_ctr_btn))
 			return true
 		end,
@@ -1327,7 +1328,7 @@ components = {
 	-- nvu_param_sel
 	interactive {
 		position = {386, 248, 40, 75},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(nvu_param_sel) - 1
 			if a < -4 then a = -4 end
 			set(nvu_param_sel, a)
@@ -1336,7 +1337,7 @@ components = {
 	},	
 	interactive {
 		position = {386+40, 248, 40, 75},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(nvu_param_sel) + 1
 			if a > 4 then a = 4 end
 			set(nvu_param_sel, a)
@@ -1347,7 +1348,7 @@ components = {
 	-- nvu_turn_sel
 	interactive {
 		position = {525, 250, 40, 75},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(nvu_turn_sel) - 1
 			if a < -1 then a = -1 end
 			set(nvu_turn_sel, a)
@@ -1356,7 +1357,7 @@ components = {
 	},	
 	interactive {
 		position = {525+40, 250, 40, 75},
-		onMouseHold = function()
+		onMouseDown = function()
 			local a = get(nvu_turn_sel) + 1
 			if a > 5 then a = 5 end
 			set(nvu_turn_sel, a)
@@ -1493,7 +1494,7 @@ components = {
 	-- close panel
 	interactive {
 		position = {size[1]-20, size[2]-20, 20, 20},
-		onMouseHold = function()
+		onMouseDown = function()
 			set(show_nvu_panel, 0)
 			return true
 		end,

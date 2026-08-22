@@ -24,6 +24,8 @@ local head = 0
 local verts = 0
 local alignment = 0
 local timer = get(run_time)
+local pixels = 0
+local rotation = 0
 
 function update()
 
@@ -55,6 +57,7 @@ head = 0 - get(heading) + math.random(-2, 2)
 end
 end
 end
+updateAll(components)
 end
 
 --0: KG 1:LB 2:KM 3:NM 4:MPS 5:FPM
@@ -176,7 +179,7 @@ components = {
 		visible = function()
 		return alignment == 0
 		end,		
-		onMouseHold = function()
+		onMouseDown = function()
 		alignment = 2
 		return true
 		end   
