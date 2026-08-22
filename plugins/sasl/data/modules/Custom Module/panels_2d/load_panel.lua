@@ -10,6 +10,9 @@ Changelog
 - Updated the 0% load preset so Cargo 1 and Cargo 2 are unloaded together with the passenger zones.
 - Consolidated mutable panel state into one STATE table to keep Lua 5.1/SASL callback upvalue counts safely below the compiler limit.
 - Preserved payload limits, passenger/cargo weights, fuel tables, fuel distribution thresholds, CG coefficients, tank limits, UI geometry, and public interfaces unless explicitly listed above.
+- Restored native SASL 3 mouse semantics: legacy onMouseClick actions now use onMouseDown instead of frame-driven onMouseHold.
+- Added updateAll(components) to the custom update() callback so child components keep receiving updates under SASL 3.
+- Removed an unused bitmap-font load that was not used by this panel.
 ]]
 
 -- Payload panel.
@@ -80,7 +83,6 @@ defineProps({
 include("fuel_tables.lua")
 
 --include("fuel_tables.sec")
-local draw_font = sasl.gl.loadBitmapFont('basic_font.fnt')
 ---local EMPTY_WEIGHT = 54865
 -- Internal mutable panel state.
 -- Keeping mutable values in one table prevents Lua 5.1 functions from capturing
@@ -449,7 +451,6 @@ function update()
 		else
 			set(CG_load, (STATE.zfw_cg - 25) * 5.28 / 100 - 0.2)
 		end
-		--]]
 		set(fuel_q_1, get(tank_1_pr))
 		set(fuel_q_4, get(tank_4_pr))
 		set(fuel_q_2L, get(tank_2L_pr))
@@ -467,10 +468,12 @@ function update()
 		else
 			set(cg_set, (STATE.zfw_cg - 25) * 5.28 / 100 - 0.2)
 		end
-		--]]
 		--set(show_load_panel, 0)	
 	end
+
+	updateAll(components)
 end
+
 --init_load()
 components = {
 	-- white background
@@ -484,7 +487,7 @@ components = {
 		color = {0.8, 0.8, 0.8, 1},
 	},	
 	-- STATE.cargo_1 fill
-	rectangle_ctr {
+	rectangle_ctr_fuel {
 		R = 0.5,
 		G = 0.5,
 		B = 1.0,
@@ -497,7 +500,7 @@ components = {
 		end,
 	},	
 	-- STATE.cargo_2 fill
-	rectangle_ctr {
+	rectangle_ctr_fuel {
 		R = 0.5,
 		G = 0.5,
 		B = 1.0,
@@ -510,7 +513,7 @@ components = {
 		end,
 	},		
 	-- STATE.tank_1_fill
-	rectangle_ctr {
+	rectangle_ctr_fuel {
 		R = 0.5,
 		G = 0.5,
 		B = 1.0,
@@ -523,7 +526,7 @@ components = {
 		end,
 	},		
 	-- STATE.tank_4_fill
-	rectangle_ctr {
+	rectangle_ctr_fuel {
 		R = 0.5,
 		G = 0.5,
 		B = 1.0,
@@ -536,7 +539,7 @@ components = {
 		end,
 	},		
 	-- STATE.tank_2L_fill
-	rectangle_ctr {
+	rectangle_ctr_fuel {
 		R = 0.5,
 		G = 0.5,
 		B = 1.0,
@@ -549,7 +552,7 @@ components = {
 		end,
 	},		
 	-- STATE.tank_2R_fill
-	rectangle_ctr {
+	rectangle_ctr_fuel {
 		R = 0.5,
 		G = 0.5,
 		B = 1.0,
@@ -562,7 +565,7 @@ components = {
 		end,
 	},		
 	-- STATE.tank_3L_fill
-	rectangle_ctr {
+	rectangle_ctr_fuel {
 		R = 0.5,
 		G = 0.5,
 		B = 1.0,
@@ -575,7 +578,7 @@ components = {
 		end,
 	},	
 	-- STATE.tank_3R_fill
-	rectangle_ctr {
+	rectangle_ctr_fuel {
 		R = 0.5,
 		G = 0.5,
 		B = 1.0,
@@ -1041,7 +1044,7 @@ components = {
 	-- cockpit crew	
 	interactive {
 		position = {121, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(crew_num_pr) - 1
 			if a < 3 then a = 3 end
 			set(crew_num_pr, a)
@@ -1050,7 +1053,7 @@ components = {
 	}, 
 	interactive {
 		position = {163, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(crew_num_pr) + 1
 			if a > 5 then a = 5 end
 			set(crew_num_pr, a)
@@ -1060,7 +1063,7 @@ components = {
 	-- ZONE 1
 	interactive {
 		position = {194, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_1_pr) - 1
 			if a < 0 then a = 0 end
 			set(zone_1_pr, a)
@@ -1069,7 +1072,7 @@ components = {
 	}, 
 	interactive {
 		position = {237, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_1_pr) + 1
 			if a > 18 then a = 18 end
 			set(zone_1_pr, a)
@@ -1079,7 +1082,7 @@ components = {
 	-- ZONE 2
 	interactive {
 		position = {278, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_2_pr) - 1
 			if a < 0 then a = 0 end
 			set(zone_2_pr, a)
@@ -1088,7 +1091,7 @@ components = {
 	}, 
 	interactive {
 		position = {338, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_2_pr) + 1
 			if a > 44 then a = 44 end
 			set(zone_2_pr, a)
@@ -1098,7 +1101,7 @@ components = {
 	-- Cabin crew
 	interactive {
 		position = {378, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(cabin_num_pr) - 1
 			if a < 0 then a = 0 end
 			set(cabin_num_pr, a)
@@ -1107,7 +1110,7 @@ components = {
 	}, 
 	interactive {
 		position = {431, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(cabin_num_pr) + 1
 			if a > 7 then a = 7 end
 			set(cabin_num_pr, a)
@@ -1117,7 +1120,7 @@ components = {
 	-- Zone 4
 	interactive {
 		position = {481, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_4_pr) - 1
 			if a < 0 then a = 0 end
 			set(zone_4_pr, a)
@@ -1126,7 +1129,7 @@ components = {
 	}, 
 	interactive {
 		position = {540, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_4_pr) + 1
 			if a > 48 then a = 48 end
 			set(zone_4_pr, a)
@@ -1136,7 +1139,7 @@ components = {
 	-- Zone 5
 	interactive {
 		position = {606, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_5_pr) - 1
 			if a < 0 then a = 0 end
 			set(zone_5_pr, a)
@@ -1145,7 +1148,7 @@ components = {
 	}, 
 	interactive {
 		position = {665, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_5_pr) + 1
 			if a > 42 then a = 42 end
 			set(zone_5_pr, a)
@@ -1155,7 +1158,7 @@ components = {
 	-- Zone 6
 	interactive {
 		position = {703, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_6_pr) - 1
 			if a < 0 then a = 0 end
 			set(zone_6_pr, a)
@@ -1164,7 +1167,7 @@ components = {
 	}, 
 	interactive {
 		position = {748, 572, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(zone_6_pr) + 1
 			if a > 14 then a = 14 end
 			set(zone_6_pr, a)
@@ -1174,7 +1177,7 @@ components = {
 	-- Cargo 1
 	interactive {
 		position = {211, 533, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(cargo_1_pr) - 100
 			if a < 0 then a = 0 end
 			set(cargo_1_pr, a)
@@ -1183,7 +1186,7 @@ components = {
 	}, 
 	interactive {
 		position = {362, 533, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(cargo_1_pr) + 100
 			if a > 12900 then a = 12900 end
 			set(cargo_1_pr, a)
@@ -1193,7 +1196,7 @@ components = {
 	-- Cargo 2
 	interactive {
 		position = {572, 533, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(cargo_2_pr) - 100
 			if a < 0 then a = 0 end
 			set(cargo_2_pr, a)
@@ -1202,7 +1205,7 @@ components = {
 	}, 
 	interactive {
 		position = {706, 533, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(cargo_2_pr) + 100
 			if a > 10400 then a = 10400 end
 			set(cargo_2_pr, a)
@@ -1212,7 +1215,7 @@ components = {
 	-- Kitchens
 	interactive {
 		position = {631, 488, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(kitchens_pr) - 10
 			if a < 0 then a = 0 end
 			set(kitchens_pr, a)
@@ -1221,7 +1224,7 @@ components = {
 	}, 
 	interactive {
 		position = {705, 488, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(kitchens_pr) + 10
 			if a > 500 then a = 500 end
 			set(kitchens_pr, a)
@@ -1231,7 +1234,7 @@ components = {
 	-- Equipment
 	interactive {
 		position = {896, 488, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(various_pr) - 10
 			if a < 50 then a = 50 end
 			set(various_pr, a)
@@ -1240,7 +1243,7 @@ components = {
 	}, 
 	interactive {
 		position = {971, 488, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(various_pr) + 10
 			if a > 500 then a = 500 end
 			set(various_pr, a)
@@ -1250,7 +1253,7 @@ components = {
 	-- 0% load
 	interactive {
 		position = {185, 486, 45, 35 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(zone_1_pr, 0)
 			set(zone_2_pr, 0)
 			set(zone_4_pr, 0)
@@ -1265,7 +1268,7 @@ components = {
 	-- 25% load
 	interactive {
 		position = {233, 486, 53, 35 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(zone_1_pr, math.random(3, 6))
 			set(zone_2_pr, math.random(8, 14))
 			set(zone_4_pr, math.random(9, 15))
@@ -1278,7 +1281,7 @@ components = {
 	-- 50% load
 	interactive {
 		position = {290, 486, 53, 35 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(zone_1_pr, math.random(7, 11))
 			set(zone_2_pr, math.random(19, 25))
 			set(zone_4_pr, math.random(21, 27))
@@ -1291,7 +1294,7 @@ components = {
 	-- 75% load
 	interactive {
 		position = {346, 486, 53, 35 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(zone_1_pr, math.random(12, 16))
 			set(zone_2_pr, math.random(30, 36))
 			set(zone_4_pr, math.random(33, 39))
@@ -1304,7 +1307,7 @@ components = {
 	-- 100% load
 	interactive {
 		position = {402, 486, 61, 35 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(zone_1_pr, 18)
 			set(zone_2_pr, 44)
 			set(zone_4_pr, 48)
@@ -1317,7 +1320,7 @@ components = {
 	-- Main distance
 	interactive {
 		position = {186, 398, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(main_dist_pr) - 100
 			if a < 0 then a = 0 end
 			set(main_dist_pr, a)
@@ -1326,7 +1329,7 @@ components = {
 	}, 
 	interactive {
 		position = {263, 398, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(main_dist_pr) + 100
 			if a > 5000 then a = 5000 end
 			set(main_dist_pr, a)
@@ -1336,7 +1339,7 @@ components = {
 	-- Alternate distance
 	interactive {
 		position = {471, 398, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(alt_dist_pr) - 100
 			if a < 0 then a = 0 end
 			set(alt_dist_pr, a)
@@ -1345,7 +1348,7 @@ components = {
 	}, 
 	interactive {
 		position = {549, 398, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(alt_dist_pr) + 100
 			if a > 5000 then a = 5000 end
 			set(alt_dist_pr, a)
@@ -1355,7 +1358,7 @@ components = {
 	-- Main FL
 	interactive {
 		position = {186, 366, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(main_fl_pr) - 10
 			if a < 200 then a = 200 end
 			set(main_fl_pr, a)
@@ -1364,7 +1367,7 @@ components = {
 	}, 
 	interactive {
 		position = {263, 366, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(main_fl_pr) + 10
 			if a > 390 then a = 390 end
 			set(main_fl_pr, a)
@@ -1374,7 +1377,7 @@ components = {
 	-- Alternate FL
 	interactive {
 		position = {471, 366, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(alt_fl_pr) - 10
 			if a < 200 then a = 200 end
 			set(alt_fl_pr, a)
@@ -1383,7 +1386,7 @@ components = {
 	}, 
 	interactive {
 		position = {549, 366, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(alt_fl_pr) + 10
 			if a > 390 then a = 390 end
 			set(alt_fl_pr, a)
@@ -1393,7 +1396,7 @@ components = {
 	-- Optimal main FL
 	interactive {
 		position = {133, 362, 50, 35 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local fl = calc_opt_fl(get(main_dist_pr))
 			set(main_fl_pr, fl)
 			return true
@@ -1402,7 +1405,7 @@ components = {
 	-- Optimal alt FL
 	interactive {
 		position = {419, 362, 50, 35 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local fl = calc_opt_fl(get(alt_dist_pr))
 			set(alt_fl_pr, fl)
 			return true
@@ -1411,7 +1414,7 @@ components = {
 	-- Navigation fuel
 	interactive {
 		position = {186, 282, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(nav_fuel_pr) - 100
 			if a < 0 then a = 0 end
 			set(nav_fuel_pr, a)
@@ -1420,7 +1423,7 @@ components = {
 	}, 
 	interactive {
 		position = {263, 282, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(nav_fuel_pr) + 100
 			if a > 5000 then a = 5000 end
 			set(nav_fuel_pr, a)
@@ -1430,7 +1433,7 @@ components = {
 	-- Taxi fuel
 	interactive {
 		position = {471, 282, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(taxi_fuel_pr) - 100
 			if a < 0 then a = 0 end
 			set(taxi_fuel_pr, a)
@@ -1439,7 +1442,7 @@ components = {
 	}, 
 	interactive {
 		position = {549, 282, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(taxi_fuel_pr) + 100
 			if a > 1000 then a = 1000 end
 			set(taxi_fuel_pr, a)
@@ -1449,7 +1452,7 @@ components = {
 	-- minimum fuel load
 	interactive {
 		position = {20, 202, 56, 37 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(tank_1_pr, 3300)
 			set(tank_4_pr, 0)
 			set(tank_2L_pr, 1500)
@@ -1462,7 +1465,7 @@ components = {
 	-- maximum fuel load
 	interactive {
 		position = {84, 202, 56, 37 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(tank_1_pr, 3300)
 			set(tank_4_pr, 6595)
 			set(tank_2L_pr, 9500)
@@ -1475,7 +1478,7 @@ components = {
 	-- Tank 4
 	interactive {
 		position = {242, 161, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_4_pr) - 25
 			if a < 0 then a = 0 end
 			set(tank_4_pr, a)
@@ -1484,7 +1487,7 @@ components = {
 	}, 
 	interactive {
 		position = {310, 161, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_4_pr) + 25
 			if a > 6595 then a = 6595 end
 			set(tank_4_pr, a)
@@ -1494,7 +1497,7 @@ components = {
 	-- Tank 1
 	interactive {
 		position = {242, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_1_pr) - 25
 			if a < 0 then a = 0 end
 			set(tank_1_pr, a)
@@ -1503,7 +1506,7 @@ components = {
 	}, 
 	interactive {
 		position = {310, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_1_pr) + 25
 			if a > 3300 then a = 3300 end
 			set(tank_1_pr, a)
@@ -1513,7 +1516,7 @@ components = {
 	-- Tank 3L
 	interactive {
 		position = {29, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_3L_pr) - 25
 			if a < 0 then a = 0 end
 			set(tank_3L_pr, a)
@@ -1522,7 +1525,7 @@ components = {
 	}, 
 	interactive {
 		position = {102, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_3L_pr) + 25
 			if a > 5405 then a = 5405 end
 			set(tank_3L_pr, a)
@@ -1532,7 +1535,7 @@ components = {
 	-- Tank 2L
 	interactive {
 		position = {137, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_2L_pr) - 25
 			if a < 0 then a = 0 end
 			set(tank_2L_pr, a)
@@ -1541,7 +1544,7 @@ components = {
 	}, 
 	interactive {
 		position = {211, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_2L_pr) + 25
 			if a > 9500 then a = 9500 end
 			set(tank_2L_pr, a)
@@ -1551,7 +1554,7 @@ components = {
 	-- Tank 2R
 	interactive {
 		position = {341, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_2R_pr) - 25
 			if a < 0 then a = 0 end
 			set(tank_2R_pr, a)
@@ -1560,7 +1563,7 @@ components = {
 	}, 
 	interactive {
 		position = {416, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_2R_pr) + 25
 			if a > 9500 then a = 9500 end
 			set(tank_2R_pr, a)
@@ -1570,7 +1573,7 @@ components = {
 	-- Tank 3R
 	interactive {
 		position = {448, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_3R_pr) - 25
 			if a < 0 then a = 0 end
 			set(tank_3R_pr, a)
@@ -1579,7 +1582,7 @@ components = {
 	}, 
 	interactive {
 		position = {523, 93, 30, 30 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			local a = get(tank_3R_pr) + 25
 			if a > 5405 then a = 5405 end
 			set(tank_3R_pr, a)
@@ -1629,14 +1632,14 @@ components = {
 	-- close button
 	interactive {
 		position = {429, 17, 130, 45 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_load_panel, 0)
 			return true
 		end,
 	},	
 	interactive {
 		position = {size[1]-15, size[2]-15, 15, 15 },
-		onMouseHold = function() 
+		onMouseDown = function() 
 			set(show_load_panel, 0)
 			return true
 		end,
