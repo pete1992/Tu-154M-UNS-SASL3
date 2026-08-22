@@ -517,47 +517,39 @@ function update()
 			set(taws_rus_phrase, 14 * (1 - eng) * alarm)
 			set(taws_eng_phrase, 14 * eng * alarm)
 			sound_counter = 1.5
-		elseif baro_vvi < 0 and rv_alt > 4.8 and rv_alt < 5.2 and sound_counter < 0 and MASTER then -- altitude callout 5m
-			set(taws_rus_phrase, 1 * (1 - eng))
-			--set(taws_eng_phrase, 1 * eng)
+		-- The replacement voice set announces feet.  rv_alt is measured in
+		-- metres, therefore every trigger below is the corresponding foot
+		-- value converted to metres.  The legacy voice selection (eng == 0)
+		-- uses all imported callouts; the original English set keeps its four
+		-- available callouts at 50, 200, 500 and 1000 ft.
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 1.35 and rv_alt < 1.70 and sound_counter <= 0 and MASTER then -- 5 ft
+			set(taws_rus_phrase, 1)
 			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 9.8 and rv_alt < 10.2 and sound_counter < 0 and MASTER then -- altitude callout 10m
-			set(taws_rus_phrase, 2 * (1 - eng))
-			--set(taws_eng_phrase, 2 * eng)	
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 2.85 and rv_alt < 3.25 and sound_counter <= 0 and MASTER then -- 10 ft
+			set(taws_rus_phrase, 2)
 			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 14.8 and rv_alt < 15.2 and sound_counter < 0 and eng == 0 and MASTER then -- altitude callout 15m
-			set(taws_rus_phrase, 3 * (1 - eng))
-			--set(taws_eng_phrase, 3 * eng)
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 5.85 and rv_alt < 6.35 and sound_counter <= 0 and MASTER then -- 20 ft
+			set(taws_rus_phrase, 3)
 			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 19.8 and rv_alt < 20.2 and sound_counter < 0 and MASTER then -- altitude callout 20m
-			set(taws_rus_phrase, 4 * (1 - eng))
-			--set(taws_eng_phrase, 4 * eng)
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 8.85 and rv_alt < 9.45 and sound_counter <= 0 and MASTER then -- 30 ft
+			set(taws_rus_phrase, 4)
 			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 24.8 and rv_alt < 25.2 and sound_counter < 0 and sound_counter < 0 and MASTER then -- altitude callout 25m
-			set(taws_rus_phrase, 5 * (1 - eng))
-			--set(taws_eng_phrase, 5 * eng)
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 11.85 and rv_alt < 12.55 and sound_counter <= 0 and MASTER then -- 40 ft
+			set(taws_rus_phrase, 5)
 			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 29.8 and rv_alt < 30.2 and sound_counter < 0 and MASTER then -- altitude callout 30m
+		elseif baro_vvi < 0 and rv_alt > 14.95 and rv_alt < 15.50 and sound_counter <= 0 and MASTER then -- 50 ft
 			set(taws_rus_phrase, 6 * (1 - eng))
-			--set(taws_eng_phrase, 6 * eng)
-			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 39.8 and rv_alt < 40.2 and sound_counter < 0 and MASTER then -- altitude callout 40m
-			set(taws_rus_phrase, 7 * (1 - eng))
-			--set(taws_eng_phrase, 7 * eng)
-			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 49.8 and rv_alt < 50.2 and sound_counter < 0 and MASTER then -- altitude callout 50m
-			set(taws_rus_phrase, 8 * (1 - eng))
-			--set(taws_eng_phrase, 8 * eng)
-			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 59.8 and rv_alt < 60.2 and eng == 0 and sound_counter < 0 and MASTER then -- altitude callout 60m
-			set(taws_rus_phrase, 9 * (1 - eng))
-			--set(taws_eng_phrase, 9 * eng)
-			sound_counter = 1
-			
-		elseif baro_vvi < 0 and rv_alt > 15 and rv_alt < 15.45 and sound_counter < 0 and MASTER then -- altitude callout 50ft
-			--set(taws_rus_phrase, 9 * (1 - eng))
 			set(taws_eng_phrase, 1 * eng)
-			sound_counter = 1	
+			sound_counter = 1
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 17.90 and rv_alt < 18.65 and sound_counter <= 0 and MASTER then -- 60 ft
+			set(taws_rus_phrase, 7)
+			sound_counter = 1
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 20.95 and rv_alt < 21.75 and sound_counter <= 0 and MASTER then -- 70 ft
+			set(taws_rus_phrase, 8)
+			sound_counter = 1
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 30.05 and rv_alt < 30.90 and sound_counter <= 0 and MASTER then -- 100 ft
+			set(taws_rus_phrase, 9)
+			sound_counter = 1
 					
 		elseif (mode_2A_res == 1 or mode_2B_res == 1) and sound_counter <= 0 and MASTER then -- terrain
 			set(taws_message, 4)
@@ -574,21 +566,26 @@ function update()
 			set(taws_rus_phrase, 20 * (1 - eng) * alarm)
 			set(taws_eng_phrase, 20 * eng * alarm)
 			sound_counter = 2
-		elseif baro_vvi < 0 and rv_alt > 149.8 and rv_alt < 150.2 and eng == 0 and sound_counter <= 0 and MASTER then -- altitude callout 150m
+		elseif baro_vvi < 0 and rv_alt > 60.55 and rv_alt < 61.35 and sound_counter <= 0 and MASTER then -- 200 ft
 			set(taws_rus_phrase, 10 * (1 - eng))
-			--set(taws_eng_phrase, 10 * eng)
-			sound_counter = 2
-		elseif baro_vvi < 0 and rv_alt > 60.7 and rv_alt < 61.1 and sound_counter <= 0 and MASTER then -- altitude callout 200ft
-			--set(taws_rus_phrase, 10 * (1 - eng))
 			set(taws_eng_phrase, 2 * eng)
 			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 152 and rv_alt < 153 and sound_counter <= 0 and MASTER then -- altitude callout 500ft
-			--set(taws_rus_phrase, 10 * (1 - eng))
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 91.00 and rv_alt < 91.90 and sound_counter <= 0 and MASTER then -- 300 ft
+			set(taws_rus_phrase, 21)
+			sound_counter = 1
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 121.35 and rv_alt < 122.45 and sound_counter <= 0 and MASTER then -- 400 ft
+			set(taws_rus_phrase, 22)
+			sound_counter = 1
+		elseif baro_vvi < 0 and rv_alt > 151.85 and rv_alt < 153.05 and sound_counter <= 0 and MASTER then -- 500 ft
+			set(taws_rus_phrase, 23 * (1 - eng))
 			set(taws_eng_phrase, 3 * eng)
 			sound_counter = 1
-		elseif baro_vvi < 0 and rv_alt > 304 and rv_alt < 306 and sound_counter <= 0 and MASTER then -- altitude callout 1000ft
-			--set(taws_rus_phrase, 10 * (1 - eng))
+		elseif baro_vvi < 0 and rv_alt > 303.80 and rv_alt < 306.00 and sound_counter <= 0 and MASTER then -- 1000 ft
+			set(taws_rus_phrase, 24 * (1 - eng))
 			set(taws_eng_phrase, 4 * eng)
+			sound_counter = 2
+		elseif eng == 0 and baro_vvi < 0 and rv_alt > 760.50 and rv_alt < 763.50 and sound_counter <= 0 and MASTER then -- 2500 ft
+			set(taws_rus_phrase, 25)
 			sound_counter = 2
 		elseif mode_4A_res == 1 and sound_counter <= 0 and MASTER then -- too low gear
 			set(taws_message, 8)

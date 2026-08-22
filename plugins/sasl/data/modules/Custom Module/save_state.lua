@@ -593,14 +593,14 @@ function update()
 
     local manualSave = get(save_state) == 1
 
-    if manualSave or saveCounter >= 30 then
+    if manualSave or saveCounter >= 90 then
         writeFile()
 
         if manualSave then
             set(save_state, 0)
             saveCounter = 0
         else
-            saveCounter = saveCounter % 30
+            saveCounter = saveCounter % 90
         end
     end
 end

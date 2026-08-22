@@ -1,3 +1,19 @@
+-- panels_2d.lua
+--[[
+Changelog
+- Corrected SASL 3 ContextWindow handling: window visibility now uses ContextWindow:setIsVisible().
+- Corrected SASL 3 ContextWindow positioning: menu positions now use ContextWindow:setPosition().
+- Replaced legacy subpanel parameters resizeProportional/savePosition with SASL 3 proportional/saveState.
+- Removed legacy noClose parameters; noDecore already suppresses the standard window decoration.
+- Corrected UPhone window movement/resizing options to SASL 3 noMove/noResize parameters.
+- Restored the original menu geometry: NAV/SERV/MISC submenus align with their corresponding rows in the extended menu.
+- Menu positions are recalculated only when the simulator window height changes.
+- Guarded the initial panel scale against a zero/unavailable X-Plane window height so ContextWindows never receive zero-sized render areas.
+- Converted the menus.png crop coordinates from image-top Y values to SASL 3's bottom-origin Y values so the menu labels render instead of empty black cells.
+- Removed the invalid file-level drawAll(components) call; this file has no top-level components table and ContextWindows render their own child components.
+- Preserved all existing panel toggles, SmartCopilot throttle-control button logic, menu actions, and Dataref paths.
+]]
+
 size = {2048, 2048}
 
 defineProperty("window_height",globalPropertyi("sim/graphics/view/window_height"))
@@ -20,17 +36,28 @@ defineProperty("ismaster", globalPropertyf("scp/api/ismaster"))
 defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) 
 defineProperty("control_thro_other", globalPropertyf("tu154/custom/SC/control_thro_other")) 
 
-local coef = (get(window_height) / 1024) * 0.8
+local initial_window_height = get(window_height)
 
-if coef > 1 then coef = 1 end  
+-- X-Plane can briefly report 0 while SASL is constructing the module. Passing
+-- zero-sized child components to a ContextWindow can crash SASL before Lua has
+-- a chance to report an error, so use the original 1024 px reference as a safe
+-- startup value and keep every initial render area at a usable size.
+if initial_window_height == nil or initial_window_height <= 0 then
+	initial_window_height = 1024
+end
+
+local coef = (initial_window_height / 1024) * 0.8
+
+if coef < 0.5 then coef = 0.5 end
+if coef > 1 then coef = 1 end
 defineProperty("closeImage", sasl.gl.loadImage("close.png"))
 palette = contextWindow {
 	position = { 50, 50, 251 * coef, 305 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = true;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = true;
+	proportional = true;
+	saveState = true;
 	name = "palette";	
 	components = {
 		palette_2d {
@@ -45,11 +72,11 @@ palette = contextWindow {
 
 payload_panel = contextWindow {
 	position = { 50, 50, 1024 * coef, 683 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = true;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = true;
+	proportional = true;
+	saveState = true;
 	name = "payload_panel";	
 	components = {
 		load_panel {
@@ -64,11 +91,11 @@ payload_panel = contextWindow {
 
 absu_2d_panel = contextWindow {
 	position = { 50, 50, 917 * coef, 597 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = true;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = true;
+	proportional = true;
+	saveState = true;
 	name = "absu_2d_panel";	
 	components = {
 		absu_panel_2d {
@@ -83,11 +110,11 @@ absu_2d_panel = contextWindow {
 
 ovhd_2d_panel = contextWindow {
 	position = { 50, 0, 1458 * coef, 1013 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = true;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = true;
+	proportional = true;
+	saveState = true;
 	name = "ovhd_2d_panel";	
 	components = {
 		overhead_2d {
@@ -101,11 +128,11 @@ ovhd_2d_panel = contextWindow {
 }
 nvu_2D_panel = contextWindow {
 	position = { 50, 0, 636 * coef, 786 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = false;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = true;
+	proportional = true;
+	saveState = true;
 	name = "nvu_2D_panel";	
 	components = {
 		nvu_panel_2d {
@@ -119,11 +146,11 @@ nvu_2D_panel = contextWindow {
 }
 checklist_panel = contextWindow {
 	position = { 50, 50, 240 * coef, 850 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = true;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = true;
+	proportional = true;
+	saveState = true;
 	name = "checklist_panel_2d";	
 	components = {
 		checklist_panel_2d {
@@ -137,11 +164,11 @@ checklist_panel = contextWindow {
 }
 ground_srv_panel = contextWindow {
 	position = { 50, 50, 655 * coef, 880 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = true;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = true;
+	proportional = true;
+	saveState = true;
 	name = "ground_srv_panel";	
 	components = {
 		ground_panel {
@@ -155,13 +182,13 @@ ground_srv_panel = contextWindow {
 }
 uphone = contextWindow {
     position = { 40, 20, 241 * coef , 446 * coef };
+	visible = false;
     noDecore = true;
     noBackground = true;
-    noClose = true;
-	movable = true;
-	resizable = true;
-	resizeProportional = true;
-	savePosition = true;
+	noMove = false;
+	noResize = false;
+	proportional = true;
+	saveState = true;
 	name = "uphone";
     components = {
 		UPhone {
@@ -175,11 +202,11 @@ uphone = contextWindow {
 }
 camera_panel = contextWindow {
 	position = { 50, 50, 512 * coef, 512 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = true;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = true;
+	proportional = true;
+	saveState = true;
 	name = "camera_panel";	
 	components = {
 		camera {
@@ -193,11 +220,11 @@ camera_panel = contextWindow {
 }
 fails_panel = contextWindow {
 	position = { 50, 100, 512 * coef, 700 * coef };
+	visible = false;
 	noDecore = true;
 	noBackground = true;
-	noClose = true;
-	resizeProportional = true;
-	savePosition = false;
+	proportional = true;
+	saveState = false;
 	name = "fails_panel";	
 	components = {
 		failures_2d {
@@ -209,115 +236,89 @@ fails_panel = contextWindow {
 		};
 	};
 }
-defineProperty("menu_wt", sasl.gl.loadImage("menus.png", 0, 0, 31, 30))
-defineProperty("menu_gr", sasl.gl.loadImage("menus.png", 30, 0, 31, 30))
-defineProperty("menu_ex_wt", sasl.gl.loadImage("menus.png", 0, 30, 31, 90))
-defineProperty("nav_ext_gr", sasl.gl.loadImage("menus.png", 30, 30, 31, 30))
-defineProperty("serv_ext_gr", sasl.gl.loadImage("menus.png", 30, 60, 31, 30))
-defineProperty("misc_ext_gr", sasl.gl.loadImage("menus.png", 30, 90, 31, 30))
-defineProperty("nav_menu_wt", sasl.gl.loadImage("menus.png", 60, 29, 121, 31))
-defineProperty("serv_menu_wt", sasl.gl.loadImage("menus.png", 60, 59, 61, 31))
-defineProperty("misc_menu_wt", sasl.gl.loadImage("menus.png", 60, 89, 121, 31))
-defineProperty("thro_red", sasl.gl.loadImage("menus.png", 90, 0, 31, 30))
-defineProperty("thro_grn", sasl.gl.loadImage("menus.png", 120, 0, 31, 30))
+local MENU_TEXTURE_HEIGHT = 256
+
+-- The sprite positions below were authored from the top edge of menus.png,
+-- while SASL 3 loadImage() measures Y from the bottom edge of the texture.
+local function menuTextureY(top, height)
+	return MENU_TEXTURE_HEIGHT - top - height
+end
+
+defineProperty("menu_wt", sasl.gl.loadImage("menus.png", 0, menuTextureY(0, 30), 31, 30))
+defineProperty("menu_gr", sasl.gl.loadImage("menus.png", 30, menuTextureY(0, 30), 31, 30))
+defineProperty("menu_ex_wt", sasl.gl.loadImage("menus.png", 0, menuTextureY(30, 90), 31, 90))
+defineProperty("nav_ext_gr", sasl.gl.loadImage("menus.png", 30, menuTextureY(30, 30), 31, 30))
+defineProperty("serv_ext_gr", sasl.gl.loadImage("menus.png", 30, menuTextureY(60, 30), 31, 30))
+defineProperty("misc_ext_gr", sasl.gl.loadImage("menus.png", 30, menuTextureY(90, 30), 31, 30))
+defineProperty("nav_menu_wt", sasl.gl.loadImage("menus.png", 60, menuTextureY(29, 31), 121, 31))
+defineProperty("serv_menu_wt", sasl.gl.loadImage("menus.png", 60, menuTextureY(59, 31), 61, 31))
+defineProperty("misc_menu_wt", sasl.gl.loadImage("menus.png", 60, menuTextureY(89, 31), 121, 31))
+defineProperty("thro_red", sasl.gl.loadImage("menus.png", 90, menuTextureY(0, 30), 31, 30))
+defineProperty("thro_grn", sasl.gl.loadImage("menus.png", 120, menuTextureY(0, 30), 31, 30))
 
 local main_menu_ext = false
 local nav_ext = false
 local serv_ext = false
 local misc_ext = false
 
--- UI layout constants (screen-space anchored)
-local MENU_MARGIN = 10
-
+-- UI layout constants.
 local MAIN_W, MAIN_H = 31, 30
-local EXT_W,  EXT_H  = 31, 90
-
-local NAV_W,  NAV_H  = 121, 31
+local EXT_W, EXT_H = 31, 90
+local NAV_W, NAV_H = 121, 31
 local SERV_W, SERV_H = 61, 31
 local MISC_W, MISC_H = 121, 31
 
-local function clamp(v, vmin, vmax)
-	if v < vmin then return vmin end
-	if v > vmax then return vmax end
-	return v
+local last_window_height = -1
+
+local function clamp(value, minimum, maximum)
+	if value < minimum then return minimum end
+	if value > maximum then return maximum end
+	return value
 end
 
 local function updateMenuLayout()
 	local wh = get(window_height)
 
-	-- Guard: during early init, objects may not exist yet
-	if not main_menu or not ext_menu or not nav_menu or not serv_menu or not misc_menu then
+	-- ContextWindows are already created before update() starts.
+	-- Reposition them only when the simulator window size actually changes.
+	if wh == last_window_height or wh <= 0 then
 		return
 	end
+	last_window_height = wh
 
-	-- Left edge, vertically centered
-	local main_y = (wh * 0.5) - (MAIN_H * 0.5)
-	main_y = clamp(main_y, 0, wh - MAIN_H)
+	-- Keep the main menu vertically centered at the left screen edge.
+	local main_y = clamp(wh * 0.5 - MAIN_H * 0.5, 0, math.max(0, wh - MAIN_H))
 
-	-- We have two possible directions for the stack:
-	-- 1) Downward (like original: ext below main)
-	-- 2) Upward (flip), if there's not enough space below
+	-- Preserve the original menu geometry:
+	-- extended menu directly below the main button, with each submenu aligned
+	-- to the matching NAV / SERV / MISC row.
+	local ext_y = clamp(main_y - EXT_H, 0, math.max(0, wh - EXT_H))
+	local nav_y = clamp(ext_y + 60, 0, math.max(0, wh - NAV_H))
+	local serv_y = clamp(ext_y + 30, 0, math.max(0, wh - SERV_H))
+	local misc_y = clamp(ext_y, 0, math.max(0, wh - MISC_H))
 
-	local needed_below = EXT_H -- ext menu height (includes the 3 toggles)
-	local lowest_needed = NAV_H + SERV_H + MISC_H -- worst case if all submenus shown (layout space)
+	main_menu:setPosition(0, main_y, MAIN_W, MAIN_H)
+	ext_menu:setPosition(0, ext_y, EXT_W, EXT_H)
+	nav_menu:setPosition(30, nav_y, NAV_W, NAV_H)
+	serv_menu:setPosition(30, serv_y, SERV_W, SERV_H)
+	misc_menu:setPosition(30, misc_y, MISC_W, MISC_H)
 
-	-- Total "potential" vertical span below main, if everything is open
-	local total_below = math.max(needed_below, lowest_needed)
+	-- Keep the SmartCopilot throttle-control button above the main menu.
+	local thro_y = clamp(main_y + MAIN_H + 10, 0, math.max(0, wh - 30))
+	thro_button:setPosition(0, thro_y, 31, 30)
+end
 
-	local space_below = main_y
-	local space_above = wh - (main_y + MAIN_H)
-
-	local open_down = true
-	if space_below < total_below and space_above > space_below then
-		open_down = false
-	end
-
-	local ext_y, nav_y, serv_y, misc_y
-
-	if open_down then
-		-- Open downward (decreasing Y)
-		ext_y  = main_y - EXT_H
-		nav_y  = main_y - NAV_H
-		serv_y = main_y - (NAV_H + SERV_H)
-		misc_y = main_y - (NAV_H + SERV_H + MISC_H)
-	else
-		-- Open upward (increasing Y)
-		ext_y  = main_y + MAIN_H
-		nav_y  = main_y + MAIN_H
-		serv_y = main_y + MAIN_H + NAV_H
-		misc_y = main_y + MAIN_H + NAV_H + SERV_H
-	end
-
-	-- Clamp all to screen
-	ext_y  = clamp(ext_y,  0, wh - EXT_H)
-	nav_y  = clamp(nav_y,  0, wh - NAV_H)
-	serv_y = clamp(serv_y, 0, wh - SERV_H)
-	misc_y = clamp(misc_y, 0, wh - MISC_H)
-
-	-- Apply positions
-	main_menu.position = { 0,  main_y, MAIN_W, MAIN_H }
-	ext_menu.position  = { 0,  ext_y,  EXT_W,  EXT_H  }
-
-	nav_menu.position  = { 30, nav_y,  NAV_W,  NAV_H  }
-	serv_menu.position = { 30, serv_y, SERV_W, SERV_H }
-	misc_menu.position = { 30, misc_y, MISC_W, MISC_H }
-
-	-- Optional: throttle button near main, avoid leaving screen
-	if thro_button then
-		local thro_y = main_y + MAIN_H + 10
-		if thro_y + 30 > wh then
-			thro_y = main_y - 30 - 10
-		end
-		thro_y = clamp(thro_y, 0, wh - 30)
-		thro_button.position = { 0, thro_y, 31, 30 }
+local function setWindowVisible(window, visible)
+	if window:isVisible() ~= visible then
+		window:setIsVisible(visible)
 	end
 end
 
 nav_menu = contextWindow {
 	position = { 30, 570, 121, 31 };
+	visible = false;
 	noDecore = true;
 	noBackground = false;
-	noClose = true;
 	noResize = true;
 	noMove = true;
 	components = {
@@ -363,9 +364,9 @@ nav_menu = contextWindow {
 }
 serv_menu = contextWindow {
 	position = { 30, 540, 61, 31 };
+	visible = false;
 	noDecore = true;
 	noBackground = false;
-	noClose = true;
 	noResize = true;
 	noMove = true;
 	components = {
@@ -391,9 +392,9 @@ serv_menu = contextWindow {
 }
 misc_menu = contextWindow {
 	position = { 30, 510, 121, 31 };
+	visible = false;
 	noDecore = true;
 	noBackground = false;
-	noClose = true;
 	noResize = true;
 	noMove = true;
 	components = {
@@ -433,9 +434,9 @@ misc_menu = contextWindow {
 }
 ext_menu = contextWindow {
 	position = { 0, 510, 31, 90 };
+	visible = false;
 	noDecore = true;
 	noBackground = false;
-	noClose = true;
 	noResize = true;
 	noMove = true;
 	components = {
@@ -489,9 +490,9 @@ ext_menu = contextWindow {
 }
 main_menu = contextWindow {
 	position = { 0, 600, 31, 30 };
+	visible = true;
 	noDecore = true;
 	noBackground = false;
-	noClose = true;
 	noResize = true;
 	noMove = true;
 	components = {
@@ -517,9 +518,9 @@ main_menu = contextWindow {
 }
 thro_button = contextWindow {
 	position = { 0, 640, 31, 30 };
+	visible = false;
 	noDecore = true;
 	noBackground = false;
-	noClose = true;
 	noResize = true;
 	noMove = true;
 	components = {
@@ -549,24 +550,22 @@ thro_button = contextWindow {
 
 function update()
 	updateMenuLayout()
-	main_menu.visible = true
-	ext_menu.visible = main_menu_ext
-	nav_menu.visible = main_menu_ext and nav_ext
-	serv_menu.visible = main_menu_ext and serv_ext
-	misc_menu.visible = main_menu_ext and misc_ext
-	payload_panel.visible = get(show_load_panel) == 1
-	absu_2d_panel.visible = get(show_absu_panel) == 1
-	ovhd_2d_panel.visible = get(show_ohvd_panel) == 1
-	nvu_2D_panel.visible = get(show_nvu_panel) == 1
-	checklist_panel.visible = get(show_checklist_panel) == 1
-	ground_srv_panel.visible = get(show_ground_panel) == 1
-	uphone.visible = get(show_phone) == 1
-	camera_panel.visible = get(show_cam) == 1
-	palette.visible = get(show_palette) == 1
-	fails_panel.visible = get(show_fail_panel) == 1
-	thro_button.visible = get(ismaster) > 0
-end
 
-function draw()
-	drawAll(components)  -- required for interactive areas in the context windows
+	setWindowVisible(main_menu, true)
+	setWindowVisible(ext_menu, main_menu_ext)
+	setWindowVisible(nav_menu, main_menu_ext and nav_ext)
+	setWindowVisible(serv_menu, main_menu_ext and serv_ext)
+	setWindowVisible(misc_menu, main_menu_ext and misc_ext)
+
+	setWindowVisible(payload_panel, get(show_load_panel) == 1)
+	setWindowVisible(absu_2d_panel, get(show_absu_panel) == 1)
+	setWindowVisible(ovhd_2d_panel, get(show_ohvd_panel) == 1)
+	setWindowVisible(nvu_2D_panel, get(show_nvu_panel) == 1)
+	setWindowVisible(checklist_panel, get(show_checklist_panel) == 1)
+	setWindowVisible(ground_srv_panel, get(show_ground_panel) == 1)
+	setWindowVisible(uphone, get(show_phone) == 1)
+	setWindowVisible(camera_panel, get(show_cam) == 1)
+	setWindowVisible(palette, get(show_palette) == 1)
+	setWindowVisible(fails_panel, get(show_fail_panel) == 1)
+	setWindowVisible(thro_button, get(ismaster) > 0)
 end

@@ -222,14 +222,14 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.4853
+[TU154 INFO]: Scripts loading time: 0.4261
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
 [TU154 INFO]: [LUA]: "crew_voices"	PREPARE
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
 [TU154 INFO]: [LUA]: "save_state"	State restored: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
@@ -255,50 +255,6 @@
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
@@ -308,33 +264,17 @@
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	CLIMB
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
@@ -347,62 +287,26 @@
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	DESCEND
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: Disabling...
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended

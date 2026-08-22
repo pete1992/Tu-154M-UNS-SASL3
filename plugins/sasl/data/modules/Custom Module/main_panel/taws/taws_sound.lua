@@ -24,26 +24,37 @@ local eng_too_low_flaps = sasl.al.loadSample('Custom Sounds/taws/eng/too_low_fla
 local eng_too_low_gear = sasl.al.loadSample('Custom Sounds/taws/eng/too_low_gear.wav')
 local eng_too_low_terrain = sasl.al.loadSample('Custom Sounds/taws/eng/too_low_terrain.wav')
 
-local rus_alt_5 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_5.wav')
-local rus_alt_10 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_10.wav')
-local rus_alt_15 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_15.wav')
-local rus_alt_20 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_20.wav')
-local rus_alt_25 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_25.wav')
-local rus_alt_30 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_30.wav')
-local rus_alt_40 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_40.wav')
-local rus_alt_50 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_50.wav')
-local rus_alt_60 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_60.wav')
-local rus_alt_150 = sasl.al.loadSample('Custom Sounds/taws/rus/alt_150.wav')
-local rus_check_alt = sasl.al.loadSample('Custom Sounds/taws/rus/check_alt.wav')
-local rus_dont_sink = sasl.al.loadSample('Custom Sounds/taws/rus/dont_sink.wav')
+-- The legacy "rus" directory now contains a second English TAWS voice set.
+-- Its radio-altimeter callouts announce feet, so keep the spoken value in the
+-- filename and let taws_warn_logic.lua trigger them at the matching height.
+local rus_alt_5 = sasl.al.loadSample('Custom Sounds/taws/rus/5ft.wav')
+local rus_alt_10 = sasl.al.loadSample('Custom Sounds/taws/rus/10ft.wav')
+local rus_alt_20 = sasl.al.loadSample('Custom Sounds/taws/rus/20ft.wav')
+local rus_alt_30 = sasl.al.loadSample('Custom Sounds/taws/rus/30ft.wav')
+local rus_alt_40 = sasl.al.loadSample('Custom Sounds/taws/rus/40ft.wav')
+local rus_alt_50 = sasl.al.loadSample('Custom Sounds/taws/rus/50ft.wav')
+local rus_alt_60 = sasl.al.loadSample('Custom Sounds/taws/rus/60ft.wav')
+local rus_alt_70 = sasl.al.loadSample('Custom Sounds/taws/rus/70ft.wav')
+local rus_alt_100 = sasl.al.loadSample('Custom Sounds/taws/rus/100ft.wav')
+local rus_alt_200 = sasl.al.loadSample('Custom Sounds/taws/rus/200ft.wav')
+local rus_alt_300 = sasl.al.loadSample('Custom Sounds/taws/rus/300ft.wav')
+local rus_alt_400 = sasl.al.loadSample('Custom Sounds/taws/rus/400ft.wav')
+local rus_alt_500 = sasl.al.loadSample('Custom Sounds/taws/rus/500ft.wav')
+local rus_alt_1000 = sasl.al.loadSample('Custom Sounds/taws/rus/1000ft.wav')
+local rus_alt_2500 = sasl.al.loadSample('Custom Sounds/taws/rus/2500ft.wav')
+local rus_check_alt = sasl.al.loadSample('Custom Sounds/taws/rus/altitude_alert.wav')
 local rus_glideslope = sasl.al.loadSample('Custom Sounds/taws/rus/glideslope.wav')
-local rus_pull_up = sasl.al.loadSample('Custom Sounds/taws/rus/pull_up.wav')
-local rus_sink_rate = sasl.al.loadSample('Custom Sounds/taws/rus/sink_rate.wav')
-local rus_terrain = sasl.al.loadSample('Custom Sounds/taws/rus/terrain.wav')
-local rus_terrain_ahead = sasl.al.loadSample('Custom Sounds/taws/rus/terrain_ahead.wav')
-local rus_too_low_flaps = sasl.al.loadSample('Custom Sounds/taws/rus/too_low_flaps.wav')
-local rus_too_low_gear = sasl.al.loadSample('Custom Sounds/taws/rus/too_low_gear.wav')
-local rus_too_low_terrain = sasl.al.loadSample('Custom Sounds/taws/rus/too_low_terrain.wav')
+local rus_pull_up = sasl.al.loadSample('Custom Sounds/taws/rus/pull.wav')
+local rus_sink_rate = sasl.al.loadSample('Custom Sounds/taws/rus/sink.wav')
+
+-- The imported set does not contain these phrases.  Reuse the existing
+-- English TAWS recordings instead of loading missing files.
+local rus_dont_sink = eng_dont_sink
+local rus_terrain = eng_terrain
+local rus_terrain_ahead = eng_terrain_ahead
+local rus_too_low_flaps = eng_too_low_flaps
+local rus_too_low_gear = eng_too_low_gear
+local rus_too_low_terrain = eng_too_low_terrain
 
 function update()
 	
@@ -81,14 +92,14 @@ function update()
 			
 		elseif num == 1 then sasl.al.playSample(rus_alt_5, false)
 		elseif num == 2 then sasl.al.playSample(rus_alt_10, false)
-		elseif num == 3 then sasl.al.playSample(rus_alt_15, false)
-		elseif num == 4 then sasl.al.playSample(rus_alt_20, false)
-		elseif num == 5 then sasl.al.playSample(rus_alt_25, false)
-		elseif num == 6 then sasl.al.playSample(rus_alt_30, false)
-		elseif num == 7 then sasl.al.playSample(rus_alt_40, false)
-		elseif num == 8 then sasl.al.playSample(rus_alt_50, false)
-		elseif num == 9 then sasl.al.playSample(rus_alt_60, false)
-		elseif num == 10 then sasl.al.playSample(rus_alt_150, false)
+		elseif num == 3 then sasl.al.playSample(rus_alt_20, false)
+		elseif num == 4 then sasl.al.playSample(rus_alt_30, false)
+		elseif num == 5 then sasl.al.playSample(rus_alt_40, false)
+		elseif num == 6 then sasl.al.playSample(rus_alt_50, false)
+		elseif num == 7 then sasl.al.playSample(rus_alt_60, false)
+		elseif num == 8 then sasl.al.playSample(rus_alt_70, false)
+		elseif num == 9 then sasl.al.playSample(rus_alt_100, false)
+		elseif num == 10 then sasl.al.playSample(rus_alt_200, false)
 		elseif num == 11 then sasl.al.playSample(rus_check_alt, false)
 		elseif num == 12 then sasl.al.playSample(rus_dont_sink, false)
 		elseif num == 13 then sasl.al.playSample(rus_glideslope, false)
@@ -99,6 +110,11 @@ function update()
 		elseif num == 18 then sasl.al.playSample(rus_too_low_flaps, false)
 		elseif num == 19 then sasl.al.playSample(rus_too_low_gear, false)
 		elseif num == 20 then sasl.al.playSample(rus_too_low_terrain, false)
+		elseif num == 21 then sasl.al.playSample(rus_alt_300, false)
+		elseif num == 22 then sasl.al.playSample(rus_alt_400, false)
+		elseif num == 23 then sasl.al.playSample(rus_alt_500, false)
+		elseif num == 24 then sasl.al.playSample(rus_alt_1000, false)
+		elseif num == 25 then sasl.al.playSample(rus_alt_2500, false)
 	
 		end
 	
