@@ -77,9 +77,8 @@ local SAMPLES = {
 }
 
 -- Global trim-speed tuning. 1.10 = 110% of the original speed.
-local TRIM_SPEED_SCALE = 1.10
-
-local PITCH_LIMIT = 0.80
+local TRIM_SPEED_SCALE = 1.0
+local PITCH_LIMIT = 1.0
 local ROLL_LIMIT = 0.24
 local YAW_LIMIT = 0.24
 

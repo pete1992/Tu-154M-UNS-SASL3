@@ -248,6 +248,7 @@ defineProps({
 })
 
 local stateFileName = moduleDirectory .. "/Custom Module/saved_state.ini"
+local SAVE_INTERVAL = 600 -- 10 minutes
 
 -- Entry format: { key, property, saveMultiplier, loadMultiplier, floorOnSave }
 -- Multipliers are only used where the legacy file format requires them.
@@ -592,15 +593,14 @@ function update()
     end
 
     local manualSave = get(save_state) == 1
-
-    if manualSave or saveCounter >= 90 then
-        writeFile()
-
-        if manualSave then
-            set(save_state, 0)
-            saveCounter = 0
-        else
-            saveCounter = saveCounter % 90
-        end
+	if manualSave or saveCounter >= SAVE_INTERVAL then
+    writeFile()
+    
+	if manualSave then
+        set(save_state, 0)
+        saveCounter = 0
+    else
+        saveCounter = saveCounter % SAVE_INTERVAL
     end
+end
 end

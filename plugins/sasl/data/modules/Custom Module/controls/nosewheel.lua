@@ -41,66 +41,50 @@ defineProps({
     {"nosewheel_turn_enable",
         "tu154/custom/switchers/nosewheel_turn_enable",
         globalPropertyi},
-
     {"nosewheel_turn_power",
         "tu154/custom/hydro/nosewheel_turn_power",
         globalPropertyi},
-
     {"nosewheel_turn_sel",
         "tu154/custom/switchers/nosewheel_turn_sel",
         globalPropertyi},
-
     {"bus27_volt_left",
         "tu154/custom/elec/bus27_volt_left",
         globalPropertyf},
-
     {"gs_press_2",
         "tu154/custom/hydro/gs_press_2",
         globalPropertyf},
-
     -- User-selected steering input from the 2D panel:
     -- 1 = Tiller
     -- 0 = Rudder/Yaw
     {"have_pedals",
         "tu154/custom/have_pedals",
         globalPropertyi},
-
-
     -- SmartCopilot / synchronized pilot inputs.
     {"tiller_val",
         "tu154/custom/SC/gear/tire_steer_command_deg",
         globalPropertyf},
-
     {"joy_yaw",
         "tu154/custom/SC/yoke_heading_ratio",
         globalPropertyf},
-
     {"ismaster",
         "scp/api/ismaster",
         globalPropertyf},
-
-
     -- X-Plane steering and gear state.
     {"tire_steer_command_deg",
         "sim/flightmodel2/gear/tire_steer_command_deg[0]",
         globalProperty},
-
     {"deflection_mtr_1",
         "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]",
         globalProperty},
-
     {"override_wheel_steer",
         "sim/operation/override/override_wheel_steer",
         globalPropertyi},
-
     {"lock",
         "sim/cockpit2/controls/nosewheel_steer_on",
         globalPropertyi},
-
     {"groundspeed",
         "sim/flightmodel/position/groundspeed",
         globalPropertyf},
-
     -- X-Plane runway condition:
     --   0     dry
     --   1-3   wet
@@ -110,29 +94,21 @@ defineProps({
     --   13-15 snowy/icy
     {"runway_friction",
         "sim/weather/runway_friction",
-        globalPropertyi},
-
-
+        globalPropertyf},
     -- X-Plane nosewheel steering limits.
     {"weel_angle1",
         "sim/aircraft/gear/acf_nw_steerdeg1",
         globalPropertyf},
-
     {"weel_angle2",
         "sim/aircraft/gear/acf_nw_steerdeg2",
         globalPropertyf},
-
-
     -- Animation and timing.
     {"tiller_angle",
         "tu154/custom/anim/tiller_pos",
         globalPropertyf},
-
     {"frame_time",
         "tu154/custom/time/frame_time",
         globalPropertyf},
-
-
     -- BetterPushback.
     {"pushback",
         "bp/connected",
@@ -151,23 +127,18 @@ defineProps({
 --   13-15 snowy/icy
 local frict_tbl = {
     {0,  1.00},
-
     {1,  0.95},
     {2,  0.90},
     {3,  0.80},
-
     {4,  0.90},
     {5,  0.85},
     {6,  0.80},
-
     {7,  0.85},
     {8,  0.80},
     {9,  0.75},
-
     {10, 0.75},
     {11, 0.70},
     {12, 0.65},
-
     {13, 0.75},
     {14, 0.70},
     {15, 0.65},
@@ -376,11 +347,7 @@ function update()
 
 
         -- No tiller animation while the user selected rudder steering.
-        set(
-            tiller_angle,
-            0
-        )
-
+        set(tiller_angle, 0)
     end
 
 
@@ -481,19 +448,10 @@ local function gear_toggle_handler(phase)
 end
 
 
-registerCommandHandler(
-    gear_toggle_command,
-    0,
-    gear_toggle_handler
-)
+registerCommandHandler(gear_toggle_command, 0, gear_toggle_handler)
 
 
 
 function onModuleDone()
-
-    set(
-        override_wheel_steer,
-        0
-    )
-
+    set(override_wheel_steer, 0)
 end
