@@ -1,20 +1,20 @@
-createGlobalPropertyi("tu154/custom/save_state_enabled", 1) --     
-createGlobalPropertyi("tu154/custom/reset_state", 0) --   
-createGlobalPropertyi("tu154/custom/save_state", 0) --    
-createGlobalPropertyi("tu154/custom/hardware_cockpit", 0) --     
-createGlobalPropertyf("tu154/custom/time/frame_time", 0.1) --   .   ,    .  FPS  10 -    = 0.1
-createGlobalPropertyf("tu154/custom/anim/cargo_1", 0) --    1. 0 - , 1 - 
-createGlobalPropertyf("tu154/custom/anim/cargo_2", 0) --    2. 0 - , 1 - 
-createGlobalPropertyf("tu154/custom/anim/apu_doors", 0) --   . 0 - , 1 - .
+createGlobalPropertyi("tu154/custom/save_state_enabled", 1) 
+createGlobalPropertyi("tu154/custom/reset_state", 0) 
+createGlobalPropertyi("tu154/custom/save_state", 0)  
+createGlobalPropertyi("tu154/custom/hardware_cockpit", 0)
+createGlobalPropertyf("tu154/custom/time/frame_time", 0.1) 
+createGlobalPropertyf("tu154/custom/anim/cargo_1", 0)
+createGlobalPropertyf("tu154/custom/anim/cargo_2", 0)
+createGlobalPropertyf("tu154/custom/anim/apu_doors", 0) 
 createGlobalPropertyf("tu154/custom/anim/pax_door_1", 0) --    
 createGlobalPropertyf("tu154/custom/anim/pax_door_2", 0) --    
 createGlobalPropertyf("tu154/custom/anim/pax_door_3", 0) --    
 createGlobalPropertyf("tu154/custom/anim/lg/front_pos", 1) --    
 createGlobalPropertyf("tu154/custom/anim/lg/front_defl", 0) --    
 createGlobalPropertyf("tu154/custom/anim/lg/front_turn", 0) --    
-createGlobalPropertyf("tu154/custom/anim/lg/main_pos_left", 1) --    . 0-1 - , 1+ -  
-createGlobalPropertyf("tu154/custom/anim/lg/main_rot_left", 0) --     
-createGlobalPropertyf("tu154/custom/anim/lg/main_pos_right", 1) --    . 0-1 - , 1+ -  
+createGlobalPropertyf("tu154/custom/anim/lg/main_pos_left", 1) 
+createGlobalPropertyf("tu154/custom/anim/lg/main_rot_left", 0) 
+createGlobalPropertyf("tu154/custom/anim/lg/main_pos_right", 1) 
 createGlobalPropertyf("tu154/custom/anim/lg/main_rot_right", 0) --     
 createGlobalPropertyf("tu154/custom/anim/light_open_left", 0) --   
 createGlobalPropertyf("tu154/custom/anim/light_open_right", 0) --   

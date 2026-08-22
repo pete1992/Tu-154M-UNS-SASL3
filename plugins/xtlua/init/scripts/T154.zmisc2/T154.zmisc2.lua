@@ -1,10 +1,13 @@
+-- T154.zmisc2.lua
+
+-- deferred_datarefs
 function deferred_dataref(name,type,notifier)
 	print("Deffered dataref: "..name)
 	dref=XLuaCreateDataRef(name, type,"yes",notifier)
 	return wrap_dref_any(dref,type) 
 end
 
-
+-- find datatefs
 simDR_failures = find_dataref("tu154/custom/failures/failures_enabled")
 simDR_rpm_low_1 = find_dataref("tu154/custom/gauges/engine/rpm_low_1")
 simDR_rpm_low_2 = find_dataref("tu154/custom/gauges/engine/rpm_low_2")
@@ -45,16 +48,8 @@ simDR_var_left = find_dataref("tu154/custom/switchers/ovhd/var_left")
 simDR_var_right = find_dataref("tu154/custom/switchers/ovhd/var_right")
 simDR_start_apu = find_dataref("tu154/custom/lights/apu/start_apu")
 simDR_lamp_test_apu =  find_dataref("tu154/custom/buttons/lamp_test_apu")
-
-
-
 ----- show_actual_fuel
-
 simDR_load_panel = find_dataref("tu154/custom/panels/show_load_panel")
-
------
-
-
 simDR_light_fuel_pump_1 = find_dataref("tu154/custom/lights/small/fuel_pump_1")
 simDR_light_fuel_pump_2 = find_dataref("tu154/custom/lights/small/fuel_pump_2")
 simDR_light_fuel_pump_3 = find_dataref("tu154/custom/lights/small/fuel_pump_3")
@@ -89,7 +84,6 @@ simDR_vna33_3_lit = find_dataref("tu154/custom/lights/engines/eng3_vna33")
 simDR_vna0_1_lit = find_dataref("tu154/custom/lights/engines/eng1_vna0")
 simDR_vna0_2_lit = find_dataref("tu154/custom/lights/engines/eng2_vna0")
 simDR_vna0_3_lit = find_dataref("tu154/custom/lights/engines/eng3_vna0")
-
 simDR_brake_heat_left = find_dataref("tu154/custom/failures/brake_heat_left")
 simDR_brake_heat_right = find_dataref("tu154/custom/failures/brake_heat_right")
 simDR_fuel_tanks = find_dataref("sim/flightmodel/weight/m_fuel") 
@@ -112,8 +106,6 @@ simDR_payload_crew = find_dataref("tu154/custom/payload/crew_num")
 simDR_payload_cabin = find_dataref("tu154/custom/payload/cabin_num")
 simDR_srd_buzzer = find_dataref("tu154/custom/switchers/eng/srd_buzzer")
 simDR_srd_buzzer_cap = find_dataref("tu154/custom/switchers/eng/srd_buzzer_cap")
-
-
 simDR_cg = find_dataref("sim/flightmodel/misc/cgz_ref_to_default")
 simDR_tank1 = find_dataref("tu154/custom/payload/tank_1")
 simDR_tank2_l = find_dataref("tu154/custom/payload/tank_2L")
@@ -132,8 +124,23 @@ simDR_door_cargo1 = find_dataref("sim/cockpit2/switches/custom_slider_on[2]")
 simDR_door_cargo2 = find_dataref("sim/cockpit2/switches/custom_slider_on[3]")
 simDR_door_kitchen = find_dataref("sim/cockpit2/switches/custom_slider_on[6]")
 simDR_catering_anim = find_dataref("tu154/custom/anim/catering_tanker")
+mDR_percip_on_craft = find_dataref("sim/weather/precipitation_on_aircraft_ratio")
+simDR_speed_svs = find_dataref("tu154/custom/svs/true_airspeed")
+simDR_ppd1_fail = find_dataref("tu154/custom/failures/pitot1")
+simDR_ppd2_fail = find_dataref("tu154/custom/failures/pitot2")
+simDR_ppd3_fail = find_dataref("tu154/custom/antiice/ppd_3_heat_fail")
+simDR_kus_left = find_dataref("tu154/custom/gauges/speed/kus_ias_left")
+simDR_tas_left = find_dataref("tu154/custom/gauges/speed/kus_tas_left")
+simDR_ias_left = find_dataref("tu154/custom/gauges/speed/ias_left")
+simDR_ias_y_left = find_dataref("tu154/custom/gauges/speed/ias_yellow_left")
+simDR_kus_right = find_dataref("tu154/custom/gauges/speed/kus_ias_right")
+simDR_tas_right = find_dataref("tu154/custom/gauges/speed/kus_tas_right")
+simDR_ias_right = find_dataref("tu154/custom/gauges/speed/ias_right")
+simDR_ias_y_right = find_dataref("tu154/custom/gauges/speed/ias_yellow_right")
 
 
+
+-- deferred_dataref
 rpm1_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_1_new", "number")
 rpm2_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_2_new", "number")
 rpm3_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_3_new", "number")
@@ -153,7 +160,6 @@ simDR_cg_pos_met = find_dataref("sim/flightmodel/misc/cgz_ref_to_default")
 simDR_cg_pos_to = find_dataref("tu154/custom/t154_efb/cax_to")
 
 -- ppd icing fix --
-
 simDR_ppd1 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_1")
 simDR_ppd2 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_2")
 simDR_ppd3 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_3")
