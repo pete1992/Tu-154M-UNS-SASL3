@@ -15,9 +15,19 @@ defineProperty("fuel_q_3L", globalProperty("sim/flightmodel/weight/m_fuel[5]")) 
 
 defineProperty("gear1_deflect", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))
 
+-- The two panel faces occupy the top of the 512 px atlas. SASL 3 crop Y
+-- coordinates start at the bottom, unlike the original source coordinates.
+local PALETTE_ATLAS_HEIGHT = 512
+
+local function paletteAtlasY(top, height)
+	return PALETTE_ATLAS_HEIGHT - top - height
+end
+
 -- load images
-defineProperty("bg_img1", sasl.gl.loadImage("palette.png", 0, 0, 251, 305))
-defineProperty("bg_img2", sasl.gl.loadImage("palette.png", 250, 0, 251, 305))
+defineProperty("bg_img1", sasl.gl.loadImage("palette.png", 0, paletteAtlasY(0, 305), 251, 305))
+defineProperty("bg_img2", sasl.gl.loadImage("palette.png", 250, paletteAtlasY(0, 305), 251, 305))
+
+local palette_font = sasl.gl.loadFont("Verdana.ttf")
 
 defineProperty("cg_pos_actual", globalProperty("tu154/custom/misc/cg_pos_actual"))
 defineProperty("weight_actual", globalProperty("tu154/custom/misc/weight_actual"))
@@ -386,6 +396,9 @@ components = {
 	text_draw {
 		position = {155, 264, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_weight
 		end,
@@ -395,6 +408,9 @@ components = {
 	text_draw {
 		position = {155, 244, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return CG_show
 		end,
@@ -404,6 +420,9 @@ components = {
 	text_draw {
 		position = {155, 184, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_V1_15
 		end,
@@ -416,6 +435,9 @@ components = {
 	text_draw {
 		position = {155, 164, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vr_15
 		end,
@@ -428,6 +450,9 @@ components = {
 	text_draw {
 		position = {155, 144, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_V2_15
 		end,
@@ -440,6 +465,9 @@ components = {
 	text_draw {
 		position = {155, 124, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vfl_0
 		end,
@@ -451,6 +479,9 @@ components = {
 	text_draw {
 		position = {155, 84, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_V1_28
 		end,
@@ -463,6 +494,9 @@ components = {
 	text_draw {
 		position = {155, 64, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vr_28
 		end,
@@ -475,6 +509,9 @@ components = {
 	text_draw {
 		position = {155, 44, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_V2_28
 		end,
@@ -487,6 +524,9 @@ components = {
 	text_draw {
 		position = {155, 24, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vfl_15_28
 		end,
@@ -499,6 +539,9 @@ components = {
 	text_draw {
 		position = {155, 4, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vfl_0
 		end,
@@ -511,6 +554,9 @@ components = {
 	text_draw {
 		position = {155, 184, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vapp_0
 		end,
@@ -523,6 +569,9 @@ components = {
 	text_draw {
 		position = {155, 164, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vapp_15
 		end,
@@ -535,6 +584,9 @@ components = {
 	text_draw {
 		position = {155, 144, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vapp_28
 		end,
@@ -547,6 +599,9 @@ components = {
 	text_draw {
 		position = {155, 124, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vapp_36
 		end,
@@ -559,6 +614,9 @@ components = {
 	text_draw {
 		position = {155, 104, 50, 50},
 		color = {0, 0, 0, 1},
+		font = palette_font,
+		font_size = 16,
+		bitmap = false,
 		text = function()
 			return show_Vapp_45
 		end,

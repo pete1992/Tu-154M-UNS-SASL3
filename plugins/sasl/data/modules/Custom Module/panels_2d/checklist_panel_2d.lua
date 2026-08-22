@@ -33,14 +33,22 @@ defineProperty("checklist_selected",globalPropertyi("tu154/custom/checklist/chec
 
 -- images
 
-defineProperty("bg_img_0", sasl.gl.loadImage("checklist_tex.png", 0, 0, 240, 850))
-defineProperty("bg_img_1", sasl.gl.loadImage("checklist_tex.png", 249, 0, 240, 850))
+-- The checklist atlas was authored with Y coordinates measured from the PNG's
+-- top edge; SASL 3 loadImage() measures them from the bottom edge.
+local CHECKLIST_ATLAS_HEIGHT = 1024
 
-defineProperty("bg_img_0_RUS", sasl.gl.loadImage("checklist_tex_RUS.png", 0, 0, 240, 850))
-defineProperty("bg_img_1_RUS", sasl.gl.loadImage("checklist_tex_RUS.png", 249, 0, 240, 850))
+local function checklistAtlasY(top, height)
+	return CHECKLIST_ATLAS_HEIGHT - top - height
+end
 
-defineProperty("fishka_left", sasl.gl.loadImage("checklist_tex.png", 0, 859, 166, 25))
-defineProperty("fishka_right", sasl.gl.loadImage("checklist_tex.png", 0, 887, 166, 25))
+defineProperty("bg_img_0", sasl.gl.loadImage("checklist_tex.png", 0, checklistAtlasY(0, 850), 240, 850))
+defineProperty("bg_img_1", sasl.gl.loadImage("checklist_tex.png", 249, checklistAtlasY(0, 850), 240, 850))
+
+defineProperty("bg_img_0_RUS", sasl.gl.loadImage("checklist_tex_RUS.png", 0, checklistAtlasY(0, 850), 240, 850))
+defineProperty("bg_img_1_RUS", sasl.gl.loadImage("checklist_tex_RUS.png", 249, checklistAtlasY(0, 850), 240, 850))
+
+defineProperty("fishka_left", sasl.gl.loadImage("checklist_tex.png", 0, checklistAtlasY(859, 25), 166, 25))
+defineProperty("fishka_right", sasl.gl.loadImage("checklist_tex.png", 0, checklistAtlasY(887, 25), 166, 25))
 
 components = {
 

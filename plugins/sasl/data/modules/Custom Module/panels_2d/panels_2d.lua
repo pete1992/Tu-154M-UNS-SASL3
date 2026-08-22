@@ -5,7 +5,6 @@ Changelog
 - Corrected SASL 3 ContextWindow positioning: menu positions now use ContextWindow:setPosition().
 - Replaced legacy subpanel parameters resizeProportional/savePosition with SASL 3 proportional/saveState.
 - Removed legacy noClose parameters; noDecore already suppresses the standard window decoration.
-- Corrected UPhone window movement/resizing options to SASL 3 noMove/noResize parameters.
 - Restored the original menu geometry: NAV/SERV/MISC submenus align with their corresponding rows in the extended menu.
 - Menu positions are recalculated only when the simulator window height changes.
 - Guarded the initial panel scale against a zero/unavailable X-Plane window height so ContextWindows never receive zero-sized render areas.
@@ -27,7 +26,6 @@ defineProperty("show_ohvd_panel",globalPropertyi("tu154/custom/panels/show_ohvd_
 defineProperty("show_nvu_panel",globalPropertyi("tu154/custom/panels/show_nvu_panel")) 
 defineProperty("show_checklist_panel",globalPropertyi("tu154/custom/panels/show_checklist_panel")) 
 defineProperty("show_ground_panel",globalPropertyi("tu154/custom/panels/show_ground_panel")) 
-defineProperty("show_phone",globalPropertyi("tu154/custom/panels/show_phone")) 
 defineProperty("show_cam",globalPropertyi("tu154/custom/panels/show_cam")) 
 defineProperty("show_palette",globalPropertyi("tu154/custom/panels/show_palette")) 
 defineProperty("show_fail_panel",globalPropertyi("tu154/custom/panels/show_fail_panel")) 
@@ -50,9 +48,15 @@ local coef = (initial_window_height / 1024) * 0.8
 
 if coef < 0.5 then coef = 0.5 end
 if coef > 1 then coef = 1 end
+
+-- These two narrow reference panels become hard to read with the common 0.8
+-- panel coefficient, so give them a modest panel-specific enlargement.
+local palette_coef = coef * 1.4
+local checklist_coef = coef * 1.25
+
 defineProperty("closeImage", sasl.gl.loadImage("close.png"))
 palette = contextWindow {
-	position = { 50, 50, 251 * coef, 305 * coef };
+	position = { 50, 50, 251 * palette_coef, 305 * palette_coef };
 	visible = false;
 	noDecore = true;
 	noBackground = true;
@@ -61,10 +65,10 @@ palette = contextWindow {
 	name = "palette";	
 	components = {
 		palette_2d {
-			position = { 0, 0, 251 * coef, 305 * coef },
+			position = { 0, 0, 251 * palette_coef, 305 * palette_coef },
 		};
 		textureLit {
-			position = { 251 * coef - 15, 305 * coef - 15, 15, 15 },
+			position = { 251 * palette_coef - 15, 305 * palette_coef - 15, 15, 15 },
 			image = get(closeImage),
 		};
 	};
@@ -145,7 +149,7 @@ nvu_2D_panel = contextWindow {
 	};
 }
 checklist_panel = contextWindow {
-	position = { 50, 50, 240 * coef, 850 * coef };
+	position = { 50, 50, 240 * checklist_coef, 850 * checklist_coef };
 	visible = false;
 	noDecore = true;
 	noBackground = true;
@@ -154,10 +158,10 @@ checklist_panel = contextWindow {
 	name = "checklist_panel_2d";	
 	components = {
 		checklist_panel_2d {
-			position = { 0, 0, 240 * coef, 850 * coef },
+			position = { 0, 0, 240 * checklist_coef, 850 * checklist_coef },
 		};
 		textureLit {
-			position = { 240 * coef - 15, 850 * coef - 15, 15, 15 },
+			position = { 240 * checklist_coef - 15, 850 * checklist_coef - 15, 15, 15 },
 			image = get(closeImage),
 		};
 	};
@@ -178,26 +182,6 @@ ground_srv_panel = contextWindow {
 			position = { 655 * coef - 15, 880 * coef - 15, 15, 15 },
 			image = get(closeImage),
 		};
-	};
-}
-uphone = contextWindow {
-    position = { 40, 20, 241 * coef , 446 * coef };
-	visible = false;
-    noDecore = true;
-    noBackground = true;
-	noMove = false;
-	noResize = false;
-	proportional = true;
-	saveState = true;
-	name = "uphone";
-    components = {
-		UPhone {
-         position = { 0, 0, 241 * coef, 446 * coef  },
-         };
-		textureLit {
- 		 position = {(241 - 16) * coef , (446 - 16) * coef , 16 * coef , 16 * coef },
-		 image = get(closeImage),
-		 };
 	};
 }
 camera_panel = contextWindow {
@@ -252,7 +236,11 @@ defineProperty("serv_ext_gr", sasl.gl.loadImage("menus.png", 30, menuTextureY(60
 defineProperty("misc_ext_gr", sasl.gl.loadImage("menus.png", 30, menuTextureY(90, 30), 31, 30))
 defineProperty("nav_menu_wt", sasl.gl.loadImage("menus.png", 60, menuTextureY(29, 31), 121, 31))
 defineProperty("serv_menu_wt", sasl.gl.loadImage("menus.png", 60, menuTextureY(59, 31), 61, 31))
-defineProperty("misc_menu_wt", sasl.gl.loadImage("menus.png", 60, menuTextureY(89, 31), 121, 31))
+-- UPhone is intentionally omitted from MISC. Load the remaining three cells
+-- separately so CAM, checklist and palette stay contiguous.
+defineProperty("misc_cam_wt", sasl.gl.loadImage("menus.png", 60, menuTextureY(89, 31), 31, 31))
+defineProperty("misc_checklist_wt", sasl.gl.loadImage("menus.png", 120, menuTextureY(89, 31), 31, 31))
+defineProperty("misc_palette_wt", sasl.gl.loadImage("menus.png", 150, menuTextureY(89, 31), 31, 31))
 defineProperty("thro_red", sasl.gl.loadImage("menus.png", 90, menuTextureY(0, 30), 31, 30))
 defineProperty("thro_grn", sasl.gl.loadImage("menus.png", 120, menuTextureY(0, 30), 31, 30))
 
@@ -266,7 +254,7 @@ local MAIN_W, MAIN_H = 31, 30
 local EXT_W, EXT_H = 31, 90
 local NAV_W, NAV_H = 121, 31
 local SERV_W, SERV_H = 61, 31
-local MISC_W, MISC_H = 121, 31
+local MISC_W, MISC_H = 91, 31
 
 local last_window_height = -1
 
@@ -391,7 +379,7 @@ serv_menu = contextWindow {
 	};
 }
 misc_menu = contextWindow {
-	position = { 30, 510, 121, 31 };
+	position = { 30, 510, 91, 31 };
 	visible = false;
 	noDecore = true;
 	noBackground = false;
@@ -399,20 +387,21 @@ misc_menu = contextWindow {
 	noMove = true;
 	components = {
 		textureLit {
-			position = { 0, 0, 121, 31 };
-			image = get(misc_menu_wt);
+			position = { 0, 0, 31, 31 };
+			image = get(misc_cam_wt);
 		},
-		interactive {
-			position = {60, 0, 31, 31 },
-			onMouseDown = function() 
-				set(show_checklist_panel, 1 - get(show_checklist_panel))
-				return true
-			end,
+		textureLit {
+			position = { 30, 0, 31, 31 };
+			image = get(misc_checklist_wt);
+		},
+		textureLit {
+			position = { 60, 0, 31, 31 };
+			image = get(misc_palette_wt);
 		},
 		interactive {
 			position = {30, 0, 31, 31 },
-			onMouseDown = function() 
-				set(show_phone, 1 - get(show_phone))
+			onMouseDown = function()
+				set(show_checklist_panel, 1 - get(show_checklist_panel))
 				return true
 			end,
 		},
@@ -424,8 +413,8 @@ misc_menu = contextWindow {
 			end,
 		},
 		interactive {
-			position = {90, 0, 31, 31 },
-			onMouseDown = function() 
+			position = {60, 0, 31, 31 },
+			onMouseDown = function()
 				set(show_palette, 1 - get(show_palette))
 				return true
 			end,
@@ -563,7 +552,6 @@ function update()
 	setWindowVisible(nvu_2D_panel, get(show_nvu_panel) == 1)
 	setWindowVisible(checklist_panel, get(show_checklist_panel) == 1)
 	setWindowVisible(ground_srv_panel, get(show_ground_panel) == 1)
-	setWindowVisible(uphone, get(show_phone) == 1)
 	setWindowVisible(camera_panel, get(show_cam) == 1)
 	setWindowVisible(palette, get(show_palette) == 1)
 	setWindowVisible(fails_panel, get(show_fail_panel) == 1)
