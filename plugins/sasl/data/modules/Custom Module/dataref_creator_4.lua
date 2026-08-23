@@ -13,4 +13,128 @@ createGlobalPropertyi("tu154/custom/tcas/vvi_left_new",0)
 createGlobalPropertyi("tu154/custom/failures/apu_pta6_fail", 0) -- PTA-6A tachometer converter failure
 createGlobalPropertyf("tu154/custom/anim/tiller_pos", 0)
 createGlobalPropertyi("tu154/custom/hydro/nosewheel_turn_power", 0)
+-- Pitch servo light (main pitch servo channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_pitch_lt", 0)
+-- -- Roll servo light (main roll servo channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_roll_lt", 0)
+-- -- Yaw servo light (main yaw servo channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_yaw_lt", 0)
+
+-- -- BDG pitch light (backup pitch channel active –  = )
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_pitch_lt", 0)
+-- -- BDG roll light (backup roll channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_roll_lt", 0)
+-- -- BDG yaw light (backup yaw channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_yaw_lt", 0)
+
+-- -- CWS1 light (Control Wheel Steering 1 mode engaged – manual override mode)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/cws1_lt", 0)
+-- -- CWS2 light (Control Wheel Steering 2 mode engaged – alternate override)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/cws2_lt", 0)
+
+-- -- BNS pitch light ( = Main vertical pitch stabilization channel)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bns_p_lt", 0)
+-- -- BAP pitch light ( = automatic pitch hold mode engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bap_p_lt", 0)
+-- -- BAP roll light ( = automatic roll hold mode engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bap_r_lt", 0)
+
+-- -- VKV light ( = lateral guidance mode from navigation source active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/vkv_lt", 0)
+-- -- VU light ( = vertical guidance mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/vu_lt", 0)
+-- -- UTE light ( = approach mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ute_lt", 0)
+
+-- -- STU pitch light ( = pitch stabilizer engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/stu_p_lt", 0)
+-- -- STU roll light ( = roll stabilizer engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/stu_r_lt", 0)
+
+-- -- AT light ( = automatic throttle engaged)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/at_lt", 0)
+-- -- BSN light ( = final approach pitch mode – likely flare/landing logic)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bsn_lt", 0)
+
+-- -- MGV pitch STU light ( = electric trim pitch in STU mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_p_stu_lt", 0)
+-- -- MGV roll STU light (electric trim roll in STU mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_r_stu_lt", 0)
+-- -- MGV pitch SAU light (electric trim pitch in SAU mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_p_sau_lt", 0)
+-- -- MGV roll SAU light (electric trim roll in SAU mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_r_sau_lt", 0)
+
+-- -- KS light ( = course stabilization mode active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ks_lt", 0)
+-- -- BNS roll light ( roll stabilization channel active)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bns_r_lt", 0)
+
+-- -- Test signal for pitch servo
+-- createGlobalPropertyi("tu154/custom/systems/absu/ppn13/servo_pitch_test_signal", 0)
+-- -- Test signal for roll servo
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_roll_test_signal", 0)
+-- -- Test signal for yaw servo
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_yaw_test_signal", 0)
+
+-- -- Test signal for backup pitch channel (BDG)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_pitch_test_signal", 0)
+-- -- Test signal for backup roll channel (BDG)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_roll_test_signal", 0)
+-- -- Test signal for backup yaw channel (BDG)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bdg_yaw_test_signal", 0)
+
+-- -- Test signal for CWS1 mode (manual override 1)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/cws1_test_signal", 0)
+-- -- Test signal for CWS2 mode (manual override 2)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/cws2_test_signal", 0)
+
+-- -- Test signal for main pitch stabilization channel (BNS)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bns_p_test_signal", 0)
+-- -- Test signal for automatic pitch hold (BAP)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bap_p_test_signal", 0)
+-- -- Test signal for automatic roll hold (BAP)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bap_r_test_signal", 0)
+
+-- -- Test signal for lateral navigation guidance (VKV)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/vkv_test_signal", 0)
+-- -- Test signal for vertical navigation guidance (VU)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/vu_test_signal", 0)
+-- -- Test signal for approach mode (UTE)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ute_test_signal", 0)
+
+-- -- Test signal for pitch stabilization (STU)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/stu_p_test_signal", 0)
+-- -- Test signal for roll stabilization (STU)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/stu_r_test_signal", 0)
+
+-- -- Test signal for auto throttle mode (AT)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/at_test_signal", 0)
+-- -- Test signal for landing logic / flare mode (BSN)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bsn_test_signal", 0)
+
+-- -- Test signal for pitch trim in STU mode
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_p_stu_test_signal", 0)
+-- -- Test signal for roll trim in STU mode
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_r_stu_test_signal", 0)
+
+-- -- Test signal for pitch trim in SAU mode
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_p_sau_test_signal", 0)
+-- -- Test signal for roll trim in SAU mode
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/mgv_r_sau_test_signal", 0)
+-- -- Test signal for course stabilization mode (KS)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ks_test_signal", 0)
+-- -- Test signal for roll channel of BNS
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/bns_r_test_signal", 0)
+-- -- ABSU channel 1 indicator light
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ch1_lt", 0)
+-- -- ABSU channel 2 indicator light
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ch2_lt", 0)
+-- -- ABSU channel 3 indicator light
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ch3_lt", 0)
+-- -- ABSU channel 4 indicator light
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/ch4_lt", 0)
+-- -- ABSU ready light (system operational)
+-- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/absu_ready_lt", 0)
+
 

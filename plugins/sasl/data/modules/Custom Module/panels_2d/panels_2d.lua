@@ -545,7 +545,6 @@ function update()
 	setWindowVisible(nav_menu, main_menu_ext and nav_ext)
 	setWindowVisible(serv_menu, main_menu_ext and serv_ext)
 	setWindowVisible(misc_menu, main_menu_ext and misc_ext)
-
 	setWindowVisible(payload_panel, get(show_load_panel) == 1)
 	setWindowVisible(absu_2d_panel, get(show_absu_panel) == 1)
 	setWindowVisible(ovhd_2d_panel, get(show_ohvd_panel) == 1)
