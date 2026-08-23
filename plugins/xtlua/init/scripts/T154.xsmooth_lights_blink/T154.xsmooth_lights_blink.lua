@@ -1,3 +1,5 @@
+-- T154.xsmooth_lights_blink.lua
+
 function deferred_dataref(name,type,notifier)
 	print("Deffered dataref: "..name)
 	dref=XLuaCreateDataRef(name, type,"yes",notifier)
@@ -5,14 +7,10 @@ function deferred_dataref(name,type,notifier)
 end
 
 --lamp tests
-
 simDR_front_lamp_test = find_dataref("tu154/custom/buttons/lamp_test_front")
-
-
 --lamp tests end
 
 -- other
-
 simDR_ping_pong = find_dataref("sim/graphics/animation/ping_pong_2")
 simDR_sin_wave = find_dataref("sim/graphics/animation/sin_wave_2")
 simDR_slats_ratio = find_dataref("sim/flightmodel2/controls/slat1_deploy_ratio")
@@ -21,25 +19,14 @@ simDR_toelev_ratio = find_dataref("tu154/custom/controls/control_force_pos")
 simDR_torud_ratio = find_dataref("tu154/custom/controls/control_force_pos_rud")
 simDR_bus27left = find_dataref("tu154/custom/elec/bus27_volt_left")
 simDR_bus27right = find_dataref("tu154/custom/elec/bus27_volt_right")
-
-
-
-
 -- other end
 
 -- lights list
-
-
 simDR_stab_work =  find_dataref("tu154/custom/lights/stab_work")
 simDR_slats_extended =  find_dataref("tu154/custom/lights/slats_extended")
 simDR_to_rudder =  find_dataref("tu154/custom/lights/to_rudder")
 simDR_to_elevator =  find_dataref("tu154/custom/lights/to_elevator")
-
-
 -- lights list end
-
-
-
 
 to_rudder =  deferred_dataref("tu154/custom/lights/to_rudder_new", "number")
 to_elevator =  deferred_dataref("tu154/custom/lights/to_elevator_new", "number")
@@ -64,8 +51,6 @@ local ping_pong_torud = 0
 local ping_pong_torud_round = 0
 local ping_pong_toelev = 0
 local ping_pong_toelev_round = 0
-
-
 
 function blinks_lights()
     
@@ -94,8 +79,7 @@ function blinks_lights()
   else
      stab_loc = stab_loc - math.abs(stab_delta) * 0.035
   end
-    
-    
+
   if stab_delta > 0.04 and bus27 > 0 then
         if ping_pong_stab < 10 and ping_pong_stab_round < 1 then
            ping_pong_stab = ping_pong_stab + 60 * SIM_PERIOD
@@ -225,7 +209,6 @@ function blinks_lights()
     
 end
 
-
 function wave_func(sin_wave,round)
   if round == 0 then
         sin_wave = sin_wave + 0.03
@@ -245,9 +228,6 @@ function round_func(sin_wave,round)
   end 
   return round
 end
-
-
-
 
 function smooth_light_blink(orig_lit,new_lit,blink_mod)
     if orig_lit == 0 and new_lit == 0 and blink_mod == 0 then
@@ -276,19 +256,12 @@ function smooth_light_blink(orig_lit,new_lit,blink_mod)
     end
 end  
 
-
-
-
-
-
-
 function new_lights()
     slats_extended =  smooth_light_blink(simDR_slats_extended,slats_extended,lit_slats_blinks)
     stab_work =  smooth_light_blink(simDR_stab_work,stab_work,lit_stab_blinks)
     to_rudder =  smooth_light_blink(simDR_to_rudder,to_rudder,lit_torud_blinks)
     to_elevator =  smooth_light_blink(simDR_to_elevator,to_elevator,lit_toelev_blinks)
 end
-
 
 function after_physics()
     new_lights()

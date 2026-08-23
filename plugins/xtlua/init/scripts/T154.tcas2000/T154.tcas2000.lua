@@ -1,3 +1,5 @@
+-- T154.tcas2000.lua
+
 function deferred_dataref(name,type,notifier)
 	print("Deffered dataref: "..name)
 	dref=XLuaCreateDataRef(name, type,"yes",notifier)
@@ -36,10 +38,6 @@ line = deferred_dataref("tu154/custom/tcas2000/line", "string")
 local atcfid = 0
 local ent = 0
 
-
-
-
-
 function tcas2000_l1_up_CMDhandler(phase, duration)
     if phase == 0 then
             if atcfid == 0 then
@@ -52,6 +50,7 @@ function tcas2000_l1_up_CMDhandler(phase, duration)
                    end
     end   	
 end	
+
 function tcas2000_l1_dn_CMDhandler(phase, duration)
     if phase == 0 then
             if atcfid == 0 then
@@ -167,14 +166,6 @@ function tcas2000_ent_CMDhandler(phase, duration)
     end   	
 end	
 
-
-
-
-
-
-
-
-
 l_1_up	= create_command("tcas2000/l1_up", "TCAS2000 L1 u", tcas2000_l1_up_CMDhandler)
 l_1_dn	= create_command("tcas2000/l1_dn", "TCAS2000 L1 d", tcas2000_l1_dn_CMDhandler)
 l_2_up	= create_command("tcas2000/l2_up", "TCAS2000 L2 u", tcas2000_l2_up_CMDhandler)
@@ -185,12 +176,6 @@ r_2_up	= create_command("tcas2000/r2_up", "TCAS2000 R2 u", tcas2000_r2_up_CMDhan
 r_2_dn	= create_command("tcas2000/r2_dn", "TCAS2000 R2 d", tcas2000_r2_dn_CMDhandler)
 mode_com	= create_command("tcas2000/mode", "TCAS2000 ATC/FID", tcas2000_mode_CMDhandler)
 ent_com	= create_command("tcas2000/ent", "TCAS2000 ENT", tcas2000_ent_CMDhandler)
-
-
-
-
-
-
 
 function tcas()
     
@@ -204,9 +189,6 @@ function tcas()
         simDR_tcas_sw_mod = mode
     
     if simDR_tcas_disp_mod < 100 then
-        
-        
-        
         if atcfid == 0 then
             if ent < 1 then
                 if simDR_sqwk > 999 then
@@ -246,8 +228,7 @@ function tcas()
             end
              lit_fid = 0
              lit_xpndr = 0
-        end 
-        
+        end
         if atcfid == 1 then
              line = string.format("%s", simDR_fid)
              lit_atc = 0
@@ -268,25 +249,15 @@ function tcas()
              lit_xpndr = 1
              ent = 0
         end
-        
         if simDR_tcas_disp_mod == 5 then
              line = string.format("%%%%%%%%%%%%%%%%")
             lit_atc = 1
             lit_fid = 1
             lit_xpndr = 1
         end
-               
-                        
-        
-        
     end
-    
-    
 end
 
 function after_physics()
     tcas()
 end
-
-
-

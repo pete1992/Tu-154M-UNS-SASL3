@@ -18,6 +18,11 @@ Flight Controls Logic - Changelog
 - Added frame-rate-independent pilot input filtering for pitch, roll and yaw to suppress noisy-axis/yoke jitter.
 - Added a small remapped center deadzone so minor hardware noise does not move the cockpit yoke or control surfaces.
 - Added gentle aileron-to-rudder coupling for users without pedals; manual yaw input, yaw trim and ABSU yaw remain additive.
+- Removed the nonphysical Mach-dependent attenuation of manual pitch authority; X-Plane remains responsible for aerodynamic Mach/compressibility effects on the elevator.
+- Replaced pitch force-loader geometry clipping/overforce logic with the documented static SUU-154 longitudinal controllability law through the RA-56 pitch channels.
+- Added the documented Ksh0 = 0.111 deg/mm, Kx = 1 - (140 - X_MET)/120, Kx <= 0.4 relationship and the +/-10 degree RA-56 differential limit.
+- Kept the force-loader mechanism as a force/system-state device instead of using it as an artificial elevator travel limiter.
+- Preserved the existing ABSU additive pitch-command path for separate validation.
 ]]
 
 -- Flight controls logic.
@@ -51,6 +56,10 @@ defineProps({
     { "control_force_pos", "tu154/custom/controls/control_force_pos", globalPropertyf }, -- Elevator force-loader position: 0 disconnected, 1 engaged.
     { "control_force_pos_rud", "tu154/custom/controls/control_force_pos_rud", globalPropertyf }, -- Rudder force-loader position: 0 disconnected, 1 engaged.
     { "contr_force_set", "tu154/custom/controll/contr_force_set", globalPropertyi }, -- Force-loader selector: -1 flight, 0 automatic, +1 takeoff/landing.
+    { "hydro_long_control", "tu154/custom/switchers/eng/hydro_long_control", globalPropertyi }, -- SUU-154 longitudinal controllability switch.
+    { "hydro_ra56_elev_1", "tu154/custom/switchers/eng/hydro_ra56_elev_1", globalPropertyi }, -- RA-56 pitch hydraulic channel 1.
+    { "hydro_ra56_elev_2", "tu154/custom/switchers/eng/hydro_ra56_elev_2", globalPropertyi }, -- RA-56 pitch hydraulic channel 2.
+    { "hydro_ra56_elev_3", "tu154/custom/switchers/eng/hydro_ra56_elev_3", globalPropertyi }, -- RA-56 pitch hydraulic channel 3.
     { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty },
     { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty },
     { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, -- Front gear vertical tire deflection.
@@ -149,6 +158,7 @@ defineProps({
     { "rudder_fail", "tu154/custom/failures/rudder_fail", globalPropertyi }, -- Rudder failure flag.
     { "elev_fail_left", "tu154/custom/failures/elev_fail_left", globalPropertyi }, -- Left elevator failure flag.
     { "elev_fail_right", "tu154/custom/failures/elev_fail_right", globalPropertyi }, -- Right elevator failure flag.
+    { "absu_ra56_pitch_fail", "tu154/custom/failures/absu_ra56_pitch_fail", globalPropertyi }, -- RA-56 pitch failure state.
 })
 
 -- Legacy direct joystick sources kept for reference.
@@ -178,7 +188,6 @@ local right_mid_sp_act = 0
 local left_inn_sp_act = 0
 local right_inn_sp_act = 0
 
-local pitch_add = 0
 local yaw_add = 0
 
 -- Pilot-input conditioning.
@@ -186,7 +195,7 @@ local yaw_add = 0
 -- so full hardware travel still reaches exactly -1 / +1.
 local INPUT_DEADZONE = 0.02
 local INPUT_FILTER_TAU = 0.04
-local AILERON_RUDDER_COUPLING = 0.08
+local AILERON_RUDDER_COUPLING = 0.04
 
 local INPUT_STATE = {
     pitch = clamp(get(joy_pitch), -1, 1),
@@ -224,28 +233,87 @@ end
 
 local passed = get(frame_time)
 
-local mach_tbl = {
-		{ -10, 1.00 },
-		{ 0.00, 1.00 },
-		{ 0.10, 0.95 },
-		{ 0.15, 0.92 },
-		{ 0.20, 0.87 },
-		{ 0.25, 0.78 },
-		{ 0.30, 0.74 },
-		{ 0.34, 0.68 },
-		{ 0.38, 0.66 },
-		{ 0.42, 0.58 },
-		{ 0.44, 0.56 },
-		{ 0.46, 0.42 },
-		{ 0.48, 0.32 },
-		{ 0.50, 0.28 },
-		{ 0.60, 0.21 }, -- Refrence point
-		{ 0.70, 0.20 },
-		{ 0.80, 0.19 },
-		{ 0.90, 0.13 },
-		{ 1.00, 0.10 },
-		{ 10.0, 0.10 },
-}
+-- Physical elevator travel relative to the movable stabilizer.
+local ELEVATOR_UP_LIMIT_DEG = 28
+local ELEVATOR_DOWN_LIMIT_DEG = 22
+
+-- SUU-154 longitudinal controllability constants.
+-- Source relation:
+--   Ksh0 = 0.111 deg/mm
+--   Kx   = 1 - (140 - X_MET) / 120
+--   Kx <= 0.4
+--   Ksh  = Ksh0 * (1 - Kx)
+local SUU_KSH0_DEG_PER_MM = 0.111
+local SUU_X_BAL0_MM = 140
+local SUU_TARGET_MM_PER_G = 120
+local SUU_KX_MAX = 0.4
+local SUU_RA56_LIMIT_DEG = 10
+
+local function pitchRatioToElevatorDeg(ratio)
+    ratio = clamp(ratio, -1, 1)
+
+    if ratio >= 0 then
+        return -ratio * ELEVATOR_UP_LIMIT_DEG
+    end
+
+    return -ratio * ELEVATOR_DOWN_LIMIT_DEG
+end
+
+local function elevatorDegToPitchRatio(elevator_deg)
+    elevator_deg = clamp(
+        elevator_deg,
+        -ELEVATOR_UP_LIMIT_DEG,
+        ELEVATOR_DOWN_LIMIT_DEG
+    )
+
+    if elevator_deg <= 0 then
+        return -elevator_deg / ELEVATOR_UP_LIMIT_DEG
+    end
+
+    return -elevator_deg / ELEVATOR_DOWN_LIMIT_DEG
+end
+
+local function getSuuKx(trim_ratio)
+    -- int_pitch_trim is the project's MET-induced balanced-column bias.
+    -- Convert it to the equivalent elevator angle, then to column travel
+    -- through the documented mechanical ratio Ksh0.
+    local balanced_elevator_deg = pitchRatioToElevatorDeg(trim_ratio)
+    local x_met_mm = balanced_elevator_deg / SUU_KSH0_DEG_PER_MM
+
+    local k_x = 1
+        - (SUU_X_BAL0_MM - x_met_mm) / SUU_TARGET_MM_PER_G
+
+    -- The source explicitly caps the positive side at Kx = 0.4.
+    if k_x > SUU_KX_MAX then
+        k_x = SUU_KX_MAX
+    end
+
+    return k_x
+end
+
+local function ra56PitchAvailable(ch1, ch2, ch3, fail_state, hydraulics_available)
+    -- Match the existing PPN-13 RA-56 pitch failure semantics. The real
+    -- longitudinal-control correction needs at least two usable channels.
+    if not hydraulics_available then
+        return false
+    end
+
+    local available = 0
+
+    if ch1 == 1 and fail_state ~= 3 then
+        available = available + 1
+    end
+
+    if ch2 == 1 and fail_state < 2 then
+        available = available + 1
+    end
+
+    if ch3 == 1 and fail_state == 0 then
+        available = available + 1
+    end
+
+    return available > 1
+end
 
 function update()
     local MASTER = get(ismaster) ~= 1
@@ -463,59 +531,98 @@ function update()
     end
 
     --------------------------------------------------------------------------
-    -- Elevator
+    -- Elevator / SUU-154 longitudinal controllability
     --------------------------------------------------------------------------
-    local pitch_joy = pilot_pitch
+    local trim_ratio = clamp(get(int_pitch_trim), -1, 1)
 
-    -- Allow the pilot to overforce the pitch force-loader limit.
-    if pitch_joy > 0.9 and pitch_add < 2 then
-        pitch_add = pitch_add + passed * 0.3
-    elseif pitch_joy < -0.9 and pitch_add > -2 then
-        pitch_add = pitch_add - passed * 0.3
-    elseif math.abs(pitch_joy) < 0.9 then
-        pitch_add = 0
+    -- The real force loader changes column force, not elevator geometry.
+    -- With conventional non-force-feedback hardware the pilot therefore keeps
+    -- the full kinematic column travel. The force-loader mechanism above stays
+    -- active for system state and electrical load, but does not clip elevator
+    -- travel in this control-surface path.
+    local cockpit_yoke_pitch = clamp(pilot_pitch + trim_ratio, -1, 1)
+
+    -- Direct mechanical booster path: column/MET position to elevator.
+    local mechanical_elevator_deg =
+        pitchRatioToElevatorDeg(cockpit_yoke_pitch)
+
+    local suu_correction_deg = 0
+    local k_x = getSuuKx(trim_ratio)
+
+    -- The PPN-13 logic treats the RA-56 servos as unavailable when fewer than
+    -- two hydraulic systems remain above the operating-pressure threshold.
+    local hydraulics_available =
+        bool2int(get(gs_press_1) >= 100)
+        + bool2int(get(gs_press_2) >= 100)
+        + bool2int(get(gs_press_3) >= 100) >= 2
+
+    local ra56_pitch_on = ra56PitchAvailable(
+        get(hydro_ra56_elev_1),
+        get(hydro_ra56_elev_2),
+        get(hydro_ra56_elev_3),
+        get(absu_ra56_pitch_fail),
+        hydraulics_available
+    )
+
+    if get(hydro_long_control) == 1 and ra56_pitch_on then
+        -- Static SUU-154 term:
+        --   delta_e = Ksh0 * dx - Ksh0 * Kx * dx
+        --           = Ksh0 * (1 - Kx) * dx
+        --
+        -- pitchRatioToElevatorDeg(pilot_pitch) is the direct Ksh0*dx
+        -- equivalent in this project, so the RA-56 correction is -Kx times
+        -- the pilot-generated elevator increment.
+        local direct_pilot_elevator_deg =
+            pitchRatioToElevatorDeg(pilot_pitch)
+
+        suu_correction_deg = clamp(
+            -k_x * direct_pilot_elevator_deg,
+            -SUU_RA56_LIMIT_DEG,
+            SUU_RA56_LIMIT_DEG
+        )
     end
 
-    -- Apply the current pitch force-loader limit.
-    local pitch_positive_limit = 1 - force_pos * 0.5
-    local pitch_negative_limit = 1 - force_pos * 0.4
-    if pitch_joy > pitch_positive_limit then
-        pitch_joy = pitch_positive_limit
-    elseif pitch_joy < -pitch_negative_limit then
-        pitch_joy = -pitch_negative_limit
-    end
+    local suu_elevator_deg = clamp(
+        mechanical_elevator_deg + suu_correction_deg,
+        -ELEVATOR_UP_LIMIT_DEG,
+        ELEVATOR_DOWN_LIMIT_DEG
+    )
 
-    local cockpit_yoke_pitch = clamp(pitch_joy + get(int_pitch_trim) + pitch_add, -1, 1)
-    local pitch_cmd = clamp(cockpit_yoke_pitch + get(absu_contr_pitch), -1, 1)
+    local suu_pitch_ratio =
+        elevatorDegToPitchRatio(suu_elevator_deg)
+
+    -- Keep the existing ABSU command path additive for this validation step.
+    -- The dynamic K_omegaZ * omegaZ term is not duplicated here.
+    local pitch_cmd = clamp(
+        suu_pitch_ratio + get(absu_contr_pitch),
+        -1,
+        1
+    )
     local pitch_target = pitch_cmd * primary_command_limit
-    local stab_pos = get(stab_ratio)
 
     if primary_step > 0 then
-        pitch_pos_act = pitch_pos_act + (pitch_target - pitch_pos_act) * primary_step
+        pitch_pos_act = pitch_pos_act
+            + (pitch_target - pitch_pos_act) * primary_step
     end
 
-    local pitch_surface_pos = manual_control and clamp(pitch_pos_act, -0.3, 0.3) or pitch_pos_act
+    local pitch_surface_pos = manual_control
+        and clamp(pitch_pos_act, -0.3, 0.3)
+        or pitch_pos_act
+
     local elev_left
     local elev_right
 
     if pitch_surface_pos >= 0 then
-        elev_left = -pitch_surface_pos * (25 - stab_pos)
-        elev_right = -pitch_surface_pos * (25 - stab_pos)
+        elev_left = -pitch_surface_pos * ELEVATOR_UP_LIMIT_DEG
+        elev_right = -pitch_surface_pos * ELEVATOR_UP_LIMIT_DEG
     else
-        elev_left = -pitch_surface_pos * (20 + stab_pos * 0.5)
-        elev_right = -pitch_surface_pos * (20 + stab_pos * 0.5)
-    end
-
-    local elev_coef = 1
-    if mach < 1 then
-        elev_coef = interpolate(mach_tbl, mach)
-    else
-        elev_coef = 0.1
+        elev_left = -pitch_surface_pos * ELEVATOR_DOWN_LIMIT_DEG
+        elev_right = -pitch_surface_pos * ELEVATOR_DOWN_LIMIT_DEG
     end
 
     if MASTER then
-        set(elevator_L, elev_left * elev_coef * (1 - elevator_fail_L))
-        set(elevator_R, elev_right * elev_coef * (1 - elevator_fail_R))
+        set(elevator_L, elev_left * (1 - elevator_fail_L))
+        set(elevator_R, elev_right * (1 - elevator_fail_R))
     end
 
     --------------------------------------------------------------------------

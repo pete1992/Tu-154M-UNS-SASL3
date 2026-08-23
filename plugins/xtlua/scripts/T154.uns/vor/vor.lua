@@ -1,3 +1,4 @@
+-- vor.lua
 local UPDATE_INTERVAL = 10
 local MAX_VOR_DISTANCE_NM = 200
 local VOR_TYPE = 4
