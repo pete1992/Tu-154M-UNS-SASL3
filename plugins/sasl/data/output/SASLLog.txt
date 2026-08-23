@@ -1,5 +1,5 @@
 [TU154 INFO]: Initializing...
-[TU154 INFO]: [DISPLAY] Monitor 0: 0, 0, 2560, 1440
+[TU154 INFO]: [DISPLAY] Main Screen Bounds: 0, 0, 2560, 1440
 [TU154 INFO]: Path to module: I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/main.lua
 [TU154 INFO]: Loading module...
 [TU154 INFO]: [LUA]: loading	module
@@ -213,30 +213,17 @@
 [TU154 INFO]: [LUA]: loading	ground_panel
 [TU154 INFO]: [LUA]: loading	lever_hor
 [TU154 INFO]: [LUA]: loading	free_texture
-[TU154 INFO]: [LUA]: loading	UPhone
-[TU154 INFO]: [LUA]: loading	UHUD
-[TU154 INFO]: [LUA]: loading	rotated_tapeLit
-[TU154 INFO]: [LUA]: loading	UConvert
-[TU154 INFO]: [LUA]: loading	UTurn
-[TU154 INFO]: [LUA]: loading	UMETAR
 [TU154 INFO]: [LUA]: loading	camera
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.4317
+[TU154 INFO]: Scripts loading time: 0.9497
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	PREPARE
 [TU154 INFO]: [LUA]: "save_state"	State restored: OK
 [TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: Disabling...
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended
 [TU154 INFO]: [LUA]: "flight_controls"	flight controls released

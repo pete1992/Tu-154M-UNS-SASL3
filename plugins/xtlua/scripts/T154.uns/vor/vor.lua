@@ -1,69 +1,140 @@
-local vor1=""
-local vor2=""
-local dme1=""
-local dme2=""
-nSize=0
-lastUpdate=0
+local UPDATE_INTERVAL = 10
+local MAX_VOR_DISTANCE_NM = 200
+local VOR_TYPE = 4
+local MIN_VOR_FREQUENCY = 10800
+local MAX_VOR_FREQUENCY = 11795
+
 local navAids
-function tu154_vor_auto()
-    
-    local diff = simDR_time - lastUpdate
-    if diff < 10 then 
-        return 
-    end
-    --print("do RNAV" .. nSize)
-    
-    lastUpdate=simDR_time
-    local lat=simDR_lat
-    local lon=simDR_long
-    if lat<-180 or lon<-180 then return end
-    local vor1_closest=200
-    local vor2_closest=200
-    local dme1_closest=200
-    local dme2_closest=200 
-    local vor1_closest_index=-1
-    local vor2_closest_index=-1
-    local dme1_closest_index=-1
-    local dme2_closest_index=-1
-    
-    if string.len(navAidsJSON) ~= nSize then
-      navAids=json.decode(navAidsJSON)
-      nSize=string.len(navAidsJSON)
-     
-    end
-    if navAids==nil then return end
-      for n=table.getn(navAids),1,-1 do
-          if navAids[n][2] == 4 and navAids[n][3]>=10800 and navAids[n][3]<=11795 then
-          local distance = getDistance(lat,lon,navAids[n][5],navAids[n][6])
+local lastNavAidsJSON
+local lastUpdate = -UPDATE_INTERVAL
+local previousVor1Auto = false
+local previousVor2Auto = false
 
-        --print("navaid "..n.."->".. distance.."->"..navAids[n][1].." ".. navAids[n][2].." ".. navAids[n][3].." ".. navAids[n][4].." ".. navAids[n][5].." ".. navAids[n][6].." ".. navAids[n][7].." ".. navAids[n][8])
+local function loadNavAids()
+    local encodedNavAids = navAidsJSON
+    if type(encodedNavAids) ~= "string" or encodedNavAids == "" then
+        return false
+    end
 
-              if distance<vor1_closest then
-                  vor2_closest=vor1_closest
-                  vor2_closest_index=vor1_closest_index
-                  vor1_closest=distance
-                  vor1_closest_index=n
-              end
-          end
+    if navAids ~= nil and encodedNavAids == lastNavAidsJSON then
+        return true
     end
-    
-    
-if vor1_closest_index>0 then
-    n=vor1_closest_index
-    if vor1_auto > 0 then
-      vor1_freq=navAids[n][3]
-    elseif vor2_auto > 0 then
-      vor2_freq=navAids[n][3]
+
+    local decodedSuccessfully, decodedNavAids = pcall(json.decode, encodedNavAids)
+    if not decodedSuccessfully or type(decodedNavAids) ~= "table" then
+        return false
     end
-       --print("VOR1 "..n.."->"..navAids[n][1].." ".. navAids[n][2].." ".. navAids[n][3].." ".. navAids[n][4].." ".. navAids[n][5].." ".. navAids[n][6].." ".. navAids[n][7].." ".. navAids[n][8])
-    
+
+    navAids = decodedNavAids
+    lastNavAidsJSON = encodedNavAids
+    return true
 end
-if vor2_closest_index>0 then
-   n=vor2_closest_index
-    if vor1_auto > 0 and vor2_auto > 0 then
-      vor2_freq=navAids[n][3]
+
+local function readVor(navAid)
+    if type(navAid) ~= "table" then
+        return nil
     end
-    --print("VOR2 "..n.."->"..navAids[n][1].." ".. navAids[n][2].." ".. navAids[n][3].." ".. navAids[n][4].." ".. navAids[n][5].." ".. navAids[n][6].." ".. navAids[n][7].." ".. navAids[n][8])
-    
+
+    local navAidType = tonumber(navAid[2])
+    local frequency = tonumber(navAid[3])
+    local latitude = tonumber(navAid[5])
+    local longitude = tonumber(navAid[6])
+
+    if navAidType ~= VOR_TYPE
+        or frequency == nil
+        or frequency < MIN_VOR_FREQUENCY
+        or frequency > MAX_VOR_FREQUENCY
+        or latitude == nil
+        or latitude < -90
+        or latitude > 90
+        or longitude == nil
+        or longitude < -180
+        or longitude > 180 then
+        return nil
+    end
+
+    return frequency, latitude, longitude
 end
-end 
+
+function tu154_vor_auto(unsPowered)
+    local vor1IsAutomatic = unsPowered and vor1_auto > 0
+    local vor2IsAutomatic = unsPowered and vor2_auto > 0
+    local automaticModeChanged = vor1IsAutomatic ~= previousVor1Auto
+        or vor2IsAutomatic ~= previousVor2Auto
+
+    previousVor1Auto = vor1IsAutomatic
+    previousVor2Auto = vor2IsAutomatic
+
+    if not vor1IsAutomatic and not vor2IsAutomatic then
+        return
+    end
+
+    local now = tonumber(simDR_time)
+    if now == nil then
+        return
+    end
+
+    if not automaticModeChanged
+        and now >= lastUpdate
+        and now - lastUpdate < UPDATE_INTERVAL then
+        return
+    end
+
+    lastUpdate = now
+
+    local aircraftLatitude = tonumber(simDR_lat)
+    local aircraftLongitude = tonumber(simDR_long)
+    if aircraftLatitude == nil
+        or aircraftLatitude < -90
+        or aircraftLatitude > 90
+        or aircraftLongitude == nil
+        or aircraftLongitude < -180
+        or aircraftLongitude > 180
+        or not loadNavAids() then
+        return
+    end
+
+    local closestFrequency
+    local secondClosestFrequency
+    local closestDistance = MAX_VOR_DISTANCE_NM
+    local secondClosestDistance = MAX_VOR_DISTANCE_NM
+
+    for index = #navAids, 1, -1 do
+        local frequency, latitude, longitude = readVor(navAids[index])
+        if frequency ~= nil then
+            local distance = getDistance(
+                aircraftLatitude,
+                aircraftLongitude,
+                latitude,
+                longitude
+            )
+
+            if distance < closestDistance then
+                secondClosestDistance = closestDistance
+                secondClosestFrequency = closestFrequency
+                closestDistance = distance
+                closestFrequency = frequency
+            elseif distance < secondClosestDistance then
+                secondClosestDistance = distance
+                secondClosestFrequency = frequency
+            end
+        end
+    end
+
+    if closestFrequency == nil then
+        return
+    end
+
+    -- Each UI selector owns exactly one receiver. A receiver in MANUAL is never
+    -- written here, even if the other receiver remains in automatic mode.
+    if vor1IsAutomatic then
+        vor1_freq = closestFrequency
+    end
+
+    if vor2IsAutomatic then
+        local selectedFrequency = vor1IsAutomatic and secondClosestFrequency or closestFrequency
+        if selectedFrequency ~= nil then
+            vor2_freq = selectedFrequency
+        end
+    end
+end
