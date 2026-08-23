@@ -3,63 +3,39 @@
 ## Project
 
 This repository contains the Tu-154 project for X-Plane 11.
-
-The current development task is the migration of an existing SASL 2 project to SASL 3 while preserving the original aircraft behavior as closely as possible.
-
-The goal is not to redesign the aircraft or modernize working logic. The goal is a clean, stable SASL 3 port.
+The primary goal is to create a bug free SASL3 port.
+The secondary goal is to update the aircrafts codebase and add new features. 
 
 ## Role
 
-Act as an experienced X-Plane 11 Lua/SASL developer and code reviewer.
+Act as an experienced X-Plane 11 Lua/SASL/xTlua developer and code reviewer.
 
-When changing code:
+When changing SASL code:
 
 - understand the existing behavior first;
 - distinguish SASL 2 compatibility code from actual aircraft logic;
-- use the SASL 3 manual as the primary API reference;
+- use the SASL 3 manual as the primary API reference; 
 - preserve DataRef paths, aircraft systems logic, coordinates, textures and timing unless a change is required for SASL 3;
-- prefer small, reviewable changes over broad automated rewrites.
 
 Do not guess SASL API behavior when it can be verified.
 
-## Current migration strategy
+## xTlua
 
-Work file by file.
+When changing xTlua code:
+- understand the existing behavior first; recognize your not in the SASL plugin.
+- use comments
 
-Do not perform repository-wide conversions unless explicitly requested.
 
-For each file:
+## Current strategy
 
-1. inspect the complete file;
-2. identify actual SASL 2 -> SASL 3 incompatibilities;
-3. separate API migration issues from aircraft/system logic;
-4. make only the required changes;
-5. preserve the original behavior;
-6. check Lua syntax after editing;
-7. report exactly what was changed and why.
+1. inspect the complete file; 
+2. make only the required or requested changes;
+3. preserve the original behavior; or expand the original behavior; big changes to the behavior only if required or requested.
+4. report exactly what was changed and why.
 
 A working parent or host file must not be modified merely because a child component is broken.
 
-## Important current state
 
-The 2D panel main/menu host is already working.
-
-Do not modify `panels_2d.lua` unless explicitly requested.
-
-If an individual popup opens correctly but its contents are broken, investigate the corresponding child panel first, for example:
-
-- `absu_panel_2d.lua`
-- `load_panel.lua`
-- `overhead_2d.lua`
-- `nvu_panel_2d.lua`
-- `checklist_panel_2d.lua`
-- `ground_panel.lua`
-- `UPhone.lua`
-- `camera.lua`
-- `palette_2d.lua`
-- `failures_2d.lua`
-
-Do not fix the main panel/menu system as a side effect of debugging one of these files.
 
 ## SASL 3 migration rules
 
@@ -80,7 +56,7 @@ For indexed/array DataRefs, do not blindly preserve SASL 2 typed-array access pa
 Example:
 
 ```lua
-defineProperty("gear0", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))
+	defineProperty("gear0", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))
 ```
 
 Use the SASL 3 manual and the actual DataRef type to determine the correct accessor.
@@ -269,7 +245,6 @@ Do not rename DataRefs, properties, files, textures or component names without a
 
 After modifying a Lua file:
 
-- run a Lua syntax check when possible;
 - search for accidentally introduced legacy SASL calls;
 - verify all referenced component names still exist;
 - verify all `components = { ... }` blocks are balanced;
@@ -277,9 +252,7 @@ After modifying a Lua file:
 - verify `set()` is only used on writable properties;
 - verify no automated replacement changed system semantics.
 
-If syntax validation is not possible, state that clearly.
 
-Do not claim runtime correctness solely because a file parses.
 
 ## Review output
 
@@ -307,7 +280,6 @@ clickable -> interactive
 ```
 
 Some of these transformations may be valid in specific places, but none are universally safe.
-
 Every conversion must be validated against the component's actual behavior.
 
 ## Source priority
@@ -321,7 +293,3 @@ When there is a conflict, use this order:
 5. inference.
 
 Do not overwrite known-working project behavior based only on a generic migration pattern.
-
-## Primary objective
-
-A successful change is the smallest change that makes the current file work correctly under SASL 3 without changing the Tu-154's intended behavior.
