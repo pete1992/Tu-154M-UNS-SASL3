@@ -1,13 +1,22 @@
 -- T154.zmisc2.lua
 
--- deferred_datarefs
+-- xTLua system coordinator for ground servicing and miscellaneous aircraft systems.
+-- This is an xTLua init script, not a SASL component: datarefs are exposed as
+-- namespace variables and after_physics() is called by the xTLua runtime.
+--
+-- Main responsibilities:
+--   * staged payload loading, refueling, service vehicles, doors, and CG movement;
+--   * VVI/slat smoothing, door icing, and brake-temperature behavior;
+--   * engine RPM correction and associated annunciator logic.
+
+-- Create writable custom datarefs in the current xTLua namespace.
 function deferred_dataref(name,type,notifier)
 	print("Deffered dataref: "..name)
 	dref=XLuaCreateDataRef(name, type,"yes",notifier)
 	return wrap_dref_any(dref,type) 
 end
 
--- find datatefs
+-- Existing aircraft, simulator, and failure-system inputs.
 simDR_failures = find_dataref("tu154/custom/failures/failures_enabled")
 simDR_rpm_low_1 = find_dataref("tu154/custom/gauges/engine/rpm_low_1")
 simDR_rpm_low_2 = find_dataref("tu154/custom/gauges/engine/rpm_low_2")
@@ -23,6 +32,8 @@ simDR_door2_anim = find_dataref("tu154/custom/anim/pax_door_2")
 simDR_door3_anim = find_dataref("tu154/custom/anim/pax_door_3")
 simDR_door_cargo1_anim = find_dataref("tu154/custom/anim/cargo_1")
 simDR_door_cargo2_anim = find_dataref("tu154/custom/anim/cargo_2")
+
+-- Environment, ground contact, brakes, and electrical power.
 simDR_door_fan_temp = find_dataref("tu154/custom/bleed/door_heat_tube_t")
 simDR_oat  = find_dataref("sim/cockpit2/temperature/outside_air_temp_deg")
 simDR_altitude = find_dataref("sim/flightmodel/position/y_agl")
@@ -48,7 +59,8 @@ simDR_var_left = find_dataref("tu154/custom/switchers/ovhd/var_left")
 simDR_var_right = find_dataref("tu154/custom/switchers/ovhd/var_right")
 simDR_start_apu = find_dataref("tu154/custom/lights/apu/start_apu")
 simDR_lamp_test_apu =  find_dataref("tu154/custom/buttons/lamp_test_apu")
------ show_actual_fuel
+
+-- Load-panel state and fuel/engine annunciators.
 simDR_load_panel = find_dataref("tu154/custom/panels/show_load_panel")
 simDR_light_fuel_pump_1 = find_dataref("tu154/custom/lights/small/fuel_pump_1")
 simDR_light_fuel_pump_2 = find_dataref("tu154/custom/lights/small/fuel_pump_2")
@@ -86,6 +98,10 @@ simDR_vna0_2_lit = find_dataref("tu154/custom/lights/engines/eng2_vna0")
 simDR_vna0_3_lit = find_dataref("tu154/custom/lights/engines/eng3_vna0")
 simDR_brake_heat_left = find_dataref("tu154/custom/failures/brake_heat_left")
 simDR_brake_heat_right = find_dataref("tu154/custom/failures/brake_heat_right")
+
+-- Fuel, payload, and target values supplied by the load panel.
+-- X-Plane's m_fuel indices used here are: 0=tank 1, 1=tank 4,
+-- 2/3=tank 2 right/left, and 4/5=tank 3 right/left.
 simDR_fuel_tanks = find_dataref("sim/flightmodel/weight/m_fuel") 
 simDR_fuel_tank1 = find_dataref("sim/flightmodel/weight/m_fuel1") 
 simDR_fuel_tank2 = find_dataref("sim/flightmodel/weight/m_fuel2") 
@@ -113,6 +129,8 @@ simDR_tank2_r = find_dataref("tu154/custom/payload/tank_2R")
 simDR_tank3_l = find_dataref("tu154/custom/payload/tank_3L")
 simDR_tank3_r = find_dataref("tu154/custom/payload/tank_3R")
 simDR_tank4 = find_dataref("tu154/custom/payload/tank_4")
+
+-- Ground-service calls and the X-Plane custom sliders used as door commands.
 simDR_fuel_tanker = find_dataref("tu154/custom/anim/fuel_tanker_call")
 simDR_fuel_tanker_anim = find_dataref("tu154/custom/anim/fuel_tanker")
 simDR_catering = find_dataref("tu154/custom/anim/catering_call")
@@ -124,6 +142,8 @@ simDR_door_cargo1 = find_dataref("sim/cockpit2/switches/custom_slider_on[2]")
 simDR_door_cargo2 = find_dataref("sim/cockpit2/switches/custom_slider_on[3]")
 simDR_door_kitchen = find_dataref("sim/cockpit2/switches/custom_slider_on[6]")
 simDR_catering_anim = find_dataref("tu154/custom/anim/catering_tanker")
+
+-- Pitot-icing and airspeed bindings retained from the original module.
 mDR_percip_on_craft = find_dataref("sim/weather/precipitation_on_aircraft_ratio")
 simDR_speed_svs = find_dataref("tu154/custom/svs/true_airspeed")
 simDR_ppd1_fail = find_dataref("tu154/custom/failures/pitot1")
@@ -140,7 +160,7 @@ simDR_ias_y_right = find_dataref("tu154/custom/gauges/speed/ias_yellow_right")
 
 
 
--- deferred_dataref
+-- Outputs created and owned by this xTLua script.
 rpm1_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_1_new", "number")
 rpm2_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_2_new", "number")
 rpm3_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_3_new", "number")
@@ -152,14 +172,13 @@ yoke_height =  deferred_dataref("tu154/custom/yoke_height", "number")
 vvi_left =  deferred_dataref("tu154/custom/gauges/vvi_left_new", "number")
 vvi_right =  deferred_dataref("tu154/custom/gauges/vvi_right_new", "number")
 
--- start_smooth load
-
+-- Smooth-loading state and CG target/actual values.
 start_loading =  deferred_dataref("tu154/custom/start_smooth_loading", "number")
 simDR_cg_pos_act = find_dataref("tu154/custom/misc/cg_pos_actual")
 simDR_cg_pos_met = find_dataref("sim/flightmodel/misc/cgz_ref_to_default")
 simDR_cg_pos_to = find_dataref("tu154/custom/t154_efb/cax_to")
 
--- ppd icing fix --
+-- Additional pitot-heater and speed inputs used by the original icing fix.
 simDR_ppd1 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_1")
 simDR_ppd2 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_2")
 simDR_ppd3 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_3")
@@ -179,7 +198,8 @@ simDR_tas_right = find_dataref("tu154/custom/gauges/speed/kus_tas_right")
 simDR_ias_right = find_dataref("tu154/custom/gauges/speed/ias_right")
 simDR_ias_y_right = find_dataref("tu154/custom/gauges/speed/ias_yellow_right")
 
-
+-- Legacy correction state retained with the original bindings. These values are
+-- currently not consumed elsewhere in this script.
 local ias_y_left_corr = 0
 local kus_left_corr = 0
 local tas_left_corr = 0
@@ -195,8 +215,7 @@ local ppd1_fail_was = 0
 local ppd2_fail_was = 0
 local ppd3_fail_was = 0
 
--- end ppd --
-
+-- Instrument animation and load-sequence state.
 local load_panel_loaded = 0
 local vvi_left_test = 0
 local vvi_left_ms = 0
@@ -206,8 +225,11 @@ local vvi_right_ms = 0
 local vvi_right_delta = 0
 local slat_ratio_loc = 0
 local slat_ratio_delta = 0
+
+-- Payload completion flags and accumulated loaded mass, in kilograms.
 local cargo_cmplt = 0
 local pax_cmplt = 0
+local cargo_doors_closed_by_loader = false
 local pax_load = 0
 local cargo_load = 0
 local payload_loc_req = 0
@@ -215,6 +237,8 @@ local cg_loc_req = 0
 local cg_loc = 0
 local payload_loc = 0
 local loading_cmplt = 0
+
+-- Refueling state. Each tank completion flag is either zero or one.
 local fueling_cpmlt_23 = 0
 local refueler_set = 0
 local refueler_set = 0
@@ -240,6 +264,8 @@ local tank2_l_cmplt = 0
 local tank3_r_cmplt = 0
 local tank3_l_cmplt = 0
 local tank4_cmplt = 0
+
+-- Miscellaneous system-model state.
 local brake_temp = 0
 local bus27 = 0
 local bus36 = 0
@@ -258,19 +284,22 @@ local rpm3_correct_loc = 0
 local brake_temp_loc_l = 0
 local brake_temp_loc_r = 0
 
---vna_off
-
+-- Outside-air-temperature-adjusted engine annunciator thresholds.
 local vna33_off = 0
 local vna0_off = 0
 
 
 
 
+-- Run the complete ground-service state machine. All work is inhibited in flight.
+-- The slow-load button captures a new set of targets; subsequent physics frames
+-- advance payload, fuel, and CG until their individual completion conditions are met.
 function refueling()
     
     
     
        if simDR_on_ground > 0 then
+           -- Capture requested fuel quantities while the slow-load button is active.
            if simDR_payload_set > 0 then
                 fuel_was_set = 1
                 tank1_req = simDR_tank1  
@@ -280,6 +309,8 @@ function refueling()
                 tank3_l_req = simDR_tank3_l
                 tank4_req = simDR_tank4
             else
+                -- Keep a snapshot of the current simulator tank quantities whenever
+                -- the request button is released.
                 tank1 = simDR_fuel_tanks[0]  
                 tank2_r = simDR_fuel_tanks[2]
                 tank2_l = simDR_fuel_tanks[3]
@@ -288,15 +319,19 @@ function refueling()
                 tank4 = simDR_fuel_tanks[1]
             end
                 
+            -- Track the current payload whenever no new target is being captured.
             if simDR_payload_set < 1 and fuel_was_set < 1 then
                 payload_loc = simDR_payload
             end
             
+            -- Initialize one complete loading/refueling cycle from the captured targets.
             if fuel_was_set > 0 then
             
                 
 
                 
+                -- Cargo targets are already masses. Passenger-zone counts use the
+                -- aircraft's fixed planning mass of 75 kg per passenger.
                 if (simDR_payload_cargo1 + simDR_payload_cargo2 +simDR_payload_cargo3) - cargo_load > 0 then
                     cargo_req = (simDR_payload_cargo1 + simDR_payload_cargo2 +simDR_payload_cargo3) - cargo_load
                 else
@@ -309,7 +344,12 @@ function refueling()
                     pax_load = (simDR_payload_pax1*75)+(simDR_payload_pax2*75)+(simDR_payload_pax3*75)+(simDR_payload_pax4*75)+(simDR_payload_pax5*75)
                     pax_req = 0
                 end
+                -- Establish the already-loaded baseline before staged mass is added.
+                -- Flight crew uses 80 kg per person; cabin crew uses 75 kg.
                 simDR_payload = (simDR_payload_crew*80)+(simDR_payload_cabin*75)+simDR_payload_cargo4 +pax_load + cargo_load
+
+                -- Excess fuel is removed immediately; fuel below target is added later
+                -- by the timed refueling section.
                 if simDR_fuel_tanks[0] > tank1_req then
                     simDR_fuel_tanks[0] = tank1_req
                 end
@@ -328,6 +368,8 @@ function refueling()
                 if simDR_fuel_tanks[1] > tank4_req then
                     simDR_fuel_tanks[1] = tank4_req
                 end
+
+                -- Open only the service doors needed by the requested payload.
                 if cargo_req > 0 then
                     if simDR_payload_cargo1 > 0 then
                         simDR_door_cargo1 = 1
@@ -342,10 +384,13 @@ function refueling()
                       simDR_door1 = 1
                   end
                 end
+
+                -- Arm all substates for the new cycle.
                 fuel_load_total = 0
                 fuel_was_set = 0
                 start_refueling = 1
                 start_loading = 1
+                cargo_doors_closed_by_loader = false
                 tank1_cmplt = 0
                 tank2_r_cmplt = 0
                 tank2_l_cmplt = 0
@@ -355,6 +400,8 @@ function refueling()
                 refueler_set = 0
             end
                 
+            -- Count completed wing tanks. Clamping the count to three keeps the
+            -- transfer-rate divisor (4 - fueling_cpmlt_23) above zero.
             if tank2_r_cmplt + tank2_l_cmplt + tank3_r_cmplt + tank3_l_cmplt < 4 then
                 fueling_cpmlt_23 = tank2_r_cmplt + tank2_l_cmplt + tank3_r_cmplt + tank3_l_cmplt
             else
@@ -365,6 +412,8 @@ function refueling()
             loading_cmplt = cargo_cmplt+pax_cmplt
             
         
+            -- Nudge X-Plane's longitudinal CG reference toward the EFB target while
+            -- the smooth-loading sequence remains active.
             if start_loading > 0 then
                 if simDR_cg_pos_act > simDR_cg_pos_to then
                    simDR_cg_pos_met = simDR_cg_pos_met - 0.0001
@@ -373,12 +422,14 @@ function refueling()
                 end
             end
             
+            -- Payload loading is complete only after cargo, passengers, and CG agree.
             if loading_cmplt == 2 and math.abs(simDR_cg_pos_act - simDR_cg_pos_to) < 0.01 then
                 start_loading = 0
                 cargo_req = 0 
                 pax_req = 0
             end
             
+            -- Fast load owns the final values, so cancel any in-progress smooth load.
             if simDR_fast_load_btn > 0 then
                 start_loading = 0
                 cargo_req = 0 
@@ -386,6 +437,7 @@ function refueling()
             end
                
             
+            -- Finish refueling when all six physical tanks have reached target.
             if fueling_cpmlt == 6 and start_refueling > 0 then
                 start_refueling = 0
                 if simDR_fuel_tanker > 0 then
@@ -399,6 +451,7 @@ function refueling()
                 tank4_cmplt = 0
             end
                 
+            -- Treat a manually removed tanker as cancellation of the active fuel job.
             if refueler_set > 0 and simDR_fuel_tanker < 1 and start_refueling > 0 then
                 start_refueling = 0
                 tank1_cmplt = 0
@@ -409,6 +462,8 @@ function refueling()
                 tank4_cmplt = 0
             end
                 
+            -- Add payload in 0.5 kg increments per physics callback. Gear blocks are
+            -- installed automatically for the duration of ground servicing.
             if start_loading > 0 then
                 if simDR_gear_blocks < 1 then
                     simDR_gear_blocks = 1
@@ -419,15 +474,22 @@ function refueling()
                     cargo_req = cargo_req - 0.5
                     cargo_load = cargo_load + 0.5
                 else
-                    if simDR_door_cargo1 > 0 then
-                       simDR_door_cargo1 = 0
-                    end
-                    if simDR_door_cargo2 > 0 then
-                       simDR_door_cargo2 = 0
+                    -- Close the cargo doors once when loading finishes. Repeating this
+                    -- every frame would override later manual input from the ground panel.
+                    if not cargo_doors_closed_by_loader then
+                        if simDR_door_cargo1 > 0 then
+                           simDR_door_cargo1 = 0
+                        end
+                        if simDR_door_cargo2 > 0 then
+                           simDR_door_cargo2 = 0
+                        end
+                        cargo_doors_closed_by_loader = true
                     end
                     cargo_cmplt = 1
-                end 
+                end
                 
+                -- Passenger loading waits until refueling has stopped. Catering and
+                -- passenger service objects are then removed when loading completes.
                 if start_refueling < 1 then
                     if pax_cmplt < 1 and simDR_payload_cargo3 > 5 then
                        simDR_catering = 1
@@ -462,9 +524,11 @@ function refueling()
             else
                 cargo_cmplt = 0
                 pax_cmplt = 0
+                cargo_doors_closed_by_loader = false
             end
               
                 
+            -- Timed refueling uses a one-kilogram completion tolerance per tank.
             if start_refueling > 0 then
                 
                 
@@ -488,14 +552,20 @@ function refueling()
                 end
                     
                     
+                -- Keep the aircraft chocked and transfer fuel only while the tanker
+                -- animation reports the service position. The modeled aggregate flow
+                -- is approximately 13.333 kg/s.
                 if simDR_gear_blocks < 1 then
                     simDR_gear_blocks = 1
                 end
                 if simDR_fuel_tanker_anim == 0 and fuel_load_total < 17600 then
+                    -- Tank 1 is filled before the wing-tank distribution begins.
                     if simDR_fuel_tanks[0] < tank1_req then
                         simDR_fuel_tanks[0] = simDR_fuel_tanks[0] +13.333 *SIM_PERIOD
                         fuel_load_total = fuel_load_total +13.333 *SIM_PERIOD
                     else
+                        -- Initially balance tank 3 left/right up to 1,725 kg. Once that
+                        -- phase is complete, divide the flow among unfinished tanks 2/3.
                         if simDR_fuel_tanks[5] < 1725 and simDR_fuel_tanks[4] < 1725 and simDR_fuel_tanks[5] < tank3_l_req and simDR_fuel_tanks[4] < tank3_r_req then
                             if simDR_fuel_tanks[5] < tank3_l_req then
                                 if simDR_fuel_tanks[4] < 1725 then
@@ -539,6 +609,7 @@ function refueling()
                                 fuel_load_total = fuel_load_total +(13.33325 / (4-fueling_cpmlt_23)) *SIM_PERIOD
                             end
                         end
+                        -- Tank 4 is filled last, after all tank 2/3 sections complete.
                         if tank2_r_cmplt > 0 and tank2_l_cmplt > 0 and tank3_r_cmplt > 0 and tank3_l_cmplt > 0 then
                             if simDR_fuel_tanks[1] < tank4_req then
                                 if  simDR_fuel_tank2 < simDR_fuel_tanks[1] then
@@ -550,6 +621,8 @@ function refueling()
                         end  
                     end  
                 else
+                    -- One tanker load is limited to 17,600 kg. Send it away, wait for
+                    -- its cycle timer, and request another tanker when more fuel remains.
                     if fuel_load_total > 17600 then
                         refueler_set = 0
                         simDR_fuel_tanker = 0
@@ -578,11 +651,15 @@ function refueling()
 end
 
 
+-- Update the independent instrument, icing, brake, and engine-indication models.
 function m_misc()
+-- Keep the SRD buzzer enabled whenever its protective cap is closed.
 if simDR_srd_buzzer_cap < 1 then
    simDR_srd_buzzer = 1
 end
     
+-- Convert the source VVI values from feet per minute to metres per second and
+-- move the custom indicators smoothly while their electrical supply is present.
 vvi_left_ms = simDR_vvi_left * 0.00508
 vvi_right_ms = simDR_vvi_right * 0.00508
     
@@ -619,10 +696,12 @@ else
    vvi_right_test = 10
 end
 
+-- Enforce the 0.3 lower bound of the custom yoke-height output.
 if yoke_height < 0.3 then
     yoke_height = 0.3
 end
 
+-- Rate-limit intermediate slat motion while preserving the simulator endpoints.
 if simDR_slat_ratio > 0 and simDR_slat_ratio < 0.95 then   
         slat_ratio_delta = simDR_slat_ratio - slat_ratio_loc
 else
@@ -637,6 +716,7 @@ elseif slat_ratio_delta < 0 then
    slat_ratio_loc = slat_ratio_loc - 0.075 * SIM_PERIOD
 end
   
+-- On the ground, use the APU start annunciator to reflect the powered gear-fan state.
 if bus27 > 0 then
   if simDR_gear_fan > 0 and simDR_on_ground > 0 then
        simDR_start_apu = 1
@@ -645,6 +725,7 @@ if bus27 > 0 then
   end
 end
   
+    -- Stagger fuel-system annunciators during the hydraulic lamp-test sequence.
     if simDR_light_test_hydro > 0 and bus27 > 0 then
         if pump_test > 0.8 then
             simDR_light_fuel_pump_1 = 0
@@ -720,6 +801,7 @@ end
     
     
 
+    -- Refresh the cached availability of the 27 V and 36 V buses once per frame.
     if simDR_bus27left > 5 then
         bus27 = 1
     elseif simDR_bus27right > 5 then
@@ -737,7 +819,12 @@ end
     end   
        
  
+    -- Failure-dependent environmental models are disabled as a group when the
+    -- aircraft's failure simulation switch is off.
     if simDR_failures > 0 then 
+        -- Accumulate door icing in cold high-altitude conditions without sufficient
+        -- heated-air temperature. Residual severe ice keeps passenger doors closed
+        -- while the modeled ice decays.
         if simDR_oat < 0 and simDR_door_fan_temp < 40 and simDR_altitude > 2450 then
             if doors_icing < 100 then
                 doors_icing = doors_icing + 0.1
@@ -767,10 +854,12 @@ end
 
 
 
+        -- Publish the current brake temperatures, then integrate the next model step.
         simDR_brake_heat_left = brake_temp_loc_l
         simDR_brake_heat_right = brake_temp_loc_r   
 
 
+        -- Add heat according to brake application and ground speed.
         if simDR_brake_l > 0 and simDR_gs > 1 and simDR_on_ground > 0 then
             if brake_temp < 1200 then
                 brake_temp_loc_l = brake_temp_loc_l + (simDR_brake_l * 0.015 * simDR_gs)
@@ -784,6 +873,8 @@ end
         end
 
 
+        -- Apply passive cooling. Rates differ with gear position, aircraft motion,
+        -- and whether the outside-air temperature is above or below zero.
         if simDR_oat < brake_temp_loc_l then
             if gears > 0 then
                 if simDR_gs > 1 then
@@ -825,6 +916,7 @@ end
         end
 
 
+        -- Powered brake fans provide additional cooling while on the ground.
         if bus36 > 0 and simDR_gear_fan > 0 and simDR_on_ground > 0 then
             if brake_temp_loc_l > simDR_oat then
                 brake_temp_loc_l = brake_temp_loc_l - 0.03
@@ -837,6 +929,7 @@ end
         end
 
 
+        -- Reduce available braking progressively above the modeled threshold of 450.
         if brake_temp_loc_l > 450 then  
             if simDR_brake_l > 1 - (1 - ((1450 - brake_temp_loc_l)*0.001)) then 
                 simDR_brake_l = 1 - (1 - ((1450 - brake_temp_loc_l)*0.001))
@@ -850,22 +943,21 @@ end
 
 
 
+        -- Cache whether any landing-gear leg is extended for the next cooling step.
         if simDR_gear1 < 0.01 and simDR_gear2 < 0.01 and simDR_gear3 < 0.01 then
             gears = 0
         else
             gears = 1
         end
     else
+        -- Disabling failures clears accumulated thermal and icing state.
         brake_temp_loc_r = 0
         brake_temp_loc_l = 0
         doors_icing = 0
     end
-            
-    
-    
-    
-            
-            
+
+    -- Build corrected low-pressure RPM indications. The correction term extends
+    -- the displayed range once the original low-pressure value rises above 3.85.
     if simDR_rpm_low_1 > 3.85 then 
             rpm1_low_loc = simDR_rpm_low_1 + rpm1_correct
     else
@@ -885,8 +977,11 @@ end
     end 
 
         
+    -- Suppress normal annunciator updates during the engine lamp test.
     if simDR_light_test_eng < 1 then
         
+        -- Illuminate bypass-valve annunciators in their respective RPM windows;
+        -- night mode uses the reduced 0.75 intensity.
         if simDR_rpm_high_1 > 50 and simDR_rpm_high_1 < 76.5 and simDR_oilmeter_1_lit > 0 then
           if simDR_day_night_lit < 1 then
             simDR_bypass_vlv_1_lit = 1
@@ -909,8 +1004,7 @@ end
           end
         end
         
-        --vna_off
-        
+        -- Temperature-compensated RPM thresholds for the VNA 33 and VNA 0 lights.
         vna33_off = 74.5+(simDR_oat/7.5)
         vna0_off = 91+(simDR_oat/6.31)
         
@@ -978,6 +1072,8 @@ end
         
         
         
+        -- Ramp a separate correction for each engine at high RPM instead of
+        -- introducing an instantaneous jump in the low-pressure indication.
         if simDR_rpm_high_1 > 75 then
             if rpm1_correct < 3.85 and simDR_rpm_low_1 < 75 then
                 if rpm1_correct < 3.83 then
@@ -1041,11 +1137,13 @@ end
         rpm2_correct_loc = rpm2_correct
         rpm3_correct_loc = rpm3_correct
     else
+        -- Hold correction values stable while the lamp-test circuit owns the lights.
         rpm1_correct = rpm1_correct_loc
         rpm2_correct = rpm2_correct_loc
         rpm3_correct = rpm3_correct_loc
     end
     
+    -- Publish non-negative corrected RPM values through this script's custom datarefs.
     if rpm1_low_loc > 0 then
         rpm1_low = rpm1_low_loc
     else
@@ -1065,6 +1163,8 @@ end
     end 
 end
 
+-- xTLua physics callback. Run both update groups once per physics frame in their
+-- established order.
 function after_physics()
     m_misc()
     refueling()
