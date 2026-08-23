@@ -17,186 +17,186 @@ function deferred_dataref(name,type,notifier)
 end
 
 -- Existing aircraft, simulator, and failure-system inputs.
-simDR_failures = find_dataref("tu154/custom/failures/failures_enabled")
-simDR_rpm_low_1 = find_dataref("tu154/custom/gauges/engine/rpm_low_1")
-simDR_rpm_low_2 = find_dataref("tu154/custom/gauges/engine/rpm_low_2")
-simDR_rpm_low_3 = find_dataref("tu154/custom/gauges/engine/rpm_low_3")
-simDR_rpm_high_1 = find_dataref("tu154/custom/gauges/engine/rpm_high_1_new")
-simDR_rpm_high_2 = find_dataref("tu154/custom/gauges/engine/rpm_high_2_new")
-simDR_rpm_high_3 = find_dataref("tu154/custom/gauges/engine/rpm_high_3_new")
-simDR_perep_1 = find_dataref("tu154/custom/lights/engines/eng1_bypass_valve")
-simDR_perep_2 = find_dataref("tu154/custom/lights/engines/eng2_bypass_valve")
-simDR_perep_3 = find_dataref("tu154/custom/lights/engines/eng3_bypass_valve")
-simDR_door1_anim = find_dataref("tu154/custom/anim/pax_door_1")
-simDR_door2_anim = find_dataref("tu154/custom/anim/pax_door_2")
-simDR_door3_anim = find_dataref("tu154/custom/anim/pax_door_3")
-simDR_door_cargo1_anim = find_dataref("tu154/custom/anim/cargo_1")
-simDR_door_cargo2_anim = find_dataref("tu154/custom/anim/cargo_2")
+-- Bind existing X-Plane and Tu-154 datarefs in a deterministic order.
+local datarefs = {
 
--- Environment, ground contact, brakes, and electrical power.
-simDR_door_fan_temp = find_dataref("tu154/custom/bleed/door_heat_tube_t")
-simDR_oat  = find_dataref("sim/cockpit2/temperature/outside_air_temp_deg")
-simDR_altitude = find_dataref("sim/flightmodel/position/y_agl")
-simDR_brake_l = find_dataref("sim/cockpit2/controls/left_brake_ratio") 
-simDR_brake_r = find_dataref("sim/cockpit2/controls/right_brake_ratio") 
-simDR_gs = find_dataref("sim/flightmodel/position/groundspeed")
-simDR_on_ground = find_dataref("sim/flightmodel/failures/onground_all") 
-simDR_gear1 = find_dataref("sim/flightmodel/movingparts/gear1def") 
-simDR_gear2 = find_dataref("sim/flightmodel/movingparts/gear2def") 
-simDR_gear3 = find_dataref("sim/flightmodel/movingparts/gear3def") 
-simDR_gear_fan = find_dataref("tu154/custom/switchers/eng/gear_fan")  
-simDR_36vl = find_dataref("tu154/custom/elec/bus36_volt_left")
-simDR_36vr = find_dataref("tu154/custom/elec/bus36_volt_right")
-simDR_bus27left = find_dataref("tu154/custom/elec/bus27_volt_left")
-simDR_bus27right = find_dataref("tu154/custom/elec/bus27_volt_right")
-simDR_passed = find_dataref("sim/operation/misc/frame_rate_period")
-simDR_gear_blocks =  find_dataref("tu154/custom/anim/gear_blocks")  
-simDR_slat_ratio = find_dataref("sim/flightmodel/controls/slatrat")
-simDR_day_night_lit = find_dataref("tu154/custom/lights/day_night_set")
-simDR_vvi_left = find_dataref("tu154/custom/gauges/vvi_left")
-simDR_vvi_right = find_dataref("tu154/custom/gauges/vvi_right")
-simDR_var_left = find_dataref("tu154/custom/switchers/ovhd/var_left")
-simDR_var_right = find_dataref("tu154/custom/switchers/ovhd/var_right")
-simDR_start_apu = find_dataref("tu154/custom/lights/apu/start_apu")
-simDR_lamp_test_apu =  find_dataref("tu154/custom/buttons/lamp_test_apu")
+    -- Engine indications, failures, and door animations
+    {"simDR_failures","tu154/custom/failures/failures_enabled"},
+    {"simDR_rpm_low_1","tu154/custom/gauges/engine/rpm_low_1"},
+    {"simDR_rpm_low_2","tu154/custom/gauges/engine/rpm_low_2"},
+    {"simDR_rpm_low_3","tu154/custom/gauges/engine/rpm_low_3"},
+    {"simDR_rpm_high_1","tu154/custom/gauges/engine/rpm_high_1_new"},
+    {"simDR_rpm_high_2","tu154/custom/gauges/engine/rpm_high_2_new"},
+    {"simDR_rpm_high_3","tu154/custom/gauges/engine/rpm_high_3_new"},
+    {"simDR_perep_1","tu154/custom/lights/engines/eng1_bypass_valve"},
+    {"simDR_perep_2","tu154/custom/lights/engines/eng2_bypass_valve"},
+    {"simDR_perep_3","tu154/custom/lights/engines/eng3_bypass_valve"},
+    {"simDR_door1_anim","tu154/custom/anim/pax_door_1"},
+    {"simDR_door2_anim","tu154/custom/anim/pax_door_2"},
+    {"simDR_door3_anim","tu154/custom/anim/pax_door_3"},
+    {"simDR_door_cargo1_anim","tu154/custom/anim/cargo_1"},
+    {"simDR_door_cargo2_anim","tu154/custom/anim/cargo_2"},
 
--- Load-panel state and fuel/engine annunciators.
-simDR_load_panel = find_dataref("tu154/custom/panels/show_load_panel")
-simDR_light_fuel_pump_1 = find_dataref("tu154/custom/lights/small/fuel_pump_1")
-simDR_light_fuel_pump_2 = find_dataref("tu154/custom/lights/small/fuel_pump_2")
-simDR_light_fuel_pump_3 = find_dataref("tu154/custom/lights/small/fuel_pump_3")
-simDR_light_fuel_pump_4 = find_dataref("tu154/custom/lights/small/fuel_pump_4")
-simDR_light_fuel_pump_10 = find_dataref("tu154/custom/lights/small/fuel_pump_10")
-simDR_light_fuel_pump_11 = find_dataref("tu154/custom/lights/small/fuel_pump_11")
-simDR_light_fuel_pump_left_5 = find_dataref("tu154/custom/lights/small/fuel_pump_left_5")
-simDR_light_fuel_pump_left_6 = find_dataref("tu154/custom/lights/small/fuel_pump_left_6")
-simDR_light_fuel_pump_left_7 = find_dataref("tu154/custom/lights/small/fuel_pump_left_7")
-simDR_light_fuel_pump_left_8 = find_dataref("tu154/custom/lights/small/fuel_pump_left_8")
-simDR_light_fuel_pump_left_9 = find_dataref("tu154/custom/lights/small/fuel_pump_left_9")
-simDR_light_fuel_pump_right_5 = find_dataref("tu154/custom/lights/small/fuel_pump_right_5")
-simDR_light_fuel_pump_right_6 = find_dataref("tu154/custom/lights/small/fuel_pump_right_6")
-simDR_light_fuel_pump_right_7 = find_dataref("tu154/custom/lights/small/fuel_pump_right_7")
-simDR_light_fuel_pump_right_8 = find_dataref("tu154/custom/lights/small/fuel_pump_right_8")
-simDR_light_fuel_pump_right_9 = find_dataref("tu154/custom/lights/small/fuel_pump_right_9")
-simDR_light_fuel_pump_left_2_fail = find_dataref("tu154/custom/lights/small/fuel_tank2_left_fail")
-simDR_light_fuel_pump_right_2_fail = find_dataref("tu154/custom/lights/small/fuel_tank2_right_fail")
-simDR_light_fuel_pump_left_3_fail = find_dataref("tu154/custom/lights/small/fuel_tank3_left_fail")
-simDR_light_fuel_pump_right_3_fail = find_dataref("tu154/custom/lights/small/fuel_tank3_right_fail")
-simDR_light_test_hydro = find_dataref("tu154/custom/buttons/lamp_test_hydro")
-simDR_light_test_eng = find_dataref("tu154/custom/buttons/lamp_test_engines")
-simDR_oilmeter_1_lit = find_dataref("tu154/custom/lights/small/oil_meter_1")
-simDR_oilmeter_2_lit = find_dataref("tu154/custom/lights/small/oil_meter_2")
-simDR_oilmeter_3_lit = find_dataref("tu154/custom/lights/small/oil_meter_3")
-simDR_bypass_vlv_1_lit = find_dataref("tu154/custom/lights/engines/eng1_bypass_valve")
-simDR_bypass_vlv_2_lit = find_dataref("tu154/custom/lights/engines/eng2_bypass_valve")
-simDR_bypass_vlv_3_lit = find_dataref("tu154/custom/lights/engines/eng3_bypass_valve")
-simDR_vna33_1_lit = find_dataref("tu154/custom/lights/engines/eng1_vna33")
-simDR_vna33_2_lit = find_dataref("tu154/custom/lights/engines/eng2_vna33")
-simDR_vna33_3_lit = find_dataref("tu154/custom/lights/engines/eng3_vna33")
-simDR_vna0_1_lit = find_dataref("tu154/custom/lights/engines/eng1_vna0")
-simDR_vna0_2_lit = find_dataref("tu154/custom/lights/engines/eng2_vna0")
-simDR_vna0_3_lit = find_dataref("tu154/custom/lights/engines/eng3_vna0")
-simDR_brake_heat_left = find_dataref("tu154/custom/failures/brake_heat_left")
-simDR_brake_heat_right = find_dataref("tu154/custom/failures/brake_heat_right")
+    -- Environment, ground contact, brakes, and electrical power
+    {"simDR_door_fan_temp","tu154/custom/bleed/door_heat_tube_t"},
+    {"simDR_oat","sim/cockpit2/temperature/outside_air_temp_deg"},
+    {"simDR_altitude","sim/flightmodel/position/y_agl"},
+    {"simDR_brake_l","sim/cockpit2/controls/left_brake_ratio"},
+    {"simDR_brake_r","sim/cockpit2/controls/right_brake_ratio"},
+    {"simDR_gs","sim/flightmodel/position/groundspeed"},
+    {"simDR_on_ground","sim/flightmodel/failures/onground_all"},
+    {"simDR_gear1","sim/flightmodel/movingparts/gear1def"},
+    {"simDR_gear2","sim/flightmodel/movingparts/gear2def"},
+    {"simDR_gear3","sim/flightmodel/movingparts/gear3def"},
+    {"simDR_gear_fan","tu154/custom/switchers/eng/gear_fan"},
+    {"simDR_36vl","tu154/custom/elec/bus36_volt_left"},
+    {"simDR_36vr","tu154/custom/elec/bus36_volt_right"},
+    {"simDR_bus27left","tu154/custom/elec/bus27_volt_left"},
+    {"simDR_bus27right","tu154/custom/elec/bus27_volt_right"},
+    {"simDR_passed","sim/operation/misc/frame_rate_period"},
+    {"simDR_gear_blocks","tu154/custom/anim/gear_blocks"},
+    {"simDR_slat_ratio","sim/flightmodel/controls/slatrat"},
+    {"simDR_day_night_lit","tu154/custom/lights/day_night_set"},
+    {"simDR_vvi_left","tu154/custom/gauges/vvi_left"},
+    {"simDR_vvi_right","tu154/custom/gauges/vvi_right"},
+    {"simDR_var_left","tu154/custom/switchers/ovhd/var_left"},
+    {"simDR_var_right","tu154/custom/switchers/ovhd/var_right"},
+    {"simDR_start_apu","tu154/custom/lights/apu/start_apu"},
+    {"simDR_lamp_test_apu","tu154/custom/buttons/lamp_test_apu"},
 
--- Fuel, payload, and target values supplied by the load panel.
--- X-Plane's m_fuel indices used here are: 0=tank 1, 1=tank 4,
--- 2/3=tank 2 right/left, and 4/5=tank 3 right/left.
-simDR_fuel_tanks = find_dataref("sim/flightmodel/weight/m_fuel") 
-simDR_fuel_tank1 = find_dataref("sim/flightmodel/weight/m_fuel1") 
-simDR_fuel_tank2 = find_dataref("sim/flightmodel/weight/m_fuel2") 
-simDR_fuel_tank3 = find_dataref("sim/flightmodel/weight/m_fuel3") 
-simDR_payload_set = find_dataref("tu154/custom/payload/load_slow_btn_new")
-simDR_fast_load_btn = find_dataref("tu154/custom/payload/load_fast_btn") 
-simDR_payload = find_dataref("sim/flightmodel/weight/m_fixed")
-simDR_payload_cargo1 = find_dataref("tu154/custom/payload/cargo_1") 
-simDR_payload_cargo2 = find_dataref("tu154/custom/payload/cargo_2")
-simDR_payload_cargo3 = find_dataref("tu154/custom/payload/kitchens")
-simDR_payload_cargo4 = find_dataref("tu154/custom/payload/various")
-simDR_payload_pax1 = find_dataref("tu154/custom/payload/zone_1")
-simDR_payload_pax2 = find_dataref("tu154/custom/payload/zone_2")
-simDR_payload_pax3 = find_dataref("tu154/custom/payload/zone_4")
-simDR_payload_pax4 = find_dataref("tu154/custom/payload/zone_5")
-simDR_payload_pax5 = find_dataref("tu154/custom/payload/zone_6")
-simDR_payload_crew = find_dataref("tu154/custom/payload/crew_num")
-simDR_payload_cabin = find_dataref("tu154/custom/payload/cabin_num")
-simDR_srd_buzzer = find_dataref("tu154/custom/switchers/eng/srd_buzzer")
-simDR_srd_buzzer_cap = find_dataref("tu154/custom/switchers/eng/srd_buzzer_cap")
-simDR_cg = find_dataref("sim/flightmodel/misc/cgz_ref_to_default")
-simDR_tank1 = find_dataref("tu154/custom/payload/tank_1")
-simDR_tank2_l = find_dataref("tu154/custom/payload/tank_2L")
-simDR_tank2_r = find_dataref("tu154/custom/payload/tank_2R")
-simDR_tank3_l = find_dataref("tu154/custom/payload/tank_3L")
-simDR_tank3_r = find_dataref("tu154/custom/payload/tank_3R")
-simDR_tank4 = find_dataref("tu154/custom/payload/tank_4")
+    -- Load-panel state and fuel/engine annunciators
+    {"simDR_load_panel","tu154/custom/panels/show_load_panel"},
+    {"simDR_light_fuel_pump_1","tu154/custom/lights/small/fuel_pump_1"},
+    {"simDR_light_fuel_pump_2","tu154/custom/lights/small/fuel_pump_2"},
+    {"simDR_light_fuel_pump_3","tu154/custom/lights/small/fuel_pump_3"},
+    {"simDR_light_fuel_pump_4","tu154/custom/lights/small/fuel_pump_4"},
+    {"simDR_light_fuel_pump_10","tu154/custom/lights/small/fuel_pump_10"},
+    {"simDR_light_fuel_pump_11","tu154/custom/lights/small/fuel_pump_11"},
+    {"simDR_light_fuel_pump_left_5","tu154/custom/lights/small/fuel_pump_left_5"},
+    {"simDR_light_fuel_pump_left_6","tu154/custom/lights/small/fuel_pump_left_6"},
+    {"simDR_light_fuel_pump_left_7","tu154/custom/lights/small/fuel_pump_left_7"},
+    {"simDR_light_fuel_pump_left_8","tu154/custom/lights/small/fuel_pump_left_8"},
+    {"simDR_light_fuel_pump_left_9","tu154/custom/lights/small/fuel_pump_left_9"},
+    {"simDR_light_fuel_pump_right_5","tu154/custom/lights/small/fuel_pump_right_5"},
+    {"simDR_light_fuel_pump_right_6","tu154/custom/lights/small/fuel_pump_right_6"},
+    {"simDR_light_fuel_pump_right_7","tu154/custom/lights/small/fuel_pump_right_7"},
+    {"simDR_light_fuel_pump_right_8","tu154/custom/lights/small/fuel_pump_right_8"},
+    {"simDR_light_fuel_pump_right_9","tu154/custom/lights/small/fuel_pump_right_9"},
+    {"simDR_light_fuel_pump_left_2_fail","tu154/custom/lights/small/fuel_tank2_left_fail"},
+    {"simDR_light_fuel_pump_right_2_fail","tu154/custom/lights/small/fuel_tank2_right_fail"},
+    {"simDR_light_fuel_pump_left_3_fail","tu154/custom/lights/small/fuel_tank3_left_fail"},
+    {"simDR_light_fuel_pump_right_3_fail","tu154/custom/lights/small/fuel_tank3_right_fail"},
+    {"simDR_light_test_hydro","tu154/custom/buttons/lamp_test_hydro"},
+    {"simDR_light_test_eng","tu154/custom/buttons/lamp_test_engines"},
+    {"simDR_oilmeter_1_lit","tu154/custom/lights/small/oil_meter_1"},
+    {"simDR_oilmeter_2_lit","tu154/custom/lights/small/oil_meter_2"},
+    {"simDR_oilmeter_3_lit","tu154/custom/lights/small/oil_meter_3"},
+    {"simDR_bypass_vlv_1_lit","tu154/custom/lights/engines/eng1_bypass_valve"},
+    {"simDR_bypass_vlv_2_lit","tu154/custom/lights/engines/eng2_bypass_valve"},
+    {"simDR_bypass_vlv_3_lit","tu154/custom/lights/engines/eng3_bypass_valve"},
+    {"simDR_vna33_1_lit","tu154/custom/lights/engines/eng1_vna33"},
+    {"simDR_vna33_2_lit","tu154/custom/lights/engines/eng2_vna33"},
+    {"simDR_vna33_3_lit","tu154/custom/lights/engines/eng3_vna33"},
+    {"simDR_vna0_1_lit","tu154/custom/lights/engines/eng1_vna0"},
+    {"simDR_vna0_2_lit","tu154/custom/lights/engines/eng2_vna0"},
+    {"simDR_vna0_3_lit","tu154/custom/lights/engines/eng3_vna0"},
+    {"simDR_brake_heat_left","tu154/custom/failures/brake_heat_left"},
+    {"simDR_brake_heat_right","tu154/custom/failures/brake_heat_right"},
 
--- Ground-service calls and the X-Plane custom sliders used as door commands.
-simDR_fuel_tanker = find_dataref("tu154/custom/anim/fuel_tanker_call")
-simDR_fuel_tanker_anim = find_dataref("tu154/custom/anim/fuel_tanker")
-simDR_catering = find_dataref("tu154/custom/anim/catering_call")
-simDR_ladder1 = find_dataref("tu154/custom/anim/ladder_1_call")
-simDR_ladder2 = find_dataref("tu154/custom/anim/ladder_2_call")
-simDR_door1 = find_dataref("sim/cockpit2/switches/custom_slider_on[4]")
-simDR_door2 = find_dataref("sim/cockpit2/switches/custom_slider_on[5]")
-simDR_door_cargo1 = find_dataref("sim/cockpit2/switches/custom_slider_on[2]")
-simDR_door_cargo2 = find_dataref("sim/cockpit2/switches/custom_slider_on[3]")
-simDR_door_kitchen = find_dataref("sim/cockpit2/switches/custom_slider_on[6]")
-simDR_catering_anim = find_dataref("tu154/custom/anim/catering_tanker")
+    -- Fuel, payload, and target values supplied by the load panel
+    {"simDR_fuel_tanks","sim/flightmodel/weight/m_fuel"},
+    {"simDR_fuel_tank1","sim/flightmodel/weight/m_fuel1"},
+    {"simDR_fuel_tank2","sim/flightmodel/weight/m_fuel2"},
+    {"simDR_fuel_tank3","sim/flightmodel/weight/m_fuel3"},
+    {"simDR_payload_set","tu154/custom/payload/load_slow_btn_new"},
+    {"simDR_fast_load_btn","tu154/custom/payload/load_fast_btn"},
+    {"simDR_payload","sim/flightmodel/weight/m_fixed"},
+    {"simDR_payload_cargo1","tu154/custom/payload/cargo_1"},
+    {"simDR_payload_cargo2","tu154/custom/payload/cargo_2"},
+    {"simDR_payload_cargo3","tu154/custom/payload/kitchens"},
+    {"simDR_payload_cargo4","tu154/custom/payload/various"},
+    {"simDR_payload_pax1","tu154/custom/payload/zone_1"},
+    {"simDR_payload_pax2","tu154/custom/payload/zone_2"},
+    {"simDR_payload_pax3","tu154/custom/payload/zone_4"},
+    {"simDR_payload_pax4","tu154/custom/payload/zone_5"},
+    {"simDR_payload_pax5","tu154/custom/payload/zone_6"},
+    {"simDR_payload_crew","tu154/custom/payload/crew_num"},
+    {"simDR_payload_cabin","tu154/custom/payload/cabin_num"},
+    {"simDR_srd_buzzer","tu154/custom/switchers/eng/srd_buzzer"},
+    {"simDR_srd_buzzer_cap","tu154/custom/switchers/eng/srd_buzzer_cap"},
+    {"simDR_cg","sim/flightmodel/misc/cgz_ref_to_default"},
+    {"simDR_tank1","tu154/custom/payload/tank_1"},
+    {"simDR_tank2_l","tu154/custom/payload/tank_2L"},
+    {"simDR_tank2_r","tu154/custom/payload/tank_2R"},
+    {"simDR_tank3_l","tu154/custom/payload/tank_3L"},
+    {"simDR_tank3_r","tu154/custom/payload/tank_3R"},
+    {"simDR_tank4","tu154/custom/payload/tank_4"},
 
--- Pitot-icing and airspeed bindings retained from the original module.
-mDR_percip_on_craft = find_dataref("sim/weather/precipitation_on_aircraft_ratio")
-simDR_speed_svs = find_dataref("tu154/custom/svs/true_airspeed")
-simDR_ppd1_fail = find_dataref("tu154/custom/failures/pitot1")
-simDR_ppd2_fail = find_dataref("tu154/custom/failures/pitot2")
-simDR_ppd3_fail = find_dataref("tu154/custom/antiice/ppd_3_heat_fail")
-simDR_kus_left = find_dataref("tu154/custom/gauges/speed/kus_ias_left")
-simDR_tas_left = find_dataref("tu154/custom/gauges/speed/kus_tas_left")
-simDR_ias_left = find_dataref("tu154/custom/gauges/speed/ias_left")
-simDR_ias_y_left = find_dataref("tu154/custom/gauges/speed/ias_yellow_left")
-simDR_kus_right = find_dataref("tu154/custom/gauges/speed/kus_ias_right")
-simDR_tas_right = find_dataref("tu154/custom/gauges/speed/kus_tas_right")
-simDR_ias_right = find_dataref("tu154/custom/gauges/speed/ias_right")
-simDR_ias_y_right = find_dataref("tu154/custom/gauges/speed/ias_yellow_right")
+    -- Ground-service calls and X-Plane custom slider door commands
+    {"simDR_fuel_tanker","tu154/custom/anim/fuel_tanker_call"},
+    {"simDR_fuel_tanker_anim","tu154/custom/anim/fuel_tanker"},
+    {"simDR_catering","tu154/custom/anim/catering_call"},
+    {"simDR_ladder1","tu154/custom/anim/ladder_1_call"},
+    {"simDR_ladder2","tu154/custom/anim/ladder_2_call"},
+    {"simDR_door1","sim/cockpit2/switches/custom_slider_on[4]"},
+    {"simDR_door2","sim/cockpit2/switches/custom_slider_on[5]"},
+    {"simDR_door_cargo1","sim/cockpit2/switches/custom_slider_on[2]"},
+    {"simDR_door_cargo2","sim/cockpit2/switches/custom_slider_on[3]"},
+    {"simDR_door_kitchen","sim/cockpit2/switches/custom_slider_on[6]"},
+    {"simDR_catering_anim","tu154/custom/anim/catering_tanker"},
 
+    -- Pitot icing and airspeed indications
+    {"mDR_percip_on_craft","sim/weather/precipitation_on_aircraft_ratio"},
+    {"simDR_speed_svs","tu154/custom/svs/true_airspeed"},
+    {"simDR_ppd1_fail","tu154/custom/failures/pitot1"},
+    {"simDR_ppd2_fail","tu154/custom/failures/pitot2"},
+    {"simDR_ppd3_fail","tu154/custom/antiice/ppd_3_heat_fail"},
+    {"simDR_kus_left","tu154/custom/gauges/speed/kus_ias_left"},
+    {"simDR_tas_left","tu154/custom/gauges/speed/kus_tas_left"},
+    {"simDR_ias_left","tu154/custom/gauges/speed/ias_left"},
+    {"simDR_ias_y_left","tu154/custom/gauges/speed/ias_yellow_left"},
+    {"simDR_kus_right","tu154/custom/gauges/speed/kus_ias_right"},
+    {"simDR_tas_right","tu154/custom/gauges/speed/kus_tas_right"},
+    {"simDR_ias_right","tu154/custom/gauges/speed/ias_right"},
+    {"simDR_ias_y_right","tu154/custom/gauges/speed/ias_yellow_right"},
 
+    -- Smooth-loading CG references
+    {"simDR_cg_pos_act","tu154/custom/misc/cg_pos_actual"},
+    {"simDR_cg_pos_met","sim/flightmodel/misc/cgz_ref_to_default"},
+    {"simDR_cg_pos_to","tu154/custom/t154_efb/cax_to"},
 
--- Outputs created and owned by this xTLua script.
-rpm1_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_1_new", "number")
-rpm2_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_2_new", "number")
-rpm3_low = deferred_dataref("tu154/custom/gauges/engine/rpm_low_3_new", "number")
-fuel_load_total = deferred_dataref("tu154/custom/fuel_load_total", "number")
-fueling_cpmlt = deferred_dataref("tu154/custom/fueling_cpmlt", "number")
-cargo_req =  deferred_dataref("tu154/custom/cargo_req", "number")
-pax_req =  deferred_dataref("tu154/custom/pax_req", "number")
-yoke_height =  deferred_dataref("tu154/custom/yoke_height", "number")
-vvi_left =  deferred_dataref("tu154/custom/gauges/vvi_left_new", "number")
-vvi_right =  deferred_dataref("tu154/custom/gauges/vvi_right_new", "number")
+    -- Pitot-heater and precipitation inputs
+    {"simDR_ppd1","tu154/custom/switchers/ovhd/pitot_heat_1"},
+    {"simDR_ppd2","tu154/custom/switchers/ovhd/pitot_heat_2"},
+    {"simDR_ppd3","tu154/custom/switchers/ovhd/pitot_heat_3"},
+    {"simDR_percip_on_craft","sim/weather/precipitation_on_aircraft_ratio"},
+}
 
--- Smooth-loading state and CG target/actual values.
-start_loading =  deferred_dataref("tu154/custom/start_smooth_loading", "number")
-simDR_cg_pos_act = find_dataref("tu154/custom/misc/cg_pos_actual")
-simDR_cg_pos_met = find_dataref("sim/flightmodel/misc/cgz_ref_to_default")
-simDR_cg_pos_to = find_dataref("tu154/custom/t154_efb/cax_to")
+local env = getfenv(1)
 
--- Additional pitot-heater and speed inputs used by the original icing fix.
-simDR_ppd1 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_1")
-simDR_ppd2 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_2")
-simDR_ppd3 = find_dataref("tu154/custom/switchers/ovhd/pitot_heat_3")
-simDR_percip_on_craft = find_dataref("sim/weather/precipitation_on_aircraft_ratio")
-simDR_speed_svs = find_dataref("tu154/custom/svs/true_airspeed")
+for _,dataref in ipairs(datarefs) do
+    env[dataref[1]] = find_dataref(dataref[2])
+end
 
-simDR_ppd1_fail = find_dataref("tu154/custom/failures/pitot1")
-simDR_ppd2_fail = find_dataref("tu154/custom/failures/pitot2")
-simDR_ppd3_fail = find_dataref("tu154/custom/antiice/ppd_3_heat_fail")
+-- Create writable custom datarefs owned by this xTLua script.
+local deferred_datarefs = {
+    {"rpm1_low","tu154/custom/gauges/engine/rpm_low_1_new"},
+    {"rpm2_low","tu154/custom/gauges/engine/rpm_low_2_new"},
+    {"rpm3_low","tu154/custom/gauges/engine/rpm_low_3_new"},
+    {"fuel_load_total","tu154/custom/fuel_load_total"},
+    {"fueling_cpmlt","tu154/custom/fueling_cpmlt"},
+    {"cargo_req","tu154/custom/cargo_req"},
+    {"pax_req","tu154/custom/pax_req"},
+    {"yoke_height","tu154/custom/yoke_height"},
+    {"vvi_left","tu154/custom/gauges/vvi_left_new"},
+    {"vvi_right","tu154/custom/gauges/vvi_right_new"},
+    {"start_loading","tu154/custom/start_smooth_loading"},
+}
 
-simDR_kus_left = find_dataref("tu154/custom/gauges/speed/kus_ias_left")
-simDR_tas_left = find_dataref("tu154/custom/gauges/speed/kus_tas_left")
-simDR_ias_left = find_dataref("tu154/custom/gauges/speed/ias_left")
-simDR_ias_y_left = find_dataref("tu154/custom/gauges/speed/ias_yellow_left")
-simDR_kus_right = find_dataref("tu154/custom/gauges/speed/kus_ias_right")
-simDR_tas_right = find_dataref("tu154/custom/gauges/speed/kus_tas_right")
-simDR_ias_right = find_dataref("tu154/custom/gauges/speed/ias_right")
-simDR_ias_y_right = find_dataref("tu154/custom/gauges/speed/ias_yellow_right")
+for _,dataref in ipairs(deferred_datarefs) do
+    env[dataref[1]] = deferred_dataref(dataref[2],"number")
+end
+
 
 -- Legacy correction state retained with the original bindings. These values are
 -- currently not consumed elsewhere in this script.

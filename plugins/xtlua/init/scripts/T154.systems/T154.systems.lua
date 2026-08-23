@@ -5,7 +5,7 @@ function tu154_azs_emerg_trim_DRhandler() end
 -- Legacy helper for writable datarefs that are created from Lua.
 function deferred_dataref(name,type,notifier)
     print("Deferred dataref: "..name)
-    local dref = XLuaCreateDataRef(name, type, "yes", notifier)
+    dref = XLuaCreateDataRef(name, type, "yes", notifier)
     return wrap_dref_any(dref, type)
 end
   
@@ -21,7 +21,6 @@ rest of this script.
 
 local function bind_datarefs(definitions)
     local env = getfenv(1)
-
     for name, path in pairs(definitions) do
         env[name] = find_dataref(path)
     end
@@ -34,7 +33,6 @@ local DATAREFS = {
     simDR_on_ground = "sim/flightmodel/failures/onground_all",
     simDR_passed = "sim/operation/misc/frame_rate_period",
     simDR_time = "sim/time/total_running_time_sec",
-    simDR_oat = "sim/cockpit2/temperature/outside_air_temp_deg",
     -- Flight controls, trim and hydraulics
     simDR_thr1 = "tu154/custom/controlls/throttle_1",
     simDR_thr2 = "tu154/custom/controlls/throttle_2",
@@ -71,27 +69,8 @@ local DATAREFS = {
     simDR_needle = "tu154/custom/gauges/speed/speed_mid_needle",
     -- APU
     simDR_apu_start_ready = "tu154/custom/lights/apu/start_ready",
-    simDR_apu_oilt = "tu154/custom/eng/apu_oil_t",
-    simDR_apu_cc = "tu154/custom/elec/gen4_amp",
-    simDR_start_seq = "tu154/custom/elec/apu_start_seq",
-    simDR_apu_n1 = "tu154/custom/eng/apu_n1",
-    simDR_apu_working = "tu154/custom/lights/apu/work_mode",
-    simDR_apu_start_mode = "tu154/custom/switchers/eng/apu_start_mode",
-    simDR_start_apu = "tu154/custom/lights/apu/start_apu",
     simDR_lamp_test_apu = "tu154/custom/buttons/lamp_test_apu",
     simDR_apu_bleed = "tu154/custom/eng/apu_air_doors",
-    simDR_apu_bleed_sw = "tu154/custom/switchers/eng/apu_air_bleed",
-    -- Tu-154M flap aerodynamics
-    simDR_flaps_cl = "sim/aircraft/controls/acf_flap_cl",
-    simDR_flaps_cd = "sim/aircraft/controls/acf_flap_cd",
-    simDR_flaps_cm = "sim/aircraft/controls/acf_flap_cm",
-    simDR_flaps2_cl = "sim/aircraft/controls/acf_flap2_cl",
-    simDR_flaps2_cd = "sim/aircraft/controls/acf_flap2_cd",
-    simDR_flaps2_cm = "sim/aircraft/controls/acf_flap2_cm",
-    simDR_flap_inn_L = "sim/flightmodel/controls/wing1l_fla1def",
-    simDR_flap_inn_R = "sim/flightmodel/controls/wing1r_fla1def",
-    simDR_flap_mid_L = "sim/flightmodel/controls/wing2l_fla2def",
-    simDR_flap_mid_R = "sim/flightmodel/controls/wing2r_fla2def",
     -- Landing lights and brakes
     simDR_light_l = "tu154/custom/lights/landing_mode_set_L",
     simDR_light_r = "tu154/custom/lights/landing_mode_set_R",
@@ -153,74 +132,6 @@ local DATAREFS = {
 
 bind_datarefs(DATAREFS)
 
--- Tu-154M flap aerodynamics.
--- The fixed CL/CD values and CM schedules mirror the calibrated flap model.
-local FLAP1_CL = 1.029
-local FLAP1_CD = 0.064
-local FLAP2_CL = 1.165
-local FLAP2_CD = 0.068
-
--- 80 percent of the calculated C-selector coupling is compensated.
--- The remaining 20 percent avoids pitch reversal and preserves useful
--- elevator margin for the F and A selector schedules.
-local flap1_cm_tbl = {
-    { -10, -0.4480 },
-    {   0, -0.4480 },
-    {  15, -0.4480 },
-    {  28, -0.3490 },
-    {  36, -0.4102 },
-    {  45, -0.3762 },
-    { 100, -0.3762 },
-}
-
-local flap2_cm_tbl = {
-    { -10, -0.5071 },
-    {   0, -0.5071 },
-    {  13, -0.5071 },
-    {  25, -0.3950 },
-    {  32, -0.4642 },
-    {  40, -0.4257 },
-    { 100, -0.4257 },
-}
-
-local function interpolate_table(tbl, value)
-    if value <= tbl[1][1] then
-        return tbl[1][2]
-    end
-    for index = 2, #tbl do
-        local upper = tbl[index]
-        if value <= upper[1] then
-            local lower = tbl[index - 1]
-            local span = upper[1] - lower[1]
-            if span == 0 then
-                return upper[2]
-            end
-            local ratio = (value - lower[1]) / span
-            return lower[2] + (upper[2] - lower[2]) * ratio
-        end
-    end
-
-    return tbl[#tbl][2]
-end
-
--- Local assignments force XTLua to 
--- refresh the external datarefs before
--- their values are used by the calculations.
-local function update_flap_coefficients()
-    local flap_inn_left = simDR_flap_inn_L
-    local flap_inn_right = simDR_flap_inn_R
-    local flap_mid_left = simDR_flap_mid_L
-    local flap_mid_right = simDR_flap_mid_R
-    local flap_inn = 0.5 * (flap_inn_left + flap_inn_right)
-    local flap_mid = 0.5 * (flap_mid_left + flap_mid_right)
-    simDR_flaps_cl = FLAP1_CL
-    simDR_flaps_cd = FLAP1_CD
-    simDR_flaps_cm = interpolate_table(flap1_cm_tbl, flap_inn)
-    simDR_flaps2_cl = FLAP2_CL
-    simDR_flaps2_cd = FLAP2_CD
-    simDR_flaps2_cm = interpolate_table(flap2_cm_tbl, flap_mid)
-end
-
 -- Runtime state -----------------------------------------------------------
 -- Saved lamp states are restored while 
 -- the general front-panel lamp test runs.
@@ -243,8 +154,6 @@ local stu_roll = 0
 local stu_toga = 0
 local at1 = 0
 local at2 = 0
-local sw_apu_sound = 0
-local apu_bleed_new = 0
 local checklist_num = 0
 local diss_timer = 0
 local diss_timer_start = 1
@@ -254,12 +163,6 @@ local diss_wnd_spd = 0
 local diss_wnd_crs = 0
 local current_pitch_trim = 0
 local current_pitch_trim_stu = 0
-local oat_delta = 0
-local apu_pause_1 = 0
-local apu_pause_2 = 0
-local apu_pause_3 = 0
-local apu_tr_n = 0
-local apu_tr_n_set = 0
 local absu_turn_zero = 0
 local lights = 0
 local wait = 0
@@ -271,7 +174,6 @@ local pressed = 0
 local start_self_test_var_l = 1
 local var_l_dur_test = 8000
 local thr_delta = 0
-local apu_was_run = 0
 local gs_fl = 0
 
 
@@ -491,32 +393,6 @@ if simDR_apu_bleed > 0.01 and simDR_lamp_test_apu < 1 then
    simDR_apu_start_ready = 0
 end
     
--- Preserve the legacy smoothed APU bleed-door state. 
--- The local value is
--- currently not written to an external dataref.
-if simDR_apu_n1 > 90 then
-    if simDR_apu_bleed_sw > 0 then
-       if apu_bleed_new < 1 then
-        apu_bleed_new = apu_bleed_new + 0.11 * SIM_PERIOD
-       else
-        apu_bleed_new = 1
-       end
-    elseif simDR_apu_bleed_sw < 0 then
-       if apu_bleed_new > 0 then
-       apu_bleed_new = apu_bleed_new - 0.11 * SIM_PERIOD
-       else
-        apu_bleed_new = 0
-       end
-    end
-else
-    if apu_bleed_new > 0 then
-      apu_bleed_new = apu_bleed_new - 0.01
-    else
-      apu_bleed_new = 0
-    end
-end
-    
- 
 -- Aircraft integration expects GPSS status 2 while this systems script runs.
 simDR_gpss = 2 
 -- Upper gear lamp-test button sound.
@@ -600,65 +476,7 @@ if lights == 0 and wait < 0.1 and lights_set > 0 then
     simDR_light_l_ext = 0
     simDR_light_r_ext = 0
 end
--- Flap aerodynamics are updated in before_physics().
 
-    
-
--- APU temperature limits and hot-start behavior --------------------------
-if simDR_apu_working > 0 then
-    apu_tr_n = 0
-    apu_was_run = 1
-end
- 
-
-if apu_was_run < 1 then
-    if simDR_apu_oilt < 5 then
-        simDR_apu_oilt = 5
-    end
-else
-    if simDR_apu_oilt < 20 then
-        simDR_apu_oilt = 20
-    end
-end
-
-if simDR_apu_oilt > 112 and simDR_apu_cc < 123 then
-    simDR_apu_oilt = 112
-end
-    
-if simDR_start_seq > 0 then
-    if simDR_oat > 25 then
-        oat_delta = (simDR_oat - 25)
-        if apu_tr_n_set < 1 then
-            apu_tr_n = apu_tr_n + 1
-            apu_tr_n_set = 1
-        end
-    else
-        oat_delta = 0
-    end
-    if oat_delta > 0 and apu_pause_1 < math.random(-1,4) and apu_tr_n < 4 and simDR_apu_start_mode > 0 then  
-        if simDR_apu_n1 > math.random(17,20) then
-            apu_pause_1 = apu_pause_1 + simDR_passed
-            simDR_apu_n1 = simDR_apu_n1 - 0.22
-        end 
-    end
-    if oat_delta > math.random(6,15) and apu_pause_2 < math.random(-1,4) and apu_tr_n < 3 and simDR_apu_start_mode > 0 then  
-        if simDR_apu_n1 > math.random(21,27) then
-            apu_pause_2 = apu_pause_2 + simDR_passed
-            simDR_apu_n1 = simDR_apu_n1 - 0.22
-        end 
-    end
-    if oat_delta > math.random(16,20) and apu_pause_3 < math.random(-1,4) and apu_tr_n < 2 and simDR_apu_start_mode > 0 then  
-        if simDR_apu_n1 > math.random(28,41) then
-            apu_pause_3 = apu_pause_3 + simDR_passed
-            simDR_apu_n1 = simDR_apu_n1 - 0.22
-        end 
-    end
-else
-    apu_pause_1 = 0
-    apu_pause_2 = 0
-    apu_pause_3 = 0
-    apu_tr_n_set = 0
-end
     
 
 -- Synchronize the command-side checklist index with external selections.
@@ -820,14 +638,6 @@ end
 end
 
 -- XTLua lifecycle callbacks ----------------------------------------------
-function flight_start()
-    update_flap_coefficients()
-end
-
-function before_physics()
-    update_flap_coefficients()
-end
-
 function after_physics()
     systems()
 end
