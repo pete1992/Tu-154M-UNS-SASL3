@@ -3,3 +3,6 @@ plugins/sasl/data/modules/Custom Module/saved_state.ini
 
 # Local Codex working backups; never commit or push these.
 /_codex_backups/
+TDSGTN.ini
+saved_state.ini
+SASLLog.txt

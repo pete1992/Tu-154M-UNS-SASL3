@@ -36,6 +36,7 @@ local datarefs = {
     {"simDR_door3_anim","tu154/custom/anim/pax_door_3"},
     {"simDR_door_cargo1_anim","tu154/custom/anim/cargo_1"},
     {"simDR_door_cargo2_anim","tu154/custom/anim/cargo_2"},
+
     -- Environment, ground contact, brakes, and electrical power
     {"simDR_door_fan_temp","tu154/custom/bleed/door_heat_tube_t"},
     {"simDR_oat","sim/cockpit2/temperature/outside_air_temp_deg"},
@@ -62,6 +63,7 @@ local datarefs = {
     {"simDR_var_right","tu154/custom/switchers/ovhd/var_right"},
     {"simDR_start_apu","tu154/custom/lights/apu/start_apu"},
     {"simDR_lamp_test_apu","tu154/custom/buttons/lamp_test_apu"},
+
     -- Load-panel state and fuel/engine annunciators
     {"simDR_load_panel","tu154/custom/panels/show_load_panel"},
     {"simDR_light_fuel_pump_1","tu154/custom/lights/small/fuel_pump_1"},
@@ -100,6 +102,7 @@ local datarefs = {
     {"simDR_vna0_3_lit","tu154/custom/lights/engines/eng3_vna0"},
     {"simDR_brake_heat_left","tu154/custom/failures/brake_heat_left"},
     {"simDR_brake_heat_right","tu154/custom/failures/brake_heat_right"},
+
     -- Fuel, payload, and target values supplied by the load panel
     {"simDR_fuel_tanks","sim/flightmodel/weight/m_fuel"},
     {"simDR_fuel_tank1","sim/flightmodel/weight/m_fuel1"},
@@ -128,6 +131,7 @@ local datarefs = {
     {"simDR_tank3_l","tu154/custom/payload/tank_3L"},
     {"simDR_tank3_r","tu154/custom/payload/tank_3R"},
     {"simDR_tank4","tu154/custom/payload/tank_4"},
+
     -- Ground-service calls and X-Plane custom slider door commands
     {"simDR_fuel_tanker","tu154/custom/anim/fuel_tanker_call"},
     {"simDR_fuel_tanker_anim","tu154/custom/anim/fuel_tanker"},
@@ -140,6 +144,7 @@ local datarefs = {
     {"simDR_door_cargo2","sim/cockpit2/switches/custom_slider_on[3]"},
     {"simDR_door_kitchen","sim/cockpit2/switches/custom_slider_on[6]"},
     {"simDR_catering_anim","tu154/custom/anim/catering_tanker"},
+
     -- Pitot icing and airspeed indications
     {"mDR_percip_on_craft","sim/weather/precipitation_on_aircraft_ratio"},
     {"simDR_speed_svs","tu154/custom/svs/true_airspeed"},
@@ -154,10 +159,12 @@ local datarefs = {
     {"simDR_tas_right","tu154/custom/gauges/speed/kus_tas_right"},
     {"simDR_ias_right","tu154/custom/gauges/speed/ias_right"},
     {"simDR_ias_y_right","tu154/custom/gauges/speed/ias_yellow_right"},
+
     -- Smooth-loading CG references
     {"simDR_cg_pos_act","tu154/custom/misc/cg_pos_actual"},
     {"simDR_cg_pos_met","sim/flightmodel/misc/cgz_ref_to_default"},
     {"simDR_cg_pos_to","tu154/custom/t154_efb/cax_to"},
+
     -- Pitot-heater and precipitation inputs
     {"simDR_ppd1","tu154/custom/switchers/ovhd/pitot_heat_1"},
     {"simDR_ppd2","tu154/custom/switchers/ovhd/pitot_heat_2"},
@@ -281,10 +288,16 @@ local brake_temp_loc_r = 0
 local vna33_off = 0
 local vna0_off = 0
 
+
+
+
 -- Run the complete ground-service state machine. All work is inhibited in flight.
 -- The slow-load button captures a new set of targets; subsequent physics frames
 -- advance payload, fuel, and CG until their individual completion conditions are met.
 function refueling()
+    
+    
+    
        if simDR_on_ground > 0 then
            -- Capture requested fuel quantities while the slow-load button is active.
            if simDR_payload_set > 0 then
@@ -304,13 +317,19 @@ function refueling()
                 tank3_r = simDR_fuel_tanks[4]
                 tank3_l = simDR_fuel_tanks[5]
                 tank4 = simDR_fuel_tanks[1]
-            end 
+            end
+                
             -- Track the current payload whenever no new target is being captured.
             if simDR_payload_set < 1 and fuel_was_set < 1 then
                 payload_loc = simDR_payload
             end
+            
             -- Initialize one complete loading/refueling cycle from the captured targets.
             if fuel_was_set > 0 then
+            
+                
+
+                
                 -- Cargo targets are already masses. Passenger-zone counts use the
                 -- aircraft's fixed planning mass of 75 kg per passenger.
                 if (simDR_payload_cargo1 + simDR_payload_cargo2 +simDR_payload_cargo3) - cargo_load > 0 then
@@ -832,15 +851,21 @@ end
                 end
             end
         end
+
+
+
         -- Publish the current brake temperatures, then integrate the next model step.
         simDR_brake_heat_left = brake_temp_loc_l
         simDR_brake_heat_right = brake_temp_loc_r   
+
+
         -- Add heat according to brake application and ground speed.
         if simDR_brake_l > 0 and simDR_gs > 1 and simDR_on_ground > 0 then
             if brake_temp < 1200 then
                 brake_temp_loc_l = brake_temp_loc_l + (simDR_brake_l * 0.015 * simDR_gs)
             end
         end
+
         if simDR_brake_r > 0 and simDR_gs > 1 and simDR_on_ground > 0 then
             if brake_temp < 1200 then
                 brake_temp_loc_r = brake_temp_loc_r + (simDR_brake_r * 0.015 * simDR_gs)
@@ -889,6 +914,8 @@ end
                 end
             end
         end
+
+
         -- Powered brake fans provide additional cooling while on the ground.
         if bus36 > 0 and simDR_gear_fan > 0 and simDR_on_ground > 0 then
             if brake_temp_loc_l > simDR_oat then
@@ -900,6 +927,8 @@ end
                 brake_temp_loc_r = brake_temp_loc_r - 0.03
             end
         end
+
+
         -- Reduce available braking progressively above the modeled threshold of 450.
         if brake_temp_loc_l > 450 then  
             if simDR_brake_l > 1 - (1 - ((1450 - brake_temp_loc_l)*0.001)) then 
@@ -911,6 +940,9 @@ end
                 simDR_brake_r = 1 - (1 - ((1450 - brake_temp_loc_r)*0.001))
             end
         end
+
+
+
         -- Cache whether any landing-gear leg is extended for the next cooling step.
         if simDR_gear1 < 0.01 and simDR_gear2 < 0.01 and simDR_gear3 < 0.01 then
             gears = 0
@@ -1035,6 +1067,11 @@ end
         else
             simDR_vna0_3_lit = 0
         end
+        
+        
+        
+        
+        
         -- Ramp a separate correction for each engine at high RPM instead of
         -- introducing an instantaneous jump in the low-pressure indication.
         if simDR_rpm_high_1 > 75 then

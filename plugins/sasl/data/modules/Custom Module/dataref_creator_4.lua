@@ -13,6 +13,58 @@ createGlobalPropertyi("tu154/custom/tcas/vvi_left_new",0)
 createGlobalPropertyi("tu154/custom/failures/apu_pta6_fail", 0) -- PTA-6A tachometer converter failure
 createGlobalPropertyf("tu154/custom/anim/tiller_pos", 0)
 createGlobalPropertyi("tu154/custom/hydro/nosewheel_turn_power", 0)
+
+-- PPN-13 controls and animations. The source aircraft uses the same names
+-- without the project-wide /custom namespace.
+local ppnButtonNames = {
+    "ack", "flt", "lookup", "poweroff", "snp", "t1", "t2", "t3",
+}
+
+for _, name in ipairs(ppnButtonNames) do
+    createGlobalPropertyi("tu154/custom/manipulators/buttons/absu/ppn13_" .. name, 0)
+    createGlobalPropertyf("tu154/custom/manipulators/buttons/absu/ppn13_" .. name .. "_anim", 0)
+end
+
+createGlobalPropertyi("tu154/custom/manipulators/buttons/absu/ppn13_test_absu", 0)
+createGlobalPropertyi("tu154/custom/manipulators/buttons/absu/ppn13_test_svk", 0)
+createGlobalPropertyi("tu154/custom/manipulators/buttons/absu/ppn13_lid", 0)
+createGlobalPropertyf("tu154/custom/manipulators/switches/absu/ppn13_test_absu_anim", 0)
+createGlobalPropertyf("tu154/custom/manipulators/switches/absu/ppn13_test_svk_anim", 0)
+createGlobalPropertyf("tu154/custom/manipulators/caps/ppn13_lid", 0)
+
+-- PPN-13 annunciators.
+local ppnLightNames = {
+    "servo_pitch_lt", "servo_roll_lt", "servo_yaw_lt",
+    "bdg_pitch_lt", "bdg_roll_lt", "bdg_yaw_lt",
+    "cws1_lt", "cws2_lt", "bns_p_lt", "bap_p_lt", "bap_r_lt", "vkv_lt",
+    "vu_lt", "ute_lt", "stu_p_lt", "stu_r_lt", "at_lt", "bsn_lt",
+    "mgv_p_stu_lt", "mgv_r_stu_lt", "mgv_p_sau_lt", "mgv_r_sau_lt",
+    "ks_lt", "bns_r_lt", "ch1_lt", "ch2_lt", "ch3_lt", "ch4_lt",
+    "absu_ready_lt",
+}
+
+for _, name in ipairs(ppnLightNames) do
+    createGlobalPropertyf("tu154/custom/systems/absu/ppn13/" .. name, 0)
+end
+
+-- Six-channel test buses are part of the XP12 PPN-13 interface. The current
+-- source logic does not drive them yet, but retaining them keeps the port's
+-- dataref contract complete for future channel-test logic.
+local ppnTestNames = {
+    "servo_pitch", "servo_roll", "servo_yaw",
+    "bdg_pitch", "bdg_roll", "bdg_yaw",
+    "cws1", "cws2", "bns_p", "bap_p", "bap_r", "vkv",
+    "vu", "ute", "stu_p", "stu_r", "at", "bsn",
+    "mgv_p_stu", "mgv_r_stu", "mgv_p_sau", "mgv_r_sau", "ks", "bns_r",
+}
+
+for _, name in ipairs(ppnTestNames) do
+    createGlobalPropertyia(
+        "tu154/custom/systems/absu/ppn13/" .. name .. "_test_signal",
+        {0, 0, 0, 0, 0, 0}
+    )
+end
+
 -- Pitch servo light (main pitch servo channel active)
 -- createGlobalPropertyf("tu154/custom/systems/absu/ppn13/servo_pitch_lt", 0)
 -- -- Roll servo light (main roll servo channel active)
