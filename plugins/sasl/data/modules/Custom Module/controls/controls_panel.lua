@@ -370,6 +370,7 @@ local function lamps()
     set(main_gear_flaps, bool2int(sound_alarm))
 end
 
+
 -- Gauges ---------------------------------------------------------------------
 
 local stab_ind_act = 0
@@ -377,20 +378,8 @@ local elev_ind_act = 0
 local flap_ind_L_act = 0
 local flap_ind_R_act = 0
 
-local mach_tbl = {
-    { -10, 1 },
-    { 0, 1 },
-    { 0.1, 1 },
-    { 0.25, 0.5 },
-    { 0.34, 0.28 },
-    { 0.38, 0.22 },
-    { 0.5, 0.21 },
-    { 0.6, 0.21 },
-    { 0.7, 0.2 },
-    { 0.8, 0.19 },
-    { 0.9, 0.13 },
-    { 1, 0.1 },
-    { 10, 0.1 } }
+local ELEVATOR_UP_LIMIT_DEG = 25
+local ELEVATOR_DOWN_LIMIT_DEG = 20
 
 local function gauges()
     local stabil_ind = 0
@@ -400,25 +389,38 @@ local function gauges()
 
     if get(bus36_volt_left) > 30 then
         stabil_ind = get(stab_pos) * 5.5
-        elev_ind = -get(elevator_L)
+
+        -- Indicate the actual elevator deflection directly.
+        -- X-Plane convention:
+        --   negative = trailing edge up
+        --   positive = trailing edge down
+        local elevator_deg = clamp(
+            get(elevator_L),
+            -ELEVATOR_UP_LIMIT_DEG,
+            ELEVATOR_DOWN_LIMIT_DEG
+        )
+
+        -- Gauge convention is opposite to the X-Plane surface sign.
+        elev_ind = -elevator_deg
+
         flap_ind_L = get(flap_inn_L)
         flap_ind_R = get(flap_inn_R)
     end
 
-    -- Mach dependent elevator indication correction
-    local mach = get(machno)
-    local elev_coef
-    if mach < 1 then
-        elev_coef = 1 / interpolate(mach_tbl, mach)
-    else
-        elev_coef = 1 / 0.1
-    end
-
+    -- Smooth gauge movement without altering the indicated values.
     local rate = min(passed * 10, 1)
-    stab_ind_act = stab_ind_act + (stabil_ind - stab_ind_act) * rate
-    elev_ind_act = elev_ind_act + (elev_ind * elev_coef - elev_ind_act) * rate
-    flap_ind_L_act = flap_ind_L_act + (flap_ind_L - flap_ind_L_act) * rate
-    flap_ind_R_act = flap_ind_R_act + (flap_ind_R - flap_ind_R_act) * rate
+
+    stab_ind_act =
+        stab_ind_act + (stabil_ind - stab_ind_act) * rate
+
+    elev_ind_act =
+        elev_ind_act + (elev_ind - elev_ind_act) * rate
+
+    flap_ind_L_act =
+        flap_ind_L_act + (flap_ind_L - flap_ind_L_act) * rate
+
+    flap_ind_R_act =
+        flap_ind_R_act + (flap_ind_R - flap_ind_R_act) * rate
 
     set(stab_ind, stab_ind_act)
     set(elevator_ind, elev_ind_act)

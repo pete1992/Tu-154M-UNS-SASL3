@@ -196,9 +196,9 @@ local yaw_add = 0
 -- Pilot-input conditioning.
 -- The deadzone removes tiny center noise while remapping the remaining axis
 -- so full hardware travel still reaches exactly -1 / +1.
-local INPUT_DEADZONE = 0.02
+local INPUT_DEADZONE = 0.04
 local INPUT_FILTER_TAU = 0.08
-local AILERON_RUDDER_COUPLING = 0.08
+local AILERON_RUDDER_COUPLING = 0.06
 
 local INPUT_STATE = {
     pitch = clamp(get(joy_pitch), -1, 1),
