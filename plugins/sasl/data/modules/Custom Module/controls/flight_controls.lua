@@ -262,7 +262,7 @@ local FLIGHT_FULL_COLUMN_FORCE_KGF = 35.0
 
 -- Elevator hydraulic slew-rate limit. This limits how fast the surface can
 -- move, but never reduces its physical -25 / +20 degree travel authority.
-local ELEVATOR_RATE_DEG_PER_SEC = 20.0
+local ELEVATOR_RATE_DEG_PER_SEC = 10.0
 
 -- High-Mach manual-control stiffening. No correction is applied through M0.86.
 -- The values above M0.86 are flight-test tuning values, not a published Tu-154
