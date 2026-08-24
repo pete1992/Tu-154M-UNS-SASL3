@@ -23,6 +23,9 @@ Flight Controls Logic - Changelog
 - Added the documented Ksh0 = 0.111 deg/mm, Kx = 1 - (140 - X_MET)/120, Kx <= 0.4 relationship and the +/-10 degree RA-56 differential limit.
 - Kept the force-loader mechanism as a force/system-state device instead of using it as an artificial elevator travel limiter.
 - Preserved the existing ABSU additive pitch-command path for separate validation.
+- Added artificial pitch-force simulation using the existing force-loader state.
+- Added a 20 deg/s elevator slew-rate limiter while preserving the -25/+20 degree physical stops.
+- Added a dedicated high-Mach manual-pitch stiffness schedule that is neutral through M0.86 and progressively increases above it.
 ]]
 
 -- Flight controls logic.
@@ -194,8 +197,8 @@ local yaw_add = 0
 -- The deadzone removes tiny center noise while remapping the remaining axis
 -- so full hardware travel still reaches exactly -1 / +1.
 local INPUT_DEADZONE = 0.02
-local INPUT_FILTER_TAU = 0.04
-local AILERON_RUDDER_COUPLING = 0.04
+local INPUT_FILTER_TAU = 0.08
+local AILERON_RUDDER_COUPLING = 0.08
 
 local INPUT_STATE = {
     pitch = clamp(get(joy_pitch), -1, 1),
@@ -234,8 +237,8 @@ end
 local passed = get(frame_time)
 
 -- Physical elevator travel relative to the movable stabilizer.
-local ELEVATOR_UP_LIMIT_DEG = 28
-local ELEVATOR_DOWN_LIMIT_DEG = 22
+local ELEVATOR_UP_LIMIT_DEG = 25
+local ELEVATOR_DOWN_LIMIT_DEG = 20
 
 -- SUU-154 longitudinal controllability constants.
 -- Source relation:
@@ -248,6 +251,121 @@ local SUU_X_BAL0_MM = 140
 local SUU_TARGET_MM_PER_G = 120
 local SUU_KX_MAX = 0.4
 local SUU_RA56_LIMIT_DEG = 10
+
+-- Artificial pitch-feel model for conventional non-force-feedback hardware.
+-- The joystick axis is interpreted as requested pilot force. The force loader
+-- changes how much virtual column travel results from that force.
+local MAX_PILOT_FORCE_KGF = 35.0
+local CONTROL_FRICTION_KGF = 4.0
+local TAKEOFF_FULL_COLUMN_FORCE_KGF = 27.0
+local FLIGHT_FULL_COLUMN_FORCE_KGF = 35.0
+
+-- Elevator hydraulic slew-rate limit. This limits how fast the surface can
+-- move, but never reduces its physical -25 / +20 degree travel authority.
+local ELEVATOR_RATE_DEG_PER_SEC = 20.0
+
+-- High-Mach manual-control stiffening. No correction is applied through M0.86.
+-- The values above M0.86 are flight-test tuning values, not a published Tu-154
+-- control-law schedule. Full pilot input can still recover full column travel.
+local PITCH_HIGH_MACH_TBL = {
+    { 0.00, 1.00 },
+    { 0.79, 0.96 },
+    { 0.80, 0.95 },
+    { 0.81, 0.94 },
+    { 0.82, 0.93 },
+    { 0.84, 0.92 },
+    { 0.86, 0.90 },
+    { 0.87, 0.88 },
+    { 0.88, 0.86 },
+    { 0.89, 0.78 },
+    { 0.90, 0.70 },
+    { 0.92, 0.62 },
+    { 0.95, 0.48 },
+    { 1.00, 0.21 },
+    { 1.20, 0.13 },
+}
+
+local HIGH_MACH_FULL_AUTHORITY_START = 0.75
+
+local function interpolateTable(tbl, value)
+    if value <= tbl[1][1] then
+        return tbl[1][2]
+    end
+    for i = 2, #tbl do
+        local x1 = tbl[i - 1][1]
+        local y1 = tbl[i - 1][2]
+        local x2 = tbl[i][1]
+        local y2 = tbl[i][2]
+        if value <= x2 then
+            local span = x2 - x1
+            if math.abs(span) < 1e-6 then
+                return y2
+            end
+            local t = (value - x1) / span
+            return y1 + (y2 - y1) * t
+        end
+    end
+    return tbl[#tbl][2]
+end
+
+local function pitchColumnFromForce(pilot_ratio, force_loader_pos)
+    pilot_ratio = clamp(pilot_ratio, -1, 1)
+    force_loader_pos = clamp(force_loader_pos, 0, 1)
+
+    local sign = pilot_ratio < 0 and -1 or 1
+    local pilot_force_kgf = math.abs(pilot_ratio) * MAX_PILOT_FORCE_KGF
+
+    if pilot_force_kgf <= CONTROL_FRICTION_KGF then
+        return 0
+    end
+
+    local full_column_force_kgf =
+        TAKEOFF_FULL_COLUMN_FORCE_KGF
+        + (FLIGHT_FULL_COLUMN_FORCE_KGF - TAKEOFF_FULL_COLUMN_FORCE_KGF)
+        * force_loader_pos
+
+    local effective_force_kgf = pilot_force_kgf - CONTROL_FRICTION_KGF
+    local effective_full_force_kgf = math.max(
+        full_column_force_kgf - CONTROL_FRICTION_KGF,
+        1.0
+    )
+
+    local column = clamp(
+        effective_force_kgf / effective_full_force_kgf,
+        0,
+        1
+    )
+
+    return column * sign
+end
+
+local function applyHighMachPitchStiffness(column, mach)
+    column = clamp(column, -1, 1)
+
+    local gain = interpolateTable(PITCH_HIGH_MACH_TBL, mach)
+    if gain >= 0.999 then
+        return column
+    end
+
+    local abs_column = math.abs(column)
+    local sign = column < 0 and -1 or 1
+
+    -- Normal inputs receive the full high-Mach reduction. Close to full pilot
+    -- force, progressively restore the lost travel so emergency full authority
+    -- remains available despite the high-Mach stiffening.
+    local restored_gain = gain
+    if abs_column > HIGH_MACH_FULL_AUTHORITY_START then
+        local overforce = clamp(
+            (abs_column - HIGH_MACH_FULL_AUTHORITY_START)
+            / (1 - HIGH_MACH_FULL_AUTHORITY_START),
+            0,
+            1
+        )
+        restored_gain = gain + (1 - gain) * overforce
+    end
+
+    return sign * abs_column * restored_gain
+end
 
 local function pitchRatioToElevatorDeg(ratio)
     ratio = clamp(ratio, -1, 1)
@@ -535,12 +653,23 @@ function update()
     --------------------------------------------------------------------------
     local trim_ratio = clamp(get(int_pitch_trim), -1, 1)
 
-    -- The real force loader changes column force, not elevator geometry.
-    -- With conventional non-force-feedback hardware the pilot therefore keeps
-    -- the full kinematic column travel. The force-loader mechanism above stays
-    -- active for system state and electrical load, but does not clip elevator
-    -- travel in this control-surface path.
-    local cockpit_yoke_pitch = clamp(pilot_pitch + trim_ratio, -1, 1)
+    -- Convert the conventional joystick axis into a virtual pilot force first.
+    -- The force-loader state then determines the resulting column travel.
+    local force_column_pitch = pitchColumnFromForce(pilot_pitch, force_pos)
+
+    -- Above M0.86, progressively stiffen only the manual pilot path. This does
+    -- not change the physical elevator stops and does not attenuate RA-56/ABSU.
+    local high_mach_column_pitch = applyHighMachPitchStiffness(
+        force_column_pitch,
+        mach
+    )
+
+    -- MET trim shifts the balanced/zero-force column position.
+    local cockpit_yoke_pitch = clamp(
+        high_mach_column_pitch + trim_ratio,
+        -1,
+        1
+    )
 
     -- Direct mechanical booster path: column/MET position to elevator.
     local mechanical_elevator_deg =
@@ -569,11 +698,11 @@ function update()
         --   delta_e = Ksh0 * dx - Ksh0 * Kx * dx
         --           = Ksh0 * (1 - Kx) * dx
         --
-        -- pitchRatioToElevatorDeg(pilot_pitch) is the direct Ksh0*dx
-        -- equivalent in this project, so the RA-56 correction is -Kx times
-        -- the pilot-generated elevator increment.
+        -- The virtual column already contains the force-loader and high-Mach
+        -- behavior. SUU therefore acts on that physical column displacement,
+        -- not directly on the raw hardware axis.
         local direct_pilot_elevator_deg =
-            pitchRatioToElevatorDeg(pilot_pitch)
+            pitchRatioToElevatorDeg(high_mach_column_pitch)
 
         suu_correction_deg = clamp(
             -k_x * direct_pilot_elevator_deg,
@@ -600,9 +729,29 @@ function update()
     )
     local pitch_target = pitch_cmd * primary_command_limit
 
-    if primary_step > 0 then
-        pitch_pos_act = pitch_pos_act
-            + (pitch_target - pitch_pos_act) * primary_step
+    -- Move the elevator toward the commanded position with a physical slew-rate
+    -- limit instead of the old very fast first-order response. Hydraulic state
+    -- scales movement speed, but does not alter the normal travel limits.
+    local target_elevator_deg = pitchRatioToElevatorDeg(pitch_target)
+    local current_elevator_deg = pitchRatioToElevatorDeg(pitch_pos_act)
+
+    if primary_response > 0 and passed > 0 then
+        local max_elevator_step =
+            ELEVATOR_RATE_DEG_PER_SEC * primary_response * passed
+
+        current_elevator_deg = current_elevator_deg + clamp(
+            target_elevator_deg - current_elevator_deg,
+            -max_elevator_step,
+            max_elevator_step
+        )
+
+        current_elevator_deg = clamp(
+            current_elevator_deg,
+            -ELEVATOR_UP_LIMIT_DEG,
+            ELEVATOR_DOWN_LIMIT_DEG
+        )
+
+        pitch_pos_act = elevatorDegToPitchRatio(current_elevator_deg)
     end
 
     local pitch_surface_pos = manual_control
@@ -619,6 +768,17 @@ function update()
         elev_left = -pitch_surface_pos * ELEVATOR_DOWN_LIMIT_DEG
         elev_right = -pitch_surface_pos * ELEVATOR_DOWN_LIMIT_DEG
     end
+
+    elev_left = clamp(
+        elev_left,
+        -ELEVATOR_UP_LIMIT_DEG,
+        ELEVATOR_DOWN_LIMIT_DEG
+    )
+    elev_right = clamp(
+        elev_right,
+        -ELEVATOR_UP_LIMIT_DEG,
+        ELEVATOR_DOWN_LIMIT_DEG
+    )
 
     if MASTER then
         set(elevator_L, elev_left * (1 - elevator_fail_L))

@@ -296,18 +296,16 @@ function update()
     local rudder_den = (rudder_L + rudder_R) * 0.5
     set(rudder_anim, safe_div(n(get(rudder)), rudder_den, 1e-6))
 
-    -- Elevator animation with IAS-dependent coefficient
-    local ias = n(get(indicated_airspeed)) * 1.852
-    local elev_coef = 1
-    if ias >= 300 and ias <= 400 then
-        elev_coef = line(ias, 300, 1, 400, 3)
-    elseif ias > 400 then
-        elev_coef = 3
-    end
-    local elev_L = n(get(elevator_L)) * elev_coef
-    local elev_R = n(get(elevator_R)) * elev_coef
-    set(elev_anim_L, elev_L)
-    set(elev_anim_R, elev_R)
+ 
+    -- Elevator animation follows the real surface deflection directly.
+	-- Tu-154M physical limits:
+	--   25 deg trailing-edge up
+	--   20 deg trailing-edge down
+	local elev_L = clamp(n(get(elevator_L)), -25, 20)
+	local elev_R = clamp(n(get(elevator_R)), -25, 20)
+
+	set(elev_anim_L, elev_L)
+	set(elev_anim_R, elev_R)
 
     -- Wing flex dynamics
     local wing_flx = (n(get(wing_tip_defl)) + 1.3)

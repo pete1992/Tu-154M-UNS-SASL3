@@ -1780,23 +1780,14 @@ end
             kontur_zbok_test = 999
         end
     end
-    
-    
-    
-    
     z_bok_nm = kontur_zbok_test
     z_bok = kontur_zbok_test * 1.852
-    
-    
-    
-    
 end  
-
-
-
 
 function after_physics()
     kontur_left()
     kontur_right()
     kontur_data()
 end
+
+
