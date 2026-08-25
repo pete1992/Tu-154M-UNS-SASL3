@@ -1,3 +1,5 @@
+-- Writable cockpit DataRefs need notifier functions, even when no side effect is required.
+function tu154_kontur_weather_mode_DRhandler() end
 function tu154_kontur_weather_sys_DRhandler() end
 
 
@@ -207,6 +209,9 @@ local true_brg = 0
 wx2000_gain = 0
 kontur_rru_l = 0.8
 kontur_rru_r = 0
+-- The mechanical WX mode selector defaults to WX independently of electrical power.
+-- weather_sys remains the actual power switch and therefore still starts off cold and dark.
+weather_mode = 1
 kntr_1_brt_sw = 0.7
 kntr_2_brt_sw = 0.7
 simDR_kontur_1_brt = 0.6
