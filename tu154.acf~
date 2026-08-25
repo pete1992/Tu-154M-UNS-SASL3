@@ -164,7 +164,7 @@ P _gear/0/_lonE -2.0
 P _gear/0/_lonN -2.0
 P _gear/0/_lonR -97.0
 P _gear/0/_scon 136308.328125000
-P _gear/0/_stat_def 0.123455286
+P _gear/0/_stat_def 0.123455301
 P _gear/0/_steerdeg_hispeed 10.0
 P _gear/0/_steerdeg_lospeed 63.0
 P _gear/0/_strut_comp 0.0
@@ -198,7 +198,7 @@ P _gear/1/_lonE -15.0
 P _gear/1/_lonN -15.0
 P _gear/1/_lonR -90.0
 P _gear/1/_scon 136308.328125000
-P _gear/1/_stat_def 0.763174534
+P _gear/1/_stat_def 0.763174653
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.0
@@ -232,7 +232,7 @@ P _gear/2/_lonE -15.0
 P _gear/2/_lonN -15.0
 P _gear/2/_lonR -90.0
 P _gear/2/_scon 136308.328125000
-P _gear/2/_stat_def 0.763174534
+P _gear/2/_stat_def 0.763174653
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.0
@@ -39679,7 +39679,7 @@ P _part/86/_part_specs_invis 1
 P _part/86/_part_tex 0
 P _part/86/_part_the 0.0
 P _part/86/_part_x -18.870000839
-P _part/86/_part_y -9.635787964
+P _part/86/_part_y -9.635787010
 P _part/86/_part_z 75.977027893
 P _part/86/_patt_con 0
 P _part/86/_patt_prt 0
@@ -41149,7 +41149,7 @@ P _part/87/_part_specs_invis 1
 P _part/87/_part_tex 0
 P _part/87/_part_the 0.0
 P _part/87/_part_x 18.870000839
-P _part/87/_part_y -9.635787964
+P _part/87/_part_y -9.635787010
 P _part/87/_part_z 75.977027893
 P _part/87/_patt_con 0
 P _part/87/_patt_prt 0
@@ -55553,7 +55553,7 @@ P acf/_HUD_del_x 240.0
 P acf/_HUD_del_y 120.0
 P acf/_ICAO T154
 P acf/_ITT_is_C 1
-P acf/_Jxx_unitmass 37.729999542
+P acf/_Jxx_unitmass 32.680000305
 P acf/_Jyy_unitmass 34.220001221
 P acf/_Jzz_unitmass 17.639999390
 P acf/_Mmo 0.920000017
