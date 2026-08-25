@@ -43,7 +43,6 @@ defineProps({
     { "joy_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf },
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- Frame duration.
     { "overr", "sim/operation/override/override_control_surfaces", globalPropertyf }, -- X-Plane control-surface override.
-
     -- Control switches, trims and force-loader state
     { "speedbrake_ratio", "sim/cockpit2/controls/speedbrake_ratio", globalPropertyf }, -- Simulator speedbrake lever ratio.
     { "elev_trimm_sw", "tu154/custom/controll/elev_trimm_switcher", globalPropertyi }, -- Elevator trim switch: -1 nose down, 0 neutral, +1 nose up.
@@ -68,7 +67,6 @@ defineProps({
     { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, -- Front gear vertical tire deflection.
     { "gear2_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, -- Left main gear vertical tire deflection.
     { "gear3_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, -- Right main gear vertical tire deflection.
-
     -- Wing control surfaces
     { "ail_L", "sim/flightmodel/controls/wing3l_ail1def", globalPropertyf }, -- Left aileron deflection in degrees; positive is trailing-edge down.
     { "ail_R", "sim/flightmodel/controls/wing3r_ail1def", globalPropertyf }, -- Right aileron deflection in degrees; positive is trailing-edge down.
@@ -85,18 +83,15 @@ defineProps({
     { "flap_mid_L", "sim/flightmodel/controls/wing2l_fla2def", globalPropertyf }, -- Left middle flap position.
     { "flap_mid_R", "sim/flightmodel/controls/wing2r_fla2def", globalPropertyf }, -- Right middle flap position.
     { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf }, -- Slat deployment ratio.
-
     -- Tail control surfaces
     { "elevator_L", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf }, -- Left elevator deflection in degrees; positive is trailing-edge down.
     { "elevator_R", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf }, -- Right elevator deflection in degrees; positive is trailing-edge down.
     { "rudder", "sim/flightmodel/controls/vstab2_rud1def", globalPropertyf }, -- Rudder deflection in degrees; positive is trailing-edge left.
     { "stab_ratio", "sim/cockpit2/controls/elevator_trim", globalPropertyf }, -- Simulator pitch trim position.
-
     -- Hydraulic pressure
     { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, -- Hydraulic system 1 pressure.
     { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, -- Hydraulic system 2 pressure.
     { "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, -- Hydraulic system 3 pressure.
-
     -- Cockpit animations and engine sources
     { "yoke_pitch", "tu154/custom/controlls/yoke_pitch", globalPropertyf }, -- Cockpit yoke pitch animation.
     { "yoke_roll", "tu154/custom/controlls/yoke_roll", globalPropertyf }, -- Cockpit yoke roll animation.
@@ -106,7 +101,6 @@ defineProps({
     { "revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalProperty }, -- Right engine thrust reverser deployment ratio.
     { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, -- Engine 1 high-pressure spool RPM.
     { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf }, -- Engine 3 high-pressure spool RPM.
-
     -- Electrical power
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, -- Left 27 V bus voltage.
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, -- Right 27 V bus voltage.
@@ -116,7 +110,6 @@ defineProps({
     { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, -- Right 36 V bus voltage.
     { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, -- PTS-250 bus 1 voltage.
     { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, -- PTS-250 bus 2 voltage.
-
     -- Spoiler deployment sources
     { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
@@ -130,25 +123,21 @@ defineProps({
     { "revers_R", "tu154/custom/controlls/revers_R", globalPropertyf }, -- Right reverser lever position.
     { "ias_L", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf }, -- Pilot indicated airspeed in knots.
     { "ias_R", "sim/cockpit2/gauges/indicators/airspeed_kts_copilot", globalPropertyf }, -- Copilot indicated airspeed in knots.
-
     -- Electrical loads
     { "ctr_27_L_cc", "tu154/custom/control/ctr_27_L_cc", globalPropertyf }, -- Flight-control load on the left 27 V bus.
     { "ctr_27_R_cc", "tu154/custom/control/ctr_27_R_cc", globalPropertyf }, -- Flight-control load on the right 27 V bus.
     { "ctr_115_1_cc", "tu154/custom/control/ctr_115_1_cc", globalPropertyf }, -- Flight-control load on 115 V bus 1.
     { "ctr_115_2_cc", "tu154/custom/control/ctr_115_2_cc", globalPropertyf }, -- Flight-control load on 115 V bus 2.
     { "ctr_115_3_cc", "tu154/custom/control/ctr_115_3_cc", globalPropertyf }, -- Flight-control load on 115 V bus 3.
-
     -- ABSU commands and flight data
     { "absu_contr_pitch", "tu154/custom/absu/contr_pitch", globalPropertyf }, -- ABSU RA-56 pitch actuator command.
     { "absu_contr_roll", "tu154/custom/absu/contr_roll", globalPropertyf }, -- ABSU RA-56 roll actuator command.
     { "absu_contr_yaw", "tu154/custom/absu/contr_yaw", globalPropertyf }, -- ABSU RA-56 yaw actuator command.
     { "indicated_airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf }, -- Indicated airspeed.
     { "machno", "sim/flightmodel/misc/machno", globalPropertyf }, -- Mach number.
-
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- SmartCopilot: 0 unavailable, 1 slave, 2 master.
     { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control.
-
     -- Failures
     { "ail_fail_left", "tu154/custom/failures/ail_fail_left", globalPropertyi }, -- Left aileron failure flag.
     { "ail_fail_right", "tu154/custom/failures/ail_fail_right", globalPropertyi }, -- Right aileron failure flag.
@@ -196,7 +185,7 @@ local yaw_add = 0
 -- Pilot-input conditioning.
 -- The deadzone removes tiny center noise while remapping the remaining axis
 -- so full hardware travel still reaches exactly -1 / +1.
-local INPUT_DEADZONE = 0.04
+local INPUT_DEADZONE = 0.02
 local INPUT_FILTER_TAU = 0.08
 local AILERON_RUDDER_COUPLING = 0.06
 
@@ -229,7 +218,6 @@ local function filterPilotInput(state_key, raw_value, dt)
     local alpha = 1 - math.exp(-dt / INPUT_FILTER_TAU)
     local filtered = INPUT_STATE[state_key]
         + (target - INPUT_STATE[state_key]) * alpha
-
     INPUT_STATE[state_key] = filtered
     return filtered
 end
@@ -262,30 +250,32 @@ local FLIGHT_FULL_COLUMN_FORCE_KGF = 35.0
 
 -- Elevator hydraulic slew-rate limit. This limits how fast the surface can
 -- move, but never reduces its physical -25 / +20 degree travel authority.
-local ELEVATOR_RATE_DEG_PER_SEC = 10.0
+local ELEVATOR_RATE_DEG_PER_SEC = 8.0
 
--- High-Mach manual-control stiffening. No correction is applied through M0.86.
+--[[
+High-Mach manual-control stiffening. No correction is applied through M0.86.
 -- The values above M0.86 are flight-test tuning values, not a published Tu-154
 -- control-law schedule. Full pilot input can still recover full column travel.
+--]]
+
+
 local PITCH_HIGH_MACH_TBL = {
     { 0.00, 1.00 },
-    { 0.79, 0.96 },
-    { 0.80, 0.95 },
-    { 0.81, 0.94 },
-    { 0.82, 0.93 },
-    { 0.84, 0.92 },
-    { 0.86, 0.90 },
-    { 0.87, 0.88 },
-    { 0.88, 0.86 },
-    { 0.89, 0.78 },
-    { 0.90, 0.70 },
-    { 0.92, 0.62 },
-    { 0.95, 0.48 },
-    { 1.00, 0.21 },
-    { 1.20, 0.13 },
+    { 0.70, 1.00 },
+    { 0.75, 0.95 },
+    { 0.80, 0.90 },
+    { 0.82, 0.90 },
+    { 0.84, 0.88 },
+    { 0.86, 0.75 },
+    { 0.88, 0.50 },
+    { 0.89, 0.30 },
+    { 0.90, 0.18 },
+    { 0.92, 0.13 },
+    { 0.95, 0.11 },
+    { 1.00, 0.10 },
 }
 
-local HIGH_MACH_FULL_AUTHORITY_START = 0.75
+local HIGH_MACH_FULL_AUTHORITY_START = 0.70
 
 local function interpolateTable(tbl, value)
     if value <= tbl[1][1] then
@@ -421,15 +411,12 @@ local function ra56PitchAvailable(ch1, ch2, ch3, fail_state, hydraulics_availabl
     if ch1 == 1 and fail_state ~= 3 then
         available = available + 1
     end
-
     if ch2 == 1 and fail_state < 2 then
         available = available + 1
     end
-
     if ch3 == 1 and fail_state == 0 then
         available = available + 1
     end
-
     return available > 1
 end
 

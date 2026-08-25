@@ -134,7 +134,7 @@ function wrap_dref_any_deferred(in_dref)
 				return XLuaSetNumber(self.dref,v)
 			else
 				return 0.0
-				--error("Previously unresolved dataref is being written to but is an array or is still undefined.")
+				--	print("Previously unresolved dataref is being written to but is an array or is still undefined.")
 			end			
 		end,	
 		dref = in_dref,
@@ -181,7 +181,7 @@ end
 --------------------------------------------------------------------------------
 
 function make_command_obj(in_cmd, in_name)
-	print("make_command_obj ")
+	--print("make_command_obj ")
 	return { 
 		start = function(self)
 		
@@ -380,7 +380,7 @@ function namespace_write(table, key, value)
 			ftable[key] = value
 		else
 			if not seems_like_object(value) and type(value) == "table" and getmetatable(value) == nil then
-				--print("Bare table wrap for "..key)
+				print("Bare table wrap for "..key)
 				v = {
 					functions = {},
 					values = {},

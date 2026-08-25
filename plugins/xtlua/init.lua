@@ -140,7 +140,7 @@ function wrap_dref_any_deferred(in_dref)
 				return XTLuaSetNumber(self.dref,v)
 			else
 				return 0.0
-				--error("Previously unresolved dataref is being written to but is an array or is still undefined.")
+					--print("Previously unresolved dataref is being written to but is an array or is still undefined.")
 			end			
 		end,	
 		dref = in_dref,
@@ -393,7 +393,7 @@ function namespace_write(table, key, value)
 				setmetatable(v,getmetatable(table))
 				vtable[key] = v
 			else
-				--print("copy for "..key)			
+				print("copy for "..key)			
 				vtable[key] = value
 			end
 		end
