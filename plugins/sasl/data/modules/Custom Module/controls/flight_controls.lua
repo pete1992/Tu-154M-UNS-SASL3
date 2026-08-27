@@ -186,8 +186,8 @@ local yaw_add = 0
 -- The deadzone removes tiny center noise while remapping the remaining axis
 -- so full hardware travel still reaches exactly -1 / +1.
 local INPUT_DEADZONE = 0.02
-local INPUT_FILTER_TAU = 0.08
-local AILERON_RUDDER_COUPLING = 0.06
+local INPUT_FILTER_TAU = 0.15
+local AILERON_RUDDER_COUPLING = 0.04
 
 local INPUT_STATE = {
     pitch = clamp(get(joy_pitch), -1, 1),
@@ -237,7 +237,7 @@ local ELEVATOR_DOWN_LIMIT_DEG = 20
 local SUU_KSH0_DEG_PER_MM = 0.111
 local SUU_X_BAL0_MM = 140
 local SUU_TARGET_MM_PER_G = 120
-local SUU_KX_MAX = 0.4
+local SUU_KX_MAX = 0.365 -- 0.4 
 local SUU_RA56_LIMIT_DEG = 10
 
 -- Artificial pitch-feel model for conventional non-force-feedback hardware.
@@ -250,7 +250,7 @@ local FLIGHT_FULL_COLUMN_FORCE_KGF = 35.0
 
 -- Elevator hydraulic slew-rate limit. This limits how fast the surface can
 -- move, but never reduces its physical -25 / +20 degree travel authority.
-local ELEVATOR_RATE_DEG_PER_SEC = 8.0
+local ELEVATOR_RATE_DEG_PER_SEC = 17.5
 
 --[[
 High-Mach manual-control stiffening. No correction is applied through M0.86.
@@ -261,7 +261,11 @@ High-Mach manual-control stiffening. No correction is applied through M0.86.
 
 local PITCH_HIGH_MACH_TBL = {
     { 0.00, 1.00 },
-    { 0.70, 1.00 },
+    { 0.50, 0.95 },
+    { 0.55, 0.95 },
+    { 0.60, 0.95 },
+    { 0.65, 0.95 },
+    { 0.70, 0.95 },
     { 0.75, 0.95 },
     { 0.80, 0.90 },
     { 0.82, 0.90 },
@@ -272,10 +276,10 @@ local PITCH_HIGH_MACH_TBL = {
     { 0.90, 0.18 },
     { 0.92, 0.13 },
     { 0.95, 0.11 },
-    { 1.00, 0.10 },
+    { 1.00, 0.08 },
 }
 
-local HIGH_MACH_FULL_AUTHORITY_START = 0.70
+local HIGH_MACH_FULL_AUTHORITY_START = 0.65
 
 local function interpolateTable(tbl, value)
     if value <= tbl[1][1] then

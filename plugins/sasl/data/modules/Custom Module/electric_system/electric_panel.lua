@@ -9,7 +9,6 @@ Changelog
 - Fixed double voltage scaling of the emergency 115 V inverter lamp during lamp test.
 - Replaced sum-based switch/cap sound detection with direct per-control state comparison.
 - Consolidated gauge needle dynamics into one helper.
-- Made gauge needle position integration frame-rate independent while matching the previous behavior at a 60 FPS reference rate.
 - Reduced repeated Dataref reads in lamp and gauge logic.
 - Preserved selector mappings, switching delays, gauge scales, cold-and-dark reset, avionics power logic, generator warning voltage threshold, and PTS/VU lamp meanings.
 - Kept GEN_OVERLOAD_AMP and NEEDLE_ACCEL_LIMIT as reserved legacy tuning constants.
@@ -175,19 +174,16 @@ local function interpolate(tbl, x)
     if x <= tbl[1][1] then
         return tbl[1][2]
     end
-
     for i = 1, #tbl - 1 do
         local x0 = tbl[i][1]
         local y0 = tbl[i][2]
         local x1 = tbl[i + 1][1]
         local y1 = tbl[i + 1][2]
-
         if x <= x1 then
             local t = (x - x0) / (x1 - x0)
             return y0 + (y1 - y0) * t
         end
     end
-
     return tbl[#tbl][2]
 end
 
@@ -213,14 +209,11 @@ local GEN_OVERLOAD_AMP = 200 -- Reserved for generator-overload indication logic
 local GEN_MIN_VOLT = 111
 
 -- Gauge dynamics.
--- The old code added velocity directly to needle position once per frame.
--- Multiplying position integration by dt * 60 preserves the old response at
--- 60 FPS while removing the strong frame-rate dependency at other frame rates.
-local NEEDLE_ACCEL = 50
+local NEEDLE_ACCEL = 60
 local NEEDLE_FRICTION = 200
 local NEEDLE_SPEED_LIMIT = 20
 local NEEDLE_ACCEL_LIMIT = 5 -- Reserved legacy tuning constant.
-local NEEDLE_REFERENCE_FPS = 60
+
 
 local function updateNeedle(state, target, dt)
     if dt <= 0 then
@@ -244,8 +237,7 @@ local function updateNeedle(state, target, dt)
         NEEDLE_SPEED_LIMIT
     )
 
-    state.actual = state.actual
-        + state.velocity * dt * NEEDLE_REFERENCE_FPS
+    state.actual = state.actual + state.velocity * dt
 
     return state.actual
 end

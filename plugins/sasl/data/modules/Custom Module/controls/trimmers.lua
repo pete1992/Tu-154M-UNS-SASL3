@@ -76,8 +76,8 @@ local SAMPLES = {
     center = sasl.al.loadSample("Custom Sounds/trimm_ctr.wav"),
 }
 
--- Global trim-speed tuning. 0.8 = 80% of the original speed.
-local TRIM_SPEED_SCALE = 0.90
+-- Global trim-speed tuning. 1.0 = 100% of the original speed.
+local TRIM_SPEED_SCALE = 1.0
 -- Limits
 local PITCH_LIMIT = 0.80
 local ROLL_LIMIT = 0.24

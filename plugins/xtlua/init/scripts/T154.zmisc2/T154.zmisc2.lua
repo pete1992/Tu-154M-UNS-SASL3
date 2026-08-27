@@ -281,6 +281,17 @@ local brake_temp_loc_r = 0
 local vna33_off = 0
 local vna0_off = 0
 
+
+-- VVI (VAR-30MK) indication constants.
+local VVI_FPM_TO_MS = 0.00508
+local VVI_PARK      = 30
+local VVI_TEST_TIME = 10
+local VVI_TEST_HOLD = 8
+local VVI_TEST_RATE = 0.5
+
+
+
+
 -- Run the complete ground-service state machine. All work is inhibited in flight.
 -- The slow-load button captures a new set of targets; subsequent physics frames
 -- advance payload, fuel, and CG until their individual completion conditions are met.
@@ -639,42 +650,32 @@ if simDR_srd_buzzer_cap < 1 then
    simDR_srd_buzzer = 1
 end
     
--- Convert the source VVI values from feet per minute to metres per second and
--- move the custom indicators smoothly while their electrical supply is present.
-vvi_left_ms = simDR_vvi_left * 0.00508
-vvi_right_ms = simDR_vvi_right * 0.00508
-    
+-- VVI indication ----------------------------------------------
+-- The needles follow the source dataref directly, one update per frame,
+-- without artificial lag. Both instruments share the right 27 V bus, so
+-- the power check is evaluated once.
+vvi_left_ms = simDR_vvi_left * VVI_FPM_TO_MS
+vvi_right_ms = simDR_vvi_right * VVI_FPM_TO_MS
+
 if simDR_bus27right > 0 then
-    vvi_left_delta = vvi_left_ms - vvi_left
-    if vvi_left_test < 8 then
-        if vvi_left_delta > 0 then
-           vvi_left = vvi_left + math.abs(vvi_left_delta) * 0.4 * SIM_PERIOD
-        elseif vvi_left_delta < 0 then
-           vvi_left = vvi_left - math.abs(vvi_left_delta) * 0.4 * SIM_PERIOD
-        end
+    if vvi_left_test < VVI_TEST_HOLD then
+        vvi_left = vvi_left_ms
     end
     if vvi_left_test > 0 then
-        vvi_left_test = vvi_left_test - 0.5 * SIM_PERIOD
-    end     
-else
-   vvi_left = 30
-   vvi_left_test = 10
-end
-if simDR_bus27right > 0 then
-    vvi_right_delta = vvi_right_ms - vvi_right
-    if vvi_right_test < 8 then
-        if vvi_right_delta > 0 then
-           vvi_right = vvi_right + math.abs(vvi_right_delta) * 0.4 * SIM_PERIOD
-        elseif vvi_right_delta < 0 then
-           vvi_right = vvi_right - math.abs(vvi_right_delta) * 0.4 * SIM_PERIOD
-        end
+        vvi_left_test = vvi_left_test - VVI_TEST_RATE * SIM_PERIOD
+    end
+
+    if vvi_right_test < VVI_TEST_HOLD then
+        vvi_right = vvi_right_ms
     end
     if vvi_right_test > 0 then
-        vvi_right_test = vvi_right_test - 0.5 * SIM_PERIOD
-    end     
+        vvi_right_test = vvi_right_test - VVI_TEST_RATE * SIM_PERIOD
+    end
 else
-   vvi_right = 30
-   vvi_right_test = 10
+    vvi_left = VVI_PARK
+    vvi_left_test = VVI_TEST_TIME
+    vvi_right = VVI_PARK
+    vvi_right_test = VVI_TEST_TIME
 end
 
 -- Enforce the 0.3 lower bound of the custom yoke-height output.
