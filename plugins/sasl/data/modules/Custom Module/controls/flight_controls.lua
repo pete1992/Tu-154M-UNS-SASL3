@@ -186,8 +186,8 @@ local yaw_add = 0
 -- The deadzone removes tiny center noise while remapping the remaining axis
 -- so full hardware travel still reaches exactly -1 / +1.
 local INPUT_DEADZONE = 0.02
-local INPUT_FILTER_TAU = 0.15
-local AILERON_RUDDER_COUPLING = 0.04
+local INPUT_FILTER_TAU = 0.115
+local AILERON_RUDDER_COUPLING = 0.02
 
 local INPUT_STATE = {
     pitch = clamp(get(joy_pitch), -1, 1),
@@ -250,15 +250,15 @@ local FLIGHT_FULL_COLUMN_FORCE_KGF = 35.0
 
 -- Elevator hydraulic slew-rate limit. This limits how fast the surface can
 -- move, but never reduces its physical -25 / +20 degree travel authority.
-local ELEVATOR_RATE_DEG_PER_SEC = 17.5
+local ELEVATOR_RATE_DEG_PER_SEC = 20.0
 
 --[[
-High-Mach manual-control stiffening. No correction is applied through M0.86.
--- The values above M0.86 are flight-test tuning values, not a published Tu-154
--- control-law schedule. Full pilot input can still recover full column travel.
+aerodynamische Wirksamkeit
++ reale Verluste
++ System-/Geometrieeffekte
++ gewünschte Tu-154-Steuercharakteristik
+= effektive Elevator-Autorität
 --]]
-
-
 local PITCH_HIGH_MACH_TBL = {
     { 0.00, 1.00 },
     { 0.50, 0.95 },
@@ -344,9 +344,9 @@ local function applyHighMachPitchStiffness(column, mach)
     local abs_column = math.abs(column)
     local sign = column < 0 and -1 or 1
 
-    -- Normal inputs receive the full high-Mach reduction. Close to full pilot
-    -- force, progressively restore the lost travel so emergency full authority
-    -- remains available despite the high-Mach stiffening.
+-- Apply the full high-Mach reduction during normal MET travel.
+-- Near maximum MET deflection, progressively restore the reduced elevator
+-- authority to preserve the available control range at high pilot force.
     local restored_gain = gain
     if abs_column > HIGH_MACH_FULL_AUTHORITY_START then
         local overforce = clamp(
