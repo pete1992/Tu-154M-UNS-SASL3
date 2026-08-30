@@ -935,13 +935,14 @@ end
 
 components = {
 	
+	-- Match the traffic overlay to the reduced, needle-aligned displays.
 	tcas_draw {
-		position = {11, 11, 482, 530},
+		position = {17.5, -2, 469, 516},
 		table_draw = tcas_show_tbl
 	},
 	
 	tcas_draw {
-		position = {518, 11, 482, 530},
+		position = {524.5, -2, 469, 516},
 		table_draw = tcas_show_tbl
 	},	
 

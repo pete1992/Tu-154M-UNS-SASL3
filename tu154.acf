@@ -1274,13 +1274,13 @@ P _obja/40/_v10_is_internal 0
 P _obja/40/_v10_steers_with_gear 0
 P _obja/41/_obj_flags 48
 P _obja/41/_obj_hide_dataref tu154/custom/t154cfg/hide_civ
-P _obja/41/_v10_att_file_stl ground_civil/uvz.obj
+P _obja/41/_v10_att_file_stl ground_civil/asu.obj
 P _obja/41/_v10_att_part -1
 P _obja/41/_v10_att_phi_ref 0.0
 P _obja/41/_v10_att_psi_ref 0.0
 P _obja/41/_v10_att_the_ref 0.0
 P _obja/41/_v10_att_x_acf_prt_ref 0.0
-P _obja/41/_v10_att_y_acf_prt_ref 6.780000210
+P _obja/41/_v10_att_y_acf_prt_ref 5.924048000
 P _obja/41/_v10_att_z_acf_prt_ref 70.0
 P _obja/41/_v10_is_internal 712688
 P _obja/41/_v10_steers_with_gear 0
@@ -1310,13 +1310,13 @@ P _obja/43/_v10_is_internal 0
 P _obja/43/_v10_steers_with_gear 0
 P _obja/44/_obj_flags 48
 P _obja/44/_obj_hide_dataref tu154/custom/t154cfg/hide_mil
-P _obja/44/_v10_att_file_stl ground_vvs/uvz.obj
+P _obja/44/_v10_att_file_stl ground_vvs/asu.obj
 P _obja/44/_v10_att_part -1
 P _obja/44/_v10_att_phi_ref 0.0
 P _obja/44/_v10_att_psi_ref 0.0
 P _obja/44/_v10_att_the_ref 0.0
 P _obja/44/_v10_att_x_acf_prt_ref 0.0
-P _obja/44/_v10_att_y_acf_prt_ref 6.780000210
+P _obja/44/_v10_att_y_acf_prt_ref 5.924048000
 P _obja/44/_v10_att_z_acf_prt_ref 70.0
 P _obja/44/_v10_is_internal 669230
 P _obja/44/_v10_steers_with_gear 0
@@ -1346,13 +1346,13 @@ P _obja/46/_v10_is_internal 0
 P _obja/46/_v10_steers_with_gear 0
 P _obja/47/_obj_flags 48
 P _obja/47/_obj_hide_dataref tu154/custom/t154cfg/hide_def
-P _obja/47/_v10_att_file_stl ground_def/uvz.obj
+P _obja/47/_v10_att_file_stl ground_def/asu.obj
 P _obja/47/_v10_att_part -1
 P _obja/47/_v10_att_phi_ref 0.0
 P _obja/47/_v10_att_psi_ref 0.0
 P _obja/47/_v10_att_the_ref 0.0
 P _obja/47/_v10_att_x_acf_prt_ref 0.0
-P _obja/47/_v10_att_y_acf_prt_ref 6.780000210
+P _obja/47/_v10_att_y_acf_prt_ref 5.924048000
 P _obja/47/_v10_att_z_acf_prt_ref 70.0
 P _obja/47/_v10_is_internal 259326
 P _obja/47/_v10_steers_with_gear 0
@@ -1390,13 +1390,13 @@ P _obja/5/_v10_att_z_acf_prt_ref 70.0
 P _obja/5/_v10_is_internal 0
 P _obja/5/_v10_steers_with_gear 0
 P _obja/50/_obj_flags 48
-P _obja/50/_v10_att_file_stl uvz.obj
+P _obja/50/_v10_att_file_stl asu.obj
 P _obja/50/_v10_att_part -1
 P _obja/50/_v10_att_phi_ref 0.0
 P _obja/50/_v10_att_psi_ref 0.0
 P _obja/50/_v10_att_the_ref 0.0
 P _obja/50/_v10_att_x_acf_prt_ref 0.0
-P _obja/50/_v10_att_y_acf_prt_ref 6.750000000
+P _obja/50/_v10_att_y_acf_prt_ref 5.924048000
 P _obja/50/_v10_att_z_acf_prt_ref 70.0
 P _obja/50/_v10_is_internal 851278
 P _obja/50/_v10_steers_with_gear 0
@@ -71260,9 +71260,9 @@ GROUP TCAS
       CLICK_DX 0
       CLICK_DY 0
 
-    gen_rotary xpndr fail
+    gen_rotary rply
       POS 1538.000000 482.000000
-      IMAGE TCAS/xpndr_fail
+      IMAGE TCAS/rply
       DATAREF 
       SHOW_EQUAL 1.000000 tu154/custom/tcas2000/lit_xpndr
       LIGHT_MODE GLASS_AUTO

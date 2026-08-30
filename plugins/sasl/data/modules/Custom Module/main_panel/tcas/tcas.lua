@@ -15,12 +15,13 @@ components = {
 		position = {0, 0, size[1], size[2]},
 	},
 	
+	-- Keep the reduced displays aligned with the fixed 3D needles.
 	tcas_gau {
-		position = {11, 11, 482, 530},
+		position = {17.5, -2, 469, 516},
 	},
 
 	tcas_gau {
-		position = {518, 11, 482, 530},
+		position = {524.5, -2, 469, 516},
 		var_on = globalPropertyi("tu154/custom/switchers/ovhd/var_right"),  -- .  
 		bus27_volt = globalPropertyf("tu154/custom/elec/bus27_volt_right"), --   27
 		bus115_volt = globalPropertyf("tu154/custom/elec/bus115_3_volt"), --    115

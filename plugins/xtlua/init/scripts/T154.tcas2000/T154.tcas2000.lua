@@ -1,29 +1,27 @@
 -- T154.tcas2000.lua
 
-function deferred_dataref(name,type,notifier)
-	print("Deffered dataref: "..name)
-	dref=XLuaCreateDataRef(name, type,"yes",notifier)
-	return wrap_dref_any(dref,type) 
+-- Create writable custom datarefs owned by this xTLua script.
+function deferred_dataref(name, type, notifier)
+    print("Deffered dataref: " .. name)
+    local dref = XLuaCreateDataRef(name, type, "yes", notifier)
+    return wrap_dref_any(dref, type)
 end
 
-simDR_sqwk	= find_dataref("sim/cockpit2/radios/actuators/transponder_code")
-simDR_fid	= find_dataref("sim/cockpit2/tcas/targets/flight_id")
-simDR_tcas_disp_mod	= find_dataref("tu154/custom/tcas/screen_mode")
-simDR_tcas_sw_mod	= find_dataref("tu154/custom/switchers/tcas/tcas_mode")
-simDR_but_sound  = find_dataref("tu154/custom/buttons/srpbz/but_down")
-simDR_vsi_brtleft  = find_dataref("tu154/custom/gauges/vsi/vsi_brt_left")
-simDR_vsi_brtright  = find_dataref("tu154/custom/gauges/vsi/vsi_brt_right")
-simDR_ping_pong	= find_dataref("sim/graphics/animation/ping_pong_2")
-simDR_1000_up	= find_command("sim/radios/transponder_1000_up")
-simDR_1000_dn	= find_command("sim/radios/transponder_1000_down")
-simDR_100_up	= find_command("sim/radios/transponder_100_up")
-simDR_100_dn	= find_command("sim/radios/transponder_100_down")
-simDR_10_up	= find_command("sim/radios/transponder_10_up")
-simDR_10_dn	= find_command("sim/radios/transponder_10_down")
-simDR_1_up	= find_command("sim/radios/transponder_1_up")
-simDR_1_dn	= find_command("sim/radios/transponder_1_down")
+-- Simulator and aircraft inputs.
+simDR_sqwk = find_dataref("sim/cockpit2/radios/actuators/transponder_code")
+simDR_fid = find_dataref("sim/cockpit2/radios/actuators/flight_id")
+simDR_xpdr_reply = find_dataref("sim/cockpit/radios/transponder_light")
+simDR_tcas_disp_mod = find_dataref("tu154/custom/tcas/screen_mode")
+simDR_tcas_sw_mod = find_dataref("tu154/custom/switchers/tcas/tcas_mode")
+simDR_tcas_mode = find_dataref("tu154/custom/tcas/mode_set")
+simDR_but_sound = find_dataref("tu154/custom/buttons/srpbz/but_down")
+simDR_vsi_brtleft = find_dataref("tu154/custom/gauges/vsi/vsi_brt_left")
+simDR_vsi_brtright = find_dataref("tu154/custom/gauges/vsi/vsi_brt_right")
+simDR_ping_pong = find_dataref("sim/graphics/animation/ping_pong_2")
+simDR_sc_master = find_dataref("scp/api/ismaster")
 
-
+-- Display, selector, and animation outputs. Keep the aircraft's existing
+-- tu154/custom namespace so the current OBJ and panel references remain valid.
 lit_atc = deferred_dataref("tu154/custom/tcas2000/lit_atc", "number")
 lit_fid = deferred_dataref("tu154/custom/tcas2000/lit_fid", "number")
 lit_xpndr = deferred_dataref("tu154/custom/tcas2000/lit_xpndr", "number")
@@ -34,227 +32,418 @@ l2 = deferred_dataref("tu154/custom/tcas2000/l2", "number")
 r1 = deferred_dataref("tu154/custom/tcas2000/r1", "number")
 r2 = deferred_dataref("tu154/custom/tcas2000/r2", "number")
 line = deferred_dataref("tu154/custom/tcas2000/line", "string")
+line_sc = deferred_dataref("tu154/custom/tcas2000/line_sc", "string")
+atcfid = deferred_dataref("tu154/custom/tcas2000/atcfid", "number")
 
-local atcfid = 0
-local ent = 0
+local FID_LENGTH = 7
+local FID_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
+
+local squawk_digits = {0, 0, 0, 0}
+local squawk_editing = false
+local squawk_cursor = 0
+
+local fid_indices = {27, 27, 27, 27, 27, 27, 27}
+local fid_cursor = 0
+
+-- SmartCopilot reports 1 on the slave, 2 on the master, and 0 when the
+-- plugin is not present. Only master/standalone may change aircraft state.
+local function has_write_authority()
+    return simDR_sc_master ~= 1
+end
+
+local function clamp(value, minimum, maximum)
+    if value < minimum then
+        return minimum
+    elseif value > maximum then
+        return maximum
+    end
+    return value
+end
+
+local function rounded(value)
+    return math.floor((tonumber(value) or 0) + 0.5)
+end
+
+local function rotate_knob(value, step)
+    value = rounded(value) + step * 36
+    while value < 0 do
+        value = value + 360
+    end
+    while value >= 360 do
+        value = value - 360
+    end
+    return value
+end
+
+local function controls_available()
+    return simDR_tcas_disp_mod >= 0 and simDR_tcas_disp_mod < 5
+end
+
+local function pulse_button_sound(value)
+    if has_write_authority() then
+        simDR_but_sound = value
+    end
+end
+
+local function digits_from_squawk(value)
+    value = clamp(rounded(value), 0, 7777)
+
+    local d1 = math.floor(value / 1000)
+    value = value - d1 * 1000
+    local d2 = math.floor(value / 100)
+    value = value - d2 * 100
+    local d3 = math.floor(value / 10)
+    local d4 = value - d3 * 10
+
+    -- The transponder code is octal even though the dataref is represented
+    -- as a normal integer containing four decimal-looking digits.
+    return {
+        clamp(d1, 0, 7),
+        clamp(d2, 0, 7),
+        clamp(d3, 0, 7),
+        clamp(d4, 0, 7),
+    }
+end
+
+local function squawk_from_digits(digits)
+    return digits[1] * 1000 + digits[2] * 100 + digits[3] * 10 + digits[4]
+end
+
+local function squawk_text(digits, cursor)
+    local result = {}
+    local cursor_visible = math.abs(simDR_ping_pong) > 0.5
+
+    for index = 1, 4 do
+        if cursor == index and not cursor_visible then
+            result[index] = " "
+        else
+            result[index] = tostring(digits[index])
+        end
+    end
+
+    return table.concat(result)
+end
+
+local function begin_squawk_edit()
+    if not squawk_editing then
+        squawk_digits = digits_from_squawk(simDR_sqwk)
+        squawk_editing = true
+    end
+end
+
+local function adjust_squawk_digit(index, step)
+    if not has_write_authority() then
+        return
+    end
+
+    begin_squawk_edit()
+    squawk_digits[index] = (squawk_digits[index] + step) % 8
+    squawk_cursor = index
+end
+
+local function commit_squawk()
+    if squawk_editing and has_write_authority() then
+        simDR_sqwk = squawk_from_digits(squawk_digits)
+    end
+
+    squawk_editing = false
+    squawk_cursor = 0
+end
+
+local function fid_character_index(character)
+    local index = string.find(FID_CHARACTERS, string.upper(character or " "), 1, true)
+    return index or 27
+end
+
+local function load_fid_buffer()
+    local terminated = false
+
+    for index = 1, FID_LENGTH do
+        local character = " "
+
+        if not terminated then
+            local byte = rounded(simDR_fid[index - 1])
+            if byte == 0 then
+                terminated = true
+            elseif byte >= 32 and byte <= 126 then
+                character = string.char(byte)
+            end
+        end
+
+        fid_indices[index] = fid_character_index(character)
+    end
+end
+
+local function fid_buffer_text(cursor)
+    local result = {}
+    local cursor_visible = math.abs(simDR_ping_pong) > 0.5
+
+    for index = 1, FID_LENGTH do
+        if cursor == index and not cursor_visible then
+            result[index] = " "
+        else
+            result[index] = string.sub(FID_CHARACTERS, fid_indices[index], fid_indices[index])
+        end
+    end
+
+    -- The target panel has eight character cells; XP11's own Flight ID uses
+    -- seven characters plus its terminating byte.
+    return table.concat(result) .. " "
+end
+
+local function write_fid_buffer()
+    if not has_write_authority() then
+        return
+    end
+
+    local text = fid_buffer_text(0)
+    text = string.sub(text, 1, FID_LENGTH)
+    text = string.gsub(text, "%s+$", "")
+
+    for index = 0, FID_LENGTH do
+        if index < string.len(text) then
+            simDR_fid[index] = string.byte(text, index + 1)
+        else
+            simDR_fid[index] = 0
+        end
+    end
+end
+
+local function adjust_fid_character(step)
+    if not has_write_authority() or fid_cursor < 1 then
+        return
+    end
+
+    local character_count = string.len(FID_CHARACTERS)
+    fid_indices[fid_cursor] = ((fid_indices[fid_cursor] - 1 + step) % character_count) + 1
+end
+
+local function mode_text(value)
+    value = rounded(value)
+
+    if value <= 0 then
+        return " ST."
+    elseif value == 1 then
+        return " ON "
+    elseif value == 2 then
+        return " ALT"
+    elseif value == 3 then
+        return " TA "
+    end
+
+    return " RA "
+end
+
+local function set_knob_animation(knob_name, step)
+    if knob_name == "l1" then
+        l1 = rotate_knob(l1, step)
+    elseif knob_name == "l2" then
+        l2 = rotate_knob(l2, step)
+    elseif knob_name == "r1" then
+        r1 = rotate_knob(r1, step)
+    else
+        r2 = rotate_knob(r2, step)
+    end
+end
+
+local function handle_knob(knob_name, squawk_index, step)
+    if not has_write_authority() then
+        return
+    end
+
+    set_knob_animation(knob_name, step)
+
+    if atcfid == 0 then
+        adjust_squawk_digit(squawk_index, -step)
+    elseif knob_name == "r2" then
+        -- CAS67 used the right small knob for character changes. ENT replaces
+        -- its missing push function and selects the Flight ID character.
+        adjust_fid_character(-step)
+    end
+end
 
 function tcas2000_l1_up_CMDhandler(phase, duration)
     if phase == 0 then
-            if atcfid == 0 then
-                simDR_1000_up:once()
-            end
-                   if l1 > 0 then
-                    l1 = l1 - 36
-                   else
-                    l1 = 324
-                   end
-    end   	
-end	
+        handle_knob("l1", 1, -1)
+    end
+end
 
 function tcas2000_l1_dn_CMDhandler(phase, duration)
     if phase == 0 then
-            if atcfid == 0 then
-                simDR_1000_dn:once()
-            end
-                   if l1 < 324 then
-                    l1 = l1 + 36
-                   else
-                    l1 = 0
-                   end
-    end   	
-end	
+        handle_knob("l1", 1, 1)
+    end
+end
 
 function tcas2000_l2_up_CMDhandler(phase, duration)
     if phase == 0 then
-            if atcfid == 0 then
-                simDR_100_up:once()
-            end
-                   if l2 > 0 then
-                    l2 = l2 - 36
-                   else
-                    l2 = 324
-                   end
-    end   	
-end	
+        handle_knob("l2", 2, -1)
+    end
+end
+
 function tcas2000_l2_dn_CMDhandler(phase, duration)
     if phase == 0 then
-            if atcfid == 0 then
-                simDR_100_dn:once()
-            end
-                   if l1 < 324 then
-                    l1 = l1 + 36
-                   else
-                    l1 = 0
-                   end
-    end   	
-end	
+        handle_knob("l2", 2, 1)
+    end
+end
 
 function tcas2000_r1_up_CMDhandler(phase, duration)
     if phase == 0 then
-            if atcfid == 0 then
-                simDR_10_up:once()
-            end
-                   if r1 > 0 then
-                    r1 = r1 - 36
-                   else
-                    r1 = 324
-                   end
-    end   	
-end	
+        handle_knob("r1", 3, -1)
+    end
+end
+
 function tcas2000_r1_dn_CMDhandler(phase, duration)
     if phase == 0 then
-            if atcfid == 0 then
-                simDR_10_dn:once()
-            end
-                   if r1 < 324 then
-                    r1 = r1 + 36
-                   else
-                    r1 = 0
-                   end
-    end   	
-end	
+        handle_knob("r1", 3, 1)
+    end
+end
 
 function tcas2000_r2_up_CMDhandler(phase, duration)
     if phase == 0 then
-            if atcfid == 0 then
-                simDR_1_up:once()
-                   if r2 > 0 then
-                    r2 = r2 - 36
-                   else
-                    r2 = 324
-                   end
-            end
-    end   	
-end	
+        handle_knob("r2", 4, -1)
+    end
+end
+
 function tcas2000_r2_dn_CMDhandler(phase, duration)
     if phase == 0 then
-            if atcfid == 0 then
-                simDR_1_dn:once()
-                   if r2 < 324 then
-                    r2 = r2 + 36
-                   else
-                    r2 = 0
-                   end
-            end
-    end   	
-end	
+        handle_knob("r2", 4, 1)
+    end
+end
 
 function tcas2000_mode_CMDhandler(phase, duration)
     if phase == 0 then
-            if simDR_tcas_disp_mod < 5 and simDR_tcas_disp_mod > -1 then
-                if atcfid < 1 then
+        if has_write_authority() and controls_available() then
+            squawk_editing = false
+            squawk_cursor = 0
+            fid_cursor = 0
+
+            if atcfid == 0 then
                 atcfid = 1
-                ent = 0
-                else
+                load_fid_buffer()
+            else
                 atcfid = 0
-                ent = 0
-                end
             end
-        simDR_but_sound = 1
-	
-     elseif phase == 2 then
-        simDR_but_sound = 0
-    end   	
-end	
+        end
+
+        pulse_button_sound(1)
+    elseif phase == 2 then
+        pulse_button_sound(0)
+    end
+end
 
 function tcas2000_ent_CMDhandler(phase, duration)
     if phase == 0 then
-        simDR_but_sound = 1
-	
-     elseif phase == 2 then
-        simDR_but_sound = 0
-    end   	
-end	
+        if has_write_authority() and controls_available() then
+            if atcfid == 0 then
+                commit_squawk()
+            elseif fid_cursor == 0 then
+                load_fid_buffer()
+                fid_cursor = 1
+            elseif fid_cursor < FID_LENGTH then
+                fid_cursor = fid_cursor + 1
+            else
+                write_fid_buffer()
+                fid_cursor = 0
+            end
+        end
 
-l_1_up	= create_command("tcas2000/l1_up", "TCAS2000 L1 u", tcas2000_l1_up_CMDhandler)
-l_1_dn	= create_command("tcas2000/l1_dn", "TCAS2000 L1 d", tcas2000_l1_dn_CMDhandler)
-l_2_up	= create_command("tcas2000/l2_up", "TCAS2000 L2 u", tcas2000_l2_up_CMDhandler)
-l_2_dn	= create_command("tcas2000/l2_dn", "TCAS2000 L2 d", tcas2000_l2_dn_CMDhandler)
-r_1_up	= create_command("tcas2000/r1_up", "TCAS2000 R1 u", tcas2000_r1_up_CMDhandler)
-r_1_dn	= create_command("tcas2000/r1_dn", "TCAS2000 R1 d", tcas2000_r1_dn_CMDhandler)
-r_2_up	= create_command("tcas2000/r2_up", "TCAS2000 R2 u", tcas2000_r2_up_CMDhandler)
-r_2_dn	= create_command("tcas2000/r2_dn", "TCAS2000 R2 d", tcas2000_r2_dn_CMDhandler)
-mode_com	= create_command("tcas2000/mode", "TCAS2000 ATC/FID", tcas2000_mode_CMDhandler)
-ent_com	= create_command("tcas2000/ent", "TCAS2000 ENT", tcas2000_ent_CMDhandler)
+        pulse_button_sound(1)
+    elseif phase == 2 then
+        pulse_button_sound(0)
+    end
+end
+
+l_1_up = create_command("tcas2000/l1_up", "TCAS2000 L1 u", tcas2000_l1_up_CMDhandler)
+l_1_dn = create_command("tcas2000/l1_dn", "TCAS2000 L1 d", tcas2000_l1_dn_CMDhandler)
+l_2_up = create_command("tcas2000/l2_up", "TCAS2000 L2 u", tcas2000_l2_up_CMDhandler)
+l_2_dn = create_command("tcas2000/l2_dn", "TCAS2000 L2 d", tcas2000_l2_dn_CMDhandler)
+r_1_up = create_command("tcas2000/r1_up", "TCAS2000 R1 u", tcas2000_r1_up_CMDhandler)
+r_1_dn = create_command("tcas2000/r1_dn", "TCAS2000 R1 d", tcas2000_r1_dn_CMDhandler)
+r_2_up = create_command("tcas2000/r2_up", "TCAS2000 R2 u", tcas2000_r2_up_CMDhandler)
+r_2_dn = create_command("tcas2000/r2_dn", "TCAS2000 R2 d", tcas2000_r2_dn_CMDhandler)
+mode_com = create_command("tcas2000/mode", "TCAS2000 ATC/FID", tcas2000_mode_CMDhandler)
+ent_com = create_command("tcas2000/ent", "TCAS2000 ENT", tcas2000_ent_CMDhandler)
+
+local function update_normal_display()
+    lit_xpndr = 0
+
+    if atcfid == 1 then
+        if fid_cursor == 0 then
+            load_fid_buffer()
+        end
+
+        line = fid_buffer_text(fid_cursor)
+        lit_atc = 0
+        lit_fid = 1
+    else
+        if squawk_editing then
+            line = "SQ " .. squawk_text(squawk_digits, squawk_cursor) .. " "
+        else
+            local current_digits = digits_from_squawk(simDR_sqwk)
+            line = squawk_text(current_digits, 0) .. mode_text(simDR_tcas_mode)
+        end
+
+        lit_atc = 1
+        lit_fid = 0
+
+        -- The legacy output name is lit_xpndr, but the panel annunciator is
+        -- the RPLY lamp. It is available only on the ATC page.
+        if simDR_xpdr_reply > 0 and rounded(simDR_tcas_mode) > 0 then
+            lit_xpndr = 1
+        end
+    end
+end
 
 function tcas()
-    
+    -- Preserve the target aircraft's existing display visibility behavior;
+    -- no CAS67 bus, power-switch, startup, or failure logic is introduced.
     if simDR_tcas_disp_mod == 100 then
         tcas_lit = 0
     else
         tcas_lit = 1
     end
+
+    if has_write_authority() then
+        -- Explicitly retained at the user's request. The TCAS/VSI rate itself
+        -- remains direct and unsmoothed in the existing gauge code.
         simDR_vsi_brtleft = 1
         simDR_vsi_brtright = 1
-        simDR_tcas_sw_mod = mode
-    
+
+        -- The SASL TCAS logic remains the owner of mode_set and screen_mode.
+        -- This script only passes the physical selector position to it.
+        simDR_tcas_sw_mod = clamp(rounded(mode), 0, 4)
+    end
+
     if simDR_tcas_disp_mod < 100 then
-        if atcfid == 0 then
-            if ent < 1 then
-                if simDR_sqwk > 999 then
-                 line = string.format("  %s", simDR_sqwk)
-                 lit_atc = 1
-                end
-                if simDR_sqwk < 1000 and simDR_sqwk > 99 then
-                 line = string.format("  0%s", simDR_sqwk)
-                 lit_atc = 1
-                end
-                if simDR_sqwk < 100 and simDR_sqwk > 9 then
-                 line = string.format("  00%s", simDR_sqwk)
-                 lit_atc = 1
-                end
-                if simDR_sqwk < 10 then
-                 line = string.format("  000%s", simDR_sqwk)
-                 lit_atc = 1
-                end
-            else
-                if simDR_sqwk > 999 then
-                 line = string.format("SQ %s", simDR_sqwk)
-                 lit_atc = 1
-                end
-                if simDR_sqwk < 1000 and simDR_sqwk > 99 then
-                 line = string.format("SQ 0%s", simDR_sqwk)
-                 lit_atc = 1
-                end
-                if simDR_sqwk < 100 and simDR_sqwk > 9 then
-                 line = string.format("SQ 00%s", simDR_sqwk)
-                 lit_atc = 1
-                end
-                if simDR_sqwk < 10 then
-                 line = string.format("SQ 000%s", simDR_sqwk)
-                 lit_atc = 1
-                end
-                lit_atc = simDR_ping_pong * 1.3
-            end
-             lit_fid = 0
-             lit_xpndr = 0
-        end
-        if atcfid == 1 then
-             line = string.format("%s", simDR_fid)
-             lit_atc = 0
-             lit_fid = 1
-             lit_xpndr = 0
-        end 
+        update_normal_display()
+
+        -- Keep the target aircraft's pre-existing special screen states. They
+        -- are not replaced with the donor's power, self-test, or failure logic.
         if simDR_tcas_disp_mod == -10 then
-             line = string.format("  IDENT")
-             lit_atc = 1
-             lit_fid = 1
-             lit_xpndr = 0
-             ent = 0
-        end
-        if simDR_tcas_disp_mod == -1 then
-             line = string.format("  ERROR")
-             lit_atc = 0
-             lit_fid = 0
-             lit_xpndr = 1
-             ent = 0
-        end
-        if simDR_tcas_disp_mod == 5 then
-             line = string.format("%%%%%%%%%%%%%%%%")
+            line = " IDENT  "
+            lit_atc = 1
+            lit_fid = 1
+            lit_xpndr = 0
+        elseif simDR_tcas_disp_mod == -1 then
+            line = " ERROR  "
+            lit_atc = 0
+            lit_fid = 0
+            lit_xpndr = 0
+        elseif simDR_tcas_disp_mod == 5 then
+            line = "%%%%%%%%"
             lit_atc = 1
             lit_fid = 1
             lit_xpndr = 1
         end
+    end
+
+    -- SmartCopilot synchronizes this derived string separately. The slave
+    -- renders the master's pending Squawk/FID edit without writing aircraft
+    -- state itself.
+    if has_write_authority() then
+        line_sc = line
+    elseif string.len(line_sc) > 0 then
+        line = line_sc
     end
 end
 

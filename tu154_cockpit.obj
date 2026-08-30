@@ -36970,27 +36970,6 @@ TRIS 22431 6
 ANIM_end
 ANIM_end
 
-# New ANIM section from uvz.obj below by KITBASH.LUA
-
-	ATTR_draw_enable
-
-	ATTR_cockpit
-ANIM_begin
-ANIM_trans 0.685207 -1.366945 10.550468 0.685207 -1.366945 10.550468 0.000000 0.000000 none
-ANIM_rotate 0.000000 1.000000 0.000000 0.000000 32.000000 0.000000 1.000000 tu154/custom/anim/asu_show
-ANIM_trans -0.685207 1.366945 -10.550468 -0.685207 1.366945 -10.550468 0.000000 0.000000 none
-ANIM_begin
-ANIM_hide 0.000000 0.500000 tu154/custom/anim/asu_show
-ANIM_begin
-TRIS	22437	51543
-LIGHT_NAMED headlight 2.764387 -4.792496 15.479827
-LIGHT_NAMED headlight 4.172894 -4.792496 15.489276
-LIGHT_NAMED taillight 4.337921 -4.818602 20.000317
-LIGHT_NAMED taillight 2.602124 -4.818602 20.003227
-ANIM_end
-ANIM_end
-ANIM_end
-
 # PPN-13 invisible cockpit manipulators.
 ATTR_reset
 ATTR_no_solid_camera
