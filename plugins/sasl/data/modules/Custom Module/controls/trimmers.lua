@@ -2,24 +2,29 @@
 -- Trimmer logic.
 --[[
 Changelog
-- Grouped all 29 existing Dataref bindings through defineProps() while preserving property names, paths, constructors, and original binding order.
-- Added X-Plane internal version detection for XP11/XP12-compatible sasl.al.playSample() calls.
-- Reduced all electric trim rates to 110% of the previous values through one TRIM_SPEED_SCALE constant.
-- Preserved the original 1.25 pitch-trim speed asymmetry below neutral.
-- Cached electrical power, trim controls, failures, and trim positions once per frame.
-- Replaced manual limit code with clamp() calls for readability.
-- Initialized previous trim positions from the actual trim Datarefs to avoid false startup current indications.
-- Kept normal pitch trim inhibited in AFCS stabilizer mode, but allowed the emergency elevator trim command to remain available.
-- Made trim-center commands respect their corresponding electrical power and trim failure state.
-- Added small helper functions for power/failure checks used by both update() and command handlers.
-- Preserved SmartCopilot master/slave write ownership, existing electrical-load behavior, trim limits, command names, and public interfaces.
+- Preserved the existing pitch, roll, yaw, emergency-trim, AFCS-trim, SmartCopilot,
+  trim-limit, command, sound, and electrical-load behavior unless noted below.
+- Added the two elevator-trim channel cutoff switches from the engineer panel:
+  hydro_trimm_rud_1 and hydro_trimm_rud_2.
+- With both elevator-trim channels enabled, normal pitch-trim speed is unchanged.
+- With one elevator-trim channel enabled, normal/manual and ABSU pitch trim run at
+  half of the normal two-channel speed when the corresponding 36 V supply is available.
+- With both elevator-trim channels disabled, all elevator trim motion is inhibited,
+  including emergency trim and pitch-trim takeoff/center commands.
+- Emergency trim remains a separate control path and retains its existing calibrated
+  speed whenever at least one elevator-trim channel is enabled.
+- Pitch-trim 36 V current indications now follow the enabled trim channels.
+- Kept the existing 1.25 pitch-trim speed asymmetry below neutral.
+- Kept all Dataref bindings in one defineProps() block.
 ]]
 
+
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        defineProperty(def[1], def[3](def[2]))
     end
 end
+
 
 defineProps({
     -- Trim controls
@@ -28,12 +33,18 @@ defineProps({
     { "rudd_trimm_sw", "tu154/custom/controll/rudd_trimm_sw", globalPropertyi },
     { "emerg_elev_trimm", "tu154/custom/switchers/console/emerg_elev_trimm", globalPropertyi },
     { "absu_pitch_trimm", "tu154/custom/absu/absu_pitch_trimm", globalPropertyi },
+
+    -- Engineer-panel elevator trim channel cutoffs
+    { "hydro_trimm_rud_1", "tu154/custom/switchers/eng/hydro_trimm_rud_1", globalPropertyi },
+    { "hydro_trimm_rud_2", "tu154/custom/switchers/eng/hydro_trimm_rud_2", globalPropertyi },
+
     -- Trim positions and AFCS modes
     { "int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf },
     { "int_roll_trim", "tu154/custom/trimmers/int_roll_trim", globalPropertyf },
     { "int_yaw_trim", "tu154/custom/trimmers/int_yaw_trim", globalPropertyf },
     { "absu_roll_mode", "tu154/custom/gauges/console/absu_roll_mode", globalPropertyi },
     { "absu_pitch_mode", "tu154/custom/gauges/console/absu_pitch_mode", globalPropertyi },
+
     -- Electrical power and current loads
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
@@ -47,19 +58,22 @@ defineProps({
     { "ctr_27_L_cc", "tu154/custom/control/ctr_27_L_cc", globalPropertyf },
     { "ctr_27_R_cc", "tu154/custom/control/ctr_27_R_cc", globalPropertyf },
     { "ctr_36L_cc", "tu154/custom/control/ctr_36L_cc", globalPropertyf },
-    -- SmartCopilot
     { "ctr_36R_cc", "tu154/custom/control/ctr_36R_cc", globalPropertyf },
+
+    -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    -- Failures
     { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+
+    -- Failures
     { "rel_trim_rud", "sim/operation/failures/rel_trim_rud", globalPropertyi },
     { "rel_trim_ail", "sim/operation/failures/rel_trim_ail", globalPropertyi },
     { "rel_trim_elv", "sim/operation/failures/rel_trim_elv", globalPropertyi },
     { "trim_emerg_elv_fail", "tu154/custom/failures/trim_emerg_elv_fail", globalPropertyi },
+
+    -- X-Plane version
+    { "xp_version", "sim/version/xplane_internal_version", globalPropertyi },
 })
 
--- Added compatibility binding; all existing bindings above remain unchanged.
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
 local XP11 = get(xp_version) > 120000
 
 local function playPanelSample(sample)
@@ -76,9 +90,10 @@ local SAMPLES = {
     center = sasl.al.loadSample("Custom Sounds/trimm_ctr.wav"),
 }
 
--- Global trim-speed tuning. 1.0 = 100% of the original speed.
+-- Global trim-speed tuning. 1.0 = 100% of the calibrated speed.
 local TRIM_SPEED_SCALE = 1.0
--- Limits
+
+-- Trim limits.
 local PITCH_LIMIT = 0.80
 local ROLL_LIMIT = 0.24
 local YAW_LIMIT = 0.24
@@ -105,10 +120,25 @@ local function has36Right()
     return get(bus36_volt_right) > 30
 end
 
+local function trimChannel1Enabled()
+    return get(hydro_trimm_rud_1) == 1
+end
+
+local function trimChannel2Enabled()
+    return get(hydro_trimm_rud_2) == 1
+end
+
+local function anyPitchTrimChannelEnabled()
+    return trimChannel1Enabled() or trimChannel2Enabled()
+end
+
 local function normalPitchTrimAvailable()
+    local channel_1_available = trimChannel1Enabled() and has36Left()
+    local channel_2_available = trimChannel2Enabled() and has36Right()
+
     return has27Left()
         and has27Right()
-        and (has36Left() or has36Right())
+        and (channel_1_available or channel_2_available)
         and get(rel_trim_elv) ~= 6
 end
 
@@ -129,6 +159,11 @@ function update()
     local power_36_L = bool2int(get(bus36_volt_left) > 30)
     local power_36_R = bool2int(get(bus36_volt_right) > 30)
 
+    local trim_channel_1 = bool2int(get(hydro_trimm_rud_1) == 1)
+    local trim_channel_2 = bool2int(get(hydro_trimm_rud_2) == 1)
+    local pitch_trim_channel_available =
+        bool2int(trim_channel_1 + trim_channel_2 > 0)
+
     local elev_failed = get(rel_trim_elv) == 6
     local roll_failed = get(rel_trim_ail) == 6
     local yaw_failed = get(rel_trim_rud) == 6
@@ -139,7 +174,7 @@ function update()
     local absu_tr_pt = get(absu_pitch_trimm)
 
     -- In AFCS stabilizer mode the normal manual pitch trim is inhibited.
-    -- Emergency trim remains available as a separate emergency path.
+    -- Emergency trim remains a separate emergency control path.
     if get(absu_pitch_mode) == 2 then
         elev_tr_sw = 0
     end
@@ -147,13 +182,19 @@ function update()
     --------------------------------------------------------------------------
     -- Pitch trimmer
     --------------------------------------------------------------------------
+
     local pitch_trim_pos = get(int_pitch_trim)
     local direction_factor = pitch_trim_pos < 0 and 1.25 or 1.0
 
-    -- Preserve the original two-motor / two-36V-bus speed relationship.
+    -- Each engineer-panel cutoff controls one of the two normal pitch-trim
+    -- channels. With both channels available this evaluates to the exact
+    -- original factor of 4. One available channel gives factor 2.
     local normal_power_factor = power_27_L
         * power_27_R
-        * (power_36_L + power_36_R)
+        * (
+            power_36_L * trim_channel_1
+            + power_36_R * trim_channel_2
+        )
         * 2
 
     if not elev_failed then
@@ -174,12 +215,15 @@ function update()
             * TRIM_SPEED_SCALE
     end
 
+    -- Emergency trim retains its existing calibrated electrical path and speed,
+    -- but cannot move the elevator trim when both trim channels are cut off.
     if not emergency_failed then
         pitch_trim_pos = pitch_trim_pos
             + emerg_tr_sw
             * passed
             * power_27_L
             * power_36_L
+            * pitch_trim_channel_available
             * 0.03
             * direction_factor
             * TRIM_SPEED_SCALE
@@ -194,8 +238,8 @@ function update()
     local pitch_moving = pitch_trim_pos ~= STATE.pitch_last
 
     if pitch_moving then
-        set(ctr_36L_cc, power_36_L)
-        set(ctr_36R_cc, power_36_R)
+        set(ctr_36L_cc, power_36_L * trim_channel_1)
+        set(ctr_36R_cc, power_36_R * trim_channel_2)
     else
         set(ctr_36L_cc, 0)
         set(ctr_36R_cc, 0)
@@ -206,6 +250,7 @@ function update()
     --------------------------------------------------------------------------
     -- Roll trimmer
     --------------------------------------------------------------------------
+
     local roll_trim_pos = get(int_roll_trim)
 
     if not roll_failed then
@@ -232,6 +277,7 @@ function update()
     --------------------------------------------------------------------------
     -- Yaw trimmer
     --------------------------------------------------------------------------
+
     local yaw_trim_pos = get(int_yaw_trim)
 
     if not yaw_failed then
@@ -262,6 +308,7 @@ pitch_UP_comm = sasl.findCommand("sim/flight_controls/pitch_trim_up")
 function pitch_UP_hnd(phase)
     if phase == 0 or phase == 1 then
         set(elev_trimm_sw, 1)
+
         if phase == 0 then
             playPanelSample(SAMPLES.up)
         end
@@ -269,6 +316,7 @@ function pitch_UP_hnd(phase)
         set(elev_trimm_sw, 0)
         playPanelSample(SAMPLES.center)
     end
+
     return 0
 end
 
@@ -280,6 +328,7 @@ pitch_DOWN_comm = sasl.findCommand("sim/flight_controls/pitch_trim_down")
 function pitch_DOWN_hnd(phase)
     if phase == 0 or phase == 1 then
         set(elev_trimm_sw, -1)
+
         if phase == 0 then
             playPanelSample(SAMPLES.down)
         end
@@ -287,6 +336,7 @@ function pitch_DOWN_hnd(phase)
         set(elev_trimm_sw, 0)
         playPanelSample(SAMPLES.center)
     end
+
     return 0
 end
 
@@ -300,6 +350,7 @@ function pitch_TO_hnd(phase)
         set(int_pitch_trim, 0)
         STATE.pitch_last = 0
     end
+
     return 0
 end
 
@@ -314,6 +365,7 @@ function roll_LEFT_hnd(phase)
     else
         set(ail_trimm_sw, 0)
     end
+
     return 0
 end
 
@@ -328,6 +380,7 @@ function roll_RIGHT_hnd(phase)
     else
         set(ail_trimm_sw, 0)
     end
+
     return 0
 end
 
@@ -341,6 +394,7 @@ function roll_CTR_hnd(phase)
         set(int_roll_trim, 0)
         STATE.roll_last = 0
     end
+
     return 0
 end
 
@@ -355,6 +409,7 @@ function yaw_LEFT_hnd(phase)
     else
         set(rudd_trimm_sw, 0)
     end
+
     return 0
 end
 
@@ -369,6 +424,7 @@ function yaw_RIGHT_hnd(phase)
     else
         set(rudd_trimm_sw, 0)
     end
+
     return 0
 end
 
@@ -382,6 +438,7 @@ function yaw_CTR_hnd(phase)
         set(int_yaw_trim, 0)
         STATE.yaw_last = 0
     end
+
     return 0
 end
 

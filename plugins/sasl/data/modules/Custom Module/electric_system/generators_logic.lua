@@ -1,40 +1,32 @@
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        defineProperty(def[1], def[3](def[2]))
+    end
+end
+
 --[[
 Changelog
-- Preserved all 42 original Dataref bindings and their original order.
-- Added X-Plane internal version detection for XP11/XP12-compatible engine N1 array bindings.
-- Corrected gen1_overload..gen4_overload and gen1_work..gen4_work to globalPropertyi to match their integer Datarefs.
-- Consolidated the three engine-generator calculations into one shared helper.
-- Cached generator switches, engine speeds, currents, failures, and 27 V bus state once per frame.
-- Consolidated generator counters and overload timers into one state table to reduce file-level upvalues.
-- Preserved the generator switch test position (-1): it can create generator voltage but does not set the work flag or X-Plane generator switch.
-- Preserved the one-frame disconnect effect when an engine-generator switch changes position.
-- Preserved the initial engine-generator counters at 1 for immediate availability in loaded engines-running states.
-- Preserved the 2-second generator connection delay after a real switch/source transition.
-- Preserved the 122 - current / 500 voltage characteristic.
-- Preserved 200 A / 5 s overload logic for engine generators and 500 A / 5 s for the APU generator.
-- Preserved overload latch reset behavior when the corresponding generator is switched/disconnected.
-- Preserved the APU-generator patch that keeps disconnected generator voltage at 0 V and applies the 111 V minimum only while online.
-- Preserved SmartCopilot master/slave write ownership and X-Plane generator synchronization.
-- Preserved currently unused GPU bindings and legacy constants without inventing new GPU logic.
+- Preserved the existing engine/APU generator voltage, delay, overload, and SmartCopilot behavior.
+- Added emergency cutoff switches for engine generators 1..3.
+- Emergency cutoff is immediate and overrides ON as well as TEST without moving the normal generator switch.
+- Releasing an emergency cutoff requires the existing 2-second reconnection delay before the generator can feed again.
+- Emergency cutoff also resets the corresponding overload latch through the existing disconnect-reset path.
+- Moved SmartCopilot bindings into defineProps.
+- Kept xp_version outside defineProps because its value is required before selecting XP11/XP12 property constructors.
 ]]
 
 -- Generator logic for the Tu-154M electrical system.
 
--- SmartCopilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster"))
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1"))
-
--- X-Plane version compatibility
+-- Must remain outside defineProps because its value determines the property
+-- constructors used by indexed X-Plane Datarefs below.
 defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
 local XP11 = get(xp_version) > 120000
 
-local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
-    end
-end
-
 defineProps({
+    -- SmartCopilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+
     -- Generator voltages
     { "gen1_volt_bus", "tu154/custom/elec/gen1_volt", globalPropertyf },
     { "gen2_volt_bus", "tu154/custom/elec/gen2_volt", globalPropertyf },
@@ -59,6 +51,10 @@ defineProps({
     { "gen_3_on", "tu154/custom/switchers/eng/gen_3_on", globalPropertyi },
     { "apu_gen_on", "tu154/custom/switchers/eng/apu_gen_on", globalPropertyi },
     { "gpu_on_sw", "tu154/custom/switchers/eng/gpu_on", globalPropertyi },
+    -- Emergency generator cutoffs
+    { "emerg_gen_on_1", "tu154/custom/switchers/eng/emerg_gen_on_1", globalPropertyi },
+    { "emerg_gen_on_2", "tu154/custom/switchers/eng/emerg_gen_on_2", globalPropertyi },
+    { "emerg_gen_on_3", "tu154/custom/switchers/eng/emerg_gen_on_3", globalPropertyi },
     -- Generator operating status
     { "gen1_work", "tu154/custom/elec/gen1_work", globalPropertyi },
     { "gen2_work", "tu154/custom/elec/gen2_work", globalPropertyi },
@@ -150,14 +146,20 @@ local ENGINE_GENERATORS = {
     },
 }
 
-local function updateEngineGenerator(index, config, switch_actual, engine_n1, current, dc_power, dt)
-    -- Preserve the original one-frame disconnect whenever the switch position
-    -- changes. This also resets the connection delay after OFF/ON/TEST changes.
+local function updateEngineGenerator(index, config, switch_actual, emergency_cutoff, engine_n1, current, dc_power, dt)
+    -- Preserve the original one-frame disconnect whenever the normal switch
+    -- changes. This resets the connection delay after OFF/ON/TEST transitions.
     local switch_effective = switch_actual
     if switch_actual ~= STATE.switch_last[index] then
         switch_effective = 0
     end
     STATE.switch_last[index] = switch_actual
+
+    -- Emergency cutoff has immediate priority over both ON (+1) and TEST (-1).
+    -- The normal generator switch is intentionally left untouched.
+    if emergency_cutoff == 1 then
+        switch_effective = 0
+    end
 
     local engine_running = engine_n1 > config.min_n1
     local can_connect = math.abs(switch_effective) * dc_power * (engine_running and 1 or 0) == 1
@@ -231,6 +233,12 @@ function update()
         get(gen_3_on),
     }
 
+    local emergency_cutoff = {
+        get(emerg_gen_on_1),
+        get(emerg_gen_on_2),
+        get(emerg_gen_on_3),
+    }
+
     local engine_n1 = {
         get(eng1_N1),
         get(eng2_N1),
@@ -255,6 +263,7 @@ function update()
             i,
             ENGINE_GENERATORS[i],
             switch_actual[i],
+            emergency_cutoff[i],
             engine_n1[i],
             current[i],
             dc_power,

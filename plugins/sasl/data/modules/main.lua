@@ -413,6 +413,7 @@ components = {
 	kskv {},
 	start_system {},
 	controls {},
+	stall {},
 	fire_system {},
 	antiice{},
 	msrp {},

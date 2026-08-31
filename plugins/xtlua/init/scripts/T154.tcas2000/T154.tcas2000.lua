@@ -156,18 +156,20 @@ local function fid_character_index(character)
 end
 
 local function load_fid_buffer()
-    local terminated = false
+    -- xTLua exposes XP11's byte[8] Flight ID dataref as a Lua string.
+    -- XTLuaGetString already stops at the terminating byte, but cut an
+    -- embedded NUL as well so this remains safe with every XP11 build.
+    local text = tostring(simDR_fid or "")
+    local terminator = string.find(text, string.char(0), 1, true)
+    if terminator then
+        text = string.sub(text, 1, terminator - 1)
+    end
+    text = string.upper(string.sub(text, 1, FID_LENGTH))
 
     for index = 1, FID_LENGTH do
-        local character = " "
-
-        if not terminated then
-            local byte = rounded(simDR_fid[index - 1])
-            if byte == 0 then
-                terminated = true
-            elseif byte >= 32 and byte <= 126 then
-                character = string.char(byte)
-            end
+        local character = string.sub(text, index, index)
+        if character == "" then
+            character = " "
         end
 
         fid_indices[index] = fid_character_index(character)
@@ -179,16 +181,32 @@ local function fid_buffer_text(cursor)
     local cursor_visible = math.abs(simDR_ping_pong) > 0.5
 
     for index = 1, FID_LENGTH do
+        local character = string.sub(FID_CHARACTERS, fid_indices[index], fid_indices[index])
+
         if cursor == index and not cursor_visible then
             result[index] = " "
+        elseif cursor == index and character == " " then
+            -- Keep the edit cursor visible even when the stored Flight ID is
+            -- empty; otherwise ENT appears to have no effect on the display.
+            result[index] = "("
         else
-            result[index] = string.sub(FID_CHARACTERS, fid_indices[index], fid_indices[index])
+            result[index] = character
         end
     end
 
     -- The target panel has eight character cells; XP11's own Flight ID uses
     -- seven characters plus its terminating byte.
     return table.concat(result) .. " "
+end
+
+local function fid_buffer_is_empty()
+    for index = 1, FID_LENGTH do
+        if string.sub(FID_CHARACTERS, fid_indices[index], fid_indices[index]) ~= " " then
+            return false
+        end
+    end
+
+    return true
 end
 
 local function write_fid_buffer()
@@ -198,20 +216,24 @@ local function write_fid_buffer()
 
     local text = fid_buffer_text(0)
     text = string.sub(text, 1, FID_LENGTH)
-    text = string.gsub(text, "%s+$", "")
 
-    for index = 0, FID_LENGTH do
-        if index < string.len(text) then
-            simDR_fid[index] = string.byte(text, index + 1)
-        else
-            simDR_fid[index] = 0
-        end
-    end
+    -- Always pass all seven useful bytes so a shorter new ID also overwrites
+    -- remnants of a longer old one. XP11 keeps byte eight as the terminator.
+    simDR_fid = text
 end
 
 local function adjust_fid_character(step)
-    if not has_write_authority() or fid_cursor < 1 then
+    if not has_write_authority() then
         return
+    end
+
+    -- A turn on the FID page must be useful immediately after MODE. The
+    -- donor required a separate push before its rotary became active; this
+    -- target replaces that push with ENT, but also accepts a direct turn by
+    -- selecting the first character automatically.
+    if fid_cursor < 1 then
+        load_fid_buffer()
+        fid_cursor = 1
     end
 
     local character_count = string.len(FID_CHARACTERS)
@@ -255,9 +277,10 @@ local function handle_knob(knob_name, squawk_index, step)
 
     if atcfid == 0 then
         adjust_squawk_digit(squawk_index, -step)
-    elseif knob_name == "r2" then
-        -- CAS67 used the right small knob for character changes. ENT replaces
-        -- its missing push function and selects the Flight ID character.
+    elseif atcfid == 1 then
+        -- CAS67 used only its right small knob. The target has four existing
+        -- digit rotaries; on the FID page all of them change the selected
+        -- character, while ENT advances to the next position and commits.
         adjust_fid_character(-step)
     end
 end
@@ -372,7 +395,13 @@ local function update_normal_display()
             load_fid_buffer()
         end
 
-        line = fid_buffer_text(fid_cursor)
+        if fid_cursor == 0 and fid_buffer_is_empty() then
+            -- MODE must show a recognizable FID page even when XP11's Flight
+            -- ID is still empty. ENT then starts the visible edit cursor.
+            line = " FID    "
+        else
+            line = fid_buffer_text(fid_cursor)
+        end
         lit_atc = 0
         lit_fid = 1
     else

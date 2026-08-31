@@ -1,110 +1,112 @@
--- this is cockpit ventilator angle calculations
-
--- define property table
-
-defineProperty("vent_1", globalPropertyf("tu154/custom/anim/cockpit_vent_1"))
-defineProperty("vent_2", globalPropertyf("tu154/custom/anim/cockpit_vent_2"))
-defineProperty("vent_3", globalPropertyf("tu154/custom/anim/cockpit_vent_3"))
-
---[[
-tu154/custom/anim/cockpit_vent_1
-tu154/custom/anim/cockpit_vent_2
-tu154/custom/anim/cockpit_vent_3
-
---]]
-
-defineProperty("vent_1_sw", globalPropertyi("tu154/custom/switchers/ovhd/vent_1"))
-defineProperty("vent_2_sw", globalPropertyi("tu154/custom/switchers/ovhd/vent_2"))
-defineProperty("vent_3_sw", globalPropertyi("tu154/custom/switchers/ovhd/vent_3"))
-
---[[
-tu154/custom/switchers/ovhd/vent_1
-tu154/custom/switchers/ovhd/vent_2
-tu154/custom/switchers/ovhd/vent_3
-
---]]
-
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) 
-
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("cam_in_cockpit", globalPropertyi("sim/graphics/view/view_is_external"))
-
-defineProperty("fan_volume_ratio", globalPropertyf("sim/operation/sound/fan_volume_ratio")) -- 
-
-local vent1_sound = sasl.al.loadSample('Custom Sounds/cockpit_fan.wav')
-local vent2_sound = sasl.al.loadSample('Custom Sounds/cockpit_fan.wav')
-local vent3_sound = sasl.al.loadSample('Custom Sounds/cockpit_fan.wav')
-
-sasl.al.playSample(vent1_sound, true) -- fan sound
-sasl.al.setSampleGain(vent1_sound, 0)
-sasl.al.playSample(vent2_sound, true) -- fan sound
-sasl.al.setSampleGain(vent2_sound, 0)
-sasl.al.playSample(vent3_sound, true) -- fan sound
-sasl.al.setSampleGain(vent3_sound, 0)
-
-local vent1_spd = 0
-local vent2_spd = 0
-local vent3_spd = 0
-
-local UP_SPD = 500
-local DN_SPD = 100
-local MAX_SPD = 1500  -- deg per second
-
-function update()
-	local passed = get(frame_time)
-	local power = get(bus27_volt_left) > 13 or get(bus27_volt_right) > 13
-	
-	-- vent 1
-	if power and get(vent_1_sw) == 1 then vent1_spd = vent1_spd + UP_SPD * passed
-	else vent1_spd = vent1_spd - DN_SPD * passed end
-	
-	if vent1_spd > MAX_SPD then vent1_spd = MAX_SPD
-	elseif vent1_spd < 0 then vent1_spd = 0 end
-	
-	local vent_1_deg = get(vent_1) + vent1_spd * passed
-	
-	while vent_1_deg > 360 do vent_1_deg = vent_1_deg - 360 end
-	
-	set(vent_1, vent_1_deg)
-	---------
-
-	-- vent 2
-	if power and get(vent_2_sw) == 1 then vent2_spd = vent2_spd + UP_SPD * passed
-	else vent2_spd = vent2_spd - DN_SPD * passed end
-	
-	if vent2_spd > MAX_SPD then vent2_spd = MAX_SPD
-	elseif vent2_spd < 0 then vent2_spd = 0 end
-	
-	local vent_2_deg = get(vent_2) + vent2_spd * passed
-	while vent_2_deg > 360 do vent_2_deg = vent_2_deg - 360 end
-	set(vent_2, vent_2_deg)
-	---------	
-	
-	-- vent 3
-	if power and get(vent_3_sw) == 1 then vent3_spd = vent3_spd + UP_SPD * passed
-	else vent3_spd = vent3_spd - DN_SPD * passed end
-	
-	if vent3_spd > MAX_SPD then vent3_spd = MAX_SPD
-	elseif vent3_spd < 0 then vent3_spd = 0 end
-	
-	local vent_3_deg = get(vent_3) + vent3_spd * passed
-	while vent_3_deg > 360 do vent_3_deg = vent_3_deg - 360 end
-	set(vent_3, vent_3_deg)
-	---------
-
-	-- vent loudness
-	local inside = get(cam_in_cockpit) == 0
-	
-	local vol = get(fan_volume_ratio)
-	
-	if inside then sasl.al.setSampleGain(vent1_sound, math.min(vent1_spd * 10, 1000)) else sasl.al.setSampleGain(vent1_sound, 0) end
-	if inside then sasl.al.setSampleGain(vent2_sound, math.min(vent2_spd * 10, 1000)) else sasl.al.setSampleGain(vent2_sound, 0) end
-	if inside then sasl.al.setSampleGain(vent3_sound, math.min(vent3_spd * 10, 1000)) else sasl.al.setSampleGain(vent3_sound, 0) end
-	
-	sasl.al.setSamplePitch(vent1_sound, vent1_spd * vol)
-	sasl.al.setSamplePitch(vent2_sound, vent2_spd * vol)
-	sasl.al.setSamplePitch(vent3_sound, vent3_spd * vol)
-
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        defineProperty(def[1], def[3](def[2]))
+    end
 end
 
+-- Cockpit ventilator animation and sound calculations
+
+defineProps({
+    -- Ventilator animation
+    {"vent_1", "tu154/custom/anim/cockpit_vent_1", globalPropertyf},
+    {"vent_2", "tu154/custom/anim/cockpit_vent_2", globalPropertyf},
+    {"vent_3", "tu154/custom/anim/cockpit_vent_3", globalPropertyf},
+
+    -- Overhead controls
+    {"vent_1_sw", "tu154/custom/switchers/ovhd/vent_1", globalPropertyi},
+    {"vent_2_sw", "tu154/custom/switchers/ovhd/vent_2", globalPropertyi},
+    {"vent_3_sw", "tu154/custom/switchers/ovhd/vent_3", globalPropertyi},
+
+    -- Electrical
+    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
+    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
+
+    -- Timing and view
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    {"view_is_external", "sim/graphics/view/view_is_external", globalPropertyi},
+
+    -- X-Plane sound settings
+    {"fan_volume_ratio", "sim/operation/sound/fan_volume_ratio", globalPropertyf},
+})
+
+local FAN_ACCELERATION = 500
+local FAN_DECELERATION = 100
+local FAN_MAX_SPEED = 1500
+local FAN_POWER_THRESHOLD = 13
+local SAMPLE_MAX_GAIN = 1000
+
+local vent1_sound = sasl.al.loadSample("Custom Sounds/cockpit_fan.wav")
+local vent2_sound = sasl.al.loadSample("Custom Sounds/cockpit_fan.wav")
+local vent3_sound = sasl.al.loadSample("Custom Sounds/cockpit_fan.wav")
+
+local fans = {
+    {
+        angle = vent_1,
+        switch = vent_1_sw,
+        sound = vent1_sound,
+        speed = 0,
+    },
+    {
+        angle = vent_2,
+        switch = vent_2_sw,
+        sound = vent2_sound,
+        speed = 0,
+    },
+    {
+        angle = vent_3,
+        switch = vent_3_sw,
+        sound = vent3_sound,
+        speed = 0,
+    },
+}
+
+for index = 1, #fans do
+    sasl.al.playSample(fans[index].sound, true)
+    sasl.al.setSampleGain(fans[index].sound, 0)
+end
+
+local function updateFan(fan, dt, powered, inside_cockpit, fan_volume)
+    if powered and get(fan.switch) == 1 then
+        fan.speed = fan.speed + FAN_ACCELERATION * dt
+    else
+        fan.speed = fan.speed - FAN_DECELERATION * dt
+    end
+
+    if fan.speed > FAN_MAX_SPEED then
+        fan.speed = FAN_MAX_SPEED
+    elseif fan.speed < 0 then
+        fan.speed = 0
+    end
+
+    local angle = get(fan.angle) + fan.speed * dt
+
+    while angle > 360 do
+        angle = angle - 360
+    end
+
+    set(fan.angle, angle)
+
+    local gain = 0
+
+    if inside_cockpit then
+        gain = math.min(fan.speed * 10, SAMPLE_MAX_GAIN) * fan_volume
+    end
+
+    sasl.al.setSampleGain(fan.sound, gain)
+    sasl.al.setSamplePitch(fan.sound, fan.speed)
+end
+
+function update()
+    local dt = get(frame_time)
+
+    local bus_left = get(bus27_volt_left)
+    local bus_right = get(bus27_volt_right)
+    local powered = bus_left > FAN_POWER_THRESHOLD or bus_right > FAN_POWER_THRESHOLD
+
+    local inside_cockpit = get(view_is_external) == 0
+    local fan_volume = get(fan_volume_ratio)
+
+    for index = 1, #fans do
+        updateFan(fans[index], dt, powered, inside_cockpit, fan_volume)
+    end
+end
