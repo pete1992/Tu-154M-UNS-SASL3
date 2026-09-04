@@ -221,7 +221,7 @@ function update()
     end
 
     nav_counter = nav_counter + passed
-    if nav_counter > 1.1 then
+    if nav_counter > 0.6 then
         nav_counter = 0
     end
 

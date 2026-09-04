@@ -41,7 +41,7 @@ ANIM_begin
 						ANIM_begin
 							ANIM_hide -0.1 0.5 tu154/custom/lights/white_light_right
 							LIGHT_NAMED	airplane_nav_tail	   4.5712   -0.0496    3.5151
-							LIGHT_PARAM full_custom_halo 4.5712 -0.0496 3.5151 0.240 0.248 0.255 0.5 20.0 0.0 -1.0 0.0 0.5
+							LIGHT_PARAM full_custom_halo 4.5712 -0.0496 3.5151 0.440 0.448 0.455 0.5 20.0 0.0 -1.0 0.0 0.5
 						ANIM_end
 							# ANIM_begin
 								# ANIM_hide -0.1 0.5 tu154/custom/lights/anticoll_light
@@ -87,7 +87,7 @@ ANIM_begin
 						ANIM_begin
 							ANIM_hide -0.1 0.5 tu154/custom/lights/white_light_left
 							LIGHT_NAMED	airplane_nav_tail	  -4.5715   -0.0495    3.5151
-							LIGHT_PARAM full_custom_halo -4.5715 -0.0495 3.5151 0.240 0.248 0.255 0.5 20.0 0.0 -1.0 0.0 0.5
+							LIGHT_PARAM full_custom_halo -4.5715 -0.0495 3.5151 0.440 0.448 0.455 0.5 20.0 0.0 -1.0 0.0 0.5
 						ANIM_end
 					# ANIM_begin
 						# ANIM_hide -0.1 0.5 tu154/custom/lights/anticoll_light
