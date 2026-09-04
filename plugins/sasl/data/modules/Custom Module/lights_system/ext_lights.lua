@@ -1,3 +1,6 @@
+-- ext_lights.lua
+-- External lighting system logic
+
 --[[
 Changelog
 - Grouped all property bindings through a local defineProps() helper while preserving every existing property name, Dataref path, constructor, and binding order.
@@ -11,13 +14,19 @@ Changelog
 - Corrected flight-signal current calculations so each electrical bus is scaled only by its own voltage coefficient instead of applying the voltage factor twice.
 - Preserved landing-light failure handling, landing-light master cutoff behavior, output scaling, animation speed, beacon/nav timing, and the Virtual Airlines landing-light workaround unless explicitly listed above.
 - Preserved currently unused properties, counters, and legacy commented logic for project compatibility and future use.
+- Added the dedicated white tail flash output and synchronized the tail and wing flashes with the native X-Plane strobe pulse.
 ]]
 
--- External lighting system logic.
-
+-- local defineProps Function
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local property
+        if def[4] ~= nil then
+            property = def[3](def[2], def[4])
+        else
+            property = def[3](def[2])
+        end
+        defineProperty(def[1], property)
     end
 end
 
@@ -32,7 +41,8 @@ defineProps({
     -- X-Plane light outputs.
     { "sim_nav_light", "sim/cockpit2/switches/navigation_lights_on", globalPropertyf },
     { "sim_beacon", "sim/cockpit2/switches/beacon_on", globalPropertyf },
-    { "sim_strobes", "sim/cockpit2/switches/strobe_lights_on", globalPropertyf },
+    { "sim_strobes", "sim/cockpit2/switches/strobe_lights_on", globalPropertyi },
+    { "sim_strobe_tail_brt", "sim/flightmodel2/lights/strobe_brightness_ratio", globalPropertyfae, 3 },
     { "sim_lan_FL", "sim/cockpit2/switches/landing_lights_switch[7]", globalProperty },
     { "sim_lan_FR", "sim/cockpit2/switches/landing_lights_switch[6]", globalProperty },
     { "sim_lan_WL", "sim/cockpit2/switches/landing_lights_switch[5]", globalProperty },
@@ -56,6 +66,7 @@ defineProps({
     { "light_open_right", "tu154/custom/anim/light_open_right", globalPropertyf },
     { "white_light_left", "tu154/custom/lights/white_light_left", globalPropertyi },
     { "white_light_right", "tu154/custom/lights/white_light_right", globalPropertyi },
+    { "white_light_tail", "tu154/custom/lights/white_light_tail", globalPropertyi },
     { "beacon_light_B", "tu154/custom/lights/beacon_light_B", globalPropertyi },
     { "beacon_light_T", "tu154/custom/lights/beacon_light_T", globalPropertyi },
     { "gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
@@ -96,7 +107,6 @@ defineProps({
     { "rel_lites_beac", "sim/operation/failures/rel_lites_beac", globalPropertyi },
 })
 
--- Preserve original initialization behavior.
 set(sim_strobes, 0)
 set(lamp_deploy_FL, 0)
 set(lamp_deploy_FR, 0)
@@ -105,36 +115,28 @@ set(lamp_deploy_WR, 0)
 
 local beacon_counter_B = 0
 local beacon_counter_T = 0
-local nav_counter = 0
 
 local lan_light_counter_L = 0
 local lan_light_counter_R = 0
---local anticoll_counter = 0
 
 function update()
     local passed = get(frame_time)
 
-    -- Electrical supply coefficients.
     local coef_27_L = clamp(get(bus27_volt_left) / 28, 0, 1)
     local coef_27_R = clamp(get(bus27_volt_right) / 28, 0, 1)
     local coef_115 = bool2int(get(bus115_1_volt) > 110)
 
-    -- Cache control states used more than once during this frame.
     local landing_ext_L = get(landing_ext_set_L)
     local landing_ext_R = get(landing_ext_set_R)
     local landing_mode_L = get(landing_mode_set_L)
     local landing_mode_R = get(landing_mode_set_R)
     local landing_master = 1 - get(landing_light_off)
 
-    -- Landing-light failures.
     local fail_FL = get(lan_lamp_fail_FL)
     local fail_FR = get(lan_lamp_fail_FR)
     local fail_WL = get(lan_lamp_fail_WL)
     local fail_WR = get(lan_lamp_fail_WR)
 
-    -- Landing-light deployment animation.
-    -- Project grouping is intentionally preserved:
-    -- left control -> wing landing-light pair, right control -> front landing-light pair.
     if landing_ext_L == 1 and lan_light_counter_L < 1 then
         lan_light_counter_L = lan_light_counter_L + passed * 0.1 * coef_27_L
     elseif landing_ext_L == 0 and lan_light_counter_L > 0 then
@@ -157,7 +159,6 @@ function update()
     set(lamp_deploy_FR, lan_light_counter_R)
     set(lamp_deploy_WR, lan_light_counter_L)
 
-    -- Landing- and taxi-light output calculations.
     local lan_light_WL = 0
     local lan_light_WR = 0
     local lan_light_FL = 0
@@ -166,7 +167,6 @@ function update()
     local taxi_lit_R = 0
 
     if landing_mode_L == 1 then
-        -- Wing landing-light pair follows the actual deployment position.
         lan_light_WL = coef_27_L * lan_light_counter_L * (1 - fail_WL) * landing_master
         lan_light_WR = coef_27_R * lan_light_counter_L * (1 - fail_WR) * landing_master
     elseif landing_mode_L == -1 then
@@ -174,71 +174,35 @@ function update()
     end
 
     if landing_mode_R == 1 then
-        -- Front landing-light pair follows the actual deployment position.
         lan_light_FL = coef_27_L * lan_light_counter_R * (1 - fail_FL) * landing_master
         lan_light_FR = coef_27_R * lan_light_counter_R * (1 - fail_FR) * landing_master
     elseif landing_mode_R == -1 then
         taxi_lit_R = coef_27_R
     end
 
-    -- Nosewheel taxi lights must remain hidden until the nose gear is almost fully deployed.
     if get(deploy_ratio_1) <= 0.9 then
         taxi_lit_L = 0
         taxi_lit_R = 0
     end
 
-    -- Flight signal lights.
     local light_signal = get(light_signal_set)
     local flight_lit = light_signal * (coef_27_L + coef_27_R) * 0.5
     set(sim_spot, flight_lit)
 
-    -- Navigation lights.
     local nav_lit = get(nav_lights_set) * coef_27_R * bool2int(get(rel_lites_nav) ~= 6)
     if nav_lit > 0 then
         nav_lit = 1
     end
     set(sim_nav_light, nav_lit)
+    set(sim_strobes, nav_lit)
 
-    -- White wing navigation strobes.
-    -- Legacy alternating logic is intentionally retained as comments for future use.
-    -- if nav_counter < 1 and nav_lit == 1 and get(gear_defl) > 0.05 and get(wing_light) == 1 then
-    --     set(white_light_left, 1)
-    --     set(white_light_right, 0)
-    -- elseif nav_counter > 1 and nav_lit == 1 and get(gear_defl) > 0.05 and get(wing_light) == 1 then
-    --     set(white_light_left, 0)
-    --     set(white_light_right, 1)
-    -- else
-    --     set(white_light_left, 0)
-    --     set(white_light_right, 0)
-    -- end
+    -- The ACF tail strobe (index 3) is the single pulse source for all three
+    -- white flashes, preventing independent OBJ and ACF blink cycles.
+    local white_flash = bool2int(nav_lit == 1 and get(sim_strobe_tail_brt) > 0.5)
+    set(white_light_left, white_flash)
+    set(white_light_right, white_flash)
+    set(white_light_tail, white_flash)
 
-    if nav_counter < 0.03 and nav_lit == 1 then
-        set(white_light_left, 1)
-        set(white_light_right, 1)
-    else
-        set(white_light_left, 0)
-        set(white_light_right, 0)
-    end
-
-    nav_counter = nav_counter + passed
-    if nav_counter > 0.6 then
-        nav_counter = 0
-    end
-
-    -- Legacy anti-collision logic is intentionally retained as comments for future use.
-    -- local anticoll_lit = get(sim_anticollision_light) * coef_27_R * coef_115
-    -- if anticoll_lit > 0 then anticoll_lit = 1 end
-    --
-    -- if anticoll_counter < 0.05 and anticoll_lit == 1 then
-    --     set(anticoll_light, 1)
-    -- else
-    --     set(anticoll_light, 0)
-    -- end
-    --
-    -- anticoll_counter = anticoll_counter + passed
-    -- if anticoll_counter > 1.1 then anticoll_counter = 0 end
-
-    -- Red beacons.
     local beacons_lit = get(strobe_set) * coef_27_R * coef_115 * bool2int(get(rel_lites_beac) ~= 6)
     if beacons_lit > 0 then
         beacons_lit = 1
@@ -268,18 +232,14 @@ function update()
         beacon_counter_T = 0
     end
 
-    -- Tail logo light.
     local logo_lit = get(tail_light_set) * coef_27_R
     set(sim_logo, logo_lit)
 
-    -- Wing and cargo lights.
     local wing_L_lit = get(wing_light_left_set) * coef_27_L
     local wing_R_lit = get(wing_light_right_set) * coef_27_R
     local cargo_1_lit = get(cargo_1) * coef_27_L
     local cargo_2_lit = get(cargo_2) * coef_27_R
 
-    -- Electrical current consumption.
-    -- Flight-signal current is calculated independently for each bus to avoid double voltage scaling.
     local current_L =
         (lan_light_WL + lan_light_FL) * 40
         + taxi_lit_L * 16
@@ -296,7 +256,6 @@ function update()
         + wing_R_lit * 1.5
         + cargo_2_lit * 2
 
-    -- X-Plane light outputs. Original landing-light brightness scaling is preserved.
     set(sim_lan_FL, lan_light_FL * 1.5)
     set(sim_lan_FR, lan_light_FR * 1.5)
     set(sim_lan_WL, lan_light_WL * 1.5)
@@ -308,7 +267,6 @@ function update()
     set(sim_cargo_1, cargo_1_lit)
     set(sim_cargo_2, cargo_2_lit)
 
-    -- Virtual Airlines compatibility workaround.
     if lan_light_WL + lan_light_WR + lan_light_FL + lan_light_FR > 0 then
         set(sim_landing, 1)
     else

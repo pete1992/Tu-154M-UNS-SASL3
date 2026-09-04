@@ -1,13 +1,21 @@
 -- absu_ppn13.lua
--- PPN-13 ABSU monitoring panel, ported from the X-Plane 12 aircraft.
+-- PPN-13 ABSU monitoring panel
 
------------------------------------------------------------------------
--- Helpers and properties
------------------------------------------------------------------------
-local function bool2int(value)
-    return value and 1 or 0
-end
+--[[
+Changelog
+- Preserved the existing PPN-13 manipulator animation, failure lookup sequence,
+  diagnostic annunciators, lamp test, smoothing, and hydraulic/failure indications.
+- Replaced the unused absu_work readiness source with direct ABSU readiness logic.
+- Restored the original readiness criteria for PKP/MGV references, hydraulic pressure,
+  RA-56 servo availability, SAU/STU, TKS, ABSU damper/control failures, and STU test.
+- Kept the current RA-56 channel-to-failure mapping used by the PPN-13 failure scan so
+  the READY indication and diagnostic sequence cannot disagree.
+- The ABSU READY output now illuminates whenever the monitored ABSU systems are healthy;
+  lamp brightness and lamp-test behavior remain unchanged.
+- Kept all Dataref bindings in one defineProps() block.
+--]]
 
+-- local defineProps Function
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         defineProperty(def[1], def[3](def[2]))
@@ -67,11 +75,21 @@ defineProps({
     {"absu_contr_roll_fail", "tu154/custom/failures/absu_contr_roll_fail", globalPropertyi},
     {"absu_contr_pitch_fail","tu154/custom/failures/absu_contr_pitch_fail",globalPropertyi},
 
-    -- Power, lamp test and the already-computed ABSU readiness signal.
+    -- ABSU readiness sources.
+    {"pkp_fail_left",  "tu154/custom/bkk/pkp_fail_left",  globalPropertyi},
+    {"pkp_fail_right", "tu154/custom/bkk/pkp_fail_right", globalPropertyi},
+    {"mgv_contr_fail", "tu154/custom/bkk/mgv_contr_fail", globalPropertyi},
+    {"sau_stu_on",     "tu154/custom/switchers/ovhd/sau_stu_on", globalPropertyi},
+    {"tks_fail_left",  "tu154/custom/tks/fail_left",  globalPropertyi},
+    {"tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi},
+    {"absu_nav_on",       "tu154/custom/switchers/console/absu_nav_on",       globalPropertyi},
+    {"absu_landing_on",   "tu154/custom/switchers/console/absu_landing_on",   globalPropertyi},
+    {"absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2",    globalPropertyi},
+
+    -- Power and lamp test.
     {"bus27_volt_left",  "tu154/custom/elec/bus27_volt_left",  globalPropertyf},
     {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
     {"test_lights",      "tu154/custom/buttons/lamp_test_pa56", globalPropertyi},
-    {"absu_work",        "tu154/custom/lights/absu_work",       globalPropertyf},
 
     -- PPN-13 annunciator outputs.
     {"servo_pitch_lt", "tu154/custom/systems/absu/ppn13/servo_pitch_lt", globalPropertyf},
@@ -104,6 +122,10 @@ defineProps({
     {"ch4_lt",         "tu154/custom/systems/absu/ppn13/ch4_lt",         globalPropertyf},
     {"absu_ready_lt",  "tu154/custom/systems/absu/ppn13/absu_ready_lt",  globalPropertyf},
 })
+
+local function bool2int(value)
+    return value and 1 or 0
+end
 
 local lightOutputs = {
     servo_pitch_lt = servo_pitch_lt,
@@ -181,6 +203,140 @@ local function updateAnimations(frameTime)
         if get(test_svk) ~= 0 then set(test_svk, 0) end
         if get(test_absu) ~= 0 then set(test_absu, 0) end
     end
+end
+
+-----------------------------------------------------------------------
+-- ABSU readiness
+-----------------------------------------------------------------------
+local stuTestElapsed = 0
+
+local function hasSufficientHydraulicPressure()
+    local lowPressureSystems =
+        bool2int(get(pressure_ind_1) < 100) +
+        bool2int(get(pressure_ind_2) < 100) +
+        bool2int(get(pressure_ind_3) < 100)
+
+    return lowPressureSystems < 2
+end
+
+local function getPitchServoChannels()
+    local failure = get(absu_ra56_pitch_fail)
+
+    local channel1 =
+        get(hydro_ra56_elev_1) ~= 0
+        and failure ~= 3
+
+    local channel2 =
+        get(hydro_ra56_elev_2) ~= 0
+        and failure < 2
+
+    local channel3 =
+        get(hydro_ra56_elev_3) ~= 0
+        and failure == 0
+
+    return channel1, channel2, channel3
+end
+
+local function getRollServoChannels()
+    local failure = get(absu_ra56_roll_fail)
+
+    local channel1 =
+        get(hydro_ra56_ail_1) ~= 0
+        and failure ~= 3
+
+    local channel2 =
+        get(hydro_ra56_ail_2) ~= 0
+        and failure < 1
+
+    local channel3 =
+        get(hydro_ra56_ail_3) ~= 0
+        and failure < 2
+
+    return channel1, channel2, channel3
+end
+
+local function getYawServoChannels()
+    local failure = get(absu_ra56_yaw_fail)
+
+    local channel1 =
+        get(hydro_ra56_rud_1) ~= 0
+        and failure ~= 3
+
+    local channel2 =
+        get(hydro_ra56_rud_2) ~= 0
+        and failure < 1
+
+    local channel3 =
+        get(hydro_ra56_rud_3) ~= 0
+        and failure < 2
+
+    return channel1, channel2, channel3
+end
+
+local function updateStuTestTimer(frameTime)
+    local navPrepared = get(absu_nav_on) == 1
+    local landingPrepared = get(absu_landing_on) == 1
+
+    if get(absu_speed_test_2) == 1 and (navPrepared or landingPrepared) then
+        stuTestElapsed = stuTestElapsed + frameTime
+    else
+        stuTestElapsed = 0
+    end
+end
+
+local function isAbsuReady(frameTime)
+    updateStuTestTimer(frameTime)
+
+    if not hasSufficientHydraulicPressure() then
+        return false
+    end
+
+    local pitch1, pitch2, pitch3 = getPitchServoChannels()
+    local roll1, roll2, roll3 = getRollServoChannels()
+    local yaw1, yaw2, yaw3 = getYawServoChannels()
+
+    local pitchServosReady =
+        bool2int(pitch1) + bool2int(pitch2) + bool2int(pitch3) > 1
+
+    local rollServosReady =
+        bool2int(roll1) + bool2int(roll2) + bool2int(roll3) > 1
+
+    local yawServosReady =
+        bool2int(yaw1) + bool2int(yaw2) + bool2int(yaw3) > 1
+
+    local channel1Working = pitch1 or roll1 or yaw1
+    local channel2Working = pitch2 or roll2 or yaw2
+    local channel3Working = pitch3 or roll3 or yaw3
+
+    local attitudeReferencesReady =
+        get(pkp_fail_left)
+        + get(pkp_fail_right)
+        + get(mgv_contr_fail) < 2
+
+    local tksReady =
+        get(tks_fail_left) + get(tks_fail_right) == 0
+
+    local dampersReady =
+        get(absu_damp_roll_fail) == 0
+        and get(absu_damp_pitch_fail) == 0
+        and get(absu_damp_yaw_fail) == 0
+
+    local controlsReady =
+        get(absu_contr_roll_fail) == 0
+        and get(absu_contr_pitch_fail) == 0
+
+    return attitudeReferencesReady
+        and pitchServosReady
+        and rollServosReady
+        and yawServosReady
+        and channel1Working
+        and channel2Working
+        and channel3Working
+        and get(sau_stu_on) == 1
+        and tksReady
+        and stuTestElapsed < 0.5
+        and dampersReady
+        and controlsReady
 end
 
 -----------------------------------------------------------------------
@@ -263,10 +419,7 @@ local function updateFailureScan(frameTime)
     end
     scan.elapsed = scan.elapsed + frameTime
 
-    local hydraulicsAvailable =
-        bool2int(get(pressure_ind_1) < 100) +
-        bool2int(get(pressure_ind_2) < 100) +
-        bool2int(get(pressure_ind_3) < 100) < 2
+    local hydraulicsAvailable = hasSufficientHydraulicPressure()
 
     if scan.state == states.servo_pitch then
         local failure = get(absu_ra56_pitch_fail)
@@ -316,7 +469,7 @@ local function updateLights(frameTime)
     )
     local testBrightness = get(test_lights) * rightVoltage
 
-    lampTargets.absu_ready_lt = bool2int(get(absu_work) > 0)
+    lampTargets.absu_ready_lt = bool2int(isAbsuReady(frameTime))
 
     for name, property in pairs(lightOutputs) do
         local target = math.max(lampTargets[name] * normalBrightness, testBrightness)

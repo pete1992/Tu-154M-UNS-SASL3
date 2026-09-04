@@ -89,12 +89,10 @@ components = {
 		ark_tens_right = globalPropertyi("tu154/custom/switchers/ovhd/ark_2_tens_right"), --   1 - 10 (0)
 		ark_ones_right = globalPropertyi("tu154/custom/switchers/ovhd/ark_2_ones_right"), --   0 - 9
 		ark_ramka = globalPropertyi("tu154/custom/buttons/ovhd/ark_2_ramka"), --  
-
 		-- light
 		ark_left_lit = globalPropertyf("tu154/custom/lights/ark2_left_lit"), --     1
 		ark_right_lit = globalPropertyf("tu154/custom/lights/ark2_right_lit"), --     1
 		ark_all_lit = globalPropertyf("tu154/custom/lights/ark2_all_lit"), --   1
-		
 		bus27_volt = globalPropertyf("tu154/custom/elec/bus27_volt_right"),
 		bus36_volt = globalPropertyf("tu154/custom/elec/bus36_volt_right"),
 		ark15_cc = globalPropertyf("tu154/custom/radio/ark15_R_cc"), --   

@@ -13,6 +13,7 @@ createGlobalPropertyi("tu154/custom/tcas/vvi_left_new",0)
 createGlobalPropertyi("tu154/custom/failures/apu_pta6_fail", 0) -- PTA-6A tachometer converter failure
 createGlobalPropertyf("tu154/custom/anim/tiller_pos", 0)
 createGlobalPropertyi("tu154/custom/hydro/nosewheel_turn_power", 0)
+createGlobalPropertyi("tu154/custom/lights/white_light_tail", 0)
 
 -- PPN-13 controls and animations. The source aircraft uses the same names
 -- without the project-wide /custom namespace.
