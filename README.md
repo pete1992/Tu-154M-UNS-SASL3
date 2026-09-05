@@ -1,10 +1,18 @@
-# Tu-154 UNS
+<img width="2172" height="724" alt="tu154_uns_header" src="https://github.com/user-attachments/assets/de4cc515-8e23-458c-9fa4-3f7512c2da3d" />
 
-Tu-154 UNS is a continued development and modernization project for the Tupolev Tu-154M in X-Plane 11.
+<p align="center">
+  <i>Still Soviet. Just slightly less broken.</i>
+</p>
 
-The project focuses on preserving the character and complexity of the original aircraft while modernizing the underlying Lua code, improving SASL 3 compatibility, correcting legacy system behaviour and refining the flight model using available Tu-154M documentation and flight-test data.
+Tu-154 UNS is a continued development and modernization project for the
+Tupolev Tu-154M in X-Plane 11.
 
-Current release: **2.0.9**
+The project focuses on preserving the character and complexity of the original
+aircraft while modernizing the underlying Lua code, improving SASL 3 compatibility,
+correcting legacy system behaviour and refining the flight model using available
+Tu-154M documentation and flight-test data.
+
+**Current release: 2.0.9**
 
 ---
 
