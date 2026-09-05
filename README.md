@@ -1,23 +1,64 @@
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/Unicode4all/Tu-154">
-    <img src="https://user-images.githubusercontent.com/4706357/192863670-7191a7d1-cb96-4934-aa3d-3c4820709644.png" alt="Logo" width="512" height="288">
+# Tu-154 UNS
 
-  </a>
+Tu-154 UNS is a continued development and modernization project for the Tupolev Tu-154M in X-Plane 11.
 
-<h1 align="center">Tu-154 Community Edition</h3>
+The project focuses on preserving the character and complexity of the original aircraft while modernizing the underlying Lua code, improving SASL 3 compatibility, correcting legacy system behaviour and refining the flight model using available Tu-154M documentation and flight-test data.
 
-  <p align="center">
-    The community continuation of Tu-154 by Felis for X-Plane
-</div>
+Current release: **2.0.9**
 
-## Contributing
+---
 
-This repo is called Tu-154 *Community Edition* for a reason! Taking the awesome Tu-154 to a new level takes great effort so we welcome any contributions from the community, be it a feature request issue or even a pull request. Here's a short guide on how to contribute:
+## About the Project
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature`)
-3. Commit your Changes (`git commit -m 'Add feature'`)
-4. Push to the Branch (`git push origin feature`)
-5. Open a Pull Request
+The Tu-154 is not a simple aircraft, and this project is intentionally not trying to turn it into one.
+
+The goal of Tu-154 UNS is to retain the systems-heavy nature of the aircraft while improving:
+
+- SASL 3 compatibility
+- system reliability
+- flight-control behaviour
+- aerodynamics
+- cockpit logic
+- navigation systems
+- electrical systems
+- lighting
+- APU simulation
+- failure simulation
+- code quality and maintainability
+
+A major principle of the project is:
+
+> Preserve working behaviour first.  
+> Correct incorrect behaviour second.  
+> Improve and extend only after the existing system has been understood.
+
+---
+
+## Requirements
+
+- X-Plane 11
+- 64-bit operating system
+- SASL 3 compatible environment
+
+The aircraft is developed primarily for **X-Plane 11**.
+
+X-Plane 12 compatibility is not currently the primary development target.
+
+---
+
+## Installation
+
+1. Download or clone the repository.
+2. Copy the complete aircraft folder into:
+
+X-Plane 11/Aircraft/
+Example:
+
+X-Plane 11/
+└── Aircraft/
+    └── Tu-154 UNS/
+Start X-Plane 11.
+Select the Tu-154M from the aircraft menu.
+Allow the aircraft and SASL components to finish initialization before operating cockpit systems.
+
+When updating an existing installation, replacing the complete aircraft folder is recommended unless otherwise stated in the release notes.
