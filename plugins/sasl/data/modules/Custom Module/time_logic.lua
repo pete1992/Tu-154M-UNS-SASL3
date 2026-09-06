@@ -1,10 +1,10 @@
+-- time_logic.lua
 -- this is time logic for all scripts
 
 -- sim time
 --defineProperty("sim_run_time", globalPropertyf("sim/time/total_flight_time_sec")) -- sim time
 defineProperty("M", globalPropertyf("sim/flightmodel/position/M"))  -- some momentum of aircraft. it's remein one value, when sim paused
 defineProperty("sim_run_time", globalPropertyf("sim/time/total_running_time_sec")) -- sim time
-
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
 
 local time_last = get(sim_run_time)  -- time for previous frame

@@ -1,3 +1,4 @@
+-- stall.lua
 -- Tu-154M v4.3.1 aggressive asymmetric stall / flat-spin entry for XP11.55.
 --
 -- The user's XP11.55 DataRefs.txt does not contain X-Plane 12.1's per-element
@@ -19,12 +20,10 @@ defineProperty("true_airspeed", globalPropertyf("sim/flightmodel/position/true_a
 defineProperty("air_density", globalPropertyf("sim/weather/rho"))
 defineProperty("total_mass", globalPropertyf("sim/flightmodel/weight/m_total"))
 defineProperty("gravity", globalPropertyf("sim/weather/gravity_mss"))
-
 defineProperty("raw_pitch", globalPropertyf("tu154/custom/SC/yoke_pitch_ratio"))
 defineProperty("raw_roll", globalPropertyf("tu154/custom/SC/yoke_roll_ratio"))
 defineProperty("raw_yaw", globalPropertyf("tu154/custom/SC/yoke_heading_ratio"))
 defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time"))
-
 defineProperty("flap_inner_left", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def"))
 defineProperty("flap_inner_right", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def"))
 defineProperty("flap_middle_left", globalPropertyf("sim/flightmodel/controls/wing2l_fla2def"))
@@ -34,12 +33,10 @@ defineProperty("gear_left", globalProperty("sim/flightmodel2/gear/deploy_ratio[1
 defineProperty("gear_right", globalProperty("sim/flightmodel2/gear/deploy_ratio[2]"))
 defineProperty("elevator_left", globalPropertyf("sim/flightmodel/controls/hstab1_elv1def"))
 defineProperty("elevator_right", globalPropertyf("sim/flightmodel/controls/hstab2_elv1def"))
-
 defineProperty("on_ground", globalPropertyi("sim/flightmodel/failures/onground_any"))
 defineProperty("paused", globalPropertyi("sim/time/paused"))
 defineProperty("in_replay", globalPropertyi("sim/time/is_in_replay"))
 defineProperty("smartcopilot_master", globalPropertyf("scp/api/ismaster"))
-
 -- XP11.55-safe additive force and moment inputs. X-Plane resets these every
 -- physics cycle; this component reads, adds, and writes so other plugins remain
 -- additive owners of their own contributions.
@@ -53,7 +50,6 @@ local STATE_NORMAL = 0
 local STATE_ENTRY = 1
 local STATE_SPIN_HOLD = 2
 local STATE_RECOVERY = 3
-
 local SIDE_LEFT = -1
 local SIDE_RIGHT = 1
 
