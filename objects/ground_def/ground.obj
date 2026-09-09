@@ -62307,7 +62307,7 @@ TRIS 20568 42
 ATTR_cull
 TRIS 20610 3876
 ANIM_begin
-ANIM_hide -4.600000 4.600000 tu154/custom/anim/fuel_tanker float
+ANIM_hide -4.600000 4.600000 tu154/custom/anim/fuel_tanker
 TRIS 24486 2220
 ANIM_end
 ANIM_begin
@@ -62335,7 +62335,7 @@ ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans 14.085100 -4.179960 -8.171000 14.085100 -4.179960 -8.171000 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 0.000000 -1.000000 tu154/custom/anim/fuel_tanker float
+ANIM_rotate_begin 0.000000 0.000000 -1.000000 tu154/custom/anim/fuel_tanker
 ANIM_rotate_key -501.000000 0.000000
 ANIM_rotate_key -4.500000 0.000000
 ANIM_rotate_key -2.000000 720.000000
@@ -62412,7 +62412,7 @@ ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans 14.950200 -5.320490 -5.242300 14.950200 -5.320490 -5.242300 0.000000 0.000000 none
-ANIM_rotate_begin -1.000000 0.000000 0.000000 tu154/custom/anim/fuel_tanker float
+ANIM_rotate_begin -1.000000 0.000000 0.000000 tu154/custom/anim/fuel_tanker
 ANIM_rotate_key -501.000000 -4736.000000
 ANIM_rotate_key -50.000000 -4736.000000
 ANIM_rotate_key -5.000000 0.000000
@@ -62425,7 +62425,7 @@ TRIS 33708 5160
 ANIM_end
 ANIM_begin
 ANIM_trans 14.950200 -5.320490 -4.012800 14.950200 -5.320490 -4.012800 0.000000 0.000000 none
-ANIM_rotate_begin -1.000000 0.000000 0.000000 tu154/custom/anim/fuel_tanker float
+ANIM_rotate_begin -1.000000 0.000000 0.000000 tu154/custom/anim/fuel_tanker
 ANIM_rotate_key -501.000000 -4736.000000
 ANIM_rotate_key -50.000000 -4736.000000
 ANIM_rotate_key -5.000000 0.000000
@@ -62656,7 +62656,7 @@ ATTR_cull
 TRIS 57612 9063
 ANIM_begin
 ANIM_trans 24.077600 -5.321710 -8.166410 24.077600 -5.321710 -8.166410 0.000000 0.000000 none
-ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/xap/groundserv/cater/move_to_cater
+ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/anim/catering
 ANIM_rotate_key -46.500000 -3765.000000
 ANIM_rotate_key -10.000000 0.000000
 ANIM_rotate_key 10.000000 0.000000
@@ -62722,9 +62722,9 @@ ANIM_trans -27.296700 5.101660 7.224220 -27.296700 5.101660 7.224220 0.000000 0.
 LIGHT_NAMED taillight 27.296700 -5.101660 -7.224220
 ANIM_end
 ANIM_begin
-ANIM_hide -5.000000 5.000000 tu154/custom/anim/catering float
+ANIM_hide -5.000000 5.000000 tu154/custom/anim/catering
 ANIM_begin
-ANIM_hide 29.200001 501.000000 tu154/custom/anim/catering float
+ANIM_hide 29.200001 501.000000 tu154/custom/anim/catering
 ANIM_begin
 ANIM_trans 18.302000 -4.594460 -7.073390 18.302000 -4.594460 -7.073390 0.000000 0.000000 none
 ANIM_rotate 0.000000 1.000000 0.000000 90.000000 90.000000 0.000000 1.000000 tu154/custom/anim/catering

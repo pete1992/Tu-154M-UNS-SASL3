@@ -43,7 +43,7 @@ defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt
 defineProperty("xpdr_code", globalPropertyf("sim/cockpit/radios/transponder_code"))
 defineProperty("xpdr_mode", globalPropertyf("sim/cockpit/radios/transponder_mode")) 
 defineProperty("xpdr_led", globalPropertyf("sim/cockpit/radios/transponder_light"))
-defineProperty("xpdr_fail", globalPropertyi("sim/operation/failures/rel_g_xpndr"))
+defineProperty("xpdr_fail", globalPropertyi("sim/operation/failures/rel_xpndr"))
 
 defineProperty("ovhd_mode", globalPropertyi("tu154/custom/switchers/ovhd/transponder_mode"))
 

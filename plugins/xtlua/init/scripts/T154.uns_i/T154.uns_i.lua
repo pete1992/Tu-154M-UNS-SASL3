@@ -7,7 +7,7 @@ function deferred_dataref(name,type,notifier)
 end
 
 
-simDR_gps_power = find_dataref("sim/cockpit2/radios/actuators/gps_power")
+-- GPS1 power is owned by the SASL GNS supplement, including both UNS requests.
 simDR_bus27left = find_dataref("tu154/custom/elec/bus27_volt_left")
 simDR_bus27right = find_dataref("tu154/custom/elec/bus27_volt_right")
 simDR_vor1_m_a = find_dataref("tu154/custom/switchers/nav_1_man_auto")
@@ -51,13 +51,6 @@ function after_physics()
             uns_brt_r = simDR_uns_brt[16]
     end 
     
-    if uns1_on > 0 then
-        simDR_gps_power = 1
-    elseif uns2_on > 0 then
-        simDR_gps_power = 1
-    else
-        simDR_gps_power = 0
-    end
     if vor1_auto > 0 and sw_sound < 1 then
         if simDR_sw_sound > -2 then
             simDR_sw_sound = -2

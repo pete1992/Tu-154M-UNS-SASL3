@@ -100267,7 +100267,7 @@ ATTR_cull
 TRIS 111339 1920
 ANIM_begin
 ANIM_trans 23.297701 -5.124520 -8.161110 23.297701 -5.124520 -8.161110 0.000000 0.000000 none
-ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/xap/groundserv/cater/move_to_cater
+ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/anim/catering
 ANIM_rotate_key -46.500000 -3765.000244
 ANIM_rotate_key -10.000000 0.000000
 ANIM_rotate_key 10.000000 0.000000

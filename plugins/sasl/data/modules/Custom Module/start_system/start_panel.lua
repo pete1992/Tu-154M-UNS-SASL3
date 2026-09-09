@@ -14,7 +14,7 @@ Changelog
 
 -- Added for X-Plane 11 / X-Plane 12 compatibility.
 defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) > 120000
+local XP11 = get(xp_version) < 120000
 
 -- Start-up panel logic.
 local function defineProps(defs)

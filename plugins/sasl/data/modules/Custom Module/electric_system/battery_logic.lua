@@ -37,11 +37,19 @@ local current_table = {
     { 20000, 1000 }
 }
 
-local bat_capacity = 75 - math.random() * 1.5 -- Initial battery capacity (Ah)
+local RATED_CAPACITY_AH = 75
+local bat_capacity = RATED_CAPACITY_AH - math.random() * 1.5 -- Initial battery capacity (Ah)
 local BAT_CURRENT_COEF = 2    -- Charging current per Ah
 local kz_timer = 0            -- Overheat timer (s)
 local KzTimer = 1             -- Thermal runaway increment
 local thermo = 20             -- Initial temperature (°C)
+
+-- Capacity controls endurance; state of charge controls the 27 V battery curve.
+-- Using Ah directly with the old 2.5 divisor produced 47 V at 75 Ah.
+local function batteryVoltage(capacity, thermal_loss, current)
+    local state_of_charge = math.max(0, math.min(1, (capacity - thermal_loss) / RATED_CAPACITY_AH))
+    return math.max(0, 17 + 10 * state_of_charge - 1.5 * current / 100)
+end
 
 function update()
     local MASTER = get(ismaster) ~= 1
@@ -63,13 +71,13 @@ function update()
     end
 
     if MASTER and passed > 0 then
-        local bat_volt = 17 + ((bat_capacity - kz_timer) / 2.5) - 1.5 * bat_amp / 100
+        local bat_volt = batteryVoltage(bat_capacity, kz_timer, bat_amp)
 
         if bat_on == 1 then -- Battery is ON, proceed with calculations
             -- Discharge if battery is bus source
             if get(bat_source) == 1 then
                 bat_capacity = bat_capacity - bat_amp * passed / 3600
-                bat_volt = 17 + ((bat_capacity - kz_timer) / 2.5) - 1.5 * bat_amp / 100
+                bat_volt = batteryVoltage(bat_capacity, kz_timer, bat_amp)
                 if bat_capacity < 2 then bat_volt = 3 end
                 set(bat_amp_cc, 0)
             else
@@ -118,7 +126,7 @@ function update()
             end
             set(bat_thermo, thermo)
             -- Voltage latches to last state
-            set(bat_volt_bus, 17 + ((bat_capacity - kz_timer) / 2.5) - 1.5 * bat_amp / 100)
+            set(bat_volt_bus, batteryVoltage(bat_capacity, kz_timer, bat_amp))
         end
     end
 end

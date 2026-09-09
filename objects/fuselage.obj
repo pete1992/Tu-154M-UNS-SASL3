@@ -3,7 +3,6 @@ I
 OBJ
 
 TEXTURE		fuselage.png
-TEXTURE_LIT	fuselage_LIT.png
 TEXTURE_NORMAL	fuselage_NML.png
 POINT_COUNTS	19042 0 0 77715
 GLOBAL_specular 1.0

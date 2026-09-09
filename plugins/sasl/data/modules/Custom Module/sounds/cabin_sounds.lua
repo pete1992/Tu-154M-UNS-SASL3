@@ -94,7 +94,7 @@ defineProps({
 -- Added compatibility binding; all existing bindings above remain unchanged.
 defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
 
-local XP11 = get(xp_version) > 120000
+local XP11 = get(xp_version) < 120000
 
 local function playPanelSample(sample, looped)
     if XP11 then

@@ -69,6 +69,10 @@ defineProps({
 -- ----------------------------------------------------------------------------
 -- Helpers
 -- ----------------------------------------------------------------------------
+local function finiteNumber(value)
+	return type(value) == "number" and value == value and math.abs(value) < math.huge
+end
+
 local function clamp(v, lo, hi)
 	if v < lo then return lo end
 	if v > hi then return hi end
@@ -168,10 +172,15 @@ function update()
 	local plane_y = get(pos_y)
 	local plane_z = get(pos_z)
 
-	-- Terrain probe (keep exact call signature and returns)
-	local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(
-		plane_x, plane_y, plane_z
-	)
+	-- SASL returns water as numeric 0/1, and only after a terrain hit.
+	local terrain_valid = false
+	local terrain_wet = false
+	if finiteNumber(plane_x) and finiteNumber(plane_y) and finiteNumber(plane_z) then
+		local prob, x, y, z, nx, ny, nz, vx, vy, vz, wet = sasl.probeTerrain(plane_x, plane_y, plane_z)
+		terrain_valid = prob == PROBE_HIT_TERRAIN and finiteNumber(x) and finiteNumber(y)
+			and finiteNumber(z) and (wet == 0 or wet == 1)
+		terrain_wet = terrain_valid and wet == 1
+	end
 
 	-- NVU mode selector
 	local nvu_mode = get(nvu_calc_set)
@@ -191,7 +200,7 @@ function update()
 	-- A1) Auto availability with hysteresis + enable/disable delay
 	-- ----------------------------------------------------------------------------
 	-- Base constraints (same intent as original, but made hysteresis-aware)
-	local wet_block = (isWet and diss_sw == 1) or (wave_amp < 0.1 and isWet)
+	local wet_block = terrain_wet and (diss_sw == 1 or wave_amp < 0.1)
 
 	-- Hysteresis thresholds depend on latch state
 	local gs_ok = false
@@ -204,7 +213,7 @@ function update()
 		roll_ok = roll_abs <= AUTO_ROLL_ON_DEG
 	end
 
-	local auto_candidate = (power and not fail and nvu_mode == 1 and roll_ok and gs_ok and not wet_block)
+	local auto_candidate = (terrain_valid and power and not fail and nvu_mode == 1 and roll_ok and gs_ok and not wet_block)
 
 	-- Apply enable/disable delays
 	if nvu_mode ~= 1 or not power or fail then
@@ -268,7 +277,7 @@ function update()
 
 		-- B5) Validity gate: refuse to update auto solution if inputs are not credible
 		-- Auto is only meaningful if TAS and GS are above minimal levels and we have stable dt
-		local auto_valid = (passed > 0) and (TAS_ms > 30) and (g_spd > 30)
+		local auto_valid = terrain_valid and (passed > 0) and (TAS_ms > 30) and (g_spd > 30)
 
 		if auto_valid then
 			local slip_rad = math.rad(slip_angle)

@@ -86,6 +86,26 @@ local mode_7_active = false
 
 local test_counter = 0
 
+-- Terrain coordinates exist only after a successful SASL probe. Reject non-finite
+-- coordinates and conversion results while scenery loads or the origin changes.
+local function finiteNumber(value)
+    return type(value) == "number" and value == value and math.abs(value) < math.huge
+end
+
+local function localAltitude(x, y, z)
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    local lat, lon, alt = sasl.localToWorld(x, y, z)
+    if finiteNumber(alt) then return alt end
+    return nil
+end
+
+local function terrainAltitude(x, y, z)
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    local result, hitX, hitY, hitZ, nx, ny, nz, vx, vy, vz, wet = sasl.probeTerrain(x, y, z)
+    if result ~= PROBE_HIT_TERRAIN then return nil end
+    return localAltitude(hitX, hitY, hitZ), wet
+end
+
 function update()
 	local mode = get(mode_set)
 	
@@ -315,7 +335,8 @@ function update()
 		local plane_y = get(pos_y)
 		local plane_z = get(pos_z)
 			
-		local acf_lat, acf_lon, acf_alt = sasl.localToWorld(plane_x, plane_y, plane_z)
+		local acf_alt = localAltitude(plane_x, plane_y, plane_z)
+		if not acf_alt then mode_7_active = false end
 		
 		local max_dist = GS * 60 -- distance of forecast
 		
@@ -356,6 +377,7 @@ function update()
 			local right_x = -dir_z; -- vector to the right
 			local right_z = dir_x;
 			
+			res_left = 0 -- discard the previous scan when terrain is unavailable
 			for row = 1, rows, 1 do
 
 				local dist = max_dist * row/rows
@@ -363,28 +385,29 @@ function update()
 				local p_x = plane_x + dir_x * dist - right_x * 250
 				local p_z = plane_z + dir_z * dist - right_z * 250
 				
-				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
-				local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
-				
-				local gnd_alt = alt - acf_alt
+				local alt = terrainAltitude(p_x, plane_y, p_z)
+				if alt then
+					local gnd_alt = alt - acf_alt
 
-				-- calculate threat zone 2
-				if dist < x_1 then
-					if gnd_alt > line(dist, 0, y_0, x_1, y_1) then res_left = 2 break end
-				elseif dist < x_3 then
-					if gnd_alt > line(dist, x_1, y_1, x_3, y_2) then res_left = 2 break end
-				elseif dist < x_4 then
-					if gnd_alt > line(dist, x_3, y_3, x_4, y_4) then res_left = 2 break end
-				end
+					-- calculate threat zone 2
+					if dist < x_1 then
+						if gnd_alt > line(dist, 0, y_0, x_1, y_1) then res_left = 2 break end
+					elseif dist < x_3 then
+						if gnd_alt > line(dist, x_1, y_1, x_3, y_2) then res_left = 2 break end
+					elseif dist < x_4 then
+						if gnd_alt > line(dist, x_3, y_3, x_4, y_4) then res_left = 2 break end
+					end
 
-				if dist < x_5 then
-					if gnd_alt > line(dist, 0, y_0, x_5, y_5) then res_left = 1 break end
-				elseif dist < x_6 then
-					if gnd_alt > y_5 then res_left = 1 break end
-				elseif dist < x_7 then
-					if gnd_alt > line(dist, x_6, y_6, x_7, y_7) then res_left = 1 break end
-				else res_left = 0 
-				
+					if dist < x_5 then
+						if gnd_alt > line(dist, 0, y_0, x_5, y_5) then res_left = 1 break end
+					elseif dist < x_6 then
+						if gnd_alt > y_5 then res_left = 1 break end
+					elseif dist < x_7 then
+						if gnd_alt > line(dist, x_6, y_6, x_7, y_7) then res_left = 1 break end
+					else res_left = 0 
+					
+					end
+
 				end
 
 			end	
@@ -407,6 +430,7 @@ function update()
 			local right_x = -dir_z; -- vector to the right
 			local right_z = dir_x;
 			
+			res_ctr = 0 -- discard the previous scan when terrain is unavailable
 			for row = 1, rows, 1 do
 
 				local dist = max_dist * row/rows
@@ -414,31 +438,32 @@ function update()
 				local p_x = plane_x + dir_x * dist
 				local p_z = plane_z + dir_z * dist
 				
-				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
-				local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
-				
-				local gnd_alt = alt - acf_alt
+				local alt = terrainAltitude(p_x, plane_y, p_z)
+				if alt then
+					local gnd_alt = alt - acf_alt
 
-				-- calculate threat zone 2
-				if dist < x_1 then
-					if gnd_alt > line(dist, 0, y_0, x_1, y_1) then res_ctr = 2 break end
-				elseif dist < x_3 then
-					if gnd_alt > line(dist, x_1, y_1, x_3, y_2) then res_ctr = 2 break end
-				elseif dist < x_4 then
-					if gnd_alt > line(dist, x_3, y_3, x_4, y_4) then res_ctr = 2 break end
+					-- calculate threat zone 2
+					if dist < x_1 then
+						if gnd_alt > line(dist, 0, y_0, x_1, y_1) then res_ctr = 2 break end
+					elseif dist < x_3 then
+						if gnd_alt > line(dist, x_1, y_1, x_3, y_2) then res_ctr = 2 break end
+					elseif dist < x_4 then
+						if gnd_alt > line(dist, x_3, y_3, x_4, y_4) then res_ctr = 2 break end
+					end
+
+					if dist < x_5 then
+						if gnd_alt > line(dist, 0, y_0, x_5, y_5) then res_ctr = 1 break end
+					elseif dist < x_6 then
+						if gnd_alt > y_5 then res_ctr = 1 break end
+					elseif dist < x_7 then
+						if gnd_alt > line(dist, x_6, y_6, x_7, y_7) then res_ctr = 1 break end
+					else res_ctr = 0 
+					
+					end
+					--print("mode 7  ", res_ctr, "  ")
+					
 				end
 
-				if dist < x_5 then
-					if gnd_alt > line(dist, 0, y_0, x_5, y_5) then res_ctr = 1 break end
-				elseif dist < x_6 then
-					if gnd_alt > y_5 then res_ctr = 1 break end
-				elseif dist < x_7 then
-					if gnd_alt > line(dist, x_6, y_6, x_7, y_7) then res_ctr = 1 break end
-				else res_ctr = 0 
-				
-				end
-				--print("mode 7  ", res_ctr, "  ")
-				
 			end				
 			
 			mode7_center_done = true
@@ -459,6 +484,7 @@ function update()
 			local right_x = -dir_z; -- vector to the right
 			local right_z = dir_x;
 			
+			res_right = 0 -- discard the previous scan when terrain is unavailable
 			for row = 1, rows, 1 do
 
 				local dist = max_dist * row/rows
@@ -466,28 +492,29 @@ function update()
 				local p_x = plane_x + dir_x * dist + right_x * 250
 				local p_z = plane_z + dir_z * dist + right_z * 250
 				
-				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
-				local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ) -- we need alt of prob from here
-				
-				local gnd_alt = alt - acf_alt
+				local alt = terrainAltitude(p_x, plane_y, p_z)
+				if alt then
+					local gnd_alt = alt - acf_alt
 
-				-- calculate threat zone 2
-				if dist < x_1 then
-					if gnd_alt > line(dist, 0, y_0, x_1, y_1) then res_right = 2 break end
-				elseif dist < x_3 then
-					if gnd_alt > line(dist, x_1, y_1, x_3, y_2) then res_right = 2 break end
-				elseif dist < x_4 then
-					if gnd_alt > line(dist, x_3, y_3, x_4, y_4) then res_right = 2 break end
-				end
+					-- calculate threat zone 2
+					if dist < x_1 then
+						if gnd_alt > line(dist, 0, y_0, x_1, y_1) then res_right = 2 break end
+					elseif dist < x_3 then
+						if gnd_alt > line(dist, x_1, y_1, x_3, y_2) then res_right = 2 break end
+					elseif dist < x_4 then
+						if gnd_alt > line(dist, x_3, y_3, x_4, y_4) then res_right = 2 break end
+					end
 
-				if dist < x_5 then
-					if gnd_alt > line(dist, 0, y_0, x_5, y_5) then res_right = 1 break end
-				elseif dist < x_6 then
-					if gnd_alt > y_5 then res_right = 1 break end
-				elseif dist < x_7 then
-					if gnd_alt > line(dist, x_6, y_6, x_7, y_7) then res_right = 1 break end
-				else res_right = 0 
-				
+					if dist < x_5 then
+						if gnd_alt > line(dist, 0, y_0, x_5, y_5) then res_right = 1 break end
+					elseif dist < x_6 then
+						if gnd_alt > y_5 then res_right = 1 break end
+					elseif dist < x_7 then
+						if gnd_alt > line(dist, x_6, y_6, x_7, y_7) then res_right = 1 break end
+					else res_right = 0 
+					
+					end
+
 				end
 
 			end				

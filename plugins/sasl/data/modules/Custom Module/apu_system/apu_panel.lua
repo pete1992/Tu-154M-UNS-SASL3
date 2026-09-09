@@ -74,6 +74,19 @@ defineProps({
 --    { "acf_has_APU_switch", "sim/aircraft/overflow/acf_has_APU_switch", globalPropertyi }, 
     { "rel_APU_press", "sim/operation/failures/rel_APU_press", globalPropertyi },
     { "bleed_air_mode", "sim/cockpit2/pressurization/actuators/bleed_air_mode", globalPropertyi }, -- 0 off, 1 left, 2 both, 3 right, 4 APU, 5 auto
+    -- XP12 pneumatic bridge; native starters require the corresponding duct.
+    { "xp_version", "sim/version/xplane_internal_version", globalPropertyi },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    { "apu_burning_fuel", "tu154/custom/elec/apu_burning_fuel", globalPropertyf },
+    { "start_sys_work", "tu154/custom/start/start_sys_work", globalPropertyi },
+    { "asu_press", "tu154/custom/asu/press", globalPropertyf },
+    { "native_apu_bleed", "sim/cockpit2/bleedair/actuators/apu_bleed", globalPropertyi },
+    { "native_gpu_bleed", "sim/cockpit2/bleedair/actuators/gpu_bleed", globalPropertyi },
+    { "native_isol_left", "sim/cockpit2/bleedair/actuators/isol_valve_left", globalPropertyi },
+    { "native_isol_right", "sim/cockpit2/bleedair/actuators/isol_valve_right", globalPropertyi },
+    { "native_pack_left", "sim/cockpit2/bleedair/actuators/pack_left", globalPropertyi },
+    { "native_pack_center", "sim/cockpit2/bleedair/actuators/pack_center", globalPropertyi },
+    { "native_pack_right", "sim/cockpit2/bleedair/actuators/pack_right", globalPropertyi },
     -- Aircraft and camera coordinates
     { "local_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- Aircraft X position
     { "local_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- Aircraft Y position
@@ -97,8 +110,57 @@ local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
 local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 local passed = get(frame_time)
 
+local native_start_valves = nil
+
 -- Keeps the default X-Plane APU active as a bridge for simulator systems.
 local function default_APU()
+    if get(ismaster) == 1 then
+        return
+    end
+
+    if get(xp_version) >= 120000 then
+        local has_power = get(bus27_volt_left) > 10 or get(bus27_volt_right) > 10
+        local custom_running = get(apu_burning_fuel) == 1
+        local wants_apu = get(apu_start_seq) == 1 or custom_running
+
+        if has_power and wants_apu then
+            local native_ready = get(APU_running) == 1 and get(APU_N1_percent) >= 50
+            set(APU_starter_switch, native_ready and 1 or 2)
+        else
+            set(APU_starter_switch, 0)
+        end
+
+        -- Generator switching belongs to generators_logic.lua.
+        set(rel_APU_press, get(apu_press_fail) == 1 and 6 or 0)
+        local bleed_ready = custom_running and get(apu_n1) > 92
+            and get(apu_air_doors) > 0.05 and get(apu_press_fail) == 0
+        set(native_apu_bleed, bleed_ready and 1 or 0)
+        set(native_gpu_bleed, get(asu_press) > 0 and 1 or 0)
+
+        -- The APU/ASU feeds the center duct. Connect both starter ducts and
+        -- shed pack demand while the custom start system closes its main valves.
+        if get(start_sys_work) == 1 then
+            if not native_start_valves then
+                native_start_valves = {
+                    get(native_isol_left), get(native_isol_right),
+                    get(native_pack_left), get(native_pack_center), get(native_pack_right)
+                }
+            end
+            set(native_isol_left, 1)
+            set(native_isol_right, 1)
+            set(native_pack_left, 0)
+            set(native_pack_center, 0)
+            set(native_pack_right, 0)
+        elseif native_start_valves then
+            set(native_isol_left, native_start_valves[1])
+            set(native_isol_right, native_start_valves[2])
+            set(native_pack_left, native_start_valves[3])
+            set(native_pack_center, native_start_valves[4])
+            set(native_pack_right, native_start_valves[5])
+            native_start_valves = nil
+        end
+        return
+    end
     local bus27_left = get(bus27_volt_left)
     local bus27_right = get(bus27_volt_right)
     local has_power = bus27_left > 10 or bus27_right > 10
@@ -170,9 +232,9 @@ local function gauges()
     -- oil_t_angle = 100
 
     -- Smooth gauge movement using frame time.
-    n1_actual = n1_actual + (n1_angle - n1_actual) * passed * 5
-    EGT_actual = EGT_actual + (EGT_angle - EGT_actual) * passed * 3
-    oil_t_actual = oil_t_actual + (oil_t_angle - oil_t_actual) * passed * 3
+    n1_actual = n1_actual + (n1_angle - n1_actual) * (1 - math.exp(-passed * 5))
+    EGT_actual = EGT_actual + (EGT_angle - EGT_actual) * (1 - math.exp(-passed * 3))
+    oil_t_actual = oil_t_actual + (oil_t_angle - oil_t_actual) * (1 - math.exp(-passed * 3))
 
     set(apu_rpm, n1_actual)
     set(apu_egt_gau, EGT_actual)
@@ -299,6 +361,7 @@ end
 
 function update()
     passed = get(frame_time)
+    if passed ~= passed or passed < 0 or passed == math.huge then passed = 0 end
     default_APU()
     check_controls()
     lamps()

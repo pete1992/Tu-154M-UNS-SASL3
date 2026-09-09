@@ -5,31 +5,39 @@ function deferred_dataref(name,type,notifier)
 	return wrap_dref_any(dref,type) 
 end
 
-simDR_36v = find_dataref("tu154/custom/elec/bus36_volt_left")
-simDR_efis_1_wxr = find_dataref("sim/cockpit/switches/EFIS_shows_weather")
-weather_sys = find_dataref("tu154/custom/kontur/weather_sys")
+-- Read the independent XP12 display switches and the Kontur-owned source status.
+simDR_efis_1_wxr = find_dataref("sim/cockpit2/EFIS/EFIS_weather_on")
+simDR_efis_2_wxr = find_dataref("sim/cockpit2/EFIS/EFIS_weather_on_copilot")
 kontur_wx_l = find_dataref("tu154/custom/kontur/left_wx")
 kontur_wx_r = find_dataref("tu154/custom/kontur/right_wx")
-weather_lit = find_dataref("tu154/custom/kontur/weather_lit")
+weather_ready = find_dataref("tu154/custom/kontur/weather_ready")
+nav_source_on = find_dataref("tu154/custom/kontur/nav_source_on")
 simDRtcasmode = find_dataref("tu154/custom/tcas/screen_mode")
 simDR_taws_mode = find_dataref("tu154/custom/taws/mode_set")
 simDR_sw_sound = find_dataref("tu154/custom/switchers/console/nvu_corr_on")
 ubs_pow_l = find_dataref("tu154/custom/ubs/left_power")
 ubs_pow_r = find_dataref("tu154/custom/ubs/right_power")
-uns1_on = find_dataref("tu154/custom/uns1_on")
-uns2_on = find_dataref("tu154/custom/uns2_on")
-srpbz = find_dataref("tu154/custom/kontur/srpbz")
 nodata = deferred_dataref("tu154/custom/kontur/nodata", "number")
 nodata_r = deferred_dataref("tu154/custom/kontur/nodata_r", "number")
 
+-- Existing bitmaps cover 29 states. The other three use the existing panel font.
+nodata_label_no = deferred_dataref("tu154/custom/kontur/nodata_label_no", "string")
+nodata_label_mw = deferred_dataref("tu154/custom/kontur/nodata_label_mw", "string")
+nodata_label_rdr = deferred_dataref("tu154/custom/kontur/nodata_label_rdr", "string")
+nodata_label_taws = deferred_dataref("tu154/custom/kontur/nodata_label_taws", "string")
+nodata_label_gps1 = deferred_dataref("tu154/custom/kontur/nodata_label_gps1", "string")
+nodata_label_no = "NO"
+nodata_label_mw = "MW"
+nodata_label_rdr = "RDR"
+nodata_label_taws = "TAWS"
+nodata_label_gps1 = "GPS1"
 
-local no_swc = 0
+local no_swc_l = 0
+local no_swc_r = 0
 local no_rls = 0
 local no_tcas = 0
 local no_taws = 0
-local no_nav_l = 0
-local no_nav_r = 0
-
+local no_nav = 0
 
 function ubs_ovhd_onoff_l_CMDhandler(phase, duration)
      if phase == 0 then
@@ -64,229 +72,36 @@ end
 UBS_L_ON_func	= create_command("ubs/ovhd_onoff_l", "UBS L OVHD ONOFF", ubs_ovhd_onoff_l_CMDhandler)
 UBS_R_ON_func	= create_command("ubs/ovhd_onoff_r", "UBS R OVHD ONOFF", ubs_ovhd_onoff_r_CMDhandler)
 
-function kontur_nodata_items()    
-    if uns1_on < 1 then
-        no_nav_l = 1
-    else
-        no_nav_l = 0
-    end
-    if uns2_on < 1 then
-        no_nav_r = 1
-    else
-        no_nav_r = 0
-    end
-    -- no swc
-    if simDR_efis_1_wxr < 1 and kontur_wx_l > 0 then
-    no_swc = 1
-    elseif simDR_efis_1_wxr < 1 and kontur_wx_r > 0 then
-    no_swc = 1
-    else
-    no_swc = 0
-    end
-	-- no rls
-   if weather_sys == 1 and simDR_36v > 0 then
-    no_rls = 0
-    weather_lit = 1
-    else
-    no_rls = 1
-    weather_lit = 0
-    end
-	-- no tcas
-    if simDRtcasmode == 100 then
-    no_tcas = 1
-    else
-    no_tcas = 0
-    end
-	-- no taws
-    if simDR_taws_mode == 0 then
-    no_taws = 1
-    elseif simDR_taws_mode == 4 then
-    no_taws = 1
-    else
-    no_taws = 0
-    end
+function kontur_nodata_items()
+    -- A powered GPS1 without a selected leg is available; waypoint fields have
+    -- their separate nav_source_valid gate and show dashes until a leg exists.
+    no_nav = nav_source_on > 0 and 0 or 1
+    no_swc_l = (kontur_wx_l > 0 and simDR_efis_1_wxr < 1) and 1 or 0
+    no_swc_r = (kontur_wx_r > 0 and simDR_efis_2_wxr < 1) and 1 or 0
+    no_rls = weather_ready > 0 and 0 or 1
+    no_tcas = simDRtcasmode == 100 and 1 or 0
+    no_taws = (simDR_taws_mode == 0 or simDR_taws_mode == 4) and 1 or 0
 end
 
+-- Missing-source mask: MW=1, radar=2, TCAS=4, TAWS=8, GPS1=16.
+-- Retain every existing artwork code and define the three previously stale states.
+local nodata_codes = {
+    [0] = 0, [1] = 11, [2] = 12, [3] = 7,
+    [4] = 13, [5] = 5, [6] = 9, [7] = 3,
+    [8] = 14, [9] = 6, [10] = 8, [11] = 30,
+    [12] = 10, [13] = 2, [14] = 4, [15] = 1,
+    [16] = 29, [17] = 25, [18] = 26, [19] = 21,
+    [20] = 27, [21] = 19, [22] = 23, [23] = 17,
+    [24] = 28, [25] = 20, [26] = 22, [27] = 31,
+    [28] = 24, [29] = 16, [30] = 18, [31] = 15,
+}
 
 function kontur_nodata_l()
-    if no_swc == 1 and no_rls == 1 and no_tcas == 1 and no_taws == 1 and no_nav_l == 1 then
-      nodata = 15
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas < 1 and no_taws < 1 and no_nav_l < 1 then
-      nodata = 0
-    end
-    if no_swc > 0 and no_rls > 0 and no_tcas > 0 and no_taws > 0 and no_nav_l < 1 then
-      nodata = 1
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas > 0 and no_taws > 0 and no_nav_l < 1 then
-      nodata = 2
-    end
-    if no_swc == 1 and no_rls > 0 and no_tcas > 0 and no_taws < 1 and no_nav_l < 1 then
-      nodata = 3
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas > 0 and no_taws > 0 and no_nav_l < 1 then
-      nodata = 4
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas > 0 and no_taws < 1 and no_nav_l < 1 then
-      nodata = 5
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas < 1 and no_taws > 0 and no_nav_l < 1 then
-      nodata = 6
-    end
-    if no_swc == 1 and no_rls > 0 and no_tcas < 1 and no_taws < 1 and no_nav_l < 1 then
-      nodata = 7
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas < 1 and no_taws > 0 and no_nav_l < 1 then
-      nodata = 8
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas > 0 and no_taws < 1 and no_nav_l < 1 then
-      nodata = 9
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas > 0 and no_taws > 0 and no_nav_l < 1 then
-      nodata = 10
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas < 1 and no_taws < 1 and no_nav_l < 1 then
-      nodata = 11
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas < 1 and no_taws < 1 and no_nav_l < 1 then
-      nodata = 12
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas > 0 and no_taws < 1 and no_nav_l < 1 then
-      nodata = 13
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas < 1 and no_taws > 0 and no_nav_l < 1 then
-      nodata = 14
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas > 0 and no_taws > 0 and no_nav_l > 0 then
-      nodata = 16
-    end
-    if no_swc == 1 and no_rls > 0 and no_tcas > 0 and no_taws < 1 and no_nav_l > 0 then
-      nodata = 17
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas > 0 and no_taws > 0 and no_nav_l > 0 then
-      nodata = 18
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas > 0 and no_taws < 1 and no_nav_l > 0 then
-      nodata = 19
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas < 1 and no_taws > 0 and no_nav_l > 0 then
-      nodata = 20
-    end
-    if no_swc == 1 and no_rls > 0 and no_tcas < 1 and no_taws < 1 and no_nav_l > 0 then
-      nodata = 21
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas < 1 and no_taws > 0 and no_nav_l > 0 then
-      nodata = 22
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas > 0 and no_taws < 1 and no_nav_l > 0 then
-      nodata = 23
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas > 0 and no_taws > 0 and no_nav_l > 0 then
-      nodata = 24
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas < 1 and no_taws < 1 and no_nav_l > 0 then
-      nodata = 25
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas < 1 and no_taws < 1 and no_nav_l > 0 then
-      nodata = 26
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas > 0 and no_taws < 1 and no_nav_l > 0 then
-      nodata = 27
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas < 1 and no_taws > 0 and no_nav_l > 0 then
-      nodata = 28
-    end 
+    nodata = nodata_codes[no_swc_l + 2 * no_rls + 4 * no_tcas + 8 * no_taws + 16 * no_nav]
 end
 
 function kontur_nodata_r()
-
-    if no_swc == 1 and no_rls == 1 and no_tcas == 1 and no_taws == 1 and no_nav_r == 1 then
-      nodata_r = 15
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas < 1 and no_taws < 1 and no_nav_r < 1 then
-      nodata_r = 0
-    end
-    if no_swc > 0 and no_rls > 0 and no_tcas > 0 and no_taws > 0 and no_nav_r < 1 then
-      nodata_r = 1
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas > 0 and no_taws > 0 and no_nav_r < 1 then
-      nodata_r = 2
-    end
-    if no_swc == 1 and no_rls > 0 and no_tcas > 0 and no_taws < 1 and no_nav_r < 1 then
-      nodata_r = 3
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas > 0 and no_taws > 0 and no_nav_r < 1 then
-      nodata_r = 4
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas > 0 and no_taws < 1 and no_nav_r < 1 then
-      nodata_r = 5
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas < 1 and no_taws > 0 and no_nav_r < 1 then
-      nodata_r = 6
-    end
-    if no_swc == 1 and no_rls > 0 and no_tcas < 1 and no_taws < 1 and no_nav_r < 1 then
-      nodata_r = 7
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas < 1 and no_taws > 0 and no_nav_r < 1 then
-      nodata_r = 8
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas > 0 and no_taws < 1 and no_nav_r < 1 then
-      nodata_r = 9
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas > 0 and no_taws > 0 and no_nav_r < 1 then
-      nodata_r = 10
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas < 1 and no_taws < 1 and no_nav_r < 1 then
-      nodata_r = 11
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas < 1 and no_taws < 1 and no_nav_r < 1 then
-      nodata_r = 12
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas > 0 and no_taws < 1 and no_nav_r < 1 then
-      nodata_r = 13
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas < 1 and no_taws > 0 and no_nav_r < 1 then
-      nodata_r = 14
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas > 0 and no_taws > 0 and no_nav_r > 0 then
-      nodata_r = 16
-    end
-    if no_swc == 1 and no_rls > 0 and no_tcas > 0 and no_taws < 1 and no_nav_r > 0 then
-      nodata_r = 17
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas > 0 and no_taws > 0 and no_nav_r > 0 then
-      nodata_r = 18
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas > 0 and no_taws < 1 and no_nav_r > 0 then
-      nodata_r = 19
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas < 1 and no_taws > 0 and no_nav_r > 0 then
-      nodata_r = 20
-    end
-    if no_swc == 1 and no_rls > 0 and no_tcas < 1 and no_taws < 1 and no_nav_r > 0 then
-      nodata_r = 21
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas < 1 and no_taws > 0 and no_nav_r > 0 then
-      nodata_r = 22
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas > 0 and no_taws < 1 and no_nav_r > 0 then
-      nodata_r = 23
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas > 0 and no_taws > 0 and no_nav_r > 0 then
-      nodata_r = 24
-    end
-    if no_swc == 1 and no_rls < 1 and no_tcas < 1 and no_taws < 1 and no_nav_r > 0 then
-      nodata_r = 25
-    end
-    if no_swc < 1 and no_rls > 0 and no_tcas < 1 and no_taws < 1 and no_nav_r > 0 then
-      nodata_r = 26
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas > 0 and no_taws < 1 and no_nav_r > 0 then
-      nodata_r = 27
-    end
-    if no_swc < 1 and no_rls < 1 and no_tcas < 1 and no_taws > 0 and no_nav_r > 0 then
-      nodata_r = 28
-    end
+    nodata_r = nodata_codes[no_swc_r + 2 * no_rls + 4 * no_tcas + 8 * no_taws + 16 * no_nav]
 end
 
 run_at_interval(kontur_nodata_l, 1.5)

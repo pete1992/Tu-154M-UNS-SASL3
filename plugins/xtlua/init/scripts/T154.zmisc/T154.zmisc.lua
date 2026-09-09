@@ -1337,7 +1337,6 @@ if simDRnvu_calc == 0 then
    simDRnvu_calc = 1
 end
  
-simDR_ap_type = 2
 simDR_artstab1 = 355
 simDR_artstab2 = 255
 simDR_artstab3 = 355

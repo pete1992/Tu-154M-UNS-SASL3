@@ -77,6 +77,14 @@ local pump_3R_P = 1
 
 local pump_4_P = 1
 
+-- Hold the pressure endpoints while the pump state is unchanged. Letting a
+-- powered pump decay at full pressure makes the start permissive flicker at low FPS.
+local function pumpPressure(pressure, running, passed)
+    local change = math.max(0, passed) * 0.8
+    if running then return math.min(1, pressure + change) end
+    return math.max(0, pressure - change)
+end
+
 function update()
 	local passed = get(frame_time)
 	
@@ -216,32 +224,15 @@ function update()
 	end
 	
 	-- calculate pressures
-	if pump2L_work > 0 and pump_2L_P < 1 then pump_2L_P = pump_2L_P + passed * 0.8
-	elseif pump_2L_P > 0 then pump_2L_P = pump_2L_P - passed * 0.8 end
-
-	if pump2R_work > 0 and pump_2R_P < 1 then pump_2R_P = pump_2R_P + passed * 0.8
-	elseif pump_2R_P > 0 then pump_2R_P = pump_2R_P - passed * 0.8 end	
-
-	if pump3L_work > 0 and pump_3L_P < 1 then pump_3L_P = pump_3L_P + passed * 0.8
-	elseif pump_3L_P > 0 then pump_3L_P = pump_3L_P - passed * 0.8 end
-
-	if pump3R_work > 0 and pump_3R_P < 1 then pump_3R_P = pump_3R_P + passed * 0.8
-	elseif pump_3R_P > 0 then pump_3R_P = pump_3R_P - passed * 0.8 end	
-	
-	if pump4_work > 0 and pump_4_P < 1 then pump_4_P = pump_4_P + passed * 0.8
-	elseif pump_4_P > 0 then pump_4_P = pump_4_P - passed * 0.8 end	
-	
-	if pump1_1_work == 1 and pump_1_1_P < 1 then pump_1_1_P = pump_1_1_P + passed * 0.8
-	elseif pump_1_1_P > 0 then pump_1_1_P = pump_1_1_P - passed * 0.8 end		
-
-	if pump1_2_work == 1 and pump_1_2_P < 1 then pump_1_2_P = pump_1_2_P + passed * 0.8
-	elseif pump_1_2_P > 0 then pump_1_2_P = pump_1_2_P - passed * 0.8 end		
-
-	if pump1_3_work == 1 and pump_1_3_P < 1 then pump_1_3_P = pump_1_3_P + passed * 0.8
-	elseif pump_1_3_P > 0 then pump_1_3_P = pump_1_3_P - passed * 0.8 end	
-	
-	if pump1_4_work == 1 and pump_1_4_P < 1 then pump_1_4_P = pump_1_4_P + passed * 0.8
-	elseif pump_1_4_P > 0 then pump_1_4_P = pump_1_4_P - passed * 0.8 end	
+	pump_2L_P = pumpPressure(pump_2L_P, pump2L_work > 0, passed)
+	pump_2R_P = pumpPressure(pump_2R_P, pump2R_work > 0, passed)
+	pump_3L_P = pumpPressure(pump_3L_P, pump3L_work > 0, passed)
+	pump_3R_P = pumpPressure(pump_3R_P, pump3R_work > 0, passed)
+	pump_4_P = pumpPressure(pump_4_P, pump4_work > 0, passed)
+	pump_1_1_P = pumpPressure(pump_1_1_P, pump1_1_work > 0, passed)
+	pump_1_2_P = pumpPressure(pump_1_2_P, pump1_2_work > 0, passed)
+	pump_1_3_P = pumpPressure(pump_1_3_P, pump1_3_work > 0, passed)
+	pump_1_4_P = pumpPressure(pump_1_4_P, pump1_4_work > 0, passed)
 	
 	-- calculate electrics
 	local bus_1_load = (pump1_1_work + pump1_3_work) * 8.3 + (pump4_work + pump2L_work * 0.5 + pump2R_work * 0.5 + (pump3L_work * 0.3 + pump3R_work * 0.3) * 2) * 2.6

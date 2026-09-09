@@ -144,10 +144,18 @@ local oil_temp_tbl = {{ -500, 10},  -- bugs workaround
 				  { 150, 0.9 },   --
           		  { 1000, 0.7 }}   -- bugs workaround	 
 local false_bleed = 0
+local bleed_noise = 0
+local bleed_noise_time = 0
 
-function update()
-	
-	local passed = get(frame_time)
+-- Keep all forces and thermal feedback on a stable integration time step.
+-- A renderer stall must not make the starter and drag curves fight each other.
+local MAX_STEP = 0.02
+
+local function failureRoll(limit)
+    return math.random(math.max(1, math.floor(limit)))
+end
+
+local function updateStep(passed)
 	
 	-- sync data
 	RPM = get(apu_n1)
@@ -165,6 +173,14 @@ if MASTER then
 	apu_fail_last_fuel = 1 - get(apu_fail_fuel_left)
 	apu_fail_EGT = 1 - get(apu_fail_egt)
 	apu_fail_OIL_T = 1 - get(apu_fail_oilt)
+	local failures_active = get(failures_enabled) > 0
+	starter_work = 1 - get(apu_start_fail)
+	if not failures_active then
+		apu_fail_last_fuel = 1
+		apu_fail_EGT = 1
+		apu_fail_OIL_T = 1
+		starter_work = 1
+	end
 	
 	local mode_sw = get(apu_start_mode)
 	local main_sw = get(apu_main_switch)
@@ -232,16 +248,16 @@ if MASTER then
 	
 	-- calculate fuel intro
 	if RPM > 21 and apd_work_time < 32 and fuel_press > 0.8 and apu_starter == 1 then
-		if fuel_last > 0.1 and apu_burning_fuel == 0 then -- fuel last failure
-			local rand = math.random (100 - fuel_last * 80)
+		if failures_active and fuel_last > 0.1 and apu_burning_fuel == 0 then -- fuel last failure
+			local rand = failureRoll(100 - fuel_last * 80)
 			if rand < 20 then
 				apu_fail_last_fuel = 0
 				set(apu_fail_fuel_left, 1)
 			end
 		end
 		
-		if egt_current > 150 and apu_burning_fuel == 0 then -- EGT failure
-			local rand =  math.random(350 - egt_current)
+		if failures_active and egt_current > 150 and apu_burning_fuel == 0 then -- EGT failure
+			local rand =  failureRoll(350 - egt_current)
 			if rand < 50 then 
 				apu_fail_EGT = 0
 				set(apu_fail_egt, 1)
@@ -274,10 +290,11 @@ if MASTER then
 	else set(apu_start_seq, 0) end
 	
 	-- set failure for starter
-	if apd_work_time < 2 and apu_starter == 1 and RPM > 20 and starter_work == 1 and not starter_RPM_check then
-		local rand = math.random(50 - RPM)
+	if failures_active and apd_work_time < 2 and apu_starter == 1 and RPM > 20 and starter_work == 1 and not starter_RPM_check then
+		local rand = failureRoll(50 - RPM)
 		if rand < 5 then
 			starter_work = 0
+			set(apu_start_fail, 1)
 		end
 		starter_RPM_check = true
 	end
@@ -308,11 +325,11 @@ if MASTER then
 	set(apu_fuel_last, fuel_last)
 	
 	-- calculate failure fr high oil temperature
-	if oil_temp > 115 then
+	if failures_active and oil_temp > 115 then
 		oil_q = oil_q - passed * 0.002
 		oil_temp_counter = oil_temp_counter + passed
 		if oil_temp_counter > 10 and apu_fail_OIL_T == 1 then
-			local rand = math.random(155 - oil_temp)
+			local rand = failureRoll(155 - oil_temp)
 			if rand < 5 then 
 				apu_fail_OIL_T = 0
 				set(apu_fail_oilt, 1)
@@ -321,15 +338,22 @@ if MASTER then
 		end
 	end
 	
-	-- set APU RPM random when both APU and engine #2 airbleed is open
-	local bleed_eng = get(eng_airvalve_2) * get(rpm_high_2) * bleed_doors_pos * (math.random(0, 100) - 51) * 0.00004
-	false_bleed = false_bleed + (bleed_eng - false_bleed) * passed * 0.5
-	
-	-- set new RPM depending on starter and fuel burning
-	RPM = RPM + interpolate(off_tbl, RPM) * t_stop_coef * (2 - apu_fail_last_fuel) * (2 - apu_fail_EGT) * (3 - apu_fail_OIL_T * 2) * passed -- stopping force
-	RPM = RPM + interpolate(starter_tbl, RPM) * apu_starter * starter_work * apu_fail_EGT * apu_fail_OIL_T * (1 - get(apu_start_fail)) * (1 - get(apu_fail)) * passed -- starter force
-	RPM = RPM + interpolate(fuel_tbl, RPM) * apu_burning_fuel * (1 - apu_emerg_off) * apu_fail_last_fuel * apu_fail_EGT * apu_fail_OIL_T * (1 - get(apu_fail)) * passed -- fuel burning force
-	RPM = RPM * (false_bleed + 1)
+	-- Sample pneumatic interference in simulation time, not once per frame.
+	-- Cranking engine 2 cannot supply compressor bleed to the running APU.
+	bleed_noise_time = bleed_noise_time + passed
+	if bleed_noise_time >= 0.25 then
+		bleed_noise_time = bleed_noise_time - 0.25
+		bleed_noise = (math.random(0, 100) - 50) * 0.00004
+	end
+	local engine_bleed_rpm = math.max(0, get(rpm_high_2) - 60)
+	local bleed_eng = get(eng_airvalve_2) * engine_bleed_rpm * bleed_doors_pos * bleed_noise
+	false_bleed = false_bleed + (bleed_eng - false_bleed) * (1 - math.exp(-passed * 0.5))
+
+	-- Evaluate every torque at the same RPM before integrating their sum.
+	local drag = interpolate(off_tbl, RPM) * t_stop_coef * (2 - apu_fail_last_fuel) * (2 - apu_fail_EGT) * (3 - apu_fail_OIL_T * 2)
+	local starter = interpolate(starter_tbl, RPM) * apu_starter * starter_work * apu_fail_EGT * apu_fail_OIL_T * (1 - get(apu_fail))
+	local fuel = interpolate(fuel_tbl, RPM) * apu_burning_fuel * (1 - apu_emerg_off) * apu_fail_last_fuel * apu_fail_EGT * apu_fail_OIL_T * (1 - get(apu_fail))
+	RPM = math.max(0, RPM + (drag + starter + fuel + RPM * false_bleed) * passed)
 	
 	-- calculate APU starter current
 	local start_current = apu_starter * 600 / (1 + math.max(RPM - 10, 0) / 5)
@@ -338,7 +362,7 @@ if MASTER then
 	-- calculate EGT
 	local out_temp = get(outside_air_temp)
 	local egt_heat_spd = (1000 - egt_current) * 0.1 * apu_burning_fuel * (bleed_doors_pos * 0.25 + 1) * (get(gen4_amp_bus) * 0.0012 + 1) * (3 - apu_fail_last_fuel * 2)
-	egt_heat_spd = egt_heat_spd - false_bleed * 2000
+	-- Bleed loading heats the exhaust through the existing door/load term.
 	local egt_cool_spd = (egt_current - apu_temp) * (0.5 + ((RPM * 0.01)^1.05) * 1.5) * 0.09
 	
 	egt_current = egt_current + (egt_heat_spd - egt_cool_spd) * passed
@@ -361,6 +385,13 @@ if MASTER then
 	--if get(apu_oil_p) < 1 then apu_emerg_off = 1 end
 	if (start_seq and egt_current > 700) or (not start_seq and egt_current > 570) then apu_emerg_off = 1 end
 	if RPM > 105 then apu_emerg_off = 1 end
+	if apu_emerg_off == 1 then
+		apu_burning_fuel = 0
+		apu_starter = 0
+		apd_work_time = 100
+		start_current = 0
+		set(apu_start_seq, 0)
+	end
 	
 	-- reset red signs
 	if system_on == 0 then apu_emerg_off = 0 end
@@ -371,8 +402,9 @@ if MASTER then
 		minusTimer = minusTimer + passed * RPM * 0.01
 		
 		if minusTimer >= 1 then
-			minusTimer = 0
-			set(apu_runtime, math.max(0, get(apu_runtime) - 1)) 
+			local elapsed = math.floor(minusTimer)
+			minusTimer = minusTimer - elapsed
+			set(apu_runtime, math.max(0, get(apu_runtime) - elapsed))
 		end
 	
 	else 
@@ -400,4 +432,17 @@ if MASTER then
 	--set(apu_temp_gau, fuel_last * 1000)
 end
 	
+end
+
+
+function update()
+    local passed = get(frame_time)
+    if get(ismaster) == 1 or passed ~= passed or passed <= 0 or passed == math.huge then
+        return
+    end
+    local steps = math.ceil(passed / MAX_STEP)
+    local step = passed / steps
+    for i = 1, steps do
+        updateStep(step)
+    end
 end

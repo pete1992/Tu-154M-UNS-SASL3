@@ -1,5 +1,9 @@
 --[[
 Changelog
+- Balanced held starter commands and released them on abort, authority loss and component unload.
+- Used simulation frame time for APD timing so a paused simulator cannot time out a start.
+- Restored power, cover, dry-crank and button-release interlocks for ground and air starts.
+- Qualified XP12 completion by sustained combustion above the configured starter design RPM.
 - Preserved all original Dataref names and paths, including the legacy sim_vers alias and unused compatibility bindings.
 - Added the project-standard X-Plane 11 / X-Plane 12 array handling: XP11 keeps the original i/f accessor, XP12 uses globalProperty.
 - Added xp_version separately before defineProps() for compatibility decisions.
@@ -8,7 +12,7 @@ Changelog
 - Replaced the three duplicated engine-start sequences with one persistent three-engine state table and shared helpers.
 - Fixed start abort handling so timeout, engine-cover and ground-start power-loss aborts also clear the internal starting state.
 - Prevented an engine-cover abort from being followed by sasl.commandBegin() again in the same frame.
-- Turned ignition and igniters off when a ground or air start finishes.
+- Preserved the fuel latch and ignition after a successful start.
 - Made all simulator/system side effects master-owned for SmartCopilot while keeping the internal state machine active on every instance.
 - Limited the APU N1 and starter-torque workarounds to X-Plane 11.
 - Replaced interpolate() with the project-wide fastInterpolate() helper for the static starter-air pressure table.
@@ -17,7 +21,7 @@ Changelog
 
 -- Added for X-Plane 11 / X-Plane 12 compatibility.
 defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) > 120000
+local XP11 = get(xp_version) < 120000
 
 -- Engine start logic.
 local function defineProps(defs)
@@ -135,6 +139,8 @@ defineProps({
     { "engine_caps", "tu154/custom/anim/engine_caps", globalPropertyi },
     -- Frame duration
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    -- Simulator pause state
+    { "sim_paused", "sim/time/paused", globalPropertyi },
     -- Simulator running time
     { "sim_run_time", "sim/time/total_running_time_sec", globalPropertyf },
     -- Starter-system air pressure
@@ -197,7 +203,10 @@ local eng_start_press_t = {
     { 1000000000, 110 },
 }
 
-local time_last = get(sim_run_time)
+-- APD elapsed time follows the aircraft simulation, not wall-clock time in menus.
+local time_last = 0
+local sequence_clock = 0
+local master_last = get(ismaster) ~= 1
 
 -- Persistent engine state.
 local ENGINES = {
@@ -217,6 +226,9 @@ local ENGINES = {
         ground_starting = false,
         air_starting = false,
         rpm_value = 0,
+        command_held = false,
+        burning_time = 0,
+        flight_button_last = false,
     },
     {
         selector = 2,
@@ -234,6 +246,9 @@ local ENGINES = {
         ground_starting = false,
         air_starting = false,
         rpm_value = 0,
+        command_held = false,
+        burning_time = 0,
+        flight_button_last = false,
     },
     {
         selector = 3,
@@ -251,14 +266,13 @@ local ENGINES = {
         ground_starting = false,
         air_starting = false,
         rpm_value = 0,
+        command_held = false,
+        burning_time = 0,
+        flight_button_last = false,
     },
 }
 
--- Legacy/reserved state retained from the original script.
-local eng1_rpm_check = false
-local eng2_rpm_check = false
-local eng3_rpm_check = false
-local start_button_pressed = false
+local start_button_pressed = get(starter_start) == 1
 
 local select_last = get(starter_eng_select)
 local starter_press = 0
@@ -281,9 +295,19 @@ local function setEngineIgnition(engine, value, MASTER)
     set(engine.igniter, value)
 end
 
-local function endStarterCommand(engine, MASTER)
-    if MASTER then
+local function beginStarterCommand(engine, MASTER)
+    -- CommandBegin holds the command until its matching CommandEnd.
+    if MASTER and not engine.command_held then
+        sasl.commandBegin(engine.command)
+        engine.command_held = true
+    end
+end
+
+local function endStarterCommand(engine)
+    -- Release only commands started here; never cancel a hardware/plugin command.
+    if engine.command_held then
         sasl.commandEnd(engine.command)
+        engine.command_held = false
     end
 end
 
@@ -292,22 +316,32 @@ local function abortStart(engine, MASTER)
         set(engine.fuel, 0)
         set(engine.ignition, 0)
         set(engine.igniter, 0)
-        sasl.commandEnd(engine.command)
     end
 
+    endStarterCommand(engine)
     engine.ground_starting = false
     engine.air_starting = false
+    engine.burning_time = 0
 end
 
 local function finishStart(engine, MASTER)
-    if MASTER then
-        set(engine.ignition, 0)
-        set(engine.igniter, 0)
-        sasl.commandEnd(engine.command)
-    end
-
+    endStarterCommand(engine)
     engine.ground_starting = false
     engine.air_starting = false
+    engine.burning_time = 0
+end
+
+local function startComplete(engine)
+    local cutoff = RPM_APD_OFF
+    if not XP11 then
+        -- XP12 idle N2 can lie below the old XP11 47% cutout. Above the
+        -- starter's no-load RPM, continued acceleration requires combustion.
+        local starter_limit = get(starter_rpm) * 100
+        if starter_limit > RPM_FOR_IGNITER then
+            cutoff = math.min(cutoff, starter_limit)
+        end
+    end
+    return engine.rpm_value > cutoff and engine.burning_time >= 2
 end
 
 local function anyGroundStartActive()
@@ -320,10 +354,12 @@ local function anyGroundStartActive()
     return false
 end
 
-local function clearAllStartStates()
+local function clearAllStartStates(MASTER)
     for i = 1, #ENGINES do
-        ENGINES[i].ground_starting = false
-        ENGINES[i].air_starting = false
+        local engine = ENGINES[i]
+        if engine.ground_starting or engine.air_starting then
+            abortStart(engine, MASTER)
+        end
     end
 end
 
@@ -331,7 +367,8 @@ local function beginSelectedGroundStart(
     eng_select,
     time_now,
     power27L,
-    power27R
+    power27R,
+    MASTER
 )
     local engine = ENGINES[eng_select]
 
@@ -343,12 +380,16 @@ local function beginSelectedGroundStart(
         return
     end
 
-    if engine.rpm_value >= RPM_APD_OFF then
+    if engine.rpm_value >= RPM_APD_OFF or get(engine.burning) == 1 then
         return
     end
 
-    clearAllStartStates()
-
+    clearAllStartStates(MASTER)
+    if MASTER then
+        set(engine.fuel, 0)
+        setEngineIgnition(engine, 0, MASTER)
+    end
+    engine.burning_time = 0
     engine.start_time = time_now
     engine.ground_starting = true
 end
@@ -358,6 +399,7 @@ local function processGroundStart(
     time_now,
     start_mode,
     stop_button,
+    power_sys,
     power27L,
     power27R,
     MASTER
@@ -366,7 +408,7 @@ local function processGroundStart(
         return
     end
 
-    if not engineHasPower(engine, power27L, power27R) then
+    if not power_sys or not engineHasPower(engine, power27L, power27R) then
         abortStart(engine, MASTER)
         return
     end
@@ -380,11 +422,11 @@ local function processGroundStart(
     local elapsed = time_now - engine.start_time
     local rpm = engine.rpm_value
 
-    if elapsed > 1 and elapsed <= START_SEQ_TIME and MASTER then
-        sasl.commandBegin(engine.command)
+    if elapsed > 1 and elapsed <= START_SEQ_TIME then
+        beginStarterCommand(engine, MASTER)
     end
 
-    if rpm > RPM_APD_OFF then
+    if startComplete(engine) then
         finishStart(engine, MASTER)
         return
     end
@@ -398,9 +440,8 @@ local function processGroundStart(
         set(engine.fuel, start_mode)
     end
 
-    if rpm >= RPM_FOR_IGNITER then
-        setEngineIgnition(engine, 1, MASTER)
-    end
+    -- Dry cranking never introduces fuel or energizes the igniters.
+    setEngineIgnition(engine, bool2int(start_mode == 1 and rpm >= RPM_FOR_IGNITER), MASTER)
 end
 
 local function processAirStart(
@@ -408,14 +449,26 @@ local function processAirStart(
     time_now,
     power27L,
     power27R,
+    blocked,
     MASTER
 )
     local rpm = engine.rpm_value
     local has_power = engineHasPower(engine, power27L, power27R)
+    local flight_button = get(engine.flight_start) == 1
+    local flight_pressed = flight_button and not engine.flight_button_last
+    engine.flight_button_last = flight_button
+
+    if blocked or not has_power or get(starter_stop) == 1 then
+        if engine.air_starting then
+            abortStart(engine, MASTER)
+        end
+        return
+    end
 
     if not engine.ground_starting
         and not engine.air_starting
-        and get(engine.flight_start) == 1
+        and flight_pressed
+        and get(engine.burning) == 0
         and rpm > RPM_FOR_IGNITER
         and has_power
     then
@@ -429,32 +482,43 @@ local function processAirStart(
 
     local elapsed = time_now - engine.start_time
 
-    if elapsed < START_SEQ_TIME
+    if startComplete(engine) then
+        finishStart(engine, MASTER)
+    elseif elapsed < START_SEQ_TIME
         and rpm > RPM_FOR_IGNITER
-        and rpm < RPM_APD_OFF + 20
     then
         if MASTER then
             set(engine.ignition, 1)
             set(engine.igniter, 1)
-            sasl.commandBegin(engine.command)
+            beginStarterCommand(engine, MASTER)
             set(engine.fuel, 1)
         end
     else
-        finishStart(engine, MASTER)
+        abortStart(engine, MASTER)
     end
 end
 
--- Stop any stale starter command when this component is initialized.
-if get(ismaster) ~= 1 then
-    sasl.commandEnd(starter_1)
-    sasl.commandEnd(starter_2)
-    sasl.commandEnd(starter_3)
+function onModuleDone()
+    for i = 1, #ENGINES do
+        endStarterCommand(ENGINES[i])
+    end
 end
 
 function update()
     local MASTER = get(ismaster) ~= 1
-    local passed = get(frame_time)
-    local time_now = get(sim_run_time)
+    local passed = clamp(get(frame_time), 0, 0.1)
+    if get(sim_paused) == 1 then
+        passed = 0
+    end
+    sequence_clock = sequence_clock + passed
+    local time_now = sequence_clock
+
+    if master_last and not MASTER then
+        for i = 1, #ENGINES do
+            endStarterCommand(ENGINES[i])
+        end
+    end
+    master_last = MASTER
 
     -- XP11-only workarounds.
     if MASTER and XP11 then
@@ -479,6 +543,11 @@ function update()
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
         engine.rpm_value = get(engine.rpm)
+        if (engine.ground_starting or engine.air_starting) and get(engine.burning) == 1 then
+            engine.burning_time = engine.burning_time + passed
+        else
+            engine.burning_time = 0
+        end
     end
 
     -- Automatic fuel/ignition cutoff after a failed start or with engine
@@ -490,8 +559,13 @@ function update()
         local timed_out =
             time_now - engine.start_time > START_SEQ_TIME
             and rpm < RPM_APD_OFF
+            and (
+                engine.ground_starting
+                or engine.air_starting
+                or get(engine.burning) == 0
+            )
 
-        if timed_out or (blocked and rpm >= 5) then
+        if timed_out or (blocked and (rpm >= 5 or engine.ground_starting or engine.air_starting)) then
             abortStart(engine, MASTER)
         elseif engine.ground_starting
             and not engineHasPower(engine, power27L, power27R)
@@ -520,12 +594,14 @@ function update()
         and power27R
 
     local start_button = get(starter_start) == 1
+    local start_pressed = start_button and not start_button_pressed
+    start_button_pressed = start_button
     local eng_select = get(starter_eng_select)
 
     -- Changing the engine selector simulates pressing the stop control.
     local stop_button =
         get(starter_stop) == 1
-        or eng_select ~= select_last
+        or (eng_select ~= select_last and anyGroundStartActive())
 
     select_last = eng_select
 
@@ -556,7 +632,8 @@ function update()
 
         if not blocked
             and not anyGroundStartActive()
-            and start_button
+            and start_pressed
+            and not stop_button
             and starter_press > 3
             and fuel_system
         then
@@ -564,7 +641,8 @@ function update()
                 eng_select,
                 time_now,
                 power27L,
-                power27R
+                power27R,
+                MASTER
             )
         end
     elseif MASTER then
@@ -580,6 +658,7 @@ function update()
             time_now,
             start_mode,
             stop_button,
+            power_sys,
             power27L,
             power27R,
             MASTER
@@ -590,6 +669,7 @@ function update()
             time_now,
             power27L,
             power27R,
+            blocked,
             MASTER
         )
     end
@@ -600,7 +680,7 @@ function update()
             local engine = ENGINES[i]
 
             if not engine.ground_starting and not engine.air_starting then
-                sasl.commandEnd(engine.command)
+                endStarterCommand(engine)
             end
         end
     end

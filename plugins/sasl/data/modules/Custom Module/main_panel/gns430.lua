@@ -6,6 +6,9 @@ defineProperty("overrideGPS", globalPropertyi("sim/operation/override/override_g
 
 -- source
 defineProperty("kln_on", globalPropertyi("tu154/custom/switchers/ovhd/kln_on"))  --  
+-- The GNS and both UNS panels share the native GPS1 receiver.
+defineProperty("uns1_on", globalPropertyf("tu154/custom/uns1_on"))
+defineProperty("uns2_on", globalPropertyf("tu154/custom/uns2_on"))
 
 defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
 defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
@@ -160,7 +163,13 @@ local overrideSet = false
 
 function update()
 
-	set(gps_power, get(kln_on) * bool2int(get(bus27_volt_left) > 13 or get(bus27_volt_right) > 13))
+	-- Own GPS1 power here so the GNS and UNS updates cannot switch it against each other.
+	local left_power = get(bus27_volt_left) > 13
+	local right_power = get(bus27_volt_right) > 13
+	local gps_requested = (get(kln_on) > 0 and (left_power or right_power))
+		or (get(uns1_on) > 0 and left_power)
+		or (get(uns2_on) > 0 and right_power)
+	set(gps_power, bool2int(gps_requested))
 	set(gns_lit, get(gps_power) * 0.7)
 	
 	if get(show_gns) == 1 and not overrideSet then
@@ -178,8 +187,7 @@ function update()
 		if get(GNS430_flag) == 1 then set(GNS430_dev, 0) end
 	end
 	
-	-- remove red line on Radar
-	set(kill_map_fms_line, 1)
+	-- Kontur owns route visibility for NAV versus WX/TCAS/TAWS modes.
 
 end
 

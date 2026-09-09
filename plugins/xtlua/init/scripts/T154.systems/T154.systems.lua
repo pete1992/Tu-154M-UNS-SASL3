@@ -393,8 +393,6 @@ if simDR_apu_bleed > 0.01 and simDR_lamp_test_apu < 1 then
    simDR_apu_start_ready = 0
 end
     
--- Aircraft integration expects GPSS status 2 while this systems script runs.
-simDR_gpss = 2 
 -- Upper gear lamp-test button sound.
 if simDRgeartestup > 0 then
     simDR_but_sound = 1

@@ -120,16 +120,16 @@ defineProperty("Xtex", sasl.gl.loadImage("KLNmap.png", 139, 36, 5, 7))
 defineProperty("Ytex", sasl.gl.loadImage("KLNmap.png", 145, 36, 5, 7))
 defineProperty("Ztex", sasl.gl.loadImage("KLNmap.png", 151, 36, 5, 7))
 defineProperty("ötex", sasl.gl.loadImage("KLNmap.png", 157, 36, 5, 7))
-defineProperty("ö0tex", sasl.gl.loadImage("KLNmap.png", 1, 44, 5, 7))
-defineProperty("ö1tex", sasl.gl.loadImage("KLNmap.png", 7, 44, 5, 7))
-defineProperty("ö2tex", sasl.gl.loadImage("KLNmap.png", 13, 44, 5, 7))
-defineProperty("ö3tex", sasl.gl.loadImage("KLNmap.png", 19, 44, 5, 7))
-defineProperty("ö4tex", sasl.gl.loadImage("KLNmap.png", 25, 44, 5, 7))
-defineProperty("ö5tex", sasl.gl.loadImage("KLNmap.png", 31, 44, 5, 7))
-defineProperty("ö6tex", sasl.gl.loadImage("KLNmap.png", 37, 44, 5, 7))
-defineProperty("ö7tex", sasl.gl.loadImage("KLNmap.png", 43, 44, 5, 7))
-defineProperty("ö8tex", sasl.gl.loadImage("KLNmap.png", 49, 44, 5, 7))
-defineProperty("ö9tex", sasl.gl.loadImage("KLNmap.png", 55, 44, 5, 7))
+defineProperty("digit0tex", sasl.gl.loadImage("KLNmap.png", 1, 44, 5, 7))
+defineProperty("digit1tex", sasl.gl.loadImage("KLNmap.png", 7, 44, 5, 7))
+defineProperty("digit2tex", sasl.gl.loadImage("KLNmap.png", 13, 44, 5, 7))
+defineProperty("digit3tex", sasl.gl.loadImage("KLNmap.png", 19, 44, 5, 7))
+defineProperty("digit4tex", sasl.gl.loadImage("KLNmap.png", 25, 44, 5, 7))
+defineProperty("digit5tex", sasl.gl.loadImage("KLNmap.png", 31, 44, 5, 7))
+defineProperty("digit6tex", sasl.gl.loadImage("KLNmap.png", 37, 44, 5, 7))
+defineProperty("digit7tex", sasl.gl.loadImage("KLNmap.png", 43, 44, 5, 7))
+defineProperty("digit8tex", sasl.gl.loadImage("KLNmap.png", 49, 44, 5, 7))
+defineProperty("digit9tex", sasl.gl.loadImage("KLNmap.png", 55, 44, 5, 7))
 
 defineProperty("lknobstex", sasl.gl.loadImage("KLN90.png", 528, 392, 71, 71))
 
@@ -2080,25 +2080,25 @@ function string2tex(tables, strings, x, y, size)
 			elseif strings == "Z" then
 				file = get(Ztex)
 			elseif strings == "0" then
-				file = get(ö0tex)
+				file = get(digit0tex)
 			elseif strings == "1" then
-				file = get(ö1tex)
+				file = get(digit1tex)
 			elseif strings == "2" then
-				file = get(ö2tex)
+				file = get(digit2tex)
 			elseif strings == "3" then
-				file = get(ö3tex)
+				file = get(digit3tex)
 			elseif strings == "4" then
-				file = get(ö4tex)
+				file = get(digit4tex)
 			elseif strings == "5" then
-				file = get(ö5tex)
+				file = get(digit5tex)
 			elseif strings == "6" then
-				file = get(ö6tex)
+				file = get(digit6tex)
 			elseif strings == "7" then
-				file = get(ö7tex)
+				file = get(digit7tex)
 			elseif strings == "8" then
-				file = get(ö8tex)
+				file = get(digit8tex)
 			elseif strings == "9" then
-				file = get(ö9tex)
+				file = get(digit9tex)
 			end
 			
 			table.insert(tables, textureLit2 {

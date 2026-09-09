@@ -61,11 +61,31 @@ for i = 1, cols, 1 do
 	end
 end
 
+-- Terrain coordinates exist only after a successful SASL probe. Reject non-finite
+-- coordinates and conversion results while scenery loads or the origin changes.
+local function finiteNumber(value)
+    return type(value) == "number" and value == value and math.abs(value) < math.huge
+end
+
+local function localAltitude(x, y, z)
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    local lat, lon, alt = sasl.localToWorld(x, y, z)
+    if finiteNumber(alt) then return alt end
+    return nil
+end
+
+local function terrainAltitude(x, y, z)
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    local result, hitX, hitY, hitZ, nx, ny, nz, vx, vy, vz, wet = sasl.probeTerrain(x, y, z)
+    if result ~= PROBE_HIT_TERRAIN then return nil end
+    return localAltitude(hitX, hitY, hitZ), wet
+end
+
 function giveColor(acf_alt, terr_alt, wet, gears)
 	local colorID = 8
 	
 	-- check alt
-	if not terr_alt then return 8 end -- error reading terrain
+	if not finiteNumber(acf_alt) or not finiteNumber(terr_alt) then return 8 end -- unavailable terrain
 	local alt = (terr_alt - acf_alt) -- meters
 	
 	--if wet then return 8 end
@@ -183,17 +203,12 @@ function update()
 	-- scan terrain and fill temp table
 	if screen_work then
 		
-		local acf_lat, acf_lon, acf_alt = sasl.localToWorld(plane_x, plane_y, plane_z)
+		local acf_alt = localAltitude(plane_x, plane_y, plane_z)
 		for row = frame_counter * 2 - 1, frame_counter * 2, 1 do
 			for col = 1, cols, 1 do
 				local p_x = plane_x + dir_x * height * row/rows - right_x * width / 2 + right_x * width * col/cols;
 				local p_z = plane_z + dir_z * height * row/rows - right_z * width / 2 + right_z * width * col/cols;
-				local prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
-								
-				--local probe_dist = math.sqrt((p_x)^2 + (p_z)^2) / 1000
-				--local correct = interpolate(correct_tbl, probe_dist) - 130
-				
-				local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ)
+				local alt, isWet = terrainAltitude(p_x, plane_y, p_z)
 				
 				tempHeightTable[col][row] = giveColor(acf_alt, alt, isWet, LG)
 				

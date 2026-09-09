@@ -4,7 +4,6 @@ OBJ
 
 TEXTURE		srd_panel_RUS.png
 TEXTURE_LIT	srd_panel_RUS_LIT.png
-TEXTURE_NORMAL	srd_panel_NML.png
 POINT_COUNTS	278 0 0 522
 
 VT	   0.5921   -2.1980  -19.1914	-0.000  1.000 -0.000	0.3956 0.7859

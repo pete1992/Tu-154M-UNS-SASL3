@@ -50,7 +50,6 @@ defineProps({
 	{"absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi},
 	{"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi},
 	{"absu_needles_on", "tu154/custom/switchers/console/absu_needles_on", globalPropertyi},
-	{"nav_select", "tu154/custom/switchers/nav_select", globalPropertyi},
 	-- STU speed test buttons
 	{"absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi},
 	{"absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2", globalPropertyi},
@@ -76,9 +75,6 @@ defineProps({
 	{"alt_svs", "tu154/custom/svs/altitude", globalPropertyf},
 	{"tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf},
 	{"ias", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf},
-	-- NVU
-	{"nvu_res_course", "tu154/custom/nvu/nvu_res_course", globalPropertyf},
-	{"nvu_res_z", "tu154/custom/nvu/nvu_res_z", globalPropertyf},
 	-- ABSU modes
 	{"roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi},
 	{"pitch_main_mode", "tu154/custom/absu/pitch_main_mode", globalPropertyi}, 
@@ -110,17 +106,15 @@ defineProps({
 	{"nav_gs_flag_2", "tu154/custom/radio/nav2_gs_flag", globalPropertyi},
 	{"cr_flag_1", "sim/cockpit2/radios/indicators/nav1_flag_from_to_pilot", globalPropertyf},
 	{"cr_flag_2", "sim/cockpit2/radios/indicators/nav2_flag_from_to_pilot", globalPropertyf},
-	-- KLN / GPS sources
-	{"kln_course", "tu154/custom/kln90/kln_course", globalPropertyf},
-	{"kln_dev", "tu154/custom/kln90/kln_dev", globalPropertyf},
-	{"show_gns", "tu154/custom/anim/show_gns", globalPropertyi},
-	{"show_RXP", "tu154/custom/anim/RXP", globalPropertyi},
-	-- RXP (GTN/GNS)
-	{"RXP_course", "RXP/radios/indicators/gps_course_degtm", globalPropertyf},
-	{"RXP_dev", "RXP/radios/indicators/gps_cross_track_nm", globalPropertyf},
-	-- GNS430 passthrough
+	-- GPS1 passthrough and validity; no alternate navigation source
 	{"GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf},
 	{"GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf},
+	{"GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi},
+	{"gps1_power", "sim/cockpit2/radios/actuators/gps_power", globalPropertyi},
+	{"gps1_fromto", "sim/cockpit/radios/gps_fromto", globalPropertyi},
+	{"gps1_course", "sim/cockpit/radios/gps_course_degtm", globalPropertyf},
+	{"gps1_hdef", "sim/cockpit/radios/gps_hdef_dot", globalPropertyf},
+	{"gps1_nm_per_dot", "sim/cockpit/radios/gps_hdef_nm_per_dot", globalPropertyf},
 	-- Radio altimeter and DH
 	{"rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf},
 	{"dh_set", "tu154/custom/gauges/alt/radioalt_dh_left", globalPropertyf},
@@ -194,6 +188,20 @@ end
 -----------------------------------------------------------------------
 -- Input validation helpers
 -----------------------------------------------------------------------
+local function finite(value)
+    return type(value) == "number" and value == value and math.abs(value) < math.huge
+end
+
+local function gps1GuidanceAvailable()
+    local fromto = get(gps1_fromto)
+    local scale = get(gps1_nm_per_dot)
+    return get(gps1_power) > 0 and (fromto == 1 or fromto == 2)
+        and get(GNS430_flag) == 0
+        and finite(get(GNS430_dtk)) and finite(get(GNS430_dev))
+        and finite(get(gps1_course)) and finite(get(gps1_hdef))
+        and finite(scale) and scale > 0
+end
+
 local function validateInputs(S)
     S.pitch_now = safeClamp(get(bkk_pitch), -90, 90, 0)
     S.roll_now  = safeClamp(get(bkk_roll),  -180, 180, 0)
@@ -247,9 +255,8 @@ local S = {
     -- handle-mode
     course_stab_timer = 0,
     course_stab_act = 0,
-    -- NVU/KLN
-    nvu_z_last = 0, nvu_side_last = 0, nvu_spd_last = 0, nvu_course_last = 0,
-    kln_frame_timer = 0, kln_Z_last = 0, kln_spd = 0,
+    -- GPS1 lateral-guidance history
+    nvu_z_last = 0, nvu_course_last = 0,
     gps_Z_smooth = 0,
     course_change_timer = 0,
     -- VOR
@@ -317,6 +324,16 @@ function update()
   local pitch_mode    = get(pitch_main_mode)
   local roll_submode  = get(roll_sub_mode)
   local pitch_submode = get(pitch_sub_mode)
+
+  -- Inhibit invalid GPS1 immediately even if the mode component updates later.
+  -- The mode component owns the public mode change and signal-loss annunciation.
+  local gps_inhibited = roll_submode == 3 and not gps1GuidanceAvailable()
+  if gps_inhibited then
+    roll_submode = 1
+    S.gps_Z_smooth = 0
+    S.nvu_z_last = 0
+    S.course_change_timer = 0
+  end
 
   -- body rates
   local roll_W  = get(roll_rate)
@@ -579,44 +596,21 @@ function update()
       S.ILS_dev_smth = 0
 
     elseif roll_submode == 3 then
-      -- NVU / GPS-LNAV
-      local nvu_course = get(nvu_res_course)
-      local nvu_z      = get(nvu_res_z)
-
-      local kln_mode = get(nav_select) == 1
+      -- The NVU button always selects GPS1; retain the existing lateral controller.
+      local nvu_course = get(GNS430_dtk)
+      -- The SC bridge carries CDI dots. Convert with GPS1's current NM/dot scale.
+      local Z = -get(GNS430_dev) * get(gps1_nm_per_dot) * 1.852
+      S.gps_Z_smooth = S.gps_Z_smooth - (S.gps_Z_smooth - Z) * S.passed
+      local nvu_z = S.gps_Z_smooth
       local KZ  = 0.015 * (100 / math.max(get(diss_groundspeed), 50))
       local KPZ = 0.4   * math.min(math.max(get(diss_groundspeed), 50) / 100, 2.0)
-
-      if kln_mode then nvu_course = get(kln_course); nvu_z = -get(kln_dev) * 1.852 end
-      if get(show_gns) == 1 and get(show_RXP) == 0 and kln_mode then
-        nvu_course = get(GNS430_dtk)
-        local Z = -get(GNS430_dev) * 1.852 * 0.8
-        S.gps_Z_smooth = S.gps_Z_smooth - (S.gps_Z_smooth - Z) * S.passed
-        nvu_z = S.gps_Z_smooth
-      end
-      if get(show_gns) == 1 and get(show_RXP) == 1 and kln_mode then
-        nvu_course = get(RXP_course)
-        local Z = -get(RXP_dev) * 1.852
-        S.gps_Z_smooth = S.gps_Z_smooth - (S.gps_Z_smooth - Z) * S.passed
-        nvu_z = S.gps_Z_smooth
-      end
 
       local side = safeClamp(nvu_z * 1000, -2400, 2400, 0)
 
       if math.abs(nvu_z) > 5.0 then nvu_z = sign(nvu_z) * 5.0; side = sign(side) * 2400 end
 
       local PZ = 0
-      if not kln_mode or (get(show_gns) >= 1 and kln_mode) then
-        if S.passed > 0 then PZ = (nvu_z - S.nvu_z_last) / S.passed end
-      else
-        if nvu_z ~= S.nvu_z_last then
-          if S.kln_frame_timer > 0 then S.kln_spd = (nvu_z - S.kln_Z_last) / S.kln_frame_timer end
-          S.kln_Z_last, S.kln_frame_timer = nvu_z, 0
-        else
-          S.kln_frame_timer = S.kln_frame_timer + S.passed
-        end
-        PZ = S.kln_spd
-      end
+      if S.passed > 0 then PZ = (nvu_z - S.nvu_z_last) / S.passed end
       S.nvu_z_last = nvu_z
 
       local side_spd = safeClamp(PZ * 1000, -160, 160, 0)
@@ -811,6 +805,7 @@ function update()
   -------------------------------------------------------------------
   local flag_roll  = bool2int((not nav_on and not app_on) or (get(absu_speed_test_2) == 1 and nav_on and app_on))
   local flag_pitch = bool2int((not nav_on and not app_on) or (get(absu_speed_test_2) == 1 and nav_on and app_on))
+  if gps_inhibited then flag_roll = 1 end
 
   if roll_submode == 1 or roll_submode == 2 then
     if not needles_on then

@@ -3,7 +3,6 @@ I
 OBJ
 
 TEXTURE		cockpit_glass.png
-TEXTURE_LIT	cockpit_glass_LIT.png
 TEXTURE_NORMAL	cockpit_glass_NML.png
 POINT_COUNTS	3093 0 0 10200
 GLOBAL_specular 1.0

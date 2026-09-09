@@ -3,7 +3,6 @@ I
 OBJ
 
 TEXTURE		wings.png
-TEXTURE_LIT	wings_LIT.png
 TEXTURE_NORMAL	wings_NML.png
 POINT_COUNTS	13560 0 0 37818
 GLOBAL_specular 1.0

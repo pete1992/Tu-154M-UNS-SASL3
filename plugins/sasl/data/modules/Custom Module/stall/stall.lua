@@ -1,55 +1,113 @@
--- stall.lua
--- Tu-154M v4.3.1 aggressive asymmetric stall / flat-spin entry for XP11.55.
---
--- The user's XP11.55 DataRefs.txt does not contain X-Plane 12.1's per-element
--- element_cl/cd/cm_addition properties. This component therefore reconstructs
--- the dump-calibrated left/right wing losses with the XP10.30+ additive plugin
--- forces and moments that are explicitly present and writable in XP11.55.
---
--- It is dormant in attached flight and in a slowly approached coordinated
--- stall. A rapid near-full-aft pull latches the first weak wing for the entire
--- event, so the natural 3-4 second left/right wing-rock cannot swap the break.
+-- aggressive_stall.lua
+-- Tu-154M: asymmetric stall and high-alpha spin-assistance model for X-Plane 12.
+-- SASL aircraft component; version 4.3.2-XP12.
 
-defineProperty("alpha_deg", globalPropertyf("sim/flightmodel2/misc/AoA_angle_degrees"))
-defineProperty("beta_deg", globalPropertyf("sim/flightmodel/position/beta"))
-defineProperty("mach_no", globalPropertyf("sim/flightmodel/misc/machno"))
-defineProperty("roll_rate", globalPropertyf("sim/flightmodel/position/P"))
-defineProperty("pitch_rate", globalPropertyf("sim/flightmodel/position/Q"))
-defineProperty("yaw_rate", globalPropertyf("sim/flightmodel/position/R"))
-defineProperty("true_airspeed", globalPropertyf("sim/flightmodel/position/true_airspeed"))
-defineProperty("air_density", globalPropertyf("sim/weather/rho"))
-defineProperty("total_mass", globalPropertyf("sim/flightmodel/weight/m_total"))
-defineProperty("gravity", globalPropertyf("sim/weather/gravity_mss"))
-defineProperty("raw_pitch", globalPropertyf("tu154/custom/SC/yoke_pitch_ratio"))
-defineProperty("raw_roll", globalPropertyf("tu154/custom/SC/yoke_roll_ratio"))
-defineProperty("raw_yaw", globalPropertyf("tu154/custom/SC/yoke_heading_ratio"))
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time"))
-defineProperty("flap_inner_left", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def"))
-defineProperty("flap_inner_right", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def"))
-defineProperty("flap_middle_left", globalPropertyf("sim/flightmodel/controls/wing2l_fla2def"))
-defineProperty("flap_middle_right", globalPropertyf("sim/flightmodel/controls/wing2r_fla2def"))
-defineProperty("slat_ratio", globalPropertyf("sim/flightmodel2/controls/slat1_deploy_ratio"))
-defineProperty("gear_left", globalProperty("sim/flightmodel2/gear/deploy_ratio[1]"))
-defineProperty("gear_right", globalProperty("sim/flightmodel2/gear/deploy_ratio[2]"))
-defineProperty("elevator_left", globalPropertyf("sim/flightmodel/controls/hstab1_elv1def"))
-defineProperty("elevator_right", globalPropertyf("sim/flightmodel/controls/hstab2_elv1def"))
-defineProperty("on_ground", globalPropertyi("sim/flightmodel/failures/onground_any"))
-defineProperty("paused", globalPropertyi("sim/time/paused"))
-defineProperty("in_replay", globalPropertyi("sim/time/is_in_replay"))
-defineProperty("smartcopilot_master", globalPropertyf("scp/api/ismaster"))
--- XP11.55-safe additive force and moment inputs. X-Plane resets these every
--- physics cycle; this component reads, adds, and writes so other plugins remain
--- additive owners of their own contributions.
-defineProperty("normal_plugin", globalPropertyf("sim/flightmodel/forces/fnrml_plug_acf"))
-defineProperty("axial_plugin", globalPropertyf("sim/flightmodel/forces/faxil_plug_acf"))
-defineProperty("roll_plugin", globalPropertyf("sim/flightmodel/forces/L_plug_acf"))
-defineProperty("pitch_plugin", globalPropertyf("sim/flightmodel/forces/M_plug_acf"))
-defineProperty("yaw_plugin", globalPropertyf("sim/flightmodel/forces/N_plug_acf"))
+--[[ Changelog
+2026-09-08 | 4.3.2-XP12
+    - Port the v4.3.1 force model to X-Plane 12; retain its aerodynamic tuning.
+    - Use sim/weather/aircraft/gravity_mss, the XP12 local-gravity dataref.
+    - Group property bindings through the project's defineProps helper.
+    - Include the nose gear in the clean-configuration gate.
+    - Retain additive forces, event-side latching and lifecycle resets.
+
+Integration
+    Install as aggressive_stall.lua in the aircraft's SASL component directory.
+    Register aggressive_stall {} exactly once, after the project's frame-time
+    producer and flight_controls {}. Replace the previous stall component.
+    Requires the Tu-154 tu154/custom/SC/*, tu154/custom/time/frame_time and
+    scp/api/ismaster properties already supplied by the aircraft project.
+    SmartCopilot mode 1 is slave; mode 0 or 2 permits local computation.
+
+Model scope
+    This is an empirical supplement to X-Plane's native aerodynamics. It
+    computes equivalent forces from 48 virtual wing elements, then adds five
+    aggregate aircraft-axis forces/moments. It does not edit native element
+    CL/CD/CM, airfoils, flap coefficients, control deflections or body rates.
+    The geometry and coefficients are inherited from the XP11 v4.3.1 model
+    and Cycle Dump(20260830-161425); XP12 flight calibration is still required.
+    A flat spin is not guaranteed by this script or established as the correct
+    real-aircraft response to every aggressive pull.
+
+    Entry requires clean configuration, Mach 0.10..0.70, pitch input >= 0.88,
+    mean actual elevator <= -20 degrees, sufficient alpha and a recent rapid
+    pull/alpha/pitch-rate event (or confirmed full aft plus deliberate yaw).
+    The entry threshold varies smoothly from 12.3 to 11.5 degrees with Mach.
+    There is no altitude-only stall threshold. Density and TAS set the force.
+    Outside this trigger, normal and slowly approached coordinated stalls
+    remain entirely with X-Plane's native model.
+
+    The weaker side remains latched through the event. When all directional
+    cues are neutral, successive events alternate the initial side. This is a
+    deterministic modeling choice, not a measured left/right aircraft bias.
+    All virtual elements reach full progression by 1.72 seconds, provided
+    the event remains active; alpha and pressure still scale the forces.
+    Spin assistance starts after 1.6 seconds OR earlier if rate/sideslip gates
+    are met. Extra nose-up moment blends in between alpha 15 and 20.5 degrees.
+    Pitch release below 0.20 for 0.60 seconds, alpha below 8.5 degrees or an
+    envelope exit starts a 2.50-second fade of the last force/moment vector.
+    This is a numerical release law, not a real-aircraft recovery prediction.
+    Pause, replay, ground contact, slave mode or invalid timestep reset it.
+
+    Load only one stall supplement. Do not also run the old XP11 stall module
+    or a B2/transsonic script applying the same stall force correction.
+    X-Plane clears plugin force accumulators every flight loop. Only add to
+    them; never zero shared accumulators on reset or unload. The component
+    must run once per SASL update; do not also register a physics callback.
+
+References
+    https://developer.x-plane.com/article/movingtheplane/
+    https://github.com/X-Plane/XPlane2Blender/blob/master/io_xplane2blender/resources/DataRefs.txt
+    Stock bindings checked against Laminar's XP12.08 dataref catalog.
+]]
+
+-- local defineProps Function
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        defineProperty(def[1], def[3](def[2]))
+    end
+end
+
+defineProps({
+    {"alpha_deg", "sim/flightmodel2/misc/AoA_angle_degrees", globalPropertyf},
+    {"beta_deg", "sim/flightmodel/position/beta", globalPropertyf},
+    {"mach_no", "sim/flightmodel/misc/machno", globalPropertyf},
+    {"roll_rate", "sim/flightmodel/position/P", globalPropertyf},
+    {"pitch_rate", "sim/flightmodel/position/Q", globalPropertyf},
+    {"yaw_rate", "sim/flightmodel/position/R", globalPropertyf},
+    {"true_airspeed", "sim/flightmodel/position/true_airspeed", globalPropertyf},
+    {"air_density", "sim/weather/rho", globalPropertyf},
+    {"total_mass", "sim/flightmodel/weight/m_total", globalPropertyf},
+    {"gravity", "sim/weather/aircraft/gravity_mss", globalPropertyf},
+    {"raw_pitch", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf},
+    {"raw_roll", "tu154/custom/SC/yoke_roll_ratio", globalPropertyf},
+    {"raw_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf},
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    {"flap_inner_left", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf},
+    {"flap_inner_right", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf},
+    {"flap_middle_left", "sim/flightmodel/controls/wing2l_fla2def", globalPropertyf},
+    {"flap_middle_right", "sim/flightmodel/controls/wing2r_fla2def", globalPropertyf},
+    {"slat_ratio", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf},
+    {"gear_nose", "sim/flightmodel2/gear/deploy_ratio[0]", globalProperty},
+    {"gear_left", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty},
+    {"gear_right", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty},
+    {"elevator_left", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf},
+    {"elevator_right", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf},
+    {"on_ground", "sim/flightmodel/failures/onground_any", globalPropertyi},
+    {"paused", "sim/time/paused", globalPropertyi},
+    {"in_replay", "sim/time/is_in_replay", globalPropertyi},
+    {"smartcopilot_master", "scp/api/ismaster", globalPropertyf},
+    {"normal_plugin", "sim/flightmodel/forces/fnrml_plug_acf", globalPropertyf},
+    {"axial_plugin", "sim/flightmodel/forces/faxil_plug_acf", globalPropertyf},
+    {"roll_plugin", "sim/flightmodel/forces/L_plug_acf", globalPropertyf},
+    {"pitch_plugin", "sim/flightmodel/forces/M_plug_acf", globalPropertyf},
+    {"yaw_plugin", "sim/flightmodel/forces/N_plug_acf", globalPropertyf},
+})
 
 local STATE_NORMAL = 0
 local STATE_ENTRY = 1
 local STATE_SPIN_HOLD = 2
 local STATE_RECOVERY = 3
+
 local SIDE_LEFT = -1
 local SIDE_RIGHT = 1
 
@@ -77,7 +135,7 @@ local RECOVERY_ALPHA = 8.50
 local RECOVERY_FADE_TIME = 2.50
 
 -- Force/moment calibration. Dynamic pressure is calculated in SI units from
--- rho and TAS, avoiding XP11's historically ambiguous Qstatic unit label.
+-- rho and TAS, independent of the simulator's Qstatic unit label.
 local DYNAMIC_PRESSURE_MAX = 3600.0
 local WING_REFERENCE_AREA = 202.1870
 local WING_MOMENT_CHORD = 6.4234
@@ -234,7 +292,7 @@ local function isCleanConfiguration()
         get(flap_middle_left),
         get(flap_middle_right)
     )
-    local gear_max = math.max(get(gear_left), get(gear_right))
+    local gear_max = math.max(get(gear_nose), get(gear_left), get(gear_right))
     return flap_max < 1.0
         and get(slat_ratio) < 0.05
         and gear_max < 0.05
@@ -344,7 +402,7 @@ local function applyActiveOutputs(alpha, trip_alpha, p_rate, q_rate, r_rate)
         local cl_value = mix(entry.cl, spin.cl, deep_spin) * progression
         local cd_value = mix(entry.cd, spin.cd, deep_spin) * progression
 
-        -- Transform the path-axis lift loss and drag increment into the XP11
+        -- Transform the path-axis lift loss and drag increment into the X-Plane
         -- aircraft Y/Z axes. At positive alpha, lost lift adds aft force while
         -- the extra drag carries a small upward component.
         local element_normal = dynamic_pressure * element.area
@@ -376,8 +434,8 @@ local function applyActiveOutputs(alpha, trip_alpha, p_rate, q_rate, r_rate)
     roll_moment = roll_moment * force_scale
     yaw_moment = yaw_moment * force_scale
 
-    -- Non-dimensional P/R damping turns the initial wing drop into a bounded,
-    -- yaw-dominant developed spin instead of an ever-faster tumble.
+    -- Non-dimensional P/R damping opposes angular rates during spin
+    -- assistance. The simulator determines the resulting motion.
     local rate_speed = math.max(tas, 25.0)
     local p_hat = math.rad(p_rate) * WING_SPAN / (2 * rate_speed)
     local r_hat = math.rad(r_rate) * WING_SPAN / (2 * rate_speed)
@@ -396,8 +454,8 @@ local function applyActiveOutputs(alpha, trip_alpha, p_rate, q_rate, r_rate)
         MAX_YAW_MOMENT
     )
 
-    -- Dump-calibrated loss of the T-tail's remaining nose-down authority.
-    -- Positive M is nose-up in XP11. At alpha 24 deg and q=738.7 Pa,
+    -- Empirical pitch correction representing reduced nose-down balance.
+    -- Positive M is nose-up in X-Plane. At alpha 24 deg and q=738.7 Pa,
     -- Cm=+0.135 gives about +130 kNm against the measured -126 kNm balance.
     local pitch_available = dynamic_pressure * WING_REFERENCE_AREA
         * WING_MOMENT_CHORD * FLAT_SPIN_CM
@@ -567,5 +625,5 @@ end
 
 function onModuleDone()
     resetState()
-    print("XP11 aggressive asymmetric stall force model released")
+    print("XP12 aggressive asymmetric stall force model v4.3.2 released")
 end

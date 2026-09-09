@@ -2,7 +2,7 @@ I
 800
 OBJ
 
-TEXTURE		glass.png
+TEXTURE		glass2.png
 TEXTURE_LIT	glass_LIT.png
 TEXTURE_NORMAL	glass_NML.png
 POINT_COUNTS	926 0 0 3198
@@ -1267,20 +1267,32 @@ IDX	788
 # fuselage.024
 #ATTR_hard
 # fuselage.024
+ANIM_begin
+	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_4
 ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_4
 TRIS	0 648
+ANIM_end
 # salon_walls.042
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
 TRIS	648 768
 # fuselage
+ANIM_begin
+	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_3
 ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_3
 TRIS	1416 108
+ANIM_end
 # fuselage.001
+ANIM_begin
+	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_2
 ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_2
 TRIS	1524 120
+ANIM_end
 # fuselage.002
+ANIM_begin
+	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_1
 ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_1
 TRIS	1644 108
+ANIM_end
 # fuselage.027
 ANIM_begin
 	ANIM_trans_begin	tu154/custom/anim/cockpit_window_right
@@ -1308,6 +1320,7 @@ ANIM_begin
 		ANIM_rotate_key	1	 -0.00
 	ANIM_rotate_end
 	# fuselage.027
+	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_4
 	ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_4
 	TRIS	1752 108
 ANIM_end
@@ -1338,6 +1351,7 @@ ANIM_begin
 		ANIM_rotate_key	1	 -0.00
 	ANIM_rotate_end
 	# fuselage.028
+	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_4
 	ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_4
 	TRIS	1860 108
 ANIM_end

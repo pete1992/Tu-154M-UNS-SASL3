@@ -139,9 +139,9 @@ local datarefs = {
     {"simDR_door_cargo1","sim/cockpit2/switches/custom_slider_on[2]"},
     {"simDR_door_cargo2","sim/cockpit2/switches/custom_slider_on[3]"},
     {"simDR_door_kitchen","sim/cockpit2/switches/custom_slider_on[6]"},
-    {"simDR_catering_anim","tu154/custom/anim/catering_tanker"},
+    {"simDR_catering_anim","tu154/custom/anim/catering"},
     -- Pitot icing and airspeed indications
-    {"mDR_percip_on_craft","sim/weather/precipitation_on_aircraft_ratio"},
+    {"mDR_percip_on_craft","sim/weather/aircraft/precipitation_on_aircraft_ratio"},
     {"simDR_speed_svs","tu154/custom/svs/true_airspeed"},
     {"simDR_ppd1_fail","tu154/custom/failures/pitot1"},
     {"simDR_ppd2_fail","tu154/custom/failures/pitot2"},
@@ -162,7 +162,7 @@ local datarefs = {
     {"simDR_ppd1","tu154/custom/switchers/ovhd/pitot_heat_1"},
     {"simDR_ppd2","tu154/custom/switchers/ovhd/pitot_heat_2"},
     {"simDR_ppd3","tu154/custom/switchers/ovhd/pitot_heat_3"},
-    {"simDR_percip_on_craft","sim/weather/precipitation_on_aircraft_ratio"},
+    {"simDR_percip_on_craft","sim/weather/aircraft/precipitation_on_aircraft_ratio"},
 }
 
 local env = getfenv(1)

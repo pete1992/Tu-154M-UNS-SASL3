@@ -77,7 +77,18 @@ defineProperty("bus36_volt_pts250_2", globalPropertyf("tu154/custom/elec/bus36_v
 defineProperty("absu_power_cc", globalPropertyf("tu154/custom/absu_power_cc")) --   
 
 -- other sources
-defineProperty("nvu_mode", globalPropertyi("tu154/custom/nvu/nvu_mode")) --  . 0 = , 1 = , 2 = , 3 = 
+-- The NVU-labelled button selects GPS1 for the HSI and ABSU.
+defineProperty("nav_select", globalPropertyi("tu154/custom/switchers/nav_select"))
+defineProperty("hsi_source_pilot", globalPropertyi("sim/cockpit2/radios/actuators/HSI_source_select_pilot"))
+defineProperty("hsi_source_copilot", globalPropertyi("sim/cockpit2/radios/actuators/HSI_source_select_copilot"))
+defineProperty("gps_power", globalPropertyi("sim/cockpit2/radios/actuators/gps_power"))
+defineProperty("gps_fromto", globalPropertyi("sim/cockpit/radios/gps_fromto"))
+defineProperty("gps_course", globalPropertyf("sim/cockpit/radios/gps_course_degtm"))
+defineProperty("gps_dev", globalPropertyf("sim/cockpit/radios/gps_hdef_dot"))
+defineProperty("gps_nm_per_dot", globalPropertyf("sim/cockpit/radios/gps_hdef_nm_per_dot"))
+defineProperty("GNS430_dtk", globalPropertyf("tu154/custom/SC/GNS430_dtk"))
+defineProperty("GNS430_dev", globalPropertyf("tu154/custom/SC/GNS430_dev"))
+defineProperty("GNS430_flag", globalPropertyi("tu154/custom/SC/GNS430_flag"))
 defineProperty("freq_1", globalPropertyf("sim/cockpit2/radios/actuators/nav1_frequency_hz"))  -- set the frequency
 defineProperty("freq_2", globalPropertyf("sim/cockpit2/radios/actuators/nav2_frequency_hz"))  -- set the frequency
 
@@ -196,14 +207,15 @@ local pitch_mode_main = 1
 
 local signal_timer = 0
 
-TOGA_COMM = sasl.findCommand("sim/engines/TOGA_power")
+TOGA_COMM = sasl.findCommand("sim/autopilot/take_off_go_around")
 
 local thro_last_1 = get(tro_comm_1)
 local thro_last_2 = get(tro_comm_2)
 local thro_last_3 = get(tro_comm_3)
 
 function TOGA_comm_hnd(phase)
-	if 1 == phase then
+	-- Handle a short press as well as a held TOGA button.
+	if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
 		TOGA_mode = true
 		TOGA_button = true
 		set(toga_command, 1)
@@ -218,7 +230,8 @@ function TOGA_comm_hnd(phase)
 	return 0
 end
 
-sasl.registerCommandHandler(TOGA_COMM, 0, TOGA_comm_hnd)
+-- The Tu-154 ABSU handles TOGA; suppress the simulator autopilot action.
+sasl.registerCommandHandler(TOGA_COMM, 1, TOGA_comm_hnd)
 
 local AP_toggle = sasl.findCommand("sim/autopilot/fdir_toggle")
 
@@ -251,6 +264,20 @@ local power_counter = 0
 local state_checked = false
 
 local yoke_reset = false
+
+local function finite_number(value)
+	return type(value) == "number" and value == value and value > -math.huge and value < math.huge
+end
+
+local function gps1_ready()
+	local fromto = get(gps_fromto)
+	local scale = get(gps_nm_per_dot)
+	return get(gps_power) > 0 and (fromto == 1 or fromto == 2)
+		and get(GNS430_flag) == 0
+		and finite_number(get(GNS430_dtk)) and finite_number(get(GNS430_dev))
+		and finite_number(get(gps_course)) and finite_number(get(gps_dev))
+		and finite_number(scale) and scale > 0
+end
 
 function update()
 	
@@ -302,6 +329,21 @@ if MASTER then
 	
 	local nav_prep = get(absu_nav_on) == 1
 	local land_prep = get(absu_landing_on) == 1
+	local gps_ready = gps1_ready()
+	if power and not land_prep then
+		-- HSI sources follow the ABSU source buttons, independently of Kontur.
+		if get(absu_nvu) == 1 then
+			set(nav_select, 1)
+			set(hsi_source_pilot, 2)
+			set(hsi_source_copilot, 2)
+		elseif get(absu_az1) == 1 and nav_prep then
+			set(hsi_source_pilot, 0)
+			set(hsi_source_copilot, 0)
+		elseif get(absu_az2) == 1 and nav_prep then
+			set(hsi_source_pilot, 1)
+			set(hsi_source_copilot, 1)
+		end
+	end
 	
 	local flaps = (get(flap_inn_L) + get(flap_inn_R)) / 2
 	
@@ -383,8 +425,15 @@ if MASTER then
 		if get(absu_zk) == 1 and roll_mode_main == 2 then -- ZK mode
 			roll_submode = 2
 			
-		elseif get(absu_nvu) == 1 and get(nvu_mode) >= 1 and not land_prep then -- NVU mode
-			roll_submode = 3
+		elseif get(absu_nvu) == 1 and not land_prep then -- GPS1 tracking
+			if gps_ready then
+				roll_submode = 3
+			else
+				-- A selected but unavailable GPS must not leave VOR steering active.
+				roll_submode = 1
+				set(man_roll_lamp, 1)
+				set(absu_fail_signal, 1)
+			end
 			
 		elseif get(absu_az1) == 1 and nav_prep and not land_prep then -- AZ mode. works only with VOR freq.
 			roll_submode = 4
@@ -414,6 +463,12 @@ if MASTER then
 		roll_submode = 0
 	end
 	
+	-- A lost GPS solution releases GPS tracking without selecting the NVU computer.
+	if roll_submode == 3 and not gps_ready then
+		roll_submode = 1
+		set(man_roll_lamp, 1)
+		set(absu_fail_signal, 1)
+	end
 	-- reset cases for ROLL modes
 	if roll_submode == 4 and roll_mode_main == 2 and (isILS(get(freq_1)) or get(nav_cs_flag_1) == 1) then -- AZ1
 		roll_submode = 1

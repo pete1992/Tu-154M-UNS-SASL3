@@ -4,7 +4,6 @@ OBJ
 
 TEXTURE		sard_scales.png
 TEXTURE_LIT	sard_scales_LIT.png
-TEXTURE_NORMAL	sard_scales_NML.png
 POINT_COUNTS	482 0 0 1194
 
 VT	   0.6162   -2.1984  -19.2021	 0.000  1.000 -0.000	0.9302 0.477 

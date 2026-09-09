@@ -83,6 +83,26 @@ local elev_last = get(elevation)
 
 local GS = get(speed)
 
+-- Terrain coordinates exist only after a successful SASL probe. Reject non-finite
+-- coordinates and conversion results while scenery loads or the origin changes.
+local function finiteNumber(value)
+    return type(value) == "number" and value == value and math.abs(value) < math.huge
+end
+
+local function localAltitude(x, y, z)
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    local lat, lon, alt = sasl.localToWorld(x, y, z)
+    if finiteNumber(alt) then return alt end
+    return nil
+end
+
+local function terrainAltitude(x, y, z)
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    local result, hitX, hitY, hitZ, nx, ny, nz, vx, vy, vz, wet = sasl.probeTerrain(x, y, z)
+    if result ~= PROBE_HIT_TERRAIN then return nil end
+    return localAltitude(hitX, hitY, hitZ), wet
+end
+
 function update()
 	
 	local passed = get(frame_time)
@@ -134,24 +154,19 @@ function update()
 		plane_x = get(pos_x)
 		plane_y = get(pos_y)
 		plane_z = get(pos_z)
-		LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear2_deploy) > 0.99
+		LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear3_deploy) > 0.99
 		
-		local acf_lat, acf_lon, acf_alt = sasl.localToWorld(plane_x, plane_y, plane_z)
+		local acf_alt = localAltitude(plane_x, plane_y, plane_z)
 		
 		height = distance * 1000
 		
 		for row = 1, rows, 1 do
 			local p_x = plane_x + dir_x * height * row/rows
 			local p_z = plane_z + dir_z * height * row/rows
-			prob, locationX, locationY, locationZ, normalX, normalY, normalZ, velocityX, velocityY, vlocityZ, isWet = sasl.probeTerrain(p_x, plane_y, p_z)
-								
-			--local probe_dist = math.sqrt((p_x)^2 + (p_z)^2) / 1000
-			--local correct = interpolate(correct_tbl, probe_dist) - 130
-			
-			--heightTable[row] = locationY + correct - plane_y
-			local lat, lon, alt = sasl.localToWorld(locationX, locationY, locationZ)
-			
-			heightTable[row] = alt - acf_alt
+			local alt = terrainAltitude(p_x, plane_y, p_z)
+			-- Missing terrain stays blank until valid scenery data returns.
+			heightTable[row] = -5000
+			if alt and acf_alt then heightTable[row] = alt - acf_alt end
 		end	
 		
 		local elev_now = get(elevation)

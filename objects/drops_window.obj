@@ -4,7 +4,6 @@ OBJ
 
 TEXTURE		drops_window.png
 TEXTURE_LIT	drops_window_LIT.png
-TEXTURE_NORMAL	drops_window_NML.png
 POINT_COUNTS	876 0 0 2544
 
 VT	  -0.2007    0.3584    0.2940	-0.669 -0.672  0.319	1.1563 0.6021
@@ -1143,6 +1142,8 @@ IDX	133
 IDX	137
 IDX	136
 
+ANIM_begin
+	ANIM_hide	0.000 0.001	tu154/custom/anim/rain_glass_1
 # fuselage
 ATTR_light_level  0.000  1.000 tu154/custom/anim/rain_glass_1
 TRIS	0 138
@@ -1342,6 +1343,8 @@ ANIM_begin
 		ATTR_light_level  0.000  1.000 tu154/custom/anim/rain_glass_1
 		TRIS	2496 48
 	ANIM_end
+ANIM_end
+
 ANIM_end
 
 # Built with Blender 2.49. Exported with XPlane2Blender 3.10.

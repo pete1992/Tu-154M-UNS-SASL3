@@ -3,7 +3,6 @@ I
 OBJ
 
 TEXTURE		gears.png
-TEXTURE_LIT	gears_LIT.png
 TEXTURE_NORMAL	gears_NML.png
 POINT_COUNTS	31152 0 0 155982
 GLOBAL_specular 1.0

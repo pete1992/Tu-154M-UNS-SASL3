@@ -11,7 +11,7 @@ defineProps({
     {"ismaster", "scp/api/ismaster", globalPropertyf},
     {"wiper_angle_left", "tu154/custom/anim/wiper_angle_left", globalPropertyf},
     {"wiper_angle_right", "tu154/custom/anim/wiper_angle_right", globalPropertyf},
-    {"actual_rain", "sim/weather/precipitation_on_aircraft_ratio", globalPropertyf},
+    {"actual_rain", "sim/weather/aircraft/precipitation_on_aircraft_ratio", globalPropertyf},
     {"net_rain_ratio", "tu154/custom/anim/net_rain_ratio", globalPropertyf},
     {"indicated_airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf},
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
@@ -57,23 +57,31 @@ for i = 1, 2 do
     end
 end
 
--- Preserve the current rain-mask state across script reloads.
+-- Preserve rain across script reloads, but discard stale snow above freezing.
 local mask_tbl = {}
 local wiper_mask_tbl_L = {}
 local wiper_mask_tbl_R = {}
+local preserve_snow_mask = get(thermo) <= 0
 
 for i = 1, 2 do
-    mask_tbl[i] = get(mask[i])
+    mask_tbl[i] =
+        i == 2 and not preserve_snow_mask
+        and 0
+        or get(mask[i])
 
     wiper_mask_tbl_L[i] = {}
     wiper_mask_tbl_R[i] = {}
 
     for y = 1, 5 do
         wiper_mask_tbl_L[i][y] =
-            get(wiper_mask_L[i][y])
+            i == 2 and not preserve_snow_mask
+            and 0
+            or get(wiper_mask_L[i][y])
 
         wiper_mask_tbl_R[i][y] =
-            get(wiper_mask_R[i][y])
+            i == 2 and not preserve_snow_mask
+            and 0
+            or get(wiper_mask_R[i][y])
     end
 end
 

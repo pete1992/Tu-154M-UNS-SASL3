@@ -4,7 +4,6 @@ OBJ
 
 TEXTURE		snow_window.png
 TEXTURE_LIT	snow_window_LIT.png
-TEXTURE_NORMAL	snow_window_NML.png
 POINT_COUNTS	876 0 0 2544
 
 VT	  -0.7684   -1.4777  -21.7466	 0.404 -0.714  0.571	2.064  -0.924
@@ -1143,6 +1142,8 @@ IDX	872
 IDX	874
 IDX	871
 
+ANIM_begin
+	ANIM_hide	0.000 0.001	tu154/custom/anim/rain_glass_2
 # fuselage.013
 ATTR_light_level  0.000  1.000 tu154/custom/anim/rain_glass_2
 TRIS	0 138
@@ -1342,6 +1343,8 @@ ANIM_begin
 	# fuselage.031
 	ATTR_light_level  0.000  1.000 tu154/custom/anim/rain_glass_2
 	TRIS	2436 108
+ANIM_end
+
 ANIM_end
 
 # Built with Blender 2.49. Exported with XPlane2Blender 3.10.

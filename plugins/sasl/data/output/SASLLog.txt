@@ -1,6 +1,6 @@
 [TU154 INFO]: Initializing...
 [TU154 INFO]: [DISPLAY] Monitor 0: 0, 0, 2560, 1440
-[TU154 INFO]: Path to module: I:\X-Plane 11/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/main.lua
+[TU154 INFO]: Path to module: I:\X-Plane 12/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/main.lua
 [TU154 INFO]: Loading module...
 [TU154 INFO]: [LUA]: loading	module
 [TU154 INFO]: [LUA]: "module"	This is the Tu154M 2.0.9
@@ -169,6 +169,13 @@
 [TU154 INFO]: [LUA]: loading	trimmers
 [TU154 INFO]: [LUA]: loading	flaps
 [TU154 INFO]: [LUA]: loading	nosewheel
+[TU154 WARN]: [STACK]:| findDataRef : DataRefsHandler::luaFindDataRef: <bp/connected> not found
+[TU154 WARN]: [STACK]:| ...154M-UNS-SASL3/plugins/sasl/data/init/initProperties.lua:395 in function <?>
+[TU154 WARN]: [STACK]:| ...s/sasl/data/modules/Custom Module/controls/nosewheel.lua:24 in function <defineProps>
+[TU154 WARN]: [STACK]:| ...s/sasl/data/modules/Custom Module/controls/nosewheel.lua:38 in function <f>
+[TU154 WARN]: [STACK]:| ...ch/Tu-154M-UNS-SASL3/plugins/sasl/data/init/initMain.lua:262 in function <nosewheel>
+[TU154 WARN]: [STACK]:| ...ns/sasl/data/modules/Custom Module/controls/controls.lua:9 in function <f>
+[TU154 WARN]: [STACK]:| ...
 [TU154 INFO]: [LUA]: loading	landing_gears
 [TU154 INFO]: [LUA]: loading	control_fails
 [TU154 INFO]: [LUA]: loading	stall
@@ -219,7 +226,7 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.4065
+[TU154 INFO]: Scripts loading time: 0.4219
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
@@ -227,65 +234,8 @@
 [TU154 INFO]: [LUA]: "save_state"	State restored: OK
 [TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
-[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	TOGA
-[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
-[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
 [TU154 INFO]: Disabling...
-[TU154 INFO]: [LUA]: "stall"	XP11 aggressive asymmetric stall force model released
+[TU154 INFO]: [LUA]: "stall"	XP12 aggressive asymmetric stall force model v4.3.2 released
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended
 [TU154 INFO]: [LUA]: "flight_controls"	flight controls released
 [TU154 INFO]: [LUA]: "rud_logic"	throttles released

@@ -6,7 +6,6 @@ OBJ
 TEXTURE cockpit_details.png
 TEXTURE_NORMAL	cockpit_details_NML.png
 GLOBAL_specular 1.0
-TEXTURE_LIT	cockpit_details_LIT.png
 POINT_COUNTS 55270 0 0 123270
 NORMAL_METALNESS
 

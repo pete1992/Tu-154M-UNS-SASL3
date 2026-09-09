@@ -3,7 +3,6 @@ I
 OBJ
 
 TEXTURE		engines.png
-TEXTURE_LIT	engines_LIT.png
 TEXTURE_NORMAL	engines_NML.png
 POINT_COUNTS	15270 0 0 47136
 GLOBAL_specular 1.0

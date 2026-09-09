@@ -190,9 +190,6 @@ local fail_counter = 0
 local check_time = math.random(15, 30)
 local resetTimer = 0
 
-set(joy_value_L, 0)
-set(joy_value_R, 0)
-
 function update()
 	passed = get(frame_time)
 	-- controls

@@ -299,6 +299,14 @@ function rev_comm_hnd(phase)
 	return 0
 end
 sasl.registerCommandHandler(rev_comm, 0, rev_comm_hnd)
+
+-- Preserve the response time constant without overshooting the commanded throttle
+-- during cold starts or long frames (the acceleration rate can reach 10 per second).
+local function approachThrottle(current, target, rate, passed)
+    local gain = 1 - math.exp(-rate * math.max(0, passed))
+    return current + (target - current) * gain
+end
+
 function update()
 	local passed = get(frame_time)
 	local stop_lever = get(throttle_lock) 
@@ -398,19 +406,19 @@ function update()
 		end
 	end
 	if virtual_rud_1_act < virtual_rud_1 then 
-		virtual_rud_1_act = virtual_rud_1_act - (virtual_rud_1_act - virtual_rud_1) * passed * T_coef_1
+		virtual_rud_1_act = approachThrottle(virtual_rud_1_act, virtual_rud_1, T_coef_1, passed)
 	else 
-		virtual_rud_1_act = virtual_rud_1_act - (virtual_rud_1_act - virtual_rud_1) * passed
+		virtual_rud_1_act = approachThrottle(virtual_rud_1_act, virtual_rud_1, 1, passed)
 	end
 	if virtual_rud_2_act < virtual_rud_2 then 
-		virtual_rud_2_act = virtual_rud_2_act - (virtual_rud_2_act - virtual_rud_2) * passed * T_coef
+		virtual_rud_2_act = approachThrottle(virtual_rud_2_act, virtual_rud_2, T_coef, passed)
 	else 
-		virtual_rud_2_act = virtual_rud_2_act - (virtual_rud_2_act - virtual_rud_2) * passed
+		virtual_rud_2_act = approachThrottle(virtual_rud_2_act, virtual_rud_2, 1, passed)
 	end
 	if virtual_rud_3_act < virtual_rud_3 then 
-		virtual_rud_3_act = virtual_rud_3_act - (virtual_rud_3_act - virtual_rud_3) * passed * T_coef_3
+		virtual_rud_3_act = approachThrottle(virtual_rud_3_act, virtual_rud_3, T_coef_3, passed)
 	else 
-		virtual_rud_3_act = virtual_rud_3_act - (virtual_rud_3_act - virtual_rud_3) * passed
+		virtual_rud_3_act = approachThrottle(virtual_rud_3_act, virtual_rud_3, 1, passed)
 	end
 	local thro_high_1 = line(virtual_rud_1_act, 0, 0.525, 1, 1.07)
 	local thro_high_2 = line(virtual_rud_2_act, 0, 0.525, 1, 1.07)

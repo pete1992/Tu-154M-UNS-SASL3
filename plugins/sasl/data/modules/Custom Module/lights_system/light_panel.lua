@@ -16,7 +16,7 @@ Changelog
 -- Panel logic for the lighting system.
 
 defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) > 120000
+local XP11 = get(xp_version) < 120000
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
