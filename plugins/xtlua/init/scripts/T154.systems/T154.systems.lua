@@ -174,7 +174,6 @@ local pressed = 0
 local start_self_test_var_l = 1
 local var_l_dur_test = 8000
 local thr_delta = 0
-local gs_fl = 0
 
 
 
@@ -620,18 +619,8 @@ if simDR_on_ground > 0 then
 end     
 
 
--- Inhibit the GLISS lamp when neither receiver has a usable glideslope.
-if simDRgs_flag1 < 1 then
-        gs_fl = 0
-elseif simDRgs_flag2 < 1 then
-        gs_fl = 0
-else
-        gs_fl = 1
-end    
-
-if gs_fl > 0 then
-        simDR_gliss_lit = 0
-end
+-- ABSU owns the GLISS armed/captured lamp. Receiver flags drive the SP-50
+-- signal lamps above, but must not overwrite the selected approach mode.
 
 end
 

@@ -2,14 +2,6 @@
 -- Improved ABSU logic (upvalue-safe refactor: consolidated state into table S)
 
 -----------------------------------------------------------------------
--- Smartcopilot
------------------------------------------------------------------------
--- 0 = not found, 1 = slave, 2 = master
-defineProperty("ismaster",    globalPropertyf("scp/api/ismaster"))
--- 1 = no control, 2 = has control
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1"))
-
------------------------------------------------------------------------
 -- Helpers
 -----------------------------------------------------------------------
 local function defineProps(defs)
@@ -22,6 +14,9 @@ end
 -- Bulk DataRef definitions
 -----------------------------------------------------------------------
 defineProps({
+	-- SmartCopilot: 0 = absent, 1 = slave, 2 = master; control: 1 = none, 2 = held
+	{"ismaster", "scp/api/ismaster", globalPropertyf},
+	{"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
 	-- Controls
 	{"joy_pitch", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf},
 	{"joy_roll", "tu154/custom/SC/yoke_roll_ratio", globalPropertyf},
@@ -167,22 +162,32 @@ local PID_PARAMS = {
 -----------------------------------------------------------------------
 -- Mode Transition Management
 -----------------------------------------------------------------------
-local mode_transition_timer = 0
+local roll_transition_timer = 0
+local pitch_transition_timer = 0
 local previous_roll_submode = 0
 local previous_pitch_submode = 0
-local transition_factor = 0
+local roll_transition_factor = 0
+local pitch_transition_factor = 0
 local TRANSITION_TIME = 3.5
 
 local function handleModeTransition(S)
     local current_roll_mode  = get(roll_sub_mode)
     local current_pitch_mode = get(pitch_sub_mode)
-    if current_roll_mode ~= previous_roll_submode or current_pitch_mode ~= previous_pitch_submode then
-        mode_transition_timer   = 0
+    -- Capturing GS must not restart the already established LOC channel.
+    if current_roll_mode ~= previous_roll_submode then
+        roll_transition_timer   = 0
         previous_roll_submode   = current_roll_mode
-        previous_pitch_submode  = current_pitch_mode
+        S.loc_guidance_valid    = false
     end
-    mode_transition_timer = mode_transition_timer + S.passed
-    transition_factor     = math.min(mode_transition_timer / TRANSITION_TIME, 1.0)
+    if current_pitch_mode ~= previous_pitch_submode then
+        pitch_transition_timer  = 0
+        previous_pitch_submode  = current_pitch_mode
+        S.gs_guidance_valid     = false
+    end
+    roll_transition_timer  = math.min(roll_transition_timer + S.passed, TRANSITION_TIME)
+    pitch_transition_timer = math.min(pitch_transition_timer + S.passed, TRANSITION_TIME)
+    roll_transition_factor  = roll_transition_timer / TRANSITION_TIME
+    pitch_transition_factor = pitch_transition_timer / TRANSITION_TIME
 end
 
 -----------------------------------------------------------------------
@@ -247,7 +252,7 @@ local S = {
     -- H
     H_stab = 0, H_last = 0, I_H = 0,
     -- GS
-    GS_last = 0, GS_smth = 0, GS_est = 0,
+    GS_last = 0, GS_smth = 0, GS_est = 0, GS_pitch_need = 0,
     -- TOGA
     toga_alt = 0,
     -- roll manual
@@ -263,6 +268,8 @@ local S = {
     vor_slip_act = 0, vor_dev_lim = 4, vor_dev_act = 0,
     -- APP
     dev_last = 0, ILS_spd_smth = 0, ILS_dev_smth = 0, ILS_spd_last = 0,
+    ILS_roll_need = 0, loc_guidance_valid = false, gs_guidance_valid = false,
+    ils_source = nil, ils_frequency = nil,
     -- Yaw damper memory
     yaw_I = 0, yaw_P_last = 0,
     -- displays / smoothing
@@ -300,7 +307,8 @@ local function yaw_holder(S) end
 function update()
 
   -- per-frame basics
-  S.passed = get(frame_time)
+  -- Limit filter/actuator integration to a stable step after a frame stall.
+  S.passed = safeClamp(get(frame_time), 0, 0.1, 0)
   S.MASTER = get(ismaster) ~= 1
 
   -- init once (stored in S to avoid extra locals)
@@ -350,8 +358,29 @@ function update()
   S.mach           = safeClamp(get(mach_svs), 0, 1.2, 0.3)
   local airspeed   = safeClamp(get(ias) * 1.852, 50, 1000, 250)
   local alt        = safeClamp(get(alt_svs), -1000, 50000, 10000)
-  local gs_dev     = safeClamp(get(nav_gs_1) * 10, -15, 15, 0)
-  if secondNav then gs_dev = safeClamp(get(nav_gs_2) * 10, -15, 15, 0) end
+  local ils_frequency = secondNav and get(freq_2) or get(freq_1)
+  local loc_deviation = secondNav and get(nav_cs_2) or get(nav_cs_1)
+  local gs_deviation = secondNav and get(nav_gs_2) or get(nav_gs_1)
+  local loc_valid = isILS(ils_frequency)
+      and (secondNav and get(nav_cs_flag_2) or get(nav_cs_flag_1)) == 0
+      and finite(loc_deviation)
+  local gs_valid = isILS(ils_frequency)
+      and (secondNav and get(nav_gs_flag_2) or get(nav_gs_flag_1)) == 0
+      and finite(gs_deviation)
+  local gs_dev = safeClamp(gs_deviation * 10, -15, 15, 0)
+
+  -- Do not differentiate across a new receiver, frequency or approach capture.
+  if S.ils_source ~= secondNav or S.ils_frequency ~= ils_frequency then
+    S.loc_guidance_valid = false; S.gs_guidance_valid = false
+    S.ILS_roll_need = S.roll_now; S.GS_pitch_need = S.pitch_now
+    S.ils_source = secondNav; S.ils_frequency = ils_frequency
+  end
+  if roll_submode ~= 6 or roll_mode < 1 then
+    S.loc_guidance_valid = false; S.ILS_roll_need = S.roll_now
+  end
+  if pitch_submode ~= 5 or pitch_mode < 1 then
+    S.gs_guidance_valid = false; S.GS_pitch_need = S.pitch_now
+  end
 
   local RV_alt = safeClamp(get(rv5_alt), 0, 2500, 1000)
 
@@ -400,7 +429,7 @@ function update()
 
       pitch_need = safeClamp(PID + S.PU_pitch, -8.5, 17.0, S.PU_pitch)
 
-      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.3 * transition_factor
+      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.3 * pitch_transition_factor
       S.M_stab = S.mach; S.M_smth = S.M_stab
       S.toga_alt = alt;  S.H_stab = alt
 
@@ -416,7 +445,7 @@ function update()
 
       pitch_need = safeClamp(PID + S.PU_pitch, -8.5, 13.6, S.PU_pitch)
 
-      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.3 * transition_factor
+      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.3 * pitch_transition_factor
       S.V_stab = airspeed; S.V_smth = S.V_stab
       S.toga_alt = alt;    S.H_stab = alt
 
@@ -434,46 +463,56 @@ function update()
 
       pitch_need = safeClamp(-PID + S.PU_pitch, -8.5, 8.5, S.PU_pitch)
 
-      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.3 * transition_factor
+      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.3 * pitch_transition_factor
       S.V_stab = airspeed; S.V_smth = S.V_stab
       S.M_stab = S.mach;   S.M_smth = S.M_stab
       S.toga_alt = alt
 
     elseif pitch_submode == 5 then
       -- GS hold (soft flare shaping)
-      S.GS_smth = S.GS_smth + (gs_dev - S.GS_smth) * S.passed * 5
-      local gs_spd = 0
-      if S.passed > 0 then gs_spd = (S.GS_smth - S.GS_last) / S.passed end
-
-      local Kp = PID_PARAMS.GS.Kp_low
-      local Kd = PID_PARAMS.GS.Kd_low
-      if RV_alt <= 250 then
-        Kp = PID_PARAMS.GS.Kp_high
-        Kd = PID_PARAMS.GS.Kd_high
-        if RV_alt <= 100 and RV_alt > 20 then
-          local f = 1.0 - (100 - RV_alt) * 0.4 / 80
-          Kp = Kp * f; Kd = Kd * f
-        elseif RV_alt <= 20 then
-          Kp = Kp * 0.3; Kd = Kd * 0.3
+      if gs_valid then
+        if not S.gs_guidance_valid then
+          S.GS_smth = gs_dev; S.GS_last = gs_dev
         end
+        S.GS_smth = S.GS_smth + (gs_dev - S.GS_smth) * S.passed * 5
+        local gs_spd = 0
+        if S.passed > 0 then gs_spd = (S.GS_smth - S.GS_last) / S.passed end
+
+        local Kp = PID_PARAMS.GS.Kp_low
+        local Kd = PID_PARAMS.GS.Kd_low
+        if RV_alt <= 250 then
+          Kp = PID_PARAMS.GS.Kp_high
+          Kd = PID_PARAMS.GS.Kd_high
+          if RV_alt <= 100 and RV_alt > 20 then
+            local f = 1.0 - (100 - RV_alt) * 0.4 / 80
+            Kp = Kp * f; Kd = Kd * f
+          elseif RV_alt <= 20 then
+            Kp = Kp * 0.3; Kd = Kd * 0.3
+          end
+        end
+
+        local PID = S.GS_smth * Kp + gs_spd * Kd * pitch_transition_factor
+        pitch_need = -PID + S.PU_pitch
+
+        local up_lim   = 17 * 0.4 * (S.gear_down and 0.8 or 1.0)
+        local down_lim = -17 * 0.5 * (S.gear_down and 1.2 or 1.0)
+        pitch_need = safeClamp(pitch_need, down_lim, up_lim, S.PU_pitch)
+
+        if math.abs(S.GS_smth) < 1 then S.GS_est = 1
+        elseif math.abs(S.GS_smth) > 6 then S.GS_est = 0 end
+
+        S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.1 * pitch_transition_factor
+        S.V_stab = airspeed; S.V_smth = S.V_stab
+        S.M_stab = S.mach;   S.M_smth = S.M_stab
+        S.H_stab = alt;      S.toga_alt = alt
+
+        if RV_alt <= 100 and math.abs(S.GS_smth) > 4 then set(absu_gs_out, 1) end
+        S.GS_pitch_need = pitch_need
+      else
+        -- The mode component owns the bounded dropout timer and disconnect.
+        pitch_need = S.GS_pitch_need
       end
-
-      local PID = S.GS_smth * Kp + gs_spd * Kd * transition_factor
-      pitch_need = -PID + S.PU_pitch
-
-      local up_lim   = 17 * 0.4 * (S.gear_down and 0.8 or 1.0)
-      local down_lim = -17 * 0.5 * (S.gear_down and 1.2 or 1.0)
-      pitch_need = safeClamp(pitch_need, down_lim, up_lim, S.PU_pitch)
-
-      if math.abs(S.GS_smth) < 1 then S.GS_est = 1
-      elseif math.abs(S.GS_smth) > 6 then S.GS_est = 0 end
-
-      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.1 * transition_factor
-      S.V_stab = airspeed; S.V_smth = S.V_stab
-      S.M_stab = S.mach;   S.M_smth = S.M_stab
-      S.H_stab = alt;      S.toga_alt = alt
-
-      if RV_alt <= 100 and math.abs(S.GS_smth) > 4 then set(absu_gs_out, 1) end
+      S.gs_guidance_valid = gs_valid
 
     elseif pitch_submode == 6 and get(absu_calc_toga_fail) == 0 then
       -- TOGA
@@ -492,7 +531,7 @@ function update()
       if alt < S.toga_alt then pitch_need = pitch_need + S.passed * 2 else pitch_need = PID + S.PU_pitch end
       pitch_need = safeClamp(pitch_need, 0, 17, S.PU_pitch)
 
-      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.2 * transition_factor
+      S.PU_pitch = S.PU_pitch + (S.pitch_now - S.PU_pitch) * S.passed * 0.2 * pitch_transition_factor
       S.M_stab = S.mach; S.M_smth = S.M_stab
       S.H_stab = alt;    S.toga_alt = alt
 
@@ -566,14 +605,14 @@ function update()
       if S.course_stab_timer > 0 and S.course_stab_timer < 8 then
         local course_diff = course_now - S.course_stab_act
         if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
-        S.course_stab_act = S.course_stab_act + course_diff * S.passed * 3 * transition_factor
+        S.course_stab_act = S.course_stab_act + course_diff * S.passed * 3 * roll_transition_factor
       end
 
       local course_diff = S.course_stab_act - course_now
       if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
 
       if S.course_stab_timer > 8 then
-        roll_need = course_diff * 1.5 * transition_factor
+        roll_need = course_diff * 1.5 * roll_transition_factor
       else
         roll_need = (math.abs(roll_handle) <= 1) and 0 or (roll_handle * 0.5)
       end
@@ -591,7 +630,7 @@ function update()
       local course_diff = pnp_course - course_now
       if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
 
-      roll_need = safeClamp(course_diff * 2 * transition_factor, -20, 20, 0)
+      roll_need = safeClamp(course_diff * 2 * roll_transition_factor, -20, 20, 0)
       S.roll_show = 0
       S.ILS_dev_smth = 0
 
@@ -628,9 +667,9 @@ function update()
         if new_course < 0 then new_course = new_course + 360 elseif new_course > 360 then new_course = new_course - 360 end
         local course_diff = new_course - course_now
         if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
-        roll_need = course_diff * 2 * transition_factor
+        roll_need = course_diff * 2 * roll_transition_factor
       else
-        roll_need = (-side * KZ - side_spd * KPZ) * transition_factor
+        roll_need = (-side * KZ - side_spd * KPZ) * roll_transition_factor
       end
 
       roll_need = safeClamp(roll_need, -25, 25, 0)
@@ -638,7 +677,7 @@ function update()
       local course_delta = nvu_course - course_now
       while course_delta > 180 do course_delta = course_delta - 360 end
       while course_delta < -180 do course_delta = course_delta + 360 end
-      if math.abs(course_delta) > 90 then roll_need = sign(course_delta) * 25 * transition_factor end
+      if math.abs(course_delta) > 90 then roll_need = sign(course_delta) * 25 * roll_transition_factor end
 
       S.roll_show = roll_need
       if not nav_on then roll_need = 0 end
@@ -652,14 +691,14 @@ function update()
       local course_dev = (roll_submode == 5 and get(nav_cs_2) or get(nav_cs_1)) * 10
       local pnp_course = (get(absu_zpu_sel) == 1) and get(pkp_obs_2) or get(pkp_obs_1)
 
-      S.vor_slip_act = S.vor_slip_act + (slip_angle - S.vor_slip_act) * S.passed * 0.5 * transition_factor
+      S.vor_slip_act = S.vor_slip_act + (slip_angle - S.vor_slip_act) * S.passed * 0.5 * roll_transition_factor
       course_dev      = safeClamp(course_dev, -S.vor_dev_lim, S.vor_dev_lim, 0)
-      S.vor_dev_act   = S.vor_dev_act + (course_dev - S.vor_dev_act) * S.passed * 0.5 * transition_factor
+      S.vor_dev_act   = S.vor_dev_act + (course_dev - S.vor_dev_act) * S.passed * 0.5 * roll_transition_factor
 
       local course_diff = pnp_course - course_now
       if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
 
-      roll_need = safeClamp(((course_diff - S.vor_slip_act) * 1.5 + S.vor_dev_act * 10) * transition_factor, -20, 20, 0)
+      roll_need = safeClamp(((course_diff - S.vor_slip_act) * 1.5 + S.vor_dev_act * 10) * roll_transition_factor, -20, 20, 0)
       S.roll_show = roll_need
       if not nav_on then roll_need = 0 end
 
@@ -669,62 +708,74 @@ function update()
 
     elseif roll_submode == 6 then
       -- APP (LOC) — softened
-      local course_dev = (secondNav and get(nav_cs_2) or get(nav_cs_1)) * 10
-      local pnp_course = (get(absu_zpu_sel) == 1) and get(pkp_obs_2) or get(pkp_obs_1)
+      if loc_valid then
+        local course_dev = safeClamp(loc_deviation * 10, -15, 15, 0)
+        local pnp_course = (get(absu_zpu_sel) == 1) and get(pkp_obs_2) or get(pkp_obs_1)
 
-      S.ILS_dev_smth = S.ILS_dev_smth + (course_dev - S.ILS_dev_smth) * S.passed * 8 * transition_factor
-      local dev_spd = 0
-      if S.passed > 0 then dev_spd = (S.ILS_dev_smth - S.dev_last) / S.passed end
-      S.dev_last = S.ILS_dev_smth
+        if not S.loc_guidance_valid then
+          S.ILS_dev_smth = course_dev; S.dev_last = course_dev; S.ILS_spd_last = 0
+        end
+        S.ILS_dev_smth = S.ILS_dev_smth + (course_dev - S.ILS_dev_smth) * S.passed * 8 * roll_transition_factor
+        local dev_spd = 0
+        if S.passed > 0 then dev_spd = (S.ILS_dev_smth - S.dev_last) / S.passed end
+        S.dev_last = S.ILS_dev_smth
 
-      if math.abs(course_dev) > 9 then
-        local intercept_angle = math.min(S.APP_INTERCEPT_CAP, math.abs(course_dev) * 2)
-        local new_course = pnp_course + intercept_angle * sign(course_dev)
-        if new_course < 0 then new_course = new_course + 360 elseif new_course > 360 then new_course = new_course - 360 end
-        local course_diff = new_course - course_now
-        if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
-        roll_need = course_diff * 1.15 * transition_factor
-        local roll_limit = S.APP_INTERCEPT_CAP * 0.6
-        roll_need = safeClamp(roll_need, -roll_limit, roll_limit, 0)
-        S.roll_show = roll_need
-      else
-        local K_ILS = S.ILS_GAIN_BASE * ((RV_alt > 250) and 2 or 1)
-        local ILS_dev_limited = safeClamp(S.ILS_dev_smth * K_ILS, -S.ILS_LIM, S.ILS_LIM, 0)
-
-        local ILS_spd_limited = safeClamp(dev_spd * (S.ILS_SPD_GAIN_BASE * ((RV_alt > 250) and 2 or 1)), -S.ILS_SPD_LIM, S.ILS_SPD_LIM, 0)
-
-        if math.abs(S.ILS_spd_last - dev_spd) > S.SPIKE_THRESHOLD then
-          ILS_spd_limited = ILS_spd_limited + (0 - ILS_spd_limited) * (1 - S.ALPHA_SPIKE)
-          ILS_dev_limited = ILS_dev_limited + (0 - ILS_dev_limited) * S.ALPHA_SPIKE
+        if math.abs(course_dev) > 9 then
+          local intercept_angle = math.min(S.APP_INTERCEPT_CAP, math.abs(course_dev) * 2)
+          local new_course = pnp_course + intercept_angle * sign(course_dev)
+          if new_course < 0 then new_course = new_course + 360 elseif new_course > 360 then new_course = new_course - 360 end
+          local course_diff = new_course - course_now
+          if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
+          roll_need = course_diff * 1.15 * roll_transition_factor
+          local roll_limit = S.APP_INTERCEPT_CAP * 0.6
+          roll_need = safeClamp(roll_need, -roll_limit, roll_limit, 0)
+          S.roll_show = roll_need
         else
-          ILS_spd_limited = ILS_spd_limited * S.ALPHA_NORMAL + (dev_spd * (S.ILS_SPD_GAIN_BASE * ((RV_alt > 250) and 2 or 1))) * (1 - S.ALPHA_NORMAL)
-          ILS_dev_limited = ILS_dev_limited * S.ALPHA_NORMAL + (S.ILS_dev_smth * K_ILS) * (1 - S.ALPHA_NORMAL)
-          ILS_spd_limited = safeClamp(ILS_spd_limited, -S.ILS_SPD_LIM, S.ILS_SPD_LIM, 0)
-          ILS_dev_limited = safeClamp(ILS_dev_limited, -S.ILS_LIM, S.ILS_LIM, 0)
+          local K_ILS = S.ILS_GAIN_BASE * ((RV_alt > 250) and 2 or 1)
+          local ILS_dev_limited = safeClamp(S.ILS_dev_smth * K_ILS, -S.ILS_LIM, S.ILS_LIM, 0)
+
+          local ILS_spd_limited = safeClamp(dev_spd * (S.ILS_SPD_GAIN_BASE * ((RV_alt > 250) and 2 or 1)), -S.ILS_SPD_LIM, S.ILS_SPD_LIM, 0)
+
+          if math.abs(S.ILS_spd_last - dev_spd) > S.SPIKE_THRESHOLD then
+            ILS_spd_limited = ILS_spd_limited + (0 - ILS_spd_limited) * (1 - S.ALPHA_SPIKE)
+            ILS_dev_limited = ILS_dev_limited + (0 - ILS_dev_limited) * S.ALPHA_SPIKE
+          else
+            ILS_spd_limited = ILS_spd_limited * S.ALPHA_NORMAL + (dev_spd * (S.ILS_SPD_GAIN_BASE * ((RV_alt > 250) and 2 or 1))) * (1 - S.ALPHA_NORMAL)
+            ILS_dev_limited = ILS_dev_limited * S.ALPHA_NORMAL + (S.ILS_dev_smth * K_ILS) * (1 - S.ALPHA_NORMAL)
+            ILS_spd_limited = safeClamp(ILS_spd_limited, -S.ILS_SPD_LIM, S.ILS_SPD_LIM, 0)
+            ILS_dev_limited = safeClamp(ILS_dev_limited, -S.ILS_LIM, S.ILS_LIM, 0)
+          end
+
+          local roll_calc = (ILS_dev_limited + ILS_spd_limited) * roll_transition_factor
+          -- Filter the target itself, not the measured bank once per frame.
+          roll_need = S.ILS_roll_need + (roll_calc - S.ILS_roll_need) * S.passed
+
+          S.ILS_spd_last = dev_spd
+
+          local roll_limit = S.APP_FINE_ROLL_CAP * ((RV_alt > 250) and 1.5 or 1.0)
+          roll_need = safeClamp(roll_need, -roll_limit, roll_limit, 0)
+          S.roll_show = roll_need
         end
 
-        local roll_calc = (ILS_dev_limited + ILS_spd_limited) * transition_factor
-        roll_need = roll_need + (roll_calc - roll_need) * S.passed
+        S.course_stab_timer = 0
+        local course_diff = course_now - S.course_stab_act
+        if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
+        S.course_stab_act = S.course_stab_act + course_diff * S.passed * 3 * roll_transition_factor
 
-        S.ILS_spd_last = dev_spd
-
-        local roll_limit = S.APP_FINE_ROLL_CAP * ((RV_alt > 250) and 1.5 or 1.0)
-        roll_need = safeClamp(roll_need, -roll_limit, roll_limit, 0)
+        if RV_alt <= 100 and math.abs(S.ILS_dev_smth) > 3 then set(absu_course_out, 1) end
+        S.ILS_roll_need = roll_need
+      else
+        -- Hold the last valid target only until the mode layer exits APP.
+        roll_need = S.ILS_roll_need
         S.roll_show = roll_need
       end
-
-      S.course_stab_timer = 0
-      local course_diff = course_now - S.course_stab_act
-      if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
-      S.course_stab_act = S.course_stab_act + course_diff * S.passed * 3 * transition_factor
-
-      if RV_alt <= 100 and math.abs(S.ILS_dev_smth) > 3 then set(absu_course_out, 1) end
+      S.loc_guidance_valid = loc_valid
 
     elseif roll_submode == 7 and get(absu_calc_toga_fail) == 0 then
       -- TOGA roll
       local course_diff = S.course_stab_act - course_now
       if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
-      roll_need = safeClamp(course_diff * 1.5 * transition_factor, -20, 20, 0)
+      roll_need = safeClamp(course_diff * 1.5 * roll_transition_factor, -20, 20, 0)
       S.roll_show = roll_need
       S.ILS_dev_smth = 0
 
@@ -742,13 +793,13 @@ function update()
       S.roll_act = safeClamp(ail_need, -S.ail_lim, S.ail_lim, 0)
       S.roll_need_smth = S.roll_now
     elseif roll_mode == 2 then
-      local rate_limit = 2 * transition_factor
+      local rate_limit = 2 * roll_transition_factor
       if roll_need - S.roll_need_smth > rate_limit then
         S.roll_need_smth = S.roll_need_smth + S.passed * 8
       elseif roll_need - S.roll_need_smth < -rate_limit then
         S.roll_need_smth = S.roll_need_smth - S.passed * 8
       else
-        S.roll_need_smth = S.roll_need_smth + (roll_need - S.roll_need_smth) * S.passed * 8 * transition_factor
+        S.roll_need_smth = S.roll_need_smth + (roll_need - S.roll_need_smth) * S.passed * 8 * roll_transition_factor
       end
       if get(absu_calc_roll_fail) == 0 then S.roll_act = roll_holder(S.roll_need_smth, S) end
     end
@@ -852,8 +903,8 @@ function update()
     elseif not app_on then
       S.roll_show = 0; S.pitch_show = 0
     else
-      if (not isILS(get(freq_1)) or get(nav_cs_flag_1) == 1) and not secondNav then S.roll_show = 0 else S.roll_show = S.roll_show - S.roll_now end
-      if (not isILS(get(freq_1)) or get(nav_gs_flag_1) == 1) and get(nav_gs_flag_2) == 1 then
+      if not loc_valid then S.roll_show = 0 else S.roll_show = S.roll_show - S.roll_now end
+      if not gs_valid then
         S.pitch_show = 0
       else
         S.pitch_show = S.pitch_show - S.pitch_now
@@ -866,7 +917,7 @@ function update()
     elseif not app_on then
       S.roll_show = 0; S.pitch_show = 0
     else
-      if (not isILS(get(freq_1)) or get(nav_cs_flag_1) == 1) and not secondNav then S.roll_show = 0 else S.roll_show = S.roll_show - S.roll_now end
+      if not loc_valid then S.roll_show = 0 else S.roll_show = S.roll_show - S.roll_now end
       S.pitch_show = 0
     end
 
@@ -884,15 +935,21 @@ function update()
     S.roll_show = 25; S.pitch_show = 10
   end
 
+  -- ILS guidance and its annunciation must use the same selected receiver.
+  local roll_signal_failed = (roll_submode == 6 and not loc_valid)
+      or (roll_submode ~= 6 and (get(nav_cs_flag_1) == 1 or get(nav_cs_flag_2) == 1))
+  local pitch_signal_failed = (pitch_submode == 5 and not gs_valid)
+      or (pitch_submode ~= 5 and get(nav_gs_flag_1) == 1)
+
   -- failure flags
   if (get(man_roll_lamp) == 1 and
-      (get(absu_calc_roll_fail) == 1 or get(nav_cs_flag_1) == 1 or get(nav_cs_flag_2) == 1 or get(tks_fail_left) + get(tks_fail_right) == 2 or get(man_pitch_lamp) == 1))
+      (get(absu_calc_roll_fail) == 1 or roll_signal_failed or get(tks_fail_left) + get(tks_fail_right) == 2 or get(man_pitch_lamp) == 1))
       or get(absu_speed_test_2) == 1 then
     flag_roll = 1; S.roll_show = 25
   end
 
   if (get(man_pitch_lamp) == 1 and
-      (get(absu_calc_pitch_fail) == 1 or get(nav_gs_flag_1) == 1 or get(man_roll_lamp) == 1))
+      (get(absu_calc_pitch_fail) == 1 or pitch_signal_failed or get(man_roll_lamp) == 1))
       or get(absu_speed_test_2) == 1 then
     flag_pitch = 1; S.pitch_show = 10
   end
@@ -927,7 +984,7 @@ function pitch_holder(pitch_hold, S)
     if S.gear_down then
         pitch_stab_coef = 0.00425 * 2
     end
-    local roll_part = math.abs(S.roll_now) * pitch_stab_coef * line(S.mach, 0.4, 1.3, 0.8, 0.8) * transition_factor
+    local roll_part = math.abs(S.roll_now) * pitch_stab_coef * line(S.mach, 0.4, 1.3, 0.8, 0.8) * pitch_transition_factor
 
     local elev_pos = PID_part + roll_part
     elev_pos = safeClamp(elev_pos, -S.elev_lim, S.elev_lim, 0)

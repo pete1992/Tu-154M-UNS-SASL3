@@ -5250,9 +5250,24 @@ TRIS 6549 174
 ANIM_end
 ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/weather_lit
 ATTR_hard 
-TRIS 6723 1875
+TRIS 6723 1638
+# WX2000 TILT knob and pointer; rotation follows the labeled texture ticks.
+ANIM_begin
+ANIM_trans 0.270782 -1.723328 -21.591263 0.270782 -1.723328 -21.591263 0.000000 0.000000 none
+ANIM_rotate_begin 0.000000 -0.139148 -0.990272 tu154/custom/wx2000_tilt
+ANIM_rotate_key -15.000000 -134.000000
+ANIM_rotate_key -10.000000 -106.000000
+ANIM_rotate_key -5.000000 -78.000000
+ANIM_rotate_key 0.000000 0.000000
+ANIM_rotate_key 5.000000 78.000000
+ANIM_rotate_key 10.000000 105.000000
+ANIM_rotate_key 15.000000 134.000000
+ANIM_rotate_end
+ANIM_trans -0.270782 1.723328 21.591263 -0.270782 1.723328 21.591263 0.000000 0.000000 none
+TRIS 8361 237
 ATTR_no_cull
 TRIS 8598 6
+ANIM_end
 ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/srpbz_rppz_lit
 ATTR_cull
 TRIS 8604 9

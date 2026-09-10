@@ -9,7 +9,7 @@ TEXTURE
 GLOBAL_cockpit_lit
 GLOBAL_specular 1.0
 
-POINT_COUNTS 11267 0 0 22857
+POINT_COUNTS 11271 0 0 22863
 
 # Compacted XP12 cockpit geometry table.
 # Only vertices and index positions reachable from TRIS commands are retained.
@@ -11282,6 +11282,12 @@ VT 0.84814075 -1.14257262 -20.07296538 -0.76350400 -0.64579800 0.00000000 0.6560
 VT 0.84814075 -1.14257262 -20.10033663 -0.76350400 -0.64579800 0.00000000 0.65605200 0.53270000
 VT 0.81926325 -1.10843138 -20.07296538 -0.76350400 -0.64579800 0.00000000 0.62118500 0.58490000
 
+# WX2000 TILT click surface, matched to the existing gain control plane.
+VT 0.261253 -1.732679 -21.587673 0.000000 0.143066 0.989716 0.658859 0.574799
+VT 0.261253 -1.713361 -21.590465 0.000000 0.143066 0.989716 0.658859 0.526993
+VT 0.280311 -1.732679 -21.587673 0.000000 0.143066 0.989716 0.626892 0.574799
+VT 0.280311 -1.713361 -21.590465 0.000000 0.143066 0.989716 0.626892 0.526993
+
 # Compacted index table.
 
 IDX10	0	1	2	3	0	2	4	5	6	7
@@ -13576,6 +13582,12 @@ IDX	11263
 IDX	11264
 IDX	11265
 IDX	11266
+IDX	11267
+IDX	11268
+IDX	11269
+IDX	11269
+IDX	11268
+IDX	11270
 
 
 # Original ANIM section from tu154_cockpit.obj below by KITBASH.LUA
@@ -18102,6 +18114,14 @@ ANIM_begin
 ANIM_hide 0.000000 0.000000 tu154/custom/switchers/eng/emerg_gen_on_3_cap
 ATTR_manip_toggle up_down 1.000000 0.000000 tu154/custom/switchers/eng/emerg_gen_on_3
 TRIS 22851 6
+ANIM_end
+
+# WX2000 TILT: half-degree click/wheel steps, positive toward UP.
+ANIM_begin
+ATTR_draw_disable
+ATTR_no_solid_camera
+ATTR_manip_axis_knob rotate_medium -15.000000 15.000000 0.500000 3.000000 tu154/custom/wx2000_tilt TILT (UP + / DN -)
+TRIS 22857 6
 ANIM_end
 
 ATTR_manip_none

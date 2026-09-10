@@ -32,6 +32,7 @@ components = {
 		v_plank = globalPropertyf("sim/cockpit2/radios/indicators/nav2_hdef_dots_pilot"), -- horizontal deflection on course
 		h_plank = globalPropertyf("sim/cockpit2/radios/indicators/nav2_vdef_dots_pilot"), -- vertical deflection on glideslope
 		cr_flag = globalPropertyf("sim/cockpit2/radios/indicators/nav2_flag_from_to_pilot"), -- Nav-To-From indication, nav1, pilot, 0 is flag, 1 is to, 2 is from.
+		cs_signal = globalPropertyi("sim/cockpit2/radios/indicators/nav2_display_horizontal"), -- Horizontal signal received by NAV2.
 		gs_flag = globalPropertyf("sim/cockpit/radios/nav2_CDI"),  -- glideslope flag. 0 - flag is shown
 		nav_deg = globalPropertyf("sim/cockpit2/radios/indicators/nav2_relative_bearing_deg"), -- nav1 bearing
 		sim_fail = globalPropertyi("sim/operation/failures/rel_nav2"), -- fail

@@ -15,6 +15,7 @@ defineProps({
     {"v_plank", "sim/cockpit2/radios/indicators/nav1_hdef_dots_pilot", globalPropertyf},
     {"h_plank", "sim/cockpit2/radios/indicators/nav1_vdef_dots_pilot", globalPropertyf},
     {"cr_flag", "sim/cockpit2/radios/indicators/nav1_flag_from_to_pilot", globalPropertyf},
+    {"cs_signal", "sim/cockpit2/radios/indicators/nav1_display_horizontal", globalPropertyi},
     {"gs_flag", "sim/cockpit/radios/nav1_CDI", globalPropertyf},
     {"nav_deg", "sim/cockpit2/radios/indicators/nav1_relative_bearing_deg", globalPropertyf},
     {"sim_fail", "sim/operation/failures/rel_nav1", globalPropertyi},
@@ -148,6 +149,10 @@ local glidesl = 0 --get(h_plank)
 local obs_knob_last = 0
 local obs_now = get(obs)
 
+local function finite(value)
+    return value == value and value > -math.huge and value < math.huge
+end
+
 function update()
 	
 	set(sim_fail, 0)
@@ -266,31 +271,19 @@ end
 	
 	if MASTER then set(vor_bear, bearing) end
 	
-	-- flags calculations
+	-- TO/FROM belongs to the VOR lamps, not localizer signal validity.
 	local nav_flag = get(cr_flag) * bool2int(power)  -- Nav-To-From indication, nav1, pilot, 0 is flag, 1 is to, 2 is from.
-	local glide_flag = get(gs_flag) * bool2int(power)  -- glideslope flag. 0 - flag is shown
+	local course_dots = get(v_plank)
+	local glide_dots = get(h_plank)
+	local course_valid = power and not FAIL and get(cs_signal) == 1 and finite(course_dots)
+	local glide_valid = power and not FAIL and get(gs_flag) == 1 and finite(glide_dots)
 	
 	-- set lamps To and From
 	lamps(nav_flag)
 	
-	-- set course and glide planks
-	if power and not FAIL then 
-		course = get(v_plank) / 2.5
-		glidesl = get(h_plank) / 2.5
-	else
-		course = 0
-		glidesl = 0
-	end
-
-	-- add random noise deflection for planks
-	if nav_flag == 0 and power and not FAIL and math.random() > 0.999 then 
-		course = (math.random() - 0.49999) * 10
-		nav_flag = math.random(1, 2)
-	end	
-	if glide_flag == 0 and power and not FAIL and math.random() > 0.999 then 
-		glidesl = (math.random() - 0.49999) * 10
-		glide_flag = 1
-	end	
+	-- Publish only received guidance; noise must never clear a failure flag.
+	course = course_valid and course_dots / 2.5 or 0
+	glidesl = glide_valid and glide_dots / 2.5 or 0
 	
 	-- add test buttons
 	local but = get(nav_but_1) + get(nav_but_2) * 2 + get(nav_but_3) * 3
@@ -311,8 +304,8 @@ if MASTER then
 	set(nav_cs, course)
 	set(nav_gs, glidesl)
 	
-	set(nav_cs_flag, bool2int(nav_flag == 0 or not power or FAIL))
-	set(nav_gs_flag, bool2int(glide_flag == 0 or not power or FAIL))
+	set(nav_cs_flag, bool2int(not course_valid))
+	set(nav_gs_flag, bool2int(not glide_valid))
 end	
 	
 	-- set OBS

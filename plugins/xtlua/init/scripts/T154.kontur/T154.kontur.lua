@@ -10,6 +10,8 @@ Changelog
   following the X-Plane 12 approach already used by the CE variant.
 - WX level remains a shared radar control and is applied to both X-Plane displays.
 - NAV and WX can be combined on each screen; their keys toggle each layer independently.
+- TCAS can be overlaid on NAV or NAV/WX without hiding the selected route.
+- The WX2000 TILT knob controls the native radar angle on both displays.
 - TCAS, TAWS and native EFIS controls remain independent between screens.
 - NAV displays GPS1 without changing the independent HSI/ABSU source selection.
 - WX re-selection and power cycles restore scanning after a display standby selection.
@@ -21,6 +23,7 @@ Changelog
 -- Writable cockpit DataRefs need notifier functions, even when no side effect is required.
 function tu154_kontur_weather_mode_DRhandler() end
 function tu154_kontur_weather_sys_DRhandler() end
+function tu154_wx2000_tilt_DRhandler() end
 
 
 
@@ -87,6 +90,8 @@ simDR_weather_gcs_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_gcs_copilot"
 simDR_weather_pws = find_dataref("sim/cockpit2/EFIS/EFIS_weather_pws")
 simDR_weather_auto_tilt = find_dataref("sim/cockpit2/EFIS/EFIS_weather_auto_tilt")
 simDR_weather_auto_tilt_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_auto_tilt_copilot")
+simDR_weather_tilt = find_dataref("sim/cockpit2/EFIS/EFIS_weather_tilt")
+simDR_weather_tilt_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_tilt_copilot")
 simDR_weather_multiscan = find_dataref("sim/cockpit2/EFIS/EFIS_weather_multiscan")
 simDR_weather_multiscan_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_multiscan_copilot")
 simDR_weather_vertical = find_dataref("sim/cockpit2/EFIS/EFIS_weather_vertical")
@@ -198,6 +203,8 @@ diff_crs = deferred_dataref("tu154/custom/kontur/crs_diff", "number")
 gs_fl = deferred_dataref("tu154/custom/kontur/gs_fl", "number")
 crs_fl = deferred_dataref("tu154/custom/kontur/crs_fl", "number")
 wx2000_gain = deferred_dataref("tu154/custom/wx2000_gain", "number")
+-- Physical TILT setting in degrees: -15 DN, 0 level, +15 UP.
+wx2000_tilt = deferred_dataref("tu154/custom/wx2000_tilt", "number", tu154_wx2000_tilt_DRhandler)
 kontur_rru_l = deferred_dataref("tu154/custom/kontur/rru_l", "number")
 kontur_rru_r = deferred_dataref("tu154/custom/kontur/rru_r", "number")
 uns1_on					= deferred_dataref("tu154/custom/uns1_on", "number")
@@ -259,6 +266,8 @@ local wx_display_l = 3
 local wx_display_r = 3
 local tcas_display_l = 1
 local tcas_display_r = 1
+local tcas_overlay_l = false
+local tcas_overlay_r = false
 local aircraft_loaded = 0
 local btn_onoff_l = 0
 local btn_onoff_r = 0
@@ -275,6 +284,7 @@ local relative_brg = 0
 local true_brg = 0
 -- Start every gain control at the actual shared level so each can turn down immediately.
 wx2000_gain = 0.8
+wx2000_tilt = 0
 kontur_rru_l = 0.8
 kontur_rru_r = 0.8
 -- Remember the shared level separately from the three physical knob positions.
@@ -330,6 +340,7 @@ end
 
 local function reset_display_l()
     wx_display_l = 3
+    tcas_overlay_l = false
     kontur_on_l = 0
     kontur_mode_l = 0
     kontur_test_l = 0
@@ -357,7 +368,14 @@ local function select_mode_l(mode)
     if not accept_key_l() then return end
     local requested = mode
     local previous = kontur_mode_l
-    mode = mode_after_key(previous, requested, info_page_l > 0)
+    if requested == 2 and (previous == 3 or previous == 5) then
+        -- TCAS toggles traffic over the selected NAV/WX layers; INFO only restores them.
+        tcas_overlay_l = info_page_l > 0 or not tcas_overlay_l
+        mode = previous
+    else
+        mode = mode_after_key(previous, requested, info_page_l > 0)
+        if mode ~= 3 and mode ~= 5 then tcas_overlay_l = false end
+    end
     if requested == 4 and (mode == 4 or mode == 5) and previous ~= 4 and previous ~= 5 then
         -- Re-selecting WX restores scanning after the WX softkey selected standby.
         wx_display_l = 3
@@ -474,6 +492,7 @@ end
 
 local function reset_display_r()
     wx_display_r = 3
+    tcas_overlay_r = false
     kontur_on_r = 0
     kontur_mode_r = 0
     kontur_test_r = 0
@@ -501,7 +520,14 @@ local function select_mode_r(mode)
     if not accept_key_r() then return end
     local requested = mode
     local previous = kontur_mode_r
-    mode = mode_after_key(previous, requested, info_page_r > 0)
+    if requested == 2 and (previous == 3 or previous == 5) then
+        -- TCAS toggles traffic over the selected NAV/WX layers; INFO only restores them.
+        tcas_overlay_r = info_page_r > 0 or not tcas_overlay_r
+        mode = previous
+    else
+        mode = mode_after_key(previous, requested, info_page_r > 0)
+        if mode ~= 3 and mode ~= 5 then tcas_overlay_r = false end
+    end
     if requested == 4 and (mode == 4 or mode == 5) and previous ~= 4 and previous ~= 5 then
         -- Re-selecting WX restores scanning after the WX softkey selected standby.
         wx_display_r = 3
@@ -634,31 +660,44 @@ KONTUR_L_ON_func	= create_command("kontur/ovhd_onoff_l", "Kontur L OVHD ONOFF", 
 KONTUR_R_ON_func	= create_command("kontur/ovhd_onoff_r", "Kontur R OVHD ONOFF", kontur_ovhd_onoff_r_CMDhandler)
 
 
--- Configure a single horizontal sector scan before releasing native WX mode.
--- Auto-tilt avoids overscanning clouds; no new physical TILT control is introduced.
+-- The shared physical knob sets both native antenna requests in degrees.
+local function apply_weather_tilt()
+    local tilt = wx2000_tilt
+    if not finite(tilt) then tilt = 0 end
+    tilt = math.max(-15, math.min(15, tilt))
+    if wx2000_tilt ~= tilt then wx2000_tilt = tilt end
+
+    -- Both automatic modes ignore manual tilt; disable them before writing the angle.
+    if simDR_weather_multiscan ~= 0 then simDR_weather_multiscan = 0 end
+    if simDR_weather_multiscan_fo ~= 0 then simDR_weather_multiscan_fo = 0 end
+    if simDR_weather_auto_tilt ~= 0 then simDR_weather_auto_tilt = 0 end
+    if simDR_weather_auto_tilt_fo ~= 0 then simDR_weather_auto_tilt_fo = 0 end
+    -- Avoid redundant writes while the knob is stationary; preserve the ongoing sweep.
+    if simDR_weather_tilt ~= tilt then simDR_weather_tilt = tilt end
+    if simDR_weather_tilt_fo ~= tilt then simDR_weather_tilt_fo = tilt end
+end
+
+-- Configure a single stabilized horizontal sector scan with manual tilt.
 local function configure_weather_scan()
     simDR_weather_sector_brg = 0
     simDR_weather_antenna_limit = 60
     simDR_weather_sector_width = 60
     simDR_weather_sweeps_per_sec = 0.3 -- Full left-right-left cycles per second.
-    simDR_weather_multiscan = 0
-    simDR_weather_multiscan_fo = 0
     simDR_weather_vertical = 0
     simDR_weather_vertical_fo = 0
-    simDR_weather_auto_tilt = 1
-    simDR_weather_auto_tilt_fo = 1
     simDR_weather_stab = 1
     simDR_weather_stab_fo = 1
     simDR_weather_gcs = 1
     simDR_weather_gcs_fo = 1
     -- PWS must not start emissions while the WX2000 system is switched off.
     simDR_weather_pws = 0
+    apply_weather_tilt()
 end
 
 function aircraft_load()
-    configure_weather_scan()
     if simDR_weather_mode_xp ~= 0 then simDR_weather_mode_xp = 0 end
     if simDR_weather_mode_xp_fo ~= 0 then simDR_weather_mode_xp_fo = 0 end
+    configure_weather_scan()
     reset_display_l()
     reset_display_r()
     weather_test_timer = 0
@@ -874,6 +913,8 @@ local function update_weather()
     local native_mode = weather_ready > 0 and 2 or 0
     if simDR_weather_mode_xp ~= native_mode then simDR_weather_mode_xp = native_mode end
     if simDR_weather_mode_xp_fo ~= native_mode then simDR_weather_mode_xp_fo = native_mode end
+    -- Apply after mode changes and power recovery so the physical setting stays in control.
+    apply_weather_tilt()
 end
 
 local function apply_display_modes()
@@ -883,6 +924,8 @@ local function apply_display_modes()
         if kontur_mode_l == 1 then kontur_taws_l = simDR_taws_mode == 2 and 2 or 1
         elseif kontur_mode_l == 2 then kontur_tcas_l = tcas_display_l
         elseif kontur_mode_l == 3 or kontur_mode_l == 5 then kontur_nav_l = 1 end
+        -- Keep NAV's expanded map geometry when adding traffic (TCAS format 2).
+        if kontur_nav_l > 0 and tcas_overlay_l then kontur_tcas_l = 2 end
         if kontur_mode_l == 4 or kontur_mode_l == 5 then
             kontur_wx_l = weather_ready > 0 and wx_display_l or 1
         end
@@ -906,6 +949,8 @@ local function apply_display_modes()
         if kontur_mode_r == 1 then kontur_taws_r = simDR_taws_mode == 2 and 2 or 1
         elseif kontur_mode_r == 2 then kontur_tcas_r = tcas_display_r
         elseif kontur_mode_r == 3 or kontur_mode_r == 5 then kontur_nav_r = 1 end
+        -- Keep NAV's expanded map geometry when adding traffic (TCAS format 2).
+        if kontur_nav_r > 0 and tcas_overlay_r then kontur_tcas_r = 2 end
         if kontur_mode_r == 4 or kontur_mode_r == 5 then
             kontur_wx_r = weather_ready > 0 and wx_display_r or 1
         end

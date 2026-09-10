@@ -1,202 +1,215 @@
 -- this is ABSU modes logic
 
+local function defineProps(defs)
+	for _, d in ipairs(defs) do
+		defineProperty(d[1], d[3](d[2]))
+	end
+end
+
+defineProps({
 -- controls
-defineProperty("absu_zpu_sel", globalPropertyi("tu154/custom/switchers/console/absu_zpu_sel")) --  .  - 
-defineProperty("absu_nav_on", globalPropertyi("tu154/custom/switchers/console/absu_nav_on")) --  
-defineProperty("absu_landing_on", globalPropertyi("tu154/custom/switchers/console/absu_landing_on")) --  
-defineProperty("absu_needles_on", globalPropertyi("tu154/custom/switchers/console/absu_needles_on")) -- 
-defineProperty("absu_speed_mode", globalPropertyi("tu154/custom/switchers/console/absu_speed_mode")) --  . 0 - , 1 - , 2 - 1, 3 - 2, 4 - 
-defineProperty("absu_speed_change", globalPropertyi("tu154/custom/switchers/console/absu_speed_change")) --   . 
-defineProperty("absu_speed_off", globalPropertyi("tu154/custom/switchers/console/absu_speed_off")) --  1  2
-defineProperty("absu_speed_prepare", globalPropertyi("tu154/custom/switchers/console/absu_speed_prepare")) -- 
-defineProperty("absu_speed_us_right_left", globalPropertyi("tu154/custom/switchers/console/absu_speed_us_right_left")) -- 
+	{ "absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi }, --  .  -
+	{ "absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi }, --
+	{ "absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi }, --
+	{ "absu_needles_on", "tu154/custom/switchers/console/absu_needles_on", globalPropertyi }, --
+	{ "absu_speed_mode", "tu154/custom/switchers/console/absu_speed_mode", globalPropertyi }, --  . 0 - , 1 - , 2 - 1, 3 - 2, 4 -
+	{ "absu_speed_change", "tu154/custom/switchers/console/absu_speed_change", globalPropertyi }, --   .
+	{ "absu_speed_off", "tu154/custom/switchers/console/absu_speed_off", globalPropertyi }, --  1  2
+	{ "absu_speed_prepare", "tu154/custom/switchers/console/absu_speed_prepare", globalPropertyi }, --
+	{ "absu_speed_us_right_left", "tu154/custom/switchers/console/absu_speed_us_right_left", globalPropertyi }, --
 
-defineProperty("absu_roll_ch_on", globalPropertyi("tu154/custom/switchers/console/absu_roll_ch_on")) --   
-defineProperty("absu_pitch_ch_on", globalPropertyi("tu154/custom/switchers/console/absu_pitch_ch_on")) --   
-defineProperty("absu_smooth_on", globalPropertyi("tu154/custom/switchers/console/absu_smooth_on")) --  " "
+	{ "absu_roll_ch_on", "tu154/custom/switchers/console/absu_roll_ch_on", globalPropertyi }, --
+	{ "absu_pitch_ch_on", "tu154/custom/switchers/console/absu_pitch_ch_on", globalPropertyi }, --
+	{ "absu_smooth_on", "tu154/custom/switchers/console/absu_smooth_on", globalPropertyi }, --  " "
 
-defineProperty("absu_turn_handle", globalPropertyi("tu154/custom/switchers/console/absu_turn_handle")) --  
-defineProperty("absu_pitch_wheel", globalPropertyf("tu154/custom/switchers/console/absu_pitch_wheel")) --  , 
+	{ "absu_turn_handle", "tu154/custom/switchers/console/absu_turn_handle", globalPropertyi }, --
+	{ "absu_pitch_wheel", "tu154/custom/switchers/console/absu_pitch_wheel", globalPropertyf }, --  ,
 
-defineProperty("hydro_ra56_rud_1", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_1")) --  56 
-defineProperty("hydro_ra56_rud_2", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_2")) --  56 
-defineProperty("hydro_ra56_rud_3", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_3")) --  56 
+	{ "hydro_ra56_rud_1", "tu154/custom/switchers/eng/hydro_ra56_rud_1", globalPropertyi }, --  56
+	{ "hydro_ra56_rud_2", "tu154/custom/switchers/eng/hydro_ra56_rud_2", globalPropertyi }, --  56
+	{ "hydro_ra56_rud_3", "tu154/custom/switchers/eng/hydro_ra56_rud_3", globalPropertyi }, --  56
 
-defineProperty("hydro_ra56_ail_1", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_1")) --  56 
-defineProperty("hydro_ra56_ail_2", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_2")) --  56 
-defineProperty("hydro_ra56_ail_3", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_3")) --  56 
+	{ "hydro_ra56_ail_1", "tu154/custom/switchers/eng/hydro_ra56_ail_1", globalPropertyi }, --  56
+	{ "hydro_ra56_ail_2", "tu154/custom/switchers/eng/hydro_ra56_ail_2", globalPropertyi }, --  56
+	{ "hydro_ra56_ail_3", "tu154/custom/switchers/eng/hydro_ra56_ail_3", globalPropertyi }, --  56
 
-defineProperty("hydro_ra56_elev_1", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_1")) --  56 
-defineProperty("hydro_ra56_elev_2", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_2")) --  56 
-defineProperty("hydro_ra56_elev_3", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_3")) --  56 
+	{ "hydro_ra56_elev_1", "tu154/custom/switchers/eng/hydro_ra56_elev_1", globalPropertyi }, --  56
+	{ "hydro_ra56_elev_2", "tu154/custom/switchers/eng/hydro_ra56_elev_2", globalPropertyi }, --  56
+	{ "hydro_ra56_elev_3", "tu154/custom/switchers/eng/hydro_ra56_elev_3", globalPropertyi }, --  56
 
-defineProperty("sau_stu_on", globalPropertyi("tu154/custom/switchers/ovhd/sau_stu_on"))  --   
+	{ "sau_stu_on", "tu154/custom/switchers/ovhd/sau_stu_on", globalPropertyi }, --
 
 --defineProperty("tro_comm_1", globalProperty("sim/flightmodel/engine/ENGN_thro[0]"))
 --defineProperty("tro_comm_2", globalProperty("sim/flightmodel/engine/ENGN_thro[1]"))
 --defineProperty("tro_comm_3", globalProperty("sim/flightmodel/engine/ENGN_thro[2]"))
 
-defineProperty("tro_comm_1", globalPropertyf("tu154/custom/SC/engine/ENGN_thro_0")) 
-defineProperty("tro_comm_2", globalPropertyf("tu154/custom/SC/engine/ENGN_thro_1")) 
-defineProperty("tro_comm_3", globalPropertyf("tu154/custom/SC/engine/ENGN_thro_2"))
+	{ "tro_comm_1", "tu154/custom/SC/engine/ENGN_thro_0", globalPropertyf },
+	{ "tro_comm_2", "tu154/custom/SC/engine/ENGN_thro_1", globalPropertyf },
+	{ "tro_comm_3", "tu154/custom/SC/engine/ENGN_thro_2", globalPropertyf },
 
 -- buttons
-defineProperty("absu_zk", globalPropertyi("tu154/custom/buttons/console/absu_zk")) --     
-defineProperty("absu_reset", globalPropertyi("tu154/custom/buttons/console/absu_reset")) --      
-defineProperty("absu_nvu", globalPropertyi("tu154/custom/buttons/console/absu_nvu")) --     
-defineProperty("absu_az1", globalPropertyi("tu154/custom/buttons/console/absu_az1")) --   1   
-defineProperty("absu_az2", globalPropertyi("tu154/custom/buttons/console/absu_az2")) --   2   
-defineProperty("absu_app", globalPropertyi("tu154/custom/buttons/console/absu_app")) --     
-defineProperty("absu_gs", globalPropertyi("tu154/custom/buttons/console/absu_gs")) --     
-defineProperty("absu_stab_m", globalPropertyi("tu154/custom/buttons/console/absu_stab_m")) --  M   
-defineProperty("absu_stab_v", globalPropertyi("tu154/custom/buttons/console/absu_stab_v")) --  V   
-defineProperty("absu_stab_h", globalPropertyi("tu154/custom/buttons/console/absu_stab_h")) --  H   
-defineProperty("absu_stab", globalPropertyi("tu154/custom/buttons/console/absu_stab")) --     
+	{ "absu_zk", "tu154/custom/buttons/console/absu_zk", globalPropertyi }, --
+	{ "absu_reset", "tu154/custom/buttons/console/absu_reset", globalPropertyi }, --
+	{ "absu_nvu", "tu154/custom/buttons/console/absu_nvu", globalPropertyi }, --
+	{ "absu_az1", "tu154/custom/buttons/console/absu_az1", globalPropertyi }, --   1
+	{ "absu_az2", "tu154/custom/buttons/console/absu_az2", globalPropertyi }, --   2
+	{ "absu_app", "tu154/custom/buttons/console/absu_app", globalPropertyi }, --
+	{ "absu_gs", "tu154/custom/buttons/console/absu_gs", globalPropertyi }, --
+	{ "absu_stab_m", "tu154/custom/buttons/console/absu_stab_m", globalPropertyi }, --  M
+	{ "absu_stab_v", "tu154/custom/buttons/console/absu_stab_v", globalPropertyi }, --  V
+	{ "absu_stab_h", "tu154/custom/buttons/console/absu_stab_h", globalPropertyi }, --  H
+	{ "absu_stab", "tu154/custom/buttons/console/absu_stab", globalPropertyi }, --
 
-defineProperty("absu_arrest", globalPropertyi("tu154/custom/buttons/console/absu_arrest")) --   
-defineProperty("absu_speed_test_1", globalPropertyi("tu154/custom/buttons/console/absu_speed_test_1")) --    
-defineProperty("absu_speed_test_2", globalPropertyi("tu154/custom/buttons/console/absu_speed_test_2")) --    
+	{ "absu_arrest", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
+	{ "absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi }, --
+	{ "absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2", globalPropertyi }, --
 
-defineProperty("absu_stab_speed", globalPropertyi("tu154/custom/buttons/console/absu_stab_speed")) --  C   
-defineProperty("absu_throt_off_1", globalPropertyi("tu154/custom/buttons/console/absu_throt_off_1")) --   1   
-defineProperty("absu_throt_off_2", globalPropertyi("tu154/custom/buttons/console/absu_throt_off_2")) --   2   
-defineProperty("absu_throt_off_3", globalPropertyi("tu154/custom/buttons/console/absu_throt_off_3")) --   3   
+	{ "absu_stab_speed", "tu154/custom/buttons/console/absu_stab_speed", globalPropertyi }, --  C
+	{ "absu_throt_off_1", "tu154/custom/buttons/console/absu_throt_off_1", globalPropertyi }, --   1
+	{ "absu_throt_off_2", "tu154/custom/buttons/console/absu_throt_off_2", globalPropertyi }, --   2
+	{ "absu_throt_off_3", "tu154/custom/buttons/console/absu_throt_off_3", globalPropertyi }, --   3
 
 -- power
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+	{ "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt")) --    115
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt")) --    115
+	{ "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, --    115
+	{ "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf }, --    115
 
-defineProperty("bus36_volt_left", globalPropertyf("tu154/custom/elec/bus36_volt_left")) --   36 
-defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right")) --   36 
-defineProperty("bus36_volt_pts250_1", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_1")) --   36  1
-defineProperty("bus36_volt_pts250_2", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_2")) --   36  2
+	{ "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf }, --   36
+	{ "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, --   36
+	{ "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, --   36  1
+	{ "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, --   36  2
 
-defineProperty("absu_power_cc", globalPropertyf("tu154/custom/absu_power_cc")) --   
+	{ "absu_power_cc", "tu154/custom/absu_power_cc", globalPropertyf }, --
 
 -- other sources
 -- The NVU-labelled button selects GPS1 for the HSI and ABSU.
-defineProperty("nav_select", globalPropertyi("tu154/custom/switchers/nav_select"))
-defineProperty("hsi_source_pilot", globalPropertyi("sim/cockpit2/radios/actuators/HSI_source_select_pilot"))
-defineProperty("hsi_source_copilot", globalPropertyi("sim/cockpit2/radios/actuators/HSI_source_select_copilot"))
-defineProperty("gps_power", globalPropertyi("sim/cockpit2/radios/actuators/gps_power"))
-defineProperty("gps_fromto", globalPropertyi("sim/cockpit/radios/gps_fromto"))
-defineProperty("gps_course", globalPropertyf("sim/cockpit/radios/gps_course_degtm"))
-defineProperty("gps_dev", globalPropertyf("sim/cockpit/radios/gps_hdef_dot"))
-defineProperty("gps_nm_per_dot", globalPropertyf("sim/cockpit/radios/gps_hdef_nm_per_dot"))
-defineProperty("GNS430_dtk", globalPropertyf("tu154/custom/SC/GNS430_dtk"))
-defineProperty("GNS430_dev", globalPropertyf("tu154/custom/SC/GNS430_dev"))
-defineProperty("GNS430_flag", globalPropertyi("tu154/custom/SC/GNS430_flag"))
-defineProperty("freq_1", globalPropertyf("sim/cockpit2/radios/actuators/nav1_frequency_hz"))  -- set the frequency
-defineProperty("freq_2", globalPropertyf("sim/cockpit2/radios/actuators/nav2_frequency_hz"))  -- set the frequency
+	{ "nav_select", "tu154/custom/switchers/nav_select", globalPropertyi },
+	{ "hsi_source_pilot", "sim/cockpit2/radios/actuators/HSI_source_select_pilot", globalPropertyi },
+	{ "hsi_source_copilot", "sim/cockpit2/radios/actuators/HSI_source_select_copilot", globalPropertyi },
+	{ "gps_power", "sim/cockpit2/radios/actuators/gps_power", globalPropertyi },
+	{ "gps_fromto", "sim/cockpit/radios/gps_fromto", globalPropertyi },
+	{ "gps_course", "sim/cockpit/radios/gps_course_degtm", globalPropertyf },
+	{ "gps_dev", "sim/cockpit/radios/gps_hdef_dot", globalPropertyf },
+	{ "gps_nm_per_dot", "sim/cockpit/radios/gps_hdef_nm_per_dot", globalPropertyf },
+	{ "GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf },
+	{ "GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf },
+	{ "GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi },
+	{ "freq_1", "sim/cockpit2/radios/actuators/nav1_frequency_hz", globalPropertyf }, -- set the frequency
+	{ "freq_2", "sim/cockpit2/radios/actuators/nav2_frequency_hz", globalPropertyf }, -- set the frequency
 
-defineProperty("nav_cs_flag_1", globalPropertyi("tu154/custom/radio/nav1_cs_flag"))
-defineProperty("nav_gs_flag_1", globalPropertyi("tu154/custom/radio/nav1_gs_flag"))
-	
-defineProperty("nav_cs_flag_2", globalPropertyi("tu154/custom/radio/nav2_cs_flag"))
-defineProperty("nav_gs_flag_2", globalPropertyi("tu154/custom/radio/nav2_gs_flag"))
+	{ "nav_cs_flag_1", "tu154/custom/radio/nav1_cs_flag", globalPropertyi },
+	{ "nav_gs_flag_1", "tu154/custom/radio/nav1_gs_flag", globalPropertyi },
 
-defineProperty("nav_gs_1", globalPropertyf("tu154/custom/radio/nav1_gs")) -- glideslope
+	{ "nav_cs_flag_2", "tu154/custom/radio/nav2_cs_flag", globalPropertyi },
+	{ "nav_gs_flag_2", "tu154/custom/radio/nav2_gs_flag", globalPropertyi },
 
-defineProperty("svs_on", globalPropertyi("tu154/custom/switchers/ovhd/svs_on")) --  
-defineProperty("svs_fail", globalPropertyi("sim/operation/failures/rel_adc_comp"))  -- static fail
+	{ "nav_gs_1", "tu154/custom/radio/nav1_gs", globalPropertyf }, -- glideslope
+	{ "nav_gs_2", "tu154/custom/radio/nav2_gs", globalPropertyf },
+	{ "nav_power_1", "tu154/custom/radio/nav1_pow_cc", globalPropertyf },
+	{ "nav_power_2", "tu154/custom/radio/nav2_pow_cc", globalPropertyf },
+	{ "nav_fail_1", "tu154/custom/failures/nav1_fail", globalPropertyi },
+	{ "nav_fail_2", "tu154/custom/failures/nav2_fail", globalPropertyi },
 
-defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))  --    
-defineProperty("rv_flag", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
+	{ "svs_on", "tu154/custom/switchers/ovhd/svs_on", globalPropertyi }, --
+	{ "svs_fail", "sim/operation/failures/rel_adc_comp", globalPropertyi }, -- static fail
 
-defineProperty("absu_course_out", globalPropertyi("tu154/custom/absu_course_out")) -- flying outside the course limits
-defineProperty("absu_gs_out", globalPropertyi("tu154/custom/absu_gs_out")) -- flying outside the course limits
+	{ "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf }, --
+	{ "rv_flag", "tu154/custom/gauges/alt/radioalt_flag_left", globalPropertyf }, -- RV flag
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- time of frame
+	{ "absu_course_out", "tu154/custom/absu_course_out", globalPropertyi }, -- flying outside the course limits
+	{ "absu_gs_out", "tu154/custom/absu_gs_out", globalPropertyi }, -- flying outside the course limits
+
+	{ "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
 
 -- Throttles
-defineProperty("anim_rud1", globalPropertyf("tu154/custom/controlls/throttle_1")) --  1
-defineProperty("anim_rud2", globalPropertyf("tu154/custom/controlls/throttle_2")) --  2
-defineProperty("anim_rud3", globalPropertyf("tu154/custom/controlls/throttle_3")) --  3
+	{ "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf }, --  1
+	{ "anim_rud2", "tu154/custom/controlls/throttle_2", globalPropertyf }, --  2
+	{ "anim_rud3", "tu154/custom/controlls/throttle_3", globalPropertyf }, --  3
 -- flaps
-defineProperty("flap_inn_L", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def")) -- inner flaps left
-defineProperty("flap_inn_R", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def")) -- inner flaps right
+	{ "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- inner flaps left
+	{ "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- inner flaps right
 
 -- joystick
 --defineProperty("joy_pitch", globalPropertyf("sim/cockpit2/controls/yoke_pitch_ratio")) -- pitch position of joytick
 --defineProperty("joy_roll", globalPropertyf("sim/cockpit2/controls/yoke_roll_ratio")) -- roll position of joystick
 --defineProperty("joy_yaw", globalPropertyf("sim/cockpit2/controls/yoke_heading_ratio")) -- yaw position of joystick
 
-defineProperty("joy_pitch", globalPropertyf("tu154/custom/SC/yoke_pitch_ratio")) 
-defineProperty("joy_roll", globalPropertyf("tu154/custom/SC/yoke_roll_ratio")) 
-defineProperty("joy_yaw", globalPropertyf("tu154/custom/SC/yoke_heading_ratio")) 
+	{ "joy_pitch", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf },
+	{ "joy_roll", "tu154/custom/SC/yoke_roll_ratio", globalPropertyf },
+	{ "joy_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf },
 
-defineProperty("manip_pitch", globalPropertyf("sim/cockpit2/controls/yoke_pitch_ratio")) 
-defineProperty("manip_roll", globalPropertyf("sim/cockpit2/controls/yoke_roll_ratio")) 
+	{ "manip_pitch", "sim/cockpit2/controls/yoke_pitch_ratio", globalPropertyf },
+	{ "manip_roll", "sim/cockpit2/controls/yoke_roll_ratio", globalPropertyf },
 
 --sim/cockpit2/controls/yoke_roll_ratio	sim/cockpit2/controls/yoke_pitch_ratio
 
-defineProperty("pkp_fail_left", globalPropertyf("tu154/custom/gauges/ahz/ahz_flag_L")) -- 
-defineProperty("pkp_fail_right", globalPropertyf("tu154/custom/gauges/ahz/ahz_flag_R")) -- 
-defineProperty("mgv_contr_fail", globalPropertyf("tu154/custom/gyro/mgv_contr_flag")) -- 
+	{ "pkp_fail_left", "tu154/custom/gauges/ahz/ahz_flag_L", globalPropertyf }, --
+	{ "pkp_fail_right", "tu154/custom/gauges/ahz/ahz_flag_R", globalPropertyf }, --
+	{ "mgv_contr_fail", "tu154/custom/gyro/mgv_contr_flag", globalPropertyf }, --
 
-defineProperty("pressure_ind_1", globalPropertyf("tu154/custom/gauges/hydro/pressure_ind_1")) --    1
-defineProperty("pressure_ind_2", globalPropertyf("tu154/custom/gauges/hydro/pressure_ind_2")) --    2
-defineProperty("pressure_ind_3", globalPropertyf("tu154/custom/gauges/hydro/pressure_ind_3")) --    3
+	{ "pressure_ind_1", "tu154/custom/gauges/hydro/pressure_ind_1", globalPropertyf }, --    1
+	{ "pressure_ind_2", "tu154/custom/gauges/hydro/pressure_ind_2", globalPropertyf }, --    2
+	{ "pressure_ind_3", "tu154/custom/gauges/hydro/pressure_ind_3", globalPropertyf }, --    3
 
-defineProperty("gs_press_1", globalPropertyf("tu154/custom/hydro/gs_press_1")) --   1
-defineProperty("gs_press_2", globalPropertyf("tu154/custom/hydro/gs_press_2")) --   2
-defineProperty("gs_press_3", globalPropertyf("tu154/custom/hydro/gs_press_3")) --   3
-defineProperty("gs_press_4", globalPropertyf("tu154/custom/hydro/gs_press_4")) --   4
+	{ "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, --   1
+	{ "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, --   2
+	{ "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, --   3
+	{ "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf }, --   4
 
-defineProperty("tks_fail_left", globalPropertyi("tu154/custom/tks/fail_left")) --  
-defineProperty("tks_fail_right", globalPropertyi("tu154/custom/tks/fail_right")) --  
+	{ "tks_fail_left", "tu154/custom/tks/fail_left", globalPropertyi }, --
+	{ "tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi }, --
 
-defineProperty("outer_marker", globalPropertyi("sim/cockpit/misc/outer_marker_lit"))
+	{ "outer_marker", "sim/cockpit/misc/outer_marker_lit", globalPropertyi },
 
 -- results
-defineProperty("roll_main_mode", globalPropertyi("tu154/custom/absu/roll_main_mode")) --     . 0 - , 1 -  - 2 - 
-defineProperty("pitch_main_mode", globalPropertyi("tu154/custom/absu/pitch_main_mode")) --     . 0 - , 1 -  - 2 - 
+	{ "roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi }, --     . 0 - , 1 -  - 2 -
+	{ "pitch_main_mode", "tu154/custom/absu/pitch_main_mode", globalPropertyi }, --     . 0 - , 1 -  - 2 -
 
-defineProperty("roll_sub_mode", globalPropertyi("tu154/custom/absu/roll_sub_mode")) --    . 0 - , 1 - , 2 - , 3 - , 4 - 1, 5 - 2, 6 - , 7 - , 10  
-defineProperty("pitch_sub_mode", globalPropertyi("tu154/custom/absu/pitch_sub_mode")) --    . 0 - , 1 - , 2 - V, 3 - M, 4 - H, 5 - , 6 - , 10 -  
+	{ "roll_sub_mode", "tu154/custom/absu/roll_sub_mode", globalPropertyi }, --    . 0 - , 1 - , 2 - , 3 - , 4 - 1, 5 - 2, 6 - , 7 - , 10
+	{ "pitch_sub_mode", "tu154/custom/absu/pitch_sub_mode", globalPropertyi }, --    . 0 - , 1 - , 2 - V, 3 - M, 4 - H, 5 - , 6 - , 10 -
 
-defineProperty("absu_pnp_mode_1", globalPropertyi("tu154/custom/absu/absu_pnp_mode_1")) --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 = 
-defineProperty("absu_pnp_mode_2", globalPropertyi("tu154/custom/absu/absu_pnp_mode_2")) --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 = 
+	{ "absu_pnp_mode_1", "tu154/custom/absu/absu_pnp_mode_1", globalPropertyi }, --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
+	{ "absu_pnp_mode_2", "tu154/custom/absu/absu_pnp_mode_2", globalPropertyi }, --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
 
-defineProperty("autopilot_mode", globalPropertyi("sim/cockpit/autopilot/autopilot_mode")) --   
+	{ "autopilot_mode", "sim/cockpit/autopilot/autopilot_mode", globalPropertyi }, --
 
-defineProperty("toga_command", globalPropertyi("tu154/custom/absu/toga_comm")) -- 	 
+	{ "toga_command", "tu154/custom/absu/toga_comm", globalPropertyi }, --
 
-defineProperty("absu_use_second_nav", globalPropertyi("tu154/custom/absu_use_second_nav")) --    
+	{ "absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi }, --
 
-defineProperty("damp_roll_lamp", globalPropertyi("tu154/custom/absu/damp_roll_lamp")) -- 
-defineProperty("damp_pitch_lamp", globalPropertyi("tu154/custom/absu/damp_pitch_lamp")) -- 
-defineProperty("damp_yaw_lamp", globalPropertyi("tu154/custom/absu/damp_yaw_lamp")) -- 
-defineProperty("roll_contr_lamp", globalPropertyi("tu154/custom/absu/roll_contr_lamp")) -- 
-defineProperty("pitch_contr_lamp", globalPropertyi("tu154/custom/absu/pitch_contr_lamp")) -- 
-defineProperty("man_roll_lamp", globalPropertyi("tu154/custom/absu/man_roll_lamp")) -- 
-defineProperty("man_pitch_lamp", globalPropertyi("tu154/custom/absu/man_pitch_lamp")) -- 
-defineProperty("man_toga_lamp", globalPropertyi("tu154/custom/absu/man_toga_lamp")) -- 
-defineProperty("triangle_lamp_signal", globalPropertyi("tu154/custom/absu/triangle_lamp_signal")) -- 
+	{ "damp_roll_lamp", "tu154/custom/absu/damp_roll_lamp", globalPropertyi }, --
+	{ "damp_pitch_lamp", "tu154/custom/absu/damp_pitch_lamp", globalPropertyi }, --
+	{ "damp_yaw_lamp", "tu154/custom/absu/damp_yaw_lamp", globalPropertyi }, --
+	{ "roll_contr_lamp", "tu154/custom/absu/roll_contr_lamp", globalPropertyi }, --
+	{ "pitch_contr_lamp", "tu154/custom/absu/pitch_contr_lamp", globalPropertyi }, --
+	{ "man_roll_lamp", "tu154/custom/absu/man_roll_lamp", globalPropertyi }, --
+	{ "man_pitch_lamp", "tu154/custom/absu/man_pitch_lamp", globalPropertyi }, --
+	{ "man_toga_lamp", "tu154/custom/absu/man_toga_lamp", globalPropertyi }, --
+	{ "triangle_lamp_signal", "tu154/custom/absu/triangle_lamp_signal", globalPropertyi }, --
 
 -- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+	{ "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+	{ "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
 -- failures
-defineProperty("absu_ra56_roll_fail", globalPropertyi("tu154/custom/failures/absu_ra56_roll_fail")) --  ra56
-defineProperty("absu_ra56_pitch_fail", globalPropertyi("tu154/custom/failures/absu_ra56_pitch_fail")) --  ra56
-defineProperty("absu_ra56_yaw_fail", globalPropertyi("tu154/custom/failures/absu_ra56_yaw_fail")) --  ra56
+	{ "absu_ra56_roll_fail", "tu154/custom/failures/absu_ra56_roll_fail", globalPropertyi }, --  ra56
+	{ "absu_ra56_pitch_fail", "tu154/custom/failures/absu_ra56_pitch_fail", globalPropertyi }, --  ra56
+	{ "absu_ra56_yaw_fail", "tu154/custom/failures/absu_ra56_yaw_fail", globalPropertyi }, --  ra56
 
 -- failures
-defineProperty("absu_damp_roll_fail", globalPropertyi("tu154/custom/failures/absu_damp_roll_fail")) --   
-defineProperty("absu_damp_pitch_fail", globalPropertyi("tu154/custom/failures/absu_damp_pitch_fail")) --   
-defineProperty("absu_damp_yaw_fail", globalPropertyi("tu154/custom/failures/absu_damp_yaw_fail")) --   
-defineProperty("absu_contr_roll_fail", globalPropertyi("tu154/custom/failures/absu_contr_roll_fail")) --   
-defineProperty("absu_contr_pitch_fail", globalPropertyi("tu154/custom/failures/absu_contr_pitch_fail")) --   
-defineProperty("absu_calc_toga_fail", globalPropertyi("tu154/custom/failures/absu_calc_toga_fail")) --   
-defineProperty("absu_calc_roll_fail", globalPropertyi("tu154/custom/failures/absu_calc_roll_fail")) --    
-defineProperty("absu_calc_pitch_fail", globalPropertyi("tu154/custom/failures/absu_calc_pitch_fail")) --    
+	{ "absu_damp_roll_fail", "tu154/custom/failures/absu_damp_roll_fail", globalPropertyi }, --
+	{ "absu_damp_pitch_fail", "tu154/custom/failures/absu_damp_pitch_fail", globalPropertyi }, --
+	{ "absu_damp_yaw_fail", "tu154/custom/failures/absu_damp_yaw_fail", globalPropertyi }, --
+	{ "absu_contr_roll_fail", "tu154/custom/failures/absu_contr_roll_fail", globalPropertyi }, --
+	{ "absu_contr_pitch_fail", "tu154/custom/failures/absu_contr_pitch_fail", globalPropertyi }, --
+	{ "absu_calc_toga_fail", "tu154/custom/failures/absu_calc_toga_fail", globalPropertyi }, --
+	{ "absu_calc_roll_fail", "tu154/custom/failures/absu_calc_roll_fail", globalPropertyi }, --
+	{ "absu_calc_pitch_fail", "tu154/custom/failures/absu_calc_pitch_fail", globalPropertyi }, --
 
-defineProperty("absu_fail_signal", globalPropertyi("tu154/custom/absu/absu_fail_signal")) --   
+	{ "absu_fail_signal", "tu154/custom/absu/absu_fail_signal", globalPropertyi }, --
+})
 
 local TOGA_mode = false
 local TOGA_button = false
@@ -265,6 +278,16 @@ local state_checked = false
 
 local yoke_reset = false
 
+-- Qualify acquisition and tolerate brief reception gaps, never hardware failures.
+local ILS_ACQUIRE_TIME = 0.3
+local ILS_LOSS_TIME = 1.0
+local ils_source = get(absu_use_second_nav) == 1 and 2 or 1
+local ils_frequency = nil
+local loc_valid_time, gs_valid_time = 0, 0
+local loc_loss_time, gs_loss_time = 0, 0
+local app_button_last, gs_button_last = false, false
+local gs_auto_armed = false
+
 local function finite_number(value)
 	return type(value) == "number" and value == value and value > -math.huge and value < math.huge
 end
@@ -303,16 +326,15 @@ if MASTER then
 	local power = get(bus27_volt_left) > 13 and get(bus27_volt_right) > 13 and get(bus115_3_volt) > 110 and get(bus36_volt_left) > 30 and get(bus36_volt_right) > 30 and get(bus36_volt_pts250_1) and sau_sw -- temp
 	
 	local passed = get(frame_time)
+	if not finite_number(passed) or passed < 0 then passed = 0 end
 	
 	local stab_btn = get(absu_stab) == 1
 	
 	if stab_btn and not yoke_reset then
 		set(manip_pitch, 0)
 		set(manip_roll, 0)
-		yoke_reset = true
-	else
-		yoke_reset = false
 	end
+	yoke_reset = stab_btn
 	
 	local pitch_sw = get(absu_pitch_ch_on) == 1
 	local roll_sw = get(absu_roll_ch_on) == 1
@@ -415,14 +437,64 @@ if MASTER then
 		pitch_mode_main = 0
 	end
 	
-	-- check if ABSU should use second NAV
-	set(absu_use_second_nav, bool2int(get(nav_cs_flag_1) == 1 and isILS(get(freq_2)) and get(nav_cs_flag_2) == 0))
+	-- Keep a captured approach on one receiver; NAV1 recovering must not switch
+	-- an established NAV2 approach or invalidate it via unrelated NAV1 flags.
+	local app_button = get(absu_app) == 1
+	local gs_button = get(absu_gs) == 1
+	local app_pressed = app_button and not app_button_last
+	local gs_pressed = gs_button and not gs_button_last
+	app_button_last, gs_button_last = app_button, gs_button
+	local approach_captured = land_prep and (roll_submode == 6 or pitch_submode == 5)
+	local nav1_ils = finite_number(get(freq_1)) and isILS(get(freq_1))
+	local nav2_ils = finite_number(get(freq_2)) and isILS(get(freq_2))
+	if ils_frequency == nil then ils_frequency = get(ils_source == 2 and freq_2 or freq_1) end
+	if not approach_captured then
+		local source = 1
+		local armed_source_valid = (roll_submode == 10 or pitch_submode == 10)
+			and (ils_source == 2 and nav2_ils or ils_source == 1 and nav1_ils)
+			and get(ils_source == 2 and nav_cs_flag_2 or nav_cs_flag_1) == 0
+		if not land_prep then
+			-- Preserve the existing non-approach receiver fallback.
+			if get(nav_cs_flag_1) == 1 and nav2_ils and get(nav_cs_flag_2) == 0 then source = 2 end
+		elseif armed_source_valid then source = ils_source
+		elseif not (nav1_ils and get(nav_cs_flag_1) == 0) and nav2_ils
+			and (get(nav_cs_flag_2) == 0 or not nav1_ils) then source = 2 end
+		local frequency = get(source == 2 and freq_2 or freq_1)
+		if source ~= ils_source or frequency ~= ils_frequency then
+			loc_valid_time, gs_valid_time = 0, 0
+			loc_loss_time, gs_loss_time = 0, 0
+		end
+		ils_source, ils_frequency = source, frequency
+	end
+	set(absu_use_second_nav, bool2int(ils_source == 2))
+	local selected_frequency = get(ils_source == 2 and freq_2 or freq_1)
+	local ils_available = (ils_source == 2 and nav2_ils or ils_source == 1 and nav1_ils)
+		and selected_frequency == ils_frequency
+		and get(ils_source == 2 and nav_power_2 or nav_power_1) > 0
+		and get(ils_source == 2 and nav_fail_2 or nav_fail_1) ~= 1
+	local loc_valid = ils_available and get(ils_source == 2 and nav_cs_flag_2 or nav_cs_flag_1) == 0
+	local gs_deviation = get(ils_source == 2 and nav_gs_2 or nav_gs_1)
+	local gs_valid = ils_available and get(ils_source == 2 and nav_gs_flag_2 or nav_gs_flag_1) == 0
+		and finite_number(gs_deviation)
+	loc_valid_time = loc_valid and math.min(ILS_ACQUIRE_TIME, loc_valid_time + passed) or 0
+	gs_valid_time = gs_valid and math.min(ILS_ACQUIRE_TIME, gs_valid_time + passed) or 0
+	loc_loss_time = loc_valid and 0 or math.min(ILS_LOSS_TIME, loc_loss_time + passed)
+	gs_loss_time = gs_valid and 0 or math.min(ILS_LOSS_TIME, gs_loss_time + passed)
+	local loc_ready = loc_valid and loc_valid_time >= ILS_ACQUIRE_TIME
+	local gs_ready = gs_valid and gs_valid_time >= ILS_ACQUIRE_TIME
+	local loc_lost = not ils_available or loc_loss_time >= ILS_LOSS_TIME
+	local gs_lost = not ils_available or gs_loss_time >= ILS_LOSS_TIME
+	if app_pressed and land_prep then gs_auto_armed = true end
+	if not power or not land_prep or reset_but or pitch_wheel_last ~= get(absu_pitch_wheel)
+		or pitch_submode == 6 then gs_auto_armed = false end
 	
 	-- submodes
 	if roll_mode_main > 0 then -- need to define cases more clearly
 		if roll_submode == 0 then roll_submode = 1 end
 		
-		if get(absu_zk) == 1 and roll_mode_main == 2 then -- ZK mode
+		if reset_but or math.abs(roll_handle) > 1 then -- Explicit cancellation precedes capture.
+			roll_submode = 1
+		elseif get(absu_zk) == 1 and roll_mode_main == 2 then -- ZK mode
 			roll_submode = 2
 			
 		elseif get(absu_nvu) == 1 and not land_prep then -- GPS1 tracking
@@ -441,17 +513,15 @@ if MASTER then
 		elseif get(absu_az2) == 1 and nav_prep and not land_prep then -- AZ mode. works only with VOR freq.
 			roll_submode = 5
 			
-		elseif get(absu_app) == 1 and land_prep and ((isILS(get(freq_1)) and get(nav_cs_flag_1) == 0) or get(absu_use_second_nav) == 1) then -- APP mode. works only with ILS freq
+		elseif app_pressed and land_prep and loc_ready then -- APP mode
 			roll_submode = 6
 			
-		elseif get(absu_app) == 1 and land_prep then -- fake APP mode
+		elseif app_pressed and land_prep and roll_submode ~= 6 then -- Arm APP until reception is stable.
 			roll_submode = 10
 			
-		elseif roll_submode == 10 and land_prep and ((isILS(get(freq_1)) and get(nav_cs_flag_1) == 0) or get(absu_use_second_nav) == 1) then -- switch to APP mode, when ILS established
+		elseif roll_submode == 10 and land_prep and loc_ready then -- Capture armed APP.
 			roll_submode = 6
 			
-		elseif reset_but or math.abs(roll_handle) > 1 then -- reset mode
-			roll_submode = 1
 		elseif (roll_submode == 6 or roll_submode == 10) and roll_mode_main >= 1 and pitch_mode_main >= 1 and (rud_toga or TOGA_mode) then -- TOGA mode
 			roll_mode_main = 2
 			pitch_mode_main = 2
@@ -476,18 +546,18 @@ if MASTER then
 	elseif roll_submode == 5 and roll_mode_main == 2 and (isILS(get(freq_2)) or get(nav_cs_flag_2) == 1) then -- AZ2
 		roll_submode = 1
 		--TOGA_mode = false
-	elseif roll_submode == 6 and (not isILS(get(freq_1)) or get(nav_cs_flag_1) == 1 or not land_prep) and pitch_submode == 5 and roll_mode_main == 2 then -- APP and GS
+	elseif roll_submode == 6 and (loc_lost or not land_prep) and pitch_submode == 5 and roll_mode_main == 2 then -- APP and GS
 		roll_submode = 1
 		roll_mode_main = 1
 		--print("OOPS")
-		if get(nav_cs_flag_1) == 1 or not isILS(get(freq_1)) then
+		if loc_lost then
 			set(man_roll_lamp, 1)
 			set(absu_fail_signal, 1)
 		end
 		--TOGA_mode = false
-	elseif roll_submode == 6 and (not isILS(get(freq_1)) or get(nav_cs_flag_1) == 1 or not land_prep) and roll_mode_main == 2 then -- APP
+	elseif roll_submode == 6 and (loc_lost or not land_prep) then -- APP / flight director
 		roll_submode = 1
-		if get(nav_cs_flag_1) == 1 or not isILS(get(freq_1)) then
+		if loc_lost then
 			set(man_roll_lamp, 1)
 			set(absu_fail_signal, 1)
 		end
@@ -520,7 +590,10 @@ if MASTER then
 		
 		local svs = get(svs_on) == 1
 
-		if get(absu_stab_v) == 1 and pitch_mode_main == 2 and svs then -- Stab V mode
+		if pitch_wheel_last ~= putch_wheel or (reset_but and pitch_submode >= 5) then
+			-- Pilot cancellation must also win on the acquisition frame.
+			pitch_submode = 1
+		elseif get(absu_stab_v) == 1 and pitch_mode_main == 2 and svs then -- Stab V mode
 			pitch_submode = 2
 		
 		elseif get(absu_stab_m) == 1 and pitch_mode_main == 2 and svs then -- Stab M mode
@@ -529,21 +602,19 @@ if MASTER then
 		elseif get(absu_stab_h) == 1 and pitch_mode_main == 2 and svs then -- Stab H mode
 			pitch_submode = 4
 			
-		elseif get(absu_gs) == 1 and land_prep and ((isILS(get(freq_1)) and get(nav_gs_flag_1) == 0) or (get(absu_use_second_nav) == 1) and get(nav_gs_flag_2) == 0) then -- GS mode
+		elseif gs_pressed and land_prep and gs_ready then -- GS mode
 			pitch_submode = 5
 			
-		elseif land_prep and get(nav_gs_flag_1) == 0 and roll_submode == 6 and math.abs(get(nav_gs_1)) < 0.02 and flaps > 31 then -- auto GS mode
+		elseif gs_auto_armed and land_prep and gs_ready and roll_submode == 6
+			and math.abs(gs_deviation) < 0.02 and flaps > 31 then -- auto GS, once per APP selection
 			pitch_submode = 5
 			
-		elseif get(absu_gs) == 1 and land_prep then -- fake GS mode
+		elseif gs_pressed and land_prep and pitch_submode ~= 5 then -- Arm GS until reception is stable.
 			pitch_submode = 10
 			
-		elseif pitch_submode == 10 and land_prep and ((isILS(get(freq_1)) and get(nav_gs_flag_1) == 0) or (get(absu_use_second_nav) == 1) and get(nav_gs_flag_2) == 0) then --switch to GS mode after ILS established
+		elseif pitch_submode == 10 and land_prep and gs_ready then -- Capture armed GS.
 			pitch_submode = 5
 			
-		elseif pitch_wheel_last ~= putch_wheel or (reset_but and pitch_submode >= 5) then -- reset. wheel or reset button on GS and TOGA modes
-			pitch_submode = 1
-		
 		elseif pitch_mode_main == 1 and (pitch_submode == 2 or pitch_submode == 3 or pitch_submode == 4) then -- reset V M H modes, when MAN mode
 			pitch_submode = 1
 		
@@ -568,13 +639,18 @@ if MASTER then
 	--print(TOGA_mode, "  ", pitch_submode, "  ", roll_submode)
 	
 	pitch_wheel_last = putch_wheel
+	if pitch_submode == 5 or roll_submode ~= 6 and roll_submode ~= 10 then gs_auto_armed = false end
+	if not land_prep then
+		if roll_submode == 10 then roll_submode = 1 end
+		if pitch_submode == 10 then pitch_submode = 1 end
+	end
 	
 	-- reset some modes
-	if pitch_mode_main == 2 and (not isILS(get(freq_1)) or not land_prep or get(nav_gs_flag_1) == 1) and pitch_submode == 5 then -- GS mode
+	if (gs_lost or not land_prep) and pitch_submode == 5 then -- GS / flight director
 		pitch_submode = 1
 		pitch_mode_main = 1
 		
-		if get(nav_gs_flag_1) == 1 or not isILS(get(freq_1)) then
+		if gs_lost then
 			set(man_pitch_lamp, 1)
 			set(absu_fail_signal, 1)
 		end
@@ -599,7 +675,8 @@ if MASTER then
 	
 	if power and roll_mode_main == 2 then
 		if (get(tks_fail_left) + get(tks_fail_right) == 2 and roll_submode > 1 and roll_submode ~= 10) or
-			(get(nav_cs_flag_1) == 1 and (roll_submode == 4 or roll_submode == 6) )
+			(get(nav_cs_flag_1) == 1 and roll_submode == 4) or
+			(loc_lost and roll_submode == 6)
 		then
 			roll_submode = 1
 			set(man_roll_lamp, 1)
@@ -624,7 +701,7 @@ if MASTER then
 	
 	if power and pitch_mode_main == 2 then
 		if ((get(svs_fail) == 6 or get(svs_on) == 0) and (pitch_submode == 2 or pitch_submode == 3 or pitch_submode == 4)) or
-			((pitch_submode == 5) and get(nav_gs_flag_1) == 1)
+			(pitch_submode == 5 and gs_lost)
 			then
 			pitch_submode = 1
 			pitch_mode_main = 1
