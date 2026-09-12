@@ -9,7 +9,7 @@ TEXTURE
 GLOBAL_cockpit_lit
 GLOBAL_specular 1.0
 
-POINT_COUNTS 11271 0 0 22863
+POINT_COUNTS 11275 0 0 22869
 
 # Compacted XP12 cockpit geometry table.
 # Only vertices and index positions reachable from TRIS commands are retained.
@@ -11288,6 +11288,12 @@ VT 0.261253 -1.713361 -21.590465 0.000000 0.143066 0.989716 0.658859 0.526993
 VT 0.280311 -1.732679 -21.587673 0.000000 0.143066 0.989716 0.626892 0.574799
 VT 0.280311 -1.713361 -21.590465 0.000000 0.143066 0.989716 0.626892 0.526993
 
+# WX2000 WINDSHEAR click surface, centered on the measured switch pivot.
+VT 0.230728 -1.737112 -21.585056 0.000000 0.143158 0.989700 0.624542 0.577301
+VT 0.211670 -1.717794 -21.587849 0.000000 0.143158 0.989700 0.659134 0.525497
+VT 0.230728 -1.717794 -21.587849 0.000000 0.143158 0.989700 0.624542 0.525497
+VT 0.211670 -1.737112 -21.585056 0.000000 0.143158 0.989700 0.659134 0.577301
+
 # Compacted index table.
 
 IDX10	0	1	2	3	0	2	4	5	6	7
@@ -13588,6 +13594,12 @@ IDX	11269
 IDX	11269
 IDX	11268
 IDX	11270
+IDX	11271
+IDX	11272
+IDX	11273
+IDX	11274
+IDX	11272
+IDX	11271
 
 
 # Original ANIM section from tu154_cockpit.obj below by KITBASH.LUA
@@ -17518,8 +17530,7 @@ ATTR_manip_wheel 0.100000
 TRIS 22011 6
 ANIM_end
 ANIM_begin
-ATTR_manip_drag_axis rotate_medium 0.000000 0.000000 0.000000 0.000000 1.000000 tu154/custom/kontur/weather_mode 
-ATTR_manip_wheel 1.000000
+ATTR_manip_axis_knob rotate_medium 0.000000 3.000000 1.000000 1.000000 tu154/custom/kontur/weather_mode WX mode (TEST / WX / WX-TURB / MAP)
 TRIS 22017 6
 ANIM_end
 ANIM_begin
@@ -18122,6 +18133,14 @@ ATTR_draw_disable
 ATTR_no_solid_camera
 ATTR_manip_axis_knob rotate_medium -15.000000 15.000000 0.500000 3.000000 tu154/custom/wx2000_tilt TILT (UP + / DN -)
 TRIS 22857 6
+ANIM_end
+
+# WX2000 WINDSHEAR: OFF to the right, AUTO to the left.
+ANIM_begin
+ATTR_draw_disable
+ATTR_no_solid_camera
+ATTR_manip_toggle left_right 1.000000 0.000000 tu154/custom/wx2000_windshear WINDSHEAR (AUTO / OFF)
+TRIS 22863 6
 ANIM_end
 
 ATTR_manip_none

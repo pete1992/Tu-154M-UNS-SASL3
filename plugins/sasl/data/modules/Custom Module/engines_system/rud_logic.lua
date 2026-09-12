@@ -7,6 +7,23 @@ local function defineProps(defs)
 end
 
 defineProps({
+    { "xp_version", "sim/version/xplane_internal_version", globalPropertyi },
+})
+local XP12 = get(xp_version) >= 12000
+
+if XP12 then
+    local function engineTemperature(index)
+        return function(path) return globalPropertyfae(path, index) end
+    end
+    defineProps({
+        { "engine_egt_1", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(1) },
+        { "engine_egt_2", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(2) },
+        { "engine_egt_3", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(3) },
+        { "engine_egt_redline", "sim/aircraft/limits/red_hi_EGT", globalPropertyf },
+    })
+end
+
+defineProps({
     -- Engine 1 throttle input synchronized through SmartCopilot
     { "tro_comm_1", "tu154/custom/SC/engine/ENGN_thro_0", globalPropertyf },
     -- Engine 2 throttle input synchronized through SmartCopilot
@@ -78,10 +95,12 @@ defineProps({
 })
 
 -- Smart Copilot
+defineProps({
 -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster"))
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 -- Have control. 0 = plugin not found, 1 = no control 2 = has control
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1"))
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+})
 
 -- local function clamp(x, lo, hi)
     -- if x ~= x then return lo end
@@ -307,6 +326,44 @@ local function approachThrottle(current, target, rate, passed)
     return current + (target - current) * gain
 end
 
+-- override_throttles bypasses X-Plane's fuel/temperature protection. In XP12,
+-- schedule acceleration against the actual engine temperature, not the cockpit
+-- needle. Leave idle, deceleration, the lever position and all warning limits alone.
+local acceleration_state = {{}, {}, {}}
+local EGT_CONTROL_MARGIN = 25 -- numerical headroom below the aircraft redline
+local EGT_PREDICTION_TIME = 2 -- allow for fuel/thermal response lag
+
+local function limitAcceleration(engine, demand, idle, temperature, redline, passed, actual)
+    local state = acceleration_state[engine]
+    if not state.output then state.output = math.min(demand, actual or idle) end
+    local dt = math.min(math.max(passed, 0), 0.1)
+    if dt <= 0 then
+        state.output = math.min(demand, state.output)
+        return state.output
+    end
+    local previous_temperature = state.temperature or temperature
+    state.temperature = temperature
+
+    local rate = (temperature - previous_temperature) / math.max(passed, 0.001)
+    state.rate = approachThrottle(state.rate or 0, rate, 5, dt)
+    if demand <= idle + 0.01 then
+        state.output = demand
+        state.rate = 0
+        return demand
+    end
+
+    local limit = redline - EGT_CONTROL_MARGIN
+    local predicted = temperature + math.max(0, state.rate) * EGT_PREDICTION_TIME
+    local headroom = math.max(0, math.min(1, (limit - predicted) / 80))
+    -- Releasing the lever always takes precedence over the acceleration schedule.
+    state.output = math.min(demand, state.output + 0.35 * dt * headroom)
+    if predicted > limit then
+        local correction = math.min(1, (predicted - limit) / 100)
+        state.output = math.max(math.min(demand, idle), state.output - 0.5 * dt * correction)
+    end
+    return state.output
+end
+
 function update()
 	local passed = get(frame_time)
 	local stop_lever = get(throttle_lock) 
@@ -428,6 +485,15 @@ function update()
 	local thro_3 = line(alt_baro, 0, virtual_rud_3_act, 11000, thro_high_3)
 local MASTER = get(ismaster) ~= 1	
 if MASTER then	
+	if XP12 then
+		local idle_gnd = 0.175 + (1 - 0.175) * fastInterpolate(forward_table, 0)
+		local idle_high = line(idle_gnd, 0, 0.525, 1, 1.07)
+		local idle = line(alt_baro, 0, idle_gnd, 11000, idle_high)
+		local redline = get(engine_egt_redline)
+		thro_1 = limitAcceleration(1, thro_1, idle, get(engine_egt_1), redline, passed, get(sim_rud_1))
+		thro_2 = limitAcceleration(2, thro_2, idle, get(engine_egt_2), redline, passed, get(sim_rud_2))
+		thro_3 = limitAcceleration(3, thro_3, idle, get(engine_egt_3), redline, passed, get(sim_rud_3))
+	end
 	set(anim_rud1, thro_1_pos)
 	set(anim_rud2, thro_2_pos)
 	set(anim_rud3, thro_3_pos)

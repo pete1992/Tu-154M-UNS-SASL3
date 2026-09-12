@@ -5177,7 +5177,12 @@ ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans 0.221542 -1.709266 -21.582235 0.221542 -1.709266 -21.582235 0.000000 0.000000 none
-ANIM_rotate 0.000000 -0.139148 -0.990272 -8.000000 35.000000 0.000000 1.000000 tu154/custom/kontur/weather_mode
+ANIM_rotate_begin 0.000000 -0.139148 -0.990272 tu154/custom/kontur/weather_mode
+ANIM_rotate_key 0.000000 -8.000000
+ANIM_rotate_key 1.000000 35.000000
+ANIM_rotate_key 2.000000 92.000000
+ANIM_rotate_key 3.000000 117.000000
+ANIM_rotate_end
 ANIM_trans -0.221542 1.709266 21.582235 -0.221542 1.709266 21.582235 0.000000 0.000000 none
 ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/weather_lit
 ATTR_no_cull
@@ -5250,7 +5255,14 @@ TRIS 6549 174
 ANIM_end
 ATTR_light_level 0.000000 1.000000 tu154/custom/kontur/weather_lit
 ATTR_hard 
-TRIS 6723 1638
+TRIS 6723 1470
+# Windshear stem is modeled in OFF; rotate only the stem toward AUTO.
+ANIM_begin
+ANIM_trans 0.221199 -1.730879 -21.594461 0.221199 -1.730879 -21.594461 0.000000 0.000000 none
+ANIM_rotate 0.000000 -0.990268 0.139173 0.000000 60.000000 0.000000 1.000000 tu154/custom/wx2000_windshear
+ANIM_trans -0.221199 1.730879 21.594461 -0.221199 1.730879 21.594461 0.000000 0.000000 none
+TRIS 8193 168
+ANIM_end
 # WX2000 TILT knob and pointer; rotation follows the labeled texture ticks.
 ANIM_begin
 ANIM_trans 0.270782 -1.723328 -21.591263 0.270782 -1.723328 -21.591263 0.000000 0.000000 none

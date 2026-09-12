@@ -1,45 +1,60 @@
--- this is vibration logic for engines
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
--- sources
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+defineProps({
+    -- this is vibration logic for engines
 
-defineProperty("eng1_fail", globalPropertyf("sim/operation/failures/rel_engfai0")) -- engine fail
-defineProperty("eng2_fail", globalPropertyf("sim/operation/failures/rel_engfai1"))
-defineProperty("eng3_fail", globalPropertyf("sim/operation/failures/rel_engfai2"))
+    -- sources
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("eng1_fire", globalPropertyf("sim/operation/failures/rel_engfir0")) -- engine fire
-defineProperty("eng2_fire", globalPropertyf("sim/operation/failures/rel_engfir1"))
-defineProperty("eng3_fire", globalPropertyf("sim/operation/failures/rel_engfir2"))
+    -- Engine failures
+    { "eng1_fail", "sim/operation/failures/rel_engfai0", globalPropertyf }, -- engine fail
+    { "eng2_fail", "sim/operation/failures/rel_engfai1", globalPropertyf },
+    { "eng3_fail", "sim/operation/failures/rel_engfai2", globalPropertyf },
 
-defineProperty("eng1_oil_p", globalProperty("sim/flightmodel/engine/ENGN_oil_press_psi[0]"))  -- oil pressure
-defineProperty("eng2_oil_p", globalProperty("sim/flightmodel/engine/ENGN_oil_press_psi[1]"))
-defineProperty("eng3_oil_p", globalProperty("sim/flightmodel/engine/ENGN_oil_press_psi[2]"))
+    -- Engine fires
+    { "eng1_fire", "sim/operation/failures/rel_engfir0", globalPropertyf }, -- engine fire
+    { "eng2_fire", "sim/operation/failures/rel_engfir1", globalPropertyf },
+    { "eng3_fire", "sim/operation/failures/rel_engfir2", globalPropertyf },
 
-defineProperty("chip_detect1", globalProperty("sim/cockpit/warnings/annunciators/chip_detected[0]")) -- chip in engine
-defineProperty("chip_detect2", globalProperty("sim/cockpit/warnings/annunciators/chip_detected[1]")) -- chip in engine
-defineProperty("chip_detect3", globalProperty("sim/cockpit/warnings/annunciators/chip_detected[2]")) -- chip in engine
+    -- Oil pressure
+    { "eng1_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi[0]", globalProperty },  -- oil pressure
+    { "eng2_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi[1]", globalProperty },
+    { "eng3_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi[2]", globalProperty },
 
-defineProperty("eng_rpm1", globalProperty("sim/flightmodel/engine/ENGN_N2_[0]")) -- engine rpm in % of N2  
-defineProperty("eng_rpm2", globalProperty("sim/flightmodel/engine/ENGN_N2_[1]"))
-defineProperty("eng_rpm3", globalProperty("sim/flightmodel/engine/ENGN_N2_[2]"))
+    -- Engine chip detection
+    { "chip_detect1", "sim/cockpit/warnings/annunciators/chip_detected[0]", globalProperty }, -- chip in engine
+    { "chip_detect2", "sim/cockpit/warnings/annunciators/chip_detected[1]", globalProperty }, -- chip in engine
+    { "chip_detect3", "sim/cockpit/warnings/annunciators/chip_detected[2]", globalProperty }, -- chip in engine
 
-defineProperty("comsta0", globalPropertyi("sim/operation/failures/rel_comsta0")) -- compressor stall
-defineProperty("comsta1", globalPropertyi("sim/operation/failures/rel_comsta1"))
-defineProperty("comsta2", globalPropertyi("sim/operation/failures/rel_comsta2"))
+    -- Engine speed
+    { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty }, -- engine rpm in % of N2
+    { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
+    { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
 
-defineProperty("sim_rud_1", globalProperty("sim/flightmodel/engine/ENGN_thro_use[0]"))
-defineProperty("sim_rud_2", globalProperty("sim/flightmodel/engine/ENGN_thro_use[1]"))
-defineProperty("sim_rud_3", globalProperty("sim/flightmodel/engine/ENGN_thro_use[2]"))
+    -- Compressor stalls
+    { "comsta0", "sim/operation/failures/rel_comsta0", globalPropertyi }, -- compressor stall
+    { "comsta1", "sim/operation/failures/rel_comsta1", globalPropertyi },
+    { "comsta2", "sim/operation/failures/rel_comsta2", globalPropertyi },
 
--- resilts
-defineProperty("vibration_1", globalPropertyf("tu154/custom/eng/vibration_1")) --  
-defineProperty("vibration_2", globalPropertyf("tu154/custom/eng/vibration_2")) --  
-defineProperty("vibration_3", globalPropertyf("tu154/custom/eng/vibration_3")) --  
+    -- Engine throttle
+    { "sim_rud_1", "sim/flightmodel/engine/ENGN_thro_use[0]", globalProperty },
+    { "sim_rud_2", "sim/flightmodel/engine/ENGN_thro_use[1]", globalProperty },
+    { "sim_rud_3", "sim/flightmodel/engine/ENGN_thro_use[2]", globalProperty },
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- Results
+    { "vibration_1", "tu154/custom/eng/vibration_1", globalPropertyf }, --
+    { "vibration_2", "tu154/custom/eng/vibration_2", globalPropertyf }, --
+    { "vibration_3", "tu154/custom/eng/vibration_3", globalPropertyf }, --
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local vibr_RPM_tbl = {{ -100000, 0.0 },    -- bugs walkaround
                   {  0, 00 }, -- 

@@ -1,66 +1,81 @@
--- this is fuel to engines logic
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
--- controls
-defineProperty("fire_valve_1", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_1")) --  
-defineProperty("fire_valve_2", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_2")) --  
-defineProperty("fire_valve_3", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_3")) --  
+defineProps({
+    -- this is fuel to engines logic
 
--- pumps
-defineProperty("pump_tank1_1_work", globalPropertyi("tu154/custom/fuel/pump_tank1_1_work"))
-defineProperty("pump_tank1_2_work", globalPropertyi("tu154/custom/fuel/pump_tank1_2_work"))
-defineProperty("pump_tank1_3_work", globalPropertyi("tu154/custom/fuel/pump_tank1_3_work"))
-defineProperty("pump_tank1_4_work", globalPropertyi("tu154/custom/fuel/pump_tank1_4_work"))
+    -- controls
+    { "fire_valve_1", "tu154/custom/switchers/fuel/fire_valve_1", globalPropertyi }, --
+    { "fire_valve_2", "tu154/custom/switchers/fuel/fire_valve_2", globalPropertyi }, --
+    { "fire_valve_3", "tu154/custom/switchers/fuel/fire_valve_3", globalPropertyi }, --
 
--- mixture hamdles
-defineProperty("eng_mix_1", globalProperty("sim/cockpit2/engine/actuators/mixture_ratio[0]")) --     
-defineProperty("eng_mix_2", globalProperty("sim/cockpit2/engine/actuators/mixture_ratio[1]")) --     
-defineProperty("eng_mix_3", globalProperty("sim/cockpit2/engine/actuators/mixture_ratio[2]")) --     
+    -- pumps
+    { "pump_tank1_1_work", "tu154/custom/fuel/pump_tank1_1_work", globalPropertyi },
+    { "pump_tank1_2_work", "tu154/custom/fuel/pump_tank1_2_work", globalPropertyi },
+    { "pump_tank1_3_work", "tu154/custom/fuel/pump_tank1_3_work", globalPropertyi },
+    { "pump_tank1_4_work", "tu154/custom/fuel/pump_tank1_4_work", globalPropertyi },
 
--- animation
-defineProperty("fuel_cutoff_1", globalPropertyf("tu154/custom/controlls/fuel_cutoff_1")) --   
-defineProperty("fuel_cutoff_2", globalPropertyf("tu154/custom/controlls/fuel_cutoff_2")) --   
-defineProperty("fuel_cutoff_3", globalPropertyf("tu154/custom/controlls/fuel_cutoff_3")) --   
+    -- Mixture handles
+    { "eng_mix_1", "sim/cockpit2/engine/actuators/mixture_ratio[0]", globalProperty }, --
+    { "eng_mix_2", "sim/cockpit2/engine/actuators/mixture_ratio[1]", globalProperty }, --
+    { "eng_mix_3", "sim/cockpit2/engine/actuators/mixture_ratio[2]", globalProperty }, --
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    -- animation
+    { "fuel_cutoff_1", "tu154/custom/controlls/fuel_cutoff_1", globalPropertyf }, --
+    { "fuel_cutoff_2", "tu154/custom/controlls/fuel_cutoff_2", globalPropertyf }, --
+    { "fuel_cutoff_3", "tu154/custom/controlls/fuel_cutoff_3", globalPropertyf }, --
 
--- results
-defineProperty("eng_fuel_press_1", globalPropertyi("tu154/custom/fuel/eng_fuel_press_1")) --      .   -
-defineProperty("eng_fuel_press_2", globalPropertyi("tu154/custom/fuel/eng_fuel_press_2")) --      .   -
-defineProperty("eng_fuel_press_3", globalPropertyi("tu154/custom/fuel/eng_fuel_press_3")) --      .   -
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("fire_vlv_open_1", globalPropertyf("tu154/custom/fuel/fire_vlv_open_1")) --   
-defineProperty("fire_vlv_open_2", globalPropertyf("tu154/custom/fuel/fire_vlv_open_2")) --   
-defineProperty("fire_vlv_open_3", globalPropertyf("tu154/custom/fuel/fire_vlv_open_3")) --   
+    -- results
+    { "eng_fuel_press_1", "tu154/custom/fuel/eng_fuel_press_1", globalPropertyi }, --      .   -
+    { "eng_fuel_press_2", "tu154/custom/fuel/eng_fuel_press_2", globalPropertyi }, --      .   -
+    { "eng_fuel_press_3", "tu154/custom/fuel/eng_fuel_press_3", globalPropertyi }, --      .   -
 
-defineProperty("engine_1_fuel", globalPropertyf("sim/operation/failures/rel_fuepmp0")) --     
-defineProperty("engine_2_fuel", globalPropertyf("sim/operation/failures/rel_fuepmp1")) --     
-defineProperty("engine_3_fuel", globalPropertyf("sim/operation/failures/rel_fuepmp2")) --     
+    -- Fire valve position
+    { "fire_vlv_open_1", "tu154/custom/fuel/fire_vlv_open_1", globalPropertyf }, --
+    { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf }, --
+    { "fire_vlv_open_3", "tu154/custom/fuel/fire_vlv_open_3", globalPropertyf }, --
 
-defineProperty("engine_1_fuel2", globalPropertyf("sim/operation/failures/rel_ele_fuepmp0")) --     
-defineProperty("engine_2_fuel2", globalPropertyf("sim/operation/failures/rel_ele_fuepmp1")) --     
-defineProperty("engine_3_fuel2", globalPropertyf("sim/operation/failures/rel_ele_fuepmp2")) --     
+    -- Engine fuel pump state
+    { "engine_1_fuel", "sim/operation/failures/rel_fuepmp0", globalPropertyf }, --
+    { "engine_2_fuel", "sim/operation/failures/rel_fuepmp1", globalPropertyf }, --
+    { "engine_3_fuel", "sim/operation/failures/rel_fuepmp2", globalPropertyf }, --
 
--- failures
-defineProperty("eng_fuel_pmp_fail_1", globalPropertyi("tu154/custom/failures/eng_fuel_pmp_fail_1"))
-defineProperty("eng_fuel_pmp_fail_2", globalPropertyi("tu154/custom/failures/eng_fuel_pmp_fail_2"))
-defineProperty("eng_fuel_pmp_fail_3", globalPropertyi("tu154/custom/failures/eng_fuel_pmp_fail_3"))
+    -- Electric fuel pump state
+    { "engine_1_fuel2", "sim/operation/failures/rel_ele_fuepmp0", globalPropertyf }, --
+    { "engine_2_fuel2", "sim/operation/failures/rel_ele_fuepmp1", globalPropertyf }, --
+    { "engine_3_fuel2", "sim/operation/failures/rel_ele_fuepmp2", globalPropertyf }, --
 
-defineProperty("eng_fuel_fluctuation_1", globalPropertyi("sim/operation/failures/rel_fuelfl0"))
-defineProperty("eng_fuel_fluctuation_2", globalPropertyi("sim/operation/failures/rel_fuelfl1"))
-defineProperty("eng_fuel_fluctuation_3", globalPropertyi("sim/operation/failures/rel_fuelfl2"))
+    -- failures
+    -- Engine fuel pump failures
+    { "eng_fuel_pmp_fail_1", "tu154/custom/failures/eng_fuel_pmp_fail_1", globalPropertyi },
+    { "eng_fuel_pmp_fail_2", "tu154/custom/failures/eng_fuel_pmp_fail_2", globalPropertyi },
+    { "eng_fuel_pmp_fail_3", "tu154/custom/failures/eng_fuel_pmp_fail_3", globalPropertyi },
 
---defineProperty("igniter_on_1", globalPropertyi("sim/cockpit2/engine/actuators/igniter_on[0]"))
+    -- Fuel flow fluctuation
+    { "eng_fuel_fluctuation_1", "sim/operation/failures/rel_fuelfl0", globalPropertyi },
+    { "eng_fuel_fluctuation_2", "sim/operation/failures/rel_fuelfl1", globalPropertyi },
+    { "eng_fuel_fluctuation_3", "sim/operation/failures/rel_fuelfl2", globalPropertyi },
 
-defineProperty("fuel_in_1", globalPropertyi("tu154/custom/start/fuel_in_1")) --     
-defineProperty("fuel_in_2", globalPropertyi("tu154/custom/start/fuel_in_2")) --     
-defineProperty("fuel_in_3", globalPropertyi("tu154/custom/start/fuel_in_3")) --     
+    --defineProperty("igniter_on_1", globalPropertyi("sim/cockpit2/engine/actuators/igniter_on[0]"))
 
-defineProperty("elevation", globalPropertyf("sim/flightmodel/position/elevation"))
+    -- Start-system fuel admission
+    { "fuel_in_1", "tu154/custom/start/fuel_in_1", globalPropertyi }, --
+    { "fuel_in_2", "tu154/custom/start/fuel_in_2", globalPropertyi }, --
+    { "fuel_in_3", "tu154/custom/start/fuel_in_3", globalPropertyi }, --
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- Aircraft altitude
+    { "elevation", "sim/flightmodel/position/elevation", globalPropertyf },
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local rod_on = sasl.al.loadSample('Custom Sounds/ROD_ON.wav')
 local rod_off = sasl.al.loadSample('Custom Sounds/ROD_OFF.wav')

@@ -1,11 +1,24 @@
 -- taws sound logic
 
-defineProperty("taws_english", globalPropertyi("tu154/custom/taws/taws_english")) --  . 0 - , 1 - 	0
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("taws_eng_phrase", globalPropertyi("tu154/custom/sounds/taws_eng_phrase")) --     
-defineProperty("taws_rus_phrase", globalPropertyi("tu154/custom/sounds/taws_rus_phrase")) --     
-
-defineProperty("external_view", globalPropertyi("sim/graphics/view/view_is_external")) -- enviroment
+defineProps({
+    -- Existing TAWS voice selection and playback requests.
+    {"taws_english", "tu154/custom/taws/taws_english", globalPropertyi},
+    {"taws_eng_phrase", "tu154/custom/sounds/taws_eng_phrase", globalPropertyi},
+    {"taws_rus_phrase", "tu154/custom/sounds/taws_rus_phrase", globalPropertyi},
+    {"external_view", "sim/graphics/view/view_is_external", globalPropertyi},
+    -- Native alert level; PWS mode alone only describes takeoff/approach readiness.
+    {"windshear_warning", "sim/cockpit2/annunciators/windshear_warning_systems", globalPropertyi},
+    {"windshear_auto", "tu154/custom/wx2000_windshear", globalPropertyf},
+    {"weather_ready", "tu154/custom/kontur/weather_ready", globalPropertyf},
+    {"weather_sys", "tu154/custom/kontur/weather_sys", globalPropertyf},
+    {"weather_bus36", "tu154/custom/elec/bus36_volt_left", globalPropertyf},
+})
 
 -- sounds
 
@@ -56,7 +69,37 @@ local rus_too_low_flaps = eng_too_low_flaps
 local rus_too_low_gear = eng_too_low_gear
 local rus_too_low_terrain = eng_too_low_terrain
 
+local windshear_sample = nil
+local windshear_sample_loaded = false
+
+local function updateWindshearSound()
+    if not windshear_sample_loaded then
+        -- Resolve the user's aircraft-level WAV after the aircraft has loaded.
+        windshear_sample = sasl.al.loadSample(sasl.getAircraftPath() .. "/sounds/alert/wshr.wav")
+        windshear_sample_loaded = true
+    end
+    if not windshear_sample then return end
+
+    local warning = get(windshear_warning)
+    -- 1 is a visual advisory; 2/3/4 are predictive caution/takeoff/approach alerts.
+    local predictive = (warning == 2 or warning == 3 or warning == 4)
+        and get(windshear_auto) == 1 and get(weather_ready) > 0
+        and get(weather_sys) > 0 and get(weather_bus36) > 0
+    -- Reactive warning (5) is independent of the radar's predictive AUTO/OFF switch.
+    local audible = get(external_view) == 0 and (predictive or warning == 5)
+    if audible then
+        -- Repeat while the alert is active without restarting the WAV every frame.
+        if not sasl.al.isSamplePlaying(windshear_sample) then
+            sasl.al.playSample(windshear_sample, true)
+        end
+    elseif sasl.al.isSamplePlaying(windshear_sample) then
+        sasl.al.stopSample(windshear_sample)
+    end
+end
+
 function update()
+
+    updateWindshearSound()
 	
 	if get(taws_english) == 1 and get(external_view) == 0 then -- english mode
 	

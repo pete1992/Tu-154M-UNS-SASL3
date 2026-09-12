@@ -42,9 +42,11 @@ defineProperty("thermo", globalPropertyf("sim/cockpit2/temperature/outside_air_t
 defineProperty("gear_vent_set", globalPropertyi("tu154/custom/switchers/eng/gear_fan")) --  
 defineProperty("gear2_deflect", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]"))  -- vertical deflection of left gear
 defineProperty("gear3_deflect", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]"))  -- vertical deflection of right gear
+set(parking_brake, 1)
+set(parkbrake, 1)
+set(parkbrake_2, 1)
+set(overr, 1)
 
-set(brake_runtime_left, 1)
-set(brake_runtime_right, 1)
 
 -- sound
 local brake_hnd_on = sasl.al.loadSample('Custom Sounds/parking_on.wav')

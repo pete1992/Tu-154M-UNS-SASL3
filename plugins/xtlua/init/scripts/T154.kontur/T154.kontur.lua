@@ -12,6 +12,8 @@ Changelog
 - NAV and WX can be combined on each screen; their keys toggle each layer independently.
 - TCAS can be overlaid on NAV or NAV/WX without hiding the selected route.
 - The WX2000 TILT knob controls the native radar angle on both displays.
+- TEST, WX, WX/TURB and MAP select the corresponding native radar modes.
+- WINDSHEAR AUTO enables native predictive detection while the radar is powered and ready.
 - TCAS, TAWS and native EFIS controls remain independent between screens.
 - NAV displays GPS1 without changing the independent HSI/ABSU source selection.
 - WX re-selection and power cycles restore scanning after a display standby selection.
@@ -24,6 +26,7 @@ Changelog
 function tu154_kontur_weather_mode_DRhandler() end
 function tu154_kontur_weather_sys_DRhandler() end
 function tu154_wx2000_tilt_DRhandler() end
+function tu154_wx2000_windshear_DRhandler() end
 
 
 
@@ -180,6 +183,7 @@ kontur_pow_r_lit = deferred_dataref("tu154/custom/kontur/light/right_power", "nu
 kontur_on_r = deferred_dataref("tu154/custom/kontur/right_on", "number")
 weather_lit = deferred_dataref("tu154/custom/kontur/weather_lit", "number")
 weather_sys = deferred_dataref("tu154/custom/kontur/weather_sys", "number",tu154_kontur_weather_sys_DRhandler)
+-- Physical detents: 0 TEST, 1 WX, 2 WX/TURB, 3 MAP.
 weather_mode = deferred_dataref("tu154/custom/kontur/weather_mode", "number",tu154_kontur_weather_mode_DRhandler)
 kontur_nav_l = deferred_dataref("tu154/custom/kontur/left_nav", "number")
 kontur_wx_l = deferred_dataref("tu154/custom/kontur/left_wx", "number")
@@ -205,6 +209,8 @@ crs_fl = deferred_dataref("tu154/custom/kontur/crs_fl", "number")
 wx2000_gain = deferred_dataref("tu154/custom/wx2000_gain", "number")
 -- Physical TILT setting in degrees: -15 DN, 0 level, +15 UP.
 wx2000_tilt = deferred_dataref("tu154/custom/wx2000_tilt", "number", tu154_wx2000_tilt_DRhandler)
+-- Physical PWS switch: 0 OFF (right), 1 AUTO (left).
+wx2000_windshear = deferred_dataref("tu154/custom/wx2000_windshear", "number", tu154_wx2000_windshear_DRhandler)
 kontur_rru_l = deferred_dataref("tu154/custom/kontur/rru_l", "number")
 kontur_rru_r = deferred_dataref("tu154/custom/kontur/rru_r", "number")
 uns1_on					= deferred_dataref("tu154/custom/uns1_on", "number")
@@ -285,6 +291,7 @@ local true_brg = 0
 -- Start every gain control at the actual shared level so each can turn down immediately.
 wx2000_gain = 0.8
 wx2000_tilt = 0
+wx2000_windshear = 0
 kontur_rru_l = 0.8
 kontur_rru_r = 0.8
 -- Remember the shared level separately from the three physical knob positions.
@@ -695,6 +702,8 @@ local function configure_weather_scan()
 end
 
 function aircraft_load()
+    -- PWS AUTO can emit even with mode OFF; inhibit it before shutting down the radar.
+    if simDR_weather_pws ~= 0 then simDR_weather_pws = 0 end
     if simDR_weather_mode_xp ~= 0 then simDR_weather_mode_xp = 0 end
     if simDR_weather_mode_xp_fo ~= 0 then simDR_weather_mode_xp_fo = 0 end
     configure_weather_scan()
@@ -889,8 +898,11 @@ end
 -- A single radar state owns the warm-up, power lamp and XP12 radar release.
 local function update_weather()
     local was_ready = weather_ready > 0
-    local powered = weather_sys > 0 and simDR_36v > 0
-    if not powered or weather_mode <= 0 then
+    local powered = finite(weather_sys) and weather_sys > 0 and finite(simDR_36v) and simDR_36v > 0
+    -- Invalid external selector writes must not select an unintended emitting mode.
+    local valid_mode = finite(weather_mode) and weather_mode >= 0 and weather_mode <= 3
+        and weather_mode == math.floor(weather_mode)
+    if not powered then
         -- Do not retain a hidden display-standby latch across a radar restart.
         wx_display_l = 3
         wx_display_r = 3
@@ -906,15 +918,28 @@ local function update_weather()
         elseif weather_test_timer >= 5 then kontur_wx_test_l = 1
         else kontur_wx_test_l = 0 end
     end
-    weather_ready = powered and weather_mode > 0 and kontur_wx_test_l == -1 and 1 or 0
+    -- TEST is a usable native display mode, not the radar power-off position.
+    weather_ready = powered and valid_mode and kontur_wx_test_l == -1 and 1 or 0
+    local pws = weather_ready > 0 and wx2000_windshear == 1 and 1 or 0
+    -- Mode OFF alone cannot stop native PWS; remove its request first on shutdown.
+    if pws == 0 and simDR_weather_pws ~= 0 then simDR_weather_pws = 0 end
     if weather_ready > 0 and not was_ready then configure_weather_scan() end
-    -- Own the operating mode, including recovery from inherited TEST/MAP/TURB.
+    -- Physical 0/1/2/3 -> XP12 TEST/WX/WX+T/MAP (native 1/2/3/4).
     -- Avoid repeated mode writes that could restart a native scan every frame.
-    local native_mode = weather_ready > 0 and 2 or 0
+    local native_mode = weather_ready > 0 and weather_mode + 1 or 0
     if simDR_weather_mode_xp ~= native_mode then simDR_weather_mode_xp = native_mode end
     if simDR_weather_mode_xp_fo ~= native_mode then simDR_weather_mode_xp_fo = native_mode end
     -- Apply after mode changes and power recovery so the physical setting stays in control.
     apply_weather_tilt()
+    if simDR_weather_stab ~= 1 then simDR_weather_stab = 1 end
+    if simDR_weather_stab_fo ~= 1 then simDR_weather_stab_fo = 1 end
+    -- MAP needs ground returns; restore the established suppression when leaving MAP.
+    local ground_suppression = native_mode == 4 and 0 or 1
+    if simDR_weather_gcs ~= ground_suppression then simDR_weather_gcs = ground_suppression end
+    if simDR_weather_gcs_fo ~= ground_suppression then simDR_weather_gcs_fo = ground_suppression end
+    -- One shared antenna/PWS controller. XP12 owns its automatic flight-phase envelope;
+    -- hiding WX on either screen must not disable predictive windshear detection.
+    if simDR_weather_pws ~= pws then simDR_weather_pws = pws end
 end
 
 local function apply_display_modes()
@@ -938,7 +963,9 @@ local function apply_display_modes()
     -- Clear active native terrain before the final WX write; the layers are exclusive.
     -- Do not issue a terrain-off write after enabling the weather overlay.
     if kontur_wx_l > 0 and simDR_efis_1_terrain > 0 then simDR_efis_1_terrain = 0 end
-    simDR_efis_1_wxr = kontur_wx_l == 3 and weather_ready > 0 and nostab_l < 1 and 1 or 0
+    -- The electronic TEST pattern does not require antenna stabilization.
+    simDR_efis_1_wxr = kontur_wx_l == 3 and weather_ready > 0
+        and (weather_mode == 0 or nostab_l < 1) and 1 or 0
     simDR_efis_1_fix = 0
     simDR_efis_1_ndb = 0
     simDR_efis_1_vor = kontur_nav_l > 0 and simDR_efis_1_range < 5 and 1 or 0
@@ -963,7 +990,8 @@ local function apply_display_modes()
     -- Clear active native terrain before the final WX write; the layers are exclusive.
     -- Do not issue a terrain-off write after enabling the weather overlay.
     if kontur_wx_r > 0 and simDR_efis_2_terrain > 0 then simDR_efis_2_terrain = 0 end
-    simDR_efis_2_wxr = kontur_wx_r == 3 and weather_ready > 0 and nostab_r < 1 and 1 or 0
+    simDR_efis_2_wxr = kontur_wx_r == 3 and weather_ready > 0
+        and (weather_mode == 0 or nostab_r < 1) and 1 or 0
     simDR_efis_2_fix = 0
     simDR_efis_2_ndb = 0
     simDR_efis_2_vor = kontur_nav_r > 0 and simDR_efis_1_range < 5 and 1 or 0
@@ -1028,11 +1056,7 @@ else
 end
     
 
-if weather_sys > 0 and simDR_36v > 0 then
-    weather_lit = 1
-else
-    weather_lit = 0
-end    
+-- update_weather() owns the radar power lamp along with readiness and native modes.
 
 if ubs_pow_r < 1 and info_page_r > 2 then
     info_page_r = 2

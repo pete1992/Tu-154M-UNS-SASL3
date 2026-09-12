@@ -1,92 +1,118 @@
--- failures
-defineProperty("engine_runtime_1", globalPropertyf("tu154/custom/failures/engine_runtime_1")) 
-defineProperty("engine_runtime_2", globalPropertyf("tu154/custom/failures/engine_runtime_2")) 
-defineProperty("engine_runtime_3", globalPropertyf("tu154/custom/failures/engine_runtime_3"))
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("engn_oil_qty_1", globalPropertyf("tu154/custom/failures/engn_oil_qty_1")) 
-defineProperty("engn_oil_qty_2", globalPropertyf("tu154/custom/failures/engn_oil_qty_2")) 
-defineProperty("engn_oil_qty_3", globalPropertyf("tu154/custom/failures/engn_oil_qty_3"))
+defineProps({
+    -- failures
+    -- Engine lifetime
+    { "engine_runtime_1", "tu154/custom/failures/engine_runtime_1", globalPropertyf },
+    { "engine_runtime_2", "tu154/custom/failures/engine_runtime_2", globalPropertyf },
+    { "engine_runtime_3", "tu154/custom/failures/engine_runtime_3", globalPropertyf },
 
-defineProperty("engn_oil_leak_1", globalPropertyi("tu154/custom/failures/engn_oil_leak_1")) 
-defineProperty("engn_oil_leak_2", globalPropertyi("tu154/custom/failures/engn_oil_leak_2")) 
-defineProperty("engn_oil_leak_3", globalPropertyi("tu154/custom/failures/engn_oil_leak_3"))
+    -- Oil quantity
+    { "engn_oil_qty_1", "tu154/custom/failures/engn_oil_qty_1", globalPropertyf },
+    { "engn_oil_qty_2", "tu154/custom/failures/engn_oil_qty_2", globalPropertyf },
+    { "engn_oil_qty_3", "tu154/custom/failures/engn_oil_qty_3", globalPropertyf },
 
-defineProperty("oil_pump_fail_1", globalPropertyi("sim/operation/failures/rel_oilpmp0")) 
-defineProperty("oil_pump_fail_2", globalPropertyi("sim/operation/failures/rel_oilpmp1")) 
-defineProperty("oil_pump_fail_3", globalPropertyi("sim/operation/failures/rel_oilpmp2"))
+    -- Oil leaks
+    { "engn_oil_leak_1", "tu154/custom/failures/engn_oil_leak_1", globalPropertyi },
+    { "engn_oil_leak_2", "tu154/custom/failures/engn_oil_leak_2", globalPropertyi },
+    { "engn_oil_leak_3", "tu154/custom/failures/engn_oil_leak_3", globalPropertyi },
 
-defineProperty("fuel_flowmeter_1_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_1_fail"))
-defineProperty("fuel_flowmeter_2_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_2_fail"))
-defineProperty("fuel_flowmeter_3_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_3_fail"))
+    -- Oil pump failures
+    { "oil_pump_fail_1", "sim/operation/failures/rel_oilpmp0", globalPropertyi },
+    { "oil_pump_fail_2", "sim/operation/failures/rel_oilpmp1", globalPropertyi },
+    { "oil_pump_fail_3", "sim/operation/failures/rel_oilpmp2", globalPropertyi },
 
-defineProperty("eng_fail_1", globalPropertyi("sim/operation/failures/rel_engfai0"))
-defineProperty("eng_fail_2", globalPropertyi("sim/operation/failures/rel_engfai1"))
-defineProperty("eng_fail_3", globalPropertyi("sim/operation/failures/rel_engfai2"))
+    -- Fuel flowmeter failures
+    { "fuel_flowmeter_1_fail", "tu154/custom/failures/fuel_flowmeter_1_fail", globalPropertyi },
+    { "fuel_flowmeter_2_fail", "tu154/custom/failures/fuel_flowmeter_2_fail", globalPropertyi },
+    { "fuel_flowmeter_3_fail", "tu154/custom/failures/fuel_flowmeter_3_fail", globalPropertyi },
 
-defineProperty("eng_fire_1", globalPropertyi("sim/operation/failures/rel_engfir0"))
-defineProperty("eng_fire_2", globalPropertyi("sim/operation/failures/rel_engfir1"))
-defineProperty("eng_fire_3", globalPropertyi("sim/operation/failures/rel_engfir2"))
+    -- Engine failures
+    { "eng_fail_1", "sim/operation/failures/rel_engfai0", globalPropertyi },
+    { "eng_fail_2", "sim/operation/failures/rel_engfai1", globalPropertyi },
+    { "eng_fail_3", "sim/operation/failures/rel_engfai2", globalPropertyi },
 
-defineProperty("eng_flame_1", globalPropertyi("sim/operation/failures/rel_engfla0"))
-defineProperty("eng_flame_2", globalPropertyi("sim/operation/failures/rel_engfla1"))
-defineProperty("eng_flame_3", globalPropertyi("sim/operation/failures/rel_engfla2"))
+    -- Engine fires
+    { "eng_fire_1", "sim/operation/failures/rel_engfir0", globalPropertyi },
+    { "eng_fire_2", "sim/operation/failures/rel_engfir1", globalPropertyi },
+    { "eng_fire_3", "sim/operation/failures/rel_engfir2", globalPropertyi },
 
-defineProperty("eng_stall_1", globalPropertyi("sim/operation/failures/rel_comsta0"))
-defineProperty("eng_stall_2", globalPropertyi("sim/operation/failures/rel_comsta1"))
-defineProperty("eng_stall_3", globalPropertyi("sim/operation/failures/rel_comsta2"))
+    -- Engine flameouts
+    { "eng_flame_1", "sim/operation/failures/rel_engfla0", globalPropertyi },
+    { "eng_flame_2", "sim/operation/failures/rel_engfla1", globalPropertyi },
+    { "eng_flame_3", "sim/operation/failures/rel_engfla2", globalPropertyi },
 
-defineProperty("eng_fuel_pmp_fail_1", globalPropertyi("tu154/custom/failures/eng_fuel_pmp_fail_1"))
-defineProperty("eng_fuel_pmp_fail_2", globalPropertyi("tu154/custom/failures/eng_fuel_pmp_fail_2"))
-defineProperty("eng_fuel_pmp_fail_3", globalPropertyi("tu154/custom/failures/eng_fuel_pmp_fail_3"))
+    -- Compressor stalls
+    { "eng_stall_1", "sim/operation/failures/rel_comsta0", globalPropertyi },
+    { "eng_stall_2", "sim/operation/failures/rel_comsta1", globalPropertyi },
+    { "eng_stall_3", "sim/operation/failures/rel_comsta2", globalPropertyi },
 
-defineProperty("eng_filter_1", globalPropertyi("sim/operation/failures/rel_eng_lo0"))
-defineProperty("eng_filter_2", globalPropertyi("sim/operation/failures/rel_eng_lo1"))
-defineProperty("eng_filter_3", globalPropertyi("sim/operation/failures/rel_eng_lo2"))
+    -- Engine fuel pump failures
+    { "eng_fuel_pmp_fail_1", "tu154/custom/failures/eng_fuel_pmp_fail_1", globalPropertyi },
+    { "eng_fuel_pmp_fail_2", "tu154/custom/failures/eng_fuel_pmp_fail_2", globalPropertyi },
+    { "eng_fuel_pmp_fail_3", "tu154/custom/failures/eng_fuel_pmp_fail_3", globalPropertyi },
 
-defineProperty("eng_start_1", globalPropertyi("sim/operation/failures/rel_startr0"))
-defineProperty("eng_start_2", globalPropertyi("sim/operation/failures/rel_startr1"))
-defineProperty("eng_start_3", globalPropertyi("sim/operation/failures/rel_startr2"))
+    -- Fuel filter failures
+    { "eng_filter_1", "sim/operation/failures/rel_eng_lo0", globalPropertyi },
+    { "eng_filter_2", "sim/operation/failures/rel_eng_lo1", globalPropertyi },
+    { "eng_filter_3", "sim/operation/failures/rel_eng_lo2", globalPropertyi },
 
-defineProperty("eng_ign_1", globalPropertyi("sim/operation/failures/rel_ignitr0"))
-defineProperty("eng_ign_2", globalPropertyi("sim/operation/failures/rel_ignitr1"))
-defineProperty("eng_ign_3", globalPropertyi("sim/operation/failures/rel_ignitr2"))
+    -- Starter failures
+    { "eng_start_1", "sim/operation/failures/rel_startr0", globalPropertyi },
+    { "eng_start_2", "sim/operation/failures/rel_startr1", globalPropertyi },
+    { "eng_start_3", "sim/operation/failures/rel_startr2", globalPropertyi },
 
-defineProperty("eng_revrs_1", globalPropertyi("sim/operation/failures/rel_revers0"))
-defineProperty("eng_revrs_3", globalPropertyi("sim/operation/failures/rel_revers2"))
+    -- Ignition failures
+    { "eng_ign_1", "sim/operation/failures/rel_ignitr0", globalPropertyi },
+    { "eng_ign_2", "sim/operation/failures/rel_ignitr1", globalPropertyi },
+    { "eng_ign_3", "sim/operation/failures/rel_ignitr2", globalPropertyi },
 
-defineProperty("ENGN_oil_q_1", globalProperty("sim/flightmodel/engine/ENGN_oil_quan[0]"))
-defineProperty("ENGN_oil_q_2", globalProperty("sim/flightmodel/engine/ENGN_oil_quan[1]"))
-defineProperty("ENGN_oil_q_3", globalProperty("sim/flightmodel/engine/ENGN_oil_quan[2]"))
+    -- Reverser failures
+    { "eng_revrs_1", "sim/operation/failures/rel_revers0", globalPropertyi },
+    { "eng_revrs_3", "sim/operation/failures/rel_revers2", globalPropertyi },
 
-defineProperty("fuel_fluct_1", globalPropertyi("sim/operation/failures/rel_fuelfl0")) -- Fuel Flow Fluctuation
-defineProperty("fuel_fluct_2", globalPropertyi("sim/operation/failures/rel_fuelfl1")) -- Fuel Flow Fluctuation
-defineProperty("fuel_fluct_3", globalPropertyi("sim/operation/failures/rel_fuelfl2")) -- Fuel Flow Fluctuation
+    -- Simulator oil quantity
+    { "ENGN_oil_q_1", "sim/flightmodel/engine/ENGN_oil_quan[0]", globalProperty },
+    { "ENGN_oil_q_2", "sim/flightmodel/engine/ENGN_oil_quan[1]", globalProperty },
+    { "ENGN_oil_q_3", "sim/flightmodel/engine/ENGN_oil_quan[2]", globalProperty },
 
-defineProperty("sim_egt_1", globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[0]")) -- EGT from sim
-defineProperty("sim_egt_2", globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[1]")) -- EGT from sim
-defineProperty("sim_egt_3", globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[2]")) -- EGT from sim
+    -- Fuel flow fluctuation
+    { "fuel_fluct_1", "sim/operation/failures/rel_fuelfl0", globalPropertyi }, -- Fuel Flow Fluctuation
+    { "fuel_fluct_2", "sim/operation/failures/rel_fuelfl1", globalPropertyi }, -- Fuel Flow Fluctuation
+    { "fuel_fluct_3", "sim/operation/failures/rel_fuelfl2", globalPropertyi }, -- Fuel Flow Fluctuation
 
--- engines data
-defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
-defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
-defineProperty("rpm_high_3", globalPropertyf("tu154/custom/gauges/engine/rpm_high_3")) --     №3
+    -- Simulator exhaust gas temperature
+    { "sim_egt_1", "sim/cockpit2/engine/indicators/EGT_deg_C[0]", globalProperty }, -- EGT from sim
+    { "sim_egt_2", "sim/cockpit2/engine/indicators/EGT_deg_C[1]", globalProperty }, -- EGT from sim
+    { "sim_egt_3", "sim/cockpit2/engine/indicators/EGT_deg_C[2]", globalProperty }, -- EGT from sim
 
-defineProperty("eng_work_1", globalProperty("sim/flightmodel2/engines/engine_is_burning_fuel[0]"))
-defineProperty("eng_work_2", globalProperty("sim/flightmodel2/engines/engine_is_burning_fuel[1]"))
-defineProperty("eng_work_3", globalProperty("sim/flightmodel2/engines/engine_is_burning_fuel[2]"))
+    -- engines data
+    { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, --     №1
+    { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf }, --     №2
+    { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf }, --     №3
 
-defineProperty("alpha", globalPropertyf("sim/flightmodel2/misc/AoA_angle_degrees"))  -- angle of attack
-defineProperty("msl_alt", globalPropertyf("sim/flightmodel/position/elevation"))  -- phisical altitude MSL. meters
-defineProperty("msl_press", globalPropertyf("sim/weather/barometer_sealevel_inhg"))  -- pressire at sea level in.Hg
-defineProperty("pressure", globalPropertyf("tu154/custom/gauges/alt/vbe_press_left"))  -- pressure in hPa
+    { "eng_work_1", "sim/flightmodel2/engines/engine_is_burning_fuel[0]", globalProperty },
+    { "eng_work_2", "sim/flightmodel2/engines/engine_is_burning_fuel[1]", globalProperty },
+    { "eng_work_3", "sim/flightmodel2/engines/engine_is_burning_fuel[2]", globalProperty },
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "alpha", "sim/flightmodel2/misc/AoA_angle_degrees", globalPropertyf },  -- angle of attack
+    { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },  -- phisical altitude MSL. meters
+    { "msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf },  -- pressire at sea level in.Hg
+    { "pressure", "tu154/custom/gauges/alt/vbe_press_left", globalPropertyf },  -- pressure in hPa
 
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- Failure configuration
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+})
 
 -- put oil before every flight
 set(engn_oil_qty_1, math.random() + 26)

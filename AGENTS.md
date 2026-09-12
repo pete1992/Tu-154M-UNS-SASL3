@@ -45,11 +45,28 @@ Preserve existing DataRef paths unless there is a confirmed reason to change the
 
 Typical SASL 3 property access:
 
-```lua
-defineProperty("name", globalProperty("path"))
-defineProperty("name", globalPropertyf("path"))
-defineProperty("name", globalPropertyi("path"))
-```
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
+
+defineProps({
+    -- Controls
+    { "soi21_on", "tu154/custom/switchers/eng/soi21_on", globalPropertyi },
+    { "soi21_test", "tu154/custom/buttons/eng/soi21_test", globalPropertyi },
+    { "antiice_slats", "tu154/custom/switchers/eng/antiice_slats", globalPropertyi },
+    { "antiice_eng_1", "tu154/custom/switchers/eng/antiice_eng_1", globalPropertyi },
+    { "antiice_eng_2", "tu154/custom/switchers/eng/antiice_eng_2", globalPropertyi },
+    { "antiice_eng_3", "tu154/custom/switchers/eng/antiice_eng_3", globalPropertyi },
+    { "antiice_wing", "tu154/custom/switchers/eng/antiice_wing", globalPropertyi },
+    { "window_heat_1", "tu154/custom/switchers/ovhd/window_heat_1", globalPropertyi },
+    { "window_heat_2", "tu154/custom/switchers/ovhd/window_heat_2", globalPropertyi },
+    { "window_heat_3", "tu154/custom/switchers/ovhd/window_heat_3", globalPropertyi },
+    { "pitot_heat_1", "tu154/custom/switchers/ovhd/pitot_heat_1", globalPropertyi },
+    { "pitot_heat_2", "tu154/custom/switchers/ovhd/pitot_heat_2", globalPropertyi },
+    { "pitot_heat_3", "tu154/custom/switchers/ovhd/pitot_heat_3", globalPropertyi },
+})
 
 For indexed/array DataRefs, do not blindly preserve SASL 2 typed-array access patterns.
 

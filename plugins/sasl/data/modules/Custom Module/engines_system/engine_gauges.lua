@@ -1,132 +1,140 @@
 -- this is engine's gauges logic
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
+
+defineProps({
+    {"xp_version", "sim/version/xplane_internal_version", globalPropertyi},
 -- controls
-defineProperty("control_ut", globalPropertyi("tu154/custom/buttons/eng/control_ut")) --   
-defineProperty("control_vibro_1", globalPropertyi("tu154/custom/buttons/eng/control_vibro_1")) --   
-defineProperty("control_vibro_2", globalPropertyi("tu154/custom/buttons/eng/control_vibro_2")) --   
-defineProperty("control_vibro_3", globalPropertyi("tu154/custom/buttons/eng/control_vibro_3")) --   
-defineProperty("vibro_sel_1", globalPropertyi("tu154/custom/switchers/eng/vibro_sel_1")) --   
-defineProperty("vibro_sel_2", globalPropertyi("tu154/custom/switchers/eng/vibro_sel_2")) --   
-defineProperty("vibro_sel_3", globalPropertyi("tu154/custom/switchers/eng/vibro_sel_3")) --   
+    {"control_ut", "tu154/custom/buttons/eng/control_ut", globalPropertyi},
+    {"control_vibro_1", "tu154/custom/buttons/eng/control_vibro_1", globalPropertyi},
+    {"control_vibro_2", "tu154/custom/buttons/eng/control_vibro_2", globalPropertyi},
+    {"control_vibro_3", "tu154/custom/buttons/eng/control_vibro_3", globalPropertyi},
+    {"vibro_sel_1", "tu154/custom/switchers/eng/vibro_sel_1", globalPropertyi},
+    {"vibro_sel_2", "tu154/custom/switchers/eng/vibro_sel_2", globalPropertyi},
+    {"vibro_sel_3", "tu154/custom/switchers/eng/vibro_sel_3", globalPropertyi},
 
-defineProperty("fuel_meter_on", globalPropertyi("tu154/custom/switchers/fuel/fuel_meter_mech_on")) -- 
+    {"fuel_meter_on", "tu154/custom/switchers/fuel/fuel_meter_mech_on", globalPropertyi},
 
-defineProperty("gauges_on_1", globalPropertyi("tu154/custom/switchers/eng/gauges_on_1")) --   
-defineProperty("gauges_on_2", globalPropertyi("tu154/custom/switchers/eng/gauges_on_2")) --   
-defineProperty("gauges_on_3", globalPropertyi("tu154/custom/switchers/eng/gauges_on_3")) --   
+    {"gauges_on_1", "tu154/custom/switchers/eng/gauges_on_1", globalPropertyi},
+    {"gauges_on_2", "tu154/custom/switchers/eng/gauges_on_2", globalPropertyi},
+    {"gauges_on_3", "tu154/custom/switchers/eng/gauges_on_3", globalPropertyi},
 
 -- gauges
-defineProperty("rpm_low_1", globalPropertyf("tu154/custom/gauges/engine/rpm_low_1")) --     №1
-defineProperty("rpm_low_2", globalPropertyf("tu154/custom/gauges/engine/rpm_low_2")) --     №2
-defineProperty("rpm_low_3", globalPropertyf("tu154/custom/gauges/engine/rpm_low_3")) --     №3
-defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
-defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
-defineProperty("rpm_high_3", globalPropertyf("tu154/custom/gauges/engine/rpm_high_3")) --     №3
+    {"rpm_low_1", "tu154/custom/gauges/engine/rpm_low_1", globalPropertyf}, --     №1
+    {"rpm_low_2", "tu154/custom/gauges/engine/rpm_low_2", globalPropertyf}, --     №2
+    {"rpm_low_3", "tu154/custom/gauges/engine/rpm_low_3", globalPropertyf}, --     №3
+    {"rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf}, --     №1
+    {"rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf}, --     №2
+    {"rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf}, --     №3
 
-defineProperty("egt_1", globalPropertyf("tu154/custom/gauges/eng/egt_1")) --   1
-defineProperty("egt_2", globalPropertyf("tu154/custom/gauges/eng/egt_2")) --   2
-defineProperty("egt_3", globalPropertyf("tu154/custom/gauges/eng/egt_3")) --   3
+    {"egt_1", "tu154/custom/gauges/eng/egt_1", globalPropertyf}, --   1
+    {"egt_2", "tu154/custom/gauges/eng/egt_2", globalPropertyf}, --   2
+    {"egt_3", "tu154/custom/gauges/eng/egt_3", globalPropertyf}, --   3
 
-defineProperty("fuel_press_1", globalPropertyf("tu154/custom/gauges/eng/fuel_press_1")) --    1
-defineProperty("fuel_press_2", globalPropertyf("tu154/custom/gauges/eng/fuel_press_2")) --    2
-defineProperty("fuel_press_3", globalPropertyf("tu154/custom/gauges/eng/fuel_press_3")) --    3
+    {"fuel_press_1", "tu154/custom/gauges/eng/fuel_press_1", globalPropertyf}, --    1
+    {"fuel_press_2", "tu154/custom/gauges/eng/fuel_press_2", globalPropertyf}, --    2
+    {"fuel_press_3", "tu154/custom/gauges/eng/fuel_press_3", globalPropertyf}, --    3
 
-defineProperty("oil_press_1", globalPropertyf("tu154/custom/gauges/eng/oil_press_1")) --    1
-defineProperty("oil_press_2", globalPropertyf("tu154/custom/gauges/eng/oil_press_2")) --    2
-defineProperty("oil_press_3", globalPropertyf("tu154/custom/gauges/eng/oil_press_3")) --    3
+    {"oil_press_1", "tu154/custom/gauges/eng/oil_press_1", globalPropertyf}, --    1
+    {"oil_press_2", "tu154/custom/gauges/eng/oil_press_2", globalPropertyf}, --    2
+    {"oil_press_3", "tu154/custom/gauges/eng/oil_press_3", globalPropertyf}, --    3
 
-defineProperty("oil_temp_1", globalPropertyf("tu154/custom/gauges/eng/oil_temp_1")) --    1
-defineProperty("oil_temp_2", globalPropertyf("tu154/custom/gauges/eng/oil_temp_2")) --    2
-defineProperty("oil_temp_3", globalPropertyf("tu154/custom/gauges/eng/oil_temp_3")) --    3
+    {"oil_temp_1", "tu154/custom/gauges/eng/oil_temp_1", globalPropertyf}, --    1
+    {"oil_temp_2", "tu154/custom/gauges/eng/oil_temp_2", globalPropertyf}, --    2
+    {"oil_temp_3", "tu154/custom/gauges/eng/oil_temp_3", globalPropertyf}, --    3
 
-defineProperty("fuel_flow_1", globalPropertyf("tu154/custom/gauges/eng/fuel_flow_1")) --    1
-defineProperty("fuel_flow_2", globalPropertyf("tu154/custom/gauges/eng/fuel_flow_2")) --    2
-defineProperty("fuel_flow_3", globalPropertyf("tu154/custom/gauges/eng/fuel_flow_3")) --    3
+    {"fuel_flow_1", "tu154/custom/gauges/eng/fuel_flow_1", globalPropertyf}, --    1
+    {"fuel_flow_2", "tu154/custom/gauges/eng/fuel_flow_2", globalPropertyf}, --    2
+    {"fuel_flow_3", "tu154/custom/gauges/eng/fuel_flow_3", globalPropertyf}, --    3
 
-defineProperty("vibra_1", globalPropertyf("tu154/custom/gauges/eng/vibra_1")) --   1
-defineProperty("vibra_2", globalPropertyf("tu154/custom/gauges/eng/vibra_2")) --   2
-defineProperty("vibra_3", globalPropertyf("tu154/custom/gauges/eng/vibra_3")) --   3
+    {"vibra_1", "tu154/custom/gauges/eng/vibra_1", globalPropertyf}, --   1
+    {"vibra_2", "tu154/custom/gauges/eng/vibra_2", globalPropertyf}, --   2
+    {"vibra_3", "tu154/custom/gauges/eng/vibra_3", globalPropertyf}, --   3
 
-defineProperty("oil_qty_1", globalPropertyf("tu154/custom/gauges/eng/oil_qty_1")) --  
-defineProperty("oil_qty_2", globalPropertyf("tu154/custom/gauges/eng/oil_qty_2")) --  
-defineProperty("oil_qty_3", globalPropertyf("tu154/custom/gauges/eng/oil_qty_3")) --  
+    {"oil_qty_1", "tu154/custom/gauges/eng/oil_qty_1", globalPropertyf},
+    {"oil_qty_2", "tu154/custom/gauges/eng/oil_qty_2", globalPropertyf},
+    {"oil_qty_3", "tu154/custom/gauges/eng/oil_qty_3", globalPropertyf},
 
-defineProperty("fuel_temp_1", globalPropertyf("tu154/custom/gauges/eng/fuel_temp_1")) --  
-defineProperty("fuel_temp_2", globalPropertyf("tu154/custom/gauges/eng/fuel_temp_2")) --  
+    {"fuel_temp_1", "tu154/custom/gauges/eng/fuel_temp_1", globalPropertyf},
+    {"fuel_temp_2", "tu154/custom/gauges/eng/fuel_temp_2", globalPropertyf},
 
 -- sources
-defineProperty("sim_egt_1", globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[0]")) -- EGT from sim
-defineProperty("sim_egt_2", globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[1]")) -- EGT from sim
-defineProperty("sim_egt_3", globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[2]")) -- EGT from sim
+    {"sim_egt_1", "sim/cockpit2/engine/indicators/EGT_deg_C[0]", globalProperty}, -- EGT from sim
+    {"sim_egt_2", "sim/cockpit2/engine/indicators/EGT_deg_C[1]", globalProperty}, -- EGT from sim
+    {"sim_egt_3", "sim/cockpit2/engine/indicators/EGT_deg_C[2]", globalProperty}, -- EGT from sim
 
-defineProperty("ENGN_FF_1", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]")) -- FF from sim kg/second
-defineProperty("ENGN_FF_2", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]")) -- FF from sim kg/second
-defineProperty("ENGN_FF_3", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]")) -- FF from sim kg/second
+    {"ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]", globalProperty}, -- FF from sim kg/second
+    {"ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]", globalProperty}, -- FF from sim kg/second
+    {"ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]", globalProperty}, -- FF from sim kg/second
 
-defineProperty("fuel_p_1", globalProperty("sim/cockpit2/engine/indicators/fuel_pressure_psi[0]"))
-defineProperty("fuel_p_2", globalProperty("sim/cockpit2/engine/indicators/fuel_pressure_psi[1]"))
-defineProperty("fuel_p_3", globalProperty("sim/cockpit2/engine/indicators/fuel_pressure_psi[2]"))
+    {"fuel_p_1", "sim/cockpit2/engine/indicators/fuel_pressure_psi[0]", globalProperty},
+    {"fuel_p_2", "sim/cockpit2/engine/indicators/fuel_pressure_psi[1]", globalProperty},
+    {"fuel_p_3", "sim/cockpit2/engine/indicators/fuel_pressure_psi[2]", globalProperty},
 
-defineProperty("oil_p_1", globalProperty("sim/cockpit2/engine/indicators/oil_pressure_psi[0]"))
-defineProperty("oil_p_2", globalProperty("sim/cockpit2/engine/indicators/oil_pressure_psi[1]"))
-defineProperty("oil_p_3", globalProperty("sim/cockpit2/engine/indicators/oil_pressure_psi[2]"))
+    {"oil_p_1", "sim/cockpit2/engine/indicators/oil_pressure_psi[0]", globalProperty},
+    {"oil_p_2", "sim/cockpit2/engine/indicators/oil_pressure_psi[1]", globalProperty},
+    {"oil_p_3", "sim/cockpit2/engine/indicators/oil_pressure_psi[2]", globalProperty},
 
-defineProperty("oil_t_1", globalProperty("sim/cockpit2/engine/indicators/oil_temperature_deg_C[0]"))
-defineProperty("oil_t_2", globalProperty("sim/cockpit2/engine/indicators/oil_temperature_deg_C[1]"))
-defineProperty("oil_t_3", globalProperty("sim/cockpit2/engine/indicators/oil_temperature_deg_C[2]"))
+    {"oil_t_1", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[0]", globalProperty},
+    {"oil_t_2", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[1]", globalProperty},
+    {"oil_t_3", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[2]", globalProperty},
 
-defineProperty("vibration_1", globalPropertyf("tu154/custom/eng/vibration_1")) --  
-defineProperty("vibration_2", globalPropertyf("tu154/custom/eng/vibration_2")) --  
-defineProperty("vibration_3", globalPropertyf("tu154/custom/eng/vibration_3")) --  
+    {"vibration_1", "tu154/custom/eng/vibration_1", globalPropertyf},
+    {"vibration_2", "tu154/custom/eng/vibration_2", globalPropertyf},
+    {"vibration_3", "tu154/custom/eng/vibration_3", globalPropertyf},
 
-defineProperty("engn_oil_qty_1", globalPropertyf("tu154/custom/failures/engn_oil_qty_1")) --  
-defineProperty("engn_oil_qty_2", globalPropertyf("tu154/custom/failures/engn_oil_qty_2")) --  
-defineProperty("engn_oil_qty_3", globalPropertyf("tu154/custom/failures/engn_oil_qty_3")) --  
+    {"engn_oil_qty_1", "tu154/custom/failures/engn_oil_qty_1", globalPropertyf},
+    {"engn_oil_qty_2", "tu154/custom/failures/engn_oil_qty_2", globalPropertyf},
+    {"engn_oil_qty_3", "tu154/custom/failures/engn_oil_qty_3", globalPropertyf},
 
 -- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
+    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty}, -- engine 1 rpm
+    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty}, -- engine 2 rpm
+    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty}, -- engine 3 rpm
 
-defineProperty("eng1_N2", globalProperty("sim/flightmodel/engine/ENGN_N2_[0]")) -- engine 1 rpm
-defineProperty("eng2_N2", globalProperty("sim/flightmodel/engine/ENGN_N2_[1]")) -- engine 2 rpm
-defineProperty("eng3_N2", globalProperty("sim/flightmodel/engine/ENGN_N2_[2]")) -- engine 3 rpm
+    {"eng1_N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty}, -- engine 1 rpm
+    {"eng2_N2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty}, -- engine 2 rpm
+    {"eng3_N2", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty}, -- engine 3 rpm
 
-defineProperty("comsta0", globalPropertyi("sim/operation/failures/rel_comsta0")) -- compressor stall
-defineProperty("comsta1", globalPropertyi("sim/operation/failures/rel_comsta1"))
-defineProperty("comsta2", globalPropertyi("sim/operation/failures/rel_comsta2"))
+    {"comsta0", "sim/operation/failures/rel_comsta0", globalPropertyi}, -- compressor stall
+    {"comsta1", "sim/operation/failures/rel_comsta1", globalPropertyi},
+    {"comsta2", "sim/operation/failures/rel_comsta2", globalPropertyi},
 
 -- other sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf}, --   27
+    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf}, --   27
 
-defineProperty("emerg_inv115", globalPropertyi("tu154/custom/switchers/eng/emerg_inv115")) -- .  115
+    {"emerg_inv115", "tu154/custom/switchers/eng/emerg_inv115", globalPropertyi}, -- .  115
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
+    {"bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf},
 
-defineProperty("bus36_volt_left", globalPropertyf("tu154/custom/elec/bus36_volt_left")) --   36 
-defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right")) --   36 
+    {"bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf}, --   36
+    {"bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf}, --   36
 
-defineProperty("thermo", globalPropertyf("sim/cockpit2/temperature/outside_air_temp_degc")) -- outside temperature
+    {"thermo", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf}, -- outside temperature
 
-defineProperty("msl_alt", globalPropertyf("sim/flightmodel/position/elevation"))  -- barometric alt. maybe in feet, maybe in meters.
-defineProperty("baro_press", globalPropertyf("sim/weather/barometer_sealevel_inhg"))  -- pressire at sea level in.Hg
+    {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},  -- barometric alt. maybe in feet, maybe in meters.
+    {"baro_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},  -- pressire at sea level in.Hg
 
 -- failures
-defineProperty("fuel_flowmeter_1_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_1_fail"))
-defineProperty("fuel_flowmeter_2_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_2_fail"))
-defineProperty("fuel_flowmeter_3_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_3_fail"))
+    {"fuel_flowmeter_1_fail", "tu154/custom/failures/fuel_flowmeter_1_fail", globalPropertyi},
+    {"fuel_flowmeter_2_fail", "tu154/custom/failures/fuel_flowmeter_2_fail", globalPropertyi},
+    {"fuel_flowmeter_3_fail", "tu154/custom/failures/fuel_flowmeter_3_fail", globalPropertyi},
 
 -- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    {"ismaster", "scp/api/ismaster", globalPropertyf}, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf}, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
 -- test
---defineProperty("fuel_pump_1", globalPropertyi("sim/operation/failures/rel_fuepmp1")) 
+--defineProperty("fuel_pump_1", globalPropertyi("sim/operation/failures/rel_fuepmp1"))
 --set(fuel_pump_1, 6)
 
 -- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- flight time
+})
 
 local MASTER = get(ismaster) ~= 1	
 

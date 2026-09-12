@@ -1,159 +1,167 @@
 -- this is engines panel
 -- controls
-defineProperty("control_ut", globalPropertyi("tu154/custom/buttons/eng/control_ut")) --   
-defineProperty("control_vibro_1", globalPropertyi("tu154/custom/buttons/eng/control_vibro_1")) --   
-defineProperty("control_vibro_2", globalPropertyi("tu154/custom/buttons/eng/control_vibro_2")) --   
-defineProperty("control_vibro_3", globalPropertyi("tu154/custom/buttons/eng/control_vibro_3")) --   
-defineProperty("vibro_sel_1", globalPropertyi("tu154/custom/switchers/eng/vibro_sel_1")) --   
-defineProperty("vibro_sel_2", globalPropertyi("tu154/custom/switchers/eng/vibro_sel_2")) --   
-defineProperty("vibro_sel_3", globalPropertyi("tu154/custom/switchers/eng/vibro_sel_3")) --   
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("test_lamps", globalPropertyi("tu154/custom/buttons/lamp_test_engines")) --     
-defineProperty("lamp_test_fwd", globalPropertyi("tu154/custom/buttons/lamp_test_front")) --      	0
+defineProps({
+    {"control_ut", "tu154/custom/buttons/eng/control_ut", globalPropertyi},
+    {"control_vibro_1", "tu154/custom/buttons/eng/control_vibro_1", globalPropertyi},
+    {"control_vibro_2", "tu154/custom/buttons/eng/control_vibro_2", globalPropertyi},
+    {"control_vibro_3", "tu154/custom/buttons/eng/control_vibro_3", globalPropertyi},
+    {"vibro_sel_1", "tu154/custom/switchers/eng/vibro_sel_1", globalPropertyi},
+    {"vibro_sel_2", "tu154/custom/switchers/eng/vibro_sel_2", globalPropertyi},
+    {"vibro_sel_3", "tu154/custom/switchers/eng/vibro_sel_3", globalPropertyi},
 
-defineProperty("day_night_set", globalPropertyf("tu154/custom/lights/day_night_set")) --   - . 0 - , 1 - .    .
+    {"test_lamps", "tu154/custom/buttons/lamp_test_engines", globalPropertyi},
+    {"lamp_test_fwd", "tu154/custom/buttons/lamp_test_front", globalPropertyi}, --      	0
 
-defineProperty("gauges_on_1", globalPropertyi("tu154/custom/switchers/eng/gauges_on_1")) --   
-defineProperty("gauges_on_2", globalPropertyi("tu154/custom/switchers/eng/gauges_on_2")) --   
-defineProperty("gauges_on_3", globalPropertyi("tu154/custom/switchers/eng/gauges_on_3")) --   
+    {"day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf}, --   - . 0 - , 1 - .    .
 
-defineProperty("gauges_on_1_cap", globalPropertyi("tu154/custom/switchers/eng/gauges_on_1_cap")) --   
-defineProperty("gauges_on_2_cap", globalPropertyi("tu154/custom/switchers/eng/gauges_on_2_cap")) --   
-defineProperty("gauges_on_3_cap", globalPropertyi("tu154/custom/switchers/eng/gauges_on_3_cap")) --   
+    {"gauges_on_1", "tu154/custom/switchers/eng/gauges_on_1", globalPropertyi},
+    {"gauges_on_2", "tu154/custom/switchers/eng/gauges_on_2", globalPropertyi},
+    {"gauges_on_3", "tu154/custom/switchers/eng/gauges_on_3", globalPropertyi},
+
+    {"gauges_on_1_cap", "tu154/custom/switchers/eng/gauges_on_1_cap", globalPropertyi},
+    {"gauges_on_2_cap", "tu154/custom/switchers/eng/gauges_on_2_cap", globalPropertyi},
+    {"gauges_on_3_cap", "tu154/custom/switchers/eng/gauges_on_3_cap", globalPropertyi},
 
 -- lamps
-defineProperty("eng1_dangerous_vibro", globalPropertyf("tu154/custom/lights/engines/eng1_dangerous_vibro")) --  
-defineProperty("eng1_oil_level", globalPropertyf("tu154/custom/lights/engines/eng1_oil_level")) --  
-defineProperty("eng1_oil_p", globalPropertyf("tu154/custom/lights/engines/eng1_oil_p")) --  
-defineProperty("eng1_bypass_valve", globalPropertyf("tu154/custom/lights/engines/eng1_bypass_valve")) --  
-defineProperty("eng1_vna33", globalPropertyf("tu154/custom/lights/engines/eng1_vna33")) --  33
-defineProperty("eng1_reverse_lock", globalPropertyf("tu154/custom/lights/engines/eng1_reverse_lock")) --  
-defineProperty("eng1_high_vibro", globalPropertyf("tu154/custom/lights/engines/eng1_high_vibro")) --  
-defineProperty("eng1_chips", globalPropertyf("tu154/custom/lights/engines/eng1_chips")) --   
-defineProperty("eng1_fuel_p", globalPropertyf("tu154/custom/lights/engines/eng1_fuel_p")) --  
-defineProperty("eng1_filter_fail", globalPropertyf("tu154/custom/lights/engines/eng1_filter_fail")) --  
-defineProperty("eng1_vna0", globalPropertyf("tu154/custom/lights/engines/eng1_vna0")) --  0
-defineProperty("eng1_reverse_doors", globalPropertyf("tu154/custom/lights/engines/eng1_reverse_doors")) --  
+    {"eng1_dangerous_vibro", "tu154/custom/lights/engines/eng1_dangerous_vibro", globalPropertyf},
+    {"eng1_oil_level", "tu154/custom/lights/engines/eng1_oil_level", globalPropertyf},
+    {"eng1_oil_p", "tu154/custom/lights/engines/eng1_oil_p", globalPropertyf},
+    {"eng1_bypass_valve", "tu154/custom/lights/engines/eng1_bypass_valve", globalPropertyf},
+    {"eng1_vna33", "tu154/custom/lights/engines/eng1_vna33", globalPropertyf}, --  33
+    {"eng1_reverse_lock", "tu154/custom/lights/engines/eng1_reverse_lock", globalPropertyf},
+    {"eng1_high_vibro", "tu154/custom/lights/engines/eng1_high_vibro", globalPropertyf},
+    {"eng1_chips", "tu154/custom/lights/engines/eng1_chips", globalPropertyf},
+    {"eng1_fuel_p", "tu154/custom/lights/engines/eng1_fuel_p", globalPropertyf},
+    {"eng1_filter_fail", "tu154/custom/lights/engines/eng1_filter_fail", globalPropertyf},
+    {"eng1_vna0", "tu154/custom/lights/engines/eng1_vna0", globalPropertyf}, --  0
+    {"eng1_reverse_doors", "tu154/custom/lights/engines/eng1_reverse_doors", globalPropertyf},
 
-defineProperty("eng2_dangerous_vibro", globalPropertyf("tu154/custom/lights/engines/eng2_dangerous_vibro")) --  
-defineProperty("eng2_oil_level", globalPropertyf("tu154/custom/lights/engines/eng2_oil_level")) --  
-defineProperty("eng2_oil_p", globalPropertyf("tu154/custom/lights/engines/eng2_oil_p")) --  
-defineProperty("eng2_bypass_valve", globalPropertyf("tu154/custom/lights/engines/eng2_bypass_valve")) --  
-defineProperty("eng2_vna33", globalPropertyf("tu154/custom/lights/engines/eng2_vna33")) --  33
-defineProperty("eng_at_on", globalPropertyf("tu154/custom/lights/engines/eng_at_on")) --  
-defineProperty("eng2_high_vibro", globalPropertyf("tu154/custom/lights/engines/eng2_high_vibro")) --  
-defineProperty("eng2_chips", globalPropertyf("tu154/custom/lights/engines/eng2_chips")) --   
-defineProperty("eng2_fuel_p", globalPropertyf("tu154/custom/lights/engines/eng2_fuel_p")) --  
-defineProperty("eng2_filter_fail", globalPropertyf("tu154/custom/lights/engines/eng2_filter_fail")) --  
-defineProperty("eng2_vna0", globalPropertyf("tu154/custom/lights/engines/eng2_vna0")) --  0
-defineProperty("eng_block", globalPropertyf("tu154/custom/lights/engines/eng_block")) --  
+    {"eng2_dangerous_vibro", "tu154/custom/lights/engines/eng2_dangerous_vibro", globalPropertyf},
+    {"eng2_oil_level", "tu154/custom/lights/engines/eng2_oil_level", globalPropertyf},
+    {"eng2_oil_p", "tu154/custom/lights/engines/eng2_oil_p", globalPropertyf},
+    {"eng2_bypass_valve", "tu154/custom/lights/engines/eng2_bypass_valve", globalPropertyf},
+    {"eng2_vna33", "tu154/custom/lights/engines/eng2_vna33", globalPropertyf}, --  33
+    {"eng_at_on", "tu154/custom/lights/engines/eng_at_on", globalPropertyf},
+    {"eng2_high_vibro", "tu154/custom/lights/engines/eng2_high_vibro", globalPropertyf},
+    {"eng2_chips", "tu154/custom/lights/engines/eng2_chips", globalPropertyf},
+    {"eng2_fuel_p", "tu154/custom/lights/engines/eng2_fuel_p", globalPropertyf},
+    {"eng2_filter_fail", "tu154/custom/lights/engines/eng2_filter_fail", globalPropertyf},
+    {"eng2_vna0", "tu154/custom/lights/engines/eng2_vna0", globalPropertyf}, --  0
+    {"eng_block", "tu154/custom/lights/engines/eng_block", globalPropertyf},
 
-defineProperty("eng3_dangerous_vibro", globalPropertyf("tu154/custom/lights/engines/eng3_dangerous_vibro")) --  
-defineProperty("eng3_oil_level", globalPropertyf("tu154/custom/lights/engines/eng3_oil_level")) --  
-defineProperty("eng3_oil_p", globalPropertyf("tu154/custom/lights/engines/eng3_oil_p")) --  
-defineProperty("eng3_bypass_valve", globalPropertyf("tu154/custom/lights/engines/eng3_bypass_valve")) --  
-defineProperty("eng3_vna33", globalPropertyf("tu154/custom/lights/engines/eng3_vna33")) --  33
-defineProperty("eng3_reverse_lock", globalPropertyf("tu154/custom/lights/engines/eng3_reverse_lock")) --  
-defineProperty("eng3_high_vibro", globalPropertyf("tu154/custom/lights/engines/eng3_high_vibro")) --  
-defineProperty("eng3_chips", globalPropertyf("tu154/custom/lights/engines/eng3_chips")) --   
-defineProperty("eng3_fuel_p", globalPropertyf("tu154/custom/lights/engines/eng3_fuel_p")) --  
-defineProperty("eng3_filter_fail", globalPropertyf("tu154/custom/lights/engines/eng3_filter_fail")) --  
-defineProperty("eng3_vna0", globalPropertyf("tu154/custom/lights/engines/eng3_vna0")) --  0
-defineProperty("eng3_reverse_doors", globalPropertyf("tu154/custom/lights/engines/eng3_reverse_doors")) --  
+    {"eng3_dangerous_vibro", "tu154/custom/lights/engines/eng3_dangerous_vibro", globalPropertyf},
+    {"eng3_oil_level", "tu154/custom/lights/engines/eng3_oil_level", globalPropertyf},
+    {"eng3_oil_p", "tu154/custom/lights/engines/eng3_oil_p", globalPropertyf},
+    {"eng3_bypass_valve", "tu154/custom/lights/engines/eng3_bypass_valve", globalPropertyf},
+    {"eng3_vna33", "tu154/custom/lights/engines/eng3_vna33", globalPropertyf}, --  33
+    {"eng3_reverse_lock", "tu154/custom/lights/engines/eng3_reverse_lock", globalPropertyf},
+    {"eng3_high_vibro", "tu154/custom/lights/engines/eng3_high_vibro", globalPropertyf},
+    {"eng3_chips", "tu154/custom/lights/engines/eng3_chips", globalPropertyf},
+    {"eng3_fuel_p", "tu154/custom/lights/engines/eng3_fuel_p", globalPropertyf},
+    {"eng3_filter_fail", "tu154/custom/lights/engines/eng3_filter_fail", globalPropertyf},
+    {"eng3_vna0", "tu154/custom/lights/engines/eng3_vna0", globalPropertyf}, --  0
+    {"eng3_reverse_doors", "tu154/custom/lights/engines/eng3_reverse_doors", globalPropertyf},
 
-defineProperty("starter_high_rpm_1", globalPropertyf("tu154/custom/lights/small/starter_high_rpm_1")) --   
-defineProperty("starter_high_rpm_2", globalPropertyf("tu154/custom/lights/small/starter_high_rpm_2")) --   
-defineProperty("starter_high_rpm_3", globalPropertyf("tu154/custom/lights/small/starter_high_rpm_3")) --   
-defineProperty("fuel_2500", globalPropertyf("tu154/custom/lights/small/fuel_2500")) --   2500
-defineProperty("fuel_tank1_used", globalPropertyf("tu154/custom/lights/small/fuel_tank1_used")) --    1
+    {"starter_high_rpm_1", "tu154/custom/lights/small/starter_high_rpm_1", globalPropertyf},
+    {"starter_high_rpm_2", "tu154/custom/lights/small/starter_high_rpm_2", globalPropertyf},
+    {"starter_high_rpm_3", "tu154/custom/lights/small/starter_high_rpm_3", globalPropertyf},
+    {"fuel_2500", "tu154/custom/lights/small/fuel_2500", globalPropertyf}, --   2500
+    {"fuel_tank1_used", "tu154/custom/lights/small/fuel_tank1_used", globalPropertyf}, --    1
 
-defineProperty("fp_eng_fail_1", globalPropertyf("tu154/custom/lights/fp_eng_fail_1")) -- .  1   
-defineProperty("fp_eng_fail_2", globalPropertyf("tu154/custom/lights/fp_eng_fail_2")) -- .  2   
-defineProperty("fp_eng_fail_3", globalPropertyf("tu154/custom/lights/fp_eng_fail_3")) -- .  3   
+    {"fp_eng_fail_1", "tu154/custom/lights/fp_eng_fail_1", globalPropertyf}, -- .  1
+    {"fp_eng_fail_2", "tu154/custom/lights/fp_eng_fail_2", globalPropertyf}, -- .  2
+    {"fp_eng_fail_3", "tu154/custom/lights/fp_eng_fail_3", globalPropertyf}, -- .  3
 
-defineProperty("fp_reverse_1", globalPropertyf("tu154/custom/lights/fp_reverse_1")) --   1   
-defineProperty("fp_reverse_3", globalPropertyf("tu154/custom/lights/fp_reverse_3")) --   3   
+    {"fp_reverse_1", "tu154/custom/lights/fp_reverse_1", globalPropertyf}, --   1
+    {"fp_reverse_3", "tu154/custom/lights/fp_reverse_3", globalPropertyf}, --   3
 
-defineProperty("oil_meter_qty_1", globalPropertyf("tu154/custom/lights/small/oil_meter_1")) --   
-defineProperty("oil_meter_qty_2", globalPropertyf("tu154/custom/lights/small/oil_meter_2")) --   
-defineProperty("oil_meter_qty_3", globalPropertyf("tu154/custom/lights/small/oil_meter_3")) --   
+    {"oil_meter_qty_1", "tu154/custom/lights/small/oil_meter_1", globalPropertyf},
+    {"oil_meter_qty_2", "tu154/custom/lights/small/oil_meter_2", globalPropertyf},
+    {"oil_meter_qty_3", "tu154/custom/lights/small/oil_meter_3", globalPropertyf},
 
 -- sources
-defineProperty("vibra_1", globalPropertyf("tu154/custom/gauges/eng/vibra_1")) --   1
-defineProperty("vibra_2", globalPropertyf("tu154/custom/gauges/eng/vibra_2")) --   2
-defineProperty("vibra_3", globalPropertyf("tu154/custom/gauges/eng/vibra_3")) --   3
+    {"vibra_1", "tu154/custom/gauges/eng/vibra_1", globalPropertyf}, --   1
+    {"vibra_2", "tu154/custom/gauges/eng/vibra_2", globalPropertyf}, --   2
+    {"vibra_3", "tu154/custom/gauges/eng/vibra_3", globalPropertyf}, --   3
 
-defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
-defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
-defineProperty("rpm_high_3", globalPropertyf("tu154/custom/gauges/engine/rpm_high_3")) --     №3
+    {"rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf}, --     №1
+    {"rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf}, --     №2
+    {"rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf}, --     №3
 
-defineProperty("revers_flap_L", globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")) -- reverse on left engine
-defineProperty("revers_flap_R", globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]")) -- reverse on right engine
+    {"revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalProperty}, -- reverse on left engine
+    {"revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalProperty}, -- reverse on right engine
 
-defineProperty("chip_detect1", globalProperty("sim/cockpit/warnings/annunciators/chip_detected[0]")) -- chip in engine1
-defineProperty("chip_detect2", globalProperty("sim/cockpit/warnings/annunciators/chip_detected[1]")) -- chip in engine1
-defineProperty("chip_detect3", globalProperty("sim/cockpit/warnings/annunciators/chip_detected[2]")) -- chip in engine1
+    {"chip_detect1", "sim/cockpit/warnings/annunciators/chip_detected[0]", globalProperty}, -- chip in engine1
+    {"chip_detect2", "sim/cockpit/warnings/annunciators/chip_detected[1]", globalProperty}, -- chip in engine1
+    {"chip_detect3", "sim/cockpit/warnings/annunciators/chip_detected[2]", globalProperty}, -- chip in engine1
 
-defineProperty("fuel_p_1", globalProperty("sim/cockpit2/engine/indicators/fuel_pressure_psi[0]"))
-defineProperty("fuel_p_2", globalProperty("sim/cockpit2/engine/indicators/fuel_pressure_psi[1]"))
-defineProperty("fuel_p_3", globalProperty("sim/cockpit2/engine/indicators/fuel_pressure_psi[2]"))
+    {"fuel_p_1", "sim/cockpit2/engine/indicators/fuel_pressure_psi[0]", globalProperty},
+    {"fuel_p_2", "sim/cockpit2/engine/indicators/fuel_pressure_psi[1]", globalProperty},
+    {"fuel_p_3", "sim/cockpit2/engine/indicators/fuel_pressure_psi[2]", globalProperty},
 
-defineProperty("oil_p_1", globalProperty("sim/cockpit2/engine/indicators/oil_pressure_psi[0]"))
-defineProperty("oil_p_2", globalProperty("sim/cockpit2/engine/indicators/oil_pressure_psi[1]"))
-defineProperty("oil_p_3", globalProperty("sim/cockpit2/engine/indicators/oil_pressure_psi[2]"))
+    {"oil_p_1", "sim/cockpit2/engine/indicators/oil_pressure_psi[0]", globalProperty},
+    {"oil_p_2", "sim/cockpit2/engine/indicators/oil_pressure_psi[1]", globalProperty},
+    {"oil_p_3", "sim/cockpit2/engine/indicators/oil_pressure_psi[2]", globalProperty},
 
-defineProperty("eng_fuel_press_1", globalPropertyi("tu154/custom/fuel/eng_fuel_press_1")) --      .   -
-defineProperty("eng_fuel_press_2", globalPropertyi("tu154/custom/fuel/eng_fuel_press_2")) --      .   -
-defineProperty("eng_fuel_press_3", globalPropertyi("tu154/custom/fuel/eng_fuel_press_3")) --      .   -
+    {"eng_fuel_press_1", "tu154/custom/fuel/eng_fuel_press_1", globalPropertyi}, --      .   -
+    {"eng_fuel_press_2", "tu154/custom/fuel/eng_fuel_press_2", globalPropertyi}, --      .   -
+    {"eng_fuel_press_3", "tu154/custom/fuel/eng_fuel_press_3", globalPropertyi}, --      .   -
 
-defineProperty("throttle_lock", globalPropertyf("tu154/custom/controlls/throttle_lock")) --   
+    {"throttle_lock", "tu154/custom/controlls/throttle_lock", globalPropertyf},
 
-defineProperty("tank1_w", globalProperty("sim/flightmodel/weight/m_fuel[0]")) -- fuel weight
-defineProperty("pump_tank2_left_work", globalPropertyi("tu154/custom/fuel/pump_tank2_left_work"))
-defineProperty("pump_tank2_right_work", globalPropertyi("tu154/custom/fuel/pump_tank2_right_work"))
-defineProperty("pump_tank3_left_work", globalPropertyi("tu154/custom/fuel/pump_tank3_left_work"))
-defineProperty("pump_tank3_right_work", globalPropertyi("tu154/custom/fuel/pump_tank3_right_work"))
-defineProperty("pump_tank4_work", globalPropertyi("tu154/custom/fuel/pump_tank4_work"))
-defineProperty("pump_tank1_1_work", globalPropertyi("tu154/custom/fuel/pump_tank1_1_work"))
-defineProperty("pump_tank1_2_work", globalPropertyi("tu154/custom/fuel/pump_tank1_2_work"))
-defineProperty("pump_tank1_3_work", globalPropertyi("tu154/custom/fuel/pump_tank1_3_work"))
-defineProperty("pump_tank1_4_work", globalPropertyi("tu154/custom/fuel/pump_tank1_4_work"))
+    {"tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty}, -- fuel weight
+    {"pump_tank2_left_work", "tu154/custom/fuel/pump_tank2_left_work", globalPropertyi},
+    {"pump_tank2_right_work", "tu154/custom/fuel/pump_tank2_right_work", globalPropertyi},
+    {"pump_tank3_left_work", "tu154/custom/fuel/pump_tank3_left_work", globalPropertyi},
+    {"pump_tank3_right_work", "tu154/custom/fuel/pump_tank3_right_work", globalPropertyi},
+    {"pump_tank4_work", "tu154/custom/fuel/pump_tank4_work", globalPropertyi},
+    {"pump_tank1_1_work", "tu154/custom/fuel/pump_tank1_1_work", globalPropertyi},
+    {"pump_tank1_2_work", "tu154/custom/fuel/pump_tank1_2_work", globalPropertyi},
+    {"pump_tank1_3_work", "tu154/custom/fuel/pump_tank1_3_work", globalPropertyi},
+    {"pump_tank1_4_work", "tu154/custom/fuel/pump_tank1_4_work", globalPropertyi},
 
-defineProperty("stu_mode", globalPropertyi("tu154/custom/absu/stu_mode")) --    0 - , 1 - , 2 - , 3 , 4 - 	
+    {"stu_mode", "tu154/custom/absu/stu_mode", globalPropertyi}, --    0 - , 1 - , 2 - , 3 , 4 -
 
-defineProperty("engn_oil_qty_1", globalPropertyf("tu154/custom/failures/engn_oil_qty_1")) 
-defineProperty("engn_oil_qty_2", globalPropertyf("tu154/custom/failures/engn_oil_qty_2")) 
-defineProperty("engn_oil_qty_3", globalPropertyf("tu154/custom/failures/engn_oil_qty_3"))
+    {"engn_oil_qty_1", "tu154/custom/failures/engn_oil_qty_1", globalPropertyf},
+    {"engn_oil_qty_2", "tu154/custom/failures/engn_oil_qty_2", globalPropertyf},
+    {"engn_oil_qty_3", "tu154/custom/failures/engn_oil_qty_3", globalPropertyf},
 
-defineProperty("oil_qty_1", globalPropertyf("tu154/custom/gauges/eng/oil_qty_1")) --  
-defineProperty("oil_qty_2", globalPropertyf("tu154/custom/gauges/eng/oil_qty_2")) --  
-defineProperty("oil_qty_3", globalPropertyf("tu154/custom/gauges/eng/oil_qty_3")) --  
+    {"oil_qty_1", "tu154/custom/gauges/eng/oil_qty_1", globalPropertyf},
+    {"oil_qty_2", "tu154/custom/gauges/eng/oil_qty_2", globalPropertyf},
+    {"oil_qty_3", "tu154/custom/gauges/eng/oil_qty_3", globalPropertyf},
 
-defineProperty("eng_filter_1", globalPropertyi("sim/operation/failures/rel_eng_lo0"))
-defineProperty("eng_filter_2", globalPropertyi("sim/operation/failures/rel_eng_lo1"))
-defineProperty("eng_filter_3", globalPropertyi("sim/operation/failures/rel_eng_lo2"))
+    {"eng_filter_1", "sim/operation/failures/rel_eng_lo0", globalPropertyi},
+    {"eng_filter_2", "sim/operation/failures/rel_eng_lo1", globalPropertyi},
+    {"eng_filter_3", "sim/operation/failures/rel_eng_lo2", globalPropertyi},
 
 -- other sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf}, --   27
+    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf}, --   27
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- flight time
 
 -- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
+    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty}, -- engine 1 rpm
+    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty}, -- engine 2 rpm
+    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty}, -- engine 3 rpm
 
-defineProperty("fire_main_switch", globalPropertyi("tu154/custom/switchers/eng/fire_main_switch")) --   
+    {"fire_main_switch", "tu154/custom/switchers/eng/fire_main_switch", globalPropertyi},
 
-defineProperty("sim_engine_on_fire1", globalPropertyi("sim/operation/failures/rel_engfir0"))  -- left engine on fire
-defineProperty("sim_engine_on_fire2", globalPropertyi("sim/operation/failures/rel_engfir1"))  -- mid engine on fire
-defineProperty("sim_engine_on_fire3", globalPropertyi("sim/operation/failures/rel_engfir2"))  -- right engine on fire
+    {"sim_engine_on_fire1", "sim/operation/failures/rel_engfir0", globalPropertyi},  -- left engine on fire
+    {"sim_engine_on_fire2", "sim/operation/failures/rel_engfir1", globalPropertyi},  -- mid engine on fire
+    {"sim_engine_on_fire3", "sim/operation/failures/rel_engfir2", globalPropertyi},  -- right engine on fire
 
-defineProperty("egt_1", globalPropertyf("tu154/custom/gauges/eng/egt_1")) --   1
-defineProperty("egt_2", globalPropertyf("tu154/custom/gauges/eng/egt_2")) --   2
-defineProperty("egt_3", globalPropertyf("tu154/custom/gauges/eng/egt_3")) --   3
+    {"egt_1", "tu154/custom/gauges/eng/egt_1", globalPropertyf}, --   1
+    {"egt_2", "tu154/custom/gauges/eng/egt_2", globalPropertyf}, --   2
+    {"egt_3", "tu154/custom/gauges/eng/egt_3", globalPropertyf}, --   3
 
-defineProperty("speaker_fuel", globalPropertyi("tu154/custom/alarm/speaker_fuel")) --   2500   1
+    {"speaker_fuel", "tu154/custom/alarm/speaker_fuel", globalPropertyi}, --   2500   1
+})
 
 local passed = get(frame_time)
 local notLoaded = true
@@ -161,6 +169,26 @@ local notLoaded = true
 local eng_1_fail_src = 0
 local eng_2_fail_src = 0
 local eng_3_fail_src = 0
+
+-- Record the actual warning source without masking or changing any engine limits.
+local last_warning_causes = {"", "", ""}
+local function reportEngineWarning(engine, rpm, oil_p, reverse, vibr, chips, fuel_p, fire, egt)
+    local causes = {}
+    if oil_p < 10 then causes[#causes + 1] = "OIL_PRESSURE" end
+    if reverse then causes[#causes + 1] = "REVERSER" end
+    if vibr > 55 then causes[#causes + 1] = "VIBRATION" end
+    if chips == 1 then causes[#causes + 1] = "CHIPS" end
+    if fuel_p == 0 then causes[#causes + 1] = "FUEL_PRESSURE" end
+    if fire == 6 then causes[#causes + 1] = "FIRE" end
+    if egt > 710 then causes[#causes + 1] = "EGT" end
+    local signature = table.concat(causes, ",")
+    if signature == last_warning_causes[engine] then return end
+    last_warning_causes[engine] = signature
+    logInfo(string.format(
+        "[Engine warning] engine=%d causes=%s rpm=%.2f oil_psi=%.2f fuel_pressure=%d vibration=%.2f chips=%d fire=%d egt_C=%.2f reverse=%d",
+        engine, signature ~= "" and signature or "CLEAR", rpm, oil_p, fuel_p,
+        vibr, chips, fire, egt, reverse and 1 or 0))
+end
 
 local function reset_switchers()
 	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
@@ -282,6 +310,8 @@ local function lamps_eng1()
 	set(eng1_reverse_doors, eng1_reverse_doors_brt)
 		
 	eng_1_fail_src = bool2int(oil_p < 10 or (rev_L < revers_flap_L_last and rev_L > 0.05 and rev_L < 0.95) or vibr > 55 or chip_det == 1 or fuel_p == 0 or (get(fire_main_switch) * get(sim_engine_on_fire1) == 6) or get(egt_1) > 710)
+	reportEngineWarning(1, RPM, oil_p, rev_L < revers_flap_L_last and rev_L > 0.05 and rev_L < 0.95,
+		vibr, chip_det, fuel_p, get(fire_main_switch) * get(sim_engine_on_fire1), get(egt_1))
 	
 	revers_flap_L_last = rev_L
 	
@@ -350,6 +380,8 @@ local function lamps_eng2()
 	set(eng_block, eng_block_brt)
 		
 	eng_2_fail_src = bool2int(oil_p < 10 or vibr > 55 or chip_det == 1 or fuel_p == 0 or (get(fire_main_switch) * get(sim_engine_on_fire2) == 6) or get(egt_2) > 710)
+	reportEngineWarning(2, RPM, oil_p, false, vibr, chip_det, fuel_p,
+		get(fire_main_switch) * get(sim_engine_on_fire2), get(egt_2))
 		
 end
 
@@ -421,6 +453,8 @@ local function lamps_eng3()
 	set(eng3_reverse_doors, eng3_reverse_doors_brt)
 		
 	eng_3_fail_src = bool2int(oil_p < 10 or (rev_R < revers_flap_R_last and rev_R > 0.05 and rev_R < 0.95) or vibr > 55 or chip_det == 1 or fuel_p == 0 or (get(fire_main_switch) * get(sim_engine_on_fire3) == 6) or get(egt_3) > 710)	
+	reportEngineWarning(3, RPM, oil_p, rev_R < revers_flap_R_last and rev_R > 0.05 and rev_R < 0.95,
+		vibr, chip_det, fuel_p, get(fire_main_switch) * get(sim_engine_on_fire3), get(egt_3))
 	
 	revers_flap_R_last = rev_R
 end
