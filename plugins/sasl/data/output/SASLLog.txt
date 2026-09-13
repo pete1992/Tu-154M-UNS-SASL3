@@ -1,6 +1,6 @@
 [TU154 INFO]: Initializing...
 [TU154 INFO]: [DISPLAY] Monitor 0: 0, 0, 2560, 1440
-[TU154 INFO]: Path to module: I:\x-plane 12/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/main.lua
+[TU154 INFO]: Path to module: I:\X-Plane 12/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/main.lua
 [TU154 INFO]: Loading module...
 [TU154 INFO]: [LUA]: loading	module
 [TU154 INFO]: [LUA]: "module"	This is the Tu154M 2.0.9
@@ -169,13 +169,6 @@
 [TU154 INFO]: [LUA]: loading	trimmers
 [TU154 INFO]: [LUA]: loading	flaps
 [TU154 INFO]: [LUA]: loading	nosewheel
-[TU154 WARN]: [STACK]:| findDataRef : DataRefsHandler::luaFindDataRef: <bp/connected> not found
-[TU154 WARN]: [STACK]:| ...154M-UNS-SASL3/plugins/sasl/data/init/initProperties.lua:395 in function <?>
-[TU154 WARN]: [STACK]:| ...s/sasl/data/modules/Custom Module/controls/nosewheel.lua:24 in function <defineProps>
-[TU154 WARN]: [STACK]:| ...s/sasl/data/modules/Custom Module/controls/nosewheel.lua:38 in function <f>
-[TU154 WARN]: [STACK]:| ...ch/Tu-154M-UNS-SASL3/plugins/sasl/data/init/initMain.lua:262 in function <nosewheel>
-[TU154 WARN]: [STACK]:| ...ns/sasl/data/modules/Custom Module/controls/controls.lua:9 in function <f>
-[TU154 WARN]: [STACK]:| ...
 [TU154 INFO]: [LUA]: loading	landing_gears
 [TU154 INFO]: [LUA]: loading	control_fails
 [TU154 INFO]: [LUA]: loading	stall
@@ -226,20 +219,15 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.4020
+[TU154 INFO]: Scripts loading time: 0.7811
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
 [TU154 INFO]: [LUA]: "crew_voices"	PREPARE
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=FUEL_PRESSURE rpm=34.33 oil_psi=16.01 fuel_pressure=0 vibration=8.88 chips=0 fire=0 egt_C=66.37 reverse=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=FUEL_PRESSURE rpm=34.33 oil_psi=16.01 fuel_pressure=0 vibration=8.88 chips=0 fire=0 egt_C=66.37 reverse=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=FUEL_PRESSURE rpm=34.33 oil_psi=16.01 fuel_pressure=0 vibration=8.88 chips=0 fire=0 egt_C=66.37 reverse=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=OIL_PRESSURE,FUEL_PRESSURE rpm=0.00 oil_psi=0.00 fuel_pressure=0 vibration=0.00 chips=0 fire=0 egt_C=0.00 reverse=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=OIL_PRESSURE,FUEL_PRESSURE rpm=0.00 oil_psi=0.00 fuel_pressure=0 vibration=0.00 chips=0 fire=0 egt_C=0.00 reverse=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=OIL_PRESSURE,FUEL_PRESSURE rpm=0.00 oil_psi=0.00 fuel_pressure=0 vibration=0.00 chips=0 fire=0 egt_C=0.00 reverse=0
 [TU154 INFO]: [LUA]: "save_state"	State restored: OK
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=CLEAR rpm=40.74 oil_psi=37.58 fuel_pressure=1 vibration=15.52 chips=0 fire=0 egt_C=214.97 reverse=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=CLEAR rpm=40.74 oil_psi=37.58 fuel_pressure=1 vibration=15.52 chips=0 fire=0 egt_C=214.97 reverse=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=CLEAR rpm=40.74 oil_psi=37.58 fuel_pressure=1 vibration=15.52 chips=0 fire=0 egt_C=214.97 reverse=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=EGT rpm=48.08 oil_psi=39.32 fuel_pressure=1 vibration=16.19 chips=0 fire=0 egt_C=710.70 reverse=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=CLEAR rpm=43.53 oil_psi=38.23 fuel_pressure=1 vibration=15.77 chips=0 fire=0 egt_C=709.50 reverse=0
 [TU154 INFO]: Disabling...
 [TU154 INFO]: [LUA]: "stall"	XP12 aggressive asymmetric stall force model v4.3.2 released
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended

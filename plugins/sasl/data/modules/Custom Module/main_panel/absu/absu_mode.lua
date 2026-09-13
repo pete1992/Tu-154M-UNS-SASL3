@@ -280,7 +280,7 @@ local yoke_reset = false
 
 -- Qualify acquisition and tolerate brief reception gaps, never hardware failures.
 local ILS_ACQUIRE_TIME = 0.3
-local ILS_LOSS_TIME = 1.0
+local ILS_LOSS_TIME = 5.0
 local ils_source = get(absu_use_second_nav) == 1 and 2 or 1
 local ils_frequency = nil
 local loc_valid_time, gs_valid_time = 0, 0

@@ -50374,6 +50374,43 @@ GROUP KONTUR_L
           CLICK_DX 0
           CLICK_DY 0
 
+        gen_rotary WX_TILT_VALUE_MASK_L
+          POS 1475.500000 -89.650000
+          IMAGE KONTUR/bg_black2
+          DATAREF
+          LIGHT_MODE GLASS_AUTO
+          LIGHT_RHEOSTAT 14
+          BUS_SRC 1
+          CORNERS 95.500000 109.750000  95.500000 -109.750000  -95.500000 -109.750000  -95.500000 109.750000
+          KEY_FRAME 0.000000 0.000000 1.000000
+          KEY_FRAME 1.000000 0.000000
+          DIGITS 1
+          ROTARY_TYPE NO_CLICK
+          CLICK_RADIUS 0.000000
+          CLICK_RADIUS_DY 0.000000
+          OFFSET 0.000000
+          STEP1 1.000000
+          STEP2 1.000000
+          CURSOR DEFAULT
+          CLICK_DX 0
+          CLICK_DY 0
+
+        gen_LED WX_TILT_VALUE_L
+          POS 1472.500000 -89.000000
+          IMAGE TYPE/dig_type_2
+          DATAREF tu154/custom/wx2000_tilt
+          SIZE 0.500000
+          LIGHT_MODE GLASS_TRANS_AUOTO
+          LIGHT_RHEOSTAT 14
+          BUS_SRC 1
+          KEY_FRAME -15.000000 -15.000000 1.000000
+          KEY_FRAME 15.000000 15.000000
+          DIGITS 4
+          DECIMALS 1
+          PERIOD_WIDTH 3
+          LED_ROWS 0
+          ROUNDING ROUND_ROUND
+
       END_GROUP
     END_GROUP
     GROUP tcas
@@ -55857,6 +55894,43 @@ GROUP KONTUR_R
           CURSOR DEFAULT
           CLICK_DX 0
           CLICK_DY 0
+
+        gen_rotary WX_TILT_VALUE_MASK_R
+          POS 1974.500000 -89.650000
+          IMAGE KONTUR/bg_black2
+          DATAREF
+          LIGHT_MODE GLASS_AUTO
+          LIGHT_RHEOSTAT 15
+          BUS_SRC 1
+          CORNERS 95.500000 109.750000  95.500000 -109.750000  -95.500000 -109.750000  -95.500000 109.750000
+          KEY_FRAME 0.000000 0.000000 1.000000
+          KEY_FRAME 1.000000 0.000000
+          DIGITS 1
+          ROTARY_TYPE NO_CLICK
+          CLICK_RADIUS 0.000000
+          CLICK_RADIUS_DY 0.000000
+          OFFSET 0.000000
+          STEP1 1.000000
+          STEP2 1.000000
+          CURSOR DEFAULT
+          CLICK_DX 0
+          CLICK_DY 0
+
+        gen_LED WX_TILT_VALUE_R
+          POS 1971.500000 -89.000000
+          IMAGE TYPE/dig_type_2
+          DATAREF tu154/custom/wx2000_tilt
+          SIZE 0.500000
+          LIGHT_MODE GLASS_TRANS_AUOTO
+          LIGHT_RHEOSTAT 15
+          BUS_SRC 1
+          KEY_FRAME -15.000000 -15.000000 1.000000
+          KEY_FRAME 15.000000 15.000000
+          DIGITS 4
+          DECIMALS 1
+          PERIOD_WIDTH 3
+          LED_ROWS 0
+          ROUNDING ROUND_ROUND
 
       END_GROUP
     END_GROUP

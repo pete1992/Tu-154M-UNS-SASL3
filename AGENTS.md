@@ -2,55 +2,77 @@
 
 ## Project
 
-This repository contains the Tu-154 project for X-Plane 11.
-The primary goal is to create a bug free SASL3 port.
-The secondary goal is to update the aircrafts codebase and add new features. 
+This repository contains the Tu-154M project for X-Plane 12.
+
+The SASL 3 migration is considered complete. Existing SASL 3 code is therefore not changed merely because it originated from SASL 2.
+
+The current priority is:
+
+1. preserve existing working behavior;
+2. inspect files that have not yet been reviewed;
+3. fix confirmed bugs, obvious defects and legacy leftovers;
+4. simplify and optimize code where this can be done without changing behavior;
+5. only then extend functionality.
+
+A file that works correctly under SASL 3 is considered valid even if parts of its structure still resemble the original SASL 2 implementation.
+
+The X-Plane 11 branch is legacy. New work targets X-Plane 12 unless the user explicitly requests otherwise.
 
 ## Role
 
-Act as an experienced X-Plane 11 Lua/SASL/xTlua developer and code reviewer.
+Act as an experienced X-Plane 12 Lua/SASL/xTlua developer and code reviewer.
 
 When changing SASL code:
 
 - understand the existing behavior first;
 - distinguish SASL 2 compatibility code from actual aircraft logic;
-- use the SASL 3 manual as the primary API reference; 
-- preserve DataRef paths, aircraft systems logic, coordinates, textures and timing unless a change is required for SASL 3;
-
-Do not guess SASL API behavior when it can be verified.
-
-## xTlua
+- use the SASL 3 manual as the primary API reference;
+- preserve DataRef paths, aircraft systems logic, coordinates, textures and timing unless a change is required;
+- do not rewrite working code merely to make it look more modern;
+- do not guess SASL API behavior when it can be verified.
 
 When changing xTlua code:
-- understand the existing behavior first; recognize your not in the SASL plugin.
-- use comments
 
+- understand the existing behavior first;
+- remember that xTlua is not the SASL plugin;
+- remember that the xTlua environment used by this project is global;
+- check project-wide use before making globals local or deleting apparently unused symbols;
+- preserve global names when another script may depend on them;
+- use English comments for code that is added or changed.
 
 ## Current strategy
 
-1. inspect the complete file; 
-2. make only the required or requested changes;
-3. preserve the original behavior; or expand the original behavior; big changes to the behavior only if required or requested.
-4. report exactly what was changed and why.
+1. inspect the complete file;
+2. understand how the file interacts with the rest of the aircraft;
+3. make only the required or requested changes;
+4. preserve the original behavior, or extend it only where requested;
+5. make large behavior changes only when required or explicitly requested;
+6. remove confirmed dead code and legacy leftovers only after checking project-wide dependencies;
+7. report exactly what was changed and why.
 
 A working parent or host file must not be modified merely because a child component is broken.
 
+SASL Reload is a developer/debugging function. Do not distort normal aircraft logic merely to preserve runtime state across a SASL reload unless the user explicitly requires it.
 
-
-## SASL 3 migration rules
+## SASL 3 rules
 
 ### Properties and DataRefs
 
 Preserve existing DataRef paths unless there is a confirmed reason to change them.
 
-Typical SASL 3 property access:
+Use the local `defineProps` helper at the start of SASL files:
 
+```lua
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))
     end
 end
+```
 
+Bind properties through `defineProps`:
+
+```lua
 defineProps({
     -- Controls
     { "soi21_on", "tu154/custom/switchers/eng/soi21_on", globalPropertyi },
@@ -67,13 +89,20 @@ defineProps({
     { "pitot_heat_2", "tu154/custom/switchers/ovhd/pitot_heat_2", globalPropertyi },
     { "pitot_heat_3", "tu154/custom/switchers/ovhd/pitot_heat_3", globalPropertyi },
 })
+```
+
+Prefer one `defineProps({ ... })` block per file.
+
+Do not split properties into several `defineProps` calls only for visual grouping. Use comments inside one block instead.
+
+If a special accessor must be generated before the block, define the helper first and still keep the actual property declarations in the same `defineProps` block.
 
 For indexed/array DataRefs, do not blindly preserve SASL 2 typed-array access patterns.
 
 Example:
 
 ```lua
-	defineProperty("gear0", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))
+defineProperty("gear0", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))
 ```
 
 Use the SASL 3 manual and the actual DataRef type to determine the correct accessor.
@@ -102,6 +131,113 @@ end
 Do not add `drawAll(components)` or `updateAll(components)` to a file that does not actually own a top-level `components` table.
 
 Context windows manage their own child components.
+
+### Module shutdown and overrides
+
+When a module owns an X-Plane override, release it reliably during module shutdown.
+
+Prefer `onModuleShutdown(isError)` for cleanup that must also occur when the module is stopped because of an error.
+
+Do not leave X-Plane overrides active after the owning module stops.
+
+## xTlua rules
+
+### Global environment
+
+The xTlua codebase in this project runs in a shared global Lua environment.
+
+Therefore:
+
+- do not assume a symbol is unused merely because it is unused in the current file;
+- do not make existing globals local without checking project-wide use; xtlua usually uses globals
+
+### DataRef binding schema
+
+For existing X-Plane or aircraft DataRefs, use a declarative `find_datarefs` table:
+
+```lua
+local find_datarefs = {
+    { "simDR_gs", "sim/flightmodel/position/groundspeed" },
+    { "simDR_time", "sim/time/total_running_time_sec" },
+    { "simDR_bus27left", "tu154/custom/elec/bus27_volt_left" },
+}
+```
+
+For custom writable DataRefs created by xTlua, use a declarative `deferred_datarefs` table:
+
+```lua
+local deferred_datarefs = {
+    { "weather_lit", "tu154/custom/kontur/weather_lit", "number" },
+    { "weather_sys", "tu154/custom/kontur/weather_sys", "number", tu154_kontur_weather_sys_DRhandler },
+    { "lat_string", "tu154/custom/kontur/latitude", "string" },
+}
+```
+
+Bind both tables through the standard loop helpers:
+
+```lua
+local function bind_datarefs(definitions)
+    for _, def in ipairs(definitions) do
+        _G[def[1]] = find_dataref(def[2])
+    end
+end
+
+local function create_datarefs(definitions)
+    for _, def in ipairs(definitions) do
+        if def[4] ~= nil then
+            _G[def[1]] = deferred_dataref(def[2], def[3], def[4])
+        else
+            _G[def[1]] = deferred_dataref(def[2], def[3])
+        end
+    end
+end
+
+bind_datarefs(find_datarefs)
+create_datarefs(deferred_datarefs)
+```
+
+Do not replace this with repetitive individual assignments unless there is a concrete technical reason.
+
+Keep the variable names created through `_G` unchanged so existing global project references continue to work.
+
+### Deferred DataRef handlers
+
+A notifier function referenced directly in `deferred_datarefs` must already exist when the table is constructed.
+
+This is valid:
+
+```lua
+function tu154_kontur_weather_mode_DRhandler() end
+function tu154_kontur_weather_sys_DRhandler() end
+function tu154_wx2000_tilt_DRhandler() end
+function tu154_wx2000_windshear_DRhandler() end
+
+local deferred_datarefs = {
+    { "weather_sys", "tu154/custom/kontur/weather_sys", "number", tu154_kontur_weather_sys_DRhandler },
+}
+```
+
+Do not move already valid handler stubs merely for style.
+
+When using the project helper:
+
+```lua
+function deferred_dataref(name, type, notifier)
+    print("Deffered dataref: " .. name)
+    local dref = XLuaCreateDataRef(name, type, "yes", notifier)
+    return wrap_dref_any(dref, type)
+end
+```
+
+keep temporary implementation values such as `dref` local unless they intentionally form part of the global interface.
+
+### X-Plane version checks
+
+The active branch targets X-Plane 12.
+
+Do not add or preserve runtime X-Plane version checks merely to support X-Plane 11 in the XP12 branch.
+
+If XP11 compatibility is explicitly required, handle it as a separate requested compatibility task rather than silently complicating XP12 code.
 
 ## Mouse handling
 
@@ -228,7 +364,7 @@ Before modifying a helper component, first check whether another dedicated helpe
 
 ## Aircraft logic
 
-Do not change aircraft behavior while performing API migration unless the user explicitly asks for a systems/aerodynamics change.
+Do not change aircraft behavior while performing API migration or cleanup unless the user explicitly asks for a systems/aerodynamics change.
 
 This includes:
 
@@ -244,7 +380,9 @@ This includes:
 - failures;
 - SmartCopilot synchronization.
 
-A SASL migration fix should not silently become a systems rewrite.
+A migration or cleanup task must not silently become a systems rewrite.
+
+When a systems change is requested, preserve unrelated behavior and limit the modification to the requested system.
 
 ## Code style
 
@@ -256,20 +394,30 @@ Prefer clear, explicit code over clever rewrites when reviewing aircraft-system 
 
 Avoid unrelated formatting churn.
 
+Do not add alignment using repeated spaces merely for visual columns.
+
+Use normal indentation and ordinary single spaces.
+
 Do not rename DataRefs, properties, files, textures or component names without a concrete reason.
+
+Do not split one logical DataRef declaration section into multiple helper calls without a technical reason.
 
 ## Validation
 
 After modifying a Lua file:
 
+- inspect the complete resulting file;
+- run syntax validation when possible;
 - search for accidentally introduced legacy SASL calls;
 - verify all referenced component names still exist;
 - verify all `components = { ... }` blocks are balanced;
 - verify mouse handlers return `true` where expected;
 - verify `set()` is only used on writable properties;
-- verify no automated replacement changed system semantics.
-
-
+- verify no automated replacement changed system semantics;
+- verify global xTlua names were not accidentally localized or removed;
+- verify DataRef paths were not changed unintentionally;
+- verify indexed DataRef access uses the correct element numbering and accessor;
+- verify an X-Plane override is released when the owning module stops.
 
 ## Review output
 
@@ -281,11 +429,11 @@ When presenting a corrected file, briefly state:
 - whether syntax validation passed;
 - any dependency that still needs inspection.
 
-Do not produce a long generic SASL explanation unless requested.
+Do not produce a long generic SASL or xTlua explanation unless requested.
 
 ## Safety rules for automated conversions
 
-Never run broad replacements without reviewing their semantic effect.
+
 
 Especially dangerous transformations include:
 
@@ -294,10 +442,13 @@ onMouseDown -> onMouseHold
 globalPropertyf -> globalProperty
 subpanel -> contextWindow
 clickable -> interactive
+global xTlua symbol -> local symbol
+individual xTlua DataRefs -> loop binding without checking notifier order
 ```
 
 Some of these transformations may be valid in specific places, but none are universally safe.
-Every conversion must be validated against the component's actual behavior.
+
+Every conversion must be validated against the component's actual behavior and the project-wide dependency graph.
 
 ## Source priority
 
@@ -306,7 +457,8 @@ When there is a conflict, use this order:
 1. current user instruction;
 2. known working behavior in the current project;
 3. SASL 3 manual/API documentation;
-4. original SASL 2 implementation;
-5. inference.
+4. X-Plane 12 DataRef/API behavior;
+5. original SASL 2 implementation;
+6. inference.
 
 Do not overwrite known-working project behavior based only on a generic migration pattern.

@@ -9,6 +9,7 @@ Changelog
 - Preserved BetterPushback steering handoff: the script does not overwrite
   the steering command while pushback is connected and the aircraft
   nosewheel steering system is unpowered.
+- Made BetterPushback optional, with silent lookup and delayed-load retry.
 - Consolidated active DataRef bindings into defineProps().
 - Preserved generic globalProperty() bindings for indexed X-Plane array
   DataRefs because these are the currently verified working bindings in
@@ -109,11 +110,32 @@ defineProps({
     {"frame_time",
         "tu154/custom/time/frame_time",
         globalPropertyf},
-    -- BetterPushback.
-    {"pushback",
-        "bp/connected",
-        globalPropertyi},
 })
+
+
+-- BetterPushback is optional. Do not bind a missing plugin DataRef during
+-- component loading, log missing-DataRef warnings, or publish a replacement.
+local pushback_ref = nil
+local pushback_retry = 0
+local PUSHBACK_RETRY_INTERVAL = 1
+
+local function isPushbackConnected(dt)
+    if not pushback_ref then
+        pushback_retry = pushback_retry - dt
+        if pushback_retry <= 0 then
+            pushback_ref = sasl.findDataRef("bp/connected", TYPE_INT, true)
+            pushback_retry = PUSHBACK_RETRY_INTERVAL
+        end
+    end
+
+    if not pushback_ref then
+        return false
+    end
+
+    -- X-Plane retains the handle if the provider is disabled/unloaded:
+    -- reads return zero until the provider registers the DataRef again.
+    return sasl.getDataRef(pushback_ref) == 1
+end
 
 
 -- Steering response factor versus X-Plane runway condition.
@@ -200,7 +222,7 @@ function update()
         compression > 0
 
     local pushback_connected =
-        get(pushback) == 1
+        isPushbackConnected(dt)
 
     local steering_enabled =
         get(nosewheel_turn_enable) == 1
@@ -451,6 +473,11 @@ registerCommandHandler(gear_toggle_command, 0, gear_toggle_handler)
 
 
 
-function onModuleDone()
+-- Release steering ownership even when SASL stops because of an error.
+function onModuleShutdown(isError)
     set(override_wheel_steer, 0)
+    if pushback_ref then
+        sasl.freeDataRef(pushback_ref)
+        pushback_ref = nil
+    end
 end

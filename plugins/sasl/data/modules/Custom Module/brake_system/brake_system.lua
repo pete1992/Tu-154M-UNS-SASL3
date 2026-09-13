@@ -1,47 +1,53 @@
 -- this is the brakes system
 
-defineProperty("have_pedals", globalPropertyi("tu154/custom/have_pedals"))
--- hydro
-defineProperty("gs_press_1", globalPropertyf("tu154/custom/hydro/gs_press_1")) --   1
-defineProperty("gs_press_2", globalPropertyf("tu154/custom/hydro/gs_press_2")) --   2
-defineProperty("gs_press_3", globalPropertyf("tu154/custom/hydro/gs_press_3")) --   3
-defineProperty("gs_press_4", globalPropertyf("tu154/custom/hydro/gs_press_4")) --   4
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
--- sim brakes
-defineProperty("l_brake_add", globalPropertyf("sim/flightmodel/controls/l_brake_add")) -- Left Brake
-defineProperty("r_brake_add", globalPropertyf("sim/flightmodel/controls/r_brake_add")) -- Right Brake
-defineProperty("parkbrake", globalPropertyf("sim/flightmodel/controls/parkbrake")) -- Parking Brake
-defineProperty("parkbrake_2", globalPropertyf("sim/cockpit2/controls/parking_brake_ratio")) -- Parking Brake
--- controls
-defineProperty("gear_blocks", globalPropertyf("tu154/custom/anim/gear_blocks")) -- Parking Brake
-defineProperty("brake_emerg", globalPropertyf("tu154/custom/controlls/brake_emerg")) --  
-defineProperty("brake_emerg_L", globalPropertyf("tu154/custom/controlls/brake_emerg_L")) --  
-defineProperty("brake_emerg_R", globalPropertyf("tu154/custom/controlls/brake_emerg_R")) --  
--- animation
-defineProperty("parking_brake", globalPropertyi("tu154/custom/controll/parking_brake")) --   
-defineProperty("brake_L", globalPropertyf("tu154/custom/controlls/brake_L")) -- 
-defineProperty("brake_R", globalPropertyf("tu154/custom/controlls/brake_R")) -- 
-defineProperty("int_brakes_L", globalPropertyf("tu154/custom/brakes/int_brakes_L")) --   
-defineProperty("int_brakes_R", globalPropertyf("tu154/custom/brakes/int_brakes_R")) --   
-defineProperty("overr", globalPropertyi("sim/operation/override/override_gearbrake")) -- 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
--- failures
-defineProperty("brake_heat_left", globalPropertyf("tu154/custom/failures/brake_heat_left")) --  
-defineProperty("brake_heat_right", globalPropertyf("tu154/custom/failures/brake_heat_right")) --  
-defineProperty("brake_runtime_left", globalPropertyf("tu154/custom/failures/brake_runtime_left")) --   
-defineProperty("brake_runtime_right", globalPropertyf("tu154/custom/failures/brake_runtime_right")) --   
-defineProperty("rel_lbrakes", globalPropertyi("sim/operation/failures/rel_lbrakes")) --  
-defineProperty("rel_rbrakes", globalPropertyi("sim/operation/failures/rel_rbrakes")) --  
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
--- enviroment
-defineProperty("speed", globalPropertyf("sim/flightmodel/position/groundspeed"))
-defineProperty("thermo", globalPropertyf("sim/cockpit2/temperature/outside_air_temp_degc")) -- outside temperature
-defineProperty("gear_vent_set", globalPropertyi("tu154/custom/switchers/eng/gear_fan")) --  
-defineProperty("gear2_deflect", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]"))  -- vertical deflection of left gear
-defineProperty("gear3_deflect", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]"))  -- vertical deflection of right gear
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
+
+defineProps({
+    {"have_pedals", "tu154/custom/have_pedals", globalPropertyi},
+    -- Hydraulic pressure and timing.
+    {"gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf},
+    {"gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf},
+    {"gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf},
+    {"gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf},
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    -- Simulator brakes.
+    {"l_brake_add", "sim/flightmodel/controls/l_brake_add", globalPropertyf},
+    {"r_brake_add", "sim/flightmodel/controls/r_brake_add", globalPropertyf},
+    {"parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf},
+    {"parkbrake_2", "sim/cockpit2/controls/parking_brake_ratio", globalPropertyf},
+    -- Aircraft controls, animation and internal brake demand.
+    {"gear_blocks", "tu154/custom/anim/gear_blocks", globalPropertyf},
+    {"brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf},
+    {"brake_emerg_L", "tu154/custom/controlls/brake_emerg_L", globalPropertyf},
+    {"brake_emerg_R", "tu154/custom/controlls/brake_emerg_R", globalPropertyf},
+    {"parking_brake", "tu154/custom/controll/parking_brake", globalPropertyi},
+    {"brake_L", "tu154/custom/controlls/brake_L", globalPropertyf},
+    {"brake_R", "tu154/custom/controlls/brake_R", globalPropertyf},
+    {"int_brakes_L", "tu154/custom/brakes/int_brakes_L", globalPropertyf},
+    {"int_brakes_R", "tu154/custom/brakes/int_brakes_R", globalPropertyf},
+    {"overr", "sim/operation/override/override_gearbrake", globalPropertyi},
+    -- SmartCopilot: 1 means slave/no local control respectively.
+    {"ismaster", "scp/api/ismaster", globalPropertyf},
+    {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
+    -- Failures and brake condition.
+    {"brake_heat_left", "tu154/custom/failures/brake_heat_left", globalPropertyf},
+    {"brake_heat_right", "tu154/custom/failures/brake_heat_right", globalPropertyf},
+    {"brake_runtime_left", "tu154/custom/failures/brake_runtime_left", globalPropertyf},
+    {"brake_runtime_right", "tu154/custom/failures/brake_runtime_right", globalPropertyf},
+    {"rel_lbrakes", "sim/operation/failures/rel_lbrakes", globalPropertyi},
+    {"rel_rbrakes", "sim/operation/failures/rel_rbrakes", globalPropertyi},
+    {"failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi},
+    -- Environment and ground contact.
+    {"speed", "sim/flightmodel/position/groundspeed", globalPropertyf},
+    {"thermo", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf},
+    {"gear_vent_set", "tu154/custom/switchers/eng/gear_fan", globalPropertyi},
+    {"gear2_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty},
+    {"gear3_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty},
+})
 set(parking_brake, 1)
 set(parkbrake, 1)
 set(parkbrake_2, 1)
@@ -192,6 +198,8 @@ local fail_counter = 0
 local check_time = math.random(15, 30)
 local resetTimer = 0
 
+local BRAKE_SYNC_DIFFERENCE = 0.10
+
 function update()
 	passed = get(frame_time)
 	-- controls
@@ -222,8 +230,17 @@ function update()
 	-- pressures
 	local main_press = math.min(get(gs_press_1) / 120, 1)
 	local emer_press = math.min(get(gs_press_4) / 120, 1)
-	local left_blake = math.max(brake_1 * main_press, sim_brake * main_press, left_brk * main_press)--, park_lvr * main_press) 
-	local right_blake = math.max(brake_2 * main_press, sim_brake * main_press, right_brk * main_press)--, park_lvr * main_press) 
+	local left_input = math.max(brake_1, sim_brake, left_brk)
+	local right_input = math.max(brake_2, sim_brake, right_brk)
+	-- Match near-equal service-brake inputs, not pressure/failure-limited outputs.
+	-- Keep the total request unchanged. Float tolerance excludes exactly 10%.
+	if math.abs(left_input - right_input) < BRAKE_SYNC_DIFFERENCE - 0.0000001 then
+		local common_input = (left_input + right_input) * 0.5
+		left_input = common_input
+		right_input = common_input
+	end
+	local left_blake = left_input * main_press
+	local right_blake = right_input * main_press
 	local park = math.max(blocks * 5, e_brake * emer_press, park_lvr * main_press)
 	-- bug workaround
 	if left_blake < 0.07 then left_blake = 0 end
@@ -292,6 +309,7 @@ end
 	set(brake_R, math.max(right_blake, brake_2, park_lvr))	
 end
 
-function onModuleDone()
+-- Release the override on normal shutdown and on SASL errors.
+function onModuleShutdown(isError)
 	set(overr, 0)
 end

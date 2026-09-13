@@ -22,7 +22,7 @@ local function controller()
         end,
         __newindex = function(_, name, value)
             if type(value) == "table" and value.dataref_handle then
-                -- deferred_dataref temporarily stores the handle in global dref.
+                -- The global creation helper stores its temporary handle separately.
                 if name == "dref" then globals[name] = value; return end
                 bindings[name] = value.path
                 if values[value.path] == nil then values[value.path] = value.kind == "string" and "" or 0 end
@@ -47,6 +47,8 @@ local function controller()
             end
         end,
     })
+    -- Mirror xTlua's shared global table inside this isolated fixture.
+    env._G = env
     env.print = function() end
     env.find_dataref = function(name) return {dataref_handle = true, path = name, kind = "number"} end
     env.XLuaCreateDataRef = function(name, kind, writable, notifier)

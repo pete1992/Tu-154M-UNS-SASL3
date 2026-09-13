@@ -20,6 +20,7 @@ Changelog
 - Shared radar level selection preserves both physical RRU knob positions.
 - Radar availability, power recovery and screen readiness have one state owner.
 - Existing custom paths remain; additional display/source status paths feed the panel.
+- DataRefs use declarative binding tables with unchanged global names and notifier handlers.
 --]]
 
 -- Writable cockpit DataRefs need notifier functions, even when no side effect is required.
@@ -30,13 +31,16 @@ function tu154_wx2000_windshear_DRhandler() end
 
 
 
-function deferred_dataref(name,type,notifier)
-	print("Deffered dataref: "..name)
-	dref=XLuaCreateDataRef(name, type,"yes",notifier)
-	return wrap_dref_any(dref,type) 
+-- Preserve the project's global writable-DataRef helper and handle.
+function deferred_dataref(name, type, notifier)
+    print("Deffered dataref: " .. name)
+    dref = XLuaCreateDataRef(name, type, "yes", notifier)
+    return wrap_dref_any(dref, type)
 end
 
 
+-- Format GPS coordinates for the existing Kontur text fields; retain their layout.
+-- These formatter names remain global for the shared xTlua environment.
 function decToDms_lat(dec_lat)
 	local abs_dec_lat = math.abs(dec_lat)
 	local degrees_lat = math.floor(abs_dec_lat)
@@ -61,202 +65,233 @@ function decToDms_long(dec_long)
 	return ew .. dlz .. degrees_long ..",".. mins_long ..".".. secs_round_long
 end
 
+-- Bind simulator and aircraft inputs without changing their shared global names.
+local find_datarefs = {
+    -- Flight state and update timing.
+    { "simDR_startuprunning", "sim/operation/prefs/startup_running" },
+    { "simDR_gs", "sim/flightmodel/position/groundspeed" },
+    { "simDR_gps_dme", "sim/cockpit2/radios/indicators/gps_dme_distance_nm" },
+    { "simDR_passed", "sim/operation/misc/frame_rate_period" },
+    { "simDR_time", "sim/time/total_running_time_sec" },
+    -- Native pilot/copilot radar display controls.
+    { "simDR_weather_alpha", "sim/cockpit2/EFIS/EFIS_weather_alpha" },
+    { "simDR_weather_alpha_fo", "sim/cockpit2/EFIS/EFIS_weather_alpha_copilot" },
+    { "simDR_weather_gain", "sim/cockpit2/EFIS/EFIS_weather_gain" },
+    { "simDR_weather_gain_fo", "sim/cockpit2/EFIS/EFIS_weather_gain_copilot" },
+    { "simDR_weather_mode_xp", "sim/cockpit2/EFIS/EFIS_weather_mode" },
+    { "simDR_weather_mode_xp_fo", "sim/cockpit2/EFIS/EFIS_weather_mode_copilot" },
+    -- Shared antenna scan, stabilization and predictive windshear.
+    { "simDR_weather_sector_brg", "sim/cockpit2/EFIS/EFIS_weather_sector_brg" },
+    { "simDR_weather_sector_width", "sim/cockpit2/EFIS/EFIS_weather_sector_width" },
+    { "simDR_weather_antenna_limit", "sim/cockpit2/EFIS/EFIS_weather_antenna_limit" },
+    { "simDR_weather_sweeps_per_sec", "sim/cockpit2/EFIS/EFIS_weather_sweeps_per_sec" },
+    { "simDR_weather_stab", "sim/cockpit2/EFIS/EFIS_weather_stab" },
+    { "simDR_weather_stab_fo", "sim/cockpit2/EFIS/EFIS_weather_stab_copilot" },
+    { "simDR_weather_gcs", "sim/cockpit2/EFIS/EFIS_weather_gcs" },
+    { "simDR_weather_gcs_fo", "sim/cockpit2/EFIS/EFIS_weather_gcs_copilot" },
+    { "simDR_weather_pws", "sim/cockpit2/EFIS/EFIS_weather_pws" },
+    { "simDR_weather_auto_tilt", "sim/cockpit2/EFIS/EFIS_weather_auto_tilt" },
+    { "simDR_weather_auto_tilt_fo", "sim/cockpit2/EFIS/EFIS_weather_auto_tilt_copilot" },
+    { "simDR_weather_tilt", "sim/cockpit2/EFIS/EFIS_weather_tilt" },
+    { "simDR_weather_tilt_fo", "sim/cockpit2/EFIS/EFIS_weather_tilt_copilot" },
+    { "simDR_weather_multiscan", "sim/cockpit2/EFIS/EFIS_weather_multiscan" },
+    { "simDR_weather_multiscan_fo", "sim/cockpit2/EFIS/EFIS_weather_multiscan_copilot" },
+    { "simDR_weather_vertical", "sim/cockpit2/EFIS/EFIS_weather_vertical" },
+    { "simDR_weather_vertical_fo", "sim/cockpit2/EFIS/EFIS_weather_vertical_copilot" },
+    { "simDR_efis_1_terrain", "sim/cockpit2/EFIS/EFIS_terrain_on" },
+    { "simDR_efis_2_terrain", "sim/cockpit2/EFIS/EFIS_terrain_on_copilot" },
+    -- Aircraft power, TAWS/TCAS sources and switch-sound signals.
+    { "simDR_bus27left", "tu154/custom/elec/bus27_volt_left" },
+    { "simDR_bus27right", "tu154/custom/elec/bus27_volt_right" },
+    { "simDR_taws_dist", "tu154/custom/taws/distance_set" },
+    { "simDR_taws_mode", "tu154/custom/taws/mode_set" },
+    { "simDR_tcas_mode", "tu154/custom/tcas/mode_set" },
+    { "simDR_tcas_disp_mod", "tu154/custom/tcas/screen_mode" },
+    { "simDR_but_sound", "tu154/custom/buttons/srpbz/but_down" },
+    { "simDR_sw_sound", "tu154/custom/switchers/console/nvu_corr_on" },
+    { "simDR_tcas_on", "sim/cockpit2/EFIS/EFIS_tcas_on" },
+    { "simDR_taws_but_mode", "tu154/custom/buttons/srpbz/but_view" },
+    { "simDR_vbe1", "tu154/custom/switchers/ovhd/vbe_1_on" },
+    { "simDR_vbe2", "tu154/custom/switchers/ovhd/vbe_2_on" },
+    -- Navigation timing, coordinates and instrument brightness.
+    { "simDR_gps_min", "sim/cockpit2/radios/indicators/gps_dme_time_min" },
+    { "simDR_lat", "sim/flightmodel/position/latitude" },
+    { "simDR_long", "sim/flightmodel/position/longitude" },
+    { "simDR_srpbz_brightness", "tu154/custom/rotary/srpbz/brightness" },
+    { "simDR_kontur_1_brt", "sim/cockpit2/switches/instrument_brightness_ratio[14]" },
+    { "simDR_kontur_2_brt", "sim/cockpit2/switches/instrument_brightness_ratio[15]" },
+    -- Navigation receiver and native map layers.
+    { "simDR_kln", "tu154/custom/switchers/ovhd/kln_on" },
+    { "simDR_rls", "tu154/custom/switchers/console/rls_mode" },
+    { "simDR_efis_1_mode", "sim/cockpit/switches/EFIS_map_submode" },
+    { "simDR_efis_1_range", "sim/cockpit/switches/EFIS_map_range_selector" },
+    { "simDR_efis_1_fix", "sim/cockpit2/EFIS/EFIS_fix_on" },
+    { "simDR_efis_1_wxr", "sim/cockpit2/EFIS/EFIS_weather_on" },
+    { "simDR_efis_2_wxr", "sim/cockpit2/EFIS/EFIS_weather_on_copilot" },
+    { "simDR_efis_1_ndb", "sim/cockpit2/EFIS/EFIS_ndb_on" },
+    { "simDR_efis_1_vor", "sim/cockpit2/EFIS/EFIS_vor_on" },
+    { "simDR_efis_1_apt", "sim/cockpit2/EFIS/EFIS_airport_on" },
+    { "simDR_efis_1_tcas", "sim/cockpit2/EFIS/EFIS_tcas_on" },
+    { "simDR_fms_line", "sim/graphics/misc/kill_map_fms_line" },
+    -- Radar supply, stabilization status and radio deviation inputs.
+    { "simDR_36v", "tu154/custom/elec/bus36_volt_left" },
+    { "simDR_rv2", "tu154/custom/elec/rv5_right_cc" },
+    { "simDRutchours", "sim/cockpit2/clock_timer/zulu_time_hours" },
+    { "simDRutcmins", "sim/cockpit2/clock_timer/zulu_time_minutes" },
+    { "simDRnostab_l", "tu154/custom/gauges/ahz/ahz_flag_L" },
+    { "simDRnostab_r", "tu154/custom/gauges/ahz/ahz_flag_R" },
+    { "simDRtcasmode", "tu154/custom/tcas/screen_mode" },
+    { "simDRcrs_plank1", "tu154/custom/radio/nav1_cs" },
+    { "simDRgs_plank1", "tu154/custom/radio/nav1_gs" },
+    { "simDRcrs_flag1", "tu154/custom/radio/nav1_cs_flag" },
+    { "simDRgs_flag1", "tu154/custom/radio/nav1_gs_flag" },
+    { "simDRcrs_plank2", "tu154/custom/radio/nav2_cs" },
+    { "simDRgs_plank2", "tu154/custom/radio/nav2_gs" },
+    { "simDRcrs_flag2", "tu154/custom/radio/nav2_cs_flag" },
+    { "simDRgs_flag2", "tu154/custom/radio/nav2_gs_flag" },
+    -- Heading, course and cross-track source values.
+    { "simDR_gmk_crs", "tu154/custom/tks/course_gmk" },
+    { "simDR_diss_slipe", "tu154/custom/nvu/diss_slip_angle" },
+    { "simDR_dtk", "sim/cockpit/radios/gps_course_degtm" },
+    { "simDR_rel_bear", "sim/cockpit2/radios/indicators/gps_relative_bearing_deg" },
+    { "simDR_bear", "sim/cockpit2/radios/indicators/gps_bearing_deg_mag" },
+    { "simDR_hdg", "sim/cockpit2/gauges/indicators/heading_electric_deg_mag_pilot" },
+    -- Radio altitude and vertical-speed source values.
+    { "simDR_radioalt", "sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot" },
+    { "simDR_vvi", "tu154/custom/gauges/vvi_left" },
+    { "simDR_vvi_rv", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot" },
+    -- GPS validity and copilot map controls.
+    { "simDR_gps_power", "sim/cockpit2/radios/actuators/gps_power" },
+    { "simDR_gps_fromto", "sim/cockpit/radios/gps_fromto" },
+    { "simDR_efis_2_mode", "sim/cockpit2/EFIS/map_mode_copilot" },
+    { "simDR_efis_2_range", "sim/cockpit2/EFIS/map_range_copilot" },
+    { "simDR_efis_1_hsi", "sim/cockpit2/EFIS/map_mode_is_HSI" },
+    { "simDR_efis_2_hsi", "sim/cockpit2/EFIS/map_mode_is_HSI_copilot" },
+    { "simDR_efis_2_fix", "sim/cockpit2/EFIS/EFIS_fix_on_copilot" },
+    { "simDR_efis_2_ndb", "sim/cockpit2/EFIS/EFIS_ndb_on_copilot" },
+    { "simDR_efis_2_vor", "sim/cockpit2/EFIS/EFIS_vor_on_copilot" },
+    { "simDR_efis_2_apt", "sim/cockpit2/EFIS/EFIS_airport_on_copilot" },
+    { "simDR_efis_2_tcas", "sim/cockpit2/EFIS/EFIS_tcas_on_copilot" },
+}
 
+-- Register writable outputs after the inputs are bound. Notifier functions must
+-- already exist when this table is constructed; omitted handlers stay omitted.
+local deferred_datarefs = {
+    -- Display brightness and computed navigation/flight indications.
+    { "kntr_1_brt_sw", "tu154/custom/kontur/kntr_1_brt_sw", "number" },
+    { "kntr_2_brt_sw", "tu154/custom/kontur/kntr_2_brt_sw", "number" },
+    { "z_bok", "tu154/custom/kontur/zbok", "number" },
+    { "z_bok_nm", "tu154/custom/kontur/zbok_nm", "number" },
+    { "radioalt", "tu154/custom/kontur/radioalt", "number" },
+    { "vvi", "tu154/custom/kontur/vvi", "number" },
+    { "vvi_rv", "tu154/custom/kontur/vvi_rv", "number" },
+    { "gs_kmh", "tu154/custom/kontur/gs_kmh", "number" },
+    { "gs_kts", "tu154/custom/kontur/gs_kts", "number" },
+    { "gps_dme_km", "tu154/custom/kontur/gps_dme_km", "number" },
+    { "gps_hours", "tu154/custom/kontur/gps_dme_hours", "number" },
+    { "gps_min", "tu154/custom/kontur/gps_dme_min", "number" },
+    { "gps_min_eta", "tu154/custom/kontur/gps_dme_min_eta", "number" },
+    { "gps_hours_eta", "tu154/custom/kontur/gps_dme_hours_eta", "number" },
+    { "gps_time_mode_l", "tu154/custom/kontur/left_gps_time_mod", "number" },
+    { "gps_time_mode_r", "tu154/custom/kontur/right_gps_time_mod", "number" },
+    -- Left/right panel power, menus and published display states.
+    { "kontur_on_l", "tu154/custom/kontur/left_on", "number" },
+    { "kontur_nav_menu_l", "tu154/custom/kontur/left_nav_menu", "number" },
+    { "info_page_l", "tu154/custom/kontur/left_info_page", "number" },
+    { "info_page_r", "tu154/custom/kontur/right_info_page", "number" },
+    { "kontur_pow_l_lit", "tu154/custom/kontur/light/left_power", "number" },
+    { "kontur_pow_r_lit", "tu154/custom/kontur/light/right_power", "number" },
+    { "kontur_on_r", "tu154/custom/kontur/right_on", "number" },
+    -- Shared radar power and operating mode; handlers are defined above.
+    { "weather_lit", "tu154/custom/kontur/weather_lit", "number" },
+    { "weather_sys", "tu154/custom/kontur/weather_sys", "number", tu154_kontur_weather_sys_DRhandler },
+    -- Physical detents: 0 TEST, 1 WX, 2 WX/TURB, 3 MAP.
+    { "weather_mode", "tu154/custom/kontur/weather_mode", "number", tu154_kontur_weather_mode_DRhandler },
+    -- Selected layers and self-test state for the left screen.
+    { "kontur_nav_l", "tu154/custom/kontur/left_nav", "number" },
+    { "kontur_wx_l", "tu154/custom/kontur/left_wx", "number" },
+    { "kontur_tcas_l", "tu154/custom/kontur/left_tcas", "number" },
+    { "kontur_wx_test_l", "tu154/custom/kontur/left_wx_test", "number" },
+    { "kontur_taws_l", "tu154/custom/kontur/left_taws", "number" },
+    { "kontur_pow_l", "tu154/custom/kontur/left_power", "number" },
+    { "kontur_onoff_l", "tu154/custom/kontur/left_onoff", "number" },
+    { "kontur_test_l", "tu154/custom/kontur/left_test", "number" },
+    -- Selected layers and self-test state for the right screen.
+    { "kontur_nav_menu_r", "tu154/custom/kontur/right_nav_menu", "number" },
+    { "kontur_nav_r", "tu154/custom/kontur/right_nav", "number" },
+    { "kontur_taws_r", "tu154/custom/kontur/right_taws", "number" },
+    { "kontur_wx_r", "tu154/custom/kontur/right_wx", "number" },
+    { "kontur_pow_r", "tu154/custom/kontur/right_power", "number" },
+    { "kontur_onoff_r", "tu154/custom/kontur/right_onoff", "number" },
+    { "kontur_test_r", "tu154/custom/kontur/right_test", "number" },
+    -- Stabilization availability and displayed radio deviations.
+    { "ubs_pow_l", "tu154/custom/ubs/left_power", "number" },
+    { "ubs_pow_r", "tu154/custom/ubs/right_power", "number" },
+    { "diff_gs", "tu154/custom/kontur/gs_diff", "number" },
+    { "diff_crs", "tu154/custom/kontur/crs_diff", "number" },
+    { "gs_fl", "tu154/custom/kontur/gs_fl", "number" },
+    { "crs_fl", "tu154/custom/kontur/crs_fl", "number" },
+    -- Shared physical radar controls.
+    { "wx2000_gain", "tu154/custom/wx2000_gain", "number" },
+    -- Tilt in degrees: -15 DN, 0 level, +15 UP.
+    { "wx2000_tilt", "tu154/custom/wx2000_tilt", "number", tu154_wx2000_tilt_DRhandler },
+    -- Predictive windshear switch: 0 OFF, 1 AUTO.
+    { "wx2000_windshear", "tu154/custom/wx2000_windshear", "number", tu154_wx2000_windshear_DRhandler },
+    -- Panel gain knobs and navigation-unit power indications.
+    { "kontur_rru_l", "tu154/custom/kontur/rru_l", "number" },
+    { "kontur_rru_r", "tu154/custom/kontur/rru_r", "number" },
+    { "uns1_on", "tu154/custom/uns1_on", "number" },
+    { "uns2_on", "tu154/custom/uns2_on", "number" },
+    { "gmk_crs", "tu154/custom/kontur/course_gmk", "number" },
+    { "fpu_crs", "tu154/custom/kontur/course_fpu", "number" },
+    -- Left panel button lighting, units and INFO knob positions.
+    { "kontur_button_lit_l", "tu154/custom/kontur/button_lights_l", "number" },
+    { "kontur_dist_mode_l", "tu154/custom/kontur/dist_mode_l", "number" },
+    { "kontur_info_knob1_l", "tu154/custom/kontur/info_knob1_l", "number" },
+    { "kontur_info_knob2_l", "tu154/custom/kontur/info_knob2_l", "number" },
+    -- Right panel button lighting, units and INFO knob positions.
+    { "kontur_button_lit_r", "tu154/custom/kontur/button_lights_r", "number" },
+    { "kontur_dist_mode_r", "tu154/custom/kontur/dist_mode_r", "number" },
+    { "kontur_info_knob1_r", "tu154/custom/kontur/info_knob1_r", "number" },
+    { "kontur_info_knob2_r", "tu154/custom/kontur/info_knob2_r", "number" },
+    -- Cross-track result and string DataRefs for coordinate text.
+    { "kontur_zbok_test", "tu154/custom/kontur/zbok_test", "number" },
+    { "lat_string", "tu154/custom/kontur/latitude", "string" },
+    { "long_string", "tu154/custom/kontur/longitude", "string" },
+    -- Screen mode: 0 blank, 1 TAWS, 2 TCAS, 3 NAV, 4 WX, 5 NAV+WX.
+    { "kontur_mode_l", "tu154/custom/kontur/left_mode", "number" },
+    { "kontur_mode_r", "tu154/custom/kontur/right_mode", "number" },
+    { "kontur_map_l", "tu154/custom/kontur/left_map_on", "number" },
+    { "kontur_map_r", "tu154/custom/kontur/right_map_on", "number" },
+    { "kontur_tcas_r", "tu154/custom/kontur/right_tcas", "number" },
+    { "nav_source_on", "tu154/custom/kontur/nav_source_on", "number" },
+    { "nav_source_valid", "tu154/custom/kontur/nav_source_valid", "number" },
+    { "weather_ready", "tu154/custom/kontur/weather_ready", "number" },
+}
 
+-- xTlua shares a global environment. Only the definitions/helpers are local;
+-- the actual DataRef variables remain available to all existing consumers.
+local function bind_datarefs(definitions)
+    for _, def in ipairs(definitions) do
+        _G[def[1]] = find_dataref(def[2])
+    end
+end
 
+local function create_datarefs(definitions)
+    for _, def in ipairs(definitions) do
+        if def[4] ~= nil then
+            _G[def[1]] = deferred_dataref(def[2], def[3], def[4])
+        else
+            _G[def[1]] = deferred_dataref(def[2], def[3])
+        end
+    end
+end
 
+bind_datarefs(find_datarefs)
+create_datarefs(deferred_datarefs)
 
-
-
-
-simDR_startuprunning = find_dataref("sim/operation/prefs/startup_running")
-simDR_gs					= find_dataref("sim/flightmodel/position/groundspeed")
-simDR_gps_dme					= find_dataref("sim/cockpit2/radios/indicators/gps_dme_distance_nm")
-simDR_passed                    = find_dataref("sim/operation/misc/frame_rate_period")
-simDR_time                    = find_dataref("sim/time/total_running_time_sec")
--- X-Plane 12 EFIS/WX controls.  cockpit2 is required for the XP12 map/radar path.
-simDR_weather_alpha                    = find_dataref("sim/cockpit2/EFIS/EFIS_weather_alpha")
-simDR_weather_alpha_fo                 = find_dataref("sim/cockpit2/EFIS/EFIS_weather_alpha_copilot")
-simDR_weather_gain                     = find_dataref("sim/cockpit2/EFIS/EFIS_weather_gain")
-simDR_weather_gain_fo                  = find_dataref("sim/cockpit2/EFIS/EFIS_weather_gain_copilot")
-simDR_weather_mode_xp                  = find_dataref("sim/cockpit2/EFIS/EFIS_weather_mode")
-simDR_weather_mode_xp_fo               = find_dataref("sim/cockpit2/EFIS/EFIS_weather_mode_copilot")
--- Native antenna configuration belongs to the shared WX2000 radar system.
-simDR_weather_sector_brg = find_dataref("sim/cockpit2/EFIS/EFIS_weather_sector_brg")
-simDR_weather_sector_width = find_dataref("sim/cockpit2/EFIS/EFIS_weather_sector_width")
-simDR_weather_antenna_limit = find_dataref("sim/cockpit2/EFIS/EFIS_weather_antenna_limit")
-simDR_weather_sweeps_per_sec = find_dataref("sim/cockpit2/EFIS/EFIS_weather_sweeps_per_sec")
-simDR_weather_stab = find_dataref("sim/cockpit2/EFIS/EFIS_weather_stab")
-simDR_weather_stab_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_stab_copilot")
-simDR_weather_gcs = find_dataref("sim/cockpit2/EFIS/EFIS_weather_gcs")
-simDR_weather_gcs_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_gcs_copilot")
-simDR_weather_pws = find_dataref("sim/cockpit2/EFIS/EFIS_weather_pws")
-simDR_weather_auto_tilt = find_dataref("sim/cockpit2/EFIS/EFIS_weather_auto_tilt")
-simDR_weather_auto_tilt_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_auto_tilt_copilot")
-simDR_weather_tilt = find_dataref("sim/cockpit2/EFIS/EFIS_weather_tilt")
-simDR_weather_tilt_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_tilt_copilot")
-simDR_weather_multiscan = find_dataref("sim/cockpit2/EFIS/EFIS_weather_multiscan")
-simDR_weather_multiscan_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_multiscan_copilot")
-simDR_weather_vertical = find_dataref("sim/cockpit2/EFIS/EFIS_weather_vertical")
-simDR_weather_vertical_fo = find_dataref("sim/cockpit2/EFIS/EFIS_weather_vertical_copilot")
-simDR_efis_1_terrain = find_dataref("sim/cockpit2/EFIS/EFIS_terrain_on")
-simDR_efis_2_terrain = find_dataref("sim/cockpit2/EFIS/EFIS_terrain_on_copilot")
-simDR_bus27left                    = find_dataref("tu154/custom/elec/bus27_volt_left")
-simDR_bus27right                    = find_dataref("tu154/custom/elec/bus27_volt_right")
-simDR_taws_dist                    = find_dataref("tu154/custom/taws/distance_set")
-simDR_taws_mode                    = find_dataref("tu154/custom/taws/mode_set")
-simDR_tcas_mode                    = find_dataref("tu154/custom/tcas/mode_set")
-simDR_tcas_disp_mod                    = find_dataref("tu154/custom/tcas/screen_mode")
-simDR_but_sound                    = find_dataref("tu154/custom/buttons/srpbz/but_down")
-simDR_sw_sound                    = find_dataref("tu154/custom/switchers/console/nvu_corr_on")
-simDR_tcas_on                    = find_dataref("sim/cockpit2/EFIS/EFIS_tcas_on")
-simDR_taws_but_mode                    = find_dataref("tu154/custom/buttons/srpbz/but_view")
-simDR_vbe1                   = find_dataref("tu154/custom/switchers/ovhd/vbe_1_on")
-simDR_vbe2                   = find_dataref("tu154/custom/switchers/ovhd/vbe_2_on")
-simDR_gps_min                    = find_dataref("sim/cockpit2/radios/indicators/gps_dme_time_min")
-simDR_lat					= find_dataref("sim/flightmodel/position/latitude")
-simDR_long					= find_dataref("sim/flightmodel/position/longitude")
-simDR_srpbz_brightness		= find_dataref("tu154/custom/rotary/srpbz/brightness")
-simDR_kontur_1_brt		= find_dataref("sim/cockpit2/switches/instrument_brightness_ratio[14]")
-simDR_kontur_2_brt		= find_dataref("sim/cockpit2/switches/instrument_brightness_ratio[15]")
-simDR_kln					= find_dataref("tu154/custom/switchers/ovhd/kln_on")
-simDR_rls					= find_dataref("tu154/custom/switchers/console/rls_mode")
-simDR_efis_1_mode					= find_dataref("sim/cockpit/switches/EFIS_map_submode")
-simDR_efis_1_range					= find_dataref("sim/cockpit/switches/EFIS_map_range_selector")
-simDR_efis_1_fix					= find_dataref("sim/cockpit2/EFIS/EFIS_fix_on")
-simDR_efis_1_wxr					= find_dataref("sim/cockpit2/EFIS/EFIS_weather_on")
-simDR_efis_2_wxr					= find_dataref("sim/cockpit2/EFIS/EFIS_weather_on_copilot")
-simDR_efis_1_ndb					= find_dataref("sim/cockpit2/EFIS/EFIS_ndb_on")
-simDR_efis_1_vor					= find_dataref("sim/cockpit2/EFIS/EFIS_vor_on")
-simDR_efis_1_apt					= find_dataref("sim/cockpit2/EFIS/EFIS_airport_on")
-simDR_efis_1_tcas					= find_dataref("sim/cockpit2/EFIS/EFIS_tcas_on")
-simDR_fms_line					= find_dataref("sim/graphics/misc/kill_map_fms_line")
-simDR_36v				= find_dataref("tu154/custom/elec/bus36_volt_left")
-simDR_rv2				= find_dataref("tu154/custom/elec/rv5_right_cc")
-simDRutchours				= find_dataref("sim/cockpit2/clock_timer/zulu_time_hours")
-simDRutcmins				= find_dataref("sim/cockpit2/clock_timer/zulu_time_minutes")
-simDRnostab_l				= find_dataref("tu154/custom/gauges/ahz/ahz_flag_L")
-simDRnostab_r				= find_dataref("tu154/custom/gauges/ahz/ahz_flag_R")
-simDRtcasmode				= find_dataref("tu154/custom/tcas/screen_mode")
-simDRcrs_plank1				= find_dataref("tu154/custom/radio/nav1_cs")
-simDRgs_plank1				= find_dataref("tu154/custom/radio/nav1_gs")
-simDRcrs_flag1				= find_dataref("tu154/custom/radio/nav1_cs_flag")
-simDRgs_flag1				= find_dataref("tu154/custom/radio/nav1_gs_flag")
-simDRcrs_plank2				= find_dataref("tu154/custom/radio/nav2_cs")
-simDRgs_plank2				= find_dataref("tu154/custom/radio/nav2_gs")
-simDRcrs_flag2				= find_dataref("tu154/custom/radio/nav2_cs_flag")
-simDRgs_flag2				= find_dataref("tu154/custom/radio/nav2_gs_flag")
-simDR_gmk_crs = find_dataref("tu154/custom/tks/course_gmk")
-simDR_diss_slipe = find_dataref("tu154/custom/nvu/diss_slip_angle")
-simDR_dtk = find_dataref("sim/cockpit/radios/gps_course_degtm")
-simDR_rel_bear = find_dataref("sim/cockpit2/radios/indicators/gps_relative_bearing_deg")
-simDR_bear = find_dataref("sim/cockpit2/radios/indicators/gps_bearing_deg_mag")
-simDR_hdg = find_dataref("sim/cockpit2/gauges/indicators/heading_electric_deg_mag_pilot")
-
-simDR_radioalt					= find_dataref("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
-simDR_vvi					= find_dataref("tu154/custom/gauges/vvi_left")
-simDR_vvi_rv					= find_dataref("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
-
-
-kntr_1_brt_sw		= deferred_dataref("tu154/custom/kontur/kntr_1_brt_sw", "number")
-kntr_2_brt_sw		= deferred_dataref("tu154/custom/kontur/kntr_2_brt_sw", "number")
-z_bok = deferred_dataref("tu154/custom/kontur/zbok", "number")
-z_bok_nm = deferred_dataref("tu154/custom/kontur/zbok_nm", "number")
-radioalt = deferred_dataref("tu154/custom/kontur/radioalt", "number")
-vvi = deferred_dataref("tu154/custom/kontur/vvi", "number")
-vvi_rv = deferred_dataref("tu154/custom/kontur/vvi_rv", "number")
-gs_kmh = deferred_dataref("tu154/custom/kontur/gs_kmh", "number")
-gs_kts = deferred_dataref("tu154/custom/kontur/gs_kts", "number")
-gps_dme_km = deferred_dataref("tu154/custom/kontur/gps_dme_km", "number")
-gps_hours = deferred_dataref("tu154/custom/kontur/gps_dme_hours", "number")
-gps_min = deferred_dataref("tu154/custom/kontur/gps_dme_min", "number")
-gps_min_eta = deferred_dataref("tu154/custom/kontur/gps_dme_min_eta", "number")
-gps_hours_eta = deferred_dataref("tu154/custom/kontur/gps_dme_hours_eta", "number")
-gps_time_mode_l = deferred_dataref("tu154/custom/kontur/left_gps_time_mod", "number")
-gps_time_mode_r = deferred_dataref("tu154/custom/kontur/right_gps_time_mod", "number")
-kontur_on_l = deferred_dataref("tu154/custom/kontur/left_on", "number")
-kontur_nav_menu_l = deferred_dataref("tu154/custom/kontur/left_nav_menu", "number")
-info_page_l = deferred_dataref("tu154/custom/kontur/left_info_page", "number")
-info_page_r = deferred_dataref("tu154/custom/kontur/right_info_page", "number")
-kontur_pow_l_lit = deferred_dataref("tu154/custom/kontur/light/left_power", "number")
-kontur_pow_r_lit = deferred_dataref("tu154/custom/kontur/light/right_power", "number")
-kontur_on_r = deferred_dataref("tu154/custom/kontur/right_on", "number")
-weather_lit = deferred_dataref("tu154/custom/kontur/weather_lit", "number")
-weather_sys = deferred_dataref("tu154/custom/kontur/weather_sys", "number",tu154_kontur_weather_sys_DRhandler)
--- Physical detents: 0 TEST, 1 WX, 2 WX/TURB, 3 MAP.
-weather_mode = deferred_dataref("tu154/custom/kontur/weather_mode", "number",tu154_kontur_weather_mode_DRhandler)
-kontur_nav_l = deferred_dataref("tu154/custom/kontur/left_nav", "number")
-kontur_wx_l = deferred_dataref("tu154/custom/kontur/left_wx", "number")
-kontur_tcas_l = deferred_dataref("tu154/custom/kontur/left_tcas", "number")
-kontur_wx_test_l = deferred_dataref("tu154/custom/kontur/left_wx_test", "number")
-kontur_taws_l = deferred_dataref("tu154/custom/kontur/left_taws", "number")
-kontur_pow_l = deferred_dataref("tu154/custom/kontur/left_power", "number")
-kontur_onoff_l = deferred_dataref("tu154/custom/kontur/left_onoff", "number")
-kontur_test_l = deferred_dataref("tu154/custom/kontur/left_test", "number")
-kontur_nav_menu_r = deferred_dataref("tu154/custom/kontur/right_nav_menu", "number")
-kontur_nav_r = deferred_dataref("tu154/custom/kontur/right_nav", "number")
-kontur_taws_r = deferred_dataref("tu154/custom/kontur/right_taws", "number")
-kontur_wx_r = deferred_dataref("tu154/custom/kontur/right_wx", "number")
-kontur_pow_r = deferred_dataref("tu154/custom/kontur/right_power", "number")
-kontur_onoff_r = deferred_dataref("tu154/custom/kontur/right_onoff", "number")
-kontur_test_r = deferred_dataref("tu154/custom/kontur/right_test", "number")
-ubs_pow_l = deferred_dataref("tu154/custom/ubs/left_power", "number")
-ubs_pow_r = deferred_dataref("tu154/custom/ubs/right_power", "number")
-diff_gs = deferred_dataref("tu154/custom/kontur/gs_diff", "number")
-diff_crs = deferred_dataref("tu154/custom/kontur/crs_diff", "number")
-gs_fl = deferred_dataref("tu154/custom/kontur/gs_fl", "number")
-crs_fl = deferred_dataref("tu154/custom/kontur/crs_fl", "number")
-wx2000_gain = deferred_dataref("tu154/custom/wx2000_gain", "number")
--- Physical TILT setting in degrees: -15 DN, 0 level, +15 UP.
-wx2000_tilt = deferred_dataref("tu154/custom/wx2000_tilt", "number", tu154_wx2000_tilt_DRhandler)
--- Physical PWS switch: 0 OFF (right), 1 AUTO (left).
-wx2000_windshear = deferred_dataref("tu154/custom/wx2000_windshear", "number", tu154_wx2000_windshear_DRhandler)
-kontur_rru_l = deferred_dataref("tu154/custom/kontur/rru_l", "number")
-kontur_rru_r = deferred_dataref("tu154/custom/kontur/rru_r", "number")
-uns1_on					= deferred_dataref("tu154/custom/uns1_on", "number")
-uns2_on					= deferred_dataref("tu154/custom/uns2_on", "number")
-gmk_crs					= deferred_dataref("tu154/custom/kontur/course_gmk", "number")
-fpu_crs					= deferred_dataref("tu154/custom/kontur/course_fpu", "number")
-
-
-kontur_button_lit_l = deferred_dataref("tu154/custom/kontur/button_lights_l", "number")
-kontur_dist_mode_l = deferred_dataref("tu154/custom/kontur/dist_mode_l", "number")
-kontur_info_knob1_l = deferred_dataref("tu154/custom/kontur/info_knob1_l", "number")
-kontur_info_knob2_l = deferred_dataref("tu154/custom/kontur/info_knob2_l", "number")
-
-kontur_button_lit_r = deferred_dataref("tu154/custom/kontur/button_lights_r", "number")
-kontur_dist_mode_r = deferred_dataref("tu154/custom/kontur/dist_mode_r", "number")
-kontur_info_knob1_r = deferred_dataref("tu154/custom/kontur/info_knob1_r", "number")
-kontur_info_knob2_r = deferred_dataref("tu154/custom/kontur/info_knob2_r", "number")
-
-kontur_zbok_test = deferred_dataref("tu154/custom/kontur/zbok_test", "number")
-
-
-
-lat_string = deferred_dataref("tu154/custom/kontur/latitude", "string")
-long_string = deferred_dataref("tu154/custom/kontur/longitude", "string")
-
--- Screen selection: 0 blank, 1 TAWS, 2 TCAS, 3 NAV, 4 WX, 5 NAV with WX overlay.
-kontur_mode_l = deferred_dataref("tu154/custom/kontur/left_mode", "number")
-kontur_mode_r = deferred_dataref("tu154/custom/kontur/right_mode", "number")
-kontur_map_l = deferred_dataref("tu154/custom/kontur/left_map_on", "number")
-kontur_map_r = deferred_dataref("tu154/custom/kontur/right_map_on", "number")
-kontur_tcas_r = deferred_dataref("tu154/custom/kontur/right_tcas", "number")
-nav_source_on = deferred_dataref("tu154/custom/kontur/nav_source_on", "number")
-nav_source_valid = deferred_dataref("tu154/custom/kontur/nav_source_valid", "number")
-weather_ready = deferred_dataref("tu154/custom/kontur/weather_ready", "number")
-simDR_gps_power = find_dataref("sim/cockpit2/radios/actuators/gps_power")
-simDR_gps_fromto = find_dataref("sim/cockpit/radios/gps_fromto")
-simDR_efis_2_mode = find_dataref("sim/cockpit2/EFIS/map_mode_copilot")
-simDR_efis_2_range = find_dataref("sim/cockpit2/EFIS/map_range_copilot")
-simDR_efis_1_hsi = find_dataref("sim/cockpit2/EFIS/map_mode_is_HSI")
-simDR_efis_2_hsi = find_dataref("sim/cockpit2/EFIS/map_mode_is_HSI_copilot")
-simDR_efis_2_fix = find_dataref("sim/cockpit2/EFIS/EFIS_fix_on_copilot")
-simDR_efis_2_ndb = find_dataref("sim/cockpit2/EFIS/EFIS_ndb_on_copilot")
-simDR_efis_2_vor = find_dataref("sim/cockpit2/EFIS/EFIS_vor_on_copilot")
-simDR_efis_2_apt = find_dataref("sim/cockpit2/EFIS/EFIS_airport_on_copilot")
-simDR_efis_2_tcas = find_dataref("sim/cockpit2/EFIS/EFIS_tcas_on_copilot")
-
+-- Private runtime state: sampled inputs, self-test timers and per-screen selections.
+-- Physical knob DataRefs remain independent from the shared radar settings below.
 local radioalt_loc = 0
 local info_knob1_l_loc = kontur_info_knob1_l
 local info_knob2_l_loc = 0
@@ -313,6 +348,7 @@ local function finite(value)
     return type(value) == "number" and value == value and math.abs(value) < math.huge
 end
 
+-- Limit timer advancement after long frames; invalid or negative periods do not advance it.
 local function frame_step()
     if not finite(simDR_passed) or simDR_passed < 0 then return 0 end
     return math.min(simDR_passed, 0.1)
@@ -337,6 +373,7 @@ local function mode_after_key(current, requested, info_open)
     return requested
 end
 
+-- Left display: clear published layers separately from the selected operating mode.
 local function clear_modes_l()
     kontur_nav_l = 0
     kontur_taws_l = 0
@@ -345,6 +382,7 @@ local function clear_modes_l()
     kontur_map_l = 0
 end
 
+-- Power loss or an ON/OFF command restarts this screen's self-test and clears its menus.
 local function reset_display_l()
     wx_display_l = 3
     tcas_overlay_l = false
@@ -398,6 +436,7 @@ local function select_mode_l(mode)
     end
 end
 
+-- Left cockpit commands act on initial press (phase 0), except the held INFO key.
 function kontur_onoff_button_l_CMDhandler(phase, duration)
     if phase ~= 0 then return end
     if kontur_pow_l > 0 and simDR_bus27left > 13 then
@@ -442,6 +481,7 @@ function kontur_zoomout_button_l_CMDhandler(phase, duration)
     end
 end
 
+-- Softkeys depend on the active page: units/time, TCAS format, TAWS view or WX standby.
 function kontur_btn1_button_l_CMDhandler(phase, duration)
     if phase ~= 0 or not accept_key_l() then return end
     if kontur_nav_menu_l == 2 then kontur_dist_mode_l = kontur_dist_mode_l < 1 and 1 or 0 end
@@ -470,6 +510,7 @@ function kontur_btn3_button_l_CMDhandler(phase, duration)
     end
 end
 
+-- Holding INFO opens the settings menu after 3 seconds and system information after 5.
 function kontur_info_button_l_CMDhandler(phase, duration)
     if not accept_key_l() then return end
     if phase == 0 and kontur_nav_menu_l > 0 then kontur_nav_menu_l = 0 end
@@ -489,6 +530,7 @@ function kontur_ovhd_onoff_l_CMDhandler(phase, duration)
     simDR_sw_sound = simDR_sw_sound > -1 and -1 or 0
 end
 
+-- Right display keeps its own power, menus and selections; its self-test timing differs.
 local function clear_modes_r()
     kontur_nav_r = 0
     kontur_taws_r = 0
@@ -550,6 +592,7 @@ local function select_mode_r(mode)
     end
 end
 
+-- Right cockpit commands mirror the left controls without sharing their display state.
 function kontur_onoff_button_r_CMDhandler(phase, duration)
     if phase ~= 0 then return end
     if kontur_pow_r > 0 and simDR_bus27right > 13 then
@@ -641,6 +684,7 @@ function kontur_ovhd_onoff_r_CMDhandler(phase, duration)
     simDR_sw_sound = simDR_sw_sound > -1 and -1 or 0
 end
 
+-- Keep cockpit command paths and global handles stable for OBJ manipulators and bindings.
 KONTUR_ONOFF_btn_l	= create_command("kontur/onoff_btn_l", "Kontur L ONOFF Button", kontur_onoff_button_l_CMDhandler)
 KONTUR_RLS_btn_l	= create_command("kontur/rls_btn_l", "Kontur L RLS Button", kontur_rls_button_l_CMDhandler)
 KONTUR_NAV_btn_l	= create_command("kontur/nav_btn_l", "Kontur L NAV Button", kontur_nav_button_l_CMDhandler)
@@ -687,9 +731,11 @@ end
 -- Configure a single stabilized horizontal sector scan with manual tilt.
 local function configure_weather_scan()
     simDR_weather_sector_brg = 0
-    simDR_weather_antenna_limit = 60
-    simDR_weather_sector_width = 60
-    simDR_weather_sweeps_per_sec = 0.3 -- Full left-right-left cycles per second.
+	-- USER EDIT
+    simDR_weather_antenna_limit = 90
+    simDR_weather_sector_width = 90
+    simDR_weather_sweeps_per_sec = 0.6 -- Full left-right-left cycles per second.
+	-- END OF EDIT
     simDR_weather_vertical = 0
     simDR_weather_vertical_fo = 0
     simDR_weather_stab = 1
@@ -701,6 +747,7 @@ local function configure_weather_scan()
     apply_weather_tilt()
 end
 
+-- Initialize native map/radar controls and restart both display self-tests on aircraft load.
 function aircraft_load()
     -- PWS AUTO can emit even with mode OFF; inhibit it before shutting down the radar.
     if simDR_weather_pws ~= 0 then simDR_weather_pws = 0 end
@@ -744,6 +791,8 @@ end
 
 
 
+-- Update left screen power, staged startup test and the two settings-menu encoders.
+-- A mode key can acknowledge the final test stage; otherwise startup completes at 23 s.
 function kontur_left()
     if kontur_pow_l <= 0 or simDR_bus27left <= 13 or kontur_onoff_l >= 1 then
         reset_display_l()
@@ -766,6 +815,7 @@ function kontur_left()
             kontur_on_l = 1
         end
     end
+-- Each encoder change of roughly 10 units advances one menu step.
 if kontur_nav_menu_l > 0 then
    if (kontur_info_knob2_l - info_knob2_l_loc) > 9.9 then
         if kontur_nav_l > 0 then
@@ -788,6 +838,7 @@ if kontur_nav_menu_l > 0 then
 end
 
 
+-- Menu 1 adjusts button backlighting; outside it, track the knob without changing brightness.
 if kontur_nav_menu_l == 1 then
     if (kontur_info_knob1_l - info_knob1_l_loc) > 9.9 then
         if kontur_button_lit_l < 1 then
@@ -820,6 +871,7 @@ end
 
 end
 
+-- Update the right screen independently, preserving its original 21-second startup sequence.
 function kontur_right()
     if kontur_pow_r <= 0 or simDR_bus27right <= 13 or kontur_onoff_r >= 1 then
         reset_display_r()
@@ -942,6 +994,8 @@ local function update_weather()
     if simDR_weather_pws ~= pws then simDR_weather_pws = pws end
 end
 
+-- Publish each screen's visible layers after power, radar readiness and source data are current.
+-- INFO temporarily hides those layers without discarding the selected NAV/WX/TCAS state.
 local function apply_display_modes()
     clear_modes_l()
     local active_l = kontur_on_l > 0 and info_page_l == 0
@@ -1001,6 +1055,8 @@ local function apply_display_modes()
     simDR_fms_line = (kontur_nav_l > 0 or kontur_nav_r > 0) and nav_source_on > 0 and 0 or 1
 end
 
+-- Prepare display-only values and shared brightness/gain; do not change HSI or ABSU sources.
+-- Each screen stays lit during its test sequence and dark when switched off.
 function kontur_data()
  
 if kontur_on_l > 0 then
@@ -1024,6 +1080,7 @@ else
     simDR_efis_1_vor					= 0
 end
     
+-- Combine compass heading and Doppler drift for the displayed track indication.
 if  simDR_gmk_crs < 0 then
      gmk_crs = 360 + simDR_gmk_crs       
 else
@@ -1033,6 +1090,7 @@ end
 fpu_crs = gmk_crs + simDR_diss_slipe
 
  
+-- Prefer a valid NAV1 deviation, then NAV2; hide the indication when both flags are invalid.
 if simDRcrs_flag1 < 1 then
         diff_crs = simDRcrs_plank1 * 5
         crs_fl = 1
@@ -1058,6 +1116,7 @@ end
 
 -- update_weather() owns the radar power lamp along with readiness and native modes.
 
+-- The UBS-dependent information page and stabilized WX view require their respective supply.
 if ubs_pow_r < 1 and info_page_r > 2 then
     info_page_r = 2
 end
@@ -1082,6 +1141,7 @@ else
         nostab_r = 0
 end
 
+-- Trigger the shared switch sound once per physical radar power-switch transition.
 if weather_sys > 0 and sw_sound < 1 then
     if simDR_sw_sound > -2 then
         simDR_sw_sound = -2
@@ -1101,6 +1161,8 @@ if weather_sys < 1 and sw_sound > 0 then
     end
 end   
     
+-- Convert the vertical-speed input and radio altitude to the metric display units.
+-- Retain the 780 m display limit and the half-second radio-altitude rate sampling.
 vvi = simDR_vvi * 0.00508
 radioalt_loc = simDR_radioalt * 0.3048
     
@@ -1180,6 +1242,7 @@ end
     end
     
     
+    -- Separate receiver power from usable route data so invalid guidance can be cleared.
     nav_source_on = simDR_gps_power > 0 and 1 or 0
     nav_source_valid = nav_source_on > 0 and simDR_gps_fromto ~= 0
         and finite(simDR_gps_dme) and simDR_gps_dme >= 0
@@ -1190,6 +1253,7 @@ end
     gs_kmh = simDR_gs * 3.6
     gs_kts = simDR_gs * 1.94
     
+    -- Cap distance to the field width and wrap UTC arrival time at midnight.
     gps_dme_km = nav_source_valid > 0 and math.min(999.9, simDR_gps_dme * 1.852) or 0
     if nav_source_valid > 0 and finite(simDR_gps_min) and simDR_gps_min >= 0 and simDR_gps_min <= 9999 then
         local minutes = math.floor(simDR_gps_min)
@@ -1205,7 +1269,8 @@ end
         gps_min_eta = 0
     end
 
-    -- calculate xtrack
+    -- Derive signed cross-track distance from GPS range and relative bearing.
+    -- Clear both unit variants immediately when route data becomes invalid.
     if nav_source_valid == 0 or not finite(simDR_dtk) or not finite(simDR_bear) then
         kontur_zbok_test = 0
         z_bok_nm = 0
@@ -1234,6 +1299,7 @@ end
     z_bok = kontur_zbok_test * 1.852
 end  
 
+-- Order matters: update screen power/tests, then shared radar and data, then final EFIS layers.
 function after_physics()
     kontur_left()
     kontur_right()

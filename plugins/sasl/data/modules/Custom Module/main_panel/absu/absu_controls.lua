@@ -312,14 +312,14 @@ function update()
   S.MASTER = get(ismaster) ~= 1
 
   -- init once (stored in S to avoid extra locals)
-  S.ILS_LIM              = S.ILS_LIM              or 25
+  S.ILS_LIM              = S.ILS_LIM              or 50
   S.ILS_SPD_LIM          = S.ILS_SPD_LIM          or 40         -- was 50, slightly softer
   S.ILS_GAIN_BASE        = S.ILS_GAIN_BASE        or 1.8        -- was 2.5*(1+), now gentler
   S.ILS_SPD_GAIN_BASE    = S.ILS_SPD_GAIN_BASE    or 1000       -- was 1600, softer
   S.SPIKE_THRESHOLD      = S.SPIKE_THRESHOLD      or 0.8        -- was 1.0
   S.ALPHA_SPIKE          = S.ALPHA_SPIKE          or 0.28       -- was 0.18
   S.ALPHA_NORMAL         = S.ALPHA_NORMAL         or 0.70       -- was 0.55
-  S.APP_INTERCEPT_CAP    = S.APP_INTERCEPT_CAP    or 18         -- was 30/20
+  S.APP_INTERCEPT_CAP    = S.APP_INTERCEPT_CAP    or 30         -- was 30/20
   S.APP_FINE_ROLL_CAP    = S.APP_FINE_ROLL_CAP    or 7.0        -- was 8..10
 
   -- validation + transition smoothing
