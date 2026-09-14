@@ -263,6 +263,8 @@ components = {
 	absu {},
 	-- various lamps
 	misc_lamps {},
+	-- Manual ARM-406 emergency beacon, PDU self-test and local monitor sound.
+	arm406 {},
 	radar {
 		position = {0, 0, 2048, 2048},
 	},

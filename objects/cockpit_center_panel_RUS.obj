@@ -16528,7 +16528,13 @@ ANIM_end
 ANIM_begin
 ANIM_end
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/mid_left_panel_int
-TRIS 0 120
+TRIS 0 108
+# PDU-406: animate only the existing recessed ARM/EMERGENCY face, preserving UVs.
+ANIM_begin
+ANIM_trans 0.000000 0.000000 0.000000 0.000000 -0.000400 0.000000 0.000000 1.000000 tu154/custom/arm406/manual_button
+TRIS 108 6
+ANIM_end
+TRIS 114 6
 ATTR_light_level_reset
 TRIS 120 1140
 ATTR_no_cull

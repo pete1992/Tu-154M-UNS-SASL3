@@ -51,8 +51,12 @@ for (const file of ['objects/gns430.obj', 'tu154_cockpit.obj']) {
     assert.strictEqual(tiltBlock(afterText), tiltBlock(beforeText), 'Working visible tilt animation changed');
   } else {
     const addedQuad = beforeText.includes('tu154/custom/wx2000_windshear') ? 0 : 1;
-    assert(after.vertices.length === before.vertices.length + 4 * addedQuad, 'Expected only one new click quad');
-    assert(after.indices.length === before.indices.length + 6 * addedQuad, 'Expected only two new click triangles');
+    // ARM-406 adds three measured PDU click quads, validated separately by
+    // arm406_geometry_test.js. They must not invalidate unchanged WX geometry.
+    const armQuads = text => text.includes('# PDU-406: measured') ? 3 : 0;
+    const addedQuads = addedQuad + armQuads(afterText) - armQuads(beforeText);
+    assert(after.vertices.length === before.vertices.length + 4 * addedQuads, 'Unexpected click vertices');
+    assert(after.indices.length === before.indices.length + 6 * addedQuads, 'Unexpected click triangles');
     assert(after.coverage.slice(before.coverage.length).every(n => n === 1), 'New click quad coverage wrong');
     assert(afterText.includes('ATTR_manip_axis_knob rotate_medium 0.000000 3.000000 1.000000 1.000000 tu154/custom/kontur/weather_mode'), 'Mode selector must expose 4 detents');
     assert(afterText.includes('ATTR_manip_toggle left_right 1.000000 0.000000 tu154/custom/wx2000_windshear'), 'Windshear click binding missing');

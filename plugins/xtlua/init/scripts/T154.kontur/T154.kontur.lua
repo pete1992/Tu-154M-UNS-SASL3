@@ -269,20 +269,22 @@ local deferred_datarefs = {
     { "weather_ready", "tu154/custom/kontur/weather_ready", "number" },
 }
 
--- xTlua shares a global environment. Only the definitions/helpers are local;
--- the actual DataRef variables remain available to all existing consumers.
+-- xTlua installs property accessors on the script environment, not on parent _G.
+-- Bind there so normal global assignments still call the native DataRef setters.
+-- Only this environment reference is local; the DataRef variables stay script globals.
+local dataref_namespace = getfenv(1)
 local function bind_datarefs(definitions)
     for _, def in ipairs(definitions) do
-        _G[def[1]] = find_dataref(def[2])
+        dataref_namespace[def[1]] = find_dataref(def[2])
     end
 end
 
 local function create_datarefs(definitions)
     for _, def in ipairs(definitions) do
         if def[4] ~= nil then
-            _G[def[1]] = deferred_dataref(def[2], def[3], def[4])
+            dataref_namespace[def[1]] = deferred_dataref(def[2], def[3], def[4])
         else
-            _G[def[1]] = deferred_dataref(def[2], def[3])
+            dataref_namespace[def[1]] = deferred_dataref(def[2], def[3])
         end
     end
 end

@@ -1,18 +1,17 @@
 "use strict";
 
 // Offline structural regression only: this does not load X-Plane or xTlua.
-// Usage: node .codex-tests/kontur_dataref_schema_test.js [aircraft-root] [baseline-ref] [--schema-only]
-// The optional flag excludes unrelated runtime tuning from the migration audit.
+// Usage: node .codex-tests/kontur_dataref_schema_test.js [aircraft-root] [baseline-ref]
 // Freeze the pre-migration revision so later commits do not change the reference.
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { isDeepStrictEqual, inspect } = require("node:util");
 const { execFileSync } = require("node:child_process");
-const schemaOnly = process.argv.includes("--schema-only");
-const positional = process.argv.slice(2).filter(value => value !== "--schema-only");
-const root = path.resolve(positional[0] || path.join(__dirname, ".."));
-const baselineRef = positional[1] || "a1e028306c09bc01724cade33ca044258265623a";
+const root = path.resolve(process.argv[2] || path.join(__dirname, ".."));
+const baselineRef = process.argv[3] || "a1e028306c09bc01724cade33ca044258265623a";
+// Preserve the user's later radar tuning; compare controller logic to the pre-fix revision.
+const runtimeBaselineRef = "f0e066d7bfdeccd387e7fd3036f548c295bcd962";
 const relativePath = "plugins/xtlua/init/scripts/T154.kontur/T154.kontur.lua";
 const cachedParser = "C:/Users/Administrator/AppData/Local/pnpm/store/v11/links/@/luaparse/0.3.1/82dd6c85b5cba35b7b7d3876f24283120e046525c6dbb6fea0be51ebb1912b54/node_modules/luaparse/luaparse.js";
 let luaparse;
@@ -139,15 +138,15 @@ for (const row of creates.rows.filter(row => row.length === 4)) {
 const helperSource = `
 local function bind_datarefs(definitions)
     for _, def in ipairs(definitions) do
-        _G[def[1]] = find_dataref(def[2])
+        dataref_namespace[def[1]] = find_dataref(def[2])
     end
 end
 local function create_datarefs(definitions)
     for _, def in ipairs(definitions) do
         if def[4] ~= nil then
-            _G[def[1]] = deferred_dataref(def[2], def[3], def[4])
+            dataref_namespace[def[1]] = deferred_dataref(def[2], def[3], def[4])
         else
-            _G[def[1]] = deferred_dataref(def[2], def[3])
+            dataref_namespace[def[1]] = deferred_dataref(def[2], def[3])
         end
     end
 end
@@ -163,13 +162,21 @@ for (const expected of helperTemplate) {
         ? statement.type === "FunctionDeclaration" && named(statement.identifier, name)
         : statement.type === "CallStatement" && statement.expression.type === "CallExpression" && named(statement.expression.base, name));
     equal(matches.length, 1, name + (isFunction ? " helper exists exactly once" : " is called exactly once"));
-    equal(clean(matches[0]), clean(expected), name + " follows the exact requested global-binding schema");
+    equal(clean(matches[0]), clean(expected), name + " binds through the actual script namespace");
     removed.add(matches[0]);
     if (!isFunction) calls.push(matches[0]);
 }
 check(current.body.indexOf(calls[0]) < current.body.indexOf(calls[1]), "find bindings precede custom DataRef creation");
 check(current.body.indexOf(finds.declaration) < current.body.indexOf(calls[0]), "find table is initialized before its loop");
 check(current.body.indexOf(creates.declaration) < current.body.indexOf(calls[1]), "creation table is initialized before its loop");
+const namespaceDeclarations = current.body.filter(statement => statement.type === "LocalStatement" &&
+    statement.variables.some(variable => named(variable, "dataref_namespace")));
+equal(namespaceDeclarations.length, 1, "capture the script environment exactly once");
+equal(clean(namespaceDeclarations[0]), clean(parse("local dataref_namespace = getfenv(1)").body[0]),
+    "use the Lua 5.1 script environment, not parent _G");
+check(current.body.indexOf(namespaceDeclarations[0]) < current.body.indexOf(calls[0]),
+    "capture the namespace before binding any properties");
+removed.add(namespaceDeclarations[0]);
 const remainingBindings = [];
 function walk(node) {
     if (!node || typeof node !== "object") return;
@@ -183,21 +190,29 @@ walk(current);
 equal(remainingBindings.length, 0, "no individual DataRef binding assignments remain anywhere");
 
 // All non-declaration runtime code remains exact, including the global creation helper and handle.
-const baselineRuntime = clean(original.body.filter(statement => !directBinding(statement)));
+const runtimeOriginal = parse(execFileSync("git", ["show", runtimeBaselineRef + ":" + relativePath], {
+    cwd: root, encoding: "utf8", maxBuffer: 8 * 1024 * 1024,
+}));
+function isBindingSetup(statement) {
+    if (statement.type === "LocalStatement") {
+        return statement.variables.some(variable => ["find_datarefs", "deferred_datarefs"].includes(variable.name));
+    }
+    if (statement.type === "FunctionDeclaration") {
+        return ["bind_datarefs", "create_datarefs"].some(name => named(statement.identifier, name));
+    }
+    return statement.type === "CallStatement" && statement.expression.type === "CallExpression" &&
+        ["bind_datarefs", "create_datarefs"].some(name => named(statement.expression.base, name));
+}
+const baselineRuntime = clean(runtimeOriginal.body.filter(statement => !isBindingSetup(statement)));
 const baselineDeferred = baselineRuntime.find(statement => statement.type === "FunctionDeclaration" && named(statement.identifier, "deferred_dataref"));
 check(Boolean(baselineDeferred), "baseline deferred_dataref helper exists");
 const handleStatements = baselineDeferred.body.filter(statement => statement.type === "AssignmentStatement" &&
     statement.variables.length === 1 && named(statement.variables[0], "dref"));
 equal(handleStatements.length, 1, "baseline scratch handle has one global assignment");
 const currentRuntime = clean(current.body.filter(statement => !removed.has(statement)));
-const currentDeferred = currentRuntime.find(statement => statement.type === "FunctionDeclaration" && named(statement.identifier, "deferred_dataref"));
-equal(currentDeferred, baselineDeferred, "global creation helper and global dref remain identical");
-if (!schemaOnly) {
-    equal(currentRuntime, baselineRuntime, "all remaining runtime AST is identical, including global deferred_dataref and dref");
-}
+equal(currentRuntime, baselineRuntime, "all remaining runtime AST is identical, including global deferred_dataref and dref");
 
 const initialStateIndex = current.body.findIndex(statement => statement.type === "LocalStatement" &&
     statement.variables.some(variable => named(variable, "radioalt_loc")));
 check(initialStateIndex > current.body.indexOf(calls[1]), "all bindings are available before controller state initialization");
-console.log(`PASS Kontur DataRef schema: ${finds.rows.length} existing bindings, ${creates.rows.length} created DataRefs; ${checks} structural checks.`);
-console.log(schemaOnly ? "SKIP full runtime comparison (--schema-only); global creation helper is still checked." : "PASS remaining runtime AST unchanged.");
+console.log(`PASS Kontur DataRef schema: ${finds.rows.length} existing bindings, ${creates.rows.length} created DataRefs; ${checks} structural checks; remaining runtime AST unchanged.`);

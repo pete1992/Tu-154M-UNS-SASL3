@@ -47,8 +47,12 @@ local function controller()
             end
         end,
     })
-    -- Mirror xTlua's shared global table inside this isolated fixture.
-    env._G = env
+    -- Parent _G is separate from the script environment in the real xTlua loader.
+    -- Supply Lua 5.1 getfenv only when running this fixture under Fengari (Lua 5.3).
+    env.getfenv = getfenv or function(level)
+        assert(level == 1, "Fixture supports the current script environment only")
+        return env
+    end
     env.print = function() end
     env.find_dataref = function(name) return {dataref_handle = true, path = name, kind = "number"} end
     env.XLuaCreateDataRef = function(name, kind, writable, notifier)

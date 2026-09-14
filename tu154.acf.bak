@@ -14258,7 +14258,7 @@ P _engn/0/_part_y 1.600000024
 P _engn/0/_part_z 110.000000000
 P _engn/0/_power_max_limit 0.000000000
 P _engn/0/_thrust_max_limit 2.555E4
-P _engn/0/_type JET_2SPOOL
+P _engn/0/_type JET_1SPOOL
 P _engn/1/_RSC_max_pwr_ENGN 1.000000000
 P _engn/1/_RSC_redline_ENGN 1.000000000
 P _engn/1/_burner_inc 0.000000000
@@ -14277,7 +14277,7 @@ P _engn/1/_part_y 2.599999905
 P _engn/1/_part_z 125.000000000
 P _engn/1/_power_max_limit 0.000000000
 P _engn/1/_thrust_max_limit 2.555E4
-P _engn/1/_type JET_2SPOOL
+P _engn/1/_type JET_1SPOOL
 P _engn/2/_RSC_max_pwr_ENGN 1.000000000
 P _engn/2/_RSC_redline_ENGN 1.000000000
 P _engn/2/_burner_inc 0.000000000
@@ -14296,7 +14296,7 @@ P _engn/2/_part_y 1.600000024
 P _engn/2/_part_z 110.000000000
 P _engn/2/_power_max_limit 0.000000000
 P _engn/2/_thrust_max_limit 2.555E4
-P _engn/2/_type JET_2SPOOL
+P _engn/2/_type JET_1SPOOL
 P _engn/count 16
 P _gear/0/_axiE 0.000000000
 P _gear/0/_axiR 0.000000000
@@ -47904,9 +47904,9 @@ P acf/_jet_N1_hicrz 90.000000000
 P acf/_jet_N1_locrz 80.000000000
 P acf/_jet_N1_takeoff 100.000000000
 P acf/_jet_SFC_climb 0.728999972
-P acf/_jet_SFC_hicrz 0.728999972
+P acf/_jet_SFC_hicrz 0.497999996
 P acf/_jet_SFC_locrz 0.714999974
-P acf/_jet_SFC_takeoff 0.497999996
+P acf/_jet_SFC_takeoff 0.728999972
 P acf/_jett_is_pipe 0
 P acf/_jett_is_ret 0
 P acf/_jett_is_slung 0
