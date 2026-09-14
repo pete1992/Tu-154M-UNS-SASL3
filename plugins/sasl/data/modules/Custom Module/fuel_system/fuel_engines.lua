@@ -17,6 +17,10 @@ defineProps({
     { "pump_tank1_2_work", "tu154/custom/fuel/pump_tank1_2_work", globalPropertyi },
     { "pump_tank1_3_work", "tu154/custom/fuel/pump_tank1_3_work", globalPropertyi },
     { "pump_tank1_4_work", "tu154/custom/fuel/pump_tank1_4_work", globalPropertyi },
+    { "pump_tank1_1_on", "tu154/custom/switchers/fuel/pump_tank1_1", globalPropertyi },
+    { "pump_tank1_2_on", "tu154/custom/switchers/fuel/pump_tank1_2", globalPropertyi },
+    { "pump_tank1_3_on", "tu154/custom/switchers/fuel/pump_tank1_3", globalPropertyi },
+    { "pump_tank1_4_on", "tu154/custom/switchers/fuel/pump_tank1_4", globalPropertyi },
 
     -- Mixture handles
     { "eng_mix_1", "sim/cockpit2/engine/actuators/mixture_ratio[0]", globalProperty }, --
@@ -30,6 +34,7 @@ defineProps({
 
     -- time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "startup_running", "sim/operation/prefs/startup_running", globalPropertyi },
 
     -- results
     { "eng_fuel_press_1", "tu154/custom/fuel/eng_fuel_press_1", globalPropertyi }, --      .   -
@@ -92,9 +97,46 @@ local mix_1_last = get(eng_mix_1)
 local mix_2_last = get(eng_mix_2)
 local mix_3_last = get(eng_mix_3)
 
+local flight_setup_pending = true
+local pending_hot_start = nil
+local startup_prime_remaining = 0
+
+function onAirportLoaded()
+    -- SASL dispatches this for a new user flight, even when the aircraft's
+    -- scripts remain loaded. Do not carry closed valves into a hot start.
+    pending_hot_start = get(startup_running) ~= 0
+    flight_setup_pending = true
+end
+
+local function initializeFuelState()
+    local hot = pending_hot_start
+    pending_hot_start = nil
+    if hot == nil then hot = get(startup_running) ~= 0 end
+    if get(ismaster) ~= 1 then
+        local position = hot and 1 or 0
+        valve_1, valve_2, valve_3 = position, position, position
+        press_count_1, press_count_2, press_count_3 = position, position, position
+        -- A running-flight preset has primed fuel lines. Allow the existing
+        -- generator contactors (2 s) and boost pumps (1.125 s) to initialize,
+        -- including when a previously cold aircraft starts a new flight aloft.
+        -- This is consumed once, never renewed by the running preference.
+        startup_prime_remaining = hot and 4 or 0
+    else
+        startup_prime_remaining = 0
+        -- A shared-cockpit slave follows received state, not its local preset.
+        valve_1, valve_2, valve_3 = get(fire_vlv_open_1), get(fire_vlv_open_2), get(fire_vlv_open_3)
+        press_count_1, press_count_2, press_count_3 = get(eng_fuel_press_1), get(eng_fuel_press_2), get(eng_fuel_press_3)
+    end
+    mix_1_last, mix_2_last, mix_3_last = get(eng_mix_1), get(eng_mix_2), get(eng_mix_3)
+    flight_setup_pending = false
+end
+
 function update()
 
+	if flight_setup_pending then initializeFuelState() end
+
 	local passed = get(frame_time)
+	startup_prime_remaining = math.max(0, startup_prime_remaining - passed)
 	
 	-- mixture logic
 	local mix_1 = get(eng_mix_1)
@@ -157,13 +199,17 @@ function update()
 		else press_count_3 = 0 press_3 = 0 end
 		
 	else
-		press_1 = 0
-		press_2 = 0
-		press_3 = 0
-		
-		press_count_1 = 0
-		press_count_2 = 0
-		press_count_3 = 0
+		-- Preserve only the finite initial priming interval, and only while
+		-- pumps are requested. Deliberate pump shutdown cancels it immediately;
+		-- a failed supply still loses pressure when the interval expires.
+		local pumps_requested = get(pump_tank1_1_on) + get(pump_tank1_2_on)
+			+ get(pump_tank1_3_on) + get(pump_tank1_4_on) > 0
+		if not pumps_requested then startup_prime_remaining = 0 end
+		local primed = startup_prime_remaining > 0
+		press_1 = bool2int(primed and valve_1 > 0.7)
+		press_2 = bool2int(primed and valve_2 > 0.7)
+		press_3 = bool2int(primed and valve_3 > 0.7)
+		press_count_1, press_count_2, press_count_3 = press_1, press_2, press_3
 	end
 
 local MSL = get(elevation)

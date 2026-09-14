@@ -97,7 +97,7 @@ local but_summ_last = 0
 -- ----------------------------------------------------------------------------
 local function sw_reset()
 	-- Reset switches only when engines are not running
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(diss_on, 0)
 		set(diss_mode, 0)
 		set(nvu_calc_set, 0)

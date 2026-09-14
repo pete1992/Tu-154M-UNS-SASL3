@@ -198,7 +198,8 @@ test("native GS loss disengages once and never silently recaptures", function(r)
     r:modes(2, 2, 6, 5, "automatic GS capture from native centered beam")
     r:set(r.nav[1], "gs_flag", 0)
     local previous, exits = 5, 0
-    for _ = 1, 150 do
+    -- Run beyond the controller's existing five-second signal-loss grace.
+    for _ = 1, 260 do
         r:step()
         local current = r:get(r.mode, "pitch_sub_mode")
         if previous == 5 and current ~= 5 then exits = exits + 1 end

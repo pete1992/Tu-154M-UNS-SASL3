@@ -74,6 +74,11 @@ defineProps({
     { "rud_2_spd", "tu154/custom/absu/rud_2_spd", globalPropertyf },
     -- Engine 3 ABSU throttle movement command
     { "rud_3_spd", "tu154/custom/absu/rud_3_spd", globalPropertyf },
+    -- AT lever ownership: keep pilot movement pending until the servo releases.
+    { "stu_mode", "tu154/custom/absu/stu_mode", globalPropertyi },
+    { "absu_throt_off_1", "tu154/custom/buttons/console/absu_throt_off_1", globalPropertyi },
+    { "absu_throt_off_2", "tu154/custom/buttons/console/absu_throt_off_2", globalPropertyi },
+    { "absu_throt_off_3", "tu154/custom/buttons/console/absu_throt_off_3", globalPropertyi },
     -- Engine 1 throttle-control failure
     { "comsta0", "sim/operation/failures/rel_comsta0", globalPropertyi },
     -- Engine 2 throttle-control failure
@@ -181,6 +186,7 @@ local initial_throttle_3 = safeClamp(get(tro_comm_3), 0, 1, 0)
 local joy_pos_last_1 = initial_throttle_1
 local joy_pos_last_2 = initial_throttle_2
 local joy_pos_last_3 = initial_throttle_3
+local at_owned_last_1, at_owned_last_2, at_owned_last_3 = false, false, false
 local virtual_rud_1 = 0.02
 local virtual_rud_2 = 0.02
 local virtual_rud_3 = 0.02
@@ -407,24 +413,37 @@ function update()
 			get(tro_comm_2),
 			get(tro_comm_3)
 		)
-	if rud_spd_1 ~= 0 then
-		joy_rud_pos_1 = joy_rud_pos_1 + rud_spd_1 * passed
-	elseif math.abs(joy_pos_1 - joy_pos_last_1) > 0.001 then
+	local at_active = get(stu_mode) >= 3
+	local at_owned_1 = at_active and get(absu_throt_off_1) == 0
+	local at_owned_2 = at_active and get(absu_throt_off_2) == 0
+	local at_owned_3 = at_active and get(absu_throt_off_3) == 0
+	-- Capture physical input at engagement, not the AT-driven virtual position.
+	if at_owned_1 and not at_owned_last_1 then joy_pos_last_1 = joy_pos_1 end
+	if at_owned_2 and not at_owned_last_2 then joy_pos_last_2 = joy_pos_2 end
+	if at_owned_3 and not at_owned_last_3 then joy_pos_last_3 = joy_pos_3 end
+	-- Mode release may precede the AT update that clears its last rate. Pending
+	-- pilot input must win over that stale command, regardless of update order.
+	if not at_owned_1 and math.abs(joy_pos_1 - joy_pos_last_1) > 0.001 then
 		joy_rud_pos_1 = joy_pos_1
+	elseif rud_spd_1 ~= 0 then
+		joy_rud_pos_1 = joy_rud_pos_1 + rud_spd_1 * passed
 	end
-	if rud_spd_2 ~= 0 then
-		joy_rud_pos_2 = joy_rud_pos_2 + rud_spd_2 * passed
-	elseif math.abs(joy_pos_2 - joy_pos_last_2) > 0.001 then
+	if not at_owned_2 and math.abs(joy_pos_2 - joy_pos_last_2) > 0.001 then
 		joy_rud_pos_2 = joy_pos_2
+	elseif rud_spd_2 ~= 0 then
+		joy_rud_pos_2 = joy_rud_pos_2 + rud_spd_2 * passed
 	end
-	if rud_spd_3 ~= 0 then
-		joy_rud_pos_3 = joy_rud_pos_3 + rud_spd_3 * passed
-	elseif math.abs(joy_pos_3 - joy_pos_last_3) > 0.001 then
+	if not at_owned_3 and math.abs(joy_pos_3 - joy_pos_last_3) > 0.001 then
 		joy_rud_pos_3 = joy_pos_3
+	elseif rud_spd_3 ~= 0 then
+		joy_rud_pos_3 = joy_rud_pos_3 + rud_spd_3 * passed
 	end
-	if math.abs(joy_pos_last_1 - joy_pos_1) > 0.001 then joy_pos_last_1 = joy_pos_1 end
-	if math.abs(joy_pos_last_2 - joy_pos_2) > 0.001 then joy_pos_last_2 = joy_pos_2 end
-	if math.abs(joy_pos_last_3 - joy_pos_3) > 0.001 then joy_pos_last_3 = joy_pos_3 end
+	-- Do not consume pilot movement while AT is driving. Once disengaged, the
+	-- pending input is applied even if the physical lever has already stopped.
+	if not at_owned_1 and math.abs(joy_pos_last_1 - joy_pos_1) > 0.001 then joy_pos_last_1 = joy_pos_1 end
+	if not at_owned_2 and math.abs(joy_pos_last_2 - joy_pos_2) > 0.001 then joy_pos_last_2 = joy_pos_2 end
+	if not at_owned_3 and math.abs(joy_pos_last_3 - joy_pos_3) > 0.001 then joy_pos_last_3 = joy_pos_3 end
+	at_owned_last_1, at_owned_last_2, at_owned_last_3 = at_owned_1, at_owned_2, at_owned_3
 	if joy_rud_pos_1 > 1 then joy_rud_pos_1 = 1
 	elseif joy_rud_pos_1 < 0 then joy_rud_pos_1 = 0 end
 	if joy_rud_pos_2 > 1 then joy_rud_pos_2 = 1

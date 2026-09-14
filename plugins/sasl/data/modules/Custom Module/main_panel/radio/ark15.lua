@@ -1,58 +1,67 @@
 -- this is ARK panel
 
 -- source
-defineProperty("left_freq", globalPropertyf("sim/cockpit2/radios/actuators/adf1_left_frequency_hz"))  -- left frequency
-defineProperty("right_freq", globalPropertyf("sim/cockpit2/radios/actuators/adf1_right_frequency_hz"))  -- right frequency
-defineProperty("active", globalPropertyf("sim/cockpit2/radios/actuators/adf1_right_is_selected"))  -- selector of active disk. 0 - left, 1 - right 
-defineProperty("fail", globalPropertyf("sim/operation/failures/rel_adf1"))
-defineProperty("adf", globalPropertyf("sim/cockpit2/radios/indicators/adf1_relative_bearing_deg"))
-defineProperty("audio_selection", globalPropertyi("sim/cockpit2/radios/actuators/audio_selection_adf1"))
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+defineProps({
+    { "left_freq", "sim/cockpit2/radios/actuators/adf1_left_frequency_hz", globalPropertyf },  -- left frequency
+    { "right_freq", "sim/cockpit2/radios/actuators/adf1_right_frequency_hz", globalPropertyf },  -- right frequency
+    { "active", "sim/cockpit2/radios/actuators/adf1_right_is_selected", globalPropertyf },  -- selector of active disk. 0 - left, 1 - right
+    { "fail", "sim/operation/failures/rel_adf1", globalPropertyf },
+    { "adf", "sim/cockpit2/radios/indicators/adf1_relative_bearing_deg", globalPropertyf },
+    { "audio_selection", "sim/cockpit2/radios/actuators/audio_selection_adf1", globalPropertyi },
 
--- controls
-defineProperty("ark_mode", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_mode")) --   1 0 - , 1 - , 2 - , 3 - 
-defineProperty("ark_channel", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_channel")) --   1
-defineProperty("ark_hundr_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_hundr_left")) --   1 - 17
-defineProperty("ark_tens_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_tens_left")) --   1 - 10 (0)
-defineProperty("ark_ones_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_ones_left")) --   0 - 9
-defineProperty("ark_hundr_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_hundr_right")) --   1 - 17
-defineProperty("ark_tens_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_tens_right")) --   1 - 10 (0)
-defineProperty("ark_ones_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_ones_right")) --   0 - 9
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("ark_ramka", globalPropertyi("tu154/custom/buttons/ovhd/ark_1_ramka")) --  
+    -- controls
+    { "ark_mode", "tu154/custom/switchers/ovhd/ark_1_mode", globalPropertyi }, --   1 0 - , 1 - , 2 - , 3 -
+    { "ark_channel", "tu154/custom/switchers/ovhd/ark_1_channel", globalPropertyi }, --   1
+    { "ark_hundr_left", "tu154/custom/switchers/ovhd/ark_1_hundr_left", globalPropertyi }, --   1 - 17
+    { "ark_tens_left", "tu154/custom/switchers/ovhd/ark_1_tens_left", globalPropertyi }, --   1 - 10 (0)
+    { "ark_ones_left", "tu154/custom/switchers/ovhd/ark_1_ones_left", globalPropertyi }, --   0 - 9
+    { "ark_hundr_right", "tu154/custom/switchers/ovhd/ark_1_hundr_right", globalPropertyi }, --   1 - 17
+    { "ark_tens_right", "tu154/custom/switchers/ovhd/ark_1_tens_right", globalPropertyi }, --   1 - 10 (0)
+    { "ark_ones_right", "tu154/custom/switchers/ovhd/ark_1_ones_right", globalPropertyi }, --   0 - 9
 
--- light
-defineProperty("ark_left_lit", globalPropertyf("tu154/custom/lights/ark1_left_lit")) --     1
-defineProperty("ark_right_lit", globalPropertyf("tu154/custom/lights/ark1_right_lit")) --     1
-defineProperty("ark_all_lit", globalPropertyf("tu154/custom/lights/ark1_all_lit")) --   1
+    { "ark_ramka", "tu154/custom/buttons/ovhd/ark_1_ramka", globalPropertyi }, --
 
--- power
-defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus36_volt", globalPropertyf("tu154/custom/elec/bus36_volt_left"))
+    -- light
+    { "ark_left_lit", "tu154/custom/lights/ark1_left_lit", globalPropertyf }, --     1
+    { "ark_right_lit", "tu154/custom/lights/ark1_right_lit", globalPropertyf }, --     1
+    { "ark_all_lit", "tu154/custom/lights/ark1_all_lit", globalPropertyf }, --   1
 
-defineProperty("ark15_cc", globalPropertyf("tu154/custom/radio/ark15_L_cc")) --   
+    -- power
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus36_volt", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
 
--- failures
+    { "ark15_cc", "tu154/custom/radio/ark15_L_cc", globalPropertyf }, --
 
--- results
-defineProperty("adf_bear", globalPropertyf("tu154/custom/radio/adf_bear_1"))
+    -- failures
 
--- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
+    -- results
+    { "adf_bear", "tu154/custom/radio/adf_bear_1", globalPropertyf },
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- engines
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
+
 
 local notLoaded = true
 local start_timer = 0
 
 local function sw_reset()
 
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(ark_mode, 0)
 	
 	end

@@ -10,8 +10,8 @@
 -----------------------------------------------------------------------
 -- Smartcopilot
 -----------------------------------------------------------------------
-defineProperty("ismaster",    globalPropertyf("scp/api/ismaster"))   -- 0 = plugin not found, 1 = slave, 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- 1 = no control, 2 = has control
+
+
 
 -- ----------------------------------------------------------------------------
 -- Property binder
@@ -26,6 +26,9 @@ end
 -- Properties
 -- ----------------------------------------------------------------------------
 defineProps({
+    -- SmartCopilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf },   -- 0 = plugin not found, 1 = slave, 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control
 	-- Aircraft heading / attitude / position
 	{ "true_psi", "sim/flightmodel/position/true_psi", globalPropertyf },
 	{ "mag_psi", "sim/flightmodel/position/mag_psi", globalPropertyf },
@@ -90,8 +93,8 @@ defineProps({
 -----------------------------------------------------------------------
 -- Smartcopilot
 -----------------------------------------------------------------------
-defineProperty("ismaster",    globalPropertyf("scp/api/ismaster"))   -- 0 = plugin not found, 1 = slave, 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- 1 = no control, 2 = has control
+
+
 
 -- ----------------------------------------------------------------------------
 -- State
@@ -123,7 +126,7 @@ local start_timer = 0
 -- ----------------------------------------------------------------------------
 local function sw_reset()
 	-- Randomize course on cold start only when engines are not running
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		course_1 = math.random(-180, 180)
 		course_2 = math.random(-180, 180)
 		set(course_ga_1, course_1)

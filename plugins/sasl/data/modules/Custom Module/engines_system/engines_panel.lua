@@ -191,7 +191,7 @@ local function reportEngineWarning(engine, rpm, oil_p, reverse, vibr, chips, fue
 end
 
 local function reset_switchers()
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(gauges_on_1, 0)
 		set(gauges_on_2, 0)
 		set(gauges_on_3, 0)

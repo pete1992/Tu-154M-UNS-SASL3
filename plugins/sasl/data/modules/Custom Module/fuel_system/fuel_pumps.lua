@@ -1,67 +1,71 @@
 -- this is fuel pumps logic
 
--- fuel ammount
-defineProperty("tank1_w", globalProperty("sim/flightmodel/weight/m_fuel[0]")) -- fuel weight
-defineProperty("tank4_w", globalProperty("sim/flightmodel/weight/m_fuel[1]")) -- fuel weight
-defineProperty("tank2R_w", globalProperty("sim/flightmodel/weight/m_fuel[2]")) -- fuel weight
-defineProperty("tank2L_w", globalProperty("sim/flightmodel/weight/m_fuel[3]")) -- fuel weight
-defineProperty("tank3R_w", globalProperty("sim/flightmodel/weight/m_fuel[4]")) -- fuel weight
-defineProperty("tank3L_w", globalProperty("sim/flightmodel/weight/m_fuel[5]")) -- fuel weight
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
--- controls
-defineProperty("pump_tank2_left", globalPropertyi("tu154/custom/switchers/fuel/pump_tank2_left")) --   2
-defineProperty("pump_tank2_right", globalPropertyi("tu154/custom/switchers/fuel/pump_tank2_right")) --   2
-defineProperty("pump_tank3_left", globalPropertyi("tu154/custom/switchers/fuel/pump_tank3_left")) --   3
-defineProperty("pump_tank3_right", globalPropertyi("tu154/custom/switchers/fuel/pump_tank3_right")) --   3
-defineProperty("pump_tank4", globalPropertyi("tu154/custom/switchers/fuel/pump_tank4")) --   4
-defineProperty("pump_tank1_1", globalPropertyi("tu154/custom/switchers/fuel/pump_tank1_1")) --   1
-defineProperty("pump_tank1_2", globalPropertyi("tu154/custom/switchers/fuel/pump_tank1_2")) --   1
-defineProperty("pump_tank1_3", globalPropertyi("tu154/custom/switchers/fuel/pump_tank1_3")) --   1
-defineProperty("pump_tank1_4", globalPropertyi("tu154/custom/switchers/fuel/pump_tank1_4")) --   1
+defineProps({
+    -- Fuel quantities
+    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty },
+    { "tank4_w", "sim/flightmodel/weight/m_fuel[1]", globalProperty },
+    { "tank2R_w", "sim/flightmodel/weight/m_fuel[2]", globalProperty },
+    { "tank2L_w", "sim/flightmodel/weight/m_fuel[3]", globalProperty },
+    { "tank3R_w", "sim/flightmodel/weight/m_fuel[4]", globalProperty },
+    { "tank3L_w", "sim/flightmodel/weight/m_fuel[5]", globalProperty },
 
-defineProperty("fuel_level", globalPropertyi("tu154/custom/switchers/fuel/fuel_level")) --  
-defineProperty("fuel_flow_mode", globalPropertyi("tu154/custom/switchers/fuel/fuel_flow_mode")) --  .  - 
-defineProperty("fuel_flow_on", globalPropertyi("tu154/custom/switchers/fuel/fuel_flow_on")) --  
+    -- Controls
+    { "pump_tank2_left", "tu154/custom/switchers/fuel/pump_tank2_left", globalPropertyi },
+    { "pump_tank2_right", "tu154/custom/switchers/fuel/pump_tank2_right", globalPropertyi },
+    { "pump_tank3_left", "tu154/custom/switchers/fuel/pump_tank3_left", globalPropertyi },
+    { "pump_tank3_right", "tu154/custom/switchers/fuel/pump_tank3_right", globalPropertyi },
+    { "pump_tank4", "tu154/custom/switchers/fuel/pump_tank4", globalPropertyi },
+    { "pump_tank1_1", "tu154/custom/switchers/fuel/pump_tank1_1", globalPropertyi },
+    { "pump_tank1_2", "tu154/custom/switchers/fuel/pump_tank1_2", globalPropertyi },
+    { "pump_tank1_3", "tu154/custom/switchers/fuel/pump_tank1_3", globalPropertyi },
+    { "pump_tank1_4", "tu154/custom/switchers/fuel/pump_tank1_4", globalPropertyi },
+    { "fuel_level", "tu154/custom/switchers/fuel/fuel_level", globalPropertyi },
+    { "fuel_flow_mode", "tu154/custom/switchers/fuel/fuel_flow_mode", globalPropertyi },
+    { "fuel_flow_on", "tu154/custom/switchers/fuel/fuel_flow_on", globalPropertyi },
 
--- power sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_2_volt", globalPropertyf("tu154/custom/elec/bus115_2_volt"))
+    -- Power sources
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
 
--- failures
-defineProperty("fuel_auto_fail", globalPropertyi("tu154/custom/failures/fuel_auto_fail"))
-defineProperty("fuel_level_fail", globalPropertyi("tu154/custom/failures/fuel_level_fail"))
+    -- Failures (pump values count the failed pumps)
+    { "fuel_auto_fail", "tu154/custom/failures/fuel_auto_fail", globalPropertyi },
+    { "fuel_level_fail", "tu154/custom/failures/fuel_level_fail", globalPropertyi },
+    { "fuel_pump_2l_fail", "tu154/custom/failures/fuel_pump_2l_fail", globalPropertyi },
+    { "fuel_pump_2r_fail", "tu154/custom/failures/fuel_pump_2r_fail", globalPropertyi },
+    { "fuel_pump_3l_fail", "tu154/custom/failures/fuel_pump_3l_fail", globalPropertyi },
+    { "fuel_pump_3r_fail", "tu154/custom/failures/fuel_pump_3r_fail", globalPropertyi },
+    { "fuel_pump_1_fail", "tu154/custom/failures/fuel_pump_1_fail", globalPropertyi },
+    { "fuel_pump_4_fail", "tu154/custom/failures/fuel_pump_4_fail", globalPropertyi },
 
-defineProperty("fuel_pump_2l_fail", globalPropertyi("tu154/custom/failures/fuel_pump_2l_fail")) -- number of failed pumps
-defineProperty("fuel_pump_2r_fail", globalPropertyi("tu154/custom/failures/fuel_pump_2r_fail"))
-defineProperty("fuel_pump_3l_fail", globalPropertyi("tu154/custom/failures/fuel_pump_3l_fail"))
-defineProperty("fuel_pump_3r_fail", globalPropertyi("tu154/custom/failures/fuel_pump_3r_fail"))
-defineProperty("fuel_pump_1_fail", globalPropertyi("tu154/custom/failures/fuel_pump_1_fail"))
-defineProperty("fuel_pump_4_fail", globalPropertyi("tu154/custom/failures/fuel_pump_4_fail"))
+    -- Pump operating states
+    { "pump_tank2_left_work", "tu154/custom/fuel/pump_tank2_left_work", globalPropertyi },
+    { "pump_tank2_right_work", "tu154/custom/fuel/pump_tank2_right_work", globalPropertyi },
+    { "pump_tank3_left_work", "tu154/custom/fuel/pump_tank3_left_work", globalPropertyi },
+    { "pump_tank3_right_work", "tu154/custom/fuel/pump_tank3_right_work", globalPropertyi },
+    { "pump_tank4_work", "tu154/custom/fuel/pump_tank4_work", globalPropertyi },
+    { "pump_tank1_1_work", "tu154/custom/fuel/pump_tank1_1_work", globalPropertyi },
+    { "pump_tank1_2_work", "tu154/custom/fuel/pump_tank1_2_work", globalPropertyi },
+    { "pump_tank1_3_work", "tu154/custom/fuel/pump_tank1_3_work", globalPropertyi },
+    { "pump_tank1_4_work", "tu154/custom/fuel/pump_tank1_4_work", globalPropertyi },
+    -- Automatic tank sequence: 0=none, 1=tank 2, 2=tanks 2+3, 3=tank 3, 4=tank 4
+    { "auto_tanks_turn", "tu154/custom/fuel/auto_tanks_turn", globalPropertyi },
+    -- Tank-level balancing: -1=left, 0=none, +1=right
+    { "auto_tank_level_2", "tu154/custom/fuel/auto_tank_level_2", globalPropertyi },
+    { "auto_tank_level_3", "tu154/custom/fuel/auto_tank_level_3", globalPropertyi },
+    { "fuel_pumps_115_1_cc", "tu154/custom/elec/fuel_pumps_115_1_cc", globalPropertyf },
+    { "fuel_pumps_115_3_cc", "tu154/custom/elec/fuel_pumps_115_3_cc", globalPropertyf },
 
--- results
-defineProperty("pump_tank2_left_work", globalPropertyi("tu154/custom/fuel/pump_tank2_left_work")) -- number of working pumps
-defineProperty("pump_tank2_right_work", globalPropertyi("tu154/custom/fuel/pump_tank2_right_work")) -- number of working pumps
-defineProperty("pump_tank3_left_work", globalPropertyi("tu154/custom/fuel/pump_tank3_left_work")) -- number of working pumps
-defineProperty("pump_tank3_right_work", globalPropertyi("tu154/custom/fuel/pump_tank3_right_work")) -- number of working pumps
-defineProperty("pump_tank4_work", globalPropertyi("tu154/custom/fuel/pump_tank4_work")) -- number of working pumps
-defineProperty("pump_tank1_1_work", globalPropertyi("tu154/custom/fuel/pump_tank1_1_work"))
-defineProperty("pump_tank1_2_work", globalPropertyi("tu154/custom/fuel/pump_tank1_2_work"))
-defineProperty("pump_tank1_3_work", globalPropertyi("tu154/custom/fuel/pump_tank1_3_work"))
-defineProperty("pump_tank1_4_work", globalPropertyi("tu154/custom/fuel/pump_tank1_4_work"))
-
-defineProperty("auto_tanks_turn", globalPropertyi("tu154/custom/fuel/auto_tanks_turn")) -- 0 = none, 1 = 2, 2 = 2+3, 3 = 3, 4 = 4
---defineProperty("auto_tank_level", globalPropertyi("tu154/custom/fuel/auto_tank_level")) --   . -2 - 2L, -3 - 3L, +3 - 3R, +2 - 2R	0
-
-defineProperty("auto_tank_level_2", globalPropertyi("tu154/custom/fuel/auto_tank_level_2")) --    2. -1 = L, 0 = none, +1 = R	0
-defineProperty("auto_tank_level_3", globalPropertyi("tu154/custom/fuel/auto_tank_level_3")) --    3. -1 = L, 0 = none, +1 = R	0
-
-defineProperty("fuel_pumps_115_1_cc", globalPropertyf("tu154/custom/elec/fuel_pumps_115_1_cc")) --    1   
-defineProperty("fuel_pumps_115_3_cc", globalPropertyf("tu154/custom/elec/fuel_pumps_115_3_cc")) --    3   
-
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    -- Simulation time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+})
 
 -- fuel press after pumps
 local pump_1_1_P = 1

@@ -1,10 +1,10 @@
 -- absu_panel.lua
 
 -----------------------------------------------------------------------
--- Smartcopilot (must stay at the top, not in the bulk list)
+-- SmartCopilot properties are bound below with the other DataRefs.
 -----------------------------------------------------------------------
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster"))      -- 0 = not found, 1 = slave, 2 = master (project-specific)
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- 1 = no control, 2 = has control (project-specific)
+
+
 
 -----------------------------------------------------------------------
 -- Helpers
@@ -23,6 +23,9 @@ end
 -- Bulk DataRef definitions
 -----------------------------------------------------------------------
 defineProps({
+    -- SmartCopilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf },      -- 0 = not found, 1 = slave, 2 = master (project-specific)
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control (project-specific)
     -- timing
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- time of frame
 
@@ -248,7 +251,7 @@ local cap_sound      = sasl.al.loadSample('Custom Sounds/cap.wav')
 -----------------------------------------------------------------------
 local function sw_reset()
     -- Reset switches if all engines are stopped
-    if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+    if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
         set(absu_needles_on, 0)
         set(absu_nav_on, 0)
         set(absu_speed_prepare, 0)

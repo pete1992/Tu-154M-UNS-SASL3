@@ -1,31 +1,26 @@
 -- Anti-ice system logic.
 
---[[
-- 70 aktive Property-Bindungen in eine lokale defineProps()-Struktur überführt.
-- Property-Namen, Dataref-Pfade, Konstruktoren und Reihenfolge 1:1 beibehalten.
-- Alle russischen Kommentare entfernt bzw. durch englische ersetzt.
-- update() vollständig neu formatiert und logisch gegliedert.
-
-- Wiederholte Reads reduziert:
-	IAS
-	Engine-Anti-Ice-Schalter
-	Engine-Icing-Failures
-	rio_fail
-	bus115_2_volt
-	Außentemperaturberechnung
-	math.max(out_term * 1, 0) wird nur noch einmal pro Frame berechnet.
-	math.max(0, wing_tube) wird für beide Tragflächen nur einmal berechnet.
-	power115_2 wird jetzt tatsächlich für die Slat-Logik verwendet, statt das Dataref erneut abzufragen.
-	Window-Ice-Zustände verwenden jetzt clamp(..., 0, 1).
-	Die drei bislang ungenutzten power_CC_115_*-Variablen wurden nicht entfernt.
-	hascontrol_1 bleibt ebenfalls erhalten.
-	Die deaktivierten alten hot_tube_t-/eng_airvalve_*-Bindungen bleiben als deaktivierte Referenzen vorhanden.
---]]
+-- Three windshield circuits drive native XP12 thermal sources; PPD switches
+-- protect pilot, copilot and standby probe groups. Existing inlet/wing logic
+-- and electrical loads are retained. Native ice is observed, never reset.
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))
     end
+end
+
+-- SASL array-element access is one-based; callers use X-Plane's zero-based index.
+local function intElement(index)
+    return function(path) return globalPropertyiae(path, index + 1) end
+end
+
+local function floatElement(index)
+    return function(path) return globalPropertyfae(path, index + 1) end
+end
+
+local function defrostTime(path)
+    return createGlobalPropertyf(path, 1 / 0.015)
 end
 
 defineProps({
@@ -51,11 +46,19 @@ defineProps({
     { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
     -- Icing sources and environmental data
     { "window_ice", "sim/flightmodel/failures/window_ice", globalPropertyf },
+    -- The native accretion rate remains meaningful at zero/full ice and does not
+    -- require corrupting a visible windshield's ice ratio to use it as a sensor.
+    { "native_ice_rate", "sim/flightmodel/failures/ice_delta", globalPropertyf },
+    { "native_ice_unheated", "sim/flightmodel/failures/window_ice_unheated", globalPropertyf },
+    { "native_ice_left", "sim/flightmodel/failures/window_ice_per_window", floatElement(0) },
+    { "native_ice_right", "sim/flightmodel/failures/window_ice_per_window", floatElement(1) },
+    { "native_ice_center", "sim/flightmodel/failures/window_ice_per_window", floatElement(2) },
     { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf },
     { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf },
     { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf },
     { "termo", "sim/weather/temperature_ambient_c", globalPropertyf },
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "sim_paused", "sim/time/paused", globalPropertyi },
     { "IAS", "sim/flightmodel/position/indicated_airspeed", globalPropertyf },
     { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
@@ -66,6 +69,10 @@ defineProps({
     { "rel_ice_inlet_heat3", "sim/operation/failures/rel_ice_inlet_heat3", globalPropertyi },
     { "rel_ice_pitot_heat1", "sim/operation/failures/rel_ice_pitot_heat1", globalPropertyi },
     { "rel_ice_pitot_heat2", "sim/operation/failures/rel_ice_pitot_heat2", globalPropertyi },
+    { "rel_ice_pitot_heat3", "sim/operation/failures/rel_ice_pitot_heat_stby", globalPropertyi },
+    { "native_window_fail_left", "sim/operation/failures/rel_ice_window_heat", globalPropertyi },
+    { "native_window_fail_right", "sim/operation/failures/rel_ice_window_heat_cop", globalPropertyi },
+    { "native_window_fail_center", "sim/operation/failures/rel_ice_window_heat_l_side", globalPropertyi },
     { "rel_ice_surf_heat", "sim/operation/failures/rel_ice_surf_heat", globalPropertyi },
     { "rel_ice_surf_heat2", "sim/operation/failures/rel_ice_surf_heat2", globalPropertyi },
     { "rio_fail", "tu154/custom/failures/rio_fail", globalPropertyi },
@@ -76,6 +83,15 @@ defineProps({
     { "ice_detected", "tu154/custom/antiice/ice_detected", globalPropertyi },
     { "ice_detect_ok", "tu154/custom/antiice/ice_detect_ok", globalPropertyi },
     { "ice_window_heat_on", "sim/cockpit2/ice/ice_window_heat_on", globalPropertyi },
+    -- This model uses XP12 thermal channels 0/1/2 for left/right/center front
+    -- panes. Channel 3 is unused; passenger windows have no electric heater.
+    { "native_heat_left", "sim/cockpit2/ice/ice_window_heat_on_window", intElement(0) },
+    { "native_heat_right", "sim/cockpit2/ice/ice_window_heat_on_window", intElement(1) },
+    { "native_heat_center", "sim/cockpit2/ice/ice_window_heat_on_window", intElement(2) },
+    { "native_heat_unused", "sim/cockpit2/ice/ice_window_heat_on_window", intElement(3) },
+    { "window_heat_time_1", "tu154/custom/antiice/window_heat_time_1", defrostTime },
+    { "window_heat_time_2", "tu154/custom/antiice/window_heat_time_2", defrostTime },
+    { "window_heat_time_3", "tu154/custom/antiice/window_heat_time_3", defrostTime },
     { "window_ice_1", "tu154/custom/anim/window_ice_1", globalPropertyf },
     { "window_ice_2", "tu154/custom/anim/window_ice_2", globalPropertyf },
     { "window_ice_3", "tu154/custom/anim/window_ice_3", globalPropertyf },
@@ -85,8 +101,16 @@ defineProps({
     { "inlet_heat_3", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[2]", globalProperty },
     { "sim_pitot_heat_1", "sim/cockpit2/ice/ice_pitot_heat_on_pilot", globalPropertyi },
     { "sim_pitot_heat_2", "sim/cockpit2/ice/ice_pitot_heat_on_copilot", globalPropertyi },
+    { "sim_pitot_heat_3", "sim/cockpit2/ice/ice_pitot_heat_on_standby", globalPropertyi },
     { "AOA_heat_on", "sim/cockpit2/ice/ice_AOA_heat_on", globalPropertyi },
     { "AOA_heat_on_copilot", "sim/cockpit2/ice/ice_AOA_heat_on_copilot", globalPropertyi },
+    { "AOA_heat_on_standby", "sim/cockpit2/ice/ice_AOA_heat_on_stby", globalPropertyi },
+    { "static_heat_pilot", "sim/cockpit2/ice/ice_static_heat_on_pilot", globalPropertyi },
+    { "static_heat_copilot", "sim/cockpit2/ice/ice_static_heat_on_copilot", globalPropertyi },
+    { "static_heat_standby", "sim/cockpit2/ice/ice_static_heat_on_standby", globalPropertyi },
+    { "TAT_heat_pilot", "sim/cockpit2/ice/ice_TAT_heat_on", globalPropertyi },
+    { "TAT_heat_copilot", "sim/cockpit2/ice/ice_TAT_heat_on_copilot", globalPropertyi },
+    { "TAT_heat_standby", "sim/cockpit2/ice/ice_TAT_heat_on_stby", globalPropertyi },
     { "wings_heat_on", "sim/cockpit2/ice/ice_surfce_heat_on", globalPropertyi },
     { "frm_ice", "sim/flightmodel/failures/frm_ice", globalPropertyf },
     { "frm_ice2", "sim/flightmodel/failures/frm_ice2", globalPropertyf },
@@ -114,8 +138,6 @@ defineProps({
 -- defineProperty("eng_airvalve_2", globalPropertyf("tu154/custom/bleed/eng_airvalve_2")) -- Engine 2 bleed-air valve position.
 -- defineProperty("eng_airvalve_3", globalPropertyf("tu154/custom/bleed/eng_airvalve_3")) -- Engine 3 bleed-air valve position.
 
-local ice_reseted = false
-local ice_ratio_last = get(window_ice)
 local ice_speed = 0
 
 local ice_timer = 20
@@ -136,6 +158,9 @@ set(window_ice_4, 1)
 function update()
     local MASTER = get(ismaster) ~= 1
     local passed = get(frame_time)
+    if passed ~= passed or passed < 0 or passed == math.huge or get(sim_paused) ~= 0 then
+        passed = 0
+    end
 
     local power27_L = get(bus27_volt_left) > 13
     local power27_R = get(bus27_volt_right) > 13
@@ -150,30 +175,39 @@ function update()
     local power_CC_115_3 = 0
 
     local out_term = get(termo)
-    local positive_out_term = math.max(out_term, 0)
-    local ice_ratio = get(window_ice)
+
+    -- Preserve the original weak/strong rates and each pane's electrical circuit,
+    -- but feed them to XP12's actual de-ice system instead of a dark LIT overlay.
+    local function heatingRate(switch, dc, ac, failure, native_failure)
+        if not dc or not ac or get(failure) ~= 0 or get(native_failure) == 6 then return 0 end
+        if get(switch) == 1 then return 0.02 end
+        if get(switch) == -1 then return 0.015 end
+        return 0
+    end
+    local window_heat_spd_1 = heatingRate(window_heat_1, power27_L, power115_1,
+        window_heat_fail_1, native_window_fail_left)
+    local window_heat_spd_2 = heatingRate(window_heat_2, power27_R, power115_3,
+        window_heat_fail_2, native_window_fail_center)
+    local window_heat_spd_3 = heatingRate(window_heat_3, power27_R, power115_3,
+        window_heat_fail_3, native_window_fail_right)
+
+    -- Own the local simulator's switches on both SmartCopilot peers. Display
+    -- mirrors and windshield AC loads below retain their master-only updates.
+    set(native_heat_left, bool2int(window_heat_spd_1 > 0))
+    set(native_heat_center, bool2int(window_heat_spd_2 > 0))
+    set(native_heat_right, bool2int(window_heat_spd_3 > 0))
+    set(native_heat_unused, 0)
+    set(window_heat_time_1, get(window_heat_1) == 1 and 50 or 1 / 0.015)
+    set(window_heat_time_2, get(window_heat_2) == 1 and 50 or 1 / 0.015)
+    set(window_heat_time_3, get(window_heat_3) == 1 and 50 or 1 / 0.015)
+
+    -- Retain the legacy rate multiplier for the existing SOI/wing model, while
+    -- removing the previous reset of native windshield ice to 0.5 every frame.
+    local icing_rate = get(native_ice_rate)
+    if icing_rate ~= icing_rate or math.abs(icing_rate) == math.huge then icing_rate = 0 end
+    ice_speed = icing_rate * 2
 
     if MASTER then
-        -- Normalize the simulator icing ratio when it approaches its limits.
-        if ice_ratio > 0.9 or ice_ratio < 0.1 then
-            ice_ratio = 0.5
-            set(window_ice, 0.5)
-            ice_reseted = true
-        else
-            ice_reseted = false
-        end
-
-        -- Derive the icing rate while ignoring large ratio jumps.
-        if passed ~= 0 and not ice_reseted then
-            if math.abs(ice_ratio - ice_ratio_last) > 0.01 then
-                ice_speed = 0
-            else
-                ice_speed = (ice_ratio - ice_ratio_last) * 2 / passed
-            end
-        end
-
-        ice_ratio_last = ice_ratio
-
         -- SOI-21 ice detection logic.
         local rio_failed = get(rio_fail) == 1
         local ice_test = get(soi21_test) == 1
@@ -218,94 +252,44 @@ function update()
 
             set(ice_detect_ok, 0)
             set(ice_detected, 0)
-            -- set(ice_window_heat_on, 0)
         end
 
-        -- Calculate windshield heating rates from switch, power and failure states.
-        local window_heat_spd_1 = 0
-        local win_heat_sw_1 = get(window_heat_1)
-        local window_heat_fail_factor_1 = 1 - get(window_heat_fail_1)
-
-        if win_heat_sw_1 == 1 and power27_L and power115_1 then
-            window_heat_spd_1 = 0.02 * window_heat_fail_factor_1
-        elseif win_heat_sw_1 == -1 and power27_L and power115_1 then
-            window_heat_spd_1 = 0.015 * window_heat_fail_factor_1
-        end
-
-        local window_heat_spd_2 = 0
-        local win_heat_sw_2 = get(window_heat_2)
-        local window_heat_fail_factor_2 = 1 - get(window_heat_fail_2)
-
-        if win_heat_sw_2 == 1 and power27_R and power115_3 then
-            window_heat_spd_2 = 0.02 * window_heat_fail_factor_2
-        elseif win_heat_sw_2 == -1 and power27_R and power115_3 then
-            window_heat_spd_2 = 0.015 * window_heat_fail_factor_2
-        end
-
-        local window_heat_spd_3 = 0
-        local win_heat_sw_3 = get(window_heat_3)
-        local window_heat_fail_factor_3 = 1 - get(window_heat_fail_3)
-
-        if win_heat_sw_3 == 1 and power27_R and power115_3 then
-            window_heat_spd_3 = 0.02 * window_heat_fail_factor_3
-        elseif win_heat_sw_3 == -1 and power27_R and power115_3 then
-            window_heat_spd_3 = 0.015 * window_heat_fail_factor_3
-        end
-
-        -- Update visual windshield ice and clamp each state to its valid range.
-        local win_ice_1 = get(window_ice_1)
-            + (ice_speed - window_heat_spd_1 - positive_out_term) * passed
-        local win_ice_2 = get(window_ice_2)
-            + (ice_speed - window_heat_spd_2 - positive_out_term) * passed
-        local win_ice_3 = get(window_ice_3)
-            + (ice_speed - window_heat_spd_3 - positive_out_term) * passed
-        local win_ice_4 = get(window_ice_4)
-            + (ice_speed - positive_out_term) * passed
-
-        set(window_ice_1, clamp(win_ice_1, 0, 1))
-        set(window_ice_2, clamp(win_ice_2, 0, 1))
-        set(window_ice_3, clamp(win_ice_3, 0, 1))
-        set(window_ice_4, clamp(win_ice_4, 0, 1))
+        -- Existing consumers keep their L/C/R/all DataRefs, now mirrored from the
+        -- native ice model. Do not clear or inject ice in X-Plane itself.
+        set(window_ice_1, clamp(get(native_ice_left), 0, 1))
+        set(window_ice_2, clamp(get(native_ice_center), 0, 1))
+        set(window_ice_3, clamp(get(native_ice_right), 0, 1))
+        set(window_ice_4, clamp(get(native_ice_unheated), 0, 1))
 
         set(ai_115_1_cc, window_heat_spd_1 * 250)
         set(ai_115_3_cc, (window_heat_spd_2 + window_heat_spd_3) * 250)
     end
 
-    -- Heat Pitot probes and AOA sensors.
-    local pitot_sw_1 = math.max(
-        get(pitot_heat_1) * bool2int(get(rel_ice_pitot_heat1) ~= 6),
-        0
-    )
-    local pitot_sw_2 = math.max(
-        get(pitot_heat_2) * bool2int(get(rel_ice_pitot_heat2) ~= 6),
-        0
-    )
-    local pitot_sw_3 = math.max(
-        get(pitot_heat_3) * bool2int(get(ppd_3_heat_fail) ~= 1),
-        0
-    )
+    -- PPD circuits: -1 is the momentary diagnostic test, 0 OFF, 1 HEAT.
+    -- XP12 has a real standby Pitot channel; the old code only charged its bus.
+    local pitot_sw_1 = bool2int(get(pitot_heat_1) == 1 and power27_L and get(rel_ice_pitot_heat1) ~= 6)
+    local pitot_sw_2 = bool2int(get(pitot_heat_2) == 1 and power27_R and get(rel_ice_pitot_heat2) ~= 6)
+    local pitot_sw_3 = bool2int(get(pitot_heat_3) == 1 and power27_R
+        and get(ppd_3_heat_fail) == 0 and get(rel_ice_pitot_heat3) ~= 6)
+    set(sim_pitot_heat_1, pitot_sw_1)
+    set(sim_pitot_heat_2, pitot_sw_2)
+    set(sim_pitot_heat_3, pitot_sw_3)
 
-    if power27_L then
-        set(sim_pitot_heat_1, pitot_sw_1)
-        set(AOA_heat_on, pitot_sw_1)
-        set(AOA_heat_on_copilot, pitot_sw_1)
-        set(ai_27_L_cc, 10 * pitot_sw_1)
-    else
-        set(sim_pitot_heat_1, 0)
-        set(AOA_heat_on, 0)
-        set(AOA_heat_on_copilot, 0)
-        set(ai_27_L_cc, 0)
-    end
-
-    if power27_R then
-        -- PPD-3 is represented in the electrical load only because no separate
-        -- third simulator Pitot-heat output is defined in the project references.
-        set(sim_pitot_heat_2, pitot_sw_2)
-        set(ai_27_R_cc, 7 * pitot_sw_2 + 7 * pitot_sw_3)
-    else
-        set(sim_pitot_heat_2, 0)
-        set(ai_27_R_cc, 0)
-    end
+    -- Each probe group also protects its associated AoA, static and TAT sensor.
+    -- In particular, the copilot AoA is no longer powered by the pilot switch.
+    -- X-Plane applies the individual native sensor-heater failure states.
+    set(AOA_heat_on, pitot_sw_1)
+    set(AOA_heat_on_copilot, pitot_sw_2)
+    set(AOA_heat_on_standby, pitot_sw_3)
+    set(static_heat_pilot, pitot_sw_1)
+    set(static_heat_copilot, pitot_sw_2)
+    set(static_heat_standby, pitot_sw_3)
+    set(TAT_heat_pilot, pitot_sw_1)
+    set(TAT_heat_copilot, pitot_sw_2)
+    set(TAT_heat_standby, pitot_sw_3)
+    -- Retain the established custom electrical circuit loads.
+    set(ai_27_L_cc, 10 * pitot_sw_1)
+    set(ai_27_R_cc, 7 * pitot_sw_2 + 7 * pitot_sw_3)
 
     -- Engine inlet anti-ice.
     local rpm_1 = get(rpm_high_1) > 50
@@ -436,5 +420,4 @@ function update()
         set(frm_ice2, ice_on_wings_R * 0.8 + ice_on_slats_R * 0.2)
     end
 
-    set(ice_window_heat_on, 0)
 end

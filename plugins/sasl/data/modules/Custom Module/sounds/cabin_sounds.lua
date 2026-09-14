@@ -1,10 +1,10 @@
 --[[
 Changelog
 - Grouped all 53 existing Dataref bindings through defineProps() while preserving property names, paths, constructors, and original binding order.
-- Added X-Plane internal version detection for XP11/XP12-compatible sasl.al.playSample() calls.
+- Uses SASL 3 boolean loop flags directly for X-Plane 12.
 - Replaced Russian comments with English comments.
 - Fixed radio-altimeter DH power logic so both left and right signals require 27 V power.
-- Replaced sum-based ABSU mode tracking with independent roll and pitch state tracking.
+- Tracks falling ABSU/STU mode edges independently; engagement is not a disconnect warning.
 - Replaced sum-based warning-switch and cap tracking with independent state tracking.
 - Reset pulsed siren and speaker timers when their corresponding warning condition is no longer active.
 - Avoided running the landing-light aerodynamic noise loop below its audible 150 kt threshold.
@@ -91,17 +91,8 @@ defineProps({
     { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
--- Added compatibility binding; all existing bindings above remain unchanged.
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-
-local XP11 = get(xp_version) < 120000
-
 local function playPanelSample(sample, looped)
-    if XP11 then
-        sasl.al.playSample(sample, looped and 1 or 0)
-    else
-        sasl.al.playSample(sample, looped)
-    end
+    sasl.al.playSample(sample, looped)
 end
 
 -- Sound samples. Keep legacy/unused samples because other aircraft revisions
@@ -279,10 +270,11 @@ function update()
     local stu_now = get(stu_mode)
     local speaker_alarm_ok = get(speaker_alarm_fail) == 0
 
-    local absu_mode_changed = (
-        roll_now ~= STATE.roll_last
-        or pitch_now ~= STATE.pitch_last
-    ) and (roll_now + pitch_now < 4)
+    -- AP engagement and damper initialization must not sound AP OFF. Each
+    -- axis still warns when it loses a previously available control level,
+    -- including a disconnect while the other axis is being engaged.
+    local absu_disconnected = roll_now < STATE.roll_last
+        or pitch_now < STATE.pitch_last
 
     local stu_disconnected = STATE.stu_last >= 3 and stu_now <= 2
 
@@ -332,7 +324,7 @@ function update()
 
         sasl.al.stopSample(SAMPLES.absu)
 
-    elseif (absu_mode_changed or stu_disconnected)
+    elseif (absu_disconnected or stu_disconnected)
         and power
         and external == 0
         and fuel_buzzer_now == 1

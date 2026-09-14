@@ -67,7 +67,7 @@ end
 
 
 local function sw_reset()
-    if get(eng1_N1) < 5
+    if isColdAndDarkStart() and get(eng1_N1) < 5
         and get(eng2_N1) < 5
         and get(eng3_N1) < 5 then
 

@@ -3,7 +3,9 @@ I
 OBJ
 
 TEXTURE		glass2.png
-TEXTURE_LIT	glass_LIT.png
+# XP12: the old dark frost LIT texture is not a transparent cabin-window material.
+# Keep the passenger glass mesh, UVs and dielectric reflections without that coating.
+# Front-pane rain and ice are rendered by glass_front_rain/reflector.obj instead.
 TEXTURE_NORMAL	glass_NML.png
 POINT_COUNTS	926 0 0 3198
 GLOBAL_specular 1.0
@@ -1279,19 +1281,26 @@ TRIS	648 768
 ANIM_begin
 	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_3
 ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_3
+# The unchanged front-pane geometry is now in the native outside/inside pair.
+ATTR_draw_disable
 TRIS	1416 108
+ATTR_draw_enable
 ANIM_end
 # fuselage.001
 ANIM_begin
 	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_2
 ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_2
+ATTR_draw_disable
 TRIS	1524 120
+ATTR_draw_enable
 ANIM_end
 # fuselage.002
 ANIM_begin
 	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_1
 ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_1
+ATTR_draw_disable
 TRIS	1644 108
+ATTR_draw_enable
 ANIM_end
 # fuselage.027
 ANIM_begin

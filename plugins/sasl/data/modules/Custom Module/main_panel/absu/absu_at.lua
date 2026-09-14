@@ -1,12 +1,6 @@
 -- absu_at.lua
--- Auto-throttle (AT) logic for Tu-154M (X-Plane 11)
+-- Auto-throttle (AT) logic for Tu-154M (X-Plane 12)
 -- Refactored for clarity and efficiency; functionality preserved.
-
------------------------------------------------------------------------
--- Smartcopilot (kept on top, not part of bulk definitions)
------------------------------------------------------------------------
-defineProperty("ismaster",    globalPropertyf("scp/api/ismaster"))   -- 0 = plugin not found, 1 = slave, 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- 1 = no control, 2 = has control
 
 -----------------------------------------------------------------------
 -- Helpers
@@ -30,6 +24,10 @@ end
 -- Bulk DataRef definitions
 -----------------------------------------------------------------------
 defineProps({
+	-- SmartCopilot input ownership; the synchronized commands below are pilot input.
+	{"ismaster", "scp/api/ismaster", globalPropertyf},
+	{"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
+	{"control_thro_other", "tu154/custom/SC/control_thro_other", globalPropertyf},
 	-- sources
 	{"ias_left", "tu154/custom/gauges/speed/ias_left", globalPropertyf},     -- captain IAS
 	{"ias_right", "tu154/custom/gauges/speed/ias_right", globalPropertyf},   -- FO IAS
@@ -66,6 +64,7 @@ defineProps({
 	{"absu_at_power_cc", "tu154/custom/absu_at_power_cc", globalPropertyf},                             -- AT current consumption (computed)
 	-- timing
 	{"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+	{"sim_paused", "sim/time/paused", globalPropertyi},
 	-- results (indications / outputs)
 	{"ias_yellow_left", "tu154/custom/gauges/speed/ias_yellow_left", globalPropertyf},                 -- yellow marker on captain's IAS
 	{"ias_yellow_right", "tu154/custom/gauges/speed/ias_yellow_right", globalPropertyf},               -- yellow marker on FO's IAS
@@ -79,8 +78,6 @@ defineProps({
 	-- failures
 	{"absu_at1_fail", "tu154/custom/failures/absu_at1_fail", globalPropertyi},
 	{"absu_at2_fail", "tu154/custom/failures/absu_at2_fail", globalPropertyi},
-	-- XP 11.10 fix selector
-	{"sim_vers", "sim/version/xplane_internal_version", globalPropertyi},
 })
 
 -----------------------------------------------------------------------
@@ -90,17 +87,13 @@ local AT_mode = 0                -- 0 = off, 1 = sync spd, 2 = prepare, 3 = work
 local spd_hold = 0               -- declared (kept; not used)
 local IAS_smth = 0               -- smoothed IAS
 local prepare_counter = 0
-local rud_chng = false
-local rud_last = get(tro_comm_1) + get(tro_comm_2) + get(tro_comm_3)
-local rud_last_1 = get(tro_comm_1)
-local rud_last_2 = get(tro_comm_2)
-local rud_last_3 = get(tro_comm_3)
 local marker_act_L = get(ias_left)
 local marker_act_R = get(ias_right)
 
 IAS_last = 0                     -- intentionally global (kept as in original)
 
 local stab_counter = 0
+local stab_button_last = get(absu_stab_speed) == 1
 local spd_diff_ind_L = 0
 local spd_diff_ind_R = 0
 
@@ -114,6 +107,49 @@ local THROTTLE_EDGE = 0.95       -- near full-forward block
 local TOGA_DONE_FACTOR = 0.98    -- TOGA considered completed when levers reach 98% of active path
 local TOGA_RUD_RATE = 0.4        -- TOGA lever advance rate
 local ACTIVE_SCALER = 0.6        -- (at_1_work + at_2_work) multiplier
+local MANUAL_THROTTLE_TRAVEL = 0.05 -- deliberate movement: 5% of full lever travel
+local MANUAL_THROTTLE_TIME = 0.10 -- reject isolated spikes, without requiring two levers
+
+local pilot_inputs = {
+	{property = tro_comm_1, disconnect = absu_throt_off_1},
+	{property = tro_comm_2, disconnect = absu_throt_off_2},
+	{property = tro_comm_3, disconnect = absu_throt_off_3},
+}
+local pilot_inputs_active = false
+local pilot_input_owner = nil
+local manual_toga_override = false
+
+-- sc_controls copies the selected pilot's native ENGN_thro into these DataRefs.
+-- AT moves only rud_logic's internal lever position / ENGN_thro_use, so servo
+-- movement cannot look like pilot input. Common axes and remote pilots use the
+-- same existing route; compare each lever separately to support a single axis.
+local function pilotMovedThrottles(active, master, passed)
+	local owner = get(ismaster) * 10 + get(hascontrol_1) * 2 + get(control_thro_other)
+	local rebase = not active or not master or not pilot_inputs_active or owner ~= pilot_input_owner
+	local dt = get(sim_paused) == 0 and math.min(math.max(passed, 0), 0.1) or 0
+	local moved = false
+	for _, input in ipairs(pilot_inputs) do
+		local value = get(input.property)
+		local enabled = get(input.disconnect) == 0
+		local valid = type(value) == "number" and value == value and value >= 0 and value <= 1
+		if not valid then
+			input.baseline = nil
+			input.timer = 0
+		elseif rebase or not enabled or input.enabled ~= enabled or input.baseline == nil then
+			input.baseline = value
+			input.timer = 0
+		elseif math.abs(value - input.baseline) >= MANUAL_THROTTLE_TRAVEL then
+			input.timer = input.timer + dt
+			if input.timer >= MANUAL_THROTTLE_TIME then moved = true end
+		else
+			input.timer = 0
+		end
+		input.enabled = enabled
+	end
+	pilot_inputs_active = active and master
+	pilot_input_owner = owner
+	return moved
+end
 
 -----------------------------------------------------------------------
 -- Command handlers: throttle up/down collapse (same logic)
@@ -122,8 +158,11 @@ local THR_dn = sasl.findCommand("sim/engines/throttle_down")
 local THR_up = sasl.findCommand("sim/engines/throttle_up")
 
 local function thr_common_handler(phase)
-	if phase == 1 then
-		if get(stu_mode) > 2 then set(stu_mode, 2) end
+	if (phase == 0 or phase == 1) and get(ismaster) ~= 1 then
+		if get(stu_mode) > 2 then
+			manual_toga_override = true
+			set(stu_mode, 2)
+		end
 	end
 	return 0
 end
@@ -143,6 +182,8 @@ function update()
 	local channel_off = get(absu_speed_off)                    -- 1 = off ch1, -1 = off ch2
 	local prepare = get(absu_speed_prepare) == 1
 	local stab_button = get(absu_stab_speed) == 1
+	local stab_pressed = stab_button and not stab_button_last
+	stab_button_last = stab_button
 	local source = 1 - get(absu_speed_us_right_left)           -- 0 = left, 1 = right
 
 	-- power & channels
@@ -160,18 +201,14 @@ function update()
 	local rud_work_2 = (1 - get(absu_throt_off_2))
 	local rud_work_3 = (1 - get(absu_throt_off_3))
 
-	-- current throttle commands (for change detection)
-	local rud_now_1 = get(tro_comm_1)
-	local rud_now_2 = get(tro_comm_2)
-	local rud_now_3 = get(tro_comm_3)
-	local rud_now = rud_now_1 + rud_now_2 + rud_now_3
-
 	-- ABSU readiness (pitch required for TOGA)
 	local stu_roll_ready = get(roll_main_mode) > 0 and get(absu_nav_on) == 1
 	local stu_pitch_ready = get(pitch_main_mode) > 0 and get(absu_landing_on) == 1
 
 	-- current mode from shared DR
 	AT_mode = get(stu_mode)
+	local rud_chng = pilotMovedThrottles(AT_mode >= 3, MASTER, passed)
+	if get(toga_command) == 0 then manual_toga_override = false end
 
 	-------------------------------------------------------------------
 	-- Mode state machine (order preserved)
@@ -184,30 +221,24 @@ function update()
 		AT_mode = 1 -- ON, not ready (sync)
 	elseif power and prepare and prepare_counter >= 1 and AT_mode == 1 then
 		AT_mode = 2 -- ready
-	elseif power and prepare and (rud_work_1 + rud_work_2 + rud_work_3) > 1 and stab_button and AT_mode == 2 and stab_counter > 0.1 then
+	elseif power and prepare and (rud_work_1 + rud_work_2 + rud_work_3) > 1 and stab_pressed and AT_mode == 2 and stab_counter > 0.1 then
 		AT_mode = 3 -- work (stabilize)
-		rud_last = rud_now
-		rud_last_1 = rud_now_1
-		rud_last_2 = rud_now_2
-		rud_last_3 = rud_now_3
+		manual_toga_override = false
+		stab_counter = 0
+	elseif rud_chng and AT_mode >= 3 then
+		AT_mode = 2 -- deliberate pilot movement takes precedence over TOGA
+		manual_toga_override = true
 		stab_counter = 0
 	elseif power and prepare and AT_mode == 3 and stu_pitch_ready and get(pitch_sub_mode) == 6 then
 		AT_mode = 4 -- TOGA
-		rud_last = rud_now
-		rud_last_1 = rud_now_1
-		rud_last_2 = rud_now_2
-		rud_last_3 = rud_now_3
 		stab_counter = 0
 	elseif (rud_work_1 + rud_work_2 + rud_work_3) < 2 and AT_mode >= 3 then
 		AT_mode = 2 -- drop to ready if two RUDs are disconnected
 		stab_counter = 0
-	elseif rud_chng and AT_mode >= 3 then
-		AT_mode = 2 -- drop to ready when pilot moves throttles
-		stab_counter = 0
 	elseif AT_mode == 4 and get(anim_rud1) > TOGA_DONE_FACTOR * rud_work_1 and get(anim_rud2) > TOGA_DONE_FACTOR * rud_work_2 and get(anim_rud3) > TOGA_DONE_FACTOR * rud_work_3 then
 		AT_mode = 2 -- TOGA completed -> ready
 		stab_counter = 0
-	elseif stab_counter > 0.1 and stab_button and AT_mode > 2 then
+	elseif stab_counter > 0.1 and stab_pressed and AT_mode > 2 then
 		AT_mode = 2 -- cancel AT when button pressed again
 		stab_counter = 0
 	end
@@ -231,21 +262,6 @@ function update()
 	end
 	if prepare_counter > 1 then prepare_counter = 1 end
 
-	-- detect manual throttle movement (two or more active levers moved > 0.1)
-	local moved_1 = bool2int(math.abs(rud_last_1 - rud_now_1) > 0.25 and rud_work_1 == 1)
-	local moved_2 = bool2int(math.abs(rud_last_2 - rud_now_2) > 0.25 and rud_work_2 == 1)
-	local moved_3 = bool2int(math.abs(rud_last_3 - rud_now_3) > 0.25 and rud_work_3 == 1)
-	local rud_moved = moved_1 + moved_2 + moved_3
-	if rud_moved > 1 then
-		rud_last = rud_now
-		rud_last_1 = rud_now_1
-		rud_last_2 = rud_now_2
-		rud_last_3 = rud_now_3
-		rud_chng = true
-	else
-		rud_chng = false
-	end
-
 	-- IAS and markers
 	local IAS = get(ias_left)
 	if source == 1 then IAS = get(ias_right) end
@@ -266,9 +282,11 @@ function update()
 		marker_act_R = lerp(marker_act_R, IAS_smth, passed * MARKER_LERP_RATE)
 
 		-- no throttle movement
-		set(rud_1_spd, 0)
-		set(rud_2_spd, 0)
-		set(rud_3_spd, 0)
+		if MASTER then
+			set(rud_1_spd, 0)
+			set(rud_2_spd, 0)
+			set(rud_3_spd, 0)
+		end
 
 		-- decay speed-diff indications
 		spd_diff_ind_L = decay(spd_diff_ind_L, DIFF_DECAY_RATE, passed)
@@ -299,12 +317,9 @@ function update()
 		if passed ~= 0 then D = (IAS_smth - IAS_last) / passed end
 		IAS_last = IAS_smth
 
-		local K_P = 0.015
-		local K_D = -0.11
-		if get(sim_vers) >= 111000 then
-			K_P = 0.008
-			K_D = -0.05
-		end
+		-- Preserve the existing XP12 controller gains.
+		local K_P = 0.008
+		local K_D = -0.05
 
 		local main_rud_spd = P * K_P + D * K_D
 		main_rud_spd = clamp(main_rud_spd, -THROTTLE_LIMIT, THROTTLE_LIMIT)
@@ -344,9 +359,11 @@ function update()
 
 	else
 		-- off / fail: no throttle movement, decay indications
-		set(rud_1_spd, 0)
-		set(rud_2_spd, 0)
-		set(rud_3_spd, 0)
+		if MASTER then
+			set(rud_1_spd, 0)
+			set(rud_2_spd, 0)
+			set(rud_3_spd, 0)
+		end
 
 		spd_diff_ind_L = decay(spd_diff_ind_L, DIFF_DECAY_RATE, passed)
 		spd_diff_ind_R = decay(spd_diff_ind_R, DIFF_DECAY_RATE, passed)
@@ -361,8 +378,9 @@ function update()
 		set(ias_yellow_left, marker_act_L)
 		set(ias_yellow_right, marker_act_R)
 
-		-- Fake TOGA behavior outside mode 4 (tiny negative speed to keep levers alive)
-		if get(toga_command) == 1 and AT_mode ~= 4 then
+		-- Keep the legacy TOGA sentinel, but never let it seize the levers again
+		-- after deliberate manual takeover; rud_logic treats any rate as servo input.
+		if get(toga_command) == 1 and AT_mode ~= 4 and not manual_toga_override then
 			set(rud_1_spd, -0.00001)
 			set(rud_2_spd, -0.00001)
 			set(rud_3_spd, -0.00001)

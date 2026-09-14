@@ -24,6 +24,13 @@ math.randomseed(os.time()) -- randomise random :)
 xplane_version = globalProperty("sim/version/xplane_internal_version")
 
 -- global functions
+-- Startup selection is authoritative while native RPM is still initializing.
+-- Legacy one-shot cold resets must not dismantle an engines-running preset.
+local startup_running = globalPropertyi("sim/operation/prefs/startup_running")
+function isColdAndDarkStart()
+    return get(startup_running) == 0
+end
+
 function drawBitmapTextScaled(font, x, y, text, alignment, color, scale)
     scale = scale or 1
     sasl.gl.saveGraphicsContext()
@@ -397,6 +404,7 @@ components = {
 	dataref_creator_4 {}, --all newly created Datarefs are here
 	save_state {},
 	time_logic {},
+	aircraft_init {}, -- Apply the selected flight preset before any systems update.
 	flap_aero {},
 	main_panel {
 		position = {0, 0, 2048, 2048},

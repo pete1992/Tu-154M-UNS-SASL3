@@ -10,8 +10,8 @@
 -----------------------------------------------------------------------
 -- Smartcopilot
 -----------------------------------------------------------------------
-defineProperty("ismaster",    globalPropertyf("scp/api/ismaster"))   -- 0 = plugin not found, 1 = slave, 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- 1 = no control, 2 = has control
+
+
 
 -- ----------------------------------------------------------------------------
 -- Property binder
@@ -26,6 +26,9 @@ end
 -- Properties
 -- ----------------------------------------------------------------------------
 defineProps({
+    -- SmartCopilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf },   -- 0 = plugin not found, 1 = slave, 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control
 	-- Inputs
 	{ "course_ga_1", "tu154/custom/tks/course_ga_1", globalPropertyf },
 	{ "course_ga_2", "tu154/custom/tks/course_ga_2", globalPropertyf },
@@ -82,7 +85,7 @@ local start_timer = 0
 -- ----------------------------------------------------------------------------
 local function sw_reset()
 	-- Randomize BGMK correction on cold start only when engines are not running
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		bgmk_corr_1 = math.random(-180, 180)
 		bgmk_corr_2 = math.random(-180, 180)
 	end

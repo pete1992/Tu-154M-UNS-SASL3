@@ -1,133 +1,142 @@
 -- this is hydraulic logic
 
 -- controls
-defineProperty("accum_fill", globalPropertyi("tu154/custom/buttons/hydro/accum_fill")) --  
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("connect2to1", globalPropertyi("tu154/custom/switchers/hydro/connect2to1")) --  2   1 
-defineProperty("pump_2", globalPropertyi("tu154/custom/switchers/hydro/pump_2")) --   2
-defineProperty("pump_3", globalPropertyi("tu154/custom/switchers/hydro/pump_3")) --  3
+defineProps({
+    { "accum_fill", "tu154/custom/buttons/hydro/accum_fill", globalPropertyi }, --
 
--- sources
-defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
-defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
-defineProperty("rpm_high_3", globalPropertyf("tu154/custom/gauges/engine/rpm_high_3")) --     №3
+    { "connect2to1", "tu154/custom/switchers/hydro/connect2to1", globalPropertyi }, --  2   1
+    { "pump_2", "tu154/custom/switchers/hydro/pump_2", globalPropertyi }, --   2
+    { "pump_3", "tu154/custom/switchers/hydro/pump_3", globalPropertyi }, --  3
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+    -- sources
+    { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, --     №1
+    { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf }, --     №2
+    { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf }, --     №3
 
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
--- results
-defineProperty("gs_press_1", globalPropertyf("tu154/custom/hydro/gs_press_1")) --   1
-defineProperty("gs_press_2", globalPropertyf("tu154/custom/hydro/gs_press_2")) --   2
-defineProperty("gs_press_3", globalPropertyf("tu154/custom/hydro/gs_press_3")) --   3
-defineProperty("gs_press_4", globalPropertyf("tu154/custom/hydro/gs_press_4")) --   4
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("bak_qty_1", globalPropertyf("tu154/custom/hydro/gs_bak_qty_1")) --    
-defineProperty("bak_qty_2", globalPropertyf("tu154/custom/hydro/gs_bak_qty_2")) --    
-defineProperty("bak_qty_3", globalPropertyf("tu154/custom/hydro/gs_bak_qty_3")) --    
+    -- results
+    { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, --   1
+    { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, --   2
+    { "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, --   3
+    { "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf }, --   4
 
-defineProperty("system_qty_1", globalPropertyf("tu154/custom/hydro/gs_qty_1")) --    
-defineProperty("system_qty_2", globalPropertyf("tu154/custom/hydro/gs_qty_2")) --    
-defineProperty("system_qty_3", globalPropertyf("tu154/custom/hydro/gs_qty_3")) --    
+    { "bak_qty_1", "tu154/custom/hydro/gs_bak_qty_1", globalPropertyf }, --
+    { "bak_qty_2", "tu154/custom/hydro/gs_bak_qty_2", globalPropertyf }, --
+    { "bak_qty_3", "tu154/custom/hydro/gs_bak_qty_3", globalPropertyf }, --
 
-defineProperty("gs_qty_12_show", globalPropertyf("tu154/custom/hydro/gs_qty_12_show")) --    
-defineProperty("gs_qty_3_show", globalPropertyf("tu154/custom/hydro/gs_qty_3_show")) --    
+    { "system_qty_1", "tu154/custom/hydro/gs_qty_1", globalPropertyf }, --
+    { "system_qty_2", "tu154/custom/hydro/gs_qty_2", globalPropertyf }, --
+    { "system_qty_3", "tu154/custom/hydro/gs_qty_3", globalPropertyf }, --
 
--- failures
-defineProperty("hs_leak_1", globalPropertyi("tu154/custom/failures/hydro_leak_1")) -- leak
-defineProperty("hs_leak_2", globalPropertyi("tu154/custom/failures/hydro_leak_2")) -- leak
-defineProperty("hs_leak_3", globalPropertyi("tu154/custom/failures/hydro_leak_3")) -- leak
-defineProperty("hs_leak_4", globalPropertyi("tu154/custom/failures/hydro_leak_4")) -- leak
+    { "gs_qty_12_show", "tu154/custom/hydro/gs_qty_12_show", globalPropertyf }, --
+    { "gs_qty_3_show", "tu154/custom/hydro/gs_qty_3_show", globalPropertyf }, --
 
-defineProperty("hydro_pump_fail_11", globalPropertyi("tu154/custom/failures/hydro_pump_fail_11")) -- fail
-defineProperty("hydro_pump_fail_12", globalPropertyi("tu154/custom/failures/hydro_pump_fail_12")) -- fail
-defineProperty("hydro_pump_fail_2", globalPropertyi("tu154/custom/failures/hydro_pump_fail_2")) -- fail
-defineProperty("hydro_pump_fail_3", globalPropertyi("tu154/custom/failures/hydro_pump_fail_3")) -- fail
+    -- failures
+    { "hs_leak_1", "tu154/custom/failures/hydro_leak_1", globalPropertyi }, -- leak
+    { "hs_leak_2", "tu154/custom/failures/hydro_leak_2", globalPropertyi }, -- leak
+    { "hs_leak_3", "tu154/custom/failures/hydro_leak_3", globalPropertyi }, -- leak
+    { "hs_leak_4", "tu154/custom/failures/hydro_leak_4", globalPropertyi }, -- leak
 
-defineProperty("hydro_elec_fail_2", globalPropertyi("tu154/custom/failures/hydro_elec_fail_2")) -- fail
-defineProperty("hydro_elec_fail_3", globalPropertyi("tu154/custom/failures/hydro_elec_fail_3")) -- fail
+    { "hydro_pump_fail_11", "tu154/custom/failures/hydro_pump_fail_11", globalPropertyi }, -- fail
+    { "hydro_pump_fail_12", "tu154/custom/failures/hydro_pump_fail_12", globalPropertyi }, -- fail
+    { "hydro_pump_fail_2", "tu154/custom/failures/hydro_pump_fail_2", globalPropertyi }, -- fail
+    { "hydro_pump_fail_3", "tu154/custom/failures/hydro_pump_fail_3", globalPropertyi }, -- fail
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "hydro_elec_fail_2", "tu154/custom/failures/hydro_elec_fail_2", globalPropertyi }, -- fail
+    { "hydro_elec_fail_3", "tu154/custom/failures/hydro_elec_fail_3", globalPropertyi }, -- fail
 
--- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
--- users --
+    -- engines
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
 
--- flaps
-defineProperty("flap_inn_L", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def")) -- inner flaps left
-defineProperty("flap_inn_R", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def")) -- inner flaps right
+    -- users --
 
--- brakes
-defineProperty("l_brake_add", globalPropertyf("tu154/custom/brakes/int_brakes_L")) --   
-defineProperty("r_brake_add", globalPropertyf("tu154/custom/brakes/int_brakes_R")) --   
+    -- flaps
+    { "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- inner flaps left
+    { "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- inner flaps right
 
-defineProperty("parkbrake", globalPropertyf("sim/flightmodel/controls/parkbrake")) -- Parking Brake
+    -- brakes
+    { "l_brake_add", "tu154/custom/brakes/int_brakes_L", globalPropertyf }, --
+    { "r_brake_add", "tu154/custom/brakes/int_brakes_R", globalPropertyf }, --
 
-defineProperty("brake_emerg", globalPropertyf("tu154/custom/controlls/brake_emerg")) --  
-defineProperty("brake_emerg_L", globalPropertyf("tu154/custom/controlls/brake_emerg_L")) --  
-defineProperty("brake_emerg_R", globalPropertyf("tu154/custom/controlls/brake_emerg_R")) --  
+    { "parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf }, -- Parking Brake
 
--- absu
-defineProperty("absu_contr_pitch", globalPropertyf("tu154/custom/absu/contr_pitch")) --   56  
-defineProperty("absu_contr_roll", globalPropertyf("tu154/custom/absu/contr_roll")) --   56  
-defineProperty("absu_contr_yaw", globalPropertyf("tu154/custom/absu/contr_yaw")) --   56  
+    { "brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf }, --
+    { "brake_emerg_L", "tu154/custom/controlls/brake_emerg_L", globalPropertyf }, --
+    { "brake_emerg_R", "tu154/custom/controlls/brake_emerg_R", globalPropertyf }, --
 
-defineProperty("hydro_ra56_rud_1", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_1")) --  56 
-defineProperty("hydro_ra56_rud_2", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_2")) --  56 
-defineProperty("hydro_ra56_rud_3", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_rud_3")) --  56 
+    -- absu
+    { "absu_contr_pitch", "tu154/custom/absu/contr_pitch", globalPropertyf }, --   56
+    { "absu_contr_roll", "tu154/custom/absu/contr_roll", globalPropertyf }, --   56
+    { "absu_contr_yaw", "tu154/custom/absu/contr_yaw", globalPropertyf }, --   56
 
-defineProperty("hydro_ra56_ail_1", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_1")) --  56 
-defineProperty("hydro_ra56_ail_2", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_2")) --  56 
-defineProperty("hydro_ra56_ail_3", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_ail_3")) --  56 
+    { "hydro_ra56_rud_1", "tu154/custom/switchers/eng/hydro_ra56_rud_1", globalPropertyi }, --  56
+    { "hydro_ra56_rud_2", "tu154/custom/switchers/eng/hydro_ra56_rud_2", globalPropertyi }, --  56
+    { "hydro_ra56_rud_3", "tu154/custom/switchers/eng/hydro_ra56_rud_3", globalPropertyi }, --  56
 
-defineProperty("hydro_ra56_elev_1", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_1")) --  56 
-defineProperty("hydro_ra56_elev_2", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_2")) --  56 
-defineProperty("hydro_ra56_elev_3", globalPropertyi("tu154/custom/switchers/eng/hydro_ra56_elev_3")) --  56 
+    { "hydro_ra56_ail_1", "tu154/custom/switchers/eng/hydro_ra56_ail_1", globalPropertyi }, --  56
+    { "hydro_ra56_ail_2", "tu154/custom/switchers/eng/hydro_ra56_ail_2", globalPropertyi }, --  56
+    { "hydro_ra56_ail_3", "tu154/custom/switchers/eng/hydro_ra56_ail_3", globalPropertyi }, --  56
 
--- ailerons
-defineProperty("ail_L", globalPropertyf("sim/flightmodel/controls/wing3l_ail1def")) -- aileron left Degrees, positive is trailing-edge down. +- 20
-defineProperty("ail_R", globalPropertyf("sim/flightmodel/controls/wing3r_ail1def")) -- aileron right Degrees, positive is trailing-edge down. +- 20
+    { "hydro_ra56_elev_1", "tu154/custom/switchers/eng/hydro_ra56_elev_1", globalPropertyi }, --  56
+    { "hydro_ra56_elev_2", "tu154/custom/switchers/eng/hydro_ra56_elev_2", globalPropertyi }, --  56
+    { "hydro_ra56_elev_3", "tu154/custom/switchers/eng/hydro_ra56_elev_3", globalPropertyi }, --  56
 
--- spoilers
-defineProperty("spd_brk_inn_L", globalPropertyf("sim/flightmodel/controls/wing1l_spo1def")) -- inner speedbrake left Degrees
-defineProperty("spd_brk_inn_R", globalPropertyf("sim/flightmodel/controls/wing1r_spo1def")) -- inner speedbrake right Degrees
+    -- ailerons
+    { "ail_L", "sim/flightmodel/controls/wing3l_ail1def", globalPropertyf }, -- aileron left Degrees, positive is trailing-edge down. +- 20
+    { "ail_R", "sim/flightmodel/controls/wing3r_ail1def", globalPropertyf }, -- aileron right Degrees, positive is trailing-edge down. +- 20
 
-defineProperty("spd_brk_mid_L", globalPropertyf("sim/flightmodel/controls/wing2l_spo2def")) -- middle speedbrake left Degrees
-defineProperty("spd_brk_mid_R", globalPropertyf("sim/flightmodel/controls/wing2r_spo2def")) -- middle speedbrake right Degrees
+    -- spoilers
+    { "spd_brk_inn_L", "sim/flightmodel/controls/wing1l_spo1def", globalPropertyf }, -- inner speedbrake left Degrees
+    { "spd_brk_inn_R", "sim/flightmodel/controls/wing1r_spo1def", globalPropertyf }, -- inner speedbrake right Degrees
 
--- tail
-defineProperty("elevator_L", globalPropertyf("sim/flightmodel/controls/hstab1_elv1def")) -- Degrees, positive is trailing-edge down.
-defineProperty("elevator_R", globalPropertyf("sim/flightmodel/controls/hstab2_elv1def")) -- Degrees, positive is trailing-edge down.
-defineProperty("rudder", globalPropertyf("sim/flightmodel/controls/vstab2_rud1def")) -- degrees, positive is trailing-edge left
+    { "spd_brk_mid_L", "sim/flightmodel/controls/wing2l_spo2def", globalPropertyf }, -- middle speedbrake left Degrees
+    { "spd_brk_mid_R", "sim/flightmodel/controls/wing2r_spo2def", globalPropertyf }, -- middle speedbrake right Degrees
 
--- gear
-defineProperty("gear1_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[0]"))  -- deploy of front gear
-defineProperty("gear2_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[1]"))  -- deploy of right gear
-defineProperty("gear3_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[2]"))  -- deploy of left gear
+    -- tail
+    { "elevator_L", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf }, -- Degrees, positive is trailing-edge down.
+    { "elevator_R", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf }, -- Degrees, positive is trailing-edge down.
+    { "rudder", "sim/flightmodel/controls/vstab2_rud1def", globalPropertyf }, -- degrees, positive is trailing-edge left
 
-defineProperty("gears_retr_lock", globalPropertyi("tu154/custom/switchers/gears_retr_lock")) --   
-defineProperty("gears_ext_3GS", globalPropertyi("tu154/custom/switchers/gears_ext_3GS")) --    3
-defineProperty("emerg_gear_ext", globalPropertyi("tu154/custom/controll/emerg_gear_ext")) --    
-defineProperty("gear_lever", globalPropertyi("tu154/custom/controll/gear_lever")) --   . -1 - , 0 - , +1 - 
+    -- gear
+    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },  -- deploy of front gear
+    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },  -- deploy of right gear
+    { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },  -- deploy of left gear
 
--- busters
-defineProperty("buster_on_1", globalPropertyi("tu154/custom/switchers/console/buster_on_1")) --  
-defineProperty("buster_on_2", globalPropertyi("tu154/custom/switchers/console/buster_on_2")) --  
-defineProperty("buster_on_3", globalPropertyi("tu154/custom/switchers/console/buster_on_3")) --  
+    { "gears_retr_lock", "tu154/custom/switchers/gears_retr_lock", globalPropertyi }, --
+    { "gears_ext_3GS", "tu154/custom/switchers/gears_ext_3GS", globalPropertyi }, --    3
+    { "emerg_gear_ext", "tu154/custom/controll/emerg_gear_ext", globalPropertyi }, --
+    { "gear_lever", "tu154/custom/controll/gear_lever", globalPropertyi }, --   . -1 - , 0 - , +1 -
 
--- currents
-defineProperty("gs_pump_2_cc", globalPropertyf("tu154/custom/hydro/gs_pump_2_cc")) --   
-defineProperty("gs_pump_3_cc", globalPropertyf("tu154/custom/hydro/gs_pump_3_cc")) --   
+    -- busters
+    { "buster_on_1", "tu154/custom/switchers/console/buster_on_1", globalPropertyi }, --
+    { "buster_on_2", "tu154/custom/switchers/console/buster_on_2", globalPropertyi }, --
+    { "buster_on_3", "tu154/custom/switchers/console/buster_on_3", globalPropertyi }, --
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- currents
+    { "gs_pump_2_cc", "tu154/custom/hydro/gs_pump_2_cc", globalPropertyf }, --
+    { "gs_pump_3_cc", "tu154/custom/hydro/gs_pump_3_cc", globalPropertyf }, --
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
+
 
 -- set initial values
 set(system_qty_1, 58)
@@ -152,7 +161,7 @@ local notLoaded = true
 local sim_start_timer = 0
 
 local function reset_switchers()
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng2_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 
 	set(gs_press_1, 0)
 		set(gs_press_2, 0)

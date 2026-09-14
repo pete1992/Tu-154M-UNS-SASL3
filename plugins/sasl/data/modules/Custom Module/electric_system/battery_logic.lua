@@ -2,7 +2,7 @@
 -- Detailed logic for a single Tu-154M battery
 -- including charging, discharging, thermal effects, and failures.
 
--- Bulk DataRef registration (excluding Smartcopilot)
+-- Declarative DataRef registration
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))
@@ -22,10 +22,10 @@ defineProps({
     {"cockpit_temp", "tu154/custom/thermo/cockpit_temp", globalPropertyf}, -- Cockpit temperature (°C)
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- Simulation frame time (s)
 	{ "sim_bat_on", "sim/cockpit2/electrical/battery_on[0]", globalProperty },
+    -- SmartCopilot ownership
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
-
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster"))                   -- Smartcopilot master/slave state
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1"))               -- Smartcopilot control flag
 
 -- Battery charge/discharge and temperature logic
 local current_table = {

@@ -4,23 +4,18 @@ local function defineProps(defs)
     end
 end
 
---[[
-Changelog
-- Preserved the existing engine/APU generator voltage, delay, overload, and SmartCopilot behavior.
-- Added emergency cutoff switches for engine generators 1..3.
-- Emergency cutoff is immediate and overrides ON as well as TEST without moving the normal generator switch.
-- Releasing an emergency cutoff requires the existing 2-second reconnection delay before the generator can feed again.
-- Emergency cutoff also resets the corresponding overload latch through the existing disconnect-reset path.
-- Moved SmartCopilot bindings into defineProps.
-- Kept xp_version outside defineProps because its value is required before selecting XP11/XP12 property constructors.
-]]
-
 -- Generator logic for the Tu-154M electrical system.
+-- XP12 supplies the shaft-speed-dependent voltage availability. The custom
+-- 115 V system retains its own voltage/load curve, protection and contactors.
 
--- Must remain outside defineProps because its value determines the property
--- constructors used by indexed X-Plane Datarefs below.
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) < 120000
+-- SASL array elements are one-based; callers below use X-Plane indices 0..2.
+local function floatElement(index)
+    return function(path) return globalPropertyfae(path, index + 1) end
+end
+
+local function intElement(index)
+    return function(path) return globalPropertyiae(path, index + 1) end
+end
 
 defineProps({
     -- SmartCopilot
@@ -64,15 +59,21 @@ defineProps({
     -- 27 V bus
     { "DC_27_volt1", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "DC_27_volt2", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
-    -- Engine/APU speeds
-    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", XP11 and globalPropertyf or globalProperty },
-    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", XP11 and globalPropertyf or globalProperty },
-    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", XP11 and globalPropertyf or globalProperty },
+    -- Core rotation and APU speed (not the remapped cockpit RPM needles).
+    { "eng1_N2", "sim/flightmodel/engine/ENGN_N2_", floatElement(0) },
+    { "eng2_N2", "sim/flightmodel/engine/ENGN_N2_", floatElement(1) },
+    { "eng3_N2", "sim/flightmodel/engine/ENGN_N2_", floatElement(2) },
     { "eng4_N1", "tu154/custom/eng/apu_n1", globalPropertyf },
+    -- Native potential voltage is available even before the contactor closes.
+    -- Normalize against the ACF's native nominal voltage, not custom 115 V.
+    { "sim_gen1_volt", "sim/cockpit2/electrical/generator_volts", floatElement(0) },
+    { "sim_gen2_volt", "sim/cockpit2/electrical/generator_volts", floatElement(1) },
+    { "sim_gen3_volt", "sim/cockpit2/electrical/generator_volts", floatElement(2) },
+    { "sim_gen_nominal_volt", "sim/aircraft/electrical/acf_nom_gen_volt", globalPropertyf },
     -- X-Plane generator switches
-    { "sim_gen1_on", "sim/cockpit/electrical/generator_on[0]",XP11 and globalPropertyi or globalProperty },
-    { "sim_gen2_on", "sim/cockpit/electrical/generator_on[1]", XP11 and globalPropertyi or globalProperty },
-    { "sim_gen3_on", "sim/cockpit/electrical/generator_on[2]", XP11 and globalProperty or globalProperty },
+    { "sim_gen1_on", "sim/cockpit/electrical/generator_on", intElement(0) },
+    { "sim_gen2_on", "sim/cockpit/electrical/generator_on", intElement(1) },
+    { "sim_gen3_on", "sim/cockpit/electrical/generator_on", intElement(2) },
     { "sim_gen4_on", "sim/cockpit2/electrical/APU_generator_on", globalPropertyi },
     -- Generator failure flags
     { "sim_gen1_fail", "sim/operation/failures/rel_genera0", globalPropertyi },
@@ -88,10 +89,10 @@ local OVERLOAD_LIMIT = 500
 local OVERLOAD_TIME = 15
 local OVERLOAD_LIMIT_APU = 1500
 
-local GEN_ON_THRESHOLD = 1 -- Preserved legacy constant.
-local MIN_GEN1_N1 = 25
-local MIN_GEN2_N1 = 25
-local MIN_GEN3_N1 = 25
+-- Availability hysteresis belongs to the simulation adapter, not a new engine
+-- idle calibration. Low-spool N1 <= 25 must not disconnect a capable generator.
+local GEN_VOLTAGE_CONNECT_RATIO = 0.90
+local GEN_VOLTAGE_HOLD_RATIO = 0.85
 local MIN_GEN4_N1 = 92
 local VOLT_ON_BUS = 13
 
@@ -101,6 +102,7 @@ local STATE = {
     -- Keep original initialization at 1 so generators are immediately
     -- available when loading an already-running aircraft state.
     engine_counter = { 1, 1, 1 },
+    engine_supply_available = { false, false, false },
 
     switch_last = {
         get(gen_1_on),
@@ -122,7 +124,6 @@ local ENGINE_GENERATORS = {
         work = gen1_work,
         sim_switch = sim_gen1_on,
         sim_failure = sim_gen1_fail,
-        min_n1 = MIN_GEN1_N1,
     },
     {
         switch = gen_2_on,
@@ -132,7 +133,6 @@ local ENGINE_GENERATORS = {
         work = gen2_work,
         sim_switch = sim_gen2_on,
         sim_failure = sim_gen2_fail,
-        min_n1 = MIN_GEN2_N1,
     },
     {
         switch = gen_3_on,
@@ -142,11 +142,28 @@ local ENGINE_GENERATORS = {
         work = gen3_work,
         sim_switch = sim_gen3_on,
         sim_failure = sim_gen3_fail,
-        min_n1 = MIN_GEN3_N1,
     },
 }
 
-local function updateEngineGenerator(index, config, switch_actual, emergency_cutoff, engine_n1, current, dc_power, dt)
+local function positiveFinite(value)
+    return type(value) == "number" and value > 0 and value < math.huge
+end
+
+local function engineSupplyAvailable(index, engine_n2, native_voltage, nominal_voltage)
+    local available = false
+    if positiveFinite(engine_n2) and positiveFinite(native_voltage) and positiveFinite(nominal_voltage) then
+        local minimum_ratio = STATE.engine_supply_available[index]
+            and GEN_VOLTAGE_HOLD_RATIO or GEN_VOLTAGE_CONNECT_RATIO
+        available = native_voltage / nominal_voltage >= minimum_ratio
+    end
+
+    -- A stale potential reading cannot energize a stopped core. No fuel-burning
+    -- flag, displayed RPM or throttle request can bypass actual supply voltage.
+    STATE.engine_supply_available[index] = available
+    return available
+end
+
+local function updateEngineGenerator(index, config, switch_actual, emergency_cutoff, engine_n2, native_voltage, nominal_voltage, current, dc_power, dt)
     -- Preserve the original one-frame disconnect whenever the normal switch
     -- changes. This resets the connection delay after OFF/ON/TEST transitions.
     local switch_effective = switch_actual
@@ -161,8 +178,8 @@ local function updateEngineGenerator(index, config, switch_actual, emergency_cut
         switch_effective = 0
     end
 
-    local engine_running = engine_n1 > config.min_n1
-    local can_connect = math.abs(switch_effective) * dc_power * (engine_running and 1 or 0) == 1
+    local supply_available = engineSupplyAvailable(index, engine_n2, native_voltage, nominal_voltage)
+    local can_connect = math.abs(switch_effective) * dc_power * (supply_available and 1 or 0) == 1
 
     if can_connect then
         STATE.engine_counter[index] = STATE.engine_counter[index] + dt * 0.5
@@ -214,7 +231,7 @@ end
 function update()
     local dt = get(frame_time)
 
-    if dt <= 0 or get(ismaster) == 1 then
+    if not positiveFinite(dt) or get(ismaster) == 1 then
         return
     end
 
@@ -239,11 +256,18 @@ function update()
         get(emerg_gen_on_3),
     }
 
-    local engine_n1 = {
-        get(eng1_N1),
-        get(eng2_N1),
-        get(eng3_N1),
+    local engine_n2 = {
+        get(eng1_N2),
+        get(eng2_N2),
+        get(eng3_N2),
     }
+
+    local native_voltage = {
+        get(sim_gen1_volt),
+        get(sim_gen2_volt),
+        get(sim_gen3_volt),
+    }
+    local nominal_voltage = get(sim_gen_nominal_volt)
 
     local current = {
         get(gen1_amp_bus),
@@ -264,7 +288,9 @@ function update()
             ENGINE_GENERATORS[i],
             switch_actual[i],
             emergency_cutoff[i],
-            engine_n1[i],
+            engine_n2[i],
+            native_voltage[i],
+            nominal_voltage,
             current[i],
             dc_power,
             dt

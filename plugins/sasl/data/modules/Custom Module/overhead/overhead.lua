@@ -213,7 +213,7 @@ local function initialize_cold_dark_caps()
     local engine_2_n1 = get(eng2_N1)
     local engine_3_n1 = get(eng3_N1)
 
-    if engine_1_n1 < ENGINE_STOPPED_N1
+    if isColdAndDarkStart() and engine_1_n1 < ENGINE_STOPPED_N1
         and engine_2_n1 < ENGINE_STOPPED_N1
         and engine_3_n1 < ENGINE_STOPPED_N1
     then

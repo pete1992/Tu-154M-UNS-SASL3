@@ -802,6 +802,10 @@ if MASTER then
 		set(absu_pnp_mode_1, 2) -- VOR 
 	elseif nav_prep and get(absu_az2) == 1 then
 		set(absu_pnp_mode_1, 3) -- VOR 
+	elseif not land_prep and get(absu_pnp_mode_1) == 4 then
+		-- The landing switch also releases the latched LD indication. Keep
+		-- an explicit NAV/VOR selection above and the copilot selector independent.
+		set(absu_pnp_mode_1, 0)
 	end
 	
 	land_sw_last = land_prep

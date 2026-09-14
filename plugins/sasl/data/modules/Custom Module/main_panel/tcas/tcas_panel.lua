@@ -1,63 +1,72 @@
 -- this is TCAS panel
 size = {2048, 2048}
 
-defineProperty("tcas_on", globalPropertyi("tu154/custom/switchers/ovhd/tcas_on"))  --  TCAS
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_2_volt", globalPropertyf("tu154/custom/elec/bus115_2_volt"))
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+defineProps({
+    { "tcas_on", "tu154/custom/switchers/ovhd/tcas_on", globalPropertyi },  --  TCAS
 
-defineProperty("tcas_mode", globalPropertyi("tu154/custom/switchers/tcas/tcas_mode"))  --	 TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA
-defineProperty("tcas_rot_big", globalPropertyi("tu154/custom/switchers/tcas/tcas_rot_big"))  --  
-defineProperty("tcas_rot_small", globalPropertyi("tu154/custom/switchers/tcas/tcas_rot_small"))  --  
-defineProperty("mode_set", globalPropertyi("tu154/custom/tcas/mode_set"))  --  TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA	4
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
-defineProperty("tcas_ident_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_ident_btn"))  --  IDENT
-defineProperty("tcas_fcn_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_fcn_btn"))  --  FCN
-defineProperty("tcas_left_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_left_btn"))  --  <
-defineProperty("tcas_right_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_right_btn"))  --  >
-defineProperty("tcas_ent_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_ent_btn"))  --  ENT
-defineProperty("tcas_atc_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_atc_btn"))  --  ATC
-defineProperty("tcas_alt_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_alt_btn"))  --  ALT
-defineProperty("tcas_rng_dn_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_rng_dn_btn"))  --  RNG DN
-defineProperty("tcas_rng_up_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_rng_up_btn"))  --  RNG UP
+    { "tcas_mode", "tu154/custom/switchers/tcas/tcas_mode", globalPropertyi },  --	 TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA
+    { "tcas_rot_big", "tu154/custom/switchers/tcas/tcas_rot_big", globalPropertyi },  --
+    { "tcas_rot_small", "tu154/custom/switchers/tcas/tcas_rot_small", globalPropertyi },  --
+    { "mode_set", "tu154/custom/tcas/mode_set", globalPropertyi },  --  TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA	4
 
-defineProperty("screen_mode", globalPropertyi("tu154/custom/tcas/screen_mode"))  --    .  -1 = , 0 =  , 1 = above mode, 2 = FL mode, 3 = FLT ID, 4 = PLN BIT, 5 = test, 6 = range set, 11-14 = code set
-defineProperty("tcas_range_set", globalPropertyi("tu154/custom/tcas/range_set"))  --   . 0 = 3, 1 = 5, 2 = 10, 3 = 15 nm
+    { "tcas_ident_btn", "tu154/custom/buttons/tcas/tcas_ident_btn", globalPropertyi },  --  IDENT
+    { "tcas_fcn_btn", "tu154/custom/buttons/tcas/tcas_fcn_btn", globalPropertyi },  --  FCN
+    { "tcas_left_btn", "tu154/custom/buttons/tcas/tcas_left_btn", globalPropertyi },  --  <
+    { "tcas_right_btn", "tu154/custom/buttons/tcas/tcas_right_btn", globalPropertyi },  --  >
+    { "tcas_ent_btn", "tu154/custom/buttons/tcas/tcas_ent_btn", globalPropertyi },  --  ENT
+    { "tcas_atc_btn", "tu154/custom/buttons/tcas/tcas_atc_btn", globalPropertyi },  --  ATC
+    { "tcas_alt_btn", "tu154/custom/buttons/tcas/tcas_alt_btn", globalPropertyi },  --  ALT
+    { "tcas_rng_dn_btn", "tu154/custom/buttons/tcas/tcas_rng_dn_btn", globalPropertyi },  --  RNG DN
+    { "tcas_rng_up_btn", "tu154/custom/buttons/tcas/tcas_rng_up_btn", globalPropertyi },  --  RNG UP
 
-defineProperty("level_mode", globalPropertyi("tu154/custom/tcas/level_mode"))  -- 1 = above, 0 = normal, -1 = below
-defineProperty("fl_mode", globalPropertyi("tu154/custom/tcas/fl_mode"))  -- 0 = absolute, 1 = relative
-defineProperty("flt_id", globalPropertyi("tu154/custom/tcas/flt_id"))  -- 0 = cover, 1 = show / change code
+    { "screen_mode", "tu154/custom/tcas/screen_mode", globalPropertyi },  --    .  -1 = , 0 =  , 1 = above mode, 2 = FL mode, 3 = FLT ID, 4 = PLN BIT, 5 = test, 6 = range set, 11-14 = code set
+    { "tcas_range_set", "tu154/custom/tcas/range_set", globalPropertyi },  --   . 0 = 3, 1 = 5, 2 = 10, 3 = 15 nm
 
-defineProperty("xpdr_code", globalPropertyf("sim/cockpit/radios/transponder_code"))
-defineProperty("xpdr_mode", globalPropertyf("sim/cockpit/radios/transponder_mode")) 
-defineProperty("xpdr_led", globalPropertyf("sim/cockpit/radios/transponder_light"))
+    { "level_mode", "tu154/custom/tcas/level_mode", globalPropertyi },  -- 1 = above, 0 = normal, -1 = below
+    { "fl_mode", "tu154/custom/tcas/fl_mode", globalPropertyi },  -- 0 = absolute, 1 = relative
+    { "flt_id", "tu154/custom/tcas/flt_id", globalPropertyi },  -- 0 = cover, 1 = show / change code
+
+    { "xpdr_code", "sim/cockpit/radios/transponder_code", globalPropertyf },
+    { "xpdr_mode", "sim/cockpit/radios/transponder_mode", globalPropertyf },
+    { "xpdr_led", "sim/cockpit/radios/transponder_light", globalPropertyf },
+    { "xpdr_fail", "sim/operation/failures/rel_xpndr", globalPropertyi },
+
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+
+    -- TCAS
+    { "ra_scale_set", "tu154/custom/tcas/ra_scale_set", globalPropertyi },  -- RA mode scale set. 0 = none.
+    { "traffic_det", "tu154/custom/tcas/traffic_det", globalPropertyi },  --
+    { "vvi", "sim/flightmodel/position/vh_ind", globalPropertyf },  -- vertical velocity of our acf
+
+    -- engines
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
+
 ident_cmd = sasl.findCommand("sim/transponder/transponder_ident")  -- comand of transponder ident
-defineProperty("xpdr_fail", globalPropertyi("sim/operation/failures/rel_xpndr"))
-
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-
--- TCAS
-defineProperty("ra_scale_set", globalPropertyi("tu154/custom/tcas/ra_scale_set"))  -- RA mode scale set. 0 = none.
-defineProperty("traffic_det", globalPropertyi("tu154/custom/tcas/traffic_det"))  --     
-defineProperty("vvi", globalPropertyf("sim/flightmodel/position/vh_ind"))  -- vertical velocity of our acf
-
--- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
-
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
 local notLoaded = true
 local start_timer = 0
 
 local function sw_reset()
 
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(tcas_mode, 0)
 	end
 	

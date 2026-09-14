@@ -1,9 +1,6 @@
 -- ext_anim.lua
 -- SASL
 
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) < 120000
-
 local function defineProps(defs)
     -- Correct: build property handles by calling the constructor with path
     for _, d in ipairs(defs) do
@@ -157,11 +154,7 @@ defineProps({
 
 -- Global helpers required by this script
 local function playPanelSample(sample)
-    if XP11 then
-        sasl.al.playSample(sample, 0)
-    else
-        sasl.al.playSample(sample, false)
-    end
+    sasl.al.playSample(sample, false)
 end
 
 -- Sound samples
@@ -182,6 +175,27 @@ local window_R_last = get(cockpit_window_right)
 -- Wrap value into [0,1) range
 local function wrap01(x)
     return x - math.floor(x)
+end
+
+-- Each motor keeps its phase when electrical power is lost. With power restored,
+-- OFF finishes the current cycle and stops exactly at park, without wrapping past
+-- it. The previous phase > 0.1 dead zone left the blades partly on the glass and
+-- could miss park repeatedly at low frame rates.
+local function advance_wiper(phase, mode, powered, dt)
+    if not powered or dt <= 0 or dt ~= dt or dt == math.huge then
+        return phase
+    end
+
+    if mode == -1 then
+        return wrap01(phase + 1.5 * dt)
+    elseif mode == 1 then
+        return wrap01(phase + 3 * dt)
+    elseif phase > 0 then
+        local parked_phase = phase + dt
+        return parked_phase >= 1 and 0 or parked_phase
+    end
+
+    return 0
 end
 
 -- Safe division with tiny epsilon guard
@@ -410,34 +424,13 @@ function update()
     -- Yokes visibility
     set(yokes_show, 1 - n(get(slider_9)))
 
-    -- Wipers (power + mode -> speed)
-    local wip_power_L = bool2int(n(get(bus27_volt_left)) > 13 and n(get(bus115_1_volt)) > 110)
-    local wip_power_R = bool2int(n(get(bus27_volt_right)) > 13 and n(get(bus115_3_volt)) > 110)
+    -- Preserve the independent DC/AC supplies, switch modes and 62-degree sweep.
+    -- These custom angles drive both the physical blades and the XP12 rain mask.
+    local wip_power_L = n(get(bus27_volt_left)) > 13 and n(get(bus115_1_volt)) > 110
+    local wip_power_R = n(get(bus27_volt_right)) > 13 and n(get(bus115_3_volt)) > 110
 
-    local wip_spd_L = 0
-    local wl = n(get(wiper_left))
-    if wl == -1 then
-        wip_spd_L = 1.5 * wip_power_L
-    elseif wl == 1 then
-        wip_spd_L = 3 * wip_power_L
-    else
-        if wiper_pos_L > 0.1 then wip_spd_L = 1 * wip_power_L end
-    end
-
-    local wip_spd_R = 0
-    local wr = n(get(wiper_right))
-    if wr == -1 then
-        wip_spd_R = 1.5 * wip_power_R
-    elseif wr == 1 then
-        wip_spd_R = 3 * wip_power_R
-    else
-        if wiper_pos_R > 0.1 then wip_spd_R = 1 * wip_power_R end
-    end
-
-    wiper_pos_L = wiper_pos_L + wip_spd_L * passed
-    wiper_pos_R = wiper_pos_R + wip_spd_R * passed
-    wiper_pos_L = wrap01(wiper_pos_L)
-    wiper_pos_R = wrap01(wiper_pos_R)
+    wiper_pos_L = advance_wiper(wiper_pos_L, n(get(wiper_left)), wip_power_L, passed)
+    wiper_pos_R = advance_wiper(wiper_pos_R, n(get(wiper_right)), wip_power_R, passed)
 
     set(wiper_angle_left,  (math.cos(math.pi * wiper_pos_L * 2 - math.pi) + 1) * 0.5 * 62)
     set(wiper_angle_right, (math.cos(math.pi * wiper_pos_R * 2 - math.pi) + 1) * 0.5 * 62)

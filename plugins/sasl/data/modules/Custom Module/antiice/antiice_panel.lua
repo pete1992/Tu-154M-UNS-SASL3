@@ -1,84 +1,72 @@
--- this is an antiice panel
+-- Anti-ice panel: switches, diagnostic lamps and temperature indications.
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
--- controls
-defineProperty("soi21_on", globalPropertyi("tu154/custom/switchers/eng/soi21_on")) --   21
-defineProperty("soi21_test", globalPropertyi("tu154/custom/buttons/eng/soi21_test")) --   21
-
-defineProperty("antiice_slats", globalPropertyi("tu154/custom/switchers/eng/antiice_slats")) -- 
-defineProperty("antiice_eng_1", globalPropertyi("tu154/custom/switchers/eng/antiice_eng_1")) -- 
-defineProperty("antiice_eng_2", globalPropertyi("tu154/custom/switchers/eng/antiice_eng_2")) -- 
-defineProperty("antiice_eng_3", globalPropertyi("tu154/custom/switchers/eng/antiice_eng_3")) -- 
-defineProperty("antiice_wing", globalPropertyi("tu154/custom/switchers/eng/antiice_wing")) -- 
-
-defineProperty("window_heat_1", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_1")) --  . -1 - , 0 - , 1 - 
-defineProperty("window_heat_2", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_2")) --  . -1 - , 0 - , 1 - 
-defineProperty("window_heat_3", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_3")) --  . -1 - , 0 - , 1 - 
-
-defineProperty("pitot_heat_1", globalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_1")) --   
-defineProperty("pitot_heat_2", globalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_2")) --   
-defineProperty("pitot_heat_3", globalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_3")) --   
-
--- lamps
-defineProperty("heat_ok_1", globalPropertyf("tu154/custom/lights/small/heat_ok_1")) --    
-defineProperty("heat_ok_2", globalPropertyf("tu154/custom/lights/small/heat_ok_2")) --    
-defineProperty("heat_ok_3", globalPropertyf("tu154/custom/lights/small/heat_ok_3")) --    
-
-defineProperty("soi_work", globalPropertyf("tu154/custom/lights/small/soi_work")) --   
-defineProperty("soi_ice_detected", globalPropertyf("tu154/custom/lights/small/soi_ice_detected")) --   
-
-defineProperty("antiice_slats_lamp", globalPropertyf("tu154/custom/lights/small/antiice_slats")) --   
-defineProperty("antiice_eng_1_lamp", globalPropertyf("tu154/custom/lights/small/antiice_eng_1")) --   
-defineProperty("antiice_eng_2_lamp", globalPropertyf("tu154/custom/lights/small/antiice_eng_2")) --   
-defineProperty("antiice_eng_3_lamp", globalPropertyf("tu154/custom/lights/small/antiice_eng_3")) --   
-defineProperty("antiice_wings_lamp", globalPropertyf("tu154/custom/lights/small/antiice_wings")) --   
-
--- gauges
-defineProperty("stab_temp", globalPropertyf("tu154/custom/gauges/eng/stab_temp")) --  
-defineProperty("wing_temp", globalPropertyf("tu154/custom/gauges/eng/wing_temp")) --  
-
--- sources
-defineProperty("wing_heat_t", globalPropertyf("tu154/custom/antiice/wing_heat_t")) --   
-defineProperty("stab_heat_t", globalPropertyf("tu154/custom/antiice/stab_heat_t")) --   
-
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
-
-defineProperty("ice_inlet_heat_1", globalProperty("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[0]"))
-defineProperty("ice_inlet_heat_2", globalProperty("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[1]"))
-defineProperty("ice_inlet_heat_3", globalProperty("sim/cockpit2/ice/ice_inlet_heat_on_per_engine[2]"))
-
-defineProperty("eng_heat_open_1", globalPropertyi("tu154/custom/antiice/eng_heat_open_1")) --    
-defineProperty("eng_heat_open_2", globalPropertyi("tu154/custom/antiice/eng_heat_open_2")) --    
-defineProperty("eng_heat_open_3", globalPropertyi("tu154/custom/antiice/eng_heat_open_3")) --    
-
-defineProperty("ice_surfce_heat_on", globalPropertyi("sim/cockpit2/ice/ice_surfce_heat_on"))
-
-defineProperty("ice_detected", globalPropertyi("tu154/custom/antiice/ice_detected")) --  
-defineProperty("ice_detect_ok", globalPropertyi("tu154/custom/antiice/ice_detect_ok")) --   
-
--- failures
-defineProperty("ppd_3_heat_fail", globalPropertyi("tu154/custom/antiice/ppd_3_heat_fail"))
-
-defineProperty("rel_ice_window_heat", globalPropertyi("sim/operation/failures/rel_ice_window_heat"))
-defineProperty("rel_ice_inlet_heat1", globalPropertyi("sim/operation/failures/rel_ice_inlet_heat"))
-defineProperty("rel_ice_inlet_heat2", globalPropertyi("sim/operation/failures/rel_ice_inlet_heat2"))
-defineProperty("rel_ice_inlet_heat3", globalPropertyi("sim/operation/failures/rel_ice_inlet_heat3"))
-
-defineProperty("rel_ice_pitot_heat1", globalPropertyi("sim/operation/failures/rel_ice_pitot_heat1"))
-defineProperty("rel_ice_pitot_heat2", globalPropertyi("sim/operation/failures/rel_ice_pitot_heat2"))
-
-defineProperty("rel_ice_surf_heat", globalPropertyi("sim/operation/failures/rel_ice_surf_heat"))
-defineProperty("rel_ice_surf_heat2", globalPropertyi("sim/operation/failures/rel_ice_surf_heat2"))
-
-defineProperty("wing_heating", globalPropertyi("tu154/custom/antiice/wing_heating")) --   
-defineProperty("slat_heating", globalPropertyi("tu154/custom/antiice/slat_heating")) --   
-
--- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
-
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+defineProps({
+    -- controls
+    { "soi21_on", "tu154/custom/switchers/eng/soi21_on", globalPropertyi },
+    { "soi21_test", "tu154/custom/buttons/eng/soi21_test", globalPropertyi },
+    { "antiice_slats", "tu154/custom/switchers/eng/antiice_slats", globalPropertyi },
+    { "antiice_eng_1", "tu154/custom/switchers/eng/antiice_eng_1", globalPropertyi },
+    { "antiice_eng_2", "tu154/custom/switchers/eng/antiice_eng_2", globalPropertyi },
+    { "antiice_eng_3", "tu154/custom/switchers/eng/antiice_eng_3", globalPropertyi },
+    { "antiice_wing", "tu154/custom/switchers/eng/antiice_wing", globalPropertyi },
+    { "window_heat_1", "tu154/custom/switchers/ovhd/window_heat_1", globalPropertyi },
+    { "window_heat_2", "tu154/custom/switchers/ovhd/window_heat_2", globalPropertyi },
+    { "window_heat_3", "tu154/custom/switchers/ovhd/window_heat_3", globalPropertyi },
+    { "pitot_heat_1", "tu154/custom/switchers/ovhd/pitot_heat_1", globalPropertyi },
+    { "pitot_heat_2", "tu154/custom/switchers/ovhd/pitot_heat_2", globalPropertyi },
+    { "pitot_heat_3", "tu154/custom/switchers/ovhd/pitot_heat_3", globalPropertyi },
+    -- lamps
+    { "heat_ok_1", "tu154/custom/lights/small/heat_ok_1", globalPropertyf },
+    { "heat_ok_2", "tu154/custom/lights/small/heat_ok_2", globalPropertyf },
+    { "heat_ok_3", "tu154/custom/lights/small/heat_ok_3", globalPropertyf },
+    { "soi_work", "tu154/custom/lights/small/soi_work", globalPropertyf },
+    { "soi_ice_detected", "tu154/custom/lights/small/soi_ice_detected", globalPropertyf },
+    { "antiice_slats_lamp", "tu154/custom/lights/small/antiice_slats", globalPropertyf },
+    { "antiice_eng_1_lamp", "tu154/custom/lights/small/antiice_eng_1", globalPropertyf },
+    { "antiice_eng_2_lamp", "tu154/custom/lights/small/antiice_eng_2", globalPropertyf },
+    { "antiice_eng_3_lamp", "tu154/custom/lights/small/antiice_eng_3", globalPropertyf },
+    { "antiice_wings_lamp", "tu154/custom/lights/small/antiice_wings", globalPropertyf },
+    -- gauges
+    { "stab_temp", "tu154/custom/gauges/eng/stab_temp", globalPropertyf },
+    { "wing_temp", "tu154/custom/gauges/eng/wing_temp", globalPropertyf },
+    -- sources
+    { "wing_heat_t", "tu154/custom/antiice/wing_heat_t", globalPropertyf },
+    { "stab_heat_t", "tu154/custom/antiice/stab_heat_t", globalPropertyf },
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+    { "ice_inlet_heat_1", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[0]", globalProperty },
+    { "ice_inlet_heat_2", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[1]", globalProperty },
+    { "ice_inlet_heat_3", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[2]", globalProperty },
+    { "eng_heat_open_1", "tu154/custom/antiice/eng_heat_open_1", globalPropertyi },
+    { "eng_heat_open_2", "tu154/custom/antiice/eng_heat_open_2", globalPropertyi },
+    { "eng_heat_open_3", "tu154/custom/antiice/eng_heat_open_3", globalPropertyi },
+    { "ice_surfce_heat_on", "sim/cockpit2/ice/ice_surfce_heat_on", globalPropertyi },
+    { "ice_detected", "tu154/custom/antiice/ice_detected", globalPropertyi },
+    { "ice_detect_ok", "tu154/custom/antiice/ice_detect_ok", globalPropertyi },
+    -- failures
+    { "ppd_3_heat_fail", "tu154/custom/antiice/ppd_3_heat_fail", globalPropertyi },
+    { "rel_ice_window_heat", "sim/operation/failures/rel_ice_window_heat", globalPropertyi },
+    { "rel_ice_inlet_heat1", "sim/operation/failures/rel_ice_inlet_heat", globalPropertyi },
+    { "rel_ice_inlet_heat2", "sim/operation/failures/rel_ice_inlet_heat2", globalPropertyi },
+    { "rel_ice_inlet_heat3", "sim/operation/failures/rel_ice_inlet_heat3", globalPropertyi },
+    { "rel_ice_pitot_heat1", "sim/operation/failures/rel_ice_pitot_heat1", globalPropertyi },
+    { "rel_ice_pitot_heat2", "sim/operation/failures/rel_ice_pitot_heat2", globalPropertyi },
+    { "rel_ice_pitot_heat_stby", "sim/operation/failures/rel_ice_pitot_heat_stby", globalPropertyi },
+    { "rel_ice_surf_heat", "sim/operation/failures/rel_ice_surf_heat", globalPropertyi },
+    { "rel_ice_surf_heat2", "sim/operation/failures/rel_ice_surf_heat2", globalPropertyi },
+    { "wing_heating", "tu154/custom/antiice/wing_heating", globalPropertyi },
+    { "slat_heating", "tu154/custom/antiice/slat_heating", globalPropertyi },
+    -- engines
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty },
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty },
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+})
 
 -- sounds
 local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
@@ -90,7 +78,7 @@ local passed = get(frame_time)
 local notLoaded = true
 
 local function reset_switchers()
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(soi21_on, 0)
 		set(antiice_slats, 0)
 		set(antiice_eng_1, 0)
@@ -193,20 +181,26 @@ local function check_controls()
 
 end
 
+-- TEST checks the selected probe circuit; it does not enable normal heating.
+-- A live opposite bus must not make an unpowered probe report healthy.
+local function probe_test_brightness(switch, bus, failed)
+    local voltage = get(bus)
+    if get(switch) ~= -1 or voltage <= 13 or failed then return 0 end
+    return math.max((voltage - 10) / 18.5, 0)
+end
+
 local function lamps()
 
 	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
 	
-	local heat_ok_1_brt = 0
-	if get(rel_ice_pitot_heat1) < 6 and get(pitot_heat_1) == -1 then heat_ok_1_brt = lamps_brt end
+	local heat_ok_1_brt = probe_test_brightness(pitot_heat_1, bus27_volt_left, get(rel_ice_pitot_heat1) == 6)
 	set(heat_ok_1, heat_ok_1_brt)
 	
-	local heat_ok_2_brt = 0
-	if get(rel_ice_pitot_heat2) < 6 and get(pitot_heat_2) == -1 then heat_ok_2_brt = lamps_brt end
+	local heat_ok_2_brt = probe_test_brightness(pitot_heat_2, bus27_volt_right, get(rel_ice_pitot_heat2) == 6)
 	set(heat_ok_2, heat_ok_2_brt)
 	
-	local heat_ok_3_brt = 0
-	if get(ppd_3_heat_fail) == 0 and get(pitot_heat_3) == -1 then heat_ok_3_brt = lamps_brt end
+	local heat_ok_3_brt = probe_test_brightness(pitot_heat_3, bus27_volt_right,
+		get(ppd_3_heat_fail) ~= 0 or get(rel_ice_pitot_heat_stby) == 6)
 	set(heat_ok_3, heat_ok_3_brt)
 	
 	local soi_work_brt = get(ice_detect_ok) * lamps_brt

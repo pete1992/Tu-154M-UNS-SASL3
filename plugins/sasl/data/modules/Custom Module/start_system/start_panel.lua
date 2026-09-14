@@ -12,10 +12,6 @@ Changelog
 - Preserved the starter-cap behavior, starter-mode exception, 36 V power condition and starter-pressure gauge response.
 ]]
 
--- Added for X-Plane 11 / X-Plane 12 compatibility.
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) < 120000
-
 -- Start-up panel logic.
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -82,11 +78,7 @@ local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
 local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 
 local function playPanelSample(sample)
-    if XP11 then
-        sasl.al.playSample(sample, 0)
-    else
-        sasl.al.playSample(sample, false)
-    end
+    sasl.al.playSample(sample, false)
 end
 
 -- Persistent sound states.

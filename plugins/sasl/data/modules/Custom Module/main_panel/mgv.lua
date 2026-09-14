@@ -1,52 +1,61 @@
 -- this is main AHZ logic
 
 -- this is aux ahz logic
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
---defineProperty("pitch_sim", globalPropertyf("sim/cockpit2/gauges/indicators/pitch_electric_deg_pilot"))
---defineProperty("roll_sim", globalPropertyf("sim/cockpit2/gauges/indicators/roll_electric_deg_pilot"))
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("pitch_sim", globalPropertyf("sim/flightmodel/position/theta"))
-defineProperty("roll_sim", globalPropertyf("sim/flightmodel/position/phi"))
+    --defineProperty("pitch_sim", globalPropertyf("sim/cockpit2/gauges/indicators/pitch_electric_deg_pilot"))
+    --defineProperty("roll_sim", globalPropertyf("sim/cockpit2/gauges/indicators/roll_electric_deg_pilot"))
 
-defineProperty("N1", globalProperty("sim/flightmodel/engine/ENGN_N2_[1]"))   
-defineProperty("N2", globalProperty("sim/flightmodel/engine/ENGN_N2_[0]"))
-defineProperty("N3", globalProperty("sim/flightmodel/engine/ENGN_N2_[2]"))
+    { "pitch_sim", "sim/flightmodel/position/theta", globalPropertyf },
+    { "roll_sim", "sim/flightmodel/position/phi", globalPropertyf },
 
--- controls
---defineProperty("pitch_corr_hdl", globalPropertyf("tu154/custom/gauges/ahz/pitch_corr_L")) --     + 
-defineProperty("mgv_contr", globalPropertyi("tu154/custom/switchers/ovhd/mgv_contr")) -- 
+    { "N1", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
+    { "N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
+    { "N3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
 
-defineProperty("arrest_btn", globalPropertyi("tu154/custom/buttons/console/absu_arrest")) --  
---defineProperty("mgv_contr", globalPropertyi("tu154/custom/switchers/ovhd/mgv_contr")) --  
+    -- controls
+    --defineProperty("pitch_corr_hdl", globalPropertyf("tu154/custom/gauges/ahz/pitch_corr_L")) --     +
+    { "mgv_contr", "tu154/custom/switchers/ovhd/mgv_contr", globalPropertyi }, --
 
--- power
---defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
+    { "arrest_btn", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
+    --defineProperty("mgv_contr", globalPropertyi("tu154/custom/switchers/ovhd/mgv_contr")) --
 
-defineProperty("bus36_volt", globalPropertyf("tu154/custom/elec/bus36_volt_left"))
-defineProperty("mgv_ctr_power_cc", globalPropertyf("tu154/custom/bkk/mgv_ctr_power_cc")) --   
---[[
-defineProperty("bus36_volt_left", globalPropertyf("tu154/custom/elec/bus36_volt_left")) --   36 
-defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right")) --   36 
-defineProperty("bus36_volt_pts250_1", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_1")) --   36  1
-defineProperty("bus36_volt_pts250_2", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_2")) --   36  2
+    -- power
+    --defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_2_volt", globalPropertyf("tu154/custom/elec/bus115_2_volt"))
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
---]]
--- results
-defineProperty("res_pitch", globalPropertyf("tu154/custom/gyro/mgv_contr_pitch")) --    +  
-defineProperty("res_roll", globalPropertyf("tu154/custom/gyro/mgv_contr_roll")) --    +  
+    { "bus36_volt", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
+    { "mgv_ctr_power_cc", "tu154/custom/bkk/mgv_ctr_power_cc", globalPropertyf }, --
+    --[[
+    defineProperty("bus36_volt_left", globalPropertyf("tu154/custom/elec/bus36_volt_left")) --   36
+    defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right")) --   36
+    defineProperty("bus36_volt_pts250_1", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_1")) --   36  1
+    defineProperty("bus36_volt_pts250_2", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_2")) --   36  2
 
-defineProperty("ahz_flag", globalPropertyi("tu154/custom/gyro/mgv_contr_flag")) --  
---defineProperty("mgv_contr_fail", globalPropertyi("tu154/custom/bkk/mgv_contr_fail")) --    -   
+    defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
+    defineProperty("bus115_2_volt", globalPropertyf("tu154/custom/elec/bus115_2_volt"))
+    defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+    --]]
+    -- results
+    { "res_pitch", "tu154/custom/gyro/mgv_contr_pitch", globalPropertyf }, --    +
+    { "res_roll", "tu154/custom/gyro/mgv_contr_roll", globalPropertyf }, --    +
 
-defineProperty("mgv_fail", globalPropertyi("tu154/custom/failures/mgv_fail")) --  
+    { "ahz_flag", "tu154/custom/gyro/mgv_contr_flag", globalPropertyi }, --
+    --defineProperty("mgv_contr_fail", globalPropertyi("tu154/custom/bkk/mgv_contr_fail")) --    -
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    { "mgv_fail", "tu154/custom/failures/mgv_fail", globalPropertyi }, --
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
+
 
 local initial_roll_err = 0 --math.random(-20, 20) * real_num -- initial error, ehich will be decreased to 0 after connecting power
 local roll_corr = 0  -- correction for errors and arrest
@@ -75,7 +84,7 @@ function update()
 	time_counter = time_counter + passed	
 
 	-- set initial AHZ position
-	if time_counter > 0.3 and time_counter < 0.4 and notLoaded and get(N1) < 10 and get(N2) < 10 and get(N3) < 10 then
+	if isColdAndDarkStart() and time_counter > 0.3 and time_counter < 0.4 and notLoaded and get(N1) < 10 and get(N2) < 10 and get(N3) < 10 then
 		initial_roll_err = math.random(-20, 20)
 		roll_off = math.random(-1, 1)
 		initial_pitch_err = math.random(-20, 20)

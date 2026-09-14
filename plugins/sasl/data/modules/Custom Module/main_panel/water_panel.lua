@@ -153,7 +153,7 @@ local function initialize_water_level(dt)
     if can_write_shared_state() then
         -- Cold and dark retains the original randomized fill level.
         -- Any non-cold-and-dark start always begins with a full water tank.
-        water_level = engines_are_stopped() and math.random() or WATER_MAX
+        water_level = isColdAndDarkStart() and engines_are_stopped() and math.random() or WATER_MAX
         set(water_lvl, water_level)
     else
         water_level = get(water_lvl)

@@ -1,63 +1,78 @@
 -- aggressive_stall.lua
--- Tu-154M: asymmetric stall and high-alpha spin-assistance model for X-Plane 12.
--- SASL aircraft component; version 4.3.2-XP12.
+-- Tu-154M: flow-driven asymmetric stall supplement for X-Plane 12 / SASL 3.
+-- Version 4.4.0-XP12.
 
 --[[ Changelog
+2026-09-14 | 4.4.0-XP12
+    - Replace raw-yoke/aggression gates with actual elevator and sustained AoA.
+    - Keep separation active with trim-held elevator and neutral joystick.
+    - Recover after sustained low AoA; re-evaluate forces during the fade.
+    - Permit re-entry during recovery without changing the latched weak side.
+    - Add roll-induced local AoA to the 48 virtual elements; shorten progression.
+    - Reduce separation-dependent P/R damping, retaining high-rate damping.
+    - Replace late fixed pitch assist with limited native nose-down attenuation.
+    - Publish this component's own state and five force/moment contributions.
+    - Reject invalid inputs without modifying other plugins' accumulators.
+
 2026-09-08 | 4.3.2-XP12
-    - Port the v4.3.1 force model to X-Plane 12; retain its aerodynamic tuning.
-    - Use sim/weather/aircraft/gravity_mss, the XP12 local-gravity dataref.
-    - Group property bindings through the project's defineProps helper.
-    - Include the nose gear in the clean-configuration gate.
-    - Retain additive forces, event-side latching and lifecycle resets.
+    - Port the v4.3.1 supplement to XP12 and use local gravity.
+    - Retain additive aircraft-axis forces and the single-component lifecycle.
 
 Integration
-    Install as aggressive_stall.lua in the aircraft's SASL component directory.
-    Register aggressive_stall {} exactly once, after the project's frame-time
-    producer and flight_controls {}. Replace the previous stall component.
-    Requires the Tu-154 tu154/custom/SC/*, tu154/custom/time/frame_time and
-    scp/api/ismaster properties already supplied by the aircraft project.
-    SmartCopilot mode 1 is slave; mode 0 or 2 permits local computation.
+    Replace the installed aggressive_stall.lua; register aggressive_stall {}
+    exactly once after frame_time and flight_controls {} in SASL.
+    This is a SASL component, not a standalone FlyWithLua/XTLua script.
+    Keep the existing airfoil, flap, stabilizer and flight_controls files.
+    Do not run another stall supplement in parallel.
+    SmartCopilot mode 1 is slave; modes 0/2 permit local computation.
 
-Model scope
-    This is an empirical supplement to X-Plane's native aerodynamics. It
-    computes equivalent forces from 48 virtual wing elements, then adds five
-    aggregate aircraft-axis forces/moments. It does not edit native element
-    CL/CD/CM, airfoils, flap coefficients, control deflections or body rates.
-    The geometry and coefficients are inherited from the XP11 v4.3.1 model
-    and Cycle Dump(20260830-161425); XP12 flight calibration is still required.
-    A flat spin is not guaranteed by this script or established as the correct
-    real-aircraft response to every aggressive pull.
+Calibration and scope
+    This is an empirical simulator tuning revision based on Data(2).txt.
+    It adds forces/moments; it does not write rates, attitude, native element
+    coefficients, deflections or simulator overrides. It has no thrust gate.
+    Its coefficients are not measured real-Tu-154 post-stall derivatives.
+    A log replay verifies software response, not the resulting flight path.
 
-    Entry requires clean configuration, Mach 0.10..0.70, pitch input >= 0.88,
-    mean actual elevator <= -20 degrees, sufficient alpha and a recent rapid
-    pull/alpha/pitch-rate event (or confirmed full aft plus deliberate yaw).
-    The entry threshold varies smoothly from 12.3 to 11.5 degrees with Mach.
-    There is no altitude-only stall threshold. Density and TAS set the force.
-    Outside this trigger, normal and slowly approached coordinated stalls
-    remain entirely with X-Plane's native model.
+    Clean flap/slat/gear configuration and Mach 0.10..0.70 are retained.
+    Entry: alpha >= entry threshold with actual elevator <= -18 deg for
+    0.20 s, OR alpha >= threshold + 1.25 deg regardless of elevator/yoke.
+    Threshold: 12.3..11.5 deg with Mach. Raw pitch is diagnostic only.
+    All elements finish time progression by 1.10 s, subject to local flow.
+    The lower wing's roll-induced AoA can increase its separation.
 
-    The weaker side remains latched through the event. When all directional
-    cues are neutral, successive events alternate the initial side. This is a
-    deterministic modeling choice, not a measured left/right aircraft bias.
-    All virtual elements reach full progression by 1.72 seconds, provided
-    the event remains active; alpha and pressure still scale the forces.
-    Spin assistance starts after 1.6 seconds OR earlier if rate/sideslip gates
-    are met. Extra nose-up moment blends in between alpha 15 and 20.5 degrees.
-    Pitch release below 0.20 for 0.60 seconds, alpha below 8.5 degrees or an
-    envelope exit starts a 2.50-second fade of the last force/moment vector.
-    This is a numerical release law, not a real-aircraft recovery prediction.
-    Pause, replay, ground contact, slave mode or invalid timestep reset it.
+    Recovery: alpha < 9 deg continuously for 0.40 s, or envelope exit.
+    Force fade: 1.25 s, recomputed from current air data and rates.
+    Re-entry above the threshold preserves event side/age and restores the
+    current output blend over 0.20 s, without a full-strength one-frame step.
+    Changing the joystick or elevator alone never declares reattachment.
+    Direction uses beta, rotation and lateral controls; with neutral cues,
+    successive events alternate sides deterministically.
 
-    Load only one stall supplement. Do not also run the old XP11 stall module
-    or a B2/transsonic script applying the same stall force correction.
-    X-Plane clears plugin force accumulators every flight loop. Only add to
-    them; never zero shared accumulators on reset or unload. The component
-    must run once per SASL update; do not also register a physics callback.
+    Pitch compensation starts above threshold - 0.30 deg and reaches its
+    full alpha blend at threshold + 3.70 deg. It can remove at most 80% of
+    the CURRENT negative native M_aero, and is further bounded by q*S*c*0.23
+    and 900 kNm. Actual elevator relief removes this correction; it does not
+    erase wing separation. Positive native M is never amplified. This is a
+    balance correction, not a claim that all M_aero comes from the tail.
+    Forces use N, moments Nm. Native M_aero excludes plugin contributions;
+    never substitute M_total or M_plug_acf here (that would create feedback).
+
+Diagnostics: tu154/custom/stall_xp12/
+    state: 0 normal, 1 entry, 2 developed separation, 3 recovery
+    side: -1 left, +1 right, 0 inactive; NOT a measured native stall flag
+    alpha_entry_deg, elevator_deg, yoke_pitch, dynamic_pressure_Pa
+    separation: area-weighted virtual-element progression, 0..1
+    force_blend: recovery/re-entry output envelope, 0..1
+    normal_N, axial_N, roll_Nm, pitch_Nm, yaw_Nm: THIS component only
+    native_pitch_Nm: sampled native aerodynamic moment
+    entry_elapsed_s, recovery_elapsed_s, release_elapsed_s
+    exit_reason: 0 none, 1 low alpha, 2 configuration/Mach
+    reset_reason: 0 none, 1 ground, 2 pause/replay, 3 slave, 4 invalid input
+    These properties are SASL-owned and do not control the model.
 
 References
     https://developer.x-plane.com/article/movingtheplane/
-    https://github.com/X-Plane/XPlane2Blender/blob/master/io_xplane2blender/resources/DataRefs.txt
-    Stock bindings checked against Laminar's XP12.08 dataref catalog.
+    https://1-sim.com/files/SASL3Manual.pdf
 ]]
 
 -- local defineProps Function
@@ -96,6 +111,7 @@ defineProps({
     {"paused", "sim/time/paused", globalPropertyi},
     {"in_replay", "sim/time/is_in_replay", globalPropertyi},
     {"smartcopilot_master", "scp/api/ismaster", globalPropertyf},
+    {"native_pitch_moment", "sim/flightmodel/forces/M_aero", globalPropertyf},
     {"normal_plugin", "sim/flightmodel/forces/fnrml_plug_acf", globalPropertyf},
     {"axial_plugin", "sim/flightmodel/forces/faxil_plug_acf", globalPropertyf},
     {"roll_plugin", "sim/flightmodel/forces/L_plug_acf", globalPropertyf},
@@ -103,85 +119,88 @@ defineProps({
     {"yaw_plugin", "sim/flightmodel/forces/N_plug_acf", globalPropertyf},
 })
 
+
+-- SASL-owned diagnostics; published for DataRefTool and custom recorders.
+local function diagnosticFloat(path)
+    return createGlobalPropertyf(path, 0, false, false, true)
+end
+local function diagnosticInt(path)
+    return createGlobalPropertyi(path, 0, false, false, true)
+end
+
+defineProps({
+    {"diag_state", "tu154/custom/stall_xp12/state", diagnosticInt},
+    {"diag_side", "tu154/custom/stall_xp12/side", diagnosticInt},
+    {"diag_alpha_entry", "tu154/custom/stall_xp12/alpha_entry_deg", diagnosticFloat},
+    {"diag_elevator", "tu154/custom/stall_xp12/elevator_deg", diagnosticFloat},
+    {"diag_yoke", "tu154/custom/stall_xp12/yoke_pitch", diagnosticFloat},
+    {"diag_pressure", "tu154/custom/stall_xp12/dynamic_pressure_Pa", diagnosticFloat},
+    {"diag_separation", "tu154/custom/stall_xp12/separation", diagnosticFloat},
+    {"diag_blend", "tu154/custom/stall_xp12/force_blend", diagnosticFloat},
+    {"diag_normal", "tu154/custom/stall_xp12/normal_N", diagnosticFloat},
+    {"diag_axial", "tu154/custom/stall_xp12/axial_N", diagnosticFloat},
+    {"diag_roll", "tu154/custom/stall_xp12/roll_Nm", diagnosticFloat},
+    {"diag_pitch", "tu154/custom/stall_xp12/pitch_Nm", diagnosticFloat},
+    {"diag_yaw", "tu154/custom/stall_xp12/yaw_Nm", diagnosticFloat},
+    {"diag_native_pitch", "tu154/custom/stall_xp12/native_pitch_Nm", diagnosticFloat},
+    {"diag_entry_age", "tu154/custom/stall_xp12/entry_elapsed_s", diagnosticFloat},
+    {"diag_recovery_age", "tu154/custom/stall_xp12/recovery_elapsed_s", diagnosticFloat},
+    {"diag_release_age", "tu154/custom/stall_xp12/release_elapsed_s", diagnosticFloat},
+    {"diag_exit_reason", "tu154/custom/stall_xp12/exit_reason", diagnosticInt},
+    {"diag_reset_reason", "tu154/custom/stall_xp12/reset_reason", diagnosticInt},
+})
+
 local STATE_NORMAL = 0
 local STATE_ENTRY = 1
-local STATE_SPIN_HOLD = 2
+local STATE_DEVELOPED = 2
 local STATE_RECOVERY = 3
-
 local SIDE_LEFT = -1
 local SIDE_RIGHT = 1
-
--- Entry envelope and aggression detector.
 local ENTRY_MACH_MIN = 0.10
 local ENTRY_MACH_MAX = 0.70
-local ENTRY_PITCH_MIN = 0.88
-local ENTRY_ELEVATOR_MAX = -20.0
-local FULL_AFT_PITCH = 0.92
-local FULL_AFT_CONFIRM_TIME = 0.20
-local RAPID_PULL_RATE = 0.60
-local RAPID_ALPHA_RATE = 1.00
-local RAPID_PITCH_RATE = 1.50
-local ALPHA_RATE_FILTER_GAIN = 4.00
-local AGGRESSIVE_LATCH_TIME = 8.00
-
--- Developed-spin and recovery gates.
-local SPIN_HOLD_MIN_AGE = 1.60
-local SPIN_HOLD_ROLL_RATE = 8.00
-local SPIN_HOLD_YAW_RATE = 2.50
-local SPIN_HOLD_BETA = 4.00
-local RELEASE_PITCH = 0.20
-local RELEASE_CONFIRM_TIME = 0.60
-local RECOVERY_ALPHA = 8.50
-local RECOVERY_FADE_TIME = 2.50
-
--- Force/moment calibration. Dynamic pressure is calculated in SI units from
--- rho and TAS, independent of the simulator's Qstatic unit label.
+local ENTRY_ELEVATOR_MAX = -18.0
+local UNCOMMANDED_ALPHA_MARGIN = 1.25
+local ENTRY_CONFIRM_TIME = 0.20
+local DEVELOPED_TIME = 1.10
+local RECOVERY_ALPHA = 9.00
+local RECOVERY_CONFIRM_TIME = 0.40
+local RECOVERY_FADE_TIME = 1.25
+local REENTRY_BLEND_TIME = 0.20
 local DYNAMIC_PRESSURE_MAX = 3600.0
 local WING_REFERENCE_AREA = 202.1870
 local WING_MOMENT_CHORD = 6.4234
 local WING_SPAN = 37.55
-local FLAT_SPIN_CM = 0.135
-local ROLL_DAMPING_COEFFICIENT = 0.25
-local YAW_DAMPING_COEFFICIENT = 0.25
+local ROLL_DAMPING_COEFFICIENT = 0.08
+local YAW_DAMPING_COEFFICIENT = 0.10
 local MAX_ROLL_MOMENT = 600000.0
-local MAX_PITCH_MOMENT = 160000.0
+local MAX_PITCH_MOMENT = 900000.0
 local MAX_YAW_MOMENT = 350000.0
+local PITCH_COMPENSATION_FRACTION = 0.80
+local MAX_PITCH_CM = 0.23
+local NATIVE_PITCH_FILTER_TIME = 0.12
 
-local function clamp01(value)
-    if value < 0 then
-        return 0
-    elseif value > 1 then
-        return 1
-    end
-    return value
+local function finite(value)
+    return type(value) == "number" and value == value
+        and value > -math.huge and value < math.huge
 end
-
 local function clamp(value, minimum, maximum)
     return math.max(minimum, math.min(maximum, value))
 end
-
+local function clamp01(value)
+    return clamp(value, 0, 1)
+end
 local function smoothstep01(value)
     value = clamp01(value)
     return value * value * (3 - 2 * value)
 end
-
 local function smoothstepRange(edge0, edge1, value)
-    if edge1 <= edge0 then
-        return value >= edge1 and 1 or 0
-    end
     return smoothstep01((value - edge0) / (edge1 - edge0))
 end
-
 local function mix(a, b, ratio)
     return a + (b - a) * ratio
 end
 
-local function maxAbs4(a, b, c, d)
-    return math.max(math.abs(a), math.abs(b), math.abs(c), math.abs(d))
-end
-
--- ENTRY produces the first hard break. SPIN is blended in from 14 to 19 deg
--- alpha and preserves a much larger drag difference on the latched side.
+-- Existing per-band increments retained; development now reaches them sooner.
 local ENTRY_WEAK = {
     [1] = {cl = -0.38, cd = 0.14},
     [2] = {cl = -0.30, cd = 0.12},
@@ -220,29 +239,23 @@ local BAND_ARM = {
     [3] = {14.35, 14.98, 15.61, 16.23, 16.86, 17.48, 18.11, 18.73},
 }
 
-local WEAK_BAND_START = {[1] = 0.00, [2] = 0.30, [3] = 0.75}
-local OTHER_BAND_START = {[1] = 0.18, [2] = 0.65, [3] = 1.05}
-local BAND_SPREAD_TIME = {[1] = 0.35, [2] = 0.50, [3] = 0.55}
-local ELEMENT_RAMP_TIME = 0.12
 
+local WEAK_BAND_START = {[1] = 0.00, [2] = 0.18, [3] = 0.40}
+local OTHER_BAND_START = {[1] = 0.10, [2] = 0.35, [3] = 0.62}
+local BAND_SPREAD_TIME = {[1] = 0.20, [2] = 0.30, [3] = 0.38}
+local ELEMENT_RAMP_TIME = 0.10
 local elements = {}
+local virtual_area = 0
 for band = 1, 3 do
     for order = 0, 7 do
-        local slot = order + 1
-        elements[#elements + 1] = {
-            side = SIDE_LEFT,
-            band = band,
-            order = order,
-            area = BAND_AREA[band][slot],
-            arm = BAND_ARM[band][slot],
-        }
-        elements[#elements + 1] = {
-            side = SIDE_RIGHT,
-            band = band,
-            order = order,
-            area = BAND_AREA[band][slot],
-            arm = BAND_ARM[band][slot],
-        }
+        for _, side in ipairs({SIDE_LEFT, SIDE_RIGHT}) do
+            local slot = order + 1
+            elements[#elements + 1] = {
+                side = side, band = band, order = order,
+                area = BAND_AREA[band][slot], arm = BAND_ARM[band][slot],
+            }
+            virtual_area = virtual_area + BAND_AREA[band][slot]
+        end
     end
 end
 
@@ -250,59 +263,79 @@ local state = STATE_NORMAL
 local weak_side = SIDE_RIGHT
 local next_neutral_side = SIDE_RIGHT
 local event_age = 0
+local entry_timer = 0
 local recovery_age = 0
-local aggressive_timer = 0
-local full_aft_timer = 0
 local release_timer = 0
-local previous_pitch = 0
-local previous_alpha = 0
-local filtered_alpha_rate = 0
-local derivative_ready = false
+local exit_reason = 0
+local output_blend = 1
+local recovery_start_blend = 1
+local resume_start_blend = 1
+local resume_age = REENTRY_BLEND_TIME
+local filtered_nose_down = 0
+local pitch_filter_ready = false
 
-local last_normal = 0
-local last_axial = 0
-local last_roll = 0
-local last_pitch = 0
-local last_yaw = 0
-
-local function clearLastOutputs()
-    last_normal = 0
-    last_axial = 0
-    last_roll = 0
-    last_pitch = 0
-    last_yaw = 0
+local function publishZeroForces()
+    set(diag_normal, 0)
+    set(diag_axial, 0)
+    set(diag_roll, 0)
+    set(diag_pitch, 0)
+    set(diag_yaw, 0)
+    set(diag_separation, 0)
 end
-
-local function resetState()
+local function publishState()
+    set(diag_state, state)
+    set(diag_side, state == STATE_NORMAL and 0 or weak_side)
+    set(diag_entry_age, event_age)
+    set(diag_recovery_age, recovery_age)
+    set(diag_release_age, release_timer)
+    set(diag_exit_reason, exit_reason)
+    set(diag_blend, state == STATE_NORMAL and 0 or output_blend)
+end
+local function resetState(reason)
     state = STATE_NORMAL
     event_age = 0
+    entry_timer = 0
     recovery_age = 0
-    aggressive_timer = 0
-    full_aft_timer = 0
     release_timer = 0
-    filtered_alpha_rate = 0
-    derivative_ready = false
-    clearLastOutputs()
+    exit_reason = 0
+    output_blend = 1
+    recovery_start_blend = 1
+    resume_start_blend = 1
+    resume_age = REENTRY_BLEND_TIME
+    filtered_nose_down = 0
+    pitch_filter_ready = false
+    publishZeroForces()
+    publishState()
+    set(diag_reset_reason, reason or 0)
+    set(diag_pressure, 0)
+    set(diag_alpha_entry, 0)
+    set(diag_elevator, 0)
+    set(diag_yoke, 0)
+    set(diag_native_pitch, 0)
+    -- Never clear shared plugin force accumulators here.
 end
-
-local function isCleanConfiguration()
-    local flap_max = maxAbs4(
-        get(flap_inner_left),
-        get(flap_inner_right),
-        get(flap_middle_left),
-        get(flap_middle_right)
-    )
-    local gear_max = math.max(get(gear_nose), get(gear_left), get(gear_right))
-    return flap_max < 1.0
-        and get(slat_ratio) < 0.05
-        and gear_max < 0.05
+local config_properties = {
+    flap_inner_left, flap_inner_right, flap_middle_left, flap_middle_right,
+    slat_ratio, gear_nose, gear_left, gear_right,
+}
+local function cleanConfiguration()
+    local clean = true
+    for i, property in ipairs(config_properties) do
+        local value = get(property)
+        if not finite(value) then
+            return nil
+        end
+        if i <= 4 then
+            if math.abs(value) >= 1.0 then clean = false end
+        elseif math.abs(value) >= 0.05 then
+            clean = false
+        end
+    end
+    return clean
 end
-
 local function entryTripAlpha(mach)
-    local mach_factor = smoothstepRange(0.25, 0.50, mach)
-    return 12.30 - 0.80 * mach_factor
+    return 12.30 - 0.80 * smoothstepRange(0.25, 0.50, mach)
 end
-
 local function chooseWeakSide(beta, yaw_input, roll_rate_value, roll_input)
     if beta > 1.00 then
         return SIDE_RIGHT
@@ -331,299 +364,251 @@ local function chooseWeakSide(beta, yaw_input, roll_rate_value, roll_input)
     return selected
 end
 
-local function startEntry(beta, yaw_input, roll_rate_value, roll_input)
-    weak_side = chooseWeakSide(beta, yaw_input, roll_rate_value, roll_input)
+
+local function startEntry(beta, yaw_input, p_rate, roll_input)
+    weak_side = chooseWeakSide(beta, yaw_input, p_rate, roll_input)
     state = STATE_ENTRY
     event_age = 0
+    entry_timer = 0
     recovery_age = 0
     release_timer = 0
+    exit_reason = 0
+    output_blend = 1
+    resume_start_blend = 1
+    resume_age = REENTRY_BLEND_TIME
 end
-
-local function startRecovery()
-    if state ~= STATE_RECOVERY then
-        state = STATE_RECOVERY
-        recovery_age = 0
-        release_timer = 0
-    end
+local function startRecovery(reason)
+    state = STATE_RECOVERY
+    recovery_age = 0
+    release_timer = 0
+    exit_reason = reason
+    recovery_start_blend = output_blend
 end
-
-local function elementProgress(element)
-    local weak = element.side == weak_side
-    local band_start = weak and WEAK_BAND_START[element.band]
-        or OTHER_BAND_START[element.band]
-    local spread = BAND_SPREAD_TIME[element.band]
-    local delay = band_start + spread * element.order / 7
+local function timeProgress(element)
+    local starts = element.side == weak_side and WEAK_BAND_START or OTHER_BAND_START
+    local delay = starts[element.band]
+        + BAND_SPREAD_TIME[element.band] * element.order / 7
     return smoothstepRange(delay, delay + ELEMENT_RAMP_TIME, event_age)
 end
 
-local function addPluginOutputs(normal_force, axial_force, roll_moment, pitch_moment, yaw_moment)
-    set(normal_plugin, get(normal_plugin) + normal_force)
-    set(axial_plugin, get(axial_plugin) + axial_force)
-    set(roll_plugin, get(roll_plugin) + roll_moment)
-    set(pitch_plugin, get(pitch_plugin) + pitch_moment)
-    set(yaw_plugin, get(yaw_plugin) + yaw_moment)
-end
-
-local function applyActiveOutputs(alpha, trip_alpha, p_rate, q_rate, r_rate)
-    local tas = math.max(0, get(true_airspeed))
-    local rho = math.max(0, get(air_density))
-    local dynamic_pressure = math.min(DYNAMIC_PRESSURE_MAX, 0.5 * rho * tas * tas)
-
-    local deep_spin = state == STATE_SPIN_HOLD
-        and smoothstepRange(14.00, 19.00, alpha)
-        or 0
-    local damping_factor = state == STATE_SPIN_HOLD
-        and mix(0.75, 1.00, deep_spin)
-        or 0
-    local alpha_factor
-    if state == STATE_ENTRY then
-        alpha_factor = smoothstepRange(trip_alpha - 0.20, trip_alpha + 0.80, alpha)
-    else
-        alpha_factor = smoothstepRange(10.00, 12.50, alpha)
-    end
-
-    local high_alpha_factor = state == STATE_SPIN_HOLD
-        and smoothstepRange(15.00, 20.50, alpha)
-        or 0
-
-    local normal_force = 0
-    local axial_force = 0
-    local roll_moment = 0
-    local yaw_moment = 0
-    local alpha_rad = math.rad(alpha)
-    local sin_alpha = math.sin(alpha_rad)
-    local cos_alpha = math.cos(alpha_rad)
+local function applyOutputs(alpha, trip_alpha, p_rate, q_rate, r_rate,
+        tas, pressure, mass, grav, elevator, native_m, fade)
+    local developed = smoothstepRange(0.35, DEVELOPED_TIME, event_age)
+    local deep_spin = developed * smoothstepRange(trip_alpha + 0.70, trip_alpha + 4.00, alpha)
+    local sine = math.sin(math.rad(alpha))
+    local cosine = math.cos(math.rad(alpha))
+    local rate_speed = math.max(tas, 25.0)
+    local normal_force, axial_force, roll_moment, yaw_moment = 0, 0, 0, 0
+    local separated_area = 0
 
     for _, element in ipairs(elements) do
         local weak = element.side == weak_side
         local entry = weak and ENTRY_WEAK[element.band] or ENTRY_OTHER[element.band]
         local spin = weak and SPIN_WEAK[element.band] or SPIN_OTHER[element.band]
-        local progression = elementProgress(element) * alpha_factor
-        local cl_value = mix(entry.cl, spin.cl, deep_spin) * progression
-        local cd_value = mix(entry.cd, spin.cd, deep_spin) * progression
-
-        -- Transform the path-axis lift loss and drag increment into the X-Plane
-        -- aircraft Y/Z axes. At positive alpha, lost lift adds aft force while
-        -- the extra drag carries a small upward component.
-        local element_normal = dynamic_pressure * element.area
-            * (cl_value * cos_alpha + cd_value * sin_alpha)
-        local element_axial = dynamic_pressure * element.area
-            * ((-cl_value) * sin_alpha + cd_value * cos_alpha)
-        local lateral_position = element.side * element.arm
-
-        normal_force = normal_force + element_normal
-        axial_force = axial_force + element_axial
-        roll_moment = roll_moment - element_normal * lateral_position
-        yaw_moment = yaw_moment + element_axial * lateral_position
+        local lateral = element.side * element.arm
+        -- Positive P lowers the right wing, increasing its local AoA.
+        -- Bound this approximation at extreme rates; it is not a native lookup.
+        local roll_alpha = clamp(math.deg(math.atan(math.rad(p_rate) * lateral / rate_speed)), -8, 8)
+        local local_alpha = alpha + roll_alpha
+        local onset = smoothstepRange(trip_alpha - 0.20, trip_alpha + 0.80, local_alpha)
+        local held = smoothstepRange(RECOVERY_ALPHA, trip_alpha + 0.20, local_alpha)
+        local separation = timeProgress(element) * mix(onset, held, developed)
+        local cl_value = mix(entry.cl, spin.cl, deep_spin) * separation
+        local cd_value = mix(entry.cd, spin.cd, deep_spin) * separation
+        local normal = pressure * element.area * (cl_value * cosine + cd_value * sine)
+        local axial = pressure * element.area * (-cl_value * sine + cd_value * cosine)
+        normal_force = normal_force + normal
+        axial_force = axial_force + axial
+        roll_moment = roll_moment - normal * lateral
+        yaw_moment = yaw_moment + axial * lateral
+        separated_area = separated_area + element.area * separation
     end
 
-    -- Cap the aggregate force vector by fractions of aircraft weight and scale
-    -- its associated roll/yaw moments by the same amount.
-    local aircraft_weight = math.max(1, get(total_mass) * get(gravity))
+    local separation = clamp01(separated_area / virtual_area)
+    local weight = mass * grav
     local force_scale = 1
-    local normal_cap = 0.30 * aircraft_weight
-    local axial_cap = 0.15 * aircraft_weight
-    if math.abs(normal_force) > normal_cap then
-        force_scale = math.min(force_scale, normal_cap / math.abs(normal_force))
+    if math.abs(normal_force) > 0.30 * weight then
+        force_scale = math.min(force_scale, 0.30 * weight / math.abs(normal_force))
     end
-    if axial_force > axial_cap then
-        force_scale = math.min(force_scale, axial_cap / axial_force)
+    if axial_force > 0.15 * weight then
+        force_scale = math.min(force_scale, 0.15 * weight / axial_force)
     end
     normal_force = normal_force * force_scale
     axial_force = axial_force * force_scale
     roll_moment = roll_moment * force_scale
     yaw_moment = yaw_moment * force_scale
 
-    -- Non-dimensional P/R damping opposes angular rates during spin
-    -- assistance. The simulator determines the resulting motion.
-    local rate_speed = math.max(tas, 25.0)
+    -- Retain damping, but do not let it erase the asymmetric break at low rates.
+    -- It vanishes with separation and increases again at extreme rotation rates.
+    local damping = separation * developed
     local p_hat = math.rad(p_rate) * WING_SPAN / (2 * rate_speed)
     local r_hat = math.rad(r_rate) * WING_SPAN / (2 * rate_speed)
-    local roll_damping = -dynamic_pressure * WING_REFERENCE_AREA * WING_SPAN
-        * ROLL_DAMPING_COEFFICIENT * p_hat * damping_factor
-    local yaw_damping = -dynamic_pressure * WING_REFERENCE_AREA * WING_SPAN
-        * YAW_DAMPING_COEFFICIENT * r_hat * damping_factor
-    roll_moment = clamp(
-        roll_moment + roll_damping,
-        -MAX_ROLL_MOMENT,
-        MAX_ROLL_MOMENT
-    )
-    yaw_moment = clamp(
-        yaw_moment + yaw_damping,
-        -MAX_YAW_MOMENT,
-        MAX_YAW_MOMENT
-    )
+    local p_damping = ROLL_DAMPING_COEFFICIENT + 0.12 * smoothstepRange(20, 60, math.abs(p_rate))
+    local r_damping = YAW_DAMPING_COEFFICIENT + 0.15 * smoothstepRange(10, 40, math.abs(r_rate))
+    roll_moment = clamp(roll_moment - pressure * WING_REFERENCE_AREA * WING_SPAN
+        * p_damping * p_hat * damping, -MAX_ROLL_MOMENT, MAX_ROLL_MOMENT)
+    yaw_moment = clamp(yaw_moment - pressure * WING_REFERENCE_AREA * WING_SPAN
+        * r_damping * r_hat * damping, -MAX_YAW_MOMENT, MAX_YAW_MOMENT)
 
-    -- Empirical pitch correction representing reduced nose-down balance.
-    -- Positive M is nose-up in X-Plane. At alpha 24 deg and q=738.7 Pa,
-    -- Cm=+0.135 gives about +130 kNm against the measured -126 kNm balance.
-    local pitch_available = dynamic_pressure * WING_REFERENCE_AREA
-        * WING_MOMENT_CHORD * FLAT_SPIN_CM
-    local upper_alpha_limit = 1 - 0.50 * smoothstepRange(30.00, 38.00, alpha)
-    local nose_up_rate_limit = 1 - 0.70 * smoothstepRange(2.00, 6.00, q_rate)
-    local pitch_moment = clamp(
-        pitch_available * high_alpha_factor
-            * upper_alpha_limit * nose_up_rate_limit,
-        0,
-        MAX_PITCH_MOMENT
-    )
+    -- Feed-forward attenuation of native NOSE-DOWN balance, never M_total.
+    -- Limiting by the current negative value preserves at least 20% of it.
+    -- Relief of the physical elevator removes this aid even if the wing is
+    -- still separated. It does not trigger artificial reattachment.
+    local alpha_blend = smoothstepRange(trip_alpha - 0.30, trip_alpha + 3.70, alpha)
+    local elevator_blend = smoothstepRange(8.0, 22.0, -elevator)
+    local negative_native = math.max(0, -native_m)
+    local pitch_request = PITCH_COMPENSATION_FRACTION
+        * math.min(filtered_nose_down, negative_native)
+        * alpha_blend * elevator_blend * separation
+    local pitch_limit = math.min(MAX_PITCH_MOMENT,
+        pressure * WING_REFERENCE_AREA * WING_MOMENT_CHORD * MAX_PITCH_CM)
+    local pitch_moment = math.min(pitch_request, pitch_limit)
 
-    last_normal = normal_force
-    last_axial = axial_force
-    last_roll = roll_moment
-    last_pitch = pitch_moment
-    last_yaw = yaw_moment
+    normal_force = normal_force * fade
+    axial_force = axial_force * fade
+    roll_moment = roll_moment * fade
+    pitch_moment = pitch_moment * fade
+    yaw_moment = yaw_moment * fade
 
-    addPluginOutputs(normal_force, axial_force, roll_moment, pitch_moment, yaw_moment)
-end
-
-local function applyRecoveryOutputs(dt)
-    recovery_age = recovery_age + dt
-    local scale = 1 - smoothstep01(recovery_age / RECOVERY_FADE_TIME)
-    addPluginOutputs(
-        last_normal * scale,
-        last_axial * scale,
-        last_roll * scale,
-        last_pitch * scale,
-        last_yaw * scale
-    )
-
-    if recovery_age >= RECOVERY_FADE_TIME then
-        resetState()
+    -- Apply the entire vector only when all shared accumulators are valid.
+    local base_n, base_a = get(normal_plugin), get(axial_plugin)
+    local base_l, base_m, base_r = get(roll_plugin), get(pitch_plugin), get(yaw_plugin)
+    if not (finite(base_n) and finite(base_a) and finite(base_l)
+        and finite(base_m) and finite(base_r)) then
+        resetState(4)
+        return
     end
+    set(normal_plugin, base_n + normal_force)
+    set(axial_plugin, base_a + axial_force)
+    set(roll_plugin, base_l + roll_moment)
+    set(pitch_plugin, base_m + pitch_moment)
+    set(yaw_plugin, base_r + yaw_moment)
+    set(diag_normal, normal_force)
+    set(diag_axial, axial_force)
+    set(diag_roll, roll_moment)
+    set(diag_pitch, pitch_moment)
+    set(diag_yaw, yaw_moment)
+    set(diag_separation, separation * fade)
+    publishState()
 end
 
 function update()
     local dt = get(frame_time)
-    local master = get(smartcopilot_master) ~= 1
-
-    -- Never add forces during pause/replay/ground/slave or discontinuous time.
-    -- Plugin forces are reset by X-Plane; deliberately do not write zero here,
-    -- because the datarefs are additive and may also be used by other plugins.
-    if dt <= 0 or dt > 0.20 or get(paused) ~= 0 or get(in_replay) ~= 0
-        or get(on_ground) ~= 0 or not master then
-        resetState()
+    local grounded, pause_value, replay_value = get(on_ground), get(paused), get(in_replay)
+    local master = get(smartcopilot_master)
+    if not (finite(dt) and finite(grounded) and finite(pause_value)
+        and finite(replay_value) and finite(master)) or dt <= 0 or dt > 0.20 then
+        resetState(4)
         return
     end
+    if grounded ~= 0 then resetState(1); return end
+    if pause_value ~= 0 or replay_value ~= 0 then resetState(2); return end
+    if master == 1 then resetState(3); return end
 
-    local alpha = get(alpha_deg)
-    local beta = get(beta_deg)
-    local mach = get(mach_no)
-    local pitch_input = get(raw_pitch)
-    local roll_input = get(raw_roll)
-    local yaw_input = get(raw_yaw)
-    local p_rate = get(roll_rate)
-    local q_rate = get(pitch_rate)
-    local r_rate = get(yaw_rate)
-    local clean = isCleanConfiguration()
-    local mach_valid = mach >= ENTRY_MACH_MIN and mach <= ENTRY_MACH_MAX
-    local elevator_deflection = 0.5 * (get(elevator_left) + get(elevator_right))
-    local elevator_ready = elevator_deflection <= ENTRY_ELEVATOR_MAX
-
-    if not derivative_ready then
-        previous_pitch = pitch_input
-        previous_alpha = alpha
-        filtered_alpha_rate = 0
-        derivative_ready = true
+    local alpha, beta, mach = get(alpha_deg), get(beta_deg), get(mach_no)
+    local p_rate, q_rate, r_rate = get(roll_rate), get(pitch_rate), get(yaw_rate)
+    local tas, rho = get(true_airspeed), get(air_density)
+    local mass, grav = get(total_mass), get(gravity)
+    local left_elevator, right_elevator = get(elevator_left), get(elevator_right)
+    local native_m = get(native_pitch_moment)
+    local roll_input, yaw_input = get(raw_roll), get(raw_yaw)
+    local clean = cleanConfiguration()
+    if not (finite(alpha) and finite(beta) and finite(mach) and finite(p_rate)
+        and finite(q_rate) and finite(r_rate) and finite(tas) and finite(rho)
+        and finite(mass) and finite(grav) and finite(left_elevator)
+        and finite(right_elevator) and finite(native_m)
+        and finite(roll_input) and finite(yaw_input)) or clean == nil
+        or tas < 0 or tas > 2000 or rho < 0 or rho > 10
+        or mass < 1000 or mass > 1000000 or grav <= 0 or grav > 30
+        or math.abs(alpha) > 180 or math.abs(beta) > 180
+        or math.abs(p_rate) > 2000 or math.abs(q_rate) > 2000 or math.abs(r_rate) > 2000
+        or math.abs(left_elevator) > 90 or math.abs(right_elevator) > 90 then
+        resetState(4)
+        return
     end
-
-    local pull_rate = (pitch_input - previous_pitch) / dt
-    local raw_alpha_rate = (alpha - previous_alpha) / dt
-    local filter_ratio = clamp01(dt * ALPHA_RATE_FILTER_GAIN)
-    filtered_alpha_rate = filtered_alpha_rate
-        + (raw_alpha_rate - filtered_alpha_rate) * filter_ratio
-    previous_pitch = pitch_input
-    previous_alpha = alpha
-
-    if pitch_input >= 0.85 and (
-        pull_rate >= RAPID_PULL_RATE
-        or filtered_alpha_rate >= RAPID_ALPHA_RATE
-        or q_rate >= RAPID_PITCH_RATE
-    ) then
-        aggressive_timer = AGGRESSIVE_LATCH_TIME
+    local elevator = 0.5 * (left_elevator + right_elevator)
+    local trip_alpha = entryTripAlpha(mach)
+    local pressure = math.min(DYNAMIC_PRESSURE_MAX, 0.5 * rho * tas * tas)
+    local envelope = clean and mach >= ENTRY_MACH_MIN and mach <= ENTRY_MACH_MAX
+    local negative_native = math.max(0, -native_m)
+    if not pitch_filter_ready then
+        filtered_nose_down = negative_native
+        pitch_filter_ready = true
     else
-        aggressive_timer = math.max(0, aggressive_timer - dt)
+        local gain = 1 - math.exp(-dt / NATIVE_PITCH_FILTER_TIME)
+        filtered_nose_down = filtered_nose_down + gain * (negative_native - filtered_nose_down)
     end
-
-    if pitch_input >= FULL_AFT_PITCH then
-        full_aft_timer = full_aft_timer + dt
-    else
-        full_aft_timer = 0
-    end
+    set(diag_reset_reason, 0)
+    set(diag_alpha_entry, trip_alpha)
+    set(diag_elevator, elevator)
+    local yoke = get(raw_pitch)
+    set(diag_yoke, finite(yoke) and yoke or 0)
+    set(diag_pressure, pressure)
+    set(diag_native_pitch, native_m)
+    publishZeroForces()
 
     if state == STATE_NORMAL then
-        if clean and mach_valid and elevator_ready
-            and pitch_input >= ENTRY_PITCH_MIN then
-            local trip_alpha = entryTripAlpha(mach)
-            local full_aft_confirmed = full_aft_timer >= FULL_AFT_CONFIRM_TIME
-            local deliberate_yaw_entry = full_aft_confirmed
-                and math.abs(yaw_input) >= 0.25
-            if alpha >= trip_alpha
-                and (aggressive_timer > 0 or deliberate_yaw_entry) then
-                startEntry(beta, yaw_input, p_rate, roll_input)
-            end
+        local entry = envelope and pressure > 1 and alpha >= trip_alpha
+            and (elevator <= ENTRY_ELEVATOR_MAX
+                or alpha >= trip_alpha + UNCOMMANDED_ALPHA_MARGIN)
+        if entry then entry_timer = entry_timer + dt else entry_timer = 0 end
+        if entry_timer + 1e-9 >= ENTRY_CONFIRM_TIME then
+            startEntry(beta, yaw_input, p_rate, roll_input)
         end
+        publishState()
         return
     end
 
     if state == STATE_RECOVERY then
-        applyRecoveryOutputs(dt)
-        return
-    end
-
-    if not clean or not mach_valid then
-        startRecovery()
-        applyRecoveryOutputs(dt)
-        return
+        if envelope and alpha >= trip_alpha and pressure > 1 then
+            state = event_age >= DEVELOPED_TIME and STATE_DEVELOPED or STATE_ENTRY
+            resume_start_blend = output_blend
+            resume_age = 0
+            recovery_age = 0
+            release_timer = 0
+            exit_reason = 0
+        else
+            recovery_age = recovery_age + dt
+            if recovery_age + 1e-9 >= RECOVERY_FADE_TIME then
+                resetState(0)
+                return
+            end
+            output_blend = recovery_start_blend
+                * (1 - smoothstep01(recovery_age / RECOVERY_FADE_TIME))
+            applyOutputs(alpha, trip_alpha, p_rate, q_rate, r_rate,
+                tas, pressure, mass, grav, elevator, native_m, output_blend)
+            return
+        end
     end
 
     event_age = event_age + dt
-
-    if pitch_input < RELEASE_PITCH then
-        release_timer = release_timer + dt
+    resume_age = math.min(REENTRY_BLEND_TIME, resume_age + dt)
+    output_blend = mix(resume_start_blend, 1,
+        smoothstep01(resume_age / REENTRY_BLEND_TIME))
+    if not envelope then
+        startRecovery(2)
     else
-        release_timer = 0
+        if alpha < RECOVERY_ALPHA then
+            release_timer = release_timer + dt
+        else
+            release_timer = 0
+        end
+        if release_timer + 1e-9 >= RECOVERY_CONFIRM_TIME then
+            startRecovery(1)
+        elseif event_age >= DEVELOPED_TIME then
+            state = STATE_DEVELOPED
+        end
     end
-
-    if alpha < RECOVERY_ALPHA or release_timer >= RELEASE_CONFIRM_TIME then
-        startRecovery()
-        applyRecoveryOutputs(dt)
-        return
-    end
-
-    if state == STATE_ENTRY and (
-        event_age >= SPIN_HOLD_MIN_AGE
-        or math.abs(p_rate) >= SPIN_HOLD_ROLL_RATE
-        or math.abs(r_rate) >= SPIN_HOLD_YAW_RATE
-        or math.abs(beta) >= SPIN_HOLD_BETA
-    ) then
-        state = STATE_SPIN_HOLD
-    end
-
-    applyActiveOutputs(alpha, entryTripAlpha(mach), p_rate, q_rate, r_rate)
+    applyOutputs(alpha, trip_alpha, p_rate, q_rate, r_rate,
+        tas, pressure, mass, grav, elevator, native_m, output_blend)
 end
 
-function onModuleInit()
-    resetState()
-end
-
-function onAirportLoaded()
-    resetState()
-end
-
-function onPlaneLoaded()
-    resetState()
-end
-
-function onPlaneUnloaded()
-    resetState()
-end
-
-function onModuleShutdown(is_error)
-    resetState()
-end
-
+function onModuleInit() resetState(0) end
+function onAirportLoaded() resetState(0) end
+function onPlaneLoaded() resetState(0) end
+function onPlaneUnloaded() resetState(0) end
+function onModuleShutdown(is_error) resetState(0) end
 function onModuleDone()
-    resetState()
-    print("XP12 aggressive asymmetric stall force model v4.3.2 released")
+    resetState(0)
+    print("XP12 asymmetric stall supplement v4.4.0 released")
 end

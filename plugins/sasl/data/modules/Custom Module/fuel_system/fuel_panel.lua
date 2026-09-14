@@ -1,184 +1,193 @@
 -- fuel system panel
 
 -- gauges
-defineProperty("fuel_meter_summ", globalPropertyf("tu154/custom/gauges/fuel/fuel_meter_summ")) --   
-defineProperty("fuel_meter_tank1", globalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank1")) --     1
-defineProperty("fuel_meter_tank2_left", globalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank2_left")) --     2
-defineProperty("fuel_meter_tank2_right", globalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank2_right")) --     2
-defineProperty("fuel_meter_tank3_left", globalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank3_left")) --     3
-defineProperty("fuel_meter_tank3_right", globalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank3_right")) --     3
-defineProperty("fuel_meter_tank4", globalPropertyf("tu154/custom/gauges/fuel/fuel_meter_tank4")) --     4
-defineProperty("fuel_meter_mech", globalPropertyf("tu154/custom/gauges/fuel/fuel_meter_mech")) -- 
-defineProperty("fuel_front_ind", globalPropertyf("tu154/custom/gauges/misc/fuel_front_ind")) --     
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
--- controls on gauges
-defineProperty("fuel_meter_summ_zero", globalPropertyf("tu154/custom/buttons/fuel/fuel_meter_summ_zero")) --   .  
-defineProperty("fuel_meter_summ_max", globalPropertyf("tu154/custom/buttons/fuel/fuel_meter_summ_max")) --   .  P
-defineProperty("fuel_meter_tank2_zero", globalPropertyf("tu154/custom/buttons/fuel/fuel_meter_tank2_zero")) --   2.  
-defineProperty("fuel_meter_tank2_max", globalPropertyf("tu154/custom/buttons/fuel/fuel_meter_tank2_max")) --   2.  P
-defineProperty("fuel_meter_tank3_zero", globalPropertyf("tu154/custom/buttons/fuel/fuel_meter_tank3_zero")) --   3.  
-defineProperty("fuel_meter_tank3_max", globalPropertyf("tu154/custom/buttons/fuel/fuel_meter_tank3_max")) --   3.  P
-defineProperty("fuel_meter_tank4_zero", globalPropertyf("tu154/custom/buttons/fuel/fuel_meter_tank4_zero")) --   4.  
-defineProperty("fuel_meter_tank4_max", globalPropertyf("tu154/custom/buttons/fuel/fuel_meter_tank4_max")) --   4.  P
-defineProperty("fuel_front_zero", globalPropertyf("tu154/custom/buttons/misc/fuel_front_zero")) --     . 
-defineProperty("fuel_front_max", globalPropertyf("tu154/custom/buttons/misc/fuel_front_max")) --     . 
+defineProps({
+    { "fuel_meter_summ", "tu154/custom/gauges/fuel/fuel_meter_summ", globalPropertyf }, --
+    { "fuel_meter_tank1", "tu154/custom/gauges/fuel/fuel_meter_tank1", globalPropertyf }, --     1
+    { "fuel_meter_tank2_left", "tu154/custom/gauges/fuel/fuel_meter_tank2_left", globalPropertyf }, --     2
+    { "fuel_meter_tank2_right", "tu154/custom/gauges/fuel/fuel_meter_tank2_right", globalPropertyf }, --     2
+    { "fuel_meter_tank3_left", "tu154/custom/gauges/fuel/fuel_meter_tank3_left", globalPropertyf }, --     3
+    { "fuel_meter_tank3_right", "tu154/custom/gauges/fuel/fuel_meter_tank3_right", globalPropertyf }, --     3
+    { "fuel_meter_tank4", "tu154/custom/gauges/fuel/fuel_meter_tank4", globalPropertyf }, --     4
+    { "fuel_meter_mech", "tu154/custom/gauges/fuel/fuel_meter_mech", globalPropertyf }, --
+    { "fuel_front_ind", "tu154/custom/gauges/misc/fuel_front_ind", globalPropertyf }, --
 
--- controls
-defineProperty("pump_tank2_left", globalPropertyi("tu154/custom/switchers/fuel/pump_tank2_left")) --   2
-defineProperty("pump_tank2_right", globalPropertyi("tu154/custom/switchers/fuel/pump_tank2_right")) --   2
-defineProperty("pump_tank3_left", globalPropertyi("tu154/custom/switchers/fuel/pump_tank3_left")) --   3
-defineProperty("pump_tank3_right", globalPropertyi("tu154/custom/switchers/fuel/pump_tank3_right")) --   3
-defineProperty("pump_tank4", globalPropertyi("tu154/custom/switchers/fuel/pump_tank4")) --   4
-defineProperty("pump_tank1_1", globalPropertyi("tu154/custom/switchers/fuel/pump_tank1_1")) --   1
-defineProperty("pump_tank1_2", globalPropertyi("tu154/custom/switchers/fuel/pump_tank1_2")) --   1
-defineProperty("pump_tank1_3", globalPropertyi("tu154/custom/switchers/fuel/pump_tank1_3")) --   1
-defineProperty("pump_tank1_4", globalPropertyi("tu154/custom/switchers/fuel/pump_tank1_4")) --   1
+    -- controls on gauges
+    { "fuel_meter_summ_zero", "tu154/custom/buttons/fuel/fuel_meter_summ_zero", globalPropertyf }, --   .
+    { "fuel_meter_summ_max", "tu154/custom/buttons/fuel/fuel_meter_summ_max", globalPropertyf }, --   .  P
+    { "fuel_meter_tank2_zero", "tu154/custom/buttons/fuel/fuel_meter_tank2_zero", globalPropertyf }, --   2.
+    { "fuel_meter_tank2_max", "tu154/custom/buttons/fuel/fuel_meter_tank2_max", globalPropertyf }, --   2.  P
+    { "fuel_meter_tank3_zero", "tu154/custom/buttons/fuel/fuel_meter_tank3_zero", globalPropertyf }, --   3.
+    { "fuel_meter_tank3_max", "tu154/custom/buttons/fuel/fuel_meter_tank3_max", globalPropertyf }, --   3.  P
+    { "fuel_meter_tank4_zero", "tu154/custom/buttons/fuel/fuel_meter_tank4_zero", globalPropertyf }, --   4.
+    { "fuel_meter_tank4_max", "tu154/custom/buttons/fuel/fuel_meter_tank4_max", globalPropertyf }, --   4.  P
+    { "fuel_front_zero", "tu154/custom/buttons/misc/fuel_front_zero", globalPropertyf }, --     .
+    { "fuel_front_max", "tu154/custom/buttons/misc/fuel_front_max", globalPropertyf }, --     .
 
-defineProperty("fuel_trans", globalPropertyi("tu154/custom/switchers/fuel/fuel_trans")) --   
-defineProperty("fuel_trans_cap", globalPropertyi("tu154/custom/switchers/fuel/fuel_trans_cap")) --   
-defineProperty("fuel_porc", globalPropertyi("tu154/custom/switchers/fuel/fuel_porc")) --  
-defineProperty("fuel_porc_cap", globalPropertyi("tu154/custom/switchers/fuel/fuel_porc_cap")) --  
-defineProperty("fuel_level", globalPropertyi("tu154/custom/switchers/fuel/fuel_level")) --  
-defineProperty("fuel_flow_mode", globalPropertyi("tu154/custom/switchers/fuel/fuel_flow_mode")) --   .  - 
-defineProperty("fuel_flow_on", globalPropertyi("tu154/custom/switchers/fuel/fuel_flow_on")) --  
-defineProperty("fuel_flow_on_cap", globalPropertyi("tu154/custom/switchers/fuel/fuel_flow_on_cap")) --  
+    -- controls
+    { "pump_tank2_left", "tu154/custom/switchers/fuel/pump_tank2_left", globalPropertyi }, --   2
+    { "pump_tank2_right", "tu154/custom/switchers/fuel/pump_tank2_right", globalPropertyi }, --   2
+    { "pump_tank3_left", "tu154/custom/switchers/fuel/pump_tank3_left", globalPropertyi }, --   3
+    { "pump_tank3_right", "tu154/custom/switchers/fuel/pump_tank3_right", globalPropertyi }, --   3
+    { "pump_tank4", "tu154/custom/switchers/fuel/pump_tank4", globalPropertyi }, --   4
+    { "pump_tank1_1", "tu154/custom/switchers/fuel/pump_tank1_1", globalPropertyi }, --   1
+    { "pump_tank1_2", "tu154/custom/switchers/fuel/pump_tank1_2", globalPropertyi }, --   1
+    { "pump_tank1_3", "tu154/custom/switchers/fuel/pump_tank1_3", globalPropertyi }, --   1
+    { "pump_tank1_4", "tu154/custom/switchers/fuel/pump_tank1_4", globalPropertyi }, --   1
 
-defineProperty("fuel_meter_on", globalPropertyi("tu154/custom/switchers/fuel/fuel_meter_on")) -- 
-defineProperty("fuel_meter_mech_on", globalPropertyi("tu154/custom/switchers/fuel/fuel_meter_mech_on")) -- 
-defineProperty("fire_valve_1", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_1")) --  
-defineProperty("fire_valve_2", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_2")) --  
-defineProperty("fire_valve_3", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_3")) --  
-defineProperty("fire_valve_1_cap", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_1_cap")) --  
-defineProperty("fire_valve_2_cap", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_2_cap")) --  
-defineProperty("fire_valve_3_cap", globalPropertyi("tu154/custom/switchers/fuel/fire_valve_3_cap")) --  
+    { "fuel_trans", "tu154/custom/switchers/fuel/fuel_trans", globalPropertyi }, --
+    { "fuel_trans_cap", "tu154/custom/switchers/fuel/fuel_trans_cap", globalPropertyi }, --
+    { "fuel_porc", "tu154/custom/switchers/fuel/fuel_porc", globalPropertyi }, --
+    { "fuel_porc_cap", "tu154/custom/switchers/fuel/fuel_porc_cap", globalPropertyi }, --
+    { "fuel_level", "tu154/custom/switchers/fuel/fuel_level", globalPropertyi }, --
+    { "fuel_flow_mode", "tu154/custom/switchers/fuel/fuel_flow_mode", globalPropertyi }, --   .  -
+    { "fuel_flow_on", "tu154/custom/switchers/fuel/fuel_flow_on", globalPropertyi }, --
+    { "fuel_flow_on_cap", "tu154/custom/switchers/fuel/fuel_flow_on_cap", globalPropertyi }, --
 
-defineProperty("reserv_pump_test", globalPropertyi("tu154/custom/buttons/eng/reserv_pump_test")) --    
+    { "fuel_meter_on", "tu154/custom/switchers/fuel/fuel_meter_on", globalPropertyi }, --
+    { "fuel_meter_mech_on", "tu154/custom/switchers/fuel/fuel_meter_mech_on", globalPropertyi }, --
+    { "fire_valve_1", "tu154/custom/switchers/fuel/fire_valve_1", globalPropertyi }, --
+    { "fire_valve_2", "tu154/custom/switchers/fuel/fire_valve_2", globalPropertyi }, --
+    { "fire_valve_3", "tu154/custom/switchers/fuel/fire_valve_3", globalPropertyi }, --
+    { "fire_valve_1_cap", "tu154/custom/switchers/fuel/fire_valve_1_cap", globalPropertyi }, --
+    { "fire_valve_2_cap", "tu154/custom/switchers/fuel/fire_valve_2_cap", globalPropertyi }, --
+    { "fire_valve_3_cap", "tu154/custom/switchers/fuel/fire_valve_3_cap", globalPropertyi }, --
 
--- lamps
-defineProperty("fuel_2500", globalPropertyf("tu154/custom/lights/small/fuel_2500")) --   2500
-defineProperty("fuel_tank1_used", globalPropertyf("tu154/custom/lights/small/fuel_tank1_used")) --    1
-defineProperty("fuel_tank3_left_fail", globalPropertyf("tu154/custom/lights/small/fuel_tank3_left_fail")) --    3 
-defineProperty("fuel_tank2_left_fail", globalPropertyf("tu154/custom/lights/small/fuel_tank2_left_fail")) --    2 
-defineProperty("fuel_tank2_right_fail", globalPropertyf("tu154/custom/lights/small/fuel_tank2_right_fail")) --    2 
-defineProperty("fuel_tank3_right_fail", globalPropertyf("tu154/custom/lights/small/fuel_tank3_right_fail")) --    3 
+    { "reserv_pump_test", "tu154/custom/buttons/eng/reserv_pump_test", globalPropertyi }, --
 
-defineProperty("fuel_pump_left_5", globalPropertyf("tu154/custom/lights/small/fuel_pump_left_5")) --   5 
-defineProperty("fuel_pump_left_6", globalPropertyf("tu154/custom/lights/small/fuel_pump_left_6")) --   6 
-defineProperty("fuel_pump_left_7", globalPropertyf("tu154/custom/lights/small/fuel_pump_left_7")) --   7 
-defineProperty("fuel_pump_left_8", globalPropertyf("tu154/custom/lights/small/fuel_pump_left_8")) --   8 
-defineProperty("fuel_pump_left_9", globalPropertyf("tu154/custom/lights/small/fuel_pump_left_9")) --   9 
+    -- lamps
+    { "fuel_2500", "tu154/custom/lights/small/fuel_2500", globalPropertyf }, --   2500
+    { "fuel_tank1_used", "tu154/custom/lights/small/fuel_tank1_used", globalPropertyf }, --    1
+    { "fuel_tank3_left_fail", "tu154/custom/lights/small/fuel_tank3_left_fail", globalPropertyf }, --    3
+    { "fuel_tank2_left_fail", "tu154/custom/lights/small/fuel_tank2_left_fail", globalPropertyf }, --    2
+    { "fuel_tank2_right_fail", "tu154/custom/lights/small/fuel_tank2_right_fail", globalPropertyf }, --    2
+    { "fuel_tank3_right_fail", "tu154/custom/lights/small/fuel_tank3_right_fail", globalPropertyf }, --    3
 
-defineProperty("fuel_pump_right_5", globalPropertyf("tu154/custom/lights/small/fuel_pump_right_5")) --   5 
-defineProperty("fuel_pump_right_6", globalPropertyf("tu154/custom/lights/small/fuel_pump_right_6")) --   6 
-defineProperty("fuel_pump_right_7", globalPropertyf("tu154/custom/lights/small/fuel_pump_right_7")) --   7 
-defineProperty("fuel_pump_right_8", globalPropertyf("tu154/custom/lights/small/fuel_pump_right_8")) --   8 
-defineProperty("fuel_pump_right_9", globalPropertyf("tu154/custom/lights/small/fuel_pump_right_9")) --   9 
+    { "fuel_pump_left_5", "tu154/custom/lights/small/fuel_pump_left_5", globalPropertyf }, --   5
+    { "fuel_pump_left_6", "tu154/custom/lights/small/fuel_pump_left_6", globalPropertyf }, --   6
+    { "fuel_pump_left_7", "tu154/custom/lights/small/fuel_pump_left_7", globalPropertyf }, --   7
+    { "fuel_pump_left_8", "tu154/custom/lights/small/fuel_pump_left_8", globalPropertyf }, --   8
+    { "fuel_pump_left_9", "tu154/custom/lights/small/fuel_pump_left_9", globalPropertyf }, --   9
 
-defineProperty("fuel_pump_10", globalPropertyf("tu154/custom/lights/small/fuel_pump_10")) --   10 
-defineProperty("fuel_pump_11", globalPropertyf("tu154/custom/lights/small/fuel_pump_11")) --   11 
-defineProperty("fuel_pump_1", globalPropertyf("tu154/custom/lights/small/fuel_pump_1")) --   1 
-defineProperty("fuel_pump_2", globalPropertyf("tu154/custom/lights/small/fuel_pump_2")) --   2 
-defineProperty("fuel_pump_3", globalPropertyf("tu154/custom/lights/small/fuel_pump_3")) --   3 
-defineProperty("fuel_pump_4", globalPropertyf("tu154/custom/lights/small/fuel_pump_4")) --   4 
+    { "fuel_pump_right_5", "tu154/custom/lights/small/fuel_pump_right_5", globalPropertyf }, --   5
+    { "fuel_pump_right_6", "tu154/custom/lights/small/fuel_pump_right_6", globalPropertyf }, --   6
+    { "fuel_pump_right_7", "tu154/custom/lights/small/fuel_pump_right_7", globalPropertyf }, --   7
+    { "fuel_pump_right_8", "tu154/custom/lights/small/fuel_pump_right_8", globalPropertyf }, --   8
+    { "fuel_pump_right_9", "tu154/custom/lights/small/fuel_pump_right_9", globalPropertyf }, --   9
 
-defineProperty("fuel_cut_off_1", globalPropertyf("tu154/custom/lights/small/fuel_cut_off_1")) --  
-defineProperty("fuel_cut_off_2", globalPropertyf("tu154/custom/lights/small/fuel_cut_off_2")) --  
-defineProperty("fuel_cut_off_3", globalPropertyf("tu154/custom/lights/small/fuel_cut_off_3")) --  
-defineProperty("fuel_flow_from_2", globalPropertyf("tu154/custom/lights/small/fuel_flow_from_2")) --  
-defineProperty("fuel_flow_from_3", globalPropertyf("tu154/custom/lights/small/fuel_flow_from_3")) --  
-defineProperty("fuel_flow_from_4", globalPropertyf("tu154/custom/lights/small/fuel_flow_from_4")) --  
+    { "fuel_pump_10", "tu154/custom/lights/small/fuel_pump_10", globalPropertyf }, --   10
+    { "fuel_pump_11", "tu154/custom/lights/small/fuel_pump_11", globalPropertyf }, --   11
+    { "fuel_pump_1", "tu154/custom/lights/small/fuel_pump_1", globalPropertyf }, --   1
+    { "fuel_pump_2", "tu154/custom/lights/small/fuel_pump_2", globalPropertyf }, --   2
+    { "fuel_pump_3", "tu154/custom/lights/small/fuel_pump_3", globalPropertyf }, --   3
+    { "fuel_pump_4", "tu154/custom/lights/small/fuel_pump_4", globalPropertyf }, --   4
 
-defineProperty("fuel_flow_auto_fail", globalPropertyf("tu154/custom/lights/small/fuel_flow_auto_fail")) --    
-defineProperty("fuel_reserv_trans_left", globalPropertyf("tu154/custom/lights/small/fuel_reserv_trans_left")) --     1 
-defineProperty("fuel_reserv_trans_right", globalPropertyf("tu154/custom/lights/small/fuel_reserv_trans_right")) --     1 
-defineProperty("fuel_porc_reserv", globalPropertyf("tu154/custom/lights/small/fuel_porc_reserv")) -- 
-defineProperty("fuel_level_automat", globalPropertyf("tu154/custom/lights/small/fuel_level_automat")) --  
+    { "fuel_cut_off_1", "tu154/custom/lights/small/fuel_cut_off_1", globalPropertyf }, --
+    { "fuel_cut_off_2", "tu154/custom/lights/small/fuel_cut_off_2", globalPropertyf }, --
+    { "fuel_cut_off_3", "tu154/custom/lights/small/fuel_cut_off_3", globalPropertyf }, --
+    { "fuel_flow_from_2", "tu154/custom/lights/small/fuel_flow_from_2", globalPropertyf }, --
+    { "fuel_flow_from_3", "tu154/custom/lights/small/fuel_flow_from_3", globalPropertyf }, --
+    { "fuel_flow_from_4", "tu154/custom/lights/small/fuel_flow_from_4", globalPropertyf }, --
 
--- sources -- 
+    { "fuel_flow_auto_fail", "tu154/custom/lights/small/fuel_flow_auto_fail", globalPropertyf }, --
+    { "fuel_reserv_trans_left", "tu154/custom/lights/small/fuel_reserv_trans_left", globalPropertyf }, --     1
+    { "fuel_reserv_trans_right", "tu154/custom/lights/small/fuel_reserv_trans_right", globalPropertyf }, --     1
+    { "fuel_porc_reserv", "tu154/custom/lights/small/fuel_porc_reserv", globalPropertyf }, --
+    { "fuel_level_automat", "tu154/custom/lights/small/fuel_level_automat", globalPropertyf }, --
 
--- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
+    -- sources --
 
-defineProperty("ENGN_FF_1", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]")) -- FF from sim kg/second
-defineProperty("ENGN_FF_2", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]")) -- FF from sim kg/second
-defineProperty("ENGN_FF_3", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]")) -- FF from sim kg/second
+    -- engines
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
 
--- fuel tanks
-defineProperty("total_w", globalPropertyf("sim/flightmodel/weight/m_fuel_total")) -- fuel weight
+    { "ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]", globalProperty }, -- FF from sim kg/second
+    { "ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]", globalProperty }, -- FF from sim kg/second
+    { "ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]", globalProperty }, -- FF from sim kg/second
 
-defineProperty("tank1_w", globalProperty("sim/flightmodel/weight/m_fuel[0]")) -- fuel weight
-defineProperty("tank4_w", globalProperty("sim/flightmodel/weight/m_fuel[1]")) -- fuel weight
-defineProperty("tank2R_w", globalProperty("sim/flightmodel/weight/m_fuel[2]")) -- fuel weight
-defineProperty("tank2L_w", globalProperty("sim/flightmodel/weight/m_fuel[3]")) -- fuel weight
-defineProperty("tank3R_w", globalProperty("sim/flightmodel/weight/m_fuel[4]")) -- fuel weight
-defineProperty("tank3L_w", globalProperty("sim/flightmodel/weight/m_fuel[5]")) -- fuel weight
+    -- fuel tanks
+    { "total_w", "sim/flightmodel/weight/m_fuel_total", globalPropertyf }, -- fuel weight
 
-defineProperty("reserv_trans", globalPropertyi("tu154/custom/fuel/reserv_trans"))
+    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel weight
+    { "tank4_w", "sim/flightmodel/weight/m_fuel[1]", globalProperty }, -- fuel weight
+    { "tank2R_w", "sim/flightmodel/weight/m_fuel[2]", globalProperty }, -- fuel weight
+    { "tank2L_w", "sim/flightmodel/weight/m_fuel[3]", globalProperty }, -- fuel weight
+    { "tank3R_w", "sim/flightmodel/weight/m_fuel[4]", globalProperty }, -- fuel weight
+    { "tank3L_w", "sim/flightmodel/weight/m_fuel[5]", globalProperty }, -- fuel weight
 
--- other sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
--- bus parameters
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_2_volt", globalPropertyf("tu154/custom/elec/bus115_2_volt"))
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+    { "reserv_trans", "tu154/custom/fuel/reserv_trans", globalPropertyi },
 
--- lamps sources
-defineProperty("test_lamps", globalPropertyi("tu154/custom/buttons/lamp_test_hydro")) --     
+    -- other sources
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
+    -- bus parameters
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
-defineProperty("pump_tank2_left_work", globalPropertyi("tu154/custom/fuel/pump_tank2_left_work"))
-defineProperty("pump_tank2_right_work", globalPropertyi("tu154/custom/fuel/pump_tank2_right_work"))
-defineProperty("pump_tank3_left_work", globalPropertyi("tu154/custom/fuel/pump_tank3_left_work"))
-defineProperty("pump_tank3_right_work", globalPropertyi("tu154/custom/fuel/pump_tank3_right_work"))
-defineProperty("pump_tank4_work", globalPropertyi("tu154/custom/fuel/pump_tank4_work"))
-defineProperty("pump_tank1_1_work", globalPropertyi("tu154/custom/fuel/pump_tank1_1_work"))
-defineProperty("pump_tank1_2_work", globalPropertyi("tu154/custom/fuel/pump_tank1_2_work"))
-defineProperty("pump_tank1_3_work", globalPropertyi("tu154/custom/fuel/pump_tank1_3_work"))
-defineProperty("pump_tank1_4_work", globalPropertyi("tu154/custom/fuel/pump_tank1_4_work"))
+    -- lamps sources
+    { "test_lamps", "tu154/custom/buttons/lamp_test_hydro", globalPropertyi }, --
 
-defineProperty("auto_tanks_turn", globalPropertyi("tu154/custom/fuel/auto_tanks_turn")) --   . 0, 1 -  , 2, 3, 4	0
---defineProperty("auto_tank_level", globalPropertyi("tu154/custom/fuel/auto_tank_level")) --   . -2 - 2L, -3 - 3L, +3 - 3R, +2 - 2R	0
+    { "pump_tank2_left_work", "tu154/custom/fuel/pump_tank2_left_work", globalPropertyi },
+    { "pump_tank2_right_work", "tu154/custom/fuel/pump_tank2_right_work", globalPropertyi },
+    { "pump_tank3_left_work", "tu154/custom/fuel/pump_tank3_left_work", globalPropertyi },
+    { "pump_tank3_right_work", "tu154/custom/fuel/pump_tank3_right_work", globalPropertyi },
+    { "pump_tank4_work", "tu154/custom/fuel/pump_tank4_work", globalPropertyi },
+    { "pump_tank1_1_work", "tu154/custom/fuel/pump_tank1_1_work", globalPropertyi },
+    { "pump_tank1_2_work", "tu154/custom/fuel/pump_tank1_2_work", globalPropertyi },
+    { "pump_tank1_3_work", "tu154/custom/fuel/pump_tank1_3_work", globalPropertyi },
+    { "pump_tank1_4_work", "tu154/custom/fuel/pump_tank1_4_work", globalPropertyi },
 
-defineProperty("auto_tank_level_2", globalPropertyi("tu154/custom/fuel/auto_tank_level_2")) --    2. -1 = L, 0 = none, +1 = R	0
-defineProperty("auto_tank_level_3", globalPropertyi("tu154/custom/fuel/auto_tank_level_3")) --    3. -1 = L, 0 = none, +1 = R	0
+    { "auto_tanks_turn", "tu154/custom/fuel/auto_tanks_turn", globalPropertyi }, --   . 0, 1 -  , 2, 3, 4	0
+    --defineProperty("auto_tank_level", globalPropertyi("tu154/custom/fuel/auto_tank_level")) --   . -2 - 2L, -3 - 3L, +3 - 3R, +2 - 2R	0
 
-defineProperty("tank1_w", globalProperty("sim/flightmodel/weight/m_fuel[0]")) -- fuel weight
+    { "auto_tank_level_2", "tu154/custom/fuel/auto_tank_level_2", globalPropertyi }, --    2. -1 = L, 0 = none, +1 = R	0
+    { "auto_tank_level_3", "tu154/custom/fuel/auto_tank_level_3", globalPropertyi }, --    3. -1 = L, 0 = none, +1 = R	0
 
-defineProperty("fire_vlv_open_1", globalPropertyf("tu154/custom/fuel/fire_vlv_open_1")) --   
-defineProperty("fire_vlv_open_2", globalPropertyf("tu154/custom/fuel/fire_vlv_open_2")) --   
-defineProperty("fire_vlv_open_3", globalPropertyf("tu154/custom/fuel/fire_vlv_open_3")) --   
+    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel weight
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "fire_vlv_open_1", "tu154/custom/fuel/fire_vlv_open_1", globalPropertyf }, --
+    { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf }, --
+    { "fire_vlv_open_3", "tu154/custom/fuel/fire_vlv_open_3", globalPropertyf }, --
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
--- failures
-defineProperty("fuel_auto_fail", globalPropertyi("tu154/custom/failures/fuel_auto_fail"))
-defineProperty("fuel_level_fail", globalPropertyi("tu154/custom/failures/fuel_level_fail"))
-defineProperty("fuel_porc_fail", globalPropertyi("tu154/custom/failures/fuel_porc_fail"))
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
-defineProperty("fuel_pump_2l_fail", globalPropertyi("tu154/custom/failures/fuel_pump_2l_fail")) -- number of failed pumps
-defineProperty("fuel_pump_2r_fail", globalPropertyi("tu154/custom/failures/fuel_pump_2r_fail"))
-defineProperty("fuel_pump_3l_fail", globalPropertyi("tu154/custom/failures/fuel_pump_3l_fail"))
-defineProperty("fuel_pump_3r_fail", globalPropertyi("tu154/custom/failures/fuel_pump_3r_fail"))
---defineProperty("fuel_pump_1_fail", globalPropertyi("tu154/custom/failures/fuel_pump_1_fail"))
-defineProperty("fuel_pump_4_fail", globalPropertyi("tu154/custom/failures/fuel_pump_4_fail"))
+    -- failures
+    { "fuel_auto_fail", "tu154/custom/failures/fuel_auto_fail", globalPropertyi },
+    { "fuel_level_fail", "tu154/custom/failures/fuel_level_fail", globalPropertyi },
+    { "fuel_porc_fail", "tu154/custom/failures/fuel_porc_fail", globalPropertyi },
 
-defineProperty("fuel_meter_2l_fail", globalPropertyi("tu154/custom/failures/fuel_meter_2l_fail"))
-defineProperty("fuel_meter_2r_fail", globalPropertyi("tu154/custom/failures/fuel_meter_2r_fail"))
-defineProperty("fuel_meter_3l_fail", globalPropertyi("tu154/custom/failures/fuel_meter_3l_fail"))
-defineProperty("fuel_meter_3r_fail", globalPropertyi("tu154/custom/failures/fuel_meter_3r_fail"))
-defineProperty("fuel_meter_1_fail", globalPropertyi("tu154/custom/failures/fuel_meter_1_fail"))
-defineProperty("fuel_meter_4_fail", globalPropertyi("tu154/custom/failures/fuel_meter_4_fail"))
-defineProperty("fuel_meter_summ_fail", globalPropertyi("tu154/custom/failures/fuel_meter_summ"))
+    { "fuel_pump_2l_fail", "tu154/custom/failures/fuel_pump_2l_fail", globalPropertyi }, -- number of failed pumps
+    { "fuel_pump_2r_fail", "tu154/custom/failures/fuel_pump_2r_fail", globalPropertyi },
+    { "fuel_pump_3l_fail", "tu154/custom/failures/fuel_pump_3l_fail", globalPropertyi },
+    { "fuel_pump_3r_fail", "tu154/custom/failures/fuel_pump_3r_fail", globalPropertyi },
+    --defineProperty("fuel_pump_1_fail", globalPropertyi("tu154/custom/failures/fuel_pump_1_fail"))
+    { "fuel_pump_4_fail", "tu154/custom/failures/fuel_pump_4_fail", globalPropertyi },
 
-defineProperty("fuel_flowmeter_1_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_1_fail"))
-defineProperty("fuel_flowmeter_2_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_2_fail"))
-defineProperty("fuel_flowmeter_3_fail", globalPropertyi("tu154/custom/failures/fuel_flowmeter_3_fail"))
+    { "fuel_meter_2l_fail", "tu154/custom/failures/fuel_meter_2l_fail", globalPropertyi },
+    { "fuel_meter_2r_fail", "tu154/custom/failures/fuel_meter_2r_fail", globalPropertyi },
+    { "fuel_meter_3l_fail", "tu154/custom/failures/fuel_meter_3l_fail", globalPropertyi },
+    { "fuel_meter_3r_fail", "tu154/custom/failures/fuel_meter_3r_fail", globalPropertyi },
+    { "fuel_meter_1_fail", "tu154/custom/failures/fuel_meter_1_fail", globalPropertyi },
+    { "fuel_meter_4_fail", "tu154/custom/failures/fuel_meter_4_fail", globalPropertyi },
+    { "fuel_meter_summ_fail", "tu154/custom/failures/fuel_meter_summ", globalPropertyi },
+
+    { "fuel_flowmeter_1_fail", "tu154/custom/failures/fuel_flowmeter_1_fail", globalPropertyi },
+    { "fuel_flowmeter_2_fail", "tu154/custom/failures/fuel_flowmeter_2_fail", globalPropertyi },
+    { "fuel_flowmeter_3_fail", "tu154/custom/failures/fuel_flowmeter_3_fail", globalPropertyi },
+})
+
 
 -- sounds
 local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
@@ -328,7 +337,7 @@ end
 local notLoaded = true
 
 local function reset_switchers()
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(pump_tank2_left, 0)
 		set(pump_tank2_right, 0)
 		set(pump_tank3_left, 0)

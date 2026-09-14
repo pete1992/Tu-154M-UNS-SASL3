@@ -19,10 +19,6 @@ Changelog
 - Reduced repeated Dataref reads and preserved all original start thresholds, pressure formulas and selector mappings.
 ]]
 
--- Added for X-Plane 11 / X-Plane 12 compatibility.
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) < 120000
-
 -- Engine start logic.
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -53,40 +49,40 @@ defineProps({
     -- Arrays
     -- Engine 1 igniter state
     { "sim_igniter1", "sim/cockpit2/engine/actuators/igniter_on[0]",
-        XP11 and globalPropertyi or globalProperty },
+        globalProperty },
     -- Engine 2 igniter state
     { "sim_igniter2", "sim/cockpit2/engine/actuators/igniter_on[1]",
-        XP11 and globalPropertyi or globalProperty },
+        globalProperty },
     -- Engine 3 igniter state
     { "sim_igniter3", "sim/cockpit2/engine/actuators/igniter_on[2]",
-        XP11 and globalPropertyi or globalProperty },
+        globalProperty },
     -- Engine 1 ignition state
     { "sim_ignition1", "sim/cockpit2/engine/actuators/ignition_on[0]",
-        XP11 and globalPropertyi or globalProperty },
+        globalProperty },
     -- Engine 2 ignition state
     { "sim_ignition2", "sim/cockpit2/engine/actuators/ignition_on[1]",
-        XP11 and globalPropertyi or globalProperty },
+        globalProperty },
     -- Engine 3 ignition state
     { "sim_ignition3", "sim/cockpit2/engine/actuators/ignition_on[2]",
-        XP11 and globalPropertyi or globalProperty },
+        globalProperty },
     -- Starter duration, engine 1 mapping
     { "sim_starter1", "sim/cockpit/engine/starter_duration[1]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Starter duration, engine 2 mapping
     { "sim_starter2", "sim/cockpit/engine/starter_duration[0]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Starter duration, engine 3 mapping
     { "sim_starter3", "sim/cockpit/engine/starter_duration[2]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Starter torque state, engine 1 mapping
     { "sim_start1", "sim/flightmodel2/engines/starter_making_torque[1]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Starter torque state, engine 2 mapping
     { "sim_start2", "sim/flightmodel2/engines/starter_making_torque[0]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Starter torque state, engine 3 mapping
     { "sim_start3", "sim/flightmodel2/engines/starter_making_torque[2]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
 
     -- Left 27 V bus voltage
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
@@ -100,22 +96,22 @@ defineProps({
     -- Arrays
     -- Engine 1 N2
     { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Engine 2 N2
     { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Engine 3 N2
     { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Engine 1 burning-fuel state
     { "eng_work1", "sim/flightmodel2/engines/engine_is_burning_fuel[0]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Engine 2 burning-fuel state
     { "eng_work2", "sim/flightmodel2/engines/engine_is_burning_fuel[1]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
     -- Engine 3 burning-fuel state
     { "eng_work3", "sim/flightmodel2/engines/engine_is_burning_fuel[2]",
-        XP11 and globalPropertyf or globalProperty },
+        globalProperty },
 
     -- Engine 1 bleed-air valve position
     { "eng_airvalve_1", "tu154/custom/bleed/eng_airvalve_1", globalPropertyf },
@@ -222,7 +218,8 @@ local ENGINES = {
         apd = apd_working_1,
         command = starter_1,
         left_bus = true,
-        start_time = time_last - 100,
+        start_time = time_last,
+        has_run = false,
         ground_starting = false,
         air_starting = false,
         rpm_value = 0,
@@ -242,7 +239,8 @@ local ENGINES = {
         apd = apd_working_2,
         command = starter_2,
         left_bus = false,
-        start_time = time_last - 100,
+        start_time = time_last,
+        has_run = false,
         ground_starting = false,
         air_starting = false,
         rpm_value = 0,
@@ -262,7 +260,8 @@ local ENGINES = {
         apd = apd_working_3,
         command = starter_3,
         left_bus = false,
-        start_time = time_last - 100,
+        start_time = time_last,
+        has_run = false,
         ground_starting = false,
         air_starting = false,
         rpm_value = 0,
@@ -276,7 +275,6 @@ local start_button_pressed = get(starter_start) == 1
 
 local select_last = get(starter_eng_select)
 local starter_press = 0
-local xp11_torque_initialized = not XP11
 
 local function engineHasPower(engine, power27L, power27R)
     if engine.left_bus then
@@ -322,6 +320,7 @@ local function abortStart(engine, MASTER)
     engine.ground_starting = false
     engine.air_starting = false
     engine.burning_time = 0
+    engine.has_run = false
 end
 
 local function finishStart(engine, MASTER)
@@ -333,13 +332,11 @@ end
 
 local function startComplete(engine)
     local cutoff = RPM_APD_OFF
-    if not XP11 then
-        -- XP12 idle N2 can lie below the old XP11 47% cutout. Above the
-        -- starter's no-load RPM, continued acceleration requires combustion.
-        local starter_limit = get(starter_rpm) * 100
-        if starter_limit > RPM_FOR_IGNITER then
-            cutoff = math.min(cutoff, starter_limit)
-        end
+    -- XP12 idle N2 can lie below the legacy 47% cutout. Above the starter's
+    -- no-load RPM, continued acceleration requires combustion.
+    local starter_limit = get(starter_rpm) * 100
+    if starter_limit > RPM_FOR_IGNITER then
+        cutoff = math.min(cutoff, starter_limit)
     end
     return engine.rpm_value > cutoff and engine.burning_time >= 2
 end
@@ -504,6 +501,23 @@ function onModuleDone()
     end
 end
 
+function onAirportLoaded()
+    -- A new flight may reuse this component. Release only our held commands;
+    -- X-Plane owns the native engine preset, aircraft_init owns fuel admission.
+    for i = 1, #ENGINES do
+        local engine = ENGINES[i]
+        endStarterCommand(engine)
+        engine.ground_starting = false
+        engine.air_starting = false
+        engine.burning_time = 0
+        engine.start_time = sequence_clock
+        engine.has_run = false
+        engine.flight_button_last = false
+    end
+    start_button_pressed = false
+    select_last = get(starter_eng_select)
+end
+
 function update()
     local MASTER = get(ismaster) ~= 1
     local passed = clamp(get(frame_time), 0, 0.1)
@@ -520,19 +534,6 @@ function update()
     end
     master_last = MASTER
 
-    -- XP11-only workarounds.
-    if MASTER and XP11 then
-        set(APU_N1, 100)
-
-        if not xp11_torque_initialized then
-            if get(xp_version) >= 111000 then
-                set(starter_torq, 0.2)
-            end
-
-            xp11_torque_initialized = true
-        end
-    end
-
     starter_press = get(starter_pressure)
 
     local power27L = get(bus27_volt_left) > 13
@@ -543,6 +544,7 @@ function update()
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
         engine.rpm_value = get(engine.rpm)
+        if get(engine.burning) == 1 then engine.has_run = true end
         if (engine.ground_starting or engine.air_starting) and get(engine.burning) == 1 then
             engine.burning_time = engine.burning_time + passed
         else
@@ -550,20 +552,20 @@ function update()
         end
     end
 
-    -- Automatic fuel/ignition cutoff after a failed start or with engine
-    -- covers installed. Clearing the local state prevents a later
+    -- A stale timestamp must not cut fuel during X-Plane's engines-running
+    -- initialization. Timeout an actual APD sequence, or clean up an engine
+    -- that has really been running and subsequently lost combustion. This
+    -- retains shutdown cleanup without treating initial zero RPM as a failure.
+    -- Engine covers still inhibit starts. Clearing local state prevents a later
     -- sasl.commandBegin() from reactivating the starter in the same frame.
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
         local rpm = engine.rpm_value
         local timed_out =
-            time_now - engine.start_time > START_SEQ_TIME
+            (engine.ground_starting or engine.air_starting
+                or (engine.has_run and get(engine.burning) == 0))
+            and time_now - engine.start_time > START_SEQ_TIME
             and rpm < RPM_APD_OFF
-            and (
-                engine.ground_starting
-                or engine.air_starting
-                or get(engine.burning) == 0
-            )
 
         if timed_out or (blocked and (rpm >= 5 or engine.ground_starting or engine.air_starting)) then
             abortStart(engine, MASTER)

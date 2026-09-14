@@ -534,23 +534,9 @@ if simDR_hyd1_press < 30 and simDR_hyd2_press < 30 and simDR_hyd3_press < 30 the
         end
 end    
     
--- STU / autothrottle mode coordination ----------------------------------
-if simDR_at_mode < 4 then
-            if simDR_thr1 < 0.08 and simDR_thr2 < 0.08 and simDR_thr3 < 0.08 then
-                if simDR_spd_but > 0 then
-                    simDR_at_mode = 2
-                end
-            else
-                if simDR_at_mode > 1.5 then
-                    if simDR_spd_but > 0 then
-                        simDR_at_mode = 3
-                    end
-                end
-            end
-        if simDR_absu_pitch_mode == 6 then
-          simDR_at_mode = 2
-        end
-end
+-- SASL absu_at.lua owns STU modes, button edges and manual/TOGA disconnects.
+-- Do not rewrite stu_mode from the held speed button here: a second writer
+-- can undo the pilot's disengagement or cause a false engage/disengage alarm.
   
 
 -- 36 V supply and SP-50 indication logic --------------------------------

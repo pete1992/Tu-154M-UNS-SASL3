@@ -15,8 +15,6 @@ Changelog
 
 -- Panel logic for the lighting system.
 
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) < 120000
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -58,11 +56,11 @@ defineProps({
     -- ======== Arrays ======== --
     
     { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", 
-		XP11 and globalPropertyf or globalProperty },
+		globalProperty },
     { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", 
-		XP11 and globalPropertyf or globalProperty },
+		globalProperty },
     { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", 
-		XP11 and globalPropertyf or globalProperty },
+		globalProperty },
 })
 
 -- Previous control states used for sound detection.
@@ -102,18 +100,14 @@ local nosmoke_sound = sasl.al.loadSample('Custom Sounds/nosmoke.wav')
 local seatbelt_sound = sasl.al.loadSample('Custom Sounds/seatbelt.wav')
 
 local function playPanelSample(sample)
-    if XP11 then
-        sasl.al.playSample(sample, 0)
-    else
-        sasl.al.playSample(sample, false)
-    end
+    sasl.al.playSample(sample, false)
 end
 
 local notLoaded = true
 local sim_start_timer = 0
 
 local function reset_switchers()
-    if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+    if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
         set(nav_lights_set, 0)
         set(strobe_set, 0)
         set(wing_light_left_set, 0)

@@ -62,7 +62,7 @@ function update()
     -- Initialize once after startup. Do not depend on hitting a narrow
     -- frame-time window, because a long frame could skip it entirely.
     if time_counter > 0.3 and notLoaded then
-        if get(N1) < 10 and get(N2) < 10 and get(N3) < 10 then
+        if isColdAndDarkStart() and get(N1) < 10 and get(N2) < 10 and get(N3) < 10 then
             initial_roll_err = math.random(-30, 30)
             initial_pitch_err = math.random(-30, 30)
         end

@@ -15,10 +15,8 @@ Changelog
 ]]
 
 -- Electric panel logic for Tu-154M.
--- SASL 2.6.1 / X-Plane 11 with X-Plane 12 compatibility where required.
+-- SASL 3 / X-Plane 12.
 
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) < 120000
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -155,9 +153,9 @@ defineProps({
     {"bat_therm_4", "tu154/custom/elec/bat_therm_4", globalPropertyf}, -- Battery 4 temperature
 
     -- Engines
-    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", XP11 and globalPropertyf or globalProperty }, -- Engine 1 N1
-    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]",XP11 and globalPropertyf or globalProperty }, -- Engine 2 N1
-    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", XP11 and globalPropertyf or globalProperty }, -- Engine 3 N1
+    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- Engine 1 N1
+    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]",globalProperty }, -- Engine 2 N1
+    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- Engine 3 N1
     {"sim_avionics", "sim/cockpit2/switches/avionics_power_on", globalPropertyi}, -- Sim avionics switch
 })
 
@@ -197,11 +195,7 @@ local function sign(x)
 end
 
 local function playPanelSample(sample)
-    if XP11 then
-        sasl.al.playSample(sample, false)
-    else
-        sasl.al.playSample(sample, false)
-    end
+    sasl.al.playSample(sample, false)
 end
 
 -- Generator warning thresholds.
@@ -647,7 +641,7 @@ end
 local not_loaded = true
 
 local function resetSwitchers()
-    if get(eng1_N1) < 5
+    if isColdAndDarkStart() and get(eng1_N1) < 5
         and get(eng2_N1) < 5
         and get(eng3_N1) < 5 then
 

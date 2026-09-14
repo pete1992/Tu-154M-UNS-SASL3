@@ -1,115 +1,124 @@
 -- this is fire system panel
 -- controls
-defineProperty("lamp_test", globalPropertyi("tu154/custom/buttons/lamp_test_fire_panel")) --      	0
-defineProperty("lamp_test_2", globalPropertyi("tu154/custom/buttons/lamp_test_engines")) --      	0
-defineProperty("smoke_test", globalPropertyi("tu154/custom/buttons/eng/smoke_test")) --   
-defineProperty("ext_test", globalPropertyi("tu154/custom/buttons/eng/ext_test")) --  
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("lamp_test_front", globalPropertyi("tu154/custom/buttons/lamp_test_front")) --     
+defineProps({
+    { "lamp_test", "tu154/custom/buttons/lamp_test_fire_panel", globalPropertyi }, --      	0
+    { "lamp_test_2", "tu154/custom/buttons/lamp_test_engines", globalPropertyi }, --      	0
+    { "smoke_test", "tu154/custom/buttons/eng/smoke_test", globalPropertyi }, --
+    { "ext_test", "tu154/custom/buttons/eng/ext_test", globalPropertyi }, --
 
-defineProperty("fire_ext_1", globalPropertyi("tu154/custom/buttons/eng/fire_ext_1")) --   
-defineProperty("fire_ext_2", globalPropertyi("tu154/custom/buttons/eng/fire_ext_2")) --   
-defineProperty("fire_ext_3", globalPropertyi("tu154/custom/buttons/eng/fire_ext_3")) --   
-defineProperty("cold_eng_1", globalPropertyi("tu154/custom/buttons/eng/cold_eng_1")) --  
-defineProperty("cold_eng_2", globalPropertyi("tu154/custom/buttons/eng/cold_eng_2")) --  
-defineProperty("cold_eng_3", globalPropertyi("tu154/custom/buttons/eng/cold_eng_3")) --  
-defineProperty("cold_apu", globalPropertyi("tu154/custom/buttons/eng/cold_apu")) --  
-defineProperty("neutral_gas", globalPropertyi("tu154/custom/buttons/eng/neutral_gas")) --  
+    { "lamp_test_front", "tu154/custom/buttons/lamp_test_front", globalPropertyi }, --
 
-defineProperty("fire_sensor_sel", globalPropertyi("tu154/custom/switchers/eng/fire_sensor_sel")) --   
-defineProperty("fire_place_sel", globalPropertyi("tu154/custom/switchers/eng/fire_place_sel")) --  
+    { "fire_ext_1", "tu154/custom/buttons/eng/fire_ext_1", globalPropertyi }, --
+    { "fire_ext_2", "tu154/custom/buttons/eng/fire_ext_2", globalPropertyi }, --
+    { "fire_ext_3", "tu154/custom/buttons/eng/fire_ext_3", globalPropertyi }, --
+    { "cold_eng_1", "tu154/custom/buttons/eng/cold_eng_1", globalPropertyi }, --
+    { "cold_eng_2", "tu154/custom/buttons/eng/cold_eng_2", globalPropertyi }, --
+    { "cold_eng_3", "tu154/custom/buttons/eng/cold_eng_3", globalPropertyi }, --
+    { "cold_apu", "tu154/custom/buttons/eng/cold_apu", globalPropertyi }, --
+    { "neutral_gas", "tu154/custom/buttons/eng/neutral_gas", globalPropertyi }, --
 
-defineProperty("fire_main_switch", globalPropertyi("tu154/custom/switchers/eng/fire_main_switch")) --   
-defineProperty("fire_buzzer", globalPropertyi("tu154/custom/switchers/eng/fire_buzzer")) --  
-defineProperty("fire_buzzer_cap", globalPropertyi("tu154/custom/switchers/eng/fire_buzzer_cap")) --  
+    { "fire_sensor_sel", "tu154/custom/switchers/eng/fire_sensor_sel", globalPropertyi }, --
+    { "fire_place_sel", "tu154/custom/switchers/eng/fire_place_sel", globalPropertyi }, --
 
--- lamps
-defineProperty("smoke_1", globalPropertyf("tu154/custom/lights/fire/smoke_1")) --   
-defineProperty("smoke_2", globalPropertyf("tu154/custom/lights/fire/smoke_2")) --   
-defineProperty("smoke_zone2_left", globalPropertyf("tu154/custom/lights/fire/smoke_zone2_left")) --   
-defineProperty("smoke_zone2_right", globalPropertyf("tu154/custom/lights/fire/smoke_zone2_right")) --   
-defineProperty("smoke_zone3", globalPropertyf("tu154/custom/lights/fire/smoke_zone3")) --   
-defineProperty("smoke_zone4", globalPropertyf("tu154/custom/lights/fire/smoke_zone4")) --   
-defineProperty("smoke_zone5_left", globalPropertyf("tu154/custom/lights/fire/smoke_zone5_left")) --   
-defineProperty("smoke_zone5_right", globalPropertyf("tu154/custom/lights/fire/smoke_zone5_right")) --   
-defineProperty("smoke_zone6", globalPropertyf("tu154/custom/lights/fire/smoke_zone6")) --   
+    { "fire_main_switch", "tu154/custom/switchers/eng/fire_main_switch", globalPropertyi }, --
+    { "fire_buzzer", "tu154/custom/switchers/eng/fire_buzzer", globalPropertyi }, --
+    { "fire_buzzer_cap", "tu154/custom/switchers/eng/fire_buzzer_cap", globalPropertyi }, --
 
-defineProperty("fire_eng_1", globalPropertyf("tu154/custom/lights/fire/fire_eng_1")) --   
-defineProperty("fire_eng_2", globalPropertyf("tu154/custom/lights/fire/fire_eng_2")) --   
-defineProperty("fire_eng_3", globalPropertyf("tu154/custom/lights/fire/fire_eng_3")) --   
+    -- lamps
+    { "smoke_1", "tu154/custom/lights/fire/smoke_1", globalPropertyf }, --
+    { "smoke_2", "tu154/custom/lights/fire/smoke_2", globalPropertyf }, --
+    { "smoke_zone2_left", "tu154/custom/lights/fire/smoke_zone2_left", globalPropertyf }, --
+    { "smoke_zone2_right", "tu154/custom/lights/fire/smoke_zone2_right", globalPropertyf }, --
+    { "smoke_zone3", "tu154/custom/lights/fire/smoke_zone3", globalPropertyf }, --
+    { "smoke_zone4", "tu154/custom/lights/fire/smoke_zone4", globalPropertyf }, --
+    { "smoke_zone5_left", "tu154/custom/lights/fire/smoke_zone5_left", globalPropertyf }, --
+    { "smoke_zone5_right", "tu154/custom/lights/fire/smoke_zone5_right", globalPropertyf }, --
+    { "smoke_zone6", "tu154/custom/lights/fire/smoke_zone6", globalPropertyf }, --
 
-defineProperty("overheat_eng_1", globalPropertyf("tu154/custom/lights/fire/overheat_eng_1")) --  
-defineProperty("overheat_eng_2", globalPropertyf("tu154/custom/lights/fire/overheat_eng_2")) --  
-defineProperty("overheat_eng_3", globalPropertyf("tu154/custom/lights/fire/overheat_eng_3")) --  
+    { "fire_eng_1", "tu154/custom/lights/fire/fire_eng_1", globalPropertyf }, --
+    { "fire_eng_2", "tu154/custom/lights/fire/fire_eng_2", globalPropertyf }, --
+    { "fire_eng_3", "tu154/custom/lights/fire/fire_eng_3", globalPropertyf }, --
 
-defineProperty("fuel_off_eng_1", globalPropertyf("tu154/custom/lights/fire/fuel_off_eng_1")) --  
-defineProperty("fuel_off_eng_2", globalPropertyf("tu154/custom/lights/fire/fuel_off_eng_2")) --  
-defineProperty("fuel_off_eng_3", globalPropertyf("tu154/custom/lights/fire/fuel_off_eng_3")) --  
+    { "overheat_eng_1", "tu154/custom/lights/fire/overheat_eng_1", globalPropertyf }, --
+    { "overheat_eng_2", "tu154/custom/lights/fire/overheat_eng_2", globalPropertyf }, --
+    { "overheat_eng_3", "tu154/custom/lights/fire/overheat_eng_3", globalPropertyf }, --
 
-defineProperty("check_overheat", globalPropertyf("tu154/custom/lights/fire/check_overheat")) --    
-defineProperty("fire_apu", globalPropertyf("tu154/custom/lights/fire/fire_apu")) --  
-defineProperty("turn_on_spz", globalPropertyf("tu154/custom/lights/fire/turn_on_spz")) --  
+    { "fuel_off_eng_1", "tu154/custom/lights/fire/fuel_off_eng_1", globalPropertyf }, --
+    { "fuel_off_eng_2", "tu154/custom/lights/fire/fuel_off_eng_2", globalPropertyf }, --
+    { "fuel_off_eng_3", "tu154/custom/lights/fire/fuel_off_eng_3", globalPropertyf }, --
 
-defineProperty("button_fire_eng_1", globalPropertyf("tu154/custom/lights/button/fire_eng_1")) --    1
-defineProperty("button_fire_eng_2", globalPropertyf("tu154/custom/lights/button/fire_eng_2")) --    2
-defineProperty("button_fire_eng_3", globalPropertyf("tu154/custom/lights/button/fire_eng_3")) --    3
-defineProperty("button_fire_apu", globalPropertyf("tu154/custom/lights/button/fire_apu")) --   
-defineProperty("button_fire_ng", globalPropertyf("tu154/custom/lights/button/fire_ng")) --   
-defineProperty("button_fire_turn_3", globalPropertyf("tu154/custom/lights/button/fire_turn_3")) --    1
-defineProperty("button_fire_turn_2", globalPropertyf("tu154/custom/lights/button/fire_turn_2")) --    1
-defineProperty("button_fire_turn_1", globalPropertyf("tu154/custom/lights/button/fire_turn_1")) --    1
+    { "check_overheat", "tu154/custom/lights/fire/check_overheat", globalPropertyf }, --
+    { "fire_apu", "tu154/custom/lights/fire/fire_apu", globalPropertyf }, --
+    { "turn_on_spz", "tu154/custom/lights/fire/turn_on_spz", globalPropertyf }, --
 
-defineProperty("throttle_1_fire", globalPropertyf("tu154/custom/lights/small/throttle_1_fire")) --    
-defineProperty("throttle_2_fire", globalPropertyf("tu154/custom/lights/small/throttle_2_fire")) --    
-defineProperty("throttle_3_fire", globalPropertyf("tu154/custom/lights/small/throttle_3_fire")) --    
+    { "button_fire_eng_1", "tu154/custom/lights/button/fire_eng_1", globalPropertyf }, --    1
+    { "button_fire_eng_2", "tu154/custom/lights/button/fire_eng_2", globalPropertyf }, --    2
+    { "button_fire_eng_3", "tu154/custom/lights/button/fire_eng_3", globalPropertyf }, --    3
+    { "button_fire_apu", "tu154/custom/lights/button/fire_apu", globalPropertyf }, --
+    { "button_fire_ng", "tu154/custom/lights/button/fire_ng", globalPropertyf }, --
+    { "button_fire_turn_3", "tu154/custom/lights/button/fire_turn_3", globalPropertyf }, --    1
+    { "button_fire_turn_2", "tu154/custom/lights/button/fire_turn_2", globalPropertyf }, --    1
+    { "button_fire_turn_1", "tu154/custom/lights/button/fire_turn_1", globalPropertyf }, --    1
 
-defineProperty("fire_lamp", globalPropertyf("tu154/custom/lights/fire")) -- 
+    { "throttle_1_fire", "tu154/custom/lights/small/throttle_1_fire", globalPropertyf }, --
+    { "throttle_2_fire", "tu154/custom/lights/small/throttle_2_fire", globalPropertyf }, --
+    { "throttle_3_fire", "tu154/custom/lights/small/throttle_3_fire", globalPropertyf }, --
 
-defineProperty("eng1_dangerous_vibro", globalPropertyf("tu154/custom/lights/engines/eng1_dangerous_vibro")) --  
-defineProperty("eng2_dangerous_vibro", globalPropertyf("tu154/custom/lights/engines/eng2_dangerous_vibro")) --  
-defineProperty("eng3_dangerous_vibro", globalPropertyf("tu154/custom/lights/engines/eng3_dangerous_vibro")) --  
+    { "fire_lamp", "tu154/custom/lights/fire", globalPropertyf }, --
 
-defineProperty("day_night_set", globalPropertyf("tu154/custom/lights/day_night_set")) --   - . 0 - , 1 - .    .
+    { "eng1_dangerous_vibro", "tu154/custom/lights/engines/eng1_dangerous_vibro", globalPropertyf }, --
+    { "eng2_dangerous_vibro", "tu154/custom/lights/engines/eng2_dangerous_vibro", globalPropertyf }, --
+    { "eng3_dangerous_vibro", "tu154/custom/lights/engines/eng3_dangerous_vibro", globalPropertyf }, --
 
--- power
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
+    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, --   - . 0 - , 1 - .    .
 
--- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
+    -- power
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    -- engines
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
 
--- other sources
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("ext_used_1", globalPropertyi("tu154/custom/fire/ext_used_1")) --  
-defineProperty("ext_used_2", globalPropertyi("tu154/custom/fire/ext_used_2")) --  
-defineProperty("ext_used_3", globalPropertyi("tu154/custom/fire/ext_used_3")) --  
+    -- other sources
 
-defineProperty("ng_used", globalPropertyi("tu154/custom/fire/ng_used")) --  
+    { "ext_used_1", "tu154/custom/fire/ext_used_1", globalPropertyi }, --
+    { "ext_used_2", "tu154/custom/fire/ext_used_2", globalPropertyi }, --
+    { "ext_used_3", "tu154/custom/fire/ext_used_3", globalPropertyi }, --
 
-defineProperty("valve_open_1", globalPropertyi("tu154/custom/fire/valve_open_1")) --    1
-defineProperty("valve_open_2", globalPropertyi("tu154/custom/fire/valve_open_2")) --    2
-defineProperty("valve_open_3", globalPropertyi("tu154/custom/fire/valve_open_3")) --    3
-defineProperty("valve_open_4", globalPropertyi("tu154/custom/fire/valve_open_4")) --   
+    { "ng_used", "tu154/custom/fire/ng_used", globalPropertyi }, --
 
-defineProperty("engine_fire_state_1", globalPropertyi("tu154/custom/fire/engine_fire_state_1")) --  . 0 - , 1 - , 2 - 
-defineProperty("engine_fire_state_2", globalPropertyi("tu154/custom/fire/engine_fire_state_2")) --  . 0 - , 1 - , 2 - 
-defineProperty("engine_fire_state_3", globalPropertyi("tu154/custom/fire/engine_fire_state_3")) --  . 0 - , 1 - , 2 - 
-defineProperty("engine_fire_state_4", globalPropertyi("tu154/custom/fire/engine_fire_state_4")) --  . 0 - , 1 - , 2 - 
+    { "valve_open_1", "tu154/custom/fire/valve_open_1", globalPropertyi }, --    1
+    { "valve_open_2", "tu154/custom/fire/valve_open_2", globalPropertyi }, --    2
+    { "valve_open_3", "tu154/custom/fire/valve_open_3", globalPropertyi }, --    3
+    { "valve_open_4", "tu154/custom/fire/valve_open_4", globalPropertyi }, --
 
-defineProperty("engine_fuel_cut_1", globalPropertyi("tu154/custom/fire/engine_fuel_cut_1")) --  
-defineProperty("engine_fuel_cut_2", globalPropertyi("tu154/custom/fire/engine_fuel_cut_2")) --  
-defineProperty("engine_fuel_cut_3", globalPropertyi("tu154/custom/fire/engine_fuel_cut_3")) --  
+    { "engine_fire_state_1", "tu154/custom/fire/engine_fire_state_1", globalPropertyi }, --  . 0 - , 1 - , 2 -
+    { "engine_fire_state_2", "tu154/custom/fire/engine_fire_state_2", globalPropertyi }, --  . 0 - , 1 - , 2 -
+    { "engine_fire_state_3", "tu154/custom/fire/engine_fire_state_3", globalPropertyi }, --  . 0 - , 1 - , 2 -
+    { "engine_fire_state_4", "tu154/custom/fire/engine_fire_state_4", globalPropertyi }, --  . 0 - , 1 - , 2 -
 
-defineProperty("fire_vlv_open_1", globalPropertyf("tu154/custom/fuel/fire_vlv_open_1")) --   
-defineProperty("fire_vlv_open_2", globalPropertyf("tu154/custom/fuel/fire_vlv_open_2")) --   
-defineProperty("fire_vlv_open_3", globalPropertyf("tu154/custom/fuel/fire_vlv_open_3")) --   
+    { "engine_fuel_cut_1", "tu154/custom/fire/engine_fuel_cut_1", globalPropertyi }, --
+    { "engine_fuel_cut_2", "tu154/custom/fire/engine_fuel_cut_2", globalPropertyi }, --
+    { "engine_fuel_cut_3", "tu154/custom/fire/engine_fuel_cut_3", globalPropertyi }, --
 
-defineProperty("fire_detected", globalPropertyi("tu154/custom/fire/fire_detected")) --  
-defineProperty("fire_siren", globalPropertyi("tu154/custom/fire/fire_siren")) --  
+    { "fire_vlv_open_1", "tu154/custom/fuel/fire_vlv_open_1", globalPropertyf }, --
+    { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf }, --
+    { "fire_vlv_open_3", "tu154/custom/fuel/fire_vlv_open_3", globalPropertyf }, --
+
+    { "fire_detected", "tu154/custom/fire/fire_detected", globalPropertyi }, --
+    { "fire_siren", "tu154/custom/fire/fire_siren", globalPropertyi }, --
+})
+
 
 -- sounds
 local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
@@ -122,7 +131,7 @@ local passed = get(frame_time)
 local notLoaded = true
 
 local function reset_switchers()
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(fire_main_switch, 0)
 
 	end

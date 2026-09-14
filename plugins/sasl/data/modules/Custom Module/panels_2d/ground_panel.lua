@@ -1,75 +1,84 @@
 -- this is ground service panel
 size = {655, 880}
-defineProperty("save_state", globalPropertyi("tu154/custom/save_state")) --    
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("show_ground_panel",globalPropertyi("tu154/custom/panels/show_ground_panel")) --    
-defineProperty("reset_crew",globalPropertyi("tu154/custom/sound/reset_crew")) --   
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
-defineProperty("have_pedals", globalPropertyi("tu154/custom/have_pedals"))
---defineProperty("save_state_enabled",globalPropertyi("tu154/custom/save_state_enabled")) --     
-defineProperty("reset_state",globalPropertyi("tu154/custom/reset_state")) --   
-defineProperty("asu_work", globalPropertyi("tu154/custom/asu/work"))
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
--- datarefs
-defineProperty("hide_rus_objects", globalPropertyi("tu154/custom/lang/hide_rus_objects")) --    
-defineProperty("hide_eng_objects", globalPropertyi("tu154/custom/lang/hide_eng_objects")) --    
-defineProperty("sounds_volume", globalPropertyi("tu154/custom/sounds_voulme")) --   
-defineProperty("slider_1", globalProperty("sim/cockpit2/switches/custom_slider_on[0]")) -- window L
-defineProperty("slider_2", globalProperty("sim/cockpit2/switches/custom_slider_on[1]")) -- window R
-defineProperty("slider_3", globalProperty("sim/cockpit2/switches/custom_slider_on[2]")) -- cargo 1
-defineProperty("slider_4", globalProperty("sim/cockpit2/switches/custom_slider_on[3]")) -- cargo 2
-defineProperty("slider_5", globalProperty("sim/cockpit2/switches/custom_slider_on[4]")) -- pax door 1
-defineProperty("slider_6", globalProperty("sim/cockpit2/switches/custom_slider_on[5]")) -- pax door 2
-defineProperty("slider_7", globalProperty("sim/cockpit2/switches/custom_slider_on[6]")) -- kitchen door
-defineProperty("slider_8", globalProperty("sim/cockpit2/switches/custom_slider_on[7]")) --
-defineProperty("slider_9", globalProperty("sim/cockpit2/switches/custom_slider_on[8]")) -- yokes
-defineProperty("slider_10", globalProperty("sim/cockpit2/switches/custom_slider_on[9]")) -- 
-defineProperty("slider_11", globalProperty("sim/cockpit2/switches/custom_slider_on[10]")) -- 
-defineProperty("slider_12", globalProperty("sim/cockpit2/switches/custom_slider_on[11]")) -- 
-defineProperty("gear_blocks", globalPropertyi("tu154/custom/anim/gear_blocks")) --   
-defineProperty("sensors_caps", globalPropertyi("tu154/custom/anim/sensors_caps")) --   
-defineProperty("engine_caps", globalPropertyi("tu154/custom/anim/engine_caps")) --   
-defineProperty("gpu_present", globalPropertyi("tu154/custom/anim/gpu_present")) -- 
-defineProperty("ladder_1_call", globalPropertyi("tu154/custom/anim/ladder_1_call")) -- . 100 - . +50..0 - , 0 -   , 0..-50 - 
-defineProperty("ladder_2_call", globalPropertyi("tu154/custom/anim/ladder_2_call")) -- 
-defineProperty("catering_call", globalPropertyi("tu154/custom/anim/catering_call")) -- 
-defineProperty("fuel_tanker_call", globalPropertyi("tu154/custom/anim/fuel_tanker_call")) -- 
-defineProperty("ladder_1", globalPropertyf("tu154/custom/anim/ladder_1")) -- - . +50..0 - , 0 -   , 0..-50 - 	100 
-defineProperty("ladder_2", globalPropertyf("tu154/custom/anim/ladder_2")) -- 
-defineProperty("catering", globalPropertyf("tu154/custom/anim/catering")) -- 
-defineProperty("fuel_tanker", globalPropertyf("tu154/custom/anim/fuel_tanker")) -- 
-defineProperty("GS", globalPropertyf("sim/flightmodel/position/groundspeed"))  -- ground speed
-defineProperty("eng_rpm1", globalProperty("sim/flightmodel/engine/ENGN_N2_[0]"))   
-defineProperty("eng_rpm2", globalProperty("sim/flightmodel/engine/ENGN_N2_[1]"))
-defineProperty("eng_rpm3", globalProperty("sim/flightmodel/engine/ENGN_N2_[2]"))
-defineProperty("zone_1_pr",globalPropertyi("tu154/custom/payload/zone_1"))
-defineProperty("zone_2_pr",globalPropertyi("tu154/custom/payload/zone_2"))
-defineProperty("zone_4_pr",globalPropertyi("tu154/custom/payload/zone_4"))
-defineProperty("zone_5_pr",globalPropertyi("tu154/custom/payload/zone_5"))
-defineProperty("zone_6_pr",globalPropertyi("tu154/custom/payload/zone_6"))
-defineProperty("cargo_1_pr",globalPropertyi("tu154/custom/payload/cargo_1"))
-defineProperty("cargo_2_pr",globalPropertyi("tu154/custom/payload/cargo_2"))
-defineProperty("kitchens_pr",globalPropertyi("tu154/custom/payload/kitchens"))
-defineProperty("sim_static_fail_L", globalPropertyi("sim/operation/failures/rel_static"))  -- static fail
-defineProperty("sim_static_fail_R", globalPropertyi("sim/operation/failures/rel_static2"))  -- static fail
-defineProperty("rel_pitot", globalPropertyi("sim/operation/failures/rel_pitot")) -- Pitot 1 - Blockage
-defineProperty("rel_pitot2", globalPropertyi("sim/operation/failures/rel_pitot2")) -- Pitot 2 - Blockage
-defineProperty("alpha_fail", globalPropertyi("sim/operation/failures/rel_AOA"))  -- angle of attack fail
-defineProperty("deflection_mtr_1", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]")) -- 
-defineProperty("deflection_mtr_2", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]")) -- 
-defineProperty("deflection_mtr_3", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]")) -- 
-defineProperty("enable_crew_vo", globalPropertyi("tu154/custom/sounds/enable_crew_vo")) --   
-defineProperty("show_fail_panel",globalPropertyi("tu154/custom/panels/show_fail_panel")) --   
-defineProperty("show_gns", globalPropertyi("tu154/custom/anim/show_gns"))
-defineProperty("show_RXP",globalPropertyi("tu154/custom/anim/RXP"))
-defineProperty("starter_torq", globalPropertyf("sim/aircraft/engine/acf_starter_torque_ratio")) --  . 0.18   
--- custom fails
-defineProperty("pitot_fail1", globalPropertyi("tu154/custom/failures/pitot1")) -- Pitot 1 - Blockage
-defineProperty("pitot_fail2", globalPropertyi("tu154/custom/failures/pitot2")) -- Pitot 2 - Blockage
-defineProperty("custom_static_fail_L", globalPropertyi("tu154/custom/failures/static1"))  -- static fail
-defineProperty("custom_static_fail_R", globalPropertyi("tu154/custom/failures/static2"))  -- static fail
-defineProperty("uap_fail", globalPropertyi("tu154/custom/failures/AOA")) -- fail
+defineProps({
+    { "save_state", "tu154/custom/save_state", globalPropertyi }, --
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "show_ground_panel", "tu154/custom/panels/show_ground_panel", globalPropertyi }, --
+    { "reset_crew", "tu154/custom/sound/reset_crew", globalPropertyi }, --
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
+    { "have_pedals", "tu154/custom/have_pedals", globalPropertyi },
+    --defineProperty("save_state_enabled",globalPropertyi("tu154/custom/save_state_enabled")) --
+    { "reset_state", "tu154/custom/reset_state", globalPropertyi }, --
+    { "asu_work", "tu154/custom/asu/work", globalPropertyi },
+
+    -- datarefs
+    { "hide_rus_objects", "tu154/custom/lang/hide_rus_objects", globalPropertyi }, --
+    { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi }, --
+    { "sounds_volume", "tu154/custom/sounds_voulme", globalPropertyi }, --
+    { "slider_1", "sim/cockpit2/switches/custom_slider_on[0]", globalProperty }, -- window L
+    { "slider_2", "sim/cockpit2/switches/custom_slider_on[1]", globalProperty }, -- window R
+    { "slider_3", "sim/cockpit2/switches/custom_slider_on[2]", globalProperty }, -- cargo 1
+    { "slider_4", "sim/cockpit2/switches/custom_slider_on[3]", globalProperty }, -- cargo 2
+    { "slider_5", "sim/cockpit2/switches/custom_slider_on[4]", globalProperty }, -- pax door 1
+    { "slider_6", "sim/cockpit2/switches/custom_slider_on[5]", globalProperty }, -- pax door 2
+    { "slider_7", "sim/cockpit2/switches/custom_slider_on[6]", globalProperty }, -- kitchen door
+    { "slider_8", "sim/cockpit2/switches/custom_slider_on[7]", globalProperty }, --
+    { "slider_9", "sim/cockpit2/switches/custom_slider_on[8]", globalProperty }, -- yokes
+    { "slider_10", "sim/cockpit2/switches/custom_slider_on[9]", globalProperty }, --
+    { "slider_11", "sim/cockpit2/switches/custom_slider_on[10]", globalProperty }, --
+    { "slider_12", "sim/cockpit2/switches/custom_slider_on[11]", globalProperty }, --
+    { "gear_blocks", "tu154/custom/anim/gear_blocks", globalPropertyi }, --
+    { "sensors_caps", "tu154/custom/anim/sensors_caps", globalPropertyi }, --
+    { "engine_caps", "tu154/custom/anim/engine_caps", globalPropertyi }, --
+    { "gpu_present", "tu154/custom/anim/gpu_present", globalPropertyi }, --
+    { "ladder_1_call", "tu154/custom/anim/ladder_1_call", globalPropertyi }, -- . 100 - . +50..0 - , 0 -   , 0..-50 -
+    { "ladder_2_call", "tu154/custom/anim/ladder_2_call", globalPropertyi }, --
+    { "catering_call", "tu154/custom/anim/catering_call", globalPropertyi }, --
+    { "fuel_tanker_call", "tu154/custom/anim/fuel_tanker_call", globalPropertyi }, --
+    { "ladder_1", "tu154/custom/anim/ladder_1", globalPropertyf }, -- - . +50..0 - , 0 -   , 0..-50 - 	100
+    { "ladder_2", "tu154/custom/anim/ladder_2", globalPropertyf }, --
+    { "catering", "tu154/custom/anim/catering", globalPropertyf }, --
+    { "fuel_tanker", "tu154/custom/anim/fuel_tanker", globalPropertyf }, --
+    { "GS", "sim/flightmodel/position/groundspeed", globalPropertyf },  -- ground speed
+    { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
+    { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
+    { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
+    { "zone_1_pr", "tu154/custom/payload/zone_1", globalPropertyi },
+    { "zone_2_pr", "tu154/custom/payload/zone_2", globalPropertyi },
+    { "zone_4_pr", "tu154/custom/payload/zone_4", globalPropertyi },
+    { "zone_5_pr", "tu154/custom/payload/zone_5", globalPropertyi },
+    { "zone_6_pr", "tu154/custom/payload/zone_6", globalPropertyi },
+    { "cargo_1_pr", "tu154/custom/payload/cargo_1", globalPropertyi },
+    { "cargo_2_pr", "tu154/custom/payload/cargo_2", globalPropertyi },
+    { "kitchens_pr", "tu154/custom/payload/kitchens", globalPropertyi },
+    { "sim_static_fail_L", "sim/operation/failures/rel_static", globalPropertyi },  -- static fail
+    { "sim_static_fail_R", "sim/operation/failures/rel_static2", globalPropertyi },  -- static fail
+    { "rel_pitot", "sim/operation/failures/rel_pitot", globalPropertyi }, -- Pitot 1 - Blockage
+    { "rel_pitot2", "sim/operation/failures/rel_pitot2", globalPropertyi }, -- Pitot 2 - Blockage
+    { "alpha_fail", "sim/operation/failures/rel_AOA", globalPropertyi },  -- angle of attack fail
+    { "deflection_mtr_1", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, --
+    { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, --
+    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, --
+    { "enable_crew_vo", "tu154/custom/sounds/enable_crew_vo", globalPropertyi }, --
+    { "show_fail_panel", "tu154/custom/panels/show_fail_panel", globalPropertyi }, --
+    { "show_gns", "tu154/custom/anim/show_gns", globalPropertyi },
+    { "show_RXP", "tu154/custom/anim/RXP", globalPropertyi },
+    { "starter_torq", "sim/aircraft/engine/acf_starter_torque_ratio", globalPropertyf }, --  . 0.18
+    -- custom fails
+    { "pitot_fail1", "tu154/custom/failures/pitot1", globalPropertyi }, -- Pitot 1 - Blockage
+    { "pitot_fail2", "tu154/custom/failures/pitot2", globalPropertyi }, -- Pitot 2 - Blockage
+    { "custom_static_fail_L", "tu154/custom/failures/static1", globalPropertyi },  -- static fail
+    { "custom_static_fail_R", "tu154/custom/failures/static2", globalPropertyi },  -- static fail
+    { "uap_fail", "tu154/custom/failures/AOA", globalPropertyi }, -- fail
+})
+
 -- Ground-panel status strings use a compact scalable font.  Verdana at the
 -- generic 24 px default is wider than the fields on this panel.
 local text_font = sasl.gl.loadFont('Verdana.ttf')
@@ -100,7 +109,7 @@ local failPanelShow = false
 local reset_click = false
 
 local function coldDarkReset()
-	if get(eng_rpm1) < 10 and get(eng_rpm2) < 10 and get(eng_rpm3) < 10 then
+	if isColdAndDarkStart() and get(eng_rpm1) < 10 and get(eng_rpm2) < 10 and get(eng_rpm3) < 10 then
 		-- cover acf
 		set(gear_blocks, 1)
 		set(sensors_caps, 1)

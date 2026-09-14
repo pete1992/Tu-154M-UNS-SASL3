@@ -1,133 +1,140 @@
 -- control panel for KSKV system
 
 -- controls on panel
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-defineProperty("cabin_sel", globalPropertyi("tu154/custom/switchers/airbleed/cabin_sel")) --  
-defineProperty("cockpit_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/cockpit_temp_set")) --   
-defineProperty("cabin1_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/cabin1_temp_set")) --   
-defineProperty("cabin2_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/cabin2_temp_set")) --   
-defineProperty("cockpit_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/cockpit_mode_set")) --   . 0 - . 1 - , 2 - , 3 - 
-defineProperty("cabin1_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/cabin1_mode_set")) --   
-defineProperty("cabin2_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/cabin2_mode_set")) --   
-defineProperty("heat_close", globalPropertyi("tu154/custom/switchers/airbleed/heat_close")) --  
-defineProperty("heat_close_cap", globalPropertyi("tu154/custom/switchers/airbleed/heat_close_cap")) --  
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("left_sys_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/left_sys_temp_set")) --    
-defineProperty("right_sys_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/right_sys_temp_set")) --    
-defineProperty("left_sys_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/left_sys_mode_set")) --    
-defineProperty("right_sys_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/right_sys_mode_set")) --    
-defineProperty("ground_cond_on", globalPropertyi("tu154/custom/switchers/airbleed/ground_cond_on")) --  
-defineProperty("ground_cond_on_cap", globalPropertyi("tu154/custom/switchers/airbleed/ground_cond_on_cap")) --  
-defineProperty("skv_faster_work", globalPropertyi("tu154/custom/switchers/airbleed/skv_faster_work")) --  , 0 - , +1 -   
-defineProperty("skv_faster_work_cap", globalPropertyi("tu154/custom/switchers/airbleed/skv_faster_work_cap")) --  , 
-defineProperty("sys_temp_select", globalPropertyi("tu154/custom/switchers/airbleed/sys_temp_select")) --   . 0 -  , 1 - , 2 -  1, 3 -  2, 4 -  , 5 -  
+defineProps({
+    { "cabin_sel", "tu154/custom/switchers/airbleed/cabin_sel", globalPropertyi }, --
+    { "cockpit_temp_set", "tu154/custom/switchers/airbleed/cockpit_temp_set", globalPropertyi }, --
+    { "cabin1_temp_set", "tu154/custom/switchers/airbleed/cabin1_temp_set", globalPropertyi }, --
+    { "cabin2_temp_set", "tu154/custom/switchers/airbleed/cabin2_temp_set", globalPropertyi }, --
+    { "cockpit_mode_set", "tu154/custom/switchers/airbleed/cockpit_mode_set", globalPropertyi }, --   . 0 - . 1 - , 2 - , 3 -
+    { "cabin1_mode_set", "tu154/custom/switchers/airbleed/cabin1_mode_set", globalPropertyi }, --
+    { "cabin2_mode_set", "tu154/custom/switchers/airbleed/cabin2_mode_set", globalPropertyi }, --
+    { "heat_close", "tu154/custom/switchers/airbleed/heat_close", globalPropertyi }, --
+    { "heat_close_cap", "tu154/custom/switchers/airbleed/heat_close_cap", globalPropertyi }, --
 
-defineProperty("psvp_left_on", globalPropertyi("tu154/custom/switchers/airbleed/psvp_left_on")) --  
-defineProperty("psvp_right_on", globalPropertyi("tu154/custom/switchers/airbleed/psvp_right_on")) --  
-defineProperty("psvp_left_on_cap", globalPropertyi("tu154/custom/switchers/airbleed/psvp_left_on_cap")) --  
-defineProperty("psvp_right_on_cap", globalPropertyi("tu154/custom/switchers/airbleed/psvp_right_on_cap")) --  
-defineProperty("air_valve_left", globalPropertyi("tu154/custom/switchers/airbleed/air_valve_left")) --  . -1 , 0 - , +1 
-defineProperty("air_valve_right", globalPropertyi("tu154/custom/switchers/airbleed/air_valve_right")) --  . -1 , 0 - , +1 
-defineProperty("air_valve_both", globalPropertyi("tu154/custom/switchers/airbleed/air_valve_both")) --  . -1 , 0 - , +1 
-defineProperty("emerg_decompress", globalPropertyi("tu154/custom/switchers/airbleed/emerg_decompress")) --  
-defineProperty("emerg_decompress_cap", globalPropertyi("tu154/custom/switchers/airbleed/emerg_decompress_cap")) --  
-defineProperty("eng_valve_1", globalPropertyi("tu154/custom/switchers/airbleed/eng_valve_1")) --    
-defineProperty("eng_valve_2", globalPropertyi("tu154/custom/switchers/airbleed/eng_valve_2")) --    
-defineProperty("eng_valve_3", globalPropertyi("tu154/custom/switchers/airbleed/eng_valve_3")) --    
-defineProperty("dubler_on", globalPropertyi("tu154/custom/switchers/airbleed/dubler_on")) -- 
-defineProperty("dubler_on_cap", globalPropertyi("tu154/custom/switchers/airbleed/dubler_on_cap")) -- 
+    { "left_sys_temp_set", "tu154/custom/switchers/airbleed/left_sys_temp_set", globalPropertyi }, --
+    { "right_sys_temp_set", "tu154/custom/switchers/airbleed/right_sys_temp_set", globalPropertyi }, --
+    { "left_sys_mode_set", "tu154/custom/switchers/airbleed/left_sys_mode_set", globalPropertyi }, --
+    { "right_sys_mode_set", "tu154/custom/switchers/airbleed/right_sys_mode_set", globalPropertyi }, --
+    { "ground_cond_on", "tu154/custom/switchers/airbleed/ground_cond_on", globalPropertyi }, --
+    { "ground_cond_on_cap", "tu154/custom/switchers/airbleed/ground_cond_on_cap", globalPropertyi }, --
+    { "skv_faster_work", "tu154/custom/switchers/airbleed/skv_faster_work", globalPropertyi }, --  , 0 - , +1 -
+    { "skv_faster_work_cap", "tu154/custom/switchers/airbleed/skv_faster_work_cap", globalPropertyi }, --  ,
+    { "sys_temp_select", "tu154/custom/switchers/airbleed/sys_temp_select", globalPropertyi }, --   . 0 -  , 1 - , 2 -  1, 3 -  2, 4 -  , 5 -
 
-defineProperty("sard_disable", globalPropertyi("tu154/custom/switchers/eng/sard_disable")) --    
-defineProperty("sard_disable_cap", globalPropertyi("tu154/custom/switchers/eng/sard_disable_cap")) --    
+    { "psvp_left_on", "tu154/custom/switchers/airbleed/psvp_left_on", globalPropertyi }, --
+    { "psvp_right_on", "tu154/custom/switchers/airbleed/psvp_right_on", globalPropertyi }, --
+    { "psvp_left_on_cap", "tu154/custom/switchers/airbleed/psvp_left_on_cap", globalPropertyi }, --
+    { "psvp_right_on_cap", "tu154/custom/switchers/airbleed/psvp_right_on_cap", globalPropertyi }, --
+    { "air_valve_left", "tu154/custom/switchers/airbleed/air_valve_left", globalPropertyi }, --  . -1 , 0 - , +1
+    { "air_valve_right", "tu154/custom/switchers/airbleed/air_valve_right", globalPropertyi }, --  . -1 , 0 - , +1
+    { "air_valve_both", "tu154/custom/switchers/airbleed/air_valve_both", globalPropertyi }, --  . -1 , 0 - , +1
+    { "emerg_decompress", "tu154/custom/switchers/airbleed/emerg_decompress", globalPropertyi }, --
+    { "emerg_decompress_cap", "tu154/custom/switchers/airbleed/emerg_decompress_cap", globalPropertyi }, --
+    { "eng_valve_1", "tu154/custom/switchers/airbleed/eng_valve_1", globalPropertyi }, --
+    { "eng_valve_2", "tu154/custom/switchers/airbleed/eng_valve_2", globalPropertyi }, --
+    { "eng_valve_3", "tu154/custom/switchers/airbleed/eng_valve_3", globalPropertyi }, --
+    { "dubler_on", "tu154/custom/switchers/airbleed/dubler_on", globalPropertyi }, --
+    { "dubler_on_cap", "tu154/custom/switchers/airbleed/dubler_on_cap", globalPropertyi }, --
 
-defineProperty("door_heat", globalPropertyi("tu154/custom/switchers/eng/door_heat")) --  
+    { "sard_disable", "tu154/custom/switchers/eng/sard_disable", globalPropertyi }, --
+    { "sard_disable_cap", "tu154/custom/switchers/eng/sard_disable_cap", globalPropertyi }, --
 
--- buttons
-defineProperty("lamp_test_srd", globalPropertyi("tu154/custom/buttons/lamp_test_srd")) --  
-defineProperty("lamp_test_front", globalPropertyi("tu154/custom/buttons/lamp_test_front")) --      	0
-defineProperty("day_night_set", globalPropertyf("tu154/custom/lights/day_night_set")) --   - . 0 - , 1 - .    .
+    { "door_heat", "tu154/custom/switchers/eng/door_heat", globalPropertyi }, --
 
-defineProperty("srd_buzzer_test", globalPropertyf("tu154/custom/buttons/eng/srd_buzzer_test")) --   
+    -- buttons
+    { "lamp_test_srd", "tu154/custom/buttons/lamp_test_srd", globalPropertyi }, --
+    { "lamp_test_front", "tu154/custom/buttons/lamp_test_front", globalPropertyi }, --      	0
+    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, --   - . 0 - , 1 - .    .
 
--- lamps
-defineProperty("skv_overheat", globalPropertyf("tu154/custom/lights/small/skv_overheat")) --  
-defineProperty("skv_overpress_left", globalPropertyf("tu154/custom/lights/small/skv_overpress_left")) --  
-defineProperty("skv_overpress_right", globalPropertyf("tu154/custom/lights/small/skv_overpress_right")) --  
-defineProperty("skv_tail_temp", globalPropertyf("tu154/custom/lights/small/skv_tail_temp")) --    
+    { "srd_buzzer_test", "tu154/custom/buttons/eng/srd_buzzer_test", globalPropertyf }, --
 
-defineProperty("skv_bleed_fail_1", globalPropertyf("tu154/custom/lights/small/skv_bleed_fail_1")) --  
-defineProperty("skv_bleed_fail_2", globalPropertyf("tu154/custom/lights/small/skv_bleed_fail_2")) --  
-defineProperty("skv_bleed_fail_3", globalPropertyf("tu154/custom/lights/small/skv_bleed_fail_3")) --  
+    -- lamps
+    { "skv_overheat", "tu154/custom/lights/small/skv_overheat", globalPropertyf }, --
+    { "skv_overpress_left", "tu154/custom/lights/small/skv_overpress_left", globalPropertyf }, --
+    { "skv_overpress_right", "tu154/custom/lights/small/skv_overpress_right", globalPropertyf }, --
+    { "skv_tail_temp", "tu154/custom/lights/small/skv_tail_temp", globalPropertyf }, --
 
-defineProperty("skv_bleed_closed_1", globalPropertyf("tu154/custom/lights/small/skv_bleed_closed_1")) --  
-defineProperty("skv_bleed_closed_2", globalPropertyf("tu154/custom/lights/small/skv_bleed_closed_2")) --  
-defineProperty("skv_bleed_closed_3", globalPropertyf("tu154/custom/lights/small/skv_bleed_closed_3")) --  
+    { "skv_bleed_fail_1", "tu154/custom/lights/small/skv_bleed_fail_1", globalPropertyf }, --
+    { "skv_bleed_fail_2", "tu154/custom/lights/small/skv_bleed_fail_2", globalPropertyf }, --
+    { "skv_bleed_fail_3", "tu154/custom/lights/small/skv_bleed_fail_3", globalPropertyf }, --
 
-defineProperty("srd_low_press", globalPropertyf("tu154/custom/lights/small/srd_low_press")) --   
-defineProperty("srd_overpress", globalPropertyf("tu154/custom/lights/small/srd_overpress")) --  
-defineProperty("cockpit_p_low", globalPropertyf("tu154/custom/lights/cockpit_p_low")) --   
+    { "skv_bleed_closed_1", "tu154/custom/lights/small/skv_bleed_closed_1", globalPropertyf }, --
+    { "skv_bleed_closed_2", "tu154/custom/lights/small/skv_bleed_closed_2", globalPropertyf }, --
+    { "skv_bleed_closed_3", "tu154/custom/lights/small/skv_bleed_closed_3", globalPropertyf }, --
 
--- gauges
-defineProperty("cockpit_temp_gau", globalPropertyf("tu154/custom/gauges/airbleed/cockpit_temp")) --   
-defineProperty("cabin_temp_gau", globalPropertyf("tu154/custom/gauges/airbleed/cabin_temp")) --   
-defineProperty("system_temp", globalPropertyf("tu154/custom/gauges/airbleed/system_temp")) --   
-defineProperty("air_flow_1", globalPropertyf("tu154/custom/gauges/airbleed/air_flow_1")) --  . 
-defineProperty("air_flow_2", globalPropertyf("tu154/custom/gauges/airbleed/air_flow_2")) --  . 
+    { "srd_low_press", "tu154/custom/lights/small/srd_low_press", globalPropertyf }, --
+    { "srd_overpress", "tu154/custom/lights/small/srd_overpress", globalPropertyf }, --
+    { "cockpit_p_low", "tu154/custom/lights/cockpit_p_low", globalPropertyf }, --
 
--- sources
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    -- gauges
+    { "cockpit_temp_gau", "tu154/custom/gauges/airbleed/cockpit_temp", globalPropertyf }, --
+    { "cabin_temp_gau", "tu154/custom/gauges/airbleed/cabin_temp", globalPropertyf }, --
+    { "system_temp", "tu154/custom/gauges/airbleed/system_temp", globalPropertyf }, --
+    { "air_flow_1", "tu154/custom/gauges/airbleed/air_flow_1", globalPropertyf }, --  .
+    { "air_flow_2", "tu154/custom/gauges/airbleed/air_flow_2", globalPropertyf }, --  .
 
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
+    -- sources
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("eng_airvalve_1", globalPropertyf("tu154/custom/bleed/eng_airvalve_1")) --     
-defineProperty("eng_airvalve_2", globalPropertyf("tu154/custom/bleed/eng_airvalve_2")) --     
-defineProperty("eng_airvalve_3", globalPropertyf("tu154/custom/bleed/eng_airvalve_3")) --     
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
-defineProperty("air_usage_L", globalPropertyf("tu154/custom/bleed/air_usage_L")) --   
-defineProperty("air_usage_R", globalPropertyf("tu154/custom/bleed/air_usage_R")) --   
+    { "eng_airvalve_1", "tu154/custom/bleed/eng_airvalve_1", globalPropertyf }, --
+    { "eng_airvalve_2", "tu154/custom/bleed/eng_airvalve_2", globalPropertyf }, --
+    { "eng_airvalve_3", "tu154/custom/bleed/eng_airvalve_3", globalPropertyf }, --
 
-defineProperty("door_heat_tube_t", globalPropertyf("tu154/custom/bleed/door_heat_tube_t")) --     
-defineProperty("cockpit_tube_t", globalPropertyf("tu154/custom/bleed/cockpit_tube_t")) --     
-defineProperty("cabin1_tube_t", globalPropertyf("tu154/custom/bleed/cabin1_tube_t")) --      1
-defineProperty("cabin2_tube_t", globalPropertyf("tu154/custom/bleed/cabin2_tube_t")) --      2
-defineProperty("cold_tube1_t", globalPropertyf("tu154/custom/bleed/cold_tube1_t")) --    1
-defineProperty("cold_tube2_t", globalPropertyf("tu154/custom/bleed/cold_tube2_t")) --    2
+    { "air_usage_L", "tu154/custom/bleed/air_usage_L", globalPropertyf }, --
+    { "air_usage_R", "tu154/custom/bleed/air_usage_R", globalPropertyf }, --
 
-defineProperty("cockpit_temp", globalPropertyf("tu154/custom/bleed/cockpit_temp")) --   
-defineProperty("cabin_1_temp", globalPropertyf("tu154/custom/bleed/cabin_1_temp")) --    1
-defineProperty("cabin_2_temp", globalPropertyf("tu154/custom/bleed/cabin_2_temp")) --    2
+    { "door_heat_tube_t", "tu154/custom/bleed/door_heat_tube_t", globalPropertyf }, --
+    { "cockpit_tube_t", "tu154/custom/bleed/cockpit_tube_t", globalPropertyf }, --
+    { "cabin1_tube_t", "tu154/custom/bleed/cabin1_tube_t", globalPropertyf }, --      1
+    { "cabin2_tube_t", "tu154/custom/bleed/cabin2_tube_t", globalPropertyf }, --      2
+    { "cold_tube1_t", "tu154/custom/bleed/cold_tube1_t", globalPropertyf }, --    1
+    { "cold_tube2_t", "tu154/custom/bleed/cold_tube2_t", globalPropertyf }, --    2
 
-defineProperty("hot_tube_t", globalPropertyf("tu154/custom/bleed/hot_tube_t")) --     
+    { "cockpit_temp", "tu154/custom/bleed/cockpit_temp", globalPropertyf }, --
+    { "cabin_1_temp", "tu154/custom/bleed/cabin_1_temp", globalPropertyf }, --    1
+    { "cabin_2_temp", "tu154/custom/bleed/cabin_2_temp", globalPropertyf }, --    2
 
-defineProperty("actual_cabin_alt", globalPropertyf("sim/cockpit2/pressurization/indicators/cabin_altitude_ft"))
-defineProperty("cabin_press_diff", globalPropertyf("sim/cockpit2/pressurization/indicators/pressure_diffential_psi"))
+    { "hot_tube_t", "tu154/custom/bleed/hot_tube_t", globalPropertyf }, --
 
--- failures
-defineProperty("airbleed_1", globalPropertyi("tu154/custom/failures/airbleed_1")) --     
-defineProperty("airbleed_2", globalPropertyi("tu154/custom/failures/airbleed_2")) --     
-defineProperty("airbleed_3", globalPropertyi("tu154/custom/failures/airbleed_3")) --     
+    { "actual_cabin_alt", "sim/cockpit2/pressurization/indicators/cabin_altitude_ft", globalPropertyf },
+    { "cabin_press_diff", "sim/cockpit2/pressurization/indicators/pressure_diffential_psi", globalPropertyf },
 
-defineProperty("main_pressure", globalPropertyi("tu154/custom/alarm/main_pressure")) --    
+    -- failures
+    { "airbleed_1", "tu154/custom/failures/airbleed_1", globalPropertyi }, --
+    { "airbleed_2", "tu154/custom/failures/airbleed_2", globalPropertyi }, --
+    { "airbleed_3", "tu154/custom/failures/airbleed_3", globalPropertyi }, --
 
--- sounds
+    { "main_pressure", "tu154/custom/alarm/main_pressure", globalPropertyi }, --
+
+    -- sounds
+    -- time
+
+    -- engines
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
+})
+
 local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
 local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
 local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
 local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
-local XP11 = get(xp_version) > 120000
--- time
 local passed = get(frame_time)
-
--- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N1_[2]")) -- engine 3 rpm
 
 local notLoaded = true
 
 local function reset_switchers()
-	if get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(cockpit_mode_set, 0)
 		set(cabin1_mode_set, 0)
 		set(cabin2_mode_set, 0)
@@ -274,11 +281,7 @@ local function rotary_sw()
 	change = change - cockpit_temp_set_last - cabin1_temp_set_last - cabin2_temp_set_last - left_sys_temp_set_last - right_sys_temp_set_last - sys_temp_select_last
 	
 if change ~= 0 then
-	if XP11 then
     sasl.al.playSample(rotary_sound, false)
-else
-    sasl.al.playSample(rotary_sound, false)
-end
 end
 	
 	cockpit_temp_set_last = cockpit_temp_set_sw

@@ -1,77 +1,86 @@
 -- this is main AHZ logic
 
 -- this is aux ahz logic
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, d in ipairs(defs) do
+        defineProperty(d[1], d[3](d[2]))
+    end
+end
 
-defineProperty("pitch_sim", globalPropertyf("sim/flightmodel/position/theta"))
-defineProperty("roll_sim", globalPropertyf("sim/flightmodel/position/phi"))
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("nav_cs_1", globalPropertyf("tu154/custom/radio/nav1_cs"))
-defineProperty("nav_gs_1", globalPropertyf("tu154/custom/radio/nav1_gs"))
+    { "pitch_sim", "sim/flightmodel/position/theta", globalPropertyf },
+    { "roll_sim", "sim/flightmodel/position/phi", globalPropertyf },
 
-defineProperty("nav_cs_2", globalPropertyf("tu154/custom/radio/nav2_cs"))
-defineProperty("nav_gs_2", globalPropertyf("tu154/custom/radio/nav2_gs"))
+    { "nav_cs_1", "tu154/custom/radio/nav1_cs", globalPropertyf },
+    { "nav_gs_1", "tu154/custom/radio/nav1_gs", globalPropertyf },
 
-defineProperty("absu_pnp_mode", globalPropertyi("tu154/custom/absu/absu_pnp_mode_1")) --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 = 
+    { "nav_cs_2", "tu154/custom/radio/nav2_cs", globalPropertyf },
+    { "nav_gs_2", "tu154/custom/radio/nav2_gs", globalPropertyf },
 
-defineProperty("nvu_res_z", globalPropertyf("tu154/custom/nvu/nvu_res_z")) --     
+    { "absu_pnp_mode", "tu154/custom/absu/absu_pnp_mode_1", globalPropertyi }, --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
 
--- ABSU
-defineProperty("absu_roll_ind", globalPropertyf("tu154/custom/absu/absu_roll_ind")) --   
-defineProperty("absu_pitch_ind", globalPropertyf("tu154/custom/absu/absu_pitch_ind")) --   
+    { "nvu_res_z", "tu154/custom/nvu/nvu_res_z", globalPropertyf }, --
 
-defineProperty("absu_roll_flag", globalPropertyi("tu154/custom/absu/absu_roll_flag")) --	  
-defineProperty("absu_pitch_flag", globalPropertyi("tu154/custom/absu/absu_pitch_flag")) --   
+    -- ABSU
+    { "absu_roll_ind", "tu154/custom/absu/absu_roll_ind", globalPropertyf }, --
+    { "absu_pitch_ind", "tu154/custom/absu/absu_pitch_ind", globalPropertyf }, --
 
-defineProperty("absu_at_dif", globalPropertyf("tu154/custom/absu_at_dif_left")) --      
+    { "absu_roll_flag", "tu154/custom/absu/absu_roll_flag", globalPropertyi }, --
+    { "absu_pitch_flag", "tu154/custom/absu/absu_pitch_flag", globalPropertyi }, --
 
-defineProperty("N1", globalProperty("sim/flightmodel/engine/ENGN_N2_[1]"))
-defineProperty("N2", globalProperty("sim/flightmodel/engine/ENGN_N2_[0]"))
-defineProperty("N3", globalProperty("sim/flightmodel/engine/ENGN_N2_[2]"))
+    { "absu_at_dif", "tu154/custom/absu_at_dif_left", globalPropertyf }, --
 
--- controls
-defineProperty("pitch_corr_hdl", globalPropertyf("tu154/custom/gauges/ahz/pitch_corr_L")) --     + 
-defineProperty("pkp_on", globalPropertyi("tu154/custom/switchers/ovhd/pkp_left_on")) -- 
+    { "N1", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
+    { "N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
+    { "N3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
 
-defineProperty("pkp_fail", globalPropertyi("tu154/custom/bkk/pkp_fail_left")) --    -  
+    -- controls
+    { "pitch_corr_hdl", "tu154/custom/gauges/ahz/pitch_corr_L", globalPropertyf }, --     +
+    { "pkp_on", "tu154/custom/switchers/ovhd/pkp_left_on", globalPropertyi }, --
 
-defineProperty("arrest_btn", globalPropertyi("tu154/custom/buttons/console/absu_arrest")) --  
+    { "pkp_fail", "tu154/custom/bkk/pkp_fail_left", globalPropertyi }, --    -
 
--- power
-defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
---defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
+    { "arrest_btn", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
 
-defineProperty("bus36_volt", globalPropertyf("tu154/custom/elec/bus36_volt_left"))
+    -- power
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    --defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
 
-defineProperty("power_cc", globalPropertyf("tu154/custom/bkk/pkp_left_power_cc")) --   
+    { "bus36_volt", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
 
-defineProperty("fail", globalPropertyi("sim/operation/failures/rel_ss_ahz"))
+    { "power_cc", "tu154/custom/bkk/pkp_left_power_cc", globalPropertyf }, --
 
-defineProperty("absu_use_second_nav", globalPropertyi("tu154/custom/absu_use_second_nav")) --    
+    { "fail", "sim/operation/failures/rel_ss_ahz", globalPropertyi },
 
--- results
-defineProperty("res_pitch", globalPropertyf("tu154/custom/gauges/ahz/pitch_L")) --    +  
-defineProperty("pitch_int", globalPropertyf("tu154/custom/gyro/ahz_pitch_int_L")) --    + 
+    { "absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi }, --
 
-defineProperty("res_roll", globalPropertyf("tu154/custom/gauges/ahz/roll_L")) --    +  
-defineProperty("res_roll_bkk", globalPropertyf("tu154/custom/bkk/pkp_roll_left")) --    +  
+    -- results
+    { "res_pitch", "tu154/custom/gauges/ahz/pitch_L", globalPropertyf }, --    +
+    { "pitch_int", "tu154/custom/gyro/ahz_pitch_int_L", globalPropertyf }, --    +
 
-defineProperty("course_plank", globalPropertyf("tu154/custom/gauges/ahz/course_plank_L")) --     +  
-defineProperty("gs_plank", globalPropertyf("tu154/custom/gauges/ahz/gs_plank_L")) --     + 
+    { "res_roll", "tu154/custom/gauges/ahz/roll_L", globalPropertyf }, --    +
+    { "res_roll_bkk", "tu154/custom/bkk/pkp_roll_left", globalPropertyf }, --    +
 
-defineProperty("dir_roll", globalPropertyf("tu154/custom/gauges/ahz/dir_roll_L")) --     +  
-defineProperty("dir_pitch", globalPropertyf("tu154/custom/gauges/ahz/dir_pitch_L")) --      + 
+    { "course_plank", "tu154/custom/gauges/ahz/course_plank_L", globalPropertyf }, --     +
+    { "gs_plank", "tu154/custom/gauges/ahz/gs_plank_L", globalPropertyf }, --     +
 
-defineProperty("speed_plank", globalPropertyf("tu154/custom/gauges/ahz/speed_plank_L")) --     + 
+    { "dir_roll", "tu154/custom/gauges/ahz/dir_roll_L", globalPropertyf }, --     +
+    { "dir_pitch", "tu154/custom/gauges/ahz/dir_pitch_L", globalPropertyf }, --      +
 
-defineProperty("dir_roll_flag", globalPropertyf("tu154/custom/gauges/ahz/dir_roll_flag_L")) --      
-defineProperty("dir_pitch_flag", globalPropertyf("tu154/custom/gauges/ahz/dir_pitch_flag_L")) --      
+    { "speed_plank", "tu154/custom/gauges/ahz/speed_plank_L", globalPropertyf }, --     +
 
-defineProperty("ahz_flag", globalPropertyf("tu154/custom/gauges/ahz/ahz_flag_L")) -- 
+    { "dir_roll_flag", "tu154/custom/gauges/ahz/dir_roll_flag_L", globalPropertyf }, --
+    { "dir_pitch_flag", "tu154/custom/gauges/ahz/dir_pitch_flag_L", globalPropertyf }, --
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    { "ahz_flag", "tu154/custom/gauges/ahz/ahz_flag_L", globalPropertyf }, --
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
+
 
 local initial_roll_err = 0 --math.random(-20, 20) * real_num -- initial error, ehich will be decreased to 0 after connecting power
 local roll_corr = 0  -- correction for errors and arrest
@@ -109,7 +118,7 @@ function update()
 	time_counter = time_counter + passed	
 
 	-- set initial AHZ position
-	if time_counter > 0.3 and time_counter < 0.4 and notLoaded and get(N1) < 10 and get(N2) < 10 and get(N3) < 10 then
+	if isColdAndDarkStart() and time_counter > 0.3 and time_counter < 0.4 and notLoaded and get(N1) < 10 and get(N2) < 10 and get(N3) < 10 then
 		initial_roll_err = math.random(-30, 30)
 		roll_off = math.random(-1, 1)
 		initial_pitch_err = math.random(-30, 30)
