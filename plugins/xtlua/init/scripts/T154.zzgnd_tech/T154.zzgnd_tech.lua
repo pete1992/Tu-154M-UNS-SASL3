@@ -1,3 +1,5 @@
+-- T154.zzgnd_tech.lua
+
 function deferred_command(name,desc,nilFunc)
 	c = XLuaCreateCommand(name,desc)
 	print("Deferred command: "..name)

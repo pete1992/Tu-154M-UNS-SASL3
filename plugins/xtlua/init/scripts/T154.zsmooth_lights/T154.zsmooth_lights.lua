@@ -1,3 +1,5 @@
+-- T154.zsmooth_lights.lua
+
 function deferred_dataref(name,type,notifier)
 	print("Deffered dataref: "..name)
 	dref=XLuaCreateDataRef(name, type,"yes",notifier)
@@ -26,7 +28,6 @@ simDR_light_fuel_pump_left_2_fail = find_dataref("tu154/custom/lights/small/fuel
 simDR_light_fuel_pump_right_2_fail = find_dataref("tu154/custom/lights/small/fuel_tank2_right_fail")
 simDR_light_fuel_pump_left_3_fail = find_dataref("tu154/custom/lights/small/fuel_tank3_left_fail")
 simDR_light_fuel_pump_right_3_fail = find_dataref("tu154/custom/lights/small/fuel_tank3_right_fail")
-
 simDR_pta6_fail = find_dataref("tu154/custom/lights/apu/pta6_fail")
 simDR_start_apu = find_dataref("tu154/custom/lights/apu/start_apu")
 simDR_high_rpm = find_dataref("tu154/custom/lights/apu/high_rpm")
@@ -324,13 +325,7 @@ simDR_gears_red_right =  find_dataref("tu154/custom/lights/gears_red_right")
 simDR_gears_not_ext =  find_dataref("tu154/custom/lights/gears_not_ext")
 simDR_alpha_high =  find_dataref("tu154/custom/lights/alpha_high")
 simDR_g_force_high =  find_dataref("tu154/custom/lights/g_force_high")
-
-
 -- lights list end
-
-
-
-
 
 trim_p_light = deferred_dataref("tu154/custom/lights/trimm_zero_pitch_new", "number")
 trim_r_light = deferred_dataref("tu154/custom/lights/trimm_zero_roll_new", "number")
@@ -671,11 +666,6 @@ function smooth_light(orig_lit,new_lit)
         return (new_lit_loc * 0.1)
     end
 end  
-
-
-
-
-
 
 
 function new_lights()

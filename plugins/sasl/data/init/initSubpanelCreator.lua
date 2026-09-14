@@ -25,11 +25,11 @@
 --- @param tbl SubpanelParams
 --- @return Component
 --- @see reference
---- : https://1-sim.com/files/SASL3Manual.pdf#contextWindow
-function contextWindow(tbl)
+--- : https://1-sim.com/files/SASL3Manual.pdf#subpanel
+function subpanel(tbl)
     local name = tbl.name
     if name == nil then
-        name = "contextWindow"
+        name = "subpanel"
     end
     local c = private.createComponent(name, popups)
     c.position = createProperty { 0, 0, 0, 0 }
@@ -148,7 +148,7 @@ function contextWindow(tbl)
         sasl.registerCommandHandler(command, 0, commandHandler)
     end
 
-    if get(c.savePosition) and name ~= "contextWindow" then
+    if get(c.savePosition) and name ~= "subpanel" then
         local pos = private.savedState.legacyPopups[name]
         if pos then
             set(c.position, pos)
@@ -184,10 +184,10 @@ function private.savePopupsState()
         local needStore = get(c.savePosition)
         local popupName = get(c.name)
         if needStore then
-            if popupName ~= "contextWindow" then
+            if popupName ~= "subpanel" then
                 positions[popupName] = get(c.position)
             else
-                logWarning("Legacy contextWindow requsted saving its state, but 'name' wasn't provided at contextWindow creation")
+                logWarning("Legacy subpanel requsted saving its state, but 'name' wasn't provided at subpanel creation")
             end
         else
             positions[popupName] = nil

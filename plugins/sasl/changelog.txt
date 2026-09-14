@@ -1,4 +1,19 @@
 ----------------------------------------------------------
+SASL 3.23.0
+----------------------------------------------------------
+
+- General stability bugfixes
+- Updated default widgets UI
+- Added native support for copying/pasting from/to clipboard on Linux
+- Implemented internal changes/optimizations related to scripts loading (Commercial version)
+
+----------------------------------------------------------
+SASL 3.22.6
+----------------------------------------------------------
+
+- 'log' function will accept nil value for 'isFatal' parameter and will apply project scope behavior regarding warning and error messages
+
+----------------------------------------------------------
 SASL 3.22.5
 ----------------------------------------------------------
 
@@ -390,7 +405,7 @@ SASL 3.10.2
 SASL 3.10.1
 ----------------------------------------------------------
 
-- Fixed drawing components cursors in old-style <contextWindow>
+- Fixed drawing components cursors in old-style <subpanel>
 - Fixed possible crash in case of enabled telemetry in Dev Widget
 
 ----------------------------------------------------------
@@ -489,7 +504,7 @@ SASL 3.6.4
 ----------------------------------------------------------
 
 - Fixed possibility of CTD on startup in Linux version
-- Fixed middle mouse button event for old-style <contextWindow> windows
+- Fixed middle mouse button event for old-style <subpanel> windows
 
 ----------------------------------------------------------
 SASL 3.6.3
@@ -870,8 +885,8 @@ SASL 3.0.0-rc1
 - Fix appearance of TRACE and DEBUG records in SASL console tab (SASL Widget)
 - Fix shared datarefs handling
 - Change default components positions and sizes handling (inheritance model) 
-- Implemented new contextWindow interaction 
-- Rename <onMouseHold> event to <onMouseHold> (to prevent misunderstanding of callback)
+- Implemented new subpanel interaction 
+- Rename <onMouseClick> event to <onMouseHold> (to prevent misunderstanding of callback)
 - Implement new default components
 - Remove <setLineWidth> function 
 - Change the way of drawing wide lines, add new routines to draw wide lines, wide poly-lines, convex shapes with wide borders, etc
@@ -950,7 +965,7 @@ SASL 3.0.0-beta2
 - Fixed right and middle mouse buttons click event handling in case if X-Plane window is not active (Linux, Windows)
 - Fixed CTD on using test drawing routines on Linux and Mac OS.
 - Proper re-initialization of DataRef Tree on SASL reload.
-- Popups contextWindow accepts now initial visibility parameter.
+- Popups subpanel accepts now initial visibility parameter.
 - Added ability to omit last parameter for array dataref get/set.
 - Fixed CTD with disabled developer widget.
 - Timer-based message windows appearence fixed.

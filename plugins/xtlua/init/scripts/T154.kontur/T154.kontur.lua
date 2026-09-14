@@ -1,5 +1,6 @@
 -- T154.kontur.lua
 -- X-Plane 12 Kontur mode selection, GPS1 and radar compatibility update.
+
 --[[
 Changelog
 - Migrated WX display enable control from the legacy sim/cockpit/switches DataRef
@@ -269,9 +270,12 @@ local deferred_datarefs = {
     { "weather_ready", "tu154/custom/kontur/weather_ready", "number" },
 }
 
--- xTlua installs property accessors on the script environment, not on parent _G.
--- Bind there so normal global assignments still call the native DataRef setters.
--- Only this environment reference is local; the DataRef variables stay script globals.
+--	 xTlua installs property accessors on the script environment, 
+--	not on parent _G.
+--	Bind there so normal global assignments still 
+--	call the native DataRef setters.
+--	Only this environment reference is local; 
+--	the DataRef variables stay script globals.
 local dataref_namespace = getfenv(1)
 local function bind_datarefs(definitions)
     for _, def in ipairs(definitions) do
