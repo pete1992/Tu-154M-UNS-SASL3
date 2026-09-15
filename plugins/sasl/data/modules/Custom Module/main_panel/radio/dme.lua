@@ -1,25 +1,37 @@
 -- this is DME indicators
 size = {215, 70}
 
--- DataRefs
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("vor_dme", globalPropertyf("tu154/custom/radio/vor_dme_1")) -- distance
-
-defineProperty("sd75_on", globalPropertyi("tu154/custom/switchers/ovhd/sd75_1_on")) -- switch on
-
-defineProperty("nav_mile_km", globalPropertyi("tu154/custom/switchers/nav_1_mile_km")) --   - 
-
--- lamps
-defineProperty("dme_mile_lit", globalPropertyf("tu154/custom/lights/small/dme_mile_left")) -- mile lamp
-defineProperty("dme_km_lit", globalPropertyf("tu154/custom/lights/small/dme_km_left")) -- km lamp
-
--- power
-defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus115_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-
-defineProperty("fail", globalPropertyi("sim/operation/failures/rel_dme")) -- fail
-defineProperty("dme_fail", globalPropertyi("tu154/custom/failures/dme1_fail")) -- fail
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    -- Each instance keeps its own NAV receiver and unit selector.
+    { "vor_dme", "tu154/custom/radio/vor_dme_1", globalPropertyf },
+    { "sd75_on", "tu154/custom/switchers/ovhd/sd75_1_on", globalPropertyi },
+    { "nav_mile_km", "tu154/custom/switchers/nav_1_mile_km", globalPropertyi },
+    -- KATET selects the displayed distance, not the radio or guidance source.
+    { "katet_dme_rsbn", "tu154/custom/katet/dme_rsbn", globalPropertyi },
+    { "rsbn_distance", "tu154/custom/rsbn/distance", globalPropertyf },
+    { "rsbn_distance_valid", "tu154/custom/rsbn/distance_valid", globalPropertyi },
+    { "rsbn_cc", "tu154/custom/radio/rsbn_cc", globalPropertyf },
+    -- Unit lamps and display power.
+    { "dme_mile_lit", "tu154/custom/lights/small/dme_mile_left", globalPropertyf },
+    { "dme_km_lit", "tu154/custom/lights/small/dme_km_left", globalPropertyf },
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "fail", "sim/operation/failures/rel_dme", globalPropertyi },
+    { "dme_fail", "tu154/custom/failures/dme1_fail", globalPropertyi },
+})
 
 local text_font = sasl.gl.loadBitmapFont('digital7_it.fnt')
 
@@ -32,19 +44,32 @@ local dist_show = 0
 
 function update()
 	
-	power = get(sd75_on) == 1 and get(bus27_volt) > 13 and get(bus115_volt) and get(dme_fail) == 0
+	local use_rsbn = get(katet_dme_rsbn) == 1
+	power = get(sd75_on) == 1 and get(bus27_volt) > 13 and get(bus115_volt) > 110
+		and (use_rsbn or get(dme_fail) == 0)
 	
 	local passed = get(frame_time)
 	
+	dist_now = 0
 	if power then
-		local dist = get(vor_dme)
-		
-		dist_now = dist
-		
-	else	
-		dist_now = 0
-	
+		if use_rsbn then
+			-- RSBN's mechanical indication holds its last reading after signal loss.
+			-- Only copy it while the receiver reports a currently valid range.
+			if get(rsbn_cc) > 0 and get(rsbn_distance_valid) == 1 then
+				dist_now = get(rsbn_distance)
+				if get(nav_mile_km) == 0 then dist_now = dist_now / 1.852 end
+			end
+		else
+			-- CourseMP has already applied the selected NM/KM units to DME.
+			dist_now = get(vor_dme)
+		end
 	end
+	
+	-- Do not let invalid or oversized receiver values corrupt the display.
+	if dist_now ~= dist_now or dist_now == math.huge or dist_now == -math.huge then
+		dist_now = 0
+	end
+	dist_now = math.max(0, math.min(999.9, dist_now))
 	
 	dist_show = math.floor((dist_now + 0.03) * 10) / 10
 	

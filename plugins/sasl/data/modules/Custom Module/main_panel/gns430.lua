@@ -1,41 +1,55 @@
 -- this is GNS supplement logicS
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- time of frame
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("show_gns", globalPropertyi("tu154/custom/anim/show_gns"))
-defineProperty("overrideGPS", globalPropertyi("sim/operation/override/override_gps"))
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
+
+    { "show_gns", "tu154/custom/anim/show_gns", globalPropertyi },
+    { "overrideGPS", "sim/operation/override/override_gps", globalPropertyi },
 
 -- source
-defineProperty("kln_on", globalPropertyi("tu154/custom/switchers/ovhd/kln_on"))  --  
+    { "kln_on", "tu154/custom/switchers/ovhd/kln_on", globalPropertyi }, --
 -- The GNS and both UNS panels share the native GPS1 receiver.
-defineProperty("uns1_on", globalPropertyf("tu154/custom/uns1_on"))
-defineProperty("uns2_on", globalPropertyf("tu154/custom/uns2_on"))
+    { "uns1_on", "tu154/custom/uns1_on", globalPropertyf },
+    { "uns2_on", "tu154/custom/uns2_on", globalPropertyf },
 
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("gps_course_degtm", globalPropertyf("sim/cockpit/radios/gps_course_degtm")) -- DTK magnetic
-defineProperty("gps_hdef_dot", globalPropertyf("sim/cockpit/radios/gps_hdef_dot")) -- Course dev in dots
-defineProperty("gps_fromto", globalPropertyi("sim/cockpit/radios/gps_fromto"))
+    { "gps_course_degtm", "sim/cockpit/radios/gps_course_degtm", globalPropertyf }, -- DTK magnetic
+    { "gps_hdef_dot", "sim/cockpit/radios/gps_hdef_dot", globalPropertyf }, -- Course dev in dots
+    { "gps_fromto", "sim/cockpit/radios/gps_fromto", globalPropertyi },
 
 -- results
-defineProperty("gps_power", globalPropertyi("sim/cockpit2/radios/actuators/gps_power")) -- GPS power
-defineProperty("gns_lit", globalPropertyf("tu154/custom/lights/gns430_lit")) -- GPS power
+    { "gps_power", "sim/cockpit2/radios/actuators/gps_power", globalPropertyi }, -- GPS power
+    { "gns_lit", "tu154/custom/lights/gns430_lit", globalPropertyf }, -- GPS power
 
-defineProperty("GNS430_dtk", globalPropertyf("tu154/custom/SC/GNS430_dtk")) --   
-defineProperty("GNS430_dev", globalPropertyf("tu154/custom/SC/GNS430_dev")) --     
-defineProperty("GNS430_flag", globalPropertyi("tu154/custom/SC/GNS430_flag")) --     
+    { "GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf }, --
+    { "GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf }, --
+    { "GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi }, --
 
 -- animation
-defineProperty("LB_angle", globalPropertyf("tu154/custom/rotary/GNS430/LB_angle")) -- LB_angle
-defineProperty("LS_angle", globalPropertyf("tu154/custom/rotary/GNS430/LS_angle")) -- LS_angle
-defineProperty("RB_angle", globalPropertyf("tu154/custom/rotary/GNS430/RB_angle")) -- RB_angle
-defineProperty("RS_angle", globalPropertyf("tu154/custom/rotary/GNS430/RS_angle")) -- RS_angle
+    { "LB_angle", "tu154/custom/rotary/GNS430/LB_angle", globalPropertyf }, -- LB_angle
+    { "LS_angle", "tu154/custom/rotary/GNS430/LS_angle", globalPropertyf }, -- LS_angle
+    { "RB_angle", "tu154/custom/rotary/GNS430/RB_angle", globalPropertyf }, -- RB_angle
+    { "RS_angle", "tu154/custom/rotary/GNS430/RS_angle", globalPropertyf }, -- RS_angle
 
-defineProperty("kill_map_fms_line", globalPropertyi("sim/graphics/misc/kill_map_fms_line")) --
+    { "kill_map_fms_line", "sim/graphics/misc/kill_map_fms_line", globalPropertyi }, --
 
 -- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local LB_left = sasl.findCommand("sim/GPS/g430n1_coarse_down")
 

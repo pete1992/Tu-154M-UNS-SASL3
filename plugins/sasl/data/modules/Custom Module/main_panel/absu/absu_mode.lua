@@ -8,6 +8,8 @@ end
 
 defineProps({
 -- controls
+	{ "katet_mode", "tu154/custom/katet/mode", globalPropertyi }, -- 0 = ILS, 1 = GPS1, 2 = SP-50
+	{ "katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi }, -- 0 = Enroute, 1 = Landing
 	{ "absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi }, --  .  -
 	{ "absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi }, --
 	{ "absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi }, --
@@ -287,6 +289,9 @@ local loc_valid_time, gs_valid_time = 0, 0
 local loc_loss_time, gs_loss_time = 0, 0
 local app_button_last, gs_button_last = false, false
 local gs_auto_armed = false
+local katet_mode_last = get(katet_mode)
+local katet_nav_last = get(katet_nav_mode)
+local katet_power_last = false
 
 local function finite_number(value)
 	return type(value) == "number" and value == value and value > -math.huge and value < math.huge
@@ -349,6 +354,56 @@ if MASTER then
 	
 	local rud_toga = get(anim_rud1) + get(anim_rud2) + get(anim_rud3) > 0.99 * 3
 	
+	-- KATET selects a navigation source, not autopilot engagement. ILS and
+	-- SP-50 share this aircraft's radio-approach controller; GPS1 is lateral only.
+	local katet_mode_now = get(katet_mode)
+	local katet_nav_now = get(katet_nav_mode)
+	local katet_gps = katet_mode_now == 1
+	local radio_landing_allowed = katet_nav_now == 1
+		and (katet_mode_now == 0 or katet_mode_now == 2)
+	local katet_source_changed = katet_mode_now ~= katet_mode_last
+	local katet_selection = katet_source_changed or katet_nav_now ~= katet_nav_last
+		or (power and not katet_power_last)
+	local katet_indication = nil
+
+	if not radio_landing_allowed or katet_source_changed then
+		-- Deliberate source/Enroute cancellation must precede reception-loss
+		-- handling, which would otherwise disconnect captured AP channels.
+		if roll_submode == 6 or roll_submode == 10 then roll_submode = 1 end
+		if pitch_submode == 5 or pitch_submode == 10 then pitch_submode = 1 end
+		gs_auto_armed = false
+		loc_valid_time, gs_valid_time = 0, 0
+		loc_loss_time, gs_loss_time = 0, 0
+	end
+	if katet_source_changed then
+		-- Do not keep steering from the old source or capture the new one
+		-- automatically. NAV/VOR/APP must be selected deliberately afterwards.
+		if roll_submode >= 3 and roll_submode <= 5 then roll_submode = 1 end
+		ils_frequency = nil
+	end
+	if not radio_landing_allowed then set(absu_landing_on, 0) end
+	if katet_selection and power then
+		if katet_gps then
+			set(nav_select, 1)
+			set(absu_nav_on, 1)
+			set(hsi_source_pilot, 2)
+			set(hsi_source_copilot, 2)
+			katet_indication = 1
+		elseif radio_landing_allowed then
+			-- Prepare needles only. APP and GS retain their existing arm/capture logic.
+			set(absu_landing_on, 1)
+			katet_indication = 4
+		else
+			set(absu_nav_on, 1)
+			local source = get(hsi_source_pilot) == 1 and 1 or 0
+			set(hsi_source_pilot, source)
+			set(hsi_source_copilot, source)
+			katet_indication = source + 2 -- VOR1/VOR2 indication, not tracking.
+		end
+	end
+	katet_mode_last, katet_nav_last = katet_mode_now, katet_nav_now
+	katet_power_last = power
+
 	local nav_prep = get(absu_nav_on) == 1
 	local land_prep = get(absu_landing_on) == 1
 	local gps_ready = gps1_ready()
@@ -467,6 +522,11 @@ if MASTER then
 		ils_source, ils_frequency = source, frequency
 	end
 	set(absu_use_second_nav, bool2int(ils_source == 2))
+	if power and land_prep then
+		-- Switch both native HSIs from GPS to the locked landing receiver.
+		set(hsi_source_pilot, ils_source - 1)
+		set(hsi_source_copilot, ils_source - 1)
+	end
 	local selected_frequency = get(ils_source == 2 and freq_2 or freq_1)
 	local ils_available = (ils_source == 2 and nav2_ils or ils_source == 1 and nav1_ils)
 		and selected_frequency == ils_frequency
@@ -788,7 +848,12 @@ if MASTER then
 
 	-- indication modes
 
-	set(absu_pnp_mode_2, get(absu_speed_mode) * bool2int(power)) -- set Co-Pilot PNP right away.
+	local copilot_indication = get(absu_speed_mode)
+	if copilot_indication == 4 and not radio_landing_allowed then
+		-- Keep the independent selector untouched, but never display stale LD.
+		copilot_indication = katet_gps and 1 or 0
+	end
+	set(absu_pnp_mode_2, copilot_indication * bool2int(power))
 	
 	-- Captain PNP
 	
@@ -796,12 +861,14 @@ if MASTER then
 		set(absu_pnp_mode_1, 0) -- off mode
 	elseif land_prep ~= land_sw_last and land_prep then
 		set(absu_pnp_mode_1, 4) -- landing mode
-	elseif get(absu_nvu) == 1 then
+	elseif get(absu_nvu) == 1 and not land_prep then
 		set(absu_pnp_mode_1, 1) -- NAV mode
-	elseif nav_prep and get(absu_az1) == 1 then
+	elseif nav_prep and get(absu_az1) == 1 and not land_prep then
 		set(absu_pnp_mode_1, 2) -- VOR 
-	elseif nav_prep and get(absu_az2) == 1 then
+	elseif nav_prep and get(absu_az2) == 1 and not land_prep then
 		set(absu_pnp_mode_1, 3) -- VOR 
+	elseif katet_indication ~= nil then
+		set(absu_pnp_mode_1, katet_indication)
 	elseif not land_prep and get(absu_pnp_mode_1) == 4 then
 		-- The landing switch also releases the latched LD indication. Keep
 		-- an explicit NAV/VOR selection above and the copilot selector independent.

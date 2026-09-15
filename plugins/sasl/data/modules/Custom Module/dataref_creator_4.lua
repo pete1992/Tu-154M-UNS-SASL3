@@ -15,6 +15,22 @@ createGlobalPropertyf("tu154/custom/anim/tiller_pos", 0)
 createGlobalPropertyi("tu154/custom/hydro/nosewheel_turn_power", 0)
 createGlobalPropertyi("tu154/custom/lights/white_light_tail", 0)
 
+-- KATET source selection, radio-approach interlock and distance indication.
+-- Keep these states separate from the repurposed legacy SP-50 DataRefs.
+local katetControls = {
+    { "mode", 0 }, -- 0 = ILS, 1 = KATET, 2 = SP-50
+    { "nav_mode", 0 }, -- 0 = Enroute, 1 = Landing
+    { "night_day", 1 }, -- 0 = Night, 1 = Day
+    { "dme_rsbn", 1 }, -- 0 = DME, 1 = RSBN
+}
+
+for _, control in ipairs(katetControls) do
+    createGlobalPropertyi("tu154/custom/katet/" .. control[1], control[2])
+end
+
+-- Unlike the held mechanical RSBN range, digital readouts need live validity.
+createGlobalPropertyi("tu154/custom/rsbn/distance_valid", 0)
+
 -- PPN-13 controls and animations. The source aircraft uses the same names
 -- without the project-wide /custom namespace.
 local ppnButtonNames = {

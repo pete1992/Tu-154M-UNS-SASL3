@@ -101,6 +101,23 @@ local DATAREFS = {
     simDRsp50_g2 = "tu154/custom/lights/small/sp50_g2",
     simDRnav1mhz = "sim/cockpit2/radios/actuators/nav1_frequency_Mhz",
     simDRnav2mhz = "sim/cockpit2/radios/actuators/nav2_frequency_Mhz",
+    -- KATET controls are independent of the repurposed legacy SP-50 switches.
+    simDR_katet_mode = "tu154/custom/katet/mode",
+    simDR_katet_nav_mode = "tu154/custom/katet/nav_mode",
+    simDR_katet_night_day = "tu154/custom/katet/night_day",
+    simDR_katet_land_prep = "tu154/custom/switchers/console/absu_landing_on",
+    simDR_katet_nav1_freq = "sim/cockpit2/radios/actuators/nav1_frequency_hz",
+    simDR_katet_nav2_freq = "sim/cockpit2/radios/actuators/nav2_frequency_hz",
+    simDR_katet_nav1_power = "tu154/custom/radio/nav1_pow_cc",
+    simDR_katet_nav2_power = "tu154/custom/radio/nav2_pow_cc",
+    simDR_katet_gps_power = "sim/cockpit2/radios/actuators/gps_power",
+    simDR_katet_gps_fromto = "sim/cockpit/radios/gps_fromto",
+    simDR_katet_gps_course = "sim/cockpit/radios/gps_course_degtm",
+    simDR_katet_gps_dev = "sim/cockpit/radios/gps_hdef_dot",
+    simDR_katet_gps_scale = "sim/cockpit/radios/gps_hdef_nm_per_dot",
+    simDR_katet_gns_dtk = "tu154/custom/SC/GNS430_dtk",
+    simDR_katet_gns_dev = "tu154/custom/SC/GNS430_dev",
+    simDR_katet_gns_flag = "tu154/custom/SC/GNS430_flag",
     -- Indicators, test controls and legacy animation helpers
     simDR_lit_test_front = "tu154/custom/buttons/lamp_test_front",
     simDR_ping_pong = "sim/graphics/animation/ping_pong_2",
@@ -342,6 +359,28 @@ lights_up_cmnd = create_command("t154/lights_up", "T154 Lights up", land_lights_
 lights_down_cmnd = create_command("t154/lights_down", "T154 Lights down", land_lights_down_CMDhandler)
 
 
+local function katet_finite(value)
+    return type(value) == "number" and value == value and value > -math.huge and value < math.huge
+end
+
+local function katet_is_ils(frequency)
+    -- The MHz-component DataRefs cannot distinguish a VOR from an ILS channel.
+    -- Use the complete frequency in 10 kHz units, as in the SASL ILS receiver.
+    return katet_finite(frequency) and frequency >= 10810 and frequency <= 11195
+        and math.floor(math.floor(frequency + 0.5) / 10) % 2 == 1
+end
+
+local function katet_gps_ready()
+    -- Match the ABSU GPS1 validity gate, including the SmartCopilot solution.
+    local fromto = simDR_katet_gps_fromto
+    local scale = simDR_katet_gps_scale
+    return simDR_katet_gps_power > 0 and (fromto == 1 or fromto == 2)
+        and simDR_katet_gns_flag == 0
+        and katet_finite(simDR_katet_gns_dtk) and katet_finite(simDR_katet_gns_dev)
+        and katet_finite(simDR_katet_gps_course) and katet_finite(simDR_katet_gps_dev)
+        and katet_finite(scale) and scale > 0
+end
+
 function systems()
 
 -- Front-panel lamp-test compatibility ------------------------------------
@@ -539,7 +578,7 @@ end
 -- can undo the pilot's disengagement or cause a false engage/disengage alarm.
   
 
--- 36 V supply and SP-50 indication logic --------------------------------
+-- 36 V supply and KATET signal indications -------------------------------
 if simDR_36vl > 5 then
     bus36 = 1
 elseif simDR_36vr > 5 then
@@ -548,48 +587,36 @@ else
     bus36 = 0
 end
 
-if bus36 > 0 then
-    
-    
-    if simDR_cab_light[3] < 1 then
-        simDR_cab_light[3] = 1
-    end
-    if simDRcrs_np1 > 0 then
-        if simDRcrs_flag1 < 1 and simDRnav1mhz < 112 then
-            simDRsp50_c1 = 1
-        else
-            simDRsp50_c1 = 0
-        end
-        if simDRgs_flag1 < 1 and simDRnav1mhz < 112 then
-            simDRsp50_g1 = 1
-        else
-            simDRsp50_g1 = 0
-        end
-    else
-        simDRsp50_c1 = 0
-        simDRsp50_g1 = 0
-    end
-    if simDRcrs_np2 > 0 then
-        if simDRcrs_flag2 < 1 and simDRnav2mhz < 112 then
-            simDRsp50_c2 = 1
-        else
-            simDRsp50_c2 = 0
-        end
-        if simDRgs_flag2 < 1 and simDRnav2mhz < 112 then
-            simDRsp50_g2 = 1
-        else
-            simDRsp50_g2 = 0
-        end
-    else
-        simDRsp50_c2 = 0
-        simDRsp50_g2 = 0
-    end       
-else
-        simDRsp50_c1 = 0
-        simDRsp50_g1 = 0
-        simDRsp50_c2 = 0
-        simDRsp50_g2 = 0
+if bus36 > 0 and simDR_cab_light[3] < 1 then
+    simDR_cab_light[3] = 1
 end
+
+local course1, glide1, course2, glide2 = false, false, false, false
+if bus36 > 0 then
+    if simDR_lit_test_front > 0 then
+        course1, glide1, course2, glide2 = true, true, true, true
+    elseif simDR_katet_mode == 1 then
+        -- GPS supplies lateral guidance only; never imply a synthetic glideslope.
+        course1 = katet_gps_ready()
+        course2 = course1
+    elseif (simDR_katet_mode == 0 or simDR_katet_mode == 2)
+        and simDR_katet_nav_mode == 1 and simDR_katet_land_prep == 1 then
+        -- ILS and SP-50 use each receiver's genuine powered LOC/GS solution.
+        if simDRcrs_np1 > 0 and simDR_katet_nav1_power > 0 and katet_is_ils(simDR_katet_nav1_freq) then
+            course1 = simDRcrs_flag1 == 0
+            glide1 = simDRgs_flag1 == 0
+        end
+        if simDRcrs_np2 > 0 and simDR_katet_nav2_power > 0 and katet_is_ils(simDR_katet_nav2_freq) then
+            course2 = simDRcrs_flag2 == 0
+            glide2 = simDRgs_flag2 == 0
+        end
+    end
+end
+local katet_brightness = simDR_katet_night_day == 0 and 0.35 or 1
+simDRsp50_c1 = course1 and katet_brightness or 0
+simDRsp50_g1 = glide1 and katet_brightness or 0
+simDRsp50_c2 = course2 and katet_brightness or 0
+simDRsp50_g2 = glide2 and katet_brightness or 0
     
 
 -- Ground-only control-load indication and TOGA trim behavior -----------

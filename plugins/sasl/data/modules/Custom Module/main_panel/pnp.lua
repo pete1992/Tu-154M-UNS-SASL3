@@ -10,6 +10,8 @@ local function defineProps(defs)
 end
 
 defineProps({
+    {"katet_mode", "tu154/custom/katet/mode", globalPropertyi},
+    {"katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi},
     {"absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi},
     {"course_ga", "tu154/custom/tks/course_ga_1", globalPropertyf},
     {"course_bgmk", "tu154/custom/tks/course_bgmk_1", globalPropertyf},
@@ -38,6 +40,7 @@ defineProps({
     {"GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf},
     {"GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi},
     {"gps_power", "sim/cockpit2/radios/actuators/gps_power", globalPropertyi},
+    {"gps_fromto", "sim/cockpit/radios/gps_fromto", globalPropertyi},
     {"RXP_course", "RXP/radios/indicators/gps_course_degtm", globalPropertyf},
     {"RXP_dev", "RXP/radios/indicators/gps_cross_track_nm", globalPropertyf},
     {"RXP_flag", "RXP/radios/indicators/hsi_flag_from_to_pilot", globalPropertyf},
@@ -99,6 +102,11 @@ function update()
     local mode = get(absu_pnp_mode)
     local mode_2 = get(absu_pnp_mode_2)
     local nav_sel = get(nav_select)
+    local katet_gps = get(katet_mode) == 1
+    if mode == 4 and (get(katet_nav_mode) ~= 1 or katet_gps) then
+        -- This gauge runs before ABSU modes; inhibit stale LD on this frame too.
+        mode = katet_gps and 1 or 0
+    end
 
     -- Read the synchronized/current course before applying local movement.
     main_scale_act = get(pkp_gyro_course)
@@ -252,6 +260,23 @@ function update()
 
         course_flag = math.min(get(nav_cs_flag_1), get(nav_cs_flag_2))
         gs_flag = math.min(get(nav_gs_flag_1), get(nav_gs_flag_2))
+
+    elseif power and mode == 1 and katet_gps then
+        -- KATET uses the same GPS1 bridge as ABSU, regardless of which GPS
+        -- faceplate is visible. No GPS vertical guidance is simulated here.
+        local dtk = get(GNS430_dtk)
+        local deviation = get(GNS430_dev)
+        local fromto = get(gps_fromto)
+        local valid = get(gps_power) > 0 and get(GNS430_flag) == 0
+            and (fromto == 1 or fromto == 2)
+            and dtk == dtk and math.abs(dtk) < math.huge
+            and deviation == deviation and math.abs(deviation) < math.huge
+        obs_course = valid and dtk or get(obs)
+        course_pl = valid and deviation * 0.1852 * 2.1 or 0
+        glidesl_pl = 0
+        course_flag = valid and 0 or 1
+        gs_flag = 1
+        set(pkp_obs_flag, 1)
 
     elseif power and mode == 1 and nav_sel == 0 then
         -- NVU mode.

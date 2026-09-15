@@ -110,6 +110,7 @@ components = {
 	dme {
 		position = {1616, 1102, 215, 70},
 		vor_dme = globalPropertyf("tu154/custom/radio/vor_dme_2"), -- distance
+		dme_fail = globalPropertyi("tu154/custom/failures/dme2_fail"), -- right DME receiver
 		sd75_on = globalPropertyi("tu154/custom/switchers/ovhd/sd75_2_on"), -- switch on
 		nav_mile_km = globalPropertyi("tu154/custom/switchers/nav_2_mile_km"), --   - 	
 		-- lamps

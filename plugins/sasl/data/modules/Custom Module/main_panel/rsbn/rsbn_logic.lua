@@ -40,6 +40,7 @@ defineProps({
 
     -- Results
     { "distance", "tu154/custom/rsbn/distance", globalPropertyf },
+    { "distance_valid", "tu154/custom/rsbn/distance_valid", globalPropertyi },
     { "azimuth",  "tu154/custom/rsbn/azimuth", globalPropertyf },
 })
 
@@ -289,6 +290,10 @@ function update()
     if power and get(rsbn_control_distance) == 1 then
         res_distance = 2000 -- m
     end
+
+    -- The shared digital displays need immediate reception validity even
+    -- though the original mechanical range indication keeps its last value.
+    set(distance_valid, bool2int(power and res_distance > 0 and res_distance < math.huge))
 
     table_read_timer = table_read_timer + passed
     if table_read_timer > 1 then
