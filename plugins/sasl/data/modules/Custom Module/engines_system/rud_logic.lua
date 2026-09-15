@@ -15,9 +15,6 @@ defineProps({
     { "engine_egt_2", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(2) },
     { "engine_egt_3", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(3) },
     { "engine_egt_redline", "sim/aircraft/limits/red_hi_EGT", globalPropertyf },
-})
-
-defineProps({
     -- Engine 1 throttle input synchronized through SmartCopilot
     { "tro_comm_1", "tu154/custom/SC/engine/ENGN_thro_0", globalPropertyf },
     -- Engine 2 throttle input synchronized through SmartCopilot
@@ -91,16 +88,11 @@ defineProps({
     { "acf_tmax", "sim/aircraft/engine/acf_tmax", globalPropertyf },
     -- Combined X-Plane throttle ratio
     { "throttle_ratio_all", "sim/cockpit2/engine/actuators/throttle_ratio_all", globalPropertyf },
-})
-
--- Smart Copilot
-defineProps({
--- Master. 0 = plugin not found, 1 = slave 2 = master
+	-- Master. 0 = plugin not found, 1 = slave 2 = master
     { "ismaster", "scp/api/ismaster", globalPropertyf },
 -- Have control. 0 = plugin not found, 1 = no control 2 = has control
     { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
-
 
 set(override, 1) 
 set(sim_rud_1, 0.25)
@@ -108,30 +100,30 @@ set(sim_rud_2, 0.25)
 set(sim_rud_3, 0.25)
 
 local forward_table = {{ -10000, 0.00 }, 
-                  {  0.0, 0.02 },	
-				  {  0.5, 0.38 },	
-				  {  0.6, 0.55}, 
-				  {  0.65, 0.637 }, 
-                  {  0.7, 0.805}, 
-           	   {  0.8, 0.886 }, 
-				  {  1.0, 0.975 },	
-				  {  1.1, 1.0 },	
-				  {  1.2, 1.2 },	
-          	    {  100000, 1.3 }} 
+	{  0.0, 0.02 },	
+	{  0.5, 0.38 },	
+	{  0.6, 0.55}, 
+	{  0.65, 0.637 }, 
+	{  0.7, 0.805}, 
+	{  0.8, 0.886 }, 
+	{  1.0, 0.975 },	
+	{  1.1, 1.0 },	
+	{  1.2, 1.2 },	
+	{  100000, 1.3 }} 
           
 local reverse_table = {{ -10000, 0.04 }, 
-                  {  0.0, 0.18 },	
-				  {  0.5, 0.18 },	
-				  {  0.6, 0.8}, 
-           	   {  1.0, 0.8 }, 
-          	    {  100000, 0.8 }} 
+	{  0.0, 0.18 },	
+	{  0.5, 0.18 },	
+	{  0.6, 0.8}, 
+	{  1.0, 0.8 }, 
+	{  100000, 0.8 }} 
           
 local rud_T_tbl = {{ -10000, 10 }, 
-                  {  -60, 10 },	
-				  {  0, 1}, 
-				  {  40, 0.4}, 
-				  {  60, 0.3}, 
-          	    {  100000, 0.1 }} 
+	{  -60, 10 },	
+	{  0, 1}, 
+	{  40, 0.4}, 
+	{  60, 0.3}, 
+	{  100000, 0.1 }} 
 				  
 local thro_1_pos = 0
 local thro_2_pos = 0
@@ -159,7 +151,6 @@ local joy_rud_pos_3 = initial_throttle_3
 
 -- Keep small hardware-axis noise from moving the virtual throttle levers.
 local THROTTLE_DEADZONE = 0.02
-
 -- Keep all three throttle axes linked while their total spread remains small.
 -- Hysteresis prevents repeated linking and unlinking near the 20% threshold.
 local THROTTLE_UNLINK_THRESHOLD = 0.25
@@ -187,12 +178,10 @@ local function apply_throttle_deadzone(raw_value, previous_value)
             0,
             1,
             previous_value
-        )
-
+	)
     if math.abs(value - previous_value) >= THROTTLE_DEADZONE then
         return value
     end
-
     return previous_value
 end
 
@@ -201,36 +190,30 @@ local function process_throttle_inputs(raw_1, raw_2, raw_3)
         apply_throttle_deadzone(
             raw_1,
             throttle_input_state.filtered_1
-        )
-
+	)
     throttle_input_state.filtered_2 =
         apply_throttle_deadzone(
             raw_2,
             throttle_input_state.filtered_2
-        )
-
+	)
     throttle_input_state.filtered_3 =
         apply_throttle_deadzone(
             raw_3,
             throttle_input_state.filtered_3
-        )
-
+	)
     local highest =
         math.max(
             throttle_input_state.filtered_1,
             throttle_input_state.filtered_2,
             throttle_input_state.filtered_3
-        )
-
+    )
     local lowest =
         math.min(
             throttle_input_state.filtered_1,
             throttle_input_state.filtered_2,
             throttle_input_state.filtered_3
-        )
-
+	)
     local spread = highest - lowest
-
     if throttle_input_state.linked then
         if spread > THROTTLE_UNLINK_THRESHOLD then
             throttle_input_state.linked = false

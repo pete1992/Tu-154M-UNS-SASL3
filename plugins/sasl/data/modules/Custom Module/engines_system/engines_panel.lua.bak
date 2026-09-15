@@ -1,14 +1,4 @@
--- engines_panel.lua
--- Engine panel controls, annunciators and warning aggregation.
-
---[[
-Changelog
-- Removed normal thrust-reverser transit from the ENGINE FAIL warning source.
-- Low oil- and fuel-pressure ENGINE FAIL warnings are now evaluated only above
-  the stabilized engine-speed range, preventing false warnings during shutdown.
-- Dedicated reverser and pressure annunciators remain unchanged.
-]]
-
+-- this is engines panel
 -- controls
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -159,9 +149,6 @@ defineProps({
     {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty}, -- engine 1 rpm
     {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty}, -- engine 2 rpm
     {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty}, -- engine 3 rpm
-    {"eng1_N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty}, -- engine 1 HP rotor rpm
-    {"eng2_N2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty}, -- engine 2 HP rotor rpm
-    {"eng3_N2", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty}, -- engine 3 HP rotor rpm
 
     {"fire_main_switch", "tu154/custom/switchers/eng/fire_main_switch", globalPropertyi},
 
@@ -183,34 +170,24 @@ local eng_1_fail_src = 0
 local eng_2_fail_src = 0
 local eng_3_fail_src = 0
 
--- Pressure warnings are meaningful only while the engine is at or above the
--- stabilized running range. This prevents normal spool-down from being reported
--- as an engine failure while still detecting pressure loss at idle and above.
-local ENGINE_PRESSURE_MONITOR_N2 = 60
-
-local function pressureWarningsEnabled(n2)
-    return n2 >= ENGINE_PRESSURE_MONITOR_N2
-end
-
 -- Record the actual warning source without masking or changing any engine limits.
 local last_warning_causes = {"", "", ""}
-local function reportEngineWarning(engine, rpm, n2, oil_p, reverse_transit, vibr, chips, fuel_p, fire, egt, oil_pressure_fault, fuel_pressure_fault)
+local function reportEngineWarning(engine, rpm, oil_p, reverse, vibr, chips, fuel_p, fire, egt)
     local causes = {}
-    if oil_pressure_fault then causes[#causes + 1] = "OIL_PRESSURE" end
+    if oil_p < 10 then causes[#causes + 1] = "OIL_PRESSURE" end
+    if reverse then causes[#causes + 1] = "REVERSER" end
     if vibr > 55 then causes[#causes + 1] = "VIBRATION" end
     if chips == 1 then causes[#causes + 1] = "CHIPS" end
-    if fuel_pressure_fault then causes[#causes + 1] = "FUEL_PRESSURE" end
+    if fuel_p == 0 then causes[#causes + 1] = "FUEL_PRESSURE" end
     if fire == 6 then causes[#causes + 1] = "FIRE" end
     if egt > 710 then causes[#causes + 1] = "EGT" end
-
     local signature = table.concat(causes, ",")
     if signature == last_warning_causes[engine] then return end
     last_warning_causes[engine] = signature
-
     logInfo(string.format(
-        "[Engine warning] engine=%d causes=%s rpm=%.2f n2_raw=%.2f oil_psi=%.2f fuel_pressure=%d vibration=%.2f chips=%d fire=%d egt_C=%.2f reverse_transit=%d",
-        engine, signature ~= "" and signature or "CLEAR", rpm, n2, oil_p, fuel_p,
-        vibr, chips, fire, egt, reverse_transit and 1 or 0))
+        "[Engine warning] engine=%d causes=%s rpm=%.2f oil_psi=%.2f fuel_pressure=%d vibration=%.2f chips=%d fire=%d egt_C=%.2f reverse=%d",
+        engine, signature ~= "" and signature or "CLEAR", rpm, oil_p, fuel_p,
+        vibr, chips, fire, egt, reverse and 1 or 0))
 end
 
 local function reset_switchers()
@@ -332,16 +309,9 @@ local function lamps_eng1()
 	eng1_reverse_doors_brt = math.max(eng1_reverse_doors_brt * lamps_brt, test_btn) 
 	set(eng1_reverse_doors, eng1_reverse_doors_brt)
 		
-	local n2 = get(eng1_N2)
-	local pressure_warnings = pressureWarningsEnabled(n2)
-	local oil_pressure_fault = pressure_warnings and oil_p < 10
-	local fuel_pressure_fault = pressure_warnings and fuel_p == 0
-	local reverse_transit = rev_L < revers_flap_L_last and rev_L > 0.05 and rev_L < 0.95
-	local fire = get(fire_main_switch) * get(sim_engine_on_fire1)
-	local egt = get(egt_1)
-
-	eng_1_fail_src = bool2int(oil_pressure_fault or vibr > 55 or chip_det == 1 or fuel_pressure_fault or fire == 6 or egt > 710)
-	reportEngineWarning(1, RPM, n2, oil_p, reverse_transit, vibr, chip_det, fuel_p, fire, egt, oil_pressure_fault, fuel_pressure_fault)
+	eng_1_fail_src = bool2int(oil_p < 10 or (rev_L < revers_flap_L_last and rev_L > 0.05 and rev_L < 0.95) or vibr > 55 or chip_det == 1 or fuel_p == 0 or (get(fire_main_switch) * get(sim_engine_on_fire1) == 6) or get(egt_1) > 710)
+	reportEngineWarning(1, RPM, oil_p, rev_L < revers_flap_L_last and rev_L > 0.05 and rev_L < 0.95,
+		vibr, chip_det, fuel_p, get(fire_main_switch) * get(sim_engine_on_fire1), get(egt_1))
 	
 	revers_flap_L_last = rev_L
 	
@@ -409,15 +379,9 @@ local function lamps_eng2()
 	eng_block_brt = math.max(eng_block_brt * lamps_brt, test_btn)
 	set(eng_block, eng_block_brt)
 		
-	local n2 = get(eng2_N2)
-	local pressure_warnings = pressureWarningsEnabled(n2)
-	local oil_pressure_fault = pressure_warnings and oil_p < 10
-	local fuel_pressure_fault = pressure_warnings and fuel_p == 0
-	local fire = get(fire_main_switch) * get(sim_engine_on_fire2)
-	local egt = get(egt_2)
-
-	eng_2_fail_src = bool2int(oil_pressure_fault or vibr > 55 or chip_det == 1 or fuel_pressure_fault or fire == 6 or egt > 710)
-	reportEngineWarning(2, RPM, n2, oil_p, false, vibr, chip_det, fuel_p, fire, egt, oil_pressure_fault, fuel_pressure_fault)
+	eng_2_fail_src = bool2int(oil_p < 10 or vibr > 55 or chip_det == 1 or fuel_p == 0 or (get(fire_main_switch) * get(sim_engine_on_fire2) == 6) or get(egt_2) > 710)
+	reportEngineWarning(2, RPM, oil_p, false, vibr, chip_det, fuel_p,
+		get(fire_main_switch) * get(sim_engine_on_fire2), get(egt_2))
 		
 end
 
@@ -488,16 +452,9 @@ local function lamps_eng3()
 	eng3_reverse_doors_brt = math.max(eng3_reverse_doors_brt * lamps_brt, test_btn)
 	set(eng3_reverse_doors, eng3_reverse_doors_brt)
 		
-	local n2 = get(eng3_N2)
-	local pressure_warnings = pressureWarningsEnabled(n2)
-	local oil_pressure_fault = pressure_warnings and oil_p < 10
-	local fuel_pressure_fault = pressure_warnings and fuel_p == 0
-	local reverse_transit = rev_R < revers_flap_R_last and rev_R > 0.05 and rev_R < 0.95
-	local fire = get(fire_main_switch) * get(sim_engine_on_fire3)
-	local egt = get(egt_3)
-
-	eng_3_fail_src = bool2int(oil_pressure_fault or vibr > 55 or chip_det == 1 or fuel_pressure_fault or fire == 6 or egt > 710)
-	reportEngineWarning(3, RPM, n2, oil_p, reverse_transit, vibr, chip_det, fuel_p, fire, egt, oil_pressure_fault, fuel_pressure_fault)
+	eng_3_fail_src = bool2int(oil_p < 10 or (rev_R < revers_flap_R_last and rev_R > 0.05 and rev_R < 0.95) or vibr > 55 or chip_det == 1 or fuel_p == 0 or (get(fire_main_switch) * get(sim_engine_on_fire3) == 6) or get(egt_3) > 710)	
+	reportEngineWarning(3, RPM, oil_p, rev_R < revers_flap_R_last and rev_R > 0.05 and rev_R < 0.95,
+		vibr, chip_det, fuel_p, get(fire_main_switch) * get(sim_engine_on_fire3), get(egt_3))
 	
 	revers_flap_R_last = rev_R
 end

@@ -35,6 +35,7 @@ defineProps({
     {"gauges_on_1", "tu154/custom/switchers/eng/gauges_on_1", globalPropertyi},
     {"gauges_on_2", "tu154/custom/switchers/eng/gauges_on_2", globalPropertyi},
     {"gauges_on_3", "tu154/custom/switchers/eng/gauges_on_3", globalPropertyi},
+
     -- Gauge outputs
     {"rpm_low_1", "tu154/custom/gauges/engine/rpm_low_1", globalPropertyf},
     {"rpm_low_2", "tu154/custom/gauges/engine/rpm_low_2", globalPropertyf},
@@ -65,6 +66,7 @@ defineProps({
     {"oil_qty_3", "tu154/custom/gauges/eng/oil_qty_3", globalPropertyf},
     {"fuel_temp_1", "tu154/custom/gauges/eng/fuel_temp_1", globalPropertyf},
     {"fuel_temp_2", "tu154/custom/gauges/eng/fuel_temp_2", globalPropertyf},
+
     -- X-Plane 12 engine sources
     {"sim_egt_1", "sim/flightmodel2/engines/EGT_deg_C[0]", globalProperty},
     {"sim_egt_2", "sim/flightmodel2/engines/EGT_deg_C[1]", globalProperty},
@@ -87,6 +89,7 @@ defineProps({
     {"oil_t_1", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[0]", globalProperty},
     {"oil_t_2", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[1]", globalProperty},
     {"oil_t_3", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[2]", globalProperty},
+
     -- Project engine sources
     {"vibration_1", "tu154/custom/eng/vibration_1", globalPropertyf},
     {"vibration_2", "tu154/custom/eng/vibration_2", globalPropertyf},
@@ -94,6 +97,7 @@ defineProps({
     {"engn_oil_qty_1", "tu154/custom/failures/engn_oil_qty_1", globalPropertyf},
     {"engn_oil_qty_2", "tu154/custom/failures/engn_oil_qty_2", globalPropertyf},
     {"engn_oil_qty_3", "tu154/custom/failures/engn_oil_qty_3", globalPropertyf},
+
     -- Electrical sources
     {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
     {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
@@ -101,16 +105,20 @@ defineProps({
     {"bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf},
     {"bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf},
     {"bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf},
+
     -- Environment
     {"thermo", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf},
     {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
     {"baro_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
+
     -- Failures
     {"fuel_flowmeter_1_fail", "tu154/custom/failures/fuel_flowmeter_1_fail", globalPropertyi},
     {"fuel_flowmeter_2_fail", "tu154/custom/failures/fuel_flowmeter_2_fail", globalPropertyi},
     {"fuel_flowmeter_3_fail", "tu154/custom/failures/fuel_flowmeter_3_fail", globalPropertyi},
+
     -- SmartCopilot
     {"ismaster", "scp/api/ismaster", globalPropertyf},
+
     -- Time
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
 })
@@ -171,13 +179,13 @@ local HP_GROUND_TABLE = {
     {-100000, 0.0},
     {0, 0},
     {23, 21},
-    {71.3, 60.5},
-    {84.0, 82.5},
-    {89.0, 86.5},
-    {91.3, 88.75},
-    {95.7, 91.9},
-    {97.4, 93.5},
-    {99.0, 95.0},
+    {73.78, 60.5},
+    {89.46, 82.5},
+    {93.1, 86.5},
+    {94.88, 88.75},
+    {97.46, 91.9},
+    {98.47, 93.5},
+    {99.52, 95.0},
     {110.0, 105.0},
     {1000000000, 105.0},
 }
@@ -186,13 +194,13 @@ local LP_GROUND_TABLE = {
     {-100000, 0.0},
     {0, 0},
     {1, 3},
-    {36.3, 30},
-    {59.3, 59},
-    {70.5, 68.5},
-    {76.2, 72.5},
-    {87.5, 80},
-    {92.4, 83.5},
-    {97.0, 86.75},
+    {34.5, 30},
+    {67.72, 59},
+    {77.82, 68.5},
+    {83.2, 72.5},
+    {91.38, 80},
+    {94.74, 83.5},
+    {98.32, 86.75},
     {110.0, 98.0},
     {1000000000, 98.0},
 }
@@ -201,13 +209,13 @@ local HP_11KM_TABLE = {
     {-100000, 0.0},
     {0, 0},
     {23, 21},
-    {82.4, 78.0},
-    {86.7, 82.25},
-    {92.9, 86.75},
-    {95.2, 88.75},
-    {98.3, 92.5},
-    {99.3, 94.0},
-    {100.9, 96.5},
+    {89.67, 78.0},
+    {92.83, 82.25},
+    {96.94, 86.75},
+    {98.31, 88.75},
+    {99.95, 92.5},
+    {100.5, 94.0},
+    {101.3, 96.5},
     {110.0, 100.0},
     {1000000000, 100.0},
 }
@@ -216,13 +224,13 @@ local LP_11KM_TABLE = {
     {-100000, 0.0},
     {0, 0},
     {1, 3},
-    {55.9, 63.0},
-    {65.3, 69.25},
-    {80.2, 77.5},
-    {86.3, 81.0},
-    {94.8, 86.75},
-    {97.8, 89.25},
-    {102.8, 94.25},
+    {68.27, 63.0},
+    {77.08, 69.25},
+    {89.68, 77.5},
+    {94.22, 81.0},
+    {99.75, 86.75},
+    {101.77, 89.25},
+    {104.9, 94.25},
     {110.0, 100.0},
     {1000000000, 100.0},
 }
@@ -255,23 +263,29 @@ local vibration_src = {vibration_1, vibration_2, vibration_3}
 local vibro_control = {control_vibro_1, control_vibro_2, control_vibro_3}
 local vibro_selector = {vibro_sel_1, vibro_sel_2, vibro_sel_3}
 local vibro_out = {vibra_1, vibra_2, vibra_3}
+
 local n1_src = {eng1_N1, eng2_N1, eng3_N1}
 local n2_src = {eng1_N2, eng2_N2, eng3_N2}
 local rpm_low_out = {rpm_low_1, rpm_low_2, rpm_low_3}
 local rpm_high_out = {rpm_high_1, rpm_high_2, rpm_high_3}
+
 local egt_src = {sim_egt_1, sim_egt_2, sim_egt_3}
 local egt_out = {egt_1, egt_2, egt_3}
+
 local fuel_pressure_src = {fuel_p_1, fuel_p_2, fuel_p_3}
 local fuel_pressure_out = {fuel_press_1, fuel_press_2, fuel_press_3}
 local oil_pressure_src = {oil_p_1, oil_p_2, oil_p_3}
 local oil_pressure_out = {oil_press_1, oil_press_2, oil_press_3}
 local oil_temp_src = {oil_t_1, oil_t_2, oil_t_3}
 local oil_temp_out = {oil_temp_1, oil_temp_2, oil_temp_3}
+
 local fuel_flow_src = {ENGN_FF_1, ENGN_FF_2, ENGN_FF_3}
 local fuel_flow_fail = {fuel_flowmeter_1_fail, fuel_flowmeter_2_fail, fuel_flowmeter_3_fail}
 local fuel_flow_out = {fuel_flow_1, fuel_flow_2, fuel_flow_3}
+
 local oil_qty_src = {engn_oil_qty_1, engn_oil_qty_2, engn_oil_qty_3}
 local oil_qty_out = {oil_qty_1, oil_qty_2, oil_qty_3}
+
 local rpm_high_state = {0, 0, 0}
 local rpm_low_state = {0, 0, 0}
 local vibration_state = {0, 0, 0}
