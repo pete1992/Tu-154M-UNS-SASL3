@@ -2,34 +2,34 @@
 function deferred_command(name,desc,realFunc)
 	return replace_command(name,realFunc)
 end
+
 --replace deferred_dataref
 function deferred_dataref(name,nilType,callFunction)
   if callFunction~=nil then
-    --print("WARN:" .. name .. " is trying to wrap a function to a dataref -> use xlua")
     end
     return find_dataref(name)
 end
 
 dofile("json/json.lua")
 
-simDR_livery_path			= find_dataref("sim/aircraft/view/acf_livery_path")
+simDR_livery_path = find_dataref("sim/aircraft/view/acf_livery_path")
 
 
---*************************************************************************************--
---** 				        CREATE READ-WRITE CUSTOM DATAREFS                        **--
---*************************************************************************************--
+--*********************************************--
+--** CREATE READ-WRITE CUSTOM DATAREFS **--
+--**********************************************--
 -- Holds all SimConfig options
-T154_simconfig_data						= deferred_dataref("tu154/custom/t154cfg/simconfig", "string")
-T154_newsimconfig_data					= deferred_dataref("tu154/custom/t154cfg/newsimconfig", "number")
-T154_hide_mil					= deferred_dataref("tu154/custom/t154cfg/hide_mil", "number")
-T154_hide_civ					= deferred_dataref("tu154/custom/t154cfg/hide_civ", "number")
-T154_hide_def					= deferred_dataref("tu154/custom/t154cfg/hide_def", "number")
-T154_hide_autoladder					= deferred_dataref("tu154/custom/t154cfg/hide_autoladder", "number")
-T154_hide_antenna					= deferred_dataref("tu154/custom/t154cfg/hide_antenna", "number")
-T154_sync_baro					= deferred_dataref("tu154/custom/t154cfg/sync_baro", "number")
-T154_sync_lights					= deferred_dataref("tu154/custom/t154cfg/sync_lights", "number")
-T154_hide_winglets					= deferred_dataref("tu154/custom/t154cfg/hide_winglets", "number")
-T154_show_winglets					= deferred_dataref("tu154/custom/t154cfg/show_winglets", "number")
+T154_simconfig_data = deferred_dataref("tu154/custom/t154cfg/simconfig", "string")
+T154_newsimconfig_data = deferred_dataref("tu154/custom/t154cfg/newsimconfig", "number")
+T154_hide_mil = deferred_dataref("tu154/custom/t154cfg/hide_mil", "number")
+T154_hide_civ = deferred_dataref("tu154/custom/t154cfg/hide_civ", "number")
+T154_hide_def = deferred_dataref("tu154/custom/t154cfg/hide_def", "number")
+T154_hide_autoladder = deferred_dataref("tu154/custom/t154cfg/hide_autoladder", "number")
+T154_hide_antenna = deferred_dataref("tu154/custom/t154cfg/hide_antenna", "number")
+T154_sync_baro = deferred_dataref("tu154/custom/t154cfg/sync_baro", "number")
+T154_sync_lights = deferred_dataref("tu154/custom/t154cfg/sync_lights", "number")
+T154_hide_winglets = deferred_dataref("tu154/custom/t154cfg/hide_winglets", "number")
+T154_show_winglets = deferred_dataref("tu154/custom/t154cfg/show_winglets", "number")
 
 simDR_kitchen_pld = find_dataref("tu154/custom/payload/kitchens")
 simDR_cargo1_pld = find_dataref("tu154/custom/payload/cargo_1")
@@ -47,9 +47,9 @@ simDR_right_panel_c_lit = find_dataref("tu154/custom/lights/mid_right_panel_int_
 simDR_left_pnppkp_lit = find_dataref("tu154/custom/switchers/airbleed/ground_cond_on_cap")
 simDR_right_pnppkp_lit = find_dataref("tu154/custom/switchers/airbleed/skv_faster_work_cap")
 
---*************************************************************************************--
---** 				        MAIN PROGRAM LOGIC                                       **--
---*************************************************************************************--
+--************************--
+--** MAIN PROGRAM LOGIC **--                              
+--**************l**********--
 simConfigData = {}
 
 

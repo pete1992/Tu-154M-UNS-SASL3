@@ -1,0 +1,6 @@
+.DS_Store
+.codex/**
+.vscode/**
+.codex-tests/**
+AGENTS.md
+CHECKLIST.ace

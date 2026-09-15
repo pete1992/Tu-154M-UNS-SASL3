@@ -62,17 +62,21 @@ Preserve existing DataRef paths unless there is a confirmed reason to change the
 
 Use the local `defineProps` helper at the start of SASL files:
 
-```lua
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
-```
 
 Bind properties through `defineProps`:
 
-```lua
+
 defineProps({
     -- Controls
     { "soi21_on", "tu154/custom/switchers/eng/soi21_on", globalPropertyi },
@@ -89,7 +93,6 @@ defineProps({
     { "pitot_heat_2", "tu154/custom/switchers/ovhd/pitot_heat_2", globalPropertyi },
     { "pitot_heat_3", "tu154/custom/switchers/ovhd/pitot_heat_3", globalPropertyi },
 })
-```
 
 Prefer one `defineProps({ ... })` block per file.
 
@@ -101,9 +104,8 @@ For indexed/array DataRefs, do not blindly preserve SASL 2 typed-array access pa
 
 Example:
 
-```lua
 defineProperty("gear0", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))
-```
+
 
 Use the SASL 3 manual and the actual DataRef type to determine the correct accessor.
 
@@ -113,20 +115,18 @@ Do not globally replace all `globalPropertyf` or `globalPropertyi`.
 
 If a component defines its own `update()` and owns child `components`, ensure child updates are still dispatched when required:
 
-```lua
+
 function update()
     -- local logic
     updateAll(components)
 end
-```
+
 
 If a component defines its own `draw()` and owns child `components`, ensure child drawing is dispatched when required:
 
-```lua
 function draw()
     drawAll(components)
 end
-```
 
 Do not add `drawAll(components)` or `updateAll(components)` to a file that does not actually own a top-level `components` table.
 
@@ -155,27 +155,25 @@ Therefore:
 
 For existing X-Plane or aircraft DataRefs, use a declarative `find_datarefs` table:
 
-```lua
+
 local find_datarefs = {
     { "simDR_gs", "sim/flightmodel/position/groundspeed" },
     { "simDR_time", "sim/time/total_running_time_sec" },
     { "simDR_bus27left", "tu154/custom/elec/bus27_volt_left" },
 }
-```
+
 
 For custom writable DataRefs created by xTlua, use a declarative `deferred_datarefs` table:
 
-```lua
+
 local deferred_datarefs = {
     { "weather_lit", "tu154/custom/kontur/weather_lit", "number" },
     { "weather_sys", "tu154/custom/kontur/weather_sys", "number", tu154_kontur_weather_sys_DRhandler },
     { "lat_string", "tu154/custom/kontur/latitude", "string" },
 }
-```
 
 Bind both tables through the standard loop helpers:
 
-```lua
 local function bind_datarefs(definitions)
     for _, def in ipairs(definitions) do
         _G[def[1]] = find_dataref(def[2])
@@ -194,7 +192,7 @@ end
 
 bind_datarefs(find_datarefs)
 create_datarefs(deferred_datarefs)
-```
+
 
 Do not replace this with repetitive individual assignments unless there is a concrete technical reason.
 
@@ -206,7 +204,7 @@ A notifier function referenced directly in `deferred_datarefs` must already exis
 
 This is valid:
 
-```lua
+
 function tu154_kontur_weather_mode_DRhandler() end
 function tu154_kontur_weather_sys_DRhandler() end
 function tu154_wx2000_tilt_DRhandler() end
@@ -215,19 +213,18 @@ function tu154_wx2000_windshear_DRhandler() end
 local deferred_datarefs = {
     { "weather_sys", "tu154/custom/kontur/weather_sys", "number", tu154_kontur_weather_sys_DRhandler },
 }
-```
 
 Do not move already valid handler stubs merely for style.
 
 When using the project helper:
 
-```lua
+
 function deferred_dataref(name, type, notifier)
     print("Deffered dataref: " .. name)
     local dref = XLuaCreateDataRef(name, type, "yes", notifier)
     return wrap_dref_any(dref, type)
 end
-```
+
 
 keep temporary implementation values such as `dref` local unless they intentionally form part of the global interface.
 
@@ -254,7 +251,7 @@ Determine the intended behavior of each control.
 
 Typical pattern:
 
-```lua
+
 onMouseDown = function()
     set(button, 1)
     return true
@@ -264,18 +261,16 @@ onMouseUp = function()
     set(button, 0)
     return true
 end,
-```
 
 ### Toggle / one-step action
 
 Use a single event, normally `onMouseDown`, unless the original behavior explicitly requires repetition:
 
-```lua
 onMouseDown = function()
     set(toggle, 1 - get(toggle))
     return true
 end,
-```
+
 
 ### Repeating action
 
@@ -305,14 +300,13 @@ Use SASL 3 `contextWindow` semantics.
 
 Typical configuration:
 
-```lua
+
 my_window = contextWindow {
     position = {50, 50, 500, 500},
     visible = false,
 
     noDecore = true,
     noBackground = true,
-
     proportional = true,
     saveState = true,
 
@@ -324,14 +318,14 @@ my_window = contextWindow {
         },
     },
 }
-```
+
 
 Use ContextWindow methods for runtime state:
 
-```lua
+
 my_window:setIsVisible(true)
 my_window:setPosition(x, y, w, h)
-```
+
 
 Do not reintroduce deprecated SASL 2 window parameters such as:
 
@@ -343,11 +337,8 @@ Do not modify already working context-window host code unless the task specifica
 ## Textures
 
 Preserve texture filenames, crop rectangles, panel coordinates and sprite geometry unless there is a confirmed SASL 3 incompatibility.
-
 Be aware that texture crop coordinate conventions may differ between old code and SASL 3 APIs.
-
 Do not alter texture coordinates merely because they look unusual.
-
 If a texture currently renders correctly, treat its coordinates as validated.
 
 ## Helper components
@@ -437,14 +428,12 @@ Do not produce a long generic SASL or xTlua explanation unless requested.
 
 Especially dangerous transformations include:
 
-```text
 onMouseDown -> onMouseHold
 globalPropertyf -> globalProperty
 subpanel -> contextWindow
 clickable -> interactive
 global xTlua symbol -> local symbol
 individual xTlua DataRefs -> loop binding without checking notifier order
-```
 
 Some of these transformations may be valid in specific places, but none are universally safe.
 

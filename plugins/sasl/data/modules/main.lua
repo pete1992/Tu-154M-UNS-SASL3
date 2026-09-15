@@ -9,17 +9,17 @@ sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
 sasl.options.setRenderingMode2D(SASL_RENDER_2D_MULTIPASS)
 sasl.options.setUpdateDrawingReady (true)
+-- Centralize Textures
 addSearchResourcesPath(moduleDirectory .. "/Custom Module/texture/")
 addSearchPath(moduleDirectory .. "/Custom Module/Custom Sounds")
 addSearchPath(moduleDirectory .. "/Custom Module/gui")
 addSearchPath(moduleDirectory .. "/Custom Module")
 addSearchPath(moduleDirectory .. "/Custom Module/main_panel")
 addSearchPath(moduleDirectory .. "/Custom Module/main_panel/taws")
-sasl.gl.setRenderTextPixelAligned(true )
 -- 3D panel issue workaround
-
-
+sasl.gl.setRenderTextPixelAligned(true )
 math.randomseed(os.time()) -- randomise random :)
+
 -- Xplane Versionsabfrage
 xplane_version = globalProperty("sim/version/xplane_internal_version")
 
@@ -401,10 +401,12 @@ components = {
 	dataref_creator_1 {},
 	dataref_creator_2 {},
 	dataref_creator_3 {},
-	dataref_creator_4 {}, --all newly created Datarefs are here
+	--all newly created Datarefs are here
+	dataref_creator_4 {},
 	save_state {},
 	time_logic {},
-	aircraft_init {}, -- Apply the selected flight preset before any systems update.
+	-- Apply the selected flight preset before any systems update.
+	aircraft_init {},
 	flap_aero {},
 	main_panel {
 		position = {0, 0, 2048, 2048},

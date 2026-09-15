@@ -6,22 +6,16 @@ local function defineProps(defs)
     end
 end
 
-defineProps({
-    { "xp_version", "sim/version/xplane_internal_version", globalPropertyi },
-})
-local XP12 = get(xp_version) >= 12000
-
-if XP12 then
-    local function engineTemperature(index)
-        return function(path) return globalPropertyfae(path, index) end
-    end
-    defineProps({
-        { "engine_egt_1", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(1) },
-        { "engine_egt_2", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(2) },
-        { "engine_egt_3", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(3) },
-        { "engine_egt_redline", "sim/aircraft/limits/red_hi_EGT", globalPropertyf },
-    })
+local function engineTemperature(index)
+    return function(path) return globalPropertyfae(path, index) end
 end
+
+defineProps({
+    { "engine_egt_1", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(1) },
+    { "engine_egt_2", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(2) },
+    { "engine_egt_3", "sim/flightmodel2/engines/EGT_deg_cel", engineTemperature(3) },
+    { "engine_egt_redline", "sim/aircraft/limits/red_hi_EGT", globalPropertyf },
+})
 
 defineProps({
     -- Engine 1 throttle input synchronized through SmartCopilot
@@ -107,43 +101,8 @@ defineProps({
     { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
--- local function clamp(x, lo, hi)
-    -- if x ~= x then return lo end
-    -- if x < lo then return lo end
-    -- if x > hi then return hi end
-    -- return x
--- end
-
--- local function safeClamp(value, min_val, max_val, default)
-    -- if type(value) ~= "number" or value ~= value then
-        -- return default or 0
-    -- end
-
-    -- return clamp(value, min_val, max_val)
--- end
-
--- local function fastInterpolate(table, x)
-    -- if #table < 2 then return 0 end
-    -- local low, high = 1, #table
-    -- while low < high do
-        -- local mid = math.floor((low + high) / 2)
-        -- if table[mid][1] <= x then
-            -- low = mid + 1
-        -- else
-            -- high = mid
-        -- end
-    -- end
-    -- local i = math.max(1, low - 1)
-    -- if i >= #table then return table[#table][2] end
-    -- if i < 1 then return table[1][2] end
-    -- local x1, y1 = table[i][1], table[i][2]
-    -- local x2, y2 = table[i + 1][1], table[i + 1][2]
-    -- if x2 == x1 then return y1 end
-    -- return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
--- end
 
 set(override, 1) 
-
 set(sim_rud_1, 0.25)
 set(sim_rud_2, 0.25)
 set(sim_rud_3, 0.25)
@@ -154,23 +113,25 @@ local forward_table = {{ -10000, 0.00 },
 				  {  0.6, 0.55}, 
 				  {  0.65, 0.637 }, 
                   {  0.7, 0.805}, 
-           	      {  0.8, 0.886 }, 
+           	   {  0.8, 0.886 }, 
 				  {  1.0, 0.975 },	
 				  {  1.1, 1.0 },	
 				  {  1.2, 1.2 },	
-          	      {  100000, 1.3 }} 
+          	    {  100000, 1.3 }} 
+          
 local reverse_table = {{ -10000, 0.04 }, 
                   {  0.0, 0.18 },	
 				  {  0.5, 0.18 },	
 				  {  0.6, 0.8}, 
-           	      {  1.0, 0.8 }, 
-          	      {  100000, 0.8 }} 
+           	   {  1.0, 0.8 }, 
+          	    {  100000, 0.8 }} 
+          
 local rud_T_tbl = {{ -10000, 10 }, 
                   {  -60, 10 },	
-				   {  0, 1}, 
+				  {  0, 1}, 
 				  {  40, 0.4}, 
 				  {  60, 0.3}, 
-          	      {  100000, 0.1 }} 
+          	    {  100000, 0.1 }} 
 				  
 local thro_1_pos = 0
 local thro_2_pos = 0
@@ -182,7 +143,6 @@ local rev_R_pos = 0
 local initial_throttle_1 = safeClamp(get(tro_comm_1), 0, 1, 0)
 local initial_throttle_2 = safeClamp(get(tro_comm_2), 0, 1, 0)
 local initial_throttle_3 = safeClamp(get(tro_comm_3), 0, 1, 0)
-
 local joy_pos_last_1 = initial_throttle_1
 local joy_pos_last_2 = initial_throttle_2
 local joy_pos_last_3 = initial_throttle_3
@@ -207,11 +167,9 @@ local THROTTLE_RELINK_THRESHOLD = 0.15
 
 local throttle_input_state = {
     linked = true,
-
     filtered_1 = initial_throttle_1,
     filtered_2 = initial_throttle_2,
     filtered_3 = initial_throttle_3,
-
     linked_position = 0,
 }
 
@@ -336,8 +294,11 @@ end
 -- schedule acceleration against the actual engine temperature, not the cockpit
 -- needle. Leave idle, deceleration, the lever position and all warning limits alone.
 local acceleration_state = {{}, {}, {}}
-local EGT_CONTROL_MARGIN = 25 -- numerical headroom below the aircraft redline
-local EGT_PREDICTION_TIME = 2 -- allow for fuel/thermal response lag
+-- numerical headroom below the aircraft redline
+local EGT_CONTROL_MARGIN = 25
+-- allow for fuel/thermal response lag
+local EGT_PREDICTION_TIME = 2 
+
 
 local function limitAcceleration(engine, demand, idle, temperature, redline, passed, actual)
     local state = acceleration_state[engine]
@@ -504,15 +465,13 @@ function update()
 	local thro_3 = line(alt_baro, 0, virtual_rud_3_act, 11000, thro_high_3)
 local MASTER = get(ismaster) ~= 1	
 if MASTER then	
-	if XP12 then
-		local idle_gnd = 0.175 + (1 - 0.175) * fastInterpolate(forward_table, 0)
-		local idle_high = line(idle_gnd, 0, 0.525, 1, 1.07)
-		local idle = line(alt_baro, 0, idle_gnd, 11000, idle_high)
-		local redline = get(engine_egt_redline)
-		thro_1 = limitAcceleration(1, thro_1, idle, get(engine_egt_1), redline, passed, get(sim_rud_1))
-		thro_2 = limitAcceleration(2, thro_2, idle, get(engine_egt_2), redline, passed, get(sim_rud_2))
-		thro_3 = limitAcceleration(3, thro_3, idle, get(engine_egt_3), redline, passed, get(sim_rud_3))
-	end
+	local idle_gnd = 0.175 + (1 - 0.175) * fastInterpolate(forward_table, 0)
+	local idle_high = line(idle_gnd, 0, 0.525, 1, 1.07)
+	local idle = line(alt_baro, 0, idle_gnd, 11000, idle_high)
+	local redline = get(engine_egt_redline)
+	thro_1 = limitAcceleration(1, thro_1, idle, get(engine_egt_1), redline, passed, get(sim_rud_1))
+	thro_2 = limitAcceleration(2, thro_2, idle, get(engine_egt_2), redline, passed, get(sim_rud_2))
+	thro_3 = limitAcceleration(3, thro_3, idle, get(engine_egt_3), redline, passed, get(sim_rud_3))
 	set(anim_rud1, thro_1_pos)
 	set(anim_rud2, thro_2_pos)
 	set(anim_rud3, thro_3_pos)
@@ -535,3 +494,4 @@ function onModuleDone()
 	set(override, 0)
 	print("throttles released")
 end
+

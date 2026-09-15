@@ -462,9 +462,7 @@ local function gear_toggle_handler(phase)
                 and 0
                 or 1
         )
-
     end
-
     return 0
 end
 

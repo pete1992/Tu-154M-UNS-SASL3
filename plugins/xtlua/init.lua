@@ -174,13 +174,6 @@ end
 
 function create_dataref(name,type,notifier)
   error("create_dataref unsupported - use init script")
-	--[[if notifier == nil then
-		dref = XLuaCreateDataRef(name,type,"no",nil)
-	else
-		dref = XLuaCreateDataRef(name,type,"yes",notifier)
-	end
-	return wrap_dref_any(dref,type)
-  ]]
 end
 
 --------------------------------------------------------------------------------

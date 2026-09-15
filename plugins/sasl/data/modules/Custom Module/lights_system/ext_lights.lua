@@ -2,20 +2,41 @@
 -- External lighting system logic
 
 --[[
-Changelog
-- Grouped all property bindings through a local defineProps() helper while preserving every existing property name, Dataref path, constructor, and binding order.
-- Replaced Russian comments with English comments.
-- Cached frequently used Dataref values once per frame to reduce repeated property reads.
-- Clamped 27 V bus coefficients to the valid 0..1 range so overvoltage cannot increase light output or landing-light deployment speed above the intended maximum.
-- Preserved the existing landing-light grouping: the left extension/mode control drives the wing landing-light pair, while the right extension/mode control drives the front landing-light pair.
-- Coupled landing-light brightness to the actual deployment position instead of switching to full brightness immediately when deployment starts.
-- Changed nosewheel taxi-light visibility so it is enabled only when the nose gear is more than 90 percent deployed.
-- Applied the nosewheel taxi-light gear interlock before electrical current calculations so hidden taxi lights no longer consume simulated current.
-- Corrected flight-signal current calculations so each electrical bus is scaled only by its own voltage coefficient instead of applying the voltage factor twice.
-- Preserved landing-light failure handling, landing-light master cutoff behavior, output scaling, animation speed, beacon/nav timing, and the Virtual Airlines landing-light workaround unless explicitly listed above.
-- Preserved currently unused properties, counters, and legacy commented logic for project compatibility and future use.
-- Added the dedicated white tail flash output and synchronized the tail and wing flashes with the native X-Plane strobe pulse.
-]]
+	Changelog
+
+	>>	Grouped all property bindings through a local defineProps() 
+			helper while preserving every existing property name, 
+			Dataref path, constructor, and binding order.
+	>>	Replaced Russian comments with English comments.
+	>>	Cached frequently used Dataref values once per frame to 
+			reduce repeated property reads.
+	>>	Clamped 27 V bus coefficients to the valid 0..1 range so 
+			overvoltage cannot increase light output or landing-light 
+			deployment speed above the intended maximum.
+	>>	Preserved the existing landing-light grouping: the left 
+			extension/mode control drives the wing landing-light pair, while 
+			the right extension/mode control drives the front landing-light 
+			pair.
+	>>	Coupled landing-light brightness to the actual deployment 
+			position instead of switching to full brightness immediately 
+			when deployment starts.
+	>>	Changed nosewheel taxi-light visibility so it is enabled only when 
+			the nose gear is more than 90 percent deployed.
+	>>	Applied the nosewheel taxi-light gear interlock before electrical 
+			current calculations so hidden taxi lights no longer consume 
+			simulated current.
+	>>	Corrected flight-signal current calculations so each electrical 
+			bus is scaled only by its own voltage coefficient instead of 
+			applying the voltage factor twice.
+	>>	Preserved landing-light failure handling, landing-light master 
+			cutoff behavior, output scaling, animation speed, beacon/nav 
+			timing, and the Virtual Airlines landing-light workaround unless 
+			explicitly listed above.
+	>>	Preserved currently unused properties, counters, and legacy 
+			commented logic for project compatibility and future use.
+	>>	Added the dedicated white tail flash output and synchronized 
+			the tail and wing flashes with the native X-Plane strobe pulse.
+--]]
 
 -- local defineProps Function
 local function defineProps(defs)
@@ -37,7 +58,6 @@ defineProps({
     { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
     { "ext_light_cc_left", "tu154/custom/elec/ext_light_cc_left", globalPropertyf },
     { "ext_light_cc_right", "tu154/custom/elec/ext_light_cc_right", globalPropertyf },
-
     -- X-Plane light outputs.
     { "sim_nav_light", "sim/cockpit2/switches/navigation_lights_on", globalPropertyf },
     { "sim_beacon", "sim/cockpit2/switches/beacon_on", globalPropertyf },
@@ -60,7 +80,6 @@ defineProps({
     { "sim_cargo_2", "sim/cockpit2/switches/generic_lights_switch[4]", globalProperty },
     { "sim_lan_brt", "sim/flightmodel2/lights/landing_lights_brightness_ratio[1]", globalProperty },
     { "sim_landing", "sim/cockpit/electrical/landing_lights_on", globalPropertyi },
-
     -- Animation and custom light outputs.
     { "light_open_left", "tu154/custom/anim/light_open_left", globalPropertyf },
     { "light_open_right", "tu154/custom/anim/light_open_right", globalPropertyf },
@@ -75,10 +94,9 @@ defineProps({
     { "lamp_deploy_FR", "sim/aircraft/parts/acf_gear_deploy[4]", globalProperty },
     { "lamp_deploy_WL", "sim/aircraft/parts/acf_gear_deploy[5]", globalProperty },
     { "lamp_deploy_WR", "sim/aircraft/parts/acf_gear_deploy[6]", globalProperty },
-
     -- Controls.
     { "nav_lights_set", "tu154/custom/lights/nav_lights_set", globalPropertyf },
-    { "strobe_set", "tu154/custom/lights/strobe_set", globalPropertyf },
+    {"strobe_set", "tu154/custom/lights/strobe_set", globalPropertyf},
     { "wing_light_left_set", "tu154/custom/lights/wing_light_left_set", globalPropertyf },
     { "wing_light_right_set", "tu154/custom/lights/wing_light_right_set", globalPropertyf },
     { "tail_light_set", "tu154/custom/lights/tail_light_set", globalPropertyf },
@@ -93,11 +111,9 @@ defineProps({
     { "light_signal_set", "tu154/custom/lights/light_signal_set", globalPropertyf },
     { "landing_light_off", "tu154/custom/lights/landing_light_off", globalPropertyi },
     { "landing_light_off_cap", "tu154/custom/lights/landing_light_off_cap", globalPropertyi },
-
     -- Time.
     { "sim_run_time", "sim/time/total_running_time_sec", globalPropertyf },
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
-
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
     -- Failures.
     { "lan_lamp_fail_FL", "tu154/custom/failures/lan_lamp_fail_FL", globalPropertyi },
     { "lan_lamp_fail_FR", "tu154/custom/failures/lan_lamp_fail_FR", globalPropertyi },
@@ -115,7 +131,6 @@ set(lamp_deploy_WR, 0)
 
 local beacon_counter_B = 0
 local beacon_counter_T = 0
-
 local lan_light_counter_L = 0
 local lan_light_counter_R = 0
 

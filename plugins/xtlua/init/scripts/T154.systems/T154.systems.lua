@@ -14,11 +14,13 @@ end
 -- Centralized dataref binding -------------------------------------------------
 
 --[[ 
-XTLua executes each script in a private environment created by init.
-xtlua. Writing the properties into that environment is important: 
-namespace_write() recognizes the find_dataref() property objects 
-and preserves the familiar transparent read/write syntax used by the 
-rest of this script.
+
+	XTLua executes each script in a private environment created by init.
+	xtlua. Writing the properties into that environment is important: 
+	namespace_write() recognizes the find_dataref() property objects 
+	and preserves the familiar transparent read/write syntax used by 
+	the rest of this script.
+
 --]]
 
 local function bind_datarefs(definitions)
@@ -177,8 +179,6 @@ local start_self_test_var_l = 1
 local var_l_dur_test = 8000
 local thr_delta = 0
 
-
-
 -- Command handlers --------------------------------------------------------
 -- Landing-light commands move the selector immediately; physical extension is
 -- delayed in systems() to represent the lamp mechanism.
@@ -223,16 +223,15 @@ function land_lights_down_CMDhandler(phase, duration)
     end
 end
 
-
-
-
--- ABSU turn handle: +/-2 per command step, +/-50 travel, with a center detent.
+-- ABSU turn handle: +/-2 per command step, +/-50 travel, 
+-- with a center detent.
 function absu_turn_left_CMDhandler(phase, duration)
     if phase == 0 then
         if simDR_absu_turn > -50 then
             local next_value = math.max(-50, simDR_absu_turn - 2)
 
-            -- Preserve the center detent when approaching zero from the right.
+		-- Preserve the center detent 
+		-- when approaching zero from the right
             if simDR_absu_turn > 0 and next_value < 0 then
                 next_value = 0
             end
@@ -262,7 +261,8 @@ function absu_turn_right_CMDhandler(phase, duration)
         if simDR_absu_turn < 50 then
             local next_value = math.min(50, simDR_absu_turn + 2)
 
-            -- Preserve the center detent when approaching zero from the left.
+            -- Preserve the center detent 
+			-- when approaching zero from the left.
             if simDR_absu_turn < 0 and next_value > 0 then
                 next_value = 0
             end
@@ -331,21 +331,21 @@ end
 
 
 -- Register custom commands after all handlers are defined.
-checklist_next_cmnd	= create_command("t154/checklist_next", "T154 Checklist next", checklist_next_CMDhandler)
-absu_roll_left_cmnd	= create_command("t154/absu_roll_left", "T154 ABSU Roll left", absu_turn_left_CMDhandler)
-absu_roll_right_cmnd	= create_command("t154/absu_roll_right", "T154 ABSU Roll right", absu_turn_right_CMDhandler)
-absu_roll_center_cmnd	= create_command("t154/absu_roll_center", "T154 ABSU Roll center", absu_turn_center_CMDhandler)
-absu_reset_cmnd	= create_command("t154/absu_reset", "T154 ABSU SBROS", absu_reset_CMDhandler)
-absu_zk_cmnd	= create_command("t154/absu_zk", "T154 ABSU ZK", absu_zk_CMDhandler)
-absu_nvu_cmnd	= create_command("t154/absu_nvu", "T154 ABSU NVU", absu_nvu_CMDhandler)
-lights_up_cmnd	= create_command("t154/lights_up", "T154 Lights up", land_lights_up_CMDhandler)
-lights_down_cmnd	= create_command("t154/lights_down", "T154 Lights down", land_lights_down_CMDhandler)
+checklist_next_cmnd = create_command("t154/checklist_next", "T154 Checklist next", checklist_next_CMDhandler)
+absu_roll_left_cmnd = create_command("t154/absu_roll_left", "T154 ABSU Roll left", absu_turn_left_CMDhandler)
+absu_roll_right_cmnd = create_command("t154/absu_roll_right", "T154 ABSU Roll right", absu_turn_right_CMDhandler)
+absu_roll_center_cmnd = create_command("t154/absu_roll_center", "T154 ABSU Roll center", absu_turn_center_CMDhandler)
+absu_reset_cmnd = create_command("t154/absu_reset", "T154 ABSU SBROS", absu_reset_CMDhandler)
+absu_zk_cmnd = create_command("t154/absu_zk", "T154 ABSU ZK", absu_zk_CMDhandler)
+absu_nvu_cmnd = create_command("t154/absu_nvu", "T154 ABSU NVU", absu_nvu_CMDhandler)
+lights_up_cmnd = create_command("t154/lights_up", "T154 Lights up", land_lights_up_CMDhandler)
+lights_down_cmnd = create_command("t154/lights_down", "T154 Lights down", land_lights_down_CMDhandler)
 
 
 function systems()
 
-    -- Front-panel lamp-test compatibility ------------------------------------
-    -- Keep selected ABSU/STU lamps at their real pre-test state.
+-- Front-panel lamp-test compatibility ------------------------------------
+-- Keep selected ABSU/STU lamps at their real pre-test state
 if simDR_lit_test_front > 0 then
     simDR_zk_lit = zk_lit
     simDR_reset_lit = reset_lit

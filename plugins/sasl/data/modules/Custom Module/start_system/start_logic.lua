@@ -1,3 +1,5 @@
+-- start_logic.lua
+
 --[[
 Changelog
 - Balanced held starter commands and released them on abort, authority loss and component unload.
@@ -552,12 +554,15 @@ function update()
         end
     end
 
-    -- A stale timestamp must not cut fuel during X-Plane's engines-running
-    -- initialization. Timeout an actual APD sequence, or clean up an engine
-    -- that has really been running and subsequently lost combustion. This
-    -- retains shutdown cleanup without treating initial zero RPM as a failure.
-    -- Engine covers still inhibit starts. Clearing local state prevents a later
-    -- sasl.commandBegin() from reactivating the starter in the same frame.
+--[[ 
+A stale timestamp must not cut fuel during X-Plane's engines-running
+initialization. Timeout an actual APD sequence, or clean up an engine
+that has really been running and subsequently lost combustion. This
+retains shutdown cleanup without treating initial zero RPM as a failure.
+Engine covers still inhibit starts. Clearing local state prevents a later
+sasl.commandBegin() from reactivating the starter in the same frame.
+]]
+
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
         local rpm = engine.rpm_value

@@ -1,3 +1,14 @@
+-- vibration_logic.lua
+-- Engine vibration and damage accumulation logic.
+
+--[[
+Changelog
+- Prevented fire and oil counters from dropping below zero during recovery.
+- Clamped fire, chip and oil counters to 100 to prevent frame-step overshoot.
+- Preserved the existing vibration model, failure thresholds and SmartCopilot behavior.
+--]]
+
+-- local defineProps Function
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))
@@ -126,25 +137,25 @@ function update()
 	vibro3 = vibro3 + fail3 * rpm3 / 5
 	
 	-- vibration may slowly increase on engine fire
-	if get(eng1_fire) == 6 and fire_counter1 <= 100 then fire_counter1 = fire_counter1 + passed * 0.8 * rpm1 * (rud1 + 0.5) / 100 
-	elseif get(eng1_fire) < 6 and fire_counter1 >= 0 then fire_counter1 = fire_counter1 - passed * 2 end
-	if get(eng2_fire) == 6 and fire_counter2 <= 100 then fire_counter2 = fire_counter2 + passed * 0.8 * rpm2 * (rud2 + 0.5) / 100 
-	elseif get(eng2_fire) < 6 and fire_counter2 >= 0 then fire_counter2 = fire_counter2 - passed * 2 end
-	if get(eng3_fire) == 6 and fire_counter3 <= 100 then fire_counter3 = fire_counter3 + passed * 0.8 * rpm3 * (rud3 + 0.5) / 100
-	elseif get(eng3_fire) < 6 and fire_counter3 >= 0 then fire_counter3 = fire_counter3 - passed * 2 end
+	if get(eng1_fire) == 6 and fire_counter1 < 100 then fire_counter1 = math.min(100, fire_counter1 + passed * 0.8 * rpm1 * (rud1 + 0.5) / 100) 
+	elseif get(eng1_fire) < 6 and fire_counter1 > 0 then fire_counter1 = math.max(0, fire_counter1 - passed * 2) end
+	if get(eng2_fire) == 6 and fire_counter2 < 100 then fire_counter2 = math.min(100, fire_counter2 + passed * 0.8 * rpm2 * (rud2 + 0.5) / 100) 
+	elseif get(eng2_fire) < 6 and fire_counter2 > 0 then fire_counter2 = math.max(0, fire_counter2 - passed * 2) end
+	if get(eng3_fire) == 6 and fire_counter3 < 100 then fire_counter3 = math.min(100, fire_counter3 + passed * 0.8 * rpm3 * (rud3 + 0.5) / 100)
+	elseif get(eng3_fire) < 6 and fire_counter3 > 0 then fire_counter3 = math.max(0, fire_counter3 - passed * 2) end
 	
 	-- vibration may increase if engine destroying
-	if get(chip_detect1) == 1 and chip_counter1 <= 100 then chip_counter1 = chip_counter1 + 1 * passed * rpm1 * (rud1 + 0.5) / 100 end
-	if get(chip_detect2) == 1 and chip_counter2 <= 100 then	chip_counter2 = chip_counter2 + 1 * passed * rpm2 * (rud2 + 0.5) / 100 end
-	if get(chip_detect3) == 1 and chip_counter3 <= 100 then chip_counter3 = chip_counter3 + 1 * passed * rpm3 * (rud3 + 0.5) / 100 end	
+	if get(chip_detect1) == 1 and chip_counter1 < 100 then chip_counter1 = math.min(100, chip_counter1 + passed * rpm1 * (rud1 + 0.5) / 100) end
+	if get(chip_detect2) == 1 and chip_counter2 < 100 then chip_counter2 = math.min(100, chip_counter2 + passed * rpm2 * (rud2 + 0.5) / 100) end
+	if get(chip_detect3) == 1 and chip_counter3 < 100 then chip_counter3 = math.min(100, chip_counter3 + passed * rpm3 * (rud3 + 0.5) / 100) end	
 	
 	-- vibration may increase if oil pressure is low and then engine may heat and destroy
-	if get(eng1_oil_p) < 10 and oil_counter1 <= 100 and rpm1 > 30 then oil_counter1 = oil_counter1 + passed * 1.5 * rpm1 * rud1 / 100
-	elseif get(eng1_oil_p) >= 10 and oil_counter1 >= 0 then oil_counter1 = oil_counter1 - passed * 4 end
-	if get(eng2_oil_p) < 10 and oil_counter2 <= 100 and rpm2 > 30 then oil_counter2 = oil_counter2 + passed * 1.5 * rpm2 * rud2 / 100
-	elseif get(eng2_oil_p) >= 10 and oil_counter2 >= 0 then oil_counter2 = oil_counter2 - passed * 4 end
-	if get(eng3_oil_p) < 10 and oil_counter3 <= 100 and rpm3 > 30 then oil_counter3 = oil_counter3 + passed * 1.5 * rpm3 * rud3 / 100
-	elseif get(eng3_oil_p) >= 10 and oil_counter3 >= 0 then oil_counter3 = oil_counter3 - passed * 4 end
+	if get(eng1_oil_p) < 10 and oil_counter1 < 100 and rpm1 > 30 then oil_counter1 = math.min(100, oil_counter1 + passed * 1.5 * rpm1 * rud1 / 100)
+	elseif get(eng1_oil_p) >= 10 and oil_counter1 > 0 then oil_counter1 = math.max(0, oil_counter1 - passed * 4) end
+	if get(eng2_oil_p) < 10 and oil_counter2 < 100 and rpm2 > 30 then oil_counter2 = math.min(100, oil_counter2 + passed * 1.5 * rpm2 * rud2 / 100)
+	elseif get(eng2_oil_p) >= 10 and oil_counter2 > 0 then oil_counter2 = math.max(0, oil_counter2 - passed * 4) end
+	if get(eng3_oil_p) < 10 and oil_counter3 < 100 and rpm3 > 30 then oil_counter3 = math.min(100, oil_counter3 + passed * 1.5 * rpm3 * rud3 / 100)
+	elseif get(eng3_oil_p) >= 10 and oil_counter3 > 0 then oil_counter3 = math.max(0, oil_counter3 - passed * 4) end
 	
 	-- vibration may increase if engine stall
 

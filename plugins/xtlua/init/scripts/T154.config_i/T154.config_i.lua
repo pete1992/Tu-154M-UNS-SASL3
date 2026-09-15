@@ -1,11 +1,12 @@
+-- T154.config_i.lua
+
+
 function deferred_command(name,desc,nilFunc)
 	c = XLuaCreateCommand(name,desc)
-	--print("Deferred command: "..name)
-	--XLuaReplaceCommand(c,null_command)
-	return nil --make_command_obj(c)
+	return nil
 end
+
 function deferred_dataref(name,type,notifier)
-	--print("Deffereed dataref: "..name)
 	dref=XLuaCreateDataRef(name, type,"yes",notifier)
 	return wrap_dref_any(dref,type) 
 end
