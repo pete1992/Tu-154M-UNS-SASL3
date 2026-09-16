@@ -15,7 +15,7 @@ end
 
 defineProps({
 {"absu_zk", "tu154/custom/buttons/console/absu_zk", globalPropertyi},
-{"absu_reset", "tu154/custom/buttons/console/absu_reset", globalPropertyi},
+-- {"absu_reset", "tu154/custom/buttons/console/absu_reset", globalPropertyi}, -- Unused here; no child or shared consumer.
 {"absu_nvu", "tu154/custom/buttons/console/absu_nvu", globalPropertyi},
 {"absu_app", "tu154/custom/buttons/console/absu_app", globalPropertyi},
 {"absu_gs", "tu154/custom/buttons/console/absu_gs", globalPropertyi},

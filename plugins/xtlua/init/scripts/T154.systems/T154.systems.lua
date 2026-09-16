@@ -38,9 +38,9 @@ local DATAREFS = {
     simDR_passed = "sim/operation/misc/frame_rate_period",
     simDR_time = "sim/time/total_running_time_sec",
     -- Flight controls, trim and hydraulics
-    simDR_thr1 = "tu154/custom/controlls/throttle_1",
-    simDR_thr2 = "tu154/custom/controlls/throttle_2",
-    simDR_thr3 = "tu154/custom/controlls/throttle_3",
+    -- simDR_thr1 = "tu154/custom/controlls/throttle_1", -- Unused binding; no child or external consumer.
+    -- simDR_thr2 = "tu154/custom/controlls/throttle_2", -- Unused binding; no child or external consumer.
+    -- simDR_thr3 = "tu154/custom/controlls/throttle_3", -- Unused binding; no child or external consumer.
     simDR_yoke_p = "tu154/custom/controlls/yoke_pitch",
     simDR_yoke_r = "tu154/custom/controlls/yoke_roll",
     simDR_pitch_trim = "tu154/custom/trimmers/int_pitch_trim",
@@ -51,17 +51,17 @@ local DATAREFS = {
     simDR_hyd_emer_press = "tu154/custom/hydro/gs_press_4",
     -- ABSU / STU and checklist controls
     simDR_gliss_lit = "tu154/custom/lights/button/absu_gz",
-    simDR_at_mode = "tu154/custom/absu/stu_mode",
+    -- simDR_at_mode = "tu154/custom/absu/stu_mode", -- Unused binding; no child or external consumer.
     simDR_sw_sound = "tu154/custom/switchers/console/nvu_corr_on",
-    simDR_spd_but = "tu154/custom/buttons/console/absu_stab_speed",
-    simDR_spd_but_lit = "tu154/custom/lights/button/absu_stab_spd",
+    -- simDR_spd_but = "tu154/custom/buttons/console/absu_stab_speed", -- Unused binding; no child or external consumer.
+    -- simDR_spd_but_lit = "tu154/custom/lights/button/absu_stab_spd", -- Unused binding; no child or external consumer.
     simDR_absu_turn = "tu154/custom/switchers/console/absu_turn_handle",
     simDR_absu_zk = "tu154/custom/buttons/console/absu_zk",
     simDR_absu_reset = "tu154/custom/buttons/console/absu_reset",
     simDR_absu_nvu = "tu154/custom/buttons/console/absu_nvu",
     simDR_absu_pitch_mode = "tu154/custom/absu/pitch_sub_mode",
     simDR_checklist_select = "tu154/custom/checklist/checklist_selected",
-    simDR_gpss = "sim/cockpit2/autopilot/gpss_status",
+    -- simDR_gpss = "sim/cockpit2/autopilot/gpss_status", -- Unused binding; no child or external consumer.
     -- DISS / NVU
     simDR_diss_cc = "tu154/custom/nvu/diss_cc",
     simDR_diss_mode = "tu154/custom/nvu/diss_mode",
@@ -99,32 +99,34 @@ local DATAREFS = {
     simDRsp50_c2 = "tu154/custom/lights/small/sp50_c2",
     simDRsp50_g1 = "tu154/custom/lights/small/sp50_g1",
     simDRsp50_g2 = "tu154/custom/lights/small/sp50_g2",
-    simDRnav1mhz = "sim/cockpit2/radios/actuators/nav1_frequency_Mhz",
-    simDRnav2mhz = "sim/cockpit2/radios/actuators/nav2_frequency_Mhz",
+    -- simDRnav1mhz = "sim/cockpit2/radios/actuators/nav1_frequency_Mhz", -- Unused binding; no child or external consumer.
+    -- simDRnav2mhz = "sim/cockpit2/radios/actuators/nav2_frequency_Mhz", -- Unused binding; no child or external consumer.
     -- KATET controls are independent of the repurposed legacy SP-50 switches.
     simDR_katet_mode = "tu154/custom/katet/mode",
     simDR_katet_nav_mode = "tu154/custom/katet/nav_mode",
     simDR_katet_night_day = "tu154/custom/katet/night_day",
-    simDR_katet_land_prep = "tu154/custom/switchers/console/absu_landing_on",
+    simDR_katet_land_prep = "tu154/custom/absu/approach_enabled", -- Preserve the binding name; LD is display-only.
+    simDR_katet_nav_source = "tu154/custom/absu_use_second_nav", -- Selected/locked ILS receiver shared with ABSU.
     simDR_katet_nav1_freq = "sim/cockpit2/radios/actuators/nav1_frequency_hz",
     simDR_katet_nav2_freq = "sim/cockpit2/radios/actuators/nav2_frequency_hz",
     simDR_katet_nav1_power = "tu154/custom/radio/nav1_pow_cc",
     simDR_katet_nav2_power = "tu154/custom/radio/nav2_pow_cc",
-    simDR_katet_gps_power = "sim/cockpit2/radios/actuators/gps_power",
-    simDR_katet_gps_fromto = "sim/cockpit/radios/gps_fromto",
-    simDR_katet_gps_course = "sim/cockpit/radios/gps_course_degtm",
-    simDR_katet_gps_dev = "sim/cockpit/radios/gps_hdef_dot",
-    simDR_katet_gps_scale = "sim/cockpit/radios/gps_hdef_nm_per_dot",
-    simDR_katet_gns_dtk = "tu154/custom/SC/GNS430_dtk",
-    simDR_katet_gns_dev = "tu154/custom/SC/GNS430_dev",
-    simDR_katet_gns_flag = "tu154/custom/SC/GNS430_flag",
+    -- KATET profiles use ILS, not GPS. These former bindings have no external consumers.
+    -- simDR_katet_gps_power = "sim/cockpit2/radios/actuators/gps_power",
+    -- simDR_katet_gps_fromto = "sim/cockpit/radios/gps_fromto",
+    -- simDR_katet_gps_course = "sim/cockpit/radios/gps_course_degtm",
+    -- simDR_katet_gps_dev = "sim/cockpit/radios/gps_hdef_dot",
+    -- simDR_katet_gps_scale = "sim/cockpit/radios/gps_hdef_nm_per_dot",
+    -- simDR_katet_gns_dtk = "tu154/custom/SC/GNS430_dtk",
+    -- simDR_katet_gns_dev = "tu154/custom/SC/GNS430_dev",
+    -- simDR_katet_gns_flag = "tu154/custom/SC/GNS430_flag",
     -- Indicators, test controls and legacy animation helpers
     simDR_lit_test_front = "tu154/custom/buttons/lamp_test_front",
     simDR_ping_pong = "sim/graphics/animation/ping_pong_2",
     simDR_sin_wave = "sim/graphics/animation/sin_wave_2",
     simDRgeartestup = "tu154/custom/buttons/lamp_test_upper_gear",
     simDR_but_sound = "tu154/custom/buttons/srpbz/but_down",
-    simDR_flood_front = "tu154/custom/lights/front_panel_flood",
+    -- simDR_flood_front = "tu154/custom/lights/front_panel_flood", -- Unused binding; no child or external consumer.
     simDR_toga = "tu154/custom/lights/toga",
     simDR_elev_load = "tu154/custom/gauges/misc/elevator_pos_ind",
     simDR_alrn_load = "tu154/custom/gauges/misc/aileron_pos_ind",
@@ -370,17 +372,6 @@ local function katet_is_ils(frequency)
         and math.floor(math.floor(frequency + 0.5) / 10) % 2 == 1
 end
 
-local function katet_gps_ready()
-    -- Match the ABSU GPS1 validity gate, including the SmartCopilot solution.
-    local fromto = simDR_katet_gps_fromto
-    local scale = simDR_katet_gps_scale
-    return simDR_katet_gps_power > 0 and (fromto == 1 or fromto == 2)
-        and simDR_katet_gns_flag == 0
-        and katet_finite(simDR_katet_gns_dtk) and katet_finite(simDR_katet_gns_dev)
-        and katet_finite(simDR_katet_gps_course) and katet_finite(simDR_katet_gps_dev)
-        and katet_finite(scale) and scale > 0
-end
-
 function systems()
 
 -- Front-panel lamp-test compatibility ------------------------------------
@@ -595,21 +586,20 @@ local course1, glide1, course2, glide2 = false, false, false, false
 if bus36 > 0 then
     if simDR_lit_test_front > 0 then
         course1, glide1, course2, glide2 = true, true, true, true
-    elseif simDR_katet_mode == 1 then
-        -- GPS supplies lateral guidance only; never imply a synthetic glideslope.
-        course1 = katet_gps_ready()
-        course2 = course1
-    elseif (simDR_katet_mode == 0 or simDR_katet_mode == 2)
+    elseif (simDR_katet_mode == 0 or simDR_katet_mode == 1 or simDR_katet_mode == 2)
         and simDR_katet_nav_mode == 1 and simDR_katet_land_prep == 1 then
-        -- ILS and SP-50 use each receiver's genuine powered LOC/GS solution.
-        if simDRcrs_np1 > 0 and simDR_katet_nav1_power > 0 and katet_is_ils(simDR_katet_nav1_freq) then
+        -- All profiles show the genuine LOC/GS validity of ABSU's selected receiver.
+        -- The other receiver cannot mask loss of the locked approach signal.
+        if simDR_katet_nav_source == 1 then
+            if simDRcrs_np2 > 0 and simDR_katet_nav2_power > 0 and katet_is_ils(simDR_katet_nav2_freq) then
+                course1 = simDRcrs_flag2 == 0
+                glide1 = simDRgs_flag2 == 0
+            end
+        elseif simDRcrs_np1 > 0 and simDR_katet_nav1_power > 0 and katet_is_ils(simDR_katet_nav1_freq) then
             course1 = simDRcrs_flag1 == 0
             glide1 = simDRgs_flag1 == 0
         end
-        if simDRcrs_np2 > 0 and simDR_katet_nav2_power > 0 and katet_is_ils(simDR_katet_nav2_freq) then
-            course2 = simDRcrs_flag2 == 0
-            glide2 = simDRgs_flag2 == 0
-        end
+        course2, glide2 = course1, glide1
     end
 end
 local katet_brightness = simDR_katet_night_day == 0 and 0.35 or 1

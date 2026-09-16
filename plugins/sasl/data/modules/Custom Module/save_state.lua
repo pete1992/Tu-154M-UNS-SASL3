@@ -24,8 +24,9 @@ defineProps({
     {"enable_crew_vo", "tu154/custom/sounds/enable_crew_vo", globalPropertyi},
     {"failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi},
     {"have_pedals", "tu154/custom/have_pedals", globalPropertyi},
-    {"show_gns", "tu154/custom/anim/show_gns", globalPropertyi},
-    {"show_RXP", "tu154/custom/anim/RXP", globalPropertyi},
+    -- GPS installation is detected live, never restored from a saved preference.
+    -- {"show_gns", "tu154/custom/anim/show_gns", globalPropertyi},
+    -- {"show_RXP", "tu154/custom/anim/RXP", globalPropertyi},
     {"pnp_1_crs", "tu154/custom/gauges/compas/pkp_obs_set_L", globalPropertyf},
     {"pnp_2_crs", "tu154/custom/gauges/compas/pkp_obs_set_R", globalPropertyf},
     {"pnp_1_obs", "tu154/custom/gauges/compas/pkp_helper_course_L", globalPropertyf},
@@ -266,8 +267,7 @@ local stateEntries = {
     {"tankthreeR", fuel_q_3R},
     {"enableFailures", failures_enabled},
     {"useNWaxis", have_pedals},
-    {"gnsInstaled", show_gns},
-    {"RXPInstaled", show_RXP},
+    -- Legacy GPS installation keys in old files are deliberately ignored.
     {"pnpCrs1", pnp_1_crs},
     {"pnpCrs2", pnp_2_crs},
     {"pnp1OBS", pnp_1_obs},

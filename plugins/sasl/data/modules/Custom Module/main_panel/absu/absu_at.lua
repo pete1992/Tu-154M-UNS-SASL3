@@ -50,11 +50,12 @@ defineProps({
 	{"tro_comm_3", "tu154/custom/SC/engine/ENGN_thro_2", globalPropertyf},
 	-- arrows (needles) logic from console
 	{"absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi},                    -- NAV arrows enabled
-	{"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi},            -- LAND arrows enabled
+	-- {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi}, -- HSI display selection only.
+	{"approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi}, -- Independent approach readiness.
 	-- main/sub modes from ABSU core
 	{"roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi},                           -- roll main mode: 0 off, 1 manual, 2 stabilizer
 	{"pitch_main_mode", "tu154/custom/absu/pitch_main_mode", globalPropertyi},                         -- pitch main mode: 0 off, 1 manual, 2 stabilizer
-	{"roll_sub_mode", "tu154/custom/absu/roll_sub_mode", globalPropertyi},                             -- roll submode
+	-- {"roll_sub_mode", "tu154/custom/absu/roll_sub_mode", globalPropertyi},                             -- roll submode -- Unused binding; no child or external consumer.
 	{"pitch_sub_mode", "tu154/custom/absu/pitch_sub_mode", globalPropertyi},                           -- pitch submode
 	-- power
 	{"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
@@ -86,6 +87,7 @@ defineProps({
 local AT_mode = 0                -- 0 = off, 1 = sync spd, 2 = prepare, 3 = work, 4 = TOGA
 local spd_hold = 0               -- declared (kept; not used)
 local IAS_smth = 0               -- smoothed IAS
+local speed_hold_active = false -- seed the controller whenever speed hold begins
 local prepare_counter = 0
 local marker_act_L = get(ias_left)
 local marker_act_R = get(ias_right)
@@ -118,6 +120,10 @@ local pilot_inputs = {
 local pilot_inputs_active = false
 local pilot_input_owner = nil
 local manual_toga_override = false
+-- Diagnostic state only: one message per active-to-inactive transition.
+local previous_at_mode = nil
+local previous_at_owner = nil
+local pending_command_disconnect = nil
 
 -- sc_controls copies the selected pilot's native ENGN_thro into these DataRefs.
 -- AT moves only rud_logic's internal lever position / ENGN_thro_use, so servo
@@ -128,27 +134,45 @@ local function pilotMovedThrottles(active, master, passed)
 	local rebase = not active or not master or not pilot_inputs_active or owner ~= pilot_input_owner
 	local dt = get(sim_paused) == 0 and math.min(math.max(passed, 0), 0.1) or 0
 	local moved = false
-	for _, input in ipairs(pilot_inputs) do
+	local moved_lever, moved_delta
+	for index, input in ipairs(pilot_inputs) do
 		local value = get(input.property)
 		local enabled = get(input.disconnect) == 0
 		local valid = type(value) == "number" and value == value and value >= 0 and value <= 1
 		if not valid then
 			input.baseline = nil
 			input.timer = 0
+			input.direction = nil
 		elseif rebase or not enabled or input.enabled ~= enabled or input.baseline == nil then
 			input.baseline = value
 			input.timer = 0
+			input.direction = nil
+		elseif dt <= 0 then
+			-- A pause cannot count as sustained movement; confirm again on resume.
+			input.timer = 0
+			input.direction = nil
 		elseif math.abs(value - input.baseline) >= MANUAL_THROTTLE_TRAVEL then
-			input.timer = input.timer + dt
-			if input.timer >= MANUAL_THROTTLE_TIME then moved = true end
+			local direction = value > input.baseline and 1 or -1
+			if input.direction ~= direction then
+				-- This sample starts the observation, not the preceding frame.
+				input.direction = direction
+				input.timer = 0
+			else
+				input.timer = input.timer + dt
+			end
+			if input.timer >= MANUAL_THROTTLE_TIME then
+				if not moved then moved_lever, moved_delta = index, value - input.baseline end
+				moved = true
+			end
 		else
 			input.timer = 0
+			input.direction = nil
 		end
 		input.enabled = enabled
 	end
 	pilot_inputs_active = active and master
 	pilot_input_owner = owner
-	return moved
+	return moved, moved_lever, moved_delta
 end
 
 -----------------------------------------------------------------------
@@ -161,6 +185,7 @@ local function thr_common_handler(phase)
 	if (phase == 0 or phase == 1) and get(ismaster) ~= 1 then
 		if get(stu_mode) > 2 then
 			manual_toga_override = true
+			pending_command_disconnect = "native_throttle_command"
 			set(stu_mode, 2)
 		end
 	end
@@ -203,11 +228,16 @@ function update()
 
 	-- ABSU readiness (pitch required for TOGA)
 	local stu_roll_ready = get(roll_main_mode) > 0 and get(absu_nav_on) == 1
-	local stu_pitch_ready = get(pitch_main_mode) > 0 and get(absu_landing_on) == 1
+	local stu_pitch_ready = get(pitch_main_mode) > 0 and get(approach_enabled) == 1
 
 	-- current mode from shared DR
 	AT_mode = get(stu_mode)
-	local rud_chng = pilotMovedThrottles(AT_mode >= 3, MASTER, passed)
+	local mode_at_entry = AT_mode
+	local owner = get(ismaster) * 10 + get(hascontrol_1) * 2 + get(control_thro_other)
+	local command_disconnect = pending_command_disconnect
+	pending_command_disconnect = nil
+	local disconnect_reason
+	local rud_chng, moved_lever, moved_delta = pilotMovedThrottles(AT_mode >= 3, MASTER, passed)
 	if get(toga_command) == 0 then manual_toga_override = false end
 
 	-------------------------------------------------------------------
@@ -215,10 +245,13 @@ function update()
 	-------------------------------------------------------------------
 	if not power then
 		AT_mode = 0 -- off
+		disconnect_reason = "power_loss"
 	elseif at_1_work + at_2_work == 0 then
 		AT_mode = -1 -- total fail
+		disconnect_reason = "channels_unavailable"
 	elseif prepare_counter < 1 and power then
 		AT_mode = 1 -- ON, not ready (sync)
+		disconnect_reason = prepare and "prepare_sync" or "prepare_off"
 	elseif power and prepare and prepare_counter >= 1 and AT_mode == 1 then
 		AT_mode = 2 -- ready
 	elseif power and prepare and (rud_work_1 + rud_work_2 + rud_work_3) > 1 and stab_pressed and AT_mode == 2 and stab_counter > 0.1 then
@@ -227,19 +260,29 @@ function update()
 		stab_counter = 0
 	elseif rud_chng and AT_mode >= 3 then
 		AT_mode = 2 -- deliberate pilot movement takes precedence over TOGA
+		disconnect_reason = "pilot_throttle"
 		manual_toga_override = true
+		stab_counter = 0
+	elseif AT_mode == 4 and get(approach_enabled) ~= 1 then
+		-- Enroute cancels go-around thrust without disturbing normal speed hold.
+		AT_mode = 2
+		disconnect_reason = "enroute"
 		stab_counter = 0
 	elseif power and prepare and AT_mode == 3 and stu_pitch_ready and get(pitch_sub_mode) == 6 then
 		AT_mode = 4 -- TOGA
 		stab_counter = 0
 	elseif (rud_work_1 + rud_work_2 + rud_work_3) < 2 and AT_mode >= 3 then
 		AT_mode = 2 -- drop to ready if two RUDs are disconnected
+		disconnect_reason = "throttles_disconnected"
 		stab_counter = 0
 	elseif AT_mode == 4 and get(anim_rud1) > TOGA_DONE_FACTOR * rud_work_1 and get(anim_rud2) > TOGA_DONE_FACTOR * rud_work_2 and get(anim_rud3) > TOGA_DONE_FACTOR * rud_work_3 then
 		AT_mode = 2 -- TOGA completed -> ready
+		disconnect_reason = "toga_complete"
 		stab_counter = 0
 	elseif stab_counter > 0.1 and stab_pressed and AT_mode > 2 then
 		AT_mode = 2 -- cancel AT when button pressed again
+		disconnect_reason = "C_off"
+		manual_toga_override = true -- a held TOGA command must respect explicit AT-off
 		stab_counter = 0
 	end
 
@@ -250,6 +293,24 @@ function update()
 
 	-- publish mode back when allowed
 	if MASTER then set(stu_mode, AT_mode) end
+
+	-- Ignore ownership handovers and never infer why another component changed
+	-- the shared mode before this update. Native throttle commands are recorded
+	-- by their handler because they also change the mode between updates.
+	if MASTER and previous_at_owner == owner and previous_at_mode ~= nil
+		and previous_at_mode >= 3 and AT_mode < 3 then
+		local reason = (mode_at_entry >= 3 and disconnect_reason or command_disconnect) or "external/unknown"
+		local movement = ""
+		if reason == "pilot_throttle" then
+			movement = string.format(" lever=%d delta=%.3f", moved_lever, moved_delta)
+		end
+		logInfo(string.format("AT disengage %d->%d reason=%s bus27=%.1f/%.1f bus36=%.1f bus115=%.1f prepare=%d channels=%d/%d channel_off=%d fail=%d/%d rud=%d/%d/%d%s",
+			previous_at_mode, AT_mode, reason, get(bus27_volt_left), get(bus27_volt_right),
+			get(bus36_volt_left), get(bus115_1_volt), bool2int(prepare), at_1_work, at_2_work,
+			channel_off, get(absu_at1_fail), get(absu_at2_fail), rud_work_1, rud_work_2, rud_work_3, movement))
+	end
+	previous_at_mode = MASTER and AT_mode or nil
+	previous_at_owner = owner
 
 	-------------------------------------------------------------------
 	-- Additional per-frame calculations
@@ -270,8 +331,17 @@ function update()
 	marker_act_L = get(ias_yellow_left)
 	marker_act_R = get(ias_yellow_right)
 
-	-- smooth IAS
-	IAS_smth = lerp(IAS_smth, IAS, passed * MARKER_LERP_RATE)
+	-- Capture current IAS on engagement: Ready already follows IAS, so neither
+	-- an old marker nor the inactive derivative history may kick the servos.
+	if AT_mode == 3 and not speed_hold_active then
+		IAS_smth = IAS
+		IAS_last = IAS
+		if source == 0 then marker_act_L = IAS else marker_act_R = IAS end
+	else
+		IAS_smth = lerp(IAS_smth, IAS, passed * MARKER_LERP_RATE)
+	end
+	if AT_mode ~= 3 then IAS_last = IAS_smth end
+	speed_hold_active = AT_mode == 3
 
 	-------------------------------------------------------------------
 	-- Throttle and speed control per mode
@@ -379,11 +449,14 @@ function update()
 		set(ias_yellow_right, marker_act_R)
 
 		-- Keep the legacy TOGA sentinel, but never let it seize the levers again
-		-- after deliberate manual takeover; rud_logic treats any rate as servo input.
-		if get(toga_command) == 1 and AT_mode ~= 4 and not manual_toga_override then
-			set(rud_1_spd, -0.00001)
-			set(rud_2_spd, -0.00001)
-			set(rud_3_spd, -0.00001)
+		-- after deliberate manual takeover or loss of AT readiness. rud_logic
+		-- treats even this tiny rate as servo input, so all safety gates apply.
+		if power and prepare and at_1_work + at_2_work > 0 and AT_mode >= 2 and AT_mode ~= 4
+			and rud_work_1 + rud_work_2 + rud_work_3 > 1
+			and get(approach_enabled) == 1 and get(toga_command) == 1 and not manual_toga_override then
+			set(rud_1_spd, -0.00001 * rud_work_1)
+			set(rud_2_spd, -0.00001 * rud_work_2)
+			set(rud_3_spd, -0.00001 * rud_work_3)
 		end
 	end
 

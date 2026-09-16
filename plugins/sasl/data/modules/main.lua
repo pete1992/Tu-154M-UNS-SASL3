@@ -20,8 +20,8 @@ addSearchPath(moduleDirectory .. "/Custom Module/main_panel/taws")
 sasl.gl.setRenderTextPixelAligned(true )
 math.randomseed(os.time()) -- randomise random :)
 
--- Xplane Versionsabfrage
-xplane_version = globalProperty("sim/version/xplane_internal_version")
+-- Unused here: components that need this value bind their own property.
+-- xplane_version = globalProperty("sim/version/xplane_internal_version")
 
 -- global functions
 -- Startup selection is authoritative while native RPM is still initializing.
@@ -407,6 +407,8 @@ components = {
 	time_logic {},
 	-- Apply the selected flight preset before any systems update.
 	aircraft_init {},
+	-- Detect the local optional GPS provider before displays consume its values.
+	gps_source {},
 	flap_aero {},
 	main_panel {
 		position = {0, 0, 2048, 2048},

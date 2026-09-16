@@ -25,7 +25,7 @@ end
 defineProps({
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },      -- 0 = not found, 1 = slave, 2 = master (project-specific)
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control (project-specific)
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control (project-specific) -- Unused binding; no child or external consumer.
     -- timing
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- time of frame
 
@@ -36,7 +36,8 @@ defineProps({
     -- console controls
     {"absu_zpu_sel",               "tu154/custom/switchers/console/absu_zpu_sel",               globalPropertyi}, -- ZPU selector: left-right
     {"absu_nav_on",                "tu154/custom/switchers/console/absu_nav_on",                globalPropertyi}, -- NAV needles prep
-    {"absu_landing_on",            "tu154/custom/switchers/console/absu_landing_on",            globalPropertyi}, -- Landing needles prep
+    {"absu_landing_on",            "tu154/custom/switchers/console/absu_landing_on",            globalPropertyi}, -- Pilot HSI display switch; retained for its sound.
+    {"approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi}, -- Independent approach readiness.
     {"absu_needles_on",            "tu154/custom/switchers/console/absu_needles_on",            globalPropertyi}, -- Needles visible
     {"absu_speed_mode",            "tu154/custom/switchers/console/absu_speed_mode",            globalPropertyi}, -- STU mode: 0 off, 1 NVU, 2 AZ1, 3 AZ2, 4 APP
     {"absu_speed_change",          "tu154/custom/switchers/console/absu_speed_change",          globalPropertyi}, -- Speed change knob
@@ -158,7 +159,7 @@ defineProps({
     {"ra56_course_fail_1", "tu154/custom/lights/ra56_course_fail_1", globalPropertyf},
     {"ra56_course_fail_2", "tu154/custom/lights/ra56_course_fail_2", globalPropertyf},
     {"ra56_course_fail_3", "tu154/custom/lights/ra56_course_fail_3", globalPropertyf},
-    {"eng_at_on_lamp",     "tu154/custom/lights/engines/eng_at_on",  globalPropertyf}, -- AT ON (engineers panel)
+    -- {"eng_at_on_lamp",     "tu154/custom/lights/engines/eng_at_on",  globalPropertyf}, -- AT ON (engineers panel) -- Unused binding; no child or external consumer.
 
     -- other sources and modes
     {"lamp_test",        "tu154/custom/buttons/lamp_test_front", globalPropertyi}, -- Front panel lamp test
@@ -169,8 +170,8 @@ defineProps({
     {"roll_sub_mode",    "tu154/custom/absu/roll_sub_mode",      globalPropertyi}, -- ABSU roll submode
     {"pitch_sub_mode",   "tu154/custom/absu/pitch_sub_mode",     globalPropertyi}, -- ABSU pitch submode
     {"stu_mode",         "tu154/custom/absu/stu_mode",           globalPropertyi}, -- AT modes: 0 off, 1 on, 2 ready, 3 hold, 4 go-around
-    {"absu_pnp_mode_1",  "tu154/custom/absu/absu_pnp_mode_1",    globalPropertyi}, -- PNP indicator mode 1: 0 off, 1 NVU, 2 VOR1, 3 VOR2, 4 PS
-    {"absu_pnp_mode_2",  "tu154/custom/absu/absu_pnp_mode_2",    globalPropertyi}, -- PNP indicator mode 2: 0 off, 1 NVU, 2 VOR1, 3 VOR2, 4 PS
+    -- {"absu_pnp_mode_1",  "tu154/custom/absu/absu_pnp_mode_1",    globalPropertyi}, -- PNP indicator mode 1: 0 off, 1 NVU, 2 VOR1, 3 VOR2, 4 PS -- Unused binding; no child or external consumer.
+    -- {"absu_pnp_mode_2",  "tu154/custom/absu/absu_pnp_mode_2",    globalPropertyi}, -- PNP indicator mode 2: 0 off, 1 NVU, 2 VOR1, 3 VOR2, 4 PS -- Unused binding; no child or external consumer.
     {"absu_course_out",  "tu154/custom/absu_course_out",         globalPropertyi}, -- Out of course limits
     {"absu_gs_out",      "tu154/custom/absu_gs_out",             globalPropertyi}, -- Out of GS limits
 
@@ -201,9 +202,9 @@ defineProps({
     {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty}, -- Engine 3 N1
 
     -- ABSU internal lamp signals (logic inputs)
-    {"damp_roll_lamp",     "tu154/custom/absu/damp_roll_lamp",   globalPropertyi},
-    {"damp_pitch_lamp",    "tu154/custom/absu/damp_pitch_lamp",  globalPropertyi},
-    {"damp_yaw_lamp",      "tu154/custom/absu/damp_yaw_lamp",    globalPropertyi},
+    -- {"damp_roll_lamp",     "tu154/custom/absu/damp_roll_lamp",   globalPropertyi}, -- Unused binding; no child or external consumer.
+    -- {"damp_pitch_lamp",    "tu154/custom/absu/damp_pitch_lamp",  globalPropertyi}, -- Unused binding; no child or external consumer.
+    -- {"damp_yaw_lamp",      "tu154/custom/absu/damp_yaw_lamp",    globalPropertyi}, -- Unused binding; no child or external consumer.
     {"roll_contr_lamp",    "tu154/custom/absu/roll_contr_lamp",  globalPropertyi},
     {"pitch_contr_lamp",   "tu154/custom/absu/pitch_contr_lamp", globalPropertyi},
     {"man_roll_lamp",      "tu154/custom/absu/man_roll_lamp",    globalPropertyi},
@@ -372,7 +373,7 @@ local function lamps()
 
     -- STU test #1 timing (requires nav or landing prep)
     local nav_prep  = get(absu_nav_on) == 1
-    local land_prep = get(absu_landing_on) == 1
+    local land_prep = get(approach_enabled) == 1
     if get(absu_speed_test_2) == 1 and (nav_prep or land_prep) then
         stu_test_1_cntr = stu_test_1_cntr + passed
     else

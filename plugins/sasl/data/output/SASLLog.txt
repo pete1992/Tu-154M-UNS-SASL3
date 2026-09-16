@@ -12,6 +12,7 @@
 [TU154 INFO]: [LUA]: loading	save_state
 [TU154 INFO]: [LUA]: loading	time_logic
 [TU154 INFO]: [LUA]: loading	aircraft_init
+[TU154 INFO]: [LUA]: loading	gps_source
 [TU154 INFO]: [LUA]: loading	flap_aero
 [TU154 INFO]: [LUA]: loading	main_panel
 [TU154 INFO]: [LUA]: loading	vers
@@ -221,13 +222,119 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.4134
+[TU154 INFO]: Scripts loading time: 0.7179
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
 [TU154 INFO]: [LUA]: "aircraft_init"	[Aircraft initialization] Engines-running controls applied
 [TU154 INFO]: [LUA]: "crew_voices"	PREPARE
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
 [TU154 INFO]: [LUA]: "save_state"	State restored: OK
+[TU154 INFO]: [LUA]: "aircraft_init"	[Aircraft initialization] Engines-running controls applied
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
+[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.060
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=3 delta=0.750
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.061
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=3 delta=0.735
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.061
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=2 delta=0.520
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=C_off bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.062
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=2 delta=0.475
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.060
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.134
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.062
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=3 delta=-0.072
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=3 delta=0.443
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.062
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=3 delta=-0.130
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.062
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=3 delta=-0.168
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.060
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 4->2 reason=toga_complete bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
+[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
+[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=2 delta=0.322
+[TU154 INFO]: [LUA]: "crew_voices"	TOGA
+[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
+[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.062
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.123
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.062
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.173
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.062
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=0.115
+[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.064
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=2 delta=-0.112
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=FUEL_PRESSURE rpm=60.79 n2_raw=73.99 oil_psi=41.73 fuel_pressure=0 vibration=17.98 chips=0 fire=0 egt_C=242.80 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=FUEL_PRESSURE rpm=60.79 n2_raw=73.99 oil_psi=41.73 fuel_pressure=0 vibration=17.98 chips=0 fire=0 egt_C=242.80 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=FUEL_PRESSURE rpm=60.79 n2_raw=73.99 oil_psi=41.73 fuel_pressure=0 vibration=17.98 chips=0 fire=0 egt_C=242.80 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=CLEAR rpm=50.02 n2_raw=60.00 oil_psi=39.72 fuel_pressure=0 vibration=16.42 chips=0 fire=0 egt_C=73.76 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=CLEAR rpm=50.01 n2_raw=59.99 oil_psi=39.72 fuel_pressure=0 vibration=16.42 chips=0 fire=0 egt_C=73.76 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=CLEAR rpm=50.02 n2_raw=59.99 oil_psi=39.72 fuel_pressure=0 vibration=16.42 chips=0 fire=0 egt_C=73.76 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=FUEL_PRESSURE rpm=16.43 n2_raw=73.98 oil_psi=41.73 fuel_pressure=0 vibration=8.55 chips=0 fire=0 egt_C=86.76 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=FUEL_PRESSURE rpm=16.40 n2_raw=73.98 oil_psi=41.73 fuel_pressure=0 vibration=8.54 chips=0 fire=0 egt_C=86.77 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=FUEL_PRESSURE rpm=16.37 n2_raw=73.98 oil_psi=41.73 fuel_pressure=0 vibration=8.52 chips=0 fire=0 egt_C=86.77 reverse_transit=0
 [TU154 INFO]: Disabling...
 [TU154 INFO]: [LUA]: "stall"	XP12 asymmetric stall supplement v4.4.0 released
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended

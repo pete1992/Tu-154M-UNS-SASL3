@@ -15,24 +15,38 @@ Changelog
 
 size = {2048, 2048}
 
-defineProperty("window_height",globalPropertyi("sim/graphics/view/window_height"))
-defineProperty("window_width",globalPropertyi("sim/graphics/view/window_width"))
-defineProperty("external",globalPropertyi("sim/graphics/view/view_is_external"))
-defineProperty("show_gns",globalPropertyi("tu154/custom/anim/show_gns"))
-defineProperty("show_RXP",globalPropertyi("tu154/custom/anim/RXP"))
-defineProperty("show_load_panel",globalPropertyi("tu154/custom/panels/show_load_panel")) 
-defineProperty("show_absu_panel",globalPropertyi("tu154/custom/panels/show_absu_panel")) 
-defineProperty("show_ohvd_panel",globalPropertyi("tu154/custom/panels/show_ohvd_panel")) 
-defineProperty("show_nvu_panel",globalPropertyi("tu154/custom/panels/show_nvu_panel")) 
-defineProperty("show_checklist_panel",globalPropertyi("tu154/custom/panels/show_checklist_panel")) 
-defineProperty("show_ground_panel",globalPropertyi("tu154/custom/panels/show_ground_panel")) 
-defineProperty("show_cam",globalPropertyi("tu154/custom/panels/show_cam")) 
-defineProperty("show_palette",globalPropertyi("tu154/custom/panels/show_palette")) 
-defineProperty("show_fail_panel",globalPropertyi("tu154/custom/panels/show_fail_panel")) 
-defineProperty("KLN90visible", globalPropertyi("tu154/custom/xap/KLN90/visible"))
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) 
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) 
-defineProperty("control_thro_other", globalPropertyi("tu154/custom/SC/control_thro_other")) 
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
+
+defineProps({
+    { "window_height", "sim/graphics/view/window_height", globalPropertyi },
+    -- Unused here; retained as comments rather than binding unnecessary properties.
+    -- { "window_width", "sim/graphics/view/window_width", globalPropertyi },
+    -- { "external", "sim/graphics/view/view_is_external", globalPropertyi },
+    -- { "show_gns", "tu154/custom/anim/show_gns", globalPropertyi },
+    -- { "show_RXP", "tu154/custom/anim/RXP", globalPropertyi },
+    { "show_load_panel", "tu154/custom/panels/show_load_panel", globalPropertyi },
+    { "show_absu_panel", "tu154/custom/panels/show_absu_panel", globalPropertyi },
+    { "show_ohvd_panel", "tu154/custom/panels/show_ohvd_panel", globalPropertyi },
+    { "show_nvu_panel", "tu154/custom/panels/show_nvu_panel", globalPropertyi },
+    { "show_checklist_panel", "tu154/custom/panels/show_checklist_panel", globalPropertyi },
+    { "show_ground_panel", "tu154/custom/panels/show_ground_panel", globalPropertyi },
+    { "show_cam", "tu154/custom/panels/show_cam", globalPropertyi },
+    { "show_palette", "tu154/custom/panels/show_palette", globalPropertyi },
+    { "show_fail_panel", "tu154/custom/panels/show_fail_panel", globalPropertyi },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    { "control_thro_other", "tu154/custom/SC/control_thro_other", globalPropertyi },
+})
 
 local initial_window_height = get(window_height)
 
@@ -317,13 +331,8 @@ nav_menu = contextWindow {
 		interactive { 
 			position = {90, 0, 31, 31 },
 			onMouseDown = function() 
-				if get(show_gns) == 1 then  
-					sasl.commandOnce(sasl.findCommand("sim/GPS/g430n1_popup"))
-					set(KLN90visible, 0)
-				elseif get(show_gns) == 0 then 
-					set(KLN90visible, 1 - get(KLN90visible))
-				else set(KLN90visible, 0) 
-				end
+				-- Keep the native GPS popup available without requiring an optional plugin.
+				sasl.commandOnce(sasl.findCommand("sim/GPS/g430n1_popup"))
 				return true
 			end,
 		},

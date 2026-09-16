@@ -16,11 +16,11 @@ end
 defineProps({
 	-- SmartCopilot: 0 = absent, 1 = slave, 2 = master; control: 1 = none, 2 = held
 	{"ismaster", "scp/api/ismaster", globalPropertyf},
-	{"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
+	-- {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf}, -- Unused binding; no child or external consumer.
 	-- Controls
 	{"joy_pitch", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf},
 	{"joy_roll", "tu154/custom/SC/yoke_roll_ratio", globalPropertyf},
-	{"joy_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf},
+	-- {"joy_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf}, -- Unused binding; no child or external consumer.
 	-- Timing
 	{"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, 
 	-- Hydraulics pressures
@@ -43,10 +43,11 @@ defineProps({
 	{"ZK_select", "tu154/custom/switchers/ZK_select", globalPropertyi},
 	{"absu_smooth_on", "tu154/custom/switchers/console/absu_smooth_on", globalPropertyi},
 	{"absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi},
-	{"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi},
+	-- {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi}, -- HSI display selection only.
+	{"approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi},
 	{"absu_needles_on", "tu154/custom/switchers/console/absu_needles_on", globalPropertyi},
 	-- STU speed test buttons
-	{"absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi},
+	-- {"absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi}, -- Unused binding; no child or external consumer.
 	{"absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2", globalPropertyi},
 	-- ABSU navigation source
 	{"absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi},
@@ -60,15 +61,15 @@ defineProps({
 	-- Angular rates and accelerations
 	{"roll_rate", "sim/flightmodel/position/P", globalPropertyf},
 	{"pitch_rate", "sim/flightmodel/position/Q", globalPropertyf},
-	{"yaw_rate", "sim/flightmodel/position/R", globalPropertyf},
+	-- {"yaw_rate", "sim/flightmodel/position/R", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"roll_acc", "sim/flightmodel/position/P_dot", globalPropertyf},
-	{"pitch_acc", "sim/flightmodel/position/Q_dot", globalPropertyf},
-	{"yaw_acc", "sim/flightmodel/position/R_dot", globalPropertyf},
+	-- {"pitch_acc", "sim/flightmodel/position/Q_dot", globalPropertyf}, -- Unused binding; no child or external consumer.
+	-- {"yaw_acc", "sim/flightmodel/position/R_dot", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"slip", "sim/cockpit2/gauges/indicators/sideslip_degrees", globalPropertyf},
 	-- SVS
 	{"mach_svs", "tu154/custom/svs/machno", globalPropertyf},
 	{"alt_svs", "tu154/custom/svs/altitude", globalPropertyf},
-	{"tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf},
+	-- {"tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"ias", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf},
 	-- ABSU modes
 	{"roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi},
@@ -80,15 +81,15 @@ defineProps({
 	{"bkk_roll", "tu154/custom/bkk/bkk_roll", globalPropertyf},
 	-- TKS
 	{"course_gpk", "tu154/custom/tks/course_gpk", globalPropertyf},
-	{"course_gmk", "tu154/custom/tks/course_gmk", globalPropertyf},
+	-- {"course_gmk", "tu154/custom/tks/course_gmk", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"tks_fail_left", "tu154/custom/tks/fail_left", globalPropertyi},
 	{"tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi},
 	-- DISS
 	{"diss_groundspeed", "tu154/custom/nvu/diss_groundspeed", globalPropertyf},
 	{"diss_slip_angle", "tu154/custom/nvu/diss_slip_angle", globalPropertyf},
 	-- Course/ILS
-	{"obs_1", "sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot", globalPropertyf},
-	{"obs_2", "sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot", globalPropertyf},
+	-- {"obs_1", "sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot", globalPropertyf}, -- Unused binding; no child or external consumer.
+	-- {"obs_2", "sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"nav_cs_1", "tu154/custom/radio/nav1_cs", globalPropertyf},
 	{"nav_cs_2", "tu154/custom/radio/nav2_cs", globalPropertyf},
 	{"nav_gs_1", "tu154/custom/radio/nav1_gs", globalPropertyf},
@@ -99,8 +100,8 @@ defineProps({
 	{"nav_gs_flag_1", "tu154/custom/radio/nav1_gs_flag", globalPropertyi},
 	{"nav_cs_flag_2", "tu154/custom/radio/nav2_cs_flag", globalPropertyi},
 	{"nav_gs_flag_2", "tu154/custom/radio/nav2_gs_flag", globalPropertyi},
-	{"cr_flag_1", "sim/cockpit2/radios/indicators/nav1_flag_from_to_pilot", globalPropertyf},
-	{"cr_flag_2", "sim/cockpit2/radios/indicators/nav2_flag_from_to_pilot", globalPropertyf},
+	-- {"cr_flag_1", "sim/cockpit2/radios/indicators/nav1_flag_from_to_pilot", globalPropertyf}, -- Unused binding; no child or external consumer.
+	-- {"cr_flag_2", "sim/cockpit2/radios/indicators/nav2_flag_from_to_pilot", globalPropertyf}, -- Unused binding; no child or external consumer.
 	-- GPS1 passthrough and validity; no alternate navigation source
 	{"GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf},
 	{"GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf},
@@ -138,8 +139,8 @@ defineProps({
 	{"absu_damp_roll_fail", "tu154/custom/failures/absu_damp_roll_fail", globalPropertyi},
 	{"absu_damp_pitch_fail", "tu154/custom/failures/absu_damp_pitch_fail", globalPropertyi},
 	{"absu_damp_yaw_fail", "tu154/custom/failures/absu_damp_yaw_fail", globalPropertyi},
-	{"absu_contr_roll_fail", "tu154/custom/failures/absu_contr_roll_fail", globalPropertyi},
-	{"absu_contr_pitch_fail", "tu154/custom/failures/absu_contr_pitch_fail", globalPropertyi},
+	-- {"absu_contr_roll_fail", "tu154/custom/failures/absu_contr_roll_fail", globalPropertyi}, -- Unused binding; no child or external consumer.
+	-- {"absu_contr_pitch_fail", "tu154/custom/failures/absu_contr_pitch_fail", globalPropertyi}, -- Unused binding; no child or external consumer.
 	{"absu_calc_toga_fail", "tu154/custom/failures/absu_calc_toga_fail", globalPropertyi},
 	{"absu_calc_roll_fail", "tu154/custom/failures/absu_calc_roll_fail", globalPropertyi},
 	{"absu_calc_pitch_fail", "tu154/custom/failures/absu_calc_pitch_fail", globalPropertyi},
@@ -267,7 +268,7 @@ local S = {
     -- VOR
     vor_slip_act = 0, vor_dev_lim = 4, vor_dev_act = 0,
     -- APP
-    dev_last = 0, ILS_spd_smth = 0, ILS_dev_smth = 0, ILS_spd_last = 0,
+    dev_last = 0, ILS_spd_smth = 0, ILS_dev_smth = 0,
     ILS_roll_need = 0, loc_guidance_valid = false, gs_guidance_valid = false,
     ils_source = nil, ils_frequency = nil,
     -- Yaw damper memory
@@ -311,16 +312,18 @@ function update()
   S.passed = safeClamp(get(frame_time), 0, 0.1, 0)
   S.MASTER = get(ismaster) ~= 1
 
-  -- init once (stored in S to avoid extra locals)
-  S.ILS_LIM              = S.ILS_LIM              or 50
-  S.ILS_SPD_LIM          = S.ILS_SPD_LIM          or 40         -- was 50, slightly softer
-  S.ILS_GAIN_BASE        = S.ILS_GAIN_BASE        or 1.8        -- was 2.5*(1+), now gentler
-  S.ILS_SPD_GAIN_BASE    = S.ILS_SPD_GAIN_BASE    or 1000       -- was 1600, softer
-  S.SPIKE_THRESHOLD      = S.SPIKE_THRESHOLD      or 0.8        -- was 1.0
-  S.ALPHA_SPIKE          = S.ALPHA_SPIKE          or 0.28       -- was 0.18
-  S.ALPHA_NORMAL         = S.ALPHA_NORMAL         or 0.70       -- was 0.55
-  S.APP_INTERCEPT_CAP    = S.APP_INTERCEPT_CAP    or 30         -- was 30/20
-  S.APP_FINE_ROLL_CAP    = S.APP_FINE_ROLL_CAP    or 7.0        -- was 8..10
+  -- LOC error is four times the native CDI dots, not an angle in degrees.
+  -- Gains below convert that error/rate into a bank target. These conservative
+  -- starting values still require an in-flight check, not just a controller mock.
+  S.ILS_LIM = S.ILS_LIM or 30 -- Maximum proportional bank contribution.
+  S.ILS_SPD_LIM = S.ILS_SPD_LIM or 15 -- Bound rate damping before target smoothing.
+  S.ILS_GAIN_BASE = S.ILS_GAIN_BASE or 1.8 -- Retain steady-error authority.
+  S.ILS_SPD_GAIN_BASE = S.ILS_SPD_GAIN_BASE or 60 -- Rate gain; 1000 saturated on tiny CDI motion.
+  S.SPIKE_THRESHOLD = S.SPIKE_THRESHOLD or 0.8 -- Rate innovation, in internal error units/second.
+  S.ALPHA_SPIKE = S.ALPHA_SPIKE or 0.04 -- New-sample weight at 60 Hz (about 0.41 s).
+  S.ALPHA_NORMAL = S.ALPHA_NORMAL or 0.12 -- New-sample weight at 60 Hz (about 0.13 s).
+  S.APP_INTERCEPT_CAP = S.APP_INTERCEPT_CAP or 20 -- Maximum intercept angle; bank is limited separately.
+  S.APP_FINE_ROLL_CAP = S.APP_FINE_ROLL_CAP or 8 -- Low approach bank cap; 12 degrees above 250 m.
 
   -- validation + transition smoothing
   validateInputs(S)
@@ -388,7 +391,7 @@ function update()
   S.flaps     = (get(flap_inn_L) + get(flap_inn_R)) / 2
 
   local nav_on      = get(absu_nav_on)      == 1
-  local app_on      = get(absu_landing_on)  == 1
+  local app_on      = get(approach_enabled) == 1 -- Guidance is independent of the pilot's LD display switch.
   local needles_on  = get(absu_needles_on)  == 1
   local absu_smooth = get(absu_smooth_on)
 
@@ -707,55 +710,51 @@ function update()
       S.ILS_dev_smth = 0
 
     elseif roll_submode == 6 then
-      -- APP (LOC) — softened
+      -- APP (LOC): continuous, bounded targets and time-based rate filtering.
       if loc_valid then
         local course_dev = safeClamp(loc_deviation * 10, -15, 15, 0)
         local pnp_course = (get(absu_zpu_sel) == 1) and get(pkp_obs_2) or get(pkp_obs_1)
+        if not finite(pnp_course) then pnp_course = course_now end
 
         if not S.loc_guidance_valid then
-          S.ILS_dev_smth = course_dev; S.dev_last = course_dev; S.ILS_spd_last = 0
+          S.ILS_dev_smth = course_dev; S.dev_last = course_dev; S.ILS_spd_smth = 0
         end
-        S.ILS_dev_smth = S.ILS_dev_smth + (course_dev - S.ILS_dev_smth) * S.passed * 8 * roll_transition_factor
+        -- Track the signal independently of the authority ramp. Exact exponential
+        -- smoothing avoids a different filter response at 20, 60 and 120 FPS.
+        S.ILS_dev_smth = S.ILS_dev_smth + (course_dev - S.ILS_dev_smth) * (1 - math.exp(-8 * S.passed))
         local dev_spd = 0
         if S.passed > 0 then dev_spd = (S.ILS_dev_smth - S.dev_last) / S.passed end
         S.dev_last = S.ILS_dev_smth
 
-        if math.abs(course_dev) > 9 then
-          local intercept_angle = math.min(S.APP_INTERCEPT_CAP, math.abs(course_dev) * 2)
-          local new_course = pnp_course + intercept_angle * sign(course_dev)
-          if new_course < 0 then new_course = new_course + 360 elseif new_course > 360 then new_course = new_course - 360 end
-          local course_diff = new_course - course_now
-          if course_diff > 180 then course_diff = course_diff - 360 elseif course_diff < -180 then course_diff = course_diff + 360 end
-          roll_need = course_diff * 1.15 * roll_transition_factor
-          local roll_limit = S.APP_INTERCEPT_CAP * 0.6
-          roll_need = safeClamp(roll_need, -roll_limit, roll_limit, 0)
-          S.roll_show = roll_need
-        else
-          local K_ILS = S.ILS_GAIN_BASE * ((RV_alt > 250) and 2 or 1)
-          local ILS_dev_limited = safeClamp(S.ILS_dev_smth * K_ILS, -S.ILS_LIM, S.ILS_LIM, 0)
+        -- Smooth against the previous rate estimate, not a second copy of the
+        -- current sample. A large innovation receives slower, sustained damping.
+        local weight = math.abs(dev_spd - S.ILS_spd_smth) > S.SPIKE_THRESHOLD
+            and S.ALPHA_SPIKE or S.ALPHA_NORMAL
+        local rate_alpha = 1 - (1 - weight) ^ (60 * S.passed)
+        S.ILS_spd_smth = S.ILS_spd_smth + (dev_spd - S.ILS_spd_smth) * rate_alpha
 
-          local ILS_spd_limited = safeClamp(dev_spd * (S.ILS_SPD_GAIN_BASE * ((RV_alt > 250) and 2 or 1)), -S.ILS_SPD_LIM, S.ILS_SPD_LIM, 0)
+        local height_gain = (RV_alt > 250) and 2 or 1
+        local proportional = safeClamp(S.ILS_dev_smth * S.ILS_GAIN_BASE * height_gain, -S.ILS_LIM, S.ILS_LIM, 0)
+        local damping = safeClamp(S.ILS_spd_smth * S.ILS_SPD_GAIN_BASE * height_gain, -S.ILS_SPD_LIM, S.ILS_SPD_LIM, 0)
+        local fine_limit = S.APP_FINE_ROLL_CAP * ((RV_alt > 250) and 1.5 or 1.0)
+        local fine_target = safeClamp((proportional + damping) * roll_transition_factor, -fine_limit, fine_limit, 0)
 
-          if math.abs(S.ILS_spd_last - dev_spd) > S.SPIKE_THRESHOLD then
-            ILS_spd_limited = ILS_spd_limited + (0 - ILS_spd_limited) * (1 - S.ALPHA_SPIKE)
-            ILS_dev_limited = ILS_dev_limited + (0 - ILS_dev_limited) * S.ALPHA_SPIKE
-          else
-            ILS_spd_limited = ILS_spd_limited * S.ALPHA_NORMAL + (dev_spd * (S.ILS_SPD_GAIN_BASE * ((RV_alt > 250) and 2 or 1))) * (1 - S.ALPHA_NORMAL)
-            ILS_dev_limited = ILS_dev_limited * S.ALPHA_NORMAL + (S.ILS_dev_smth * K_ILS) * (1 - S.ALPHA_NORMAL)
-            ILS_spd_limited = safeClamp(ILS_spd_limited, -S.ILS_SPD_LIM, S.ILS_SPD_LIM, 0)
-            ILS_dev_limited = safeClamp(ILS_dev_limited, -S.ILS_LIM, S.ILS_LIM, 0)
-          end
+        local intercept_angle = math.min(S.APP_INTERCEPT_CAP, math.abs(S.ILS_dev_smth) * 2)
+        local new_course = pnp_course + intercept_angle * sign(S.ILS_dev_smth)
+        -- Constant-time wrapping also handles out-of-range OBS values safely.
+        local course_diff = (new_course - course_now + 180) % 360 - 180
+        local intercept_limit = S.APP_INTERCEPT_CAP * 0.6
+        local intercept_target = safeClamp(course_diff * 1.15 * roll_transition_factor, -intercept_limit, intercept_limit, 0)
 
-          local roll_calc = (ILS_dev_limited + ILS_spd_limited) * roll_transition_factor
-          -- Filter the target itself, not the measured bank once per frame.
-          roll_need = S.ILS_roll_need + (roll_calc - S.ILS_roll_need) * S.passed
-
-          S.ILS_spd_last = dev_spd
-
-          local roll_limit = S.APP_FINE_ROLL_CAP * ((RV_alt > 250) and 1.5 or 1.0)
-          roll_need = safeClamp(roll_need, -roll_limit, roll_limit, 0)
-          S.roll_show = roll_need
-        end
+        -- Blend around the former hard threshold (9) instead of switching control
+        -- laws every time the needle crosses it. Limit BEFORE the shared filter
+        -- so a saturated P/D sum cannot force repeated bank-limit reversals.
+        local intercept_mix = clamp((math.abs(S.ILS_dev_smth) - 8) / 2, 0, 1)
+        local roll_target = fine_target + (intercept_target - fine_target) * intercept_mix
+        roll_need = S.ILS_roll_need + (roll_target - S.ILS_roll_need) * (1 - math.exp(-S.passed))
+        local roll_limit = fine_limit + (intercept_limit - fine_limit) * intercept_mix
+        roll_need = safeClamp(roll_need, -roll_limit, roll_limit, 0)
+        S.roll_show = roll_need
 
         S.course_stab_timer = 0
         local course_diff = course_now - S.course_stab_act

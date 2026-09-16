@@ -15,7 +15,8 @@ defineProps({
     { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
     { "have_pedals", "tu154/custom/have_pedals", globalPropertyi },
     --defineProperty("save_state_enabled",globalPropertyi("tu154/custom/save_state_enabled")) --
-    { "reset_state", "tu154/custom/reset_state", globalPropertyi }, --
+    -- Unused bindings retained for reference; no ground-panel control reads them.
+    -- { "reset_state", "tu154/custom/reset_state", globalPropertyi },
     { "asu_work", "tu154/custom/asu/work", globalPropertyi },
 
     -- datarefs
@@ -29,11 +30,11 @@ defineProps({
     { "slider_5", "sim/cockpit2/switches/custom_slider_on[4]", globalProperty }, -- pax door 1
     { "slider_6", "sim/cockpit2/switches/custom_slider_on[5]", globalProperty }, -- pax door 2
     { "slider_7", "sim/cockpit2/switches/custom_slider_on[6]", globalProperty }, -- kitchen door
-    { "slider_8", "sim/cockpit2/switches/custom_slider_on[7]", globalProperty }, --
+    -- { "slider_8", "sim/cockpit2/switches/custom_slider_on[7]", globalProperty },
     { "slider_9", "sim/cockpit2/switches/custom_slider_on[8]", globalProperty }, -- yokes
-    { "slider_10", "sim/cockpit2/switches/custom_slider_on[9]", globalProperty }, --
-    { "slider_11", "sim/cockpit2/switches/custom_slider_on[10]", globalProperty }, --
-    { "slider_12", "sim/cockpit2/switches/custom_slider_on[11]", globalProperty }, --
+    -- { "slider_10", "sim/cockpit2/switches/custom_slider_on[9]", globalProperty },
+    -- { "slider_11", "sim/cockpit2/switches/custom_slider_on[10]", globalProperty },
+    -- { "slider_12", "sim/cockpit2/switches/custom_slider_on[11]", globalProperty },
     { "gear_blocks", "tu154/custom/anim/gear_blocks", globalPropertyi }, --
     { "sensors_caps", "tu154/custom/anim/sensors_caps", globalPropertyi }, --
     { "engine_caps", "tu154/custom/anim/engine_caps", globalPropertyi }, --
@@ -68,7 +69,7 @@ defineProps({
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, --
     { "enable_crew_vo", "tu154/custom/sounds/enable_crew_vo", globalPropertyi }, --
     { "show_fail_panel", "tu154/custom/panels/show_fail_panel", globalPropertyi }, --
-    { "show_gns", "tu154/custom/anim/show_gns", globalPropertyi },
+    -- { "show_gns", "tu154/custom/anim/show_gns", globalPropertyi }, -- No manual GPS selection.
     { "show_RXP", "tu154/custom/anim/RXP", globalPropertyi },
     { "starter_torq", "sim/aircraft/engine/acf_starter_torque_ratio", globalPropertyf }, --  . 0.18
     -- custom fails
@@ -738,13 +739,12 @@ components = {
 			return true
 		end,
 	},	
-	-- Select GNS or KLN or RXP
+	-- GPS installation is detected centrally, even while this window is closed.
 	text_draw {
 		position = {32, 120, 55, 60},
 		text = function()
-			if get(show_gns) == 1 and get(show_RXP) == 0 then return "GNS430 INSTALLED"
-			elseif get(show_gns) == 1 and get(show_RXP) == 1 then return "RXP INSTALLED"
-			else return	"KLN90 INSTALLED" end
+			if get(show_RXP) == 1 then return "RXP AUTO"
+			else return "GNS430 AUTO" end
 		end,
 		font = text_font,
 		font_size = 17,
@@ -752,25 +752,6 @@ components = {
 		color = {0,0,0,1},
 		visible = true,
 	},
-	interactive {
-		position = {23, 110, 200, 35},
-		onMouseDown = function() 
-			local a = get(show_gns) + get(show_RXP) + 1
-			if a > 2 then a = 0 end
-			if a == 0 then 
-				set(show_gns, 0)
-				set(show_RXP, 0)
-			elseif a == 1 then
-				set(show_gns, 1)
-				set(show_RXP, 0)
-			elseif a == 2 then
-				set(show_gns, 1)
-				set(show_RXP, 1)
-			end
-			set(save_state, 1)
-			return true
-		end,
-	},	
 	-- set starter torque
 	text_draw {
 		position = {507, 52, 55, 60},

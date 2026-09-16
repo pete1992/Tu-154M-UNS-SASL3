@@ -1,13 +1,13 @@
 createGlobalPropertyi("tu154/custom/switchers/ovhd/stabil_ga_reserve", 1  )
 createGlobalPropertyf("scp/api/ismaster", 0 )
 createGlobalPropertyf("scp/api/hascontrol_1", 0 )
-createGlobalPropertyi("tu154/custom/xap/KLN90/WPT", 0 )
-createGlobalPropertyi("tu154/custom/xap/KLN90/MSG", 0 )
-createGlobalPropertyi("tu154/custom/xap/KLN90/visible", 0)
 createGlobalPropertyf("tu154/custom/eng/apu_fuel_last", 0)
-createGlobalPropertyf("RXP/radios/indicators/gps_course_degtm", 0)
-createGlobalPropertyf("RXP/radios/indicators/gps_cross_track_nm", 0)
-createGlobalPropertyf("RXP/radios/indicators/hsi_flag_from_to_pilot", 0)
+-- RXP owns its external DataRefs. Publish only our checked, optional bridge;
+-- creating RXP placeholders here would make a missing plugin look installed.
+createGlobalPropertyi("tu154/custom/gps/rxp_available", 0)
+createGlobalPropertyf("tu154/custom/gps/rxp_course", 0)
+createGlobalPropertyf("tu154/custom/gps/rxp_deviation", 0)
+createGlobalPropertyi("tu154/custom/gps/rxp_flag", 0)
 createGlobalPropertyf("tu154/custom/xap/An24_gauges/mrp_cc", 0)
 createGlobalPropertyi("tu154/custom/tcas/vvi_left_new",0)
 createGlobalPropertyi("tu154/custom/failures/apu_pta6_fail", 0) -- PTA-6A tachometer converter failure
@@ -18,7 +18,7 @@ createGlobalPropertyi("tu154/custom/lights/white_light_tail", 0)
 -- KATET source selection, radio-approach interlock and distance indication.
 -- Keep these states separate from the repurposed legacy SP-50 DataRefs.
 local katetControls = {
-    { "mode", 0 }, -- 0 = ILS, 1 = KATET, 2 = SP-50
+    { "mode", 0 }, -- 0 = ILS/CAT III, 1 = KATET/CAT II, 2 = SP-50/CAT I simulation profiles.
     { "nav_mode", 0 }, -- 0 = Enroute, 1 = Landing
     { "night_day", 1 }, -- 0 = Night, 1 = Day
     { "dme_rsbn", 1 }, -- 0 = DME, 1 = RSBN
@@ -27,6 +27,10 @@ local katetControls = {
 for _, control in ipairs(katetControls) do
     createGlobalPropertyi("tu154/custom/katet/" .. control[1], control[2])
 end
+
+-- KATET approach preparation is independent of the pilot's HSI LD switch.
+createGlobalPropertyi("tu154/custom/absu/approach_enabled", 0)
+createGlobalPropertyi("tu154/custom/absu/approach_category", 3) -- Selected simulation profile, not autoland certification.
 
 -- Unlike the held mechanical RSBN range, digital readouts need live validity.
 createGlobalPropertyi("tu154/custom/rsbn/distance_valid", 0)

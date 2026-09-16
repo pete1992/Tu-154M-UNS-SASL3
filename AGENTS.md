@@ -96,6 +96,13 @@ defineProps({
 
 Prefer one `defineProps({ ... })` block per file.
 
+When a script is already opened for the current task, check its DataRef bindings
+for unused entries. Before commenting one out, verify that child components,
+shared globals, generated lookups and other actual consumers do not need it.
+Comment out confirmed unused bindings instead of deleting them. Do not open or
+scan additional scripts solely to perform an unused-DataRef cleanup; targeted
+dependency checks for a candidate in an already opened file are allowed.
+
 Do not split properties into several `defineProps` calls only for visual grouping. Use comments inside one block instead.
 
 If a special accessor must be generated before the block, define the helper first and still keep the actual property declarations in the same `defineProps` block.

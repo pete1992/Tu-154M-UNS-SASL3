@@ -33,7 +33,7 @@ createGlobalPropertyf("tu154/custom/anim/cockpit_vent_2", 0) --
 createGlobalPropertyf("tu154/custom/anim/cockpit_vent_3", 0) --   
 createGlobalPropertyf("tu154/custom/anim/cockpit_window_left", 0) --  
 createGlobalPropertyf("tu154/custom/anim/cockpit_window_right", 0) --  
-createGlobalPropertyi("tu154/custom/anim/show_gns", 1) --    GNS430  KLN
+createGlobalPropertyi("tu154/custom/anim/show_gns", 1) -- Native GNS430 faceplate visibility.
 createGlobalPropertyi("tu154/custom/anim/RXP", 0) --    RXP
 createGlobalPropertyi("tu154/custom/anim/show_yokes", 1) --   
 createGlobalPropertyi("tu154/custom/anim/show_chairs", 1) --   
@@ -392,7 +392,7 @@ createGlobalPropertyi("tu154/custom/switchers/ovhd/curs_pnp_mode_2", 1) --   . 0
 createGlobalPropertyi("tu154/custom/buttons/ovhd/svs_contr", 0) --   
 createGlobalPropertyi("tu154/custom/switchers/ovhd/svs_on", 1) --  
 createGlobalPropertyi("tu154/custom/switchers/ovhd/svs_heat", 1) --  
-createGlobalPropertyi("tu154/custom/switchers/ovhd/kln_on", 1) --  
+createGlobalPropertyi("tu154/custom/switchers/ovhd/kln_on", 1) -- Legacy path retained for the shared GPS1/GNS/UNS power switch.
 createGlobalPropertyi("tu154/custom/switchers/ovhd/tcas_on", 1) --  TCAS
 createGlobalPropertyi("tu154/custom/switchers/ovhd/emerg_light_cap", 0) --   
 createGlobalPropertyi("tu154/custom/switchers/ovhd/emerg_light_on", 0) --  
@@ -1383,17 +1383,10 @@ createGlobalPropertyf("tu154/custom/lights/nvu_2_active", 0) --
 createGlobalPropertyf("tu154/custom/lights/oil_qty_work_1", 1) --    
 createGlobalPropertyf("tu154/custom/lights/oil_qty_work_2", 1) --    
 createGlobalPropertyf("tu154/custom/lights/oil_qty_work_3", 1) --    
-createGlobalPropertyi("tu154/custom/rotary/KLN90/3D_L_Angle", 0) --    90
-createGlobalPropertyi("tu154/custom/rotary/KLN90/3D_R_Angle", 0) --    90
-createGlobalPropertyi("tu154/custom/rotary/KLN90/power_knob", 0) --   
-createGlobalPropertyi("tu154/custom/rotary/KLN90/power_knob_angle", 0) --    90
-createGlobalPropertyi("tu154/custom/rotary/KLN90/scan_knob", 0) --   scan
 createGlobalPropertyi("tu154/custom/switchers/wiper_left", 0) --   . -1 - , 0 - , +1 - 
 createGlobalPropertyi("tu154/custom/switchers/wiper_right", 0) --   . -1 - , 0 - , +1 - 
 createGlobalPropertyf("tu154/custom/anim/wiper_angle_left", 0) --     . 0 - 62
 createGlobalPropertyf("tu154/custom/anim/wiper_angle_right", 0) --     . 0 - 62
-createGlobalPropertyi("tu154/custom/switchers/kln_knob_out", 0) --   
-createGlobalPropertyi("tu154/custom/switchers/kln_power_knob", 0) --    
 createGlobalPropertyi("tu154/custom/lights/landing_light_off", 0) --  
 createGlobalPropertyi("tu154/custom/lights/landing_light_off_cap", 0) --  
 createGlobalPropertyf("tu154/custom/lights/gns430_lit", 1) --   

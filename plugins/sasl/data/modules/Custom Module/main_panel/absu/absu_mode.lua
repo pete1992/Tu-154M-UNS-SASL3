@@ -8,21 +8,23 @@ end
 
 defineProps({
 -- controls
-	{ "katet_mode", "tu154/custom/katet/mode", globalPropertyi }, -- 0 = ILS, 1 = GPS1, 2 = SP-50
+	{ "katet_mode", "tu154/custom/katet/mode", globalPropertyi }, -- 0 = ILS/CAT III, 1 = KATET/CAT II, 2 = SP-50/CAT I profiles.
 	{ "katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi }, -- 0 = Enroute, 1 = Landing
-	{ "absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi }, --  .  -
+	-- { "absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi }, --  .  -
 	{ "absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi }, --
-	{ "absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi }, --
-	{ "absu_needles_on", "tu154/custom/switchers/console/absu_needles_on", globalPropertyi }, --
+	{ "absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi }, -- Pilot HSI LD indication only.
+	{ "approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi }, -- KATET radio-approach preparation, not HSI selection.
+	{ "approach_category", "tu154/custom/absu/approach_category", globalPropertyi }, -- Selected simulation profile, not autoland capability.
+	-- { "absu_needles_on", "tu154/custom/switchers/console/absu_needles_on", globalPropertyi }, --
 	{ "absu_speed_mode", "tu154/custom/switchers/console/absu_speed_mode", globalPropertyi }, --  . 0 - , 1 - , 2 - 1, 3 - 2, 4 -
-	{ "absu_speed_change", "tu154/custom/switchers/console/absu_speed_change", globalPropertyi }, --   .
-	{ "absu_speed_off", "tu154/custom/switchers/console/absu_speed_off", globalPropertyi }, --  1  2
-	{ "absu_speed_prepare", "tu154/custom/switchers/console/absu_speed_prepare", globalPropertyi }, --
-	{ "absu_speed_us_right_left", "tu154/custom/switchers/console/absu_speed_us_right_left", globalPropertyi }, --
+	-- { "absu_speed_change", "tu154/custom/switchers/console/absu_speed_change", globalPropertyi }, --   .
+	-- { "absu_speed_off", "tu154/custom/switchers/console/absu_speed_off", globalPropertyi }, --  1  2
+	-- { "absu_speed_prepare", "tu154/custom/switchers/console/absu_speed_prepare", globalPropertyi }, --
+	-- { "absu_speed_us_right_left", "tu154/custom/switchers/console/absu_speed_us_right_left", globalPropertyi }, --
 
 	{ "absu_roll_ch_on", "tu154/custom/switchers/console/absu_roll_ch_on", globalPropertyi }, --
 	{ "absu_pitch_ch_on", "tu154/custom/switchers/console/absu_pitch_ch_on", globalPropertyi }, --
-	{ "absu_smooth_on", "tu154/custom/switchers/console/absu_smooth_on", globalPropertyi }, --  " "
+	-- { "absu_smooth_on", "tu154/custom/switchers/console/absu_smooth_on", globalPropertyi }, --  " "
 
 	{ "absu_turn_handle", "tu154/custom/switchers/console/absu_turn_handle", globalPropertyi }, --
 	{ "absu_pitch_wheel", "tu154/custom/switchers/console/absu_pitch_wheel", globalPropertyf }, --  ,
@@ -62,26 +64,26 @@ defineProps({
 	{ "absu_stab_h", "tu154/custom/buttons/console/absu_stab_h", globalPropertyi }, --  H
 	{ "absu_stab", "tu154/custom/buttons/console/absu_stab", globalPropertyi }, --
 
-	{ "absu_arrest", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
-	{ "absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi }, --
-	{ "absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2", globalPropertyi }, --
+	-- { "absu_arrest", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
+	-- { "absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi }, --
+	-- { "absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2", globalPropertyi }, --
 
-	{ "absu_stab_speed", "tu154/custom/buttons/console/absu_stab_speed", globalPropertyi }, --  C
-	{ "absu_throt_off_1", "tu154/custom/buttons/console/absu_throt_off_1", globalPropertyi }, --   1
-	{ "absu_throt_off_2", "tu154/custom/buttons/console/absu_throt_off_2", globalPropertyi }, --   2
-	{ "absu_throt_off_3", "tu154/custom/buttons/console/absu_throt_off_3", globalPropertyi }, --   3
+	-- { "absu_stab_speed", "tu154/custom/buttons/console/absu_stab_speed", globalPropertyi }, --  C
+	-- { "absu_throt_off_1", "tu154/custom/buttons/console/absu_throt_off_1", globalPropertyi }, --   1
+	-- { "absu_throt_off_2", "tu154/custom/buttons/console/absu_throt_off_2", globalPropertyi }, --   2
+	-- { "absu_throt_off_3", "tu154/custom/buttons/console/absu_throt_off_3", globalPropertyi }, --   3
 
 -- power
 	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
 	{ "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-	{ "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, --    115
+	-- { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, --    115
 	{ "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf }, --    115
 
 	{ "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf }, --   36
 	{ "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, --   36
 	{ "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, --   36  1
-	{ "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, --   36  2
+	-- { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, --   36  2
 
 	{ "absu_power_cc", "tu154/custom/absu_power_cc", globalPropertyf }, --
 
@@ -140,7 +142,7 @@ defineProps({
 
 	{ "joy_pitch", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf },
 	{ "joy_roll", "tu154/custom/SC/yoke_roll_ratio", globalPropertyf },
-	{ "joy_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf },
+	-- { "joy_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf },
 
 	{ "manip_pitch", "sim/cockpit2/controls/yoke_pitch_ratio", globalPropertyf },
 	{ "manip_roll", "sim/cockpit2/controls/yoke_roll_ratio", globalPropertyf },
@@ -151,14 +153,14 @@ defineProps({
 	{ "pkp_fail_right", "tu154/custom/gauges/ahz/ahz_flag_R", globalPropertyf }, --
 	{ "mgv_contr_fail", "tu154/custom/gyro/mgv_contr_flag", globalPropertyf }, --
 
-	{ "pressure_ind_1", "tu154/custom/gauges/hydro/pressure_ind_1", globalPropertyf }, --    1
-	{ "pressure_ind_2", "tu154/custom/gauges/hydro/pressure_ind_2", globalPropertyf }, --    2
-	{ "pressure_ind_3", "tu154/custom/gauges/hydro/pressure_ind_3", globalPropertyf }, --    3
+	-- { "pressure_ind_1", "tu154/custom/gauges/hydro/pressure_ind_1", globalPropertyf }, --    1
+	-- { "pressure_ind_2", "tu154/custom/gauges/hydro/pressure_ind_2", globalPropertyf }, --    2
+	-- { "pressure_ind_3", "tu154/custom/gauges/hydro/pressure_ind_3", globalPropertyf }, --    3
 
 	{ "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, --   1
 	{ "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, --   2
 	{ "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, --   3
-	{ "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf }, --   4
+	-- { "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf }, --   4
 
 	{ "tks_fail_left", "tu154/custom/tks/fail_left", globalPropertyi }, --
 	{ "tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi }, --
@@ -193,7 +195,7 @@ defineProps({
 
 -- Smart Copilot
 	{ "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-	{ "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+	-- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
 -- failures
 	{ "absu_ra56_roll_fail", "tu154/custom/failures/absu_ra56_roll_fail", globalPropertyi }, --  ra56
@@ -273,15 +275,21 @@ local sau_sw_last = get(sau_stu_on) == 1
 
 local pitch_wheel_last = get(absu_pitch_wheel)
 
-local land_sw_last = get(absu_landing_on) == 1
-
 local power_counter = 0
 local state_checked = false
 
 local yoke_reset = false
 
--- Qualify acquisition and tolerate brief reception gaps, never hardware failures.
-local ILS_ACQUIRE_TIME = 0.3
+-- All three positions use X-Plane's ILS receiver. These deliberately simplified
+-- profiles vary stable-signal qualification, not RF modulation or AP gains.
+-- The timings are simulation design values, not historical/CAT specifications;
+-- category selection does not add flare, rollout, minima alerts or autoland.
+local approach_profiles = {
+	[0] = { category = 3, acquire_time = 0.3 }, -- ILS: retain the proven response.
+	[1] = { category = 2, acquire_time = 0.5 }, -- KATET: intermediate qualification.
+	[2] = { category = 1, acquire_time = 0.8 }, -- SP-50: slower qualification.
+}
+-- Tolerate brief reception gaps equally, never hardware failures.
 local ILS_LOSS_TIME = 5.0
 local ils_source = get(absu_use_second_nav) == 1 and 2 or 1
 local ils_frequency = nil
@@ -290,8 +298,6 @@ local loc_loss_time, gs_loss_time = 0, 0
 local app_button_last, gs_button_last = false, false
 local gs_auto_armed = false
 local katet_mode_last = get(katet_mode)
-local katet_nav_last = get(katet_nav_mode)
-local katet_power_last = false
 
 local function finite_number(value)
 	return type(value) == "number" and value == value and value > -math.huge and value < math.huge
@@ -308,6 +314,15 @@ local function gps1_ready()
 end
 
 function update()
+	-- Derive this on both SmartCopilot peers from the synchronized selectors.
+	-- Display selection must never arm, cancel or change flight-director guidance.
+	local katet_mode_now = get(katet_mode)
+	local katet_nav_now = get(katet_nav_mode)
+	local profile = approach_profiles[katet_mode_now]
+	local radio_landing_allowed = katet_nav_now == 1 and profile ~= nil
+	set(approach_enabled, bool2int(radio_landing_allowed))
+	set(approach_category, profile and profile.category or 0)
+	local acquire_time = profile and profile.acquire_time or 0.8
 	
 	thro_last_1 = get(tro_comm_1)
 	thro_last_2 = get(tro_comm_2)
@@ -354,17 +369,8 @@ if MASTER then
 	
 	local rud_toga = get(anim_rud1) + get(anim_rud2) + get(anim_rud3) > 0.99 * 3
 	
-	-- KATET selects a navigation source, not autopilot engagement. ILS and
-	-- SP-50 share this aircraft's radio-approach controller; GPS1 is lateral only.
-	local katet_mode_now = get(katet_mode)
-	local katet_nav_now = get(katet_nav_mode)
-	local katet_gps = katet_mode_now == 1
-	local radio_landing_allowed = katet_nav_now == 1
-		and (katet_mode_now == 0 or katet_mode_now == 2)
+	-- KATET selects the ILS reception profile, not HSI display or engagement.
 	local katet_source_changed = katet_mode_now ~= katet_mode_last
-	local katet_selection = katet_source_changed or katet_nav_now ~= katet_nav_last
-		or (power and not katet_power_last)
-	local katet_indication = nil
 
 	if not radio_landing_allowed or katet_source_changed then
 		-- Deliberate source/Enroute cancellation must precede reception-loss
@@ -375,51 +381,22 @@ if MASTER then
 		loc_valid_time, gs_valid_time = 0, 0
 		loc_loss_time, gs_loss_time = 0, 0
 	end
+	if not radio_landing_allowed then
+		-- Enroute also releases active go-around guidance, not the AP channels.
+		if pitch_submode == 6 then pitch_submode = 1 end
+		TOGA_mode = false
+	end
 	if katet_source_changed then
-		-- Do not keep steering from the old source or capture the new one
-		-- automatically. NAV/VOR/APP must be selected deliberately afterwards.
-		if roll_submode >= 3 and roll_submode <= 5 then roll_submode = 1 end
+		-- Requalify a changed radio profile; unrelated NAV/VOR tracking survives.
 		ils_frequency = nil
 	end
-	if not radio_landing_allowed then set(absu_landing_on, 0) end
-	if katet_selection and power then
-		if katet_gps then
-			set(nav_select, 1)
-			set(absu_nav_on, 1)
-			set(hsi_source_pilot, 2)
-			set(hsi_source_copilot, 2)
-			katet_indication = 1
-		elseif radio_landing_allowed then
-			-- Prepare needles only. APP and GS retain their existing arm/capture logic.
-			set(absu_landing_on, 1)
-			katet_indication = 4
-		else
-			set(absu_nav_on, 1)
-			local source = get(hsi_source_pilot) == 1 and 1 or 0
-			set(hsi_source_pilot, source)
-			set(hsi_source_copilot, source)
-			katet_indication = source + 2 -- VOR1/VOR2 indication, not tracking.
-		end
-	end
-	katet_mode_last, katet_nav_last = katet_mode_now, katet_nav_now
-	katet_power_last = power
+	katet_mode_last = katet_mode_now
 
 	local nav_prep = get(absu_nav_on) == 1
-	local land_prep = get(absu_landing_on) == 1
+	local land_prep = radio_landing_allowed
 	local gps_ready = gps1_ready()
-	if power and not land_prep then
-		-- HSI sources follow the ABSU source buttons, independently of Kontur.
-		if get(absu_nvu) == 1 then
-			set(nav_select, 1)
-			set(hsi_source_pilot, 2)
-			set(hsi_source_copilot, 2)
-		elseif get(absu_az1) == 1 and nav_prep then
-			set(hsi_source_pilot, 0)
-			set(hsi_source_copilot, 0)
-		elseif get(absu_az2) == 1 and nav_prep then
-			set(hsi_source_pilot, 1)
-			set(hsi_source_copilot, 1)
-		end
+	if power and not land_prep and get(absu_nvu) == 1 then
+		set(nav_select, 1)
 	end
 	
 	local flaps = (get(flap_inn_L) + get(flap_inn_R)) / 2
@@ -522,11 +499,6 @@ if MASTER then
 		ils_source, ils_frequency = source, frequency
 	end
 	set(absu_use_second_nav, bool2int(ils_source == 2))
-	if power and land_prep then
-		-- Switch both native HSIs from GPS to the locked landing receiver.
-		set(hsi_source_pilot, ils_source - 1)
-		set(hsi_source_copilot, ils_source - 1)
-	end
 	local selected_frequency = get(ils_source == 2 and freq_2 or freq_1)
 	local ils_available = (ils_source == 2 and nav2_ils or ils_source == 1 and nav1_ils)
 		and selected_frequency == ils_frequency
@@ -536,12 +508,12 @@ if MASTER then
 	local gs_deviation = get(ils_source == 2 and nav_gs_2 or nav_gs_1)
 	local gs_valid = ils_available and get(ils_source == 2 and nav_gs_flag_2 or nav_gs_flag_1) == 0
 		and finite_number(gs_deviation)
-	loc_valid_time = loc_valid and math.min(ILS_ACQUIRE_TIME, loc_valid_time + passed) or 0
-	gs_valid_time = gs_valid and math.min(ILS_ACQUIRE_TIME, gs_valid_time + passed) or 0
+	loc_valid_time = power and land_prep and loc_valid and math.min(acquire_time, loc_valid_time + passed) or 0
+	gs_valid_time = power and land_prep and gs_valid and math.min(acquire_time, gs_valid_time + passed) or 0
 	loc_loss_time = loc_valid and 0 or math.min(ILS_LOSS_TIME, loc_loss_time + passed)
 	gs_loss_time = gs_valid and 0 or math.min(ILS_LOSS_TIME, gs_loss_time + passed)
-	local loc_ready = loc_valid and loc_valid_time >= ILS_ACQUIRE_TIME
-	local gs_ready = gs_valid and gs_valid_time >= ILS_ACQUIRE_TIME
+	local loc_ready = loc_valid and loc_valid_time >= acquire_time
+	local gs_ready = gs_valid and gs_valid_time >= acquire_time
 	local loc_lost = not ils_available or loc_loss_time >= ILS_LOSS_TIME
 	local gs_lost = not ils_available or gs_loss_time >= ILS_LOSS_TIME
 	if app_pressed and land_prep then gs_auto_armed = true end
@@ -846,36 +818,36 @@ if MASTER then
 		pitch_submode = 0
 	end
 
-	-- indication modes
-
-	local copilot_indication = get(absu_speed_mode)
-	if copilot_indication == 4 and not radio_landing_allowed then
-		-- Keep the independent selector untouched, but never display stale LD.
-		copilot_indication = katet_gps and 1 or 0
-	end
-	set(absu_pnp_mode_2, copilot_indication * bool2int(power))
-	
-	-- Captain PNP
-	
-	if reset_but or not power then
+	-- HSI indication only: the AT-panel rotary owns the copilot HSI, while
+	-- the ABSU Landing switch owns pilot LD, regardless of KATET or APP/GS.
+	set(absu_pnp_mode_2, get(absu_speed_mode) * bool2int(power))
+	local pilot_ld = get(absu_landing_on) == 1
+	if not power then
 		set(absu_pnp_mode_1, 0) -- off mode
-	elseif land_prep ~= land_sw_last and land_prep then
+	elseif pilot_ld then
 		set(absu_pnp_mode_1, 4) -- landing mode
-	elseif get(absu_nvu) == 1 and not land_prep then
+	elseif reset_but then
+		set(absu_pnp_mode_1, 0)
+	elseif get(absu_nvu) == 1 then
 		set(absu_pnp_mode_1, 1) -- NAV mode
-	elseif nav_prep and get(absu_az1) == 1 and not land_prep then
+	elseif nav_prep and get(absu_az1) == 1 then
 		set(absu_pnp_mode_1, 2) -- VOR 
-	elseif nav_prep and get(absu_az2) == 1 and not land_prep then
+	elseif nav_prep and get(absu_az2) == 1 then
 		set(absu_pnp_mode_1, 3) -- VOR 
-	elseif katet_indication ~= nil then
-		set(absu_pnp_mode_1, katet_indication)
-	elseif not land_prep and get(absu_pnp_mode_1) == 4 then
-		-- The landing switch also releases the latched LD indication. Keep
-		-- an explicit NAV/VOR selection above and the copilot selector independent.
+	elseif get(absu_pnp_mode_1) == 4 then
 		set(absu_pnp_mode_1, 0)
 	end
-	
-	land_sw_last = land_prep
+
+	-- Publish each native HSI source once, from that side's final display mode.
+	-- Approach capture must not overwrite the other pilot's independent selector.
+	local function sync_hsi_source(mode, property)
+		if mode == 1 then set(property, 2) -- GPS
+		elseif mode == 2 then set(property, 0) -- NAV1
+		elseif mode == 3 then set(property, 1) -- NAV2
+		elseif mode == 4 then set(property, ils_source - 1) end -- Locked ILS receiver
+	end
+	sync_hsi_source(get(absu_pnp_mode_1), hsi_source_pilot)
+	sync_hsi_source(get(absu_pnp_mode_2), hsi_source_copilot)
 	
 	-- set results
 	set(roll_main_mode, roll_mode_main)

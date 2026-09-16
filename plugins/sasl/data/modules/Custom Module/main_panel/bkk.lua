@@ -33,7 +33,8 @@ defineProps({
     {"radio_alt", "sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot", globalPropertyf},
     {"bkk_pitch", "tu154/custom/bkk/bkk_pitch", globalPropertyf},
     {"bkk_roll", "tu154/custom/bkk/bkk_roll", globalPropertyf},
-    {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi},
+    -- {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi}, -- HSI display selection only.
+    {"approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi}, -- Independent approach readiness.
     {"test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi},
     {"day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf},
     {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
@@ -117,7 +118,7 @@ function update()
 
     -- Switch between landing and flight roll limits.
     if spd <= 280
-        or (alt <= 250 and get(absu_landing_on) == 1) then
+        or (alt <= 250 and get(approach_enabled) == 1) then
         flight_mode = false
     elseif spd >= 340 then
         flight_mode = true

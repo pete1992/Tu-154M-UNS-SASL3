@@ -10,8 +10,9 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"katet_mode", "tu154/custom/katet/mode", globalPropertyi},
-    {"katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi},
+    -- Unused: KATET prepares approach guidance, not this side's HSI display.
+    -- {"katet_mode", "tu154/custom/katet/mode", globalPropertyi},
+    -- {"katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi},
     {"absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi},
     {"course_ga", "tu154/custom/tks/course_ga_1", globalPropertyf},
     {"course_bgmk", "tu154/custom/tks/course_bgmk_1", globalPropertyf},
@@ -29,26 +30,27 @@ defineProps({
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
     {"gyro_fail", "tu154/custom/tks/fail_left", globalPropertyi},
     {"absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi},
-    {"nvu_res_course", "tu154/custom/nvu/nvu_res_course", globalPropertyf},
-    {"nvu_res_z", "tu154/custom/nvu/nvu_res_z", globalPropertyf},
-    {"kln_course", "tu154/custom/kln90/kln_course", globalPropertyf},
-    {"kln_dev", "tu154/custom/kln90/kln_dev", globalPropertyf},
-    {"kln_flag", "tu154/custom/kln90/kln_flag", globalPropertyi},
-    {"show_gns", "tu154/custom/anim/show_gns", globalPropertyi},
+    -- Unused: the NVU/NAV display position now selects GPS, not the legacy NVU computer.
+    -- {"nvu_res_course", "tu154/custom/nvu/nvu_res_course", globalPropertyf},
+    -- {"nvu_res_z", "tu154/custom/nvu/nvu_res_z", globalPropertyf},
+    -- Unused here: the installed faceplate no longer determines navigation data.
+    -- {"show_gns", "tu154/custom/anim/show_gns", globalPropertyi},
     {"show_RXP", "tu154/custom/anim/RXP", globalPropertyi},
     {"GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf},
     {"GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf},
     {"GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi},
     {"gps_power", "sim/cockpit2/radios/actuators/gps_power", globalPropertyi},
     {"gps_fromto", "sim/cockpit/radios/gps_fromto", globalPropertyi},
-    {"RXP_course", "RXP/radios/indicators/gps_course_degtm", globalPropertyf},
-    {"RXP_dev", "RXP/radios/indicators/gps_cross_track_nm", globalPropertyf},
-    {"RXP_flag", "RXP/radios/indicators/hsi_flag_from_to_pilot", globalPropertyf},
+    -- The central GPS source component owns all optional plugin bindings.
+    {"RXP_available", "tu154/custom/gps/rxp_available", globalPropertyi},
+    {"RXP_course", "tu154/custom/gps/rxp_course", globalPropertyf},
+    {"RXP_dev", "tu154/custom/gps/rxp_deviation", globalPropertyf},
+    {"RXP_flag", "tu154/custom/gps/rxp_flag", globalPropertyi},
     {"pnp_mode", "tu154/custom/switchers/ovhd/curs_pnp_mode_1", globalPropertyi},
     {"pkp_obs_knob", "tu154/custom/gauges/compas/pkp_obs_knob_L", globalPropertyf},
     {"absu_pnp_mode", "tu154/custom/absu/absu_pnp_mode_1", globalPropertyi},
     {"absu_pnp_mode_2", "tu154/custom/absu/absu_pnp_mode_2", globalPropertyi},
-    {"nav_select", "tu154/custom/switchers/nav_select", globalPropertyi},
+    -- {"nav_select", "tu154/custom/switchers/nav_select", globalPropertyi}, -- Unused: no legacy NVU override of GPS indication.
     {"bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
     {"bus36_volt", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf},
     {"fail_ga", "sim/operation/failures/rel_ss_dgy", globalPropertyf},
@@ -101,12 +103,6 @@ function update()
 
     local mode = get(absu_pnp_mode)
     local mode_2 = get(absu_pnp_mode_2)
-    local nav_sel = get(nav_select)
-    local katet_gps = get(katet_mode) == 1
-    if mode == 4 and (get(katet_nav_mode) ~= 1 or katet_gps) then
-        -- This gauge runs before ABSU modes; inhibit stale LD on this frame too.
-        mode = katet_gps and 1 or 0
-    end
 
     -- Read the synchronized/current course before applying local movement.
     main_scale_act = get(pkp_gyro_course)
@@ -261,9 +257,9 @@ function update()
         course_flag = math.min(get(nav_cs_flag_1), get(nav_cs_flag_2))
         gs_flag = math.min(get(nav_gs_flag_1), get(nav_gs_flag_2))
 
-    elseif power and mode == 1 and katet_gps then
-        -- KATET uses the same GPS1 bridge as ABSU, regardless of which GPS
-        -- faceplate is visible. No GPS vertical guidance is simulated here.
+    elseif power and mode == 1 then
+        -- Both HSI NVU/NAV positions mean GPS. VOR1/VOR2 are modes 2/3 above.
+        -- Native GNS430 is the fallback whenever the optional RXP source is absent.
         local dtk = get(GNS430_dtk)
         local deviation = get(GNS430_dev)
         local fromto = get(gps_fromto)
@@ -274,47 +270,21 @@ function update()
         obs_course = valid and dtk or get(obs)
         course_pl = valid and deviation * 0.1852 * 2.1 or 0
         glidesl_pl = 0
+        gs_flag = 1
         course_flag = valid and 0 or 1
-        gs_flag = 1
-        set(pkp_obs_flag, 1)
 
-    elseif power and mode == 1 and nav_sel == 0 then
-        -- NVU mode.
-        obs_course = get(nvu_res_course)
-        course_pl = -get(nvu_res_z) * 0.1
-        glidesl_pl = 0
-
-        gs_flag = 1
-        course_flag = 0
-
-        set(pkp_obs_flag, 1)
-
-    elseif power and mode == 1 and nav_sel == 1 then
-        -- KLN/GNS/RXP mode.
-        obs_course = get(kln_course)
-        course_pl = get(kln_dev) * 0.1852
-        glidesl_pl = 0
-
-        gs_flag = 1
-        course_flag = bool2int(get(kln_flag) == 0)
-
-        if get(show_gns) == 1 and get(show_RXP) == 0 then
-            -- GNS.
-            obs_course = get(GNS430_dtk)
-            course_pl = get(GNS430_dev) * 0.1852 * 2.1
-            glidesl_pl = 0
-
-            gs_flag = 1
-            course_flag = get(GNS430_flag)
-
-        elseif get(show_gns) == 1 and get(show_RXP) == 1 then
-            -- RXP.
-            obs_course = get(RXP_course)
-            course_pl = get(RXP_dev) * 1.852 * 0.5
-            glidesl_pl = 0
-
-            gs_flag = 1
-            course_flag = bool2int(get(RXP_flag) == 0)
+        if get(show_RXP) == 1 and get(RXP_available) == 1 then
+            -- Availability means the plugin exists, not that its route is valid.
+            -- A lost RXP solution is flagged instead of silently following another route.
+            dtk = get(RXP_course)
+            deviation = get(RXP_dev)
+            fromto = get(RXP_flag)
+            valid = (fromto == 1 or fromto == 2)
+                and dtk == dtk and math.abs(dtk) < math.huge
+                and deviation == deviation and math.abs(deviation) < math.huge
+            obs_course = valid and dtk or get(obs)
+            course_pl = valid and deviation * 1.852 * 0.5 or 0
+            course_flag = valid and 0 or 1
         end
 
         set(pkp_obs_flag, 1)

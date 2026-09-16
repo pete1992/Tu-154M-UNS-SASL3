@@ -83,7 +83,8 @@ defineProps({
     {"tks_fail_left",  "tu154/custom/tks/fail_left",  globalPropertyi},
     {"tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi},
     {"absu_nav_on",       "tu154/custom/switchers/console/absu_nav_on",       globalPropertyi},
-    {"absu_landing_on",   "tu154/custom/switchers/console/absu_landing_on",   globalPropertyi},
+    -- {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi}, -- HSI display selection only.
+    {"approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi}, -- Independent approach readiness.
     {"absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2",    globalPropertyi},
 
     -- Power and lamp test.
@@ -275,7 +276,7 @@ end
 
 local function updateStuTestTimer(frameTime)
     local navPrepared = get(absu_nav_on) == 1
-    local landingPrepared = get(absu_landing_on) == 1
+    local landingPrepared = get(approach_enabled) == 1
 
     if get(absu_speed_test_2) == 1 and (navPrepared or landingPrepared) then
         stuTestElapsed = stuTestElapsed + frameTime

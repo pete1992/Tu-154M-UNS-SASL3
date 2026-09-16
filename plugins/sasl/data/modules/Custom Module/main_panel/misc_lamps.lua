@@ -49,13 +49,12 @@ defineProps({
     {"msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
     {"mach_sim", "sim/flightmodel/misc/machno", globalPropertyf},
     {"rel_pitot", "sim/operation/failures/rel_pitot", globalPropertyi},
-    {"WPTalert", "tu154/custom/xap/KLN90/WPT", globalPropertyi},
-    {"MSGalert", "tu154/custom/xap/KLN90/MSG", globalPropertyi},
     {"speaker_speed", "tu154/custom/alarm/speaker_speed", globalPropertyi},
     {"damp_roll_lamp", "tu154/custom/absu/damp_roll_lamp", globalPropertyi},
     {"damp_pitch_lamp", "tu154/custom/absu/damp_pitch_lamp", globalPropertyi},
     {"damp_yaw_lamp", "tu154/custom/absu/damp_yaw_lamp", globalPropertyi},
-    {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi},
+    -- {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi}, -- HSI display selection only.
+    {"approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi}, -- Independent approach readiness.
     {"nav1_pow_cc", "tu154/custom/radio/nav1_pow_cc", globalPropertyf},
     {"nav2_pow_cc", "tu154/custom/radio/nav2_pow_cc", globalPropertyf},
     {"nav1_fail", "tu154/custom/failures/nav1_fail", globalPropertyi},
@@ -73,12 +72,6 @@ local to_not_ready_lit = 0
 
 local fuel2500_counter = 0
 local fuel2500_lit = 0
-
-local WPT_counter = 0
-local WPT_lit = 0
-
-local MSG_counter = 0
-local MSG_lit = 0
 
 local TO_notReadyAct = 0
 
@@ -225,41 +218,10 @@ function update()
 
     set(speed_high, speed_high_brt)
 
-    -- KLN MSG alert.
-    if get(MSGalert) == 1 then
-        MSG_counter = MSG_counter + passed
-
-        if MSG_counter > 0.3 then
-            MSG_lit = 1 - MSG_lit
-            MSG_counter = 0
-        end
-    else
-        MSG_counter = 0
-        MSG_lit = 0
-    end
-
-    local msg_lamp_brt =
-        math.max(MSG_lit * lamps_brt, test_btn)
-
-    set(msg_lamp, msg_lamp_brt)
-
-    -- KLN WPT alert.
-    if get(WPTalert) == 1 then
-        WPT_counter = WPT_counter + passed
-
-        if WPT_counter > 0.3 then
-            WPT_lit = 1 - WPT_lit
-            WPT_counter = 0
-        end
-    else
-        WPT_counter = 0
-        WPT_lit = 0
-    end
-
-    local wpt_lamp_brt =
-        math.max(WPT_lit * lamps_brt, test_btn)
-
-    set(wpt_lamp, wpt_lamp_brt)
+    -- The removed navigator no longer drives MSG/WPT. Preserve the physical
+    -- lamps and their powered lamp test without inventing native GPS alerts.
+    set(msg_lamp, test_btn)
+    set(wpt_lamp, test_btn)
 
     -- ABSU damper lamps.
     local damper_course_brt =
@@ -279,7 +241,7 @@ function update()
 
     -- CourseMP reserve lamps.
     local reserve_missing =
-        get(absu_landing_on) == 1
+        get(approach_enabled) == 1
         and (
             get(nav1_fail) == 1
             or get(nav2_fail) == 1

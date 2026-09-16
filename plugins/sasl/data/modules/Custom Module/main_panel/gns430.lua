@@ -12,13 +12,16 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
+    -- Unused in this component (no child components consume these bindings).
+    -- { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
 
-    { "show_gns", "tu154/custom/anim/show_gns", globalPropertyi },
+    -- { "show_gns", "tu154/custom/anim/show_gns", globalPropertyi },
+    { "show_RXP", "tu154/custom/anim/RXP", globalPropertyi },
     { "overrideGPS", "sim/operation/override/override_gps", globalPropertyi },
 
 -- source
-    { "kln_on", "tu154/custom/switchers/ovhd/kln_on", globalPropertyi }, --
+    -- Keep the existing overhead-switch path: it now powers GNS/UNS, not KLN.
+    { "gps_on", "tu154/custom/switchers/ovhd/kln_on", globalPropertyi },
 -- The GNS and both UNS panels share the native GPS1 receiver.
     { "uns1_on", "tu154/custom/uns1_on", globalPropertyf },
     { "uns2_on", "tu154/custom/uns2_on", globalPropertyf },
@@ -48,7 +51,8 @@ defineProps({
 
 -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- Unused: this component only distinguishes the SmartCopilot master/slave.
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 local LB_left = sasl.findCommand("sim/GPS/g430n1_coarse_down")
@@ -173,25 +177,26 @@ sim/GPS/g430n1_ent				ENT button
 
 --]]
 
-local overrideSet = false
+local native_gps_last = false
 
 function update()
 
 	-- Own GPS1 power here so the GNS and UNS updates cannot switch it against each other.
 	local left_power = get(bus27_volt_left) > 13
 	local right_power = get(bus27_volt_right) > 13
-	local gps_requested = (get(kln_on) > 0 and (left_power or right_power))
+	local gps_requested = (get(gps_on) > 0 and (left_power or right_power))
 		or (get(uns1_on) > 0 and left_power)
 		or (get(uns2_on) > 0 and right_power)
 	set(gps_power, bool2int(gps_requested))
 	set(gns_lit, get(gps_power) * 0.7)
 	
-	if get(show_gns) == 1 and not overrideSet then
+	local native_gps_selected = get(show_RXP) == 0
+	if native_gps_selected and not native_gps_last then
+		-- Release a former provider's override on native fallback, but do not
+		-- overwrite GPS ownership while the optional RXP provider is selected.
 		set(overrideGPS, 0)
-		overrideSet = true
-	elseif get(show_gns) == 0 then
-		overrideSet = false
 	end
+	native_gps_last = native_gps_selected
 	
 	--print(get(gps_hdef_dot))
 	if get(ismaster) ~= 1 then

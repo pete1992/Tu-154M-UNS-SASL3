@@ -347,9 +347,6 @@ createGlobalPropertyi("tu154/custom/absu/man_pitch_lamp", 0) --   .
 createGlobalPropertyi("tu154/custom/absu/man_toga_lamp", 0) --   .  
 createGlobalPropertyi("tu154/custom/absu/triangle_lamp_signal", 0) --   . 
 createGlobalPropertyi("tu154/custom/absu/absu_fail_signal", 0															) --   
-createGlobalPropertyf("tu154/custom/kln90/kln_course", 0																) --    
-createGlobalPropertyf("tu154/custom/kln90/kln_dev", 0																) --   , 
-createGlobalPropertyi("tu154/custom/kln90/kln_flag", 0																) --   . 0 =  , 1 = 
 createGlobalPropertyf("tu154/custom/radio/vhf1_cc", 0) --   
 createGlobalPropertyf("tu154/custom/radio/vhf2_cc", 0) --   
 createGlobalPropertyf("tu154/custom/tks/km5_1_cc", 0) --   5
