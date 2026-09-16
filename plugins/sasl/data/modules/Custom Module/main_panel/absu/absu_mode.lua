@@ -126,11 +126,12 @@ defineProps({
 	{ "absu_gs_out", "tu154/custom/absu_gs_out", globalPropertyi }, -- flying outside the course limits
 
 	{ "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
+	{ "sim_paused", "sim/time/paused", globalPropertyi }, -- Paused input changes are not go-around requests.
 
 -- Throttles
-	{ "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf }, --  1
-	{ "anim_rud2", "tu154/custom/controlls/throttle_2", globalPropertyf }, --  2
-	{ "anim_rud3", "tu154/custom/controlls/throttle_3", globalPropertyf }, --  3
+	-- { "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf }, -- Servo animation is not pilot input; unused here.
+	-- { "anim_rud2", "tu154/custom/controlls/throttle_2", globalPropertyf }, -- Servo animation is not pilot input; unused here.
+	-- { "anim_rud3", "tu154/custom/controlls/throttle_3", globalPropertyf }, -- Servo animation is not pilot input; unused here.
 -- flaps
 	{ "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- inner flaps left
 	{ "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- inner flaps right
@@ -178,6 +179,7 @@ defineProps({
 	{ "absu_pnp_mode_2", "tu154/custom/absu/absu_pnp_mode_2", globalPropertyi }, --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
 
 	{ "autopilot_mode", "sim/cockpit/autopilot/autopilot_mode", globalPropertyi }, --
+	{ "native_at_mode", "sim/cockpit2/autopilot/autothrottle_enabled", globalPropertyi }, -- A native servo movement is not pilot intent.
 
 	{ "toga_command", "tu154/custom/absu/toga_comm", globalPropertyi }, --
 
@@ -195,7 +197,8 @@ defineProps({
 
 -- Smart Copilot
 	{ "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-	-- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+	{ "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+	{ "control_thro_other", "tu154/custom/SC/control_thro_other", globalPropertyf }, -- Selected throttle-input owner.
 
 -- failures
 	{ "absu_ra56_roll_fail", "tu154/custom/failures/absu_ra56_roll_fail", globalPropertyi }, --  ra56
@@ -303,6 +306,18 @@ local function finite_number(value)
 	return type(value) == "number" and value == value and value > -math.huge and value < math.huge
 end
 
+local function pilot_throttles_full()
+	local valid = finite_number(thro_last_1) and finite_number(thro_last_2) and finite_number(thro_last_3)
+		and thro_last_1 >= 0 and thro_last_1 <= 1
+		and thro_last_2 >= 0 and thro_last_2 <= 1
+		and thro_last_3 >= 0 and thro_last_3 <= 1
+	if not valid then return nil end
+	return thro_last_1 + thro_last_2 + thro_last_3 > 0.99 * 3
+end
+local pilot_throttles_full_last = pilot_throttles_full()
+local pilot_throttle_owner_last = get(ismaster) * 10 + get(hascontrol_1) * 2 + get(control_thro_other)
+local pilot_throttle_inputs_initialized = false
+
 local function gps1_ready()
 	local fromto = get(gps_fromto)
 	local scale = get(gps_nm_per_dot)
@@ -327,6 +342,19 @@ function update()
 	thro_last_1 = get(tro_comm_1)
 	thro_last_2 = get(tro_comm_2)
 	thro_last_3 = get(tro_comm_3)
+	-- Only a fresh pilot-input movement may request the manual full-thrust
+	-- go-around. AT-driven lever animation and an already-full position cannot.
+	-- Track the edge on both peers, including while Enroute or AT is active.
+	local pilot_throttles_full_now = pilot_throttles_full()
+	local pilot_throttle_owner = get(ismaster) * 10 + get(hascontrol_1) * 2 + get(control_thro_other)
+	local input_time = get(frame_time)
+	local rud_toga = pilot_throttles_full_now == true and pilot_throttles_full_last == false
+		and pilot_throttle_inputs_initialized and get(native_at_mode) <= 0
+		and pilot_throttle_owner == pilot_throttle_owner_last
+		and get(sim_paused) == 0 and finite_number(input_time) and input_time > 0
+	pilot_throttles_full_last = pilot_throttles_full_now
+	pilot_throttle_owner_last = pilot_throttle_owner
+	pilot_throttle_inputs_initialized = true
 	
 	set(autopilot_mode, 0)
 	
@@ -366,8 +394,6 @@ if MASTER then
 	local rud_hyd_sw = get(hydro_ra56_rud_1) + get(hydro_ra56_rud_2) + get(hydro_ra56_rud_3) > 1 and get(absu_ra56_yaw_fail) < 2
 	
 	local roll_handle = get(absu_turn_handle)
-	
-	local rud_toga = get(anim_rud1) + get(anim_rud2) + get(anim_rud3) > 0.99 * 3
 	
 	-- KATET selects the ILS reception profile, not HSI display or engagement.
 	local katet_source_changed = katet_mode_now ~= katet_mode_last

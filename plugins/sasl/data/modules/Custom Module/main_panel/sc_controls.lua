@@ -1,59 +1,73 @@
 -- this is flight controls override script for SmartCopilot
 
--- Sim Datarefs
---defineProperty("yoke_pitch_ratio", globalPropertyf("sim/joystick/yoke_pitch_ratio")) 
---defineProperty("yoke_roll_ratio", globalPropertyf("sim/joystick/yoke_roll_ratio")) 
---defineProperty("yoke_heading_ratio", globalPropertyf("sim/joystick/yoke_heading_ratio")) 
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("yoke_pitch_ratio", globalPropertyf("sim/cockpit2/controls/yoke_pitch_ratio")) -- pitch position of joytick
-defineProperty("yoke_roll_ratio", globalPropertyf("sim/cockpit2/controls/yoke_roll_ratio")) -- roll position of joystick
-defineProperty("yoke_heading_ratio", globalPropertyf("sim/cockpit2/controls/yoke_heading_ratio")) -- yaw position of joystick
+defineProps({
+    -- Simulator controls.
+    -- { "yoke_pitch_ratio", "sim/joystick/yoke_pitch_ratio", globalPropertyf },
+    -- { "yoke_roll_ratio", "sim/joystick/yoke_roll_ratio", globalPropertyf },
+    -- { "yoke_heading_ratio", "sim/joystick/yoke_heading_ratio", globalPropertyf },
+    { "yoke_pitch_ratio", "sim/cockpit2/controls/yoke_pitch_ratio", globalPropertyf }, -- Joystick pitch position.
+    { "yoke_roll_ratio", "sim/cockpit2/controls/yoke_roll_ratio", globalPropertyf }, -- Joystick roll position.
+    { "yoke_heading_ratio", "sim/cockpit2/controls/yoke_heading_ratio", globalPropertyf }, -- Joystick yaw position.
 
-defineProperty("ENGN_thro_0", globalProperty("sim/flightmodel/engine/ENGN_thro[0]")) 
-defineProperty("ENGN_thro_1", globalProperty("sim/flightmodel/engine/ENGN_thro[1]")) 
-defineProperty("ENGN_thro_2", globalProperty("sim/flightmodel/engine/ENGN_thro[2]")) 
+    { "ENGN_thro_0", "sim/flightmodel/engine/ENGN_thro[0]", globalProperty },
+    { "ENGN_thro_1", "sim/flightmodel/engine/ENGN_thro[1]", globalProperty },
+    { "ENGN_thro_2", "sim/flightmodel/engine/ENGN_thro[2]", globalProperty },
 
-defineProperty("ENGN_propmode_0", globalProperty("sim/flightmodel/engine/ENGN_propmode[0]")) 
-defineProperty("ENGN_propmode_2", globalProperty("sim/flightmodel/engine/ENGN_propmode[2]")) 
+    -- Propeller-mode synchronization below is disabled; no active consumers.
+    -- { "ENGN_propmode_0", "sim/flightmodel/engine/ENGN_propmode[0]", globalProperty },
+    -- { "ENGN_propmode_2", "sim/flightmodel/engine/ENGN_propmode[2]", globalProperty },
 
-defineProperty("tire_steer_command_deg", globalProperty("sim/flightmodel2/gear/tire_steer_command_deg[0]")) 
+    { "tire_steer_command_deg", "sim/flightmodel2/gear/tire_steer_command_deg[0]", globalProperty },
 
-defineProperty("l_brake_add", globalPropertyf("sim/flightmodel/controls/l_brake_add")) 
-defineProperty("r_brake_add", globalPropertyf("sim/flightmodel/controls/r_brake_add")) 
-defineProperty("int_brakes_L", globalPropertyf("tu154/custom/brakes/int_brakes_L")) 
-defineProperty("int_brakes_R", globalPropertyf("tu154/custom/brakes/int_brakes_R")) 
-defineProperty("parkbrake", globalPropertyf("sim/flightmodel/controls/parkbrake")) 
+    -- Brake synchronization below is disabled; no active consumers.
+    -- { "l_brake_add", "sim/flightmodel/controls/l_brake_add", globalPropertyf },
+    -- { "r_brake_add", "sim/flightmodel/controls/r_brake_add", globalPropertyf },
+    -- { "int_brakes_L", "tu154/custom/brakes/int_brakes_L", globalPropertyf },
+    -- { "int_brakes_R", "tu154/custom/brakes/int_brakes_R", globalPropertyf },
+    -- { "parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf },
 
--- custom datarefs
-defineProperty("CS_pitch_ratio", globalPropertyf("tu154/custom/SC/yoke_pitch_ratio")) 
-defineProperty("SC_roll_ratio", globalPropertyf("tu154/custom/SC/yoke_roll_ratio")) 
-defineProperty("SC_heading_ratio", globalPropertyf("tu154/custom/SC/yoke_heading_ratio")) 
+    -- SmartCopilot control bridge.
+    { "CS_pitch_ratio", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf },
+    { "SC_roll_ratio", "tu154/custom/SC/yoke_roll_ratio", globalPropertyf },
+    { "SC_heading_ratio", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf },
 
-defineProperty("SC_ENGN_thro_0", globalPropertyf("tu154/custom/SC/engine/ENGN_thro_0")) 
-defineProperty("SC_ENGN_thro_1", globalPropertyf("tu154/custom/SC/engine/ENGN_thro_1")) 
-defineProperty("SC_ENGN_thro_2", globalPropertyf("tu154/custom/SC/engine/ENGN_thro_2")) 
+    { "SC_ENGN_thro_0", "tu154/custom/SC/engine/ENGN_thro_0", globalPropertyf },
+    { "SC_ENGN_thro_1", "tu154/custom/SC/engine/ENGN_thro_1", globalPropertyf },
+    { "SC_ENGN_thro_2", "tu154/custom/SC/engine/ENGN_thro_2", globalPropertyf },
 
-defineProperty("SC_ENGN_propmode_0", globalPropertyf("tu154/custom/SC/engine/ENGN_propmode_0")) 
-defineProperty("SC_ENGN_propmode_2", globalPropertyf("tu154/custom/SC/engine/ENGN_propmode_2")) 
+    -- Propeller-mode synchronization below is disabled; no active consumers.
+    -- { "SC_ENGN_propmode_0", "tu154/custom/SC/engine/ENGN_propmode_0", globalPropertyf },
+    -- { "SC_ENGN_propmode_2", "tu154/custom/SC/engine/ENGN_propmode_2", globalPropertyf },
 
-defineProperty("SC_tire_steer", globalPropertyf("tu154/custom/SC/gear/tire_steer_command_deg")) 
+    { "SC_tire_steer", "tu154/custom/SC/gear/tire_steer_command_deg", globalPropertyf },
 
-defineProperty("SC_l_brake_add", globalPropertyf("tu154/custom/SC/controls/l_brake_add")) 
-defineProperty("SC_r_brake_add", globalPropertyf("tu154/custom/SC/controls/r_brake_add")) 
+    -- Brake synchronization below is disabled; no active consumers.
+    -- { "SC_l_brake_add", "tu154/custom/SC/controls/l_brake_add", globalPropertyf },
+    -- { "SC_r_brake_add", "tu154/custom/SC/controls/r_brake_add", globalPropertyf },
+    -- { "SC_int_brakes_L", "tu154/custom/SC/brakes/int_brakes_L", globalPropertyf },
+    -- { "SC_int_brakes_R", "tu154/custom/SC/brakes/int_brakes_R", globalPropertyf },
+    -- { "SC_parkbrake", "tu154/custom/SC/controls/parkbrake", globalPropertyf },
 
-defineProperty("SC_int_brakes_L", globalPropertyf("tu154/custom/SC/brakes/int_brakes_L")) 
-defineProperty("SC_int_brakes_R", globalPropertyf("tu154/custom/SC/brakes/int_brakes_R")) 
+    -- SmartCopilot connection and ownership.
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master.
+    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 0 = absent, 1 = no control, 2 = has control.
+    { "control_thro_other", "tu154/custom/SC/control_thro_other", globalPropertyf },
 
-defineProperty("SC_parkbrake", globalPropertyf("tu154/custom/SC/controls/parkbrake")) 
-
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
-
-defineProperty("control_thro_other", globalPropertyf("tu154/custom/SC/control_thro_other")) --    -
-
--- overrides
-defineProperty("override_wheel_steer", globalPropertyf("sim/operation/override/override_wheel_steer")) -- wheel steering
+    -- Wheel-steering override.
+    { "override_wheel_steer", "sim/operation/override/override_wheel_steer", globalPropertyf },
+})
 
 local conr_last = true
 set(override_wheel_steer, 0)

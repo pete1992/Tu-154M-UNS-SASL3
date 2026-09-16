@@ -52,6 +52,7 @@ end
 -----------------------------------------------------------------------
 local AP_stab          = sasl.findCommand("sim/autopilot/fdir_on")
 local AP_AT            = sasl.findCommand("sim/autopilot/autothrottle_toggle")
+local AP_AT_CUSTOM = sasl.createCommand("tu154/absu/autothrottle_toggle", "Tu-154M: Autothrottle toggle (C button)")
 local AP_ZK            = sasl.findCommand("sim/autopilot/heading")
 local AP_wing_level    = sasl.findCommand("sim/autopilot/wing_leveler")
 local AP_turn_left     = sasl.findCommand("sim/autopilot/override_left")
@@ -81,11 +82,29 @@ local function AP_stab_hnd(phase)
 end
 sasl.registerCommandHandler(AP_stab, 0, AP_stab_hnd)
 
+local at_release_updates = 0
 local function AP_AT_hnd(phase)
-    if phase == 1 then set(absu_stab_speed, 1) else set(absu_stab_speed, 0) end
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        at_release_updates = 0
+        set(absu_stab_speed, 1)
+    elseif phase == SASL_COMMAND_END then
+        -- Keep a commandOnce/short hardware tap visible for one AT update,
+        -- regardless of the ordering of the two SASL components.
+        at_release_updates = 2
+    end
     return 0
 end
-sasl.registerCommandHandler(AP_AT, 0, AP_AT_hnd)
+-- Consume the native alias BEFORE X-Plane can start its own throttle servo.
+-- The dedicated command and existing controller bindings drive only our C key.
+sasl.registerCommandHandler(AP_AT, 1, AP_AT_hnd)
+sasl.registerCommandHandler(AP_AT_CUSTOM, 1, AP_AT_hnd)
+
+function update()
+    if at_release_updates > 0 then
+        at_release_updates = at_release_updates - 1
+        if at_release_updates == 0 then set(absu_stab_speed, 0) end
+    end
+end
 
 local function AP_ZK_hnd(phase)
     if phase == 1 then set(absu_zk, 1) else set(absu_zk, 0) end

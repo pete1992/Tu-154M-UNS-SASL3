@@ -66,6 +66,7 @@ defineProps({
 	-- timing
 	{"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
 	{"sim_paused", "sim/time/paused", globalPropertyi},
+	{"native_at_mode", "sim/cockpit2/autopilot/autothrottle_enabled", globalPropertyi}, -- Native servo must not compete with the custom AT.
 	-- results (indications / outputs)
 	{"ias_yellow_left", "tu154/custom/gauges/speed/ias_yellow_left", globalPropertyf},                 -- yellow marker on captain's IAS
 	{"ias_yellow_right", "tu154/custom/gauges/speed/ias_yellow_right", globalPropertyf},               -- yellow marker on FO's IAS
@@ -124,11 +125,13 @@ local manual_toga_override = false
 local previous_at_mode = nil
 local previous_at_owner = nil
 local pending_command_disconnect = nil
+local toga_pitch_last = get(pitch_sub_mode)
+local toga_button_last = get(toga_command) == 1
 
--- sc_controls copies the selected pilot's native ENGN_thro into these DataRefs.
--- AT moves only rud_logic's internal lever position / ENGN_thro_use, so servo
--- movement cannot look like pilot input. Common axes and remote pilots use the
--- same existing route; compare each lever separately to support a single axis.
+-- SC carries X-Plane throttle-handle commands, NOT isolated hardware-axis data.
+-- The native AT can change those handles too, so it must remain disarmed below.
+-- Our own servo changes only rud_logic's internal position / ENGN_thro_use.
+-- Keep the shared input route for physical axes, mouse input and remote pilots.
 local function pilotMovedThrottles(active, master, passed)
 	local owner = get(ismaster) * 10 + get(hascontrol_1) * 2 + get(control_thro_other)
 	local rebase = not active or not master or not pilot_inputs_active or owner ~= pilot_input_owner
@@ -202,6 +205,14 @@ function update()
 	-- Smartcopilot: treat "not slave" as write-enabled
 	local MASTER = get(ismaster) ~= 1
 	local passed = get(frame_time)
+	-- This aircraft uses its own throttle controller. Clear a native AT left on
+	-- by a prior native command or saved flight; do not override any other AP axis.
+	if MASTER and get(native_at_mode) ~= -1 then set(native_at_mode, -1) end
+	local toga_pitch = get(pitch_sub_mode)
+	local toga_button = get(toga_command) == 1
+	local toga_requested = (toga_pitch == 6 and toga_pitch_last ~= 6)
+		or (toga_button and not toga_button_last)
+	toga_pitch_last, toga_button_last = toga_pitch, toga_button
 
 	-- inputs / switches
 	local channel_off = get(absu_speed_off)                    -- 1 = off ch1, -1 = off ch2
@@ -268,7 +279,9 @@ function update()
 		AT_mode = 2
 		disconnect_reason = "enroute"
 		stab_counter = 0
-	elseif power and prepare and AT_mode == 3 and stu_pitch_ready and get(pitch_sub_mode) == 6 then
+	elseif power and prepare and AT_mode == 3 and stu_pitch_ready and toga_pitch == 6 and toga_requested then
+		-- A completed/cancelled go-around may leave pitch mode 6 selected. Only
+		-- a fresh request may advance the levers again, never a new C-key press.
 		AT_mode = 4 -- TOGA
 		stab_counter = 0
 	elseif (rud_work_1 + rud_work_2 + rud_work_3) < 2 and AT_mode >= 3 then
