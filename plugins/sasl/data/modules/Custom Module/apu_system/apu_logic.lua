@@ -29,7 +29,7 @@ defineProps({
     -- Fuel quantity
     { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- Fuel weight in tank 1
     -- APU outputs
-    { "apu_air_press", "tu154/custom/eng/apu_air_press", globalPropertyf }, -- Air pressure available for engine start
+    -- { "apu_air_press", "tu154/custom/eng/apu_air_press", globalPropertyf }, -- Unused in this component; DataRef remains available.
     { "apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf }, -- Bleed air door position
     { "apu_fuel_p", "tu154/custom/eng/apu_fuel_p", globalPropertyf }, -- APU fuel pressure
     -- APU electrical system
@@ -50,7 +50,7 @@ defineProps({
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf }, -- Aircraft elevation above mean sea level
     { "baro_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf }, -- Sea-level barometric pressure in inHg
     -- Aircraft state reset
-    { "reset_state", "tu154/custom/reset_state", globalPropertyi }, -- Reset aircraft state
+    -- { "reset_state", "tu154/custom/reset_state", globalPropertyi }, -- No reset-state consumer in this component.
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 plugin unavailable, 1 slave, 2 master
     { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 0 plugin unavailable, 1 no control, 2 has control

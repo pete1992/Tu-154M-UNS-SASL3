@@ -8,7 +8,7 @@ TEXTURE_NORMAL	cockpit_side_panel_RUS_NML.png
 GLOBAL_specular 1.0
 TEXTURE_LIT	cockpit_side_panel_RUS_LIT.png
 POINT_COUNTS 234 0 0 459
-NORMAL_METALNESS
+# Blue follows albedo brightness, not material F0; retain dielectric reflections.
 
 VT -0.211533 -1.366501 -21.448151 0.063644 0.105438 0.992386 0.529953 0.216751
 VT -0.212204 -1.350571 -21.449554 0.038177 0.054520 0.997787 0.529099 0.238159

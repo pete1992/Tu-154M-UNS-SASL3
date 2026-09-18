@@ -1,0 +1,16 @@
+A
+800
+OBJ
+
+TEXTURE aircraft_particles.png
+# Load only the supported Tu-154M effect, not the donor aircraft's emitter library.
+PARTICLE_SYSTEM apu_effects.pss
+
+POINT_COUNTS	0 0 0 0
+
+# Same model origin as fuselage.obj; aft direction is set inside the PSS.
+EMITTER apu_effects 0 -0.05 17.2 0 0 0
+# Ground deicing is intentionally inactive until its service logic is implemented.
+# Donor emitter definitions remain in aircraft_particles.pss for future work.
+# EMITTER de_ice -9.936 -2.94227 1.80017 0 0 0
+# EMITTER de_ice2 10.1831 -3.1795 5.21665 0 0 0
