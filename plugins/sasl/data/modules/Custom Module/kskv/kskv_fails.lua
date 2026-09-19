@@ -1,24 +1,39 @@
+-- kskv_fails.lua
 -- air bleed fails
 
-defineProperty("airbleed_1", globalPropertyi("tu154/custom/failures/airbleed_1")) --     
-defineProperty("airbleed_2", globalPropertyi("tu154/custom/failures/airbleed_2")) --     
-defineProperty("airbleed_3", globalPropertyi("tu154/custom/failures/airbleed_3")) --     
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("psvp_fail_left", globalPropertyi("tu154/custom/failures/psvp_fail_left")) --  
-defineProperty("psvp_fail_right", globalPropertyi("tu154/custom/failures/psvp_fail_right")) --  
+defineProps({
+    { "airbleed_1", "tu154/custom/failures/airbleed_1", globalPropertyi }, --
+    { "airbleed_2", "tu154/custom/failures/airbleed_2", globalPropertyi }, --
+    { "airbleed_3", "tu154/custom/failures/airbleed_3", globalPropertyi }, --
 
-defineProperty("tth_left_fail", globalPropertyi("tu154/custom/failures/tth_left_fail")) --  
-defineProperty("tth_right_fail", globalPropertyi("tu154/custom/failures/tth_right_fail")) --  
+    { "psvp_fail_left", "tu154/custom/failures/psvp_fail_left", globalPropertyi }, --
+    { "psvp_fail_right", "tu154/custom/failures/psvp_fail_right", globalPropertyi }, --
 
-defineProperty("sard_valve_fail", globalPropertyi("tu154/custom/failures/sard_valve_fail")) --   
+    { "tth_left_fail", "tu154/custom/failures/tth_left_fail", globalPropertyi }, --
+    { "tth_right_fail", "tu154/custom/failures/tth_right_fail", globalPropertyi }, --
 
--- define sources
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
+    { "sard_valve_fail", "tu154/custom/failures/sard_valve_fail", globalPropertyi }, --
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- define sources
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local fail_counter = 0
 local check_time = math.random(15, 30)

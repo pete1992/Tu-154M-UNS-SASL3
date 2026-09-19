@@ -1,59 +1,74 @@
+-- taws_warn_logic.lua
 -- this is TAWS warning logic
 
 -- sources
-defineProperty("vvi_L", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")) -- vertical speed in ft/min
-defineProperty("vvi_R", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_copilot"))
-defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))  --    
-defineProperty("mach_svs", globalPropertyf("tu154/custom/svs/machno")) -- Mach number
-defineProperty("alt_svs", globalPropertyf("tu154/custom/svs/altitude")) -- Altitude by 1013 hpa
-defineProperty("vbe_alt_left", globalPropertyf("tu154/custom/gauges/alt/vbe_alt_left"))  -- indicated altitude in meters
-defineProperty("vbe_alt_right", globalPropertyf("tu154/custom/gauges/alt/vbe_alt_right"))  -- indicated altitude in meters
-defineProperty("speed", globalPropertyf("sim/flightmodel/position/groundspeed"))
-defineProperty("course", globalPropertyf("sim/flightmodel/position/psi")) -- angle between -Z axis and airplane's nose
-defineProperty("course_fly", globalPropertyf("sim/flightmodel/position/hpath")) -- course, where aircraft actually flies
-defineProperty("elevation", globalPropertyf("sim/flightmodel/position/elevation"))
-defineProperty("pos_x", globalPropertyf("sim/flightmodel/position/local_x")) -- longtitude. positive from W to E
-defineProperty("pos_y", globalPropertyf("sim/flightmodel/position/local_y")) -- altitude. positive UP
-defineProperty("pos_z", globalPropertyf("sim/flightmodel/position/local_z")) -- latitude. positive from N to S
-defineProperty("gear1_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[0]"))  -- deploy of front gear
-defineProperty("gear2_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[1]"))  -- deploy of right gear
-defineProperty("gear3_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[2]"))  -- deploy of left gear
-defineProperty("deflection_mtr_1", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]")) -- 
-defineProperty("deflection_mtr_2", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]")) -- 
-defineProperty("deflection_mtr_3", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]")) -- 
-defineProperty("flap_inn_L", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def")) -- inner flaps left
-defineProperty("flap_inn_R", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def")) -- inner flaps right
-defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
-defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
-defineProperty("rpm_high_3", globalPropertyf("tu154/custom/gauges/engine/rpm_high_3")) --     №3
-defineProperty("nav_cs", globalPropertyf("tu154/custom/radio/nav1_cs"))
-defineProperty("nav_gs", globalPropertyf("tu154/custom/radio/nav1_gs"))
-defineProperty("nav_cs_flag", globalPropertyi("tu154/custom/radio/nav1_cs_flag"))
-defineProperty("nav_gs_flag", globalPropertyi("tu154/custom/radio/nav1_gs_flag"))
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
--- controls
-defineProperty("taws_english", globalPropertyi("tu154/custom/taws/taws_english")) --  . 0 - , 1 - 	0
-defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 - 
-defineProperty("egpws_alarm_1", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1")) --   
-defineProperty("egpws_alarm_2", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2")) --   
-defineProperty("egpws_relief", globalPropertyi("tu154/custom/switchers/ovhd/egpws_relief")) -- 
-defineProperty("egpws_mode", globalPropertyi("tu154/custom/switchers/ovhd/egpws_mode")) -- QNH - QFE
-defineProperty("egpws_control", globalPropertyi("tu154/custom/buttons/ovhd/egpws_control")) --   
-defineProperty("egpws_contr_gs", globalPropertyi("tu154/custom/buttons/ovhd/egpws_contr_gs")) --   
--- results
-defineProperty("taws_message", globalPropertyi("tu154/custom/taws/taws_message")) -- 
--- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain, 
--- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
-defineProperty("taws_eng_phrase", globalPropertyi("tu154/custom/sounds/taws_eng_phrase")) --     
-defineProperty("taws_rus_phrase", globalPropertyi("tu154/custom/sounds/taws_rus_phrase")) --     
-defineProperty("taws_alt_left", globalPropertyi("tu154/custom/taws/taws_alt_left")) --     
-defineProperty("taws_alt_right", globalPropertyi("tu154/custom/taws/taws_alt_right")) --     
-defineProperty("gs_msg_int", globalPropertyf("tu154/custom/taws/gs_msg_int")) --   
-defineProperty("gs_msg_vol", globalPropertyf("tu154/custom/taws/gs_msg_vol")) --   
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
+
+defineProps({
+    { "vvi_L", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf }, -- vertical speed in ft/min
+    { "vvi_R", "sim/cockpit2/gauges/indicators/vvi_fpm_copilot", globalPropertyf },
+    { "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf },  --
+    { "mach_svs", "tu154/custom/svs/machno", globalPropertyf }, -- Mach number
+    { "alt_svs", "tu154/custom/svs/altitude", globalPropertyf }, -- Altitude by 1013 hpa
+    { "vbe_alt_left", "tu154/custom/gauges/alt/vbe_alt_left", globalPropertyf },  -- indicated altitude in meters
+    { "vbe_alt_right", "tu154/custom/gauges/alt/vbe_alt_right", globalPropertyf },  -- indicated altitude in meters
+    { "speed", "sim/flightmodel/position/groundspeed", globalPropertyf },
+    { "course", "sim/flightmodel/position/psi", globalPropertyf }, -- angle between -Z axis and airplane's nose
+    { "course_fly", "sim/flightmodel/position/hpath", globalPropertyf }, -- course, where aircraft actually flies
+    { "elevation", "sim/flightmodel/position/elevation", globalPropertyf },
+    { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- longtitude. positive from W to E
+    { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- altitude. positive UP
+    { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- latitude. positive from N to S
+    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },  -- deploy of front gear
+    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },  -- deploy of right gear
+    { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },  -- deploy of left gear
+    -- { "deflection_mtr_1", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, --
+    { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, --
+    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, --
+    { "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- inner flaps left
+    { "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- inner flaps right
+    { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, --     №1
+    { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf }, --     №2
+    { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf }, --     №3
+    -- { "nav_cs", "tu154/custom/radio/nav1_cs", globalPropertyf },
+    { "nav_gs", "tu154/custom/radio/nav1_gs", globalPropertyf },
+    -- { "nav_cs_flag", "tu154/custom/radio/nav1_cs_flag", globalPropertyi },
+    { "nav_gs_flag", "tu154/custom/radio/nav1_gs_flag", globalPropertyi },
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    -- controls
+    { "taws_english", "tu154/custom/taws/taws_english", globalPropertyi }, --  . 0 - , 1 - 	0
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 -
+    { "egpws_alarm_1", "tu154/custom/switchers/ovhd/egpws_alarm_1", globalPropertyi }, --
+    { "egpws_alarm_2", "tu154/custom/switchers/ovhd/egpws_alarm_2", globalPropertyi }, --
+    { "egpws_relief", "tu154/custom/switchers/ovhd/egpws_relief", globalPropertyi }, --
+    { "egpws_mode", "tu154/custom/switchers/ovhd/egpws_mode", globalPropertyi }, -- QNH - QFE
+    -- { "egpws_control", "tu154/custom/buttons/ovhd/egpws_control", globalPropertyi }, --
+    { "egpws_contr_gs", "tu154/custom/buttons/ovhd/egpws_contr_gs", globalPropertyi }, --
+    -- results
+    { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi }, --
+    -- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain,
+    -- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
+    { "taws_eng_phrase", "tu154/custom/sounds/taws_eng_phrase", globalPropertyi }, --
+    { "taws_rus_phrase", "tu154/custom/sounds/taws_rus_phrase", globalPropertyi }, --
+    { "taws_alt_left", "tu154/custom/taws/taws_alt_left", globalPropertyi }, --
+    { "taws_alt_right", "tu154/custom/taws/taws_alt_right", globalPropertyi }, --
+    -- { "gs_msg_int", "tu154/custom/taws/gs_msg_int", globalPropertyf }, --
+    { "gs_msg_vol", "tu154/custom/taws/gs_msg_vol", globalPropertyf }, --
+    -- Smart Copilot
+    -- { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local rv_last = get(rv5_alt)
 local sm_rv_vvi = 0 -- smoothed

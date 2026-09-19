@@ -111,9 +111,9 @@ defineProps({
     {"chip_detect2", "sim/cockpit/warnings/annunciators/chip_detected[1]", globalProperty}, -- chip in engine1
     {"chip_detect3", "sim/cockpit/warnings/annunciators/chip_detected[2]", globalProperty}, -- chip in engine1
 
-    {"fuel_p_1", "sim/cockpit2/engine/indicators/fuel_pressure_psi[0]", globalProperty},
-    {"fuel_p_2", "sim/cockpit2/engine/indicators/fuel_pressure_psi[1]", globalProperty},
-    {"fuel_p_3", "sim/cockpit2/engine/indicators/fuel_pressure_psi[2]", globalProperty},
+    -- {"fuel_p_1", "sim/cockpit2/engine/indicators/fuel_pressure_psi[0]", globalProperty},
+    -- {"fuel_p_2", "sim/cockpit2/engine/indicators/fuel_pressure_psi[1]", globalProperty},
+    -- {"fuel_p_3", "sim/cockpit2/engine/indicators/fuel_pressure_psi[2]", globalProperty},
 
     {"oil_p_1", "sim/cockpit2/engine/indicators/oil_pressure_psi[0]", globalProperty},
     {"oil_p_2", "sim/cockpit2/engine/indicators/oil_pressure_psi[1]", globalProperty},
@@ -138,9 +138,9 @@ defineProps({
 
     {"stu_mode", "tu154/custom/absu/stu_mode", globalPropertyi}, --    0 - , 1 - , 2 - , 3 , 4 -
 
-    {"engn_oil_qty_1", "tu154/custom/failures/engn_oil_qty_1", globalPropertyf},
-    {"engn_oil_qty_2", "tu154/custom/failures/engn_oil_qty_2", globalPropertyf},
-    {"engn_oil_qty_3", "tu154/custom/failures/engn_oil_qty_3", globalPropertyf},
+    -- {"engn_oil_qty_1", "tu154/custom/failures/engn_oil_qty_1", globalPropertyf},
+    -- {"engn_oil_qty_2", "tu154/custom/failures/engn_oil_qty_2", globalPropertyf},
+    -- {"engn_oil_qty_3", "tu154/custom/failures/engn_oil_qty_3", globalPropertyf},
 
     {"oil_qty_1", "tu154/custom/gauges/eng/oil_qty_1", globalPropertyf},
     {"oil_qty_2", "tu154/custom/gauges/eng/oil_qty_2", globalPropertyf},

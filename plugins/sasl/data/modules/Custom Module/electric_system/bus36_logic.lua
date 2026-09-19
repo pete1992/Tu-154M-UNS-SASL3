@@ -1,3 +1,4 @@
+-- bus36_logic.lua
 -- 36V Bus Logic for Tu-154M X-Plane 11
 -- All comments in English, code refactored for clarity and robustness
 
@@ -9,8 +10,14 @@
 --  Bus 4: Powered from PTS250_2 (connected to 27V left bus)
 
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        _G[d[1]] = d[3](d[2])
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
@@ -53,11 +60,11 @@ defineProps({
     {"pts250_1_fail", "tu154/custom/failures/pts250_1_fail", globalPropertyi},
     {"pts250_2_fail", "tu154/custom/failures/pts250_2_fail", globalPropertyi},
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-})
 
--- Smartcopilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- Smartcopilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 function update()
     -- Only execute on master instance

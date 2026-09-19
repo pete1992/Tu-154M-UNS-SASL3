@@ -1,152 +1,167 @@
-defineProperty("reset_crew", globalPropertyi("tu154/custom/sound/reset_crew")) --   
+-- voice_talk.lua
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- sources
+defineProps({
+    { "reset_crew", "tu154/custom/sound/reset_crew", globalPropertyi }, --
 
--- gears
-defineProperty("deflection_mtr_1", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]")) -- 
-defineProperty("deflection_mtr_2", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]")) -- 
-defineProperty("deflection_mtr_3", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]")) -- 
+    -- sources
 
-defineProperty("gear1_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[0]"))  -- deploy of front gear
-defineProperty("gear2_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[1]"))  -- deploy of right gear
-defineProperty("gear3_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[2]"))  -- deploy of left gear
+    -- gears
+    { "deflection_mtr_1", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, --
+    { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, --
+    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, --
 
-defineProperty("groundspeed", globalPropertyf("sim/flightmodel/position/groundspeed")) -- GS, m/s
+    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },  -- deploy of front gear
+    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },  -- deploy of right gear
+    { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },  -- deploy of left gear
 
--- controls
-defineProperty("nosewheel_turn_sel", globalPropertyi("tu154/custom/switchers/nosewheel_turn_sel")) --     . 0 - 10, 1 - 63
-defineProperty("parking_brake", globalPropertyi("tu154/custom/controll/parking_brake")) --   
-defineProperty("l_brake_add", globalPropertyf("sim/flightmodel/controls/l_brake_add")) -- Left Brake
-defineProperty("r_brake_add", globalPropertyf("sim/flightmodel/controls/r_brake_add")) -- Right Brake
+    { "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf }, -- GS, m/s
 
-defineProperty("turn_rate_ind", globalPropertyf("tu154/custom/gauges/misc/turn_rate_ind")) --  
-defineProperty("big_course_needle", globalPropertyf("tu154/custom/gauges/compas/big_course_needle")) --  ""
+    -- controls
+    { "nosewheel_turn_sel", "tu154/custom/switchers/nosewheel_turn_sel", globalPropertyi }, --     . 0 - 10, 1 - 63
+    { "parking_brake", "tu154/custom/controll/parking_brake", globalPropertyi }, --
+    { "l_brake_add", "sim/flightmodel/controls/l_brake_add", globalPropertyf }, -- Left Brake
+    { "r_brake_add", "sim/flightmodel/controls/r_brake_add", globalPropertyf }, -- Right Brake
 
--- flaps and stab
+    { "turn_rate_ind", "tu154/custom/gauges/misc/turn_rate_ind", globalPropertyf }, --
+    { "big_course_needle", "tu154/custom/gauges/compas/big_course_needle", globalPropertyf }, --  ""
 
-defineProperty("stab_man_cap", globalPropertyi("tu154/custom/controll/stab_man_cap")) --    
-defineProperty("stab_ind", globalPropertyf("tu154/custom/gauges/misc/stab_ind")) --   
-defineProperty("flap_left_ind", globalPropertyf("tu154/custom/gauges/misc/flap_left_ind")) --   
-defineProperty("flap_right_ind", globalPropertyf("tu154/custom/gauges/misc/flap_right_ind")) --   
-defineProperty("slat_man", globalPropertyi("tu154/custom/switchers/slat_man")) --   . -1 - , 0 , +1 - 
-defineProperty("slats", globalPropertyf("sim/flightmodel2/controls/slat1_deploy_ratio")) -- slats position. this one works too
-defineProperty("gear_lever", globalPropertyi("tu154/custom/controll/gear_lever")) --   . -1 - , 0 - , +1 - 
-defineProperty("int_pitch_trim", globalPropertyf("tu154/custom/trimmers/int_pitch_trim"))
+    -- flaps and stab
 
-defineProperty("spoilers_inn_left", globalPropertyf("tu154/custom/lights/spoilers_inn_left")) --   
-defineProperty("spoilers_inn_right", globalPropertyf("tu154/custom/lights/spoilers_inn_right")) --   
-defineProperty("spoilers_lever", globalPropertyf("tu154/custom/controlls/spoilers_lever")) --  
+    { "stab_man_cap", "tu154/custom/controll/stab_man_cap", globalPropertyi }, --
+    { "stab_ind", "tu154/custom/gauges/misc/stab_ind", globalPropertyf }, --
+    { "flap_left_ind", "tu154/custom/gauges/misc/flap_left_ind", globalPropertyf }, --
+    { "flap_right_ind", "tu154/custom/gauges/misc/flap_right_ind", globalPropertyf }, --
+    { "slat_man", "tu154/custom/switchers/slat_man", globalPropertyi }, --   . -1 - , 0 , +1 -
+    { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf }, -- slats position. this one works too
+    { "gear_lever", "tu154/custom/controll/gear_lever", globalPropertyi }, --   . -1 - , 0 - , +1 -
+    { "int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf },
 
--- batteries
-defineProperty("bat1_on", globalPropertyi("tu154/custom/switchers/eng/bat1_on")) --  1
-defineProperty("bat2_on", globalPropertyi("tu154/custom/switchers/eng/bat2_on")) --  2
-defineProperty("bat3_on", globalPropertyi("tu154/custom/switchers/eng/bat3_on")) --  3
-defineProperty("bat4_on", globalPropertyi("tu154/custom/switchers/eng/bat4_on")) --  4
+    { "spoilers_inn_left", "tu154/custom/lights/spoilers_inn_left", globalPropertyf }, --
+    { "spoilers_inn_right", "tu154/custom/lights/spoilers_inn_right", globalPropertyf }, --
+    { "spoilers_lever", "tu154/custom/controlls/spoilers_lever", globalPropertyf }, --
 
--- APU
-defineProperty("apu_main_switch", globalPropertyi("tu154/custom/switchers/eng/apu_main_switch")) --  
-defineProperty("apu_start_mode", globalPropertyi("tu154/custom/switchers/eng/apu_start_mode")) --   
-defineProperty("apu_n1", globalPropertyf("tu154/custom/eng/apu_n1")) --  
-defineProperty("apu_fuel_p", globalPropertyf("tu154/custom/eng/apu_fuel_p")) --   
-defineProperty("apu_doors", globalPropertyf("tu154/custom/anim/apu_doors")) --   . 0 - , 1 - .
+    -- batteries
+    { "bat1_on", "tu154/custom/switchers/eng/bat1_on", globalPropertyi }, --  1
+    { "bat2_on", "tu154/custom/switchers/eng/bat2_on", globalPropertyi }, --  2
+    { "bat3_on", "tu154/custom/switchers/eng/bat3_on", globalPropertyi }, --  3
+    { "bat4_on", "tu154/custom/switchers/eng/bat4_on", globalPropertyi }, --  4
 
--- engines
-defineProperty("starter_pressure", globalPropertyf("tu154/custom/start/starter_pressure")) --    
-defineProperty("starter_cap", globalPropertyi("tu154/custom/switchers/eng/starter_cap")) --   
-defineProperty("starter_switch", globalPropertyi("tu154/custom/switchers/eng/starter_switch")) --  
-defineProperty("starter_eng_select", globalPropertyi("tu154/custom/switchers/eng/starter_eng_select")) --  
-defineProperty("starter_mode", globalPropertyi("tu154/custom/switchers/eng/starter_mode")) --  
+    -- APU
+    { "apu_main_switch", "tu154/custom/switchers/eng/apu_main_switch", globalPropertyi }, --
+    { "apu_start_mode", "tu154/custom/switchers/eng/apu_start_mode", globalPropertyi }, --
+    { "apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf }, --
+    { "apu_fuel_p", "tu154/custom/eng/apu_fuel_p", globalPropertyf }, --
+    { "apu_doors", "tu154/custom/anim/apu_doors", globalPropertyf }, --   . 0 - , 1 - .
 
-defineProperty("starter_start", globalPropertyi("tu154/custom/buttons/eng/starter_start")) --  
+    -- engines
+    -- { "starter_pressure", "tu154/custom/start/starter_pressure", globalPropertyf }, --
+    { "starter_cap", "tu154/custom/switchers/eng/starter_cap", globalPropertyi }, --
+    { "starter_switch", "tu154/custom/switchers/eng/starter_switch", globalPropertyi }, --
+    -- { "starter_eng_select", "tu154/custom/switchers/eng/starter_eng_select", globalPropertyi }, --
+    { "starter_mode", "tu154/custom/switchers/eng/starter_mode", globalPropertyi }, --
 
-defineProperty("apd_working_1", globalPropertyf("tu154/custom/start/apd_working_1")) --   
-defineProperty("apd_working_2", globalPropertyf("tu154/custom/start/apd_working_2")) --   
-defineProperty("apd_working_3", globalPropertyf("tu154/custom/start/apd_working_3")) --   
+    -- { "starter_start", "tu154/custom/buttons/eng/starter_start", globalPropertyi }, --
 
-defineProperty("eng_rpm1", globalProperty("sim/flightmodel/engine/ENGN_N2_[0]"))   
-defineProperty("eng_rpm2", globalProperty("sim/flightmodel/engine/ENGN_N2_[1]"))
-defineProperty("eng_rpm3", globalProperty("sim/flightmodel/engine/ENGN_N2_[2]"))
+    { "apd_working_1", "tu154/custom/start/apd_working_1", globalPropertyf }, --
+    { "apd_working_2", "tu154/custom/start/apd_working_2", globalPropertyf }, --
+    { "apd_working_3", "tu154/custom/start/apd_working_3", globalPropertyf }, --
 
-defineProperty("engine_caps", globalPropertyi("tu154/custom/anim/engine_caps")) --   
-defineProperty("gear_blocks", globalPropertyi("tu154/custom/anim/gear_blocks")) --   
-defineProperty("sensors_caps", globalPropertyi("tu154/custom/anim/sensors_caps")) --   
+    { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
+    { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
+    { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
 
-defineProperty("slider_3", globalProperty("sim/cockpit2/switches/custom_slider_on[2]")) -- cargo 1
-defineProperty("slider_4", globalProperty("sim/cockpit2/switches/custom_slider_on[3]")) -- cargo 2
-defineProperty("slider_5", globalProperty("sim/cockpit2/switches/custom_slider_on[4]")) -- pax door 1
-defineProperty("slider_6", globalProperty("sim/cockpit2/switches/custom_slider_on[5]")) -- pax door 2
-defineProperty("slider_7", globalProperty("sim/cockpit2/switches/custom_slider_on[6]")) -- kitchen door
+    { "engine_caps", "tu154/custom/anim/engine_caps", globalPropertyi }, --
+    { "gear_blocks", "tu154/custom/anim/gear_blocks", globalPropertyi }, --
+    { "sensors_caps", "tu154/custom/anim/sensors_caps", globalPropertyi }, --
 
-defineProperty("sim_gen1_on", globalProperty("sim/cockpit/electrical/generator_on[0]"))
-defineProperty("sim_gen2_on", globalProperty("sim/cockpit/electrical/generator_on[1]"))
-defineProperty("sim_gen3_on", globalProperty("sim/cockpit/electrical/generator_on[2]"))
+    { "slider_3", "sim/cockpit2/switches/custom_slider_on[2]", globalProperty }, -- cargo 1
+    { "slider_4", "sim/cockpit2/switches/custom_slider_on[3]", globalProperty }, -- cargo 2
+    { "slider_5", "sim/cockpit2/switches/custom_slider_on[4]", globalProperty }, -- pax door 1
+    { "slider_6", "sim/cockpit2/switches/custom_slider_on[5]", globalProperty }, -- pax door 2
+    { "slider_7", "sim/cockpit2/switches/custom_slider_on[6]", globalProperty }, -- kitchen door
 
-defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
-defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
-defineProperty("rpm_high_3", globalPropertyf("tu154/custom/gauges/engine/rpm_high_3")) --     №3
+    { "sim_gen1_on", "sim/cockpit/electrical/generator_on[0]", globalProperty },
+    { "sim_gen2_on", "sim/cockpit/electrical/generator_on[1]", globalProperty },
+    { "sim_gen3_on", "sim/cockpit/electrical/generator_on[2]", globalProperty },
 
-defineProperty("revers_flap_L", globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")) -- reverse on left engine
-defineProperty("revers_flap_R", globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]")) -- reverse on right engine
+    { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, --     №1
+    { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf }, --     №2
+    { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf }, --     №3
 
--- speeds
-defineProperty("v1_15", globalPropertyi("tu154/custom/speeds/v1_15")) -- 
-defineProperty("vr_15", globalPropertyi("tu154/custom/speeds/vr_15")) -- 
-defineProperty("v2_15", globalPropertyi("tu154/custom/speeds/v2_15")) -- 
-defineProperty("v1_28", globalPropertyi("tu154/custom/speeds/v1_28")) -- 
-defineProperty("vr_28", globalPropertyi("tu154/custom/speeds/vr_28")) -- 
-defineProperty("v2_28", globalPropertyi("tu154/custom/speeds/v2_28")) -- 
+    { "revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalProperty }, -- reverse on left engine
+    { "revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalProperty }, -- reverse on right engine
 
-defineProperty("ias_left", globalPropertyf("tu154/custom/gauges/speed/ias_left")) --   
-defineProperty("ias_right", globalPropertyf("tu154/custom/gauges/speed/ias_right")) --   2
+    -- speeds
+    { "v1_15", "tu154/custom/speeds/v1_15", globalPropertyi }, --
+    { "vr_15", "tu154/custom/speeds/vr_15", globalPropertyi }, --
+    { "v2_15", "tu154/custom/speeds/v2_15", globalPropertyi }, --
+    { "v1_28", "tu154/custom/speeds/v1_28", globalPropertyi }, --
+    { "vr_28", "tu154/custom/speeds/vr_28", globalPropertyi }, --
+    { "v2_28", "tu154/custom/speeds/v2_28", globalPropertyi }, --
 
-defineProperty("ias_L", globalPropertyf("sim/cockpit2/gauges/indicators/airspeed_kts_pilot")) -- indicated airspeed in KTS
-defineProperty("ias_R", globalPropertyf("sim/cockpit2/gauges/indicators/airspeed_kts_copilot"))
+    -- { "ias_left", "tu154/custom/gauges/speed/ias_left", globalPropertyf }, --
+    -- { "ias_right", "tu154/custom/gauges/speed/ias_right", globalPropertyf }, --   2
 
-defineProperty("vvi_L", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")) -- vertical speed in ft/min
-defineProperty("vvi_R", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_copilot"))
+    { "ias_L", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf }, -- indicated airspeed in KTS
+    { "ias_R", "sim/cockpit2/gauges/indicators/airspeed_kts_copilot", globalPropertyf },
 
-defineProperty("VVI", globalPropertyf("sim/flightmodel/position/vh_ind")) -- vertical speed in m/s
-defineProperty("IAS", globalPropertyf("sim/flightmodel/position/indicated_airspeed")) -- Air speed indicated
+    { "vvi_L", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf }, -- vertical speed in ft/min
+    { "vvi_R", "sim/cockpit2/gauges/indicators/vvi_fpm_copilot", globalPropertyf },
 
-defineProperty("groundspeed", globalPropertyf("sim/flightmodel/position/groundspeed")) -- GS, m/s
+    { "VVI", "sim/flightmodel/position/vh_ind", globalPropertyf }, -- vertical speed in m/s
+    { "IAS", "sim/flightmodel/position/indicated_airspeed", globalPropertyf }, -- Air speed indicated
 
--- altitude
-defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))
-defineProperty("pressure_L", globalPropertyf("tu154/custom/gauges/alt/vbe_press_left"))
-defineProperty("pressure_R", globalPropertyf("tu154/custom/gauges/alt/vbe_press_right"))
-defineProperty("alt_mtr", globalPropertyf("tu154/custom/gauges/alt/vbe_alt_left"))  -- indicated altitude in meters
+    { "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf }, -- GS, m/s
 
-defineProperty("dh_set", globalPropertyf("tu154/custom/gauges/alt/radioalt_dh_left"))  -- DH angle
-defineProperty("rv_test_btn", globalPropertyf("tu154/custom/gauges/alt/radioalt_button_left"))  -- Test button
-defineProperty("rv_angle", globalPropertyf("tu154/custom/gauges/alt/radioalt_needle_left"))  -- RV needle
+    -- altitude
+    { "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf },
+    { "pressure_L", "tu154/custom/gauges/alt/vbe_press_left", globalPropertyf },
+    { "pressure_R", "tu154/custom/gauges/alt/vbe_press_right", globalPropertyf },
+    -- { "alt_mtr", "tu154/custom/gauges/alt/vbe_alt_left", globalPropertyf },  -- indicated altitude in meters
 
-defineProperty("rv_lamp", globalPropertyf("tu154/custom/lights/small/rv5_left_dh"))  -- RV lamp
+    { "dh_set", "tu154/custom/gauges/alt/radioalt_dh_left", globalPropertyf },  -- DH angle
+    { "rv_test_btn", "tu154/custom/gauges/alt/radioalt_button_left", globalPropertyf },  -- Test button
+    { "rv_angle", "tu154/custom/gauges/alt/radioalt_needle_left", globalPropertyf },  -- RV needle
 
--- ABSU
-defineProperty("roll_main_mode", globalPropertyi("tu154/custom/absu/roll_main_mode")) --     . 0 - , 1 -  - 2 - 
-defineProperty("pitch_main_mode", globalPropertyi("tu154/custom/absu/pitch_main_mode")) --     . 0 - , 1 -  - 2 - 
-defineProperty("stu_mode", globalPropertyi("tu154/custom/absu/stu_mode")) --    0 - , 1 - , 2 - , 3 , 4 - 	
+    { "rv_lamp", "tu154/custom/lights/small/rv5_left_dh", globalPropertyf },  -- RV lamp
 
--- lights
-defineProperty("landing_ext_set_L", globalPropertyi("tu154/custom/lights/landing_ext_set_L")) --   
-defineProperty("landing_ext_set_R", globalPropertyi("tu154/custom/lights/landing_ext_set_R")) --   
-defineProperty("landing_mode_set_L", globalPropertyi("tu154/custom/lights/landing_mode_set_L")) --   . -1 - , 0 - , +1 - 
-defineProperty("landing_mode_set_R", globalPropertyi("tu154/custom/lights/landing_mode_set_R")) --   
+    -- ABSU
+    { "roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi }, --     . 0 - , 1 -  - 2 -
+    { "pitch_main_mode", "tu154/custom/absu/pitch_main_mode", globalPropertyi }, --     . 0 - , 1 -  - 2 -
+    { "stu_mode", "tu154/custom/absu/stu_mode", globalPropertyi }, --    0 - , 1 - , 2 - , 3 , 4 -
 
-defineProperty("parking_brake", globalPropertyi("tu154/custom/controll/parking_brake")) --   
+    -- lights
+    { "landing_ext_set_L", "tu154/custom/lights/landing_ext_set_L", globalPropertyi }, --
+    { "landing_ext_set_R", "tu154/custom/lights/landing_ext_set_R", globalPropertyi }, --
+    { "landing_mode_set_L", "tu154/custom/lights/landing_mode_set_L", globalPropertyi }, --   . -1 - , 0 - , +1 -
+    { "landing_mode_set_R", "tu154/custom/lights/landing_mode_set_R", globalPropertyi }, --
 
-defineProperty("tks_course_set", globalPropertyi("tu154/custom/switchers/ovhd/tks_course_set")) --  
+    { "parking_brake", "tu154/custom/controll/parking_brake", globalPropertyi }, --
 
-defineProperty("bat1_on", globalPropertyi("tu154/custom/switchers/eng/bat1_on")) --  1
-defineProperty("bat2_on", globalPropertyi("tu154/custom/switchers/eng/bat2_on")) --  2
-defineProperty("bat3_on", globalPropertyi("tu154/custom/switchers/eng/bat3_on")) --  3
-defineProperty("bat4_on", globalPropertyi("tu154/custom/switchers/eng/bat4_on")) --  4
+    { "tks_course_set", "tu154/custom/switchers/ovhd/tks_course_set", globalPropertyi }, --
 
--- controls
-defineProperty("ail_L", globalPropertyf("sim/flightmodel/controls/wing3l_ail1def")) -- aileron left Degrees, positive is trailing-edge down. +- 20
-defineProperty("ail_R", globalPropertyf("sim/flightmodel/controls/wing3r_ail1def")) -- aileron right Degrees, positive is trailing-edge down. +- 20
-defineProperty("elevator_L", globalPropertyf("sim/flightmodel/controls/hstab1_elv1def")) -- Degrees, positive is trailing-edge down.
-defineProperty("elevator_R", globalPropertyf("sim/flightmodel/controls/hstab2_elv1def")) -- Degrees, positive is trailing-edge down.
+    { "bat1_on", "tu154/custom/switchers/eng/bat1_on", globalPropertyi }, --  1
+    { "bat2_on", "tu154/custom/switchers/eng/bat2_on", globalPropertyi }, --  2
+    { "bat3_on", "tu154/custom/switchers/eng/bat3_on", globalPropertyi }, --  3
+    { "bat4_on", "tu154/custom/switchers/eng/bat4_on", globalPropertyi }, --  4
+
+    -- controls
+    { "ail_L", "sim/flightmodel/controls/wing3l_ail1def", globalPropertyf }, -- aileron left Degrees, positive is trailing-edge down. +- 20
+    { "ail_R", "sim/flightmodel/controls/wing3r_ail1def", globalPropertyf }, -- aileron right Degrees, positive is trailing-edge down. +- 20
+    { "elevator_L", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf }, -- Degrees, positive is trailing-edge down.
+    { "elevator_R", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf }, -- Degrees, positive is trailing-edge down.
+})
 
 local flight_status = 0 
 local flight_status_last = 10

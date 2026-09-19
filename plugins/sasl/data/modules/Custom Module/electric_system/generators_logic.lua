@@ -1,3 +1,4 @@
+-- generators_logic.lua
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         defineProperty(def[1], def[3](def[2]))
@@ -20,32 +21,32 @@ end
 defineProps({
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 
     -- Generator voltages
     { "gen1_volt_bus", "tu154/custom/elec/gen1_volt", globalPropertyf },
     { "gen2_volt_bus", "tu154/custom/elec/gen2_volt", globalPropertyf },
     { "gen3_volt_bus", "tu154/custom/elec/gen3_volt", globalPropertyf },
     { "gen4_volt_bus", "tu154/custom/elec/gen4_volt", globalPropertyf },
-    { "gpu_volt_bus", "tu154/custom/elec/gpu_volt", globalPropertyf },
+    -- { "gpu_volt_bus", "tu154/custom/elec/gpu_volt", globalPropertyf },
     -- Generator currents
     { "gen1_amp_bus", "tu154/custom/elec/gen1_amp", globalPropertyf },
     { "gen2_amp_bus", "tu154/custom/elec/gen2_amp", globalPropertyf },
     { "gen3_amp_bus", "tu154/custom/elec/gen3_amp", globalPropertyf },
     { "gen4_amp_bus", "tu154/custom/elec/gen4_amp", globalPropertyf },
-    { "gpu_amp", "tu154/custom/elec/gpu_amp", globalPropertyf },
+    -- { "gpu_amp", "tu154/custom/elec/gpu_amp", globalPropertyf },
     -- Overload flags
     { "gen1_overload", "tu154/custom/elec/gen1_overload", globalPropertyi },
     { "gen2_overload", "tu154/custom/elec/gen2_overload", globalPropertyi },
     { "gen3_overload", "tu154/custom/elec/gen3_overload", globalPropertyi },
     { "gen4_overload", "tu154/custom/elec/gen4_overload", globalPropertyi },
-    { "gpu_overload", "tu154/custom/elec/gpu_overload", globalPropertyi },
+    -- { "gpu_overload", "tu154/custom/elec/gpu_overload", globalPropertyi },
     -- Generator switches
     { "gen_1_on", "tu154/custom/switchers/eng/gen_1_on", globalPropertyi },
     { "gen_2_on", "tu154/custom/switchers/eng/gen_2_on", globalPropertyi },
     { "gen_3_on", "tu154/custom/switchers/eng/gen_3_on", globalPropertyi },
     { "apu_gen_on", "tu154/custom/switchers/eng/apu_gen_on", globalPropertyi },
-    { "gpu_on_sw", "tu154/custom/switchers/eng/gpu_on", globalPropertyi },
+    -- { "gpu_on_sw", "tu154/custom/switchers/eng/gpu_on", globalPropertyi },
     -- Emergency generator cutoffs
     { "emerg_gen_on_1", "tu154/custom/switchers/eng/emerg_gen_on_1", globalPropertyi },
     { "emerg_gen_on_2", "tu154/custom/switchers/eng/emerg_gen_on_2", globalPropertyi },
@@ -55,7 +56,7 @@ defineProps({
     { "gen2_work", "tu154/custom/elec/gen2_work", globalPropertyi },
     { "gen3_work", "tu154/custom/elec/gen3_work", globalPropertyi },
     { "gen4_work", "tu154/custom/elec/gen4_work", globalPropertyi },
-    { "gpu_work_bus", "tu154/custom/elec/gpu_work", globalPropertyi },
+    -- { "gpu_work_bus", "tu154/custom/elec/gpu_work", globalPropertyi },
     -- 27 V bus
     { "DC_27_volt1", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "DC_27_volt2", "tu154/custom/elec/bus27_volt_right", globalPropertyf },

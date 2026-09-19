@@ -1,3 +1,4 @@
+-- absu.lua
 
 components = {
 	absu_commands {},

@@ -1,15 +1,30 @@
+-- camera.lua
 -- this is camera panel
 
 size = {512, 512}
-defineProperty("show_cam",globalPropertyi("tu154/custom/panels/show_cam")) --   
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- pilot head pos
+defineProps({
+    { "show_cam", "tu154/custom/panels/show_cam", globalPropertyi }, --
 
-defineProperty("px", globalPropertyf("sim/graphics/view/pilots_head_x"))
-defineProperty("py", globalPropertyf("sim/graphics/view/pilots_head_y"))
-defineProperty("pz", globalPropertyf("sim/graphics/view/pilots_head_z"))
-defineProperty("az", globalPropertyf("sim/graphics/view/pilots_head_the"))
-defineProperty("ax", globalPropertyf("sim/graphics/view/pilots_head_psi"))
+    -- pilot head pos
+
+    { "px", "sim/graphics/view/pilots_head_x", globalPropertyf },
+    { "py", "sim/graphics/view/pilots_head_y", globalPropertyf },
+    { "pz", "sim/graphics/view/pilots_head_z", globalPropertyf },
+    { "az", "sim/graphics/view/pilots_head_the", globalPropertyf },
+    { "ax", "sim/graphics/view/pilots_head_psi", globalPropertyf },
+})
 
 local cockview2 = sasl.findCommand("sim/view/3d_cockpit_cmnd_look") -- command from X-Plane 10
 

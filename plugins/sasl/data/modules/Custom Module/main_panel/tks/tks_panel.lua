@@ -1,3 +1,4 @@
+-- tks_panel.lua
 -- ============================================================================
 -- TKS SWITCHES / LAMPS / SOUNDS
 -- Refactor goals:
@@ -27,11 +28,11 @@ defineProps({
 	{ "tks_source", "tu154/custom/switchers/ovhd/tks_mode_right", globalPropertyi },
 	{ "tks_course_set", "tu154/custom/switchers/ovhd/tks_course_set", globalPropertyi },
 	{ "tks_corrr_button", "tu154/custom/buttons/ovhd/tks_corrr_button", globalPropertyi },
-	{ "tks_lat_set", "tu154/custom/rotary/ovhd/tks_lat_set", globalPropertyf },
+	-- { "tks_lat_set", "tu154/custom/rotary/ovhd/tks_lat_set", globalPropertyf },
 
 	-- Stabilization
-	{ "stabil_ga_main", "tu154/custom/switchers/ovhd/stabil_ga_main", globalPropertyi },
-	{ "stabil_ga_reserv", "tu154/custom/switchers/ovhd/stabil_ga_reserv", globalPropertyi },
+	-- { "stabil_ga_main", "tu154/custom/switchers/ovhd/stabil_ga_main", globalPropertyi },
+	-- { "stabil_ga_reserv", "tu154/custom/switchers/ovhd/stabil_ga_reserv", globalPropertyi },
 
 	-- Fail flags
 	{ "fail_left", "tu154/custom/tks/fail_left", globalPropertyi },
@@ -41,8 +42,8 @@ defineProps({
 	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
 	{ "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
-	{ "mgv_flag", "tu154/custom/gyro/mgv_contr_flag", globalPropertyf },
-	{ "mgv_contr_fail", "tu154/custom/bkk/mgv_contr_fail", globalPropertyi },
+	-- { "mgv_flag", "tu154/custom/gyro/mgv_contr_flag", globalPropertyf },
+	-- { "mgv_contr_fail", "tu154/custom/bkk/mgv_contr_fail", globalPropertyi },
 
 	{ "tks_main_fail", "tu154/custom/lights/small/tks_main_fail", globalPropertyf },
 	{ "tks_contr_fail", "tu154/custom/lights/small/tks_contr_fail", globalPropertyf },

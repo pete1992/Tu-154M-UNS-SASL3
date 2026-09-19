@@ -134,7 +134,7 @@ defineProps({
     { "spd_brk_mid_L", "sim/flightmodel/controls/wing2l_spo2def", globalPropertyf },
     { "spd_brk_mid_R", "sim/flightmodel/controls/wing2r_spo2def", globalPropertyf },
     { "indicated_airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf },
-    { "machno", "sim/flightmodel/misc/machno", globalPropertyf },
+    -- { "machno", "sim/flightmodel/misc/machno", globalPropertyf },
     { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },
     { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },
     { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },

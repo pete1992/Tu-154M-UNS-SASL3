@@ -1,3 +1,4 @@
+-- radio.lua
 -- thi is radio panel main script. VHF radios, CourseMP and ARK
 size = {2048, 2048}
 

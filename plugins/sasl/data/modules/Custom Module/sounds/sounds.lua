@@ -1,3 +1,4 @@
+-- sounds.lua
 -- this is the main sounds script
 
 components = {

@@ -1,3 +1,4 @@
+-- diss_logic.lua
 -- ============================================================================
 -- DISS / NVU WIND CALCULATION LOGIC
 -- Functional improvements applied:
@@ -9,61 +10,68 @@
 -- Smartcopilot
 -----------------------------------------------------------------------
 -- 0 = not found, 1 = slave, 2 = master
-defineProperty("ismaster",    globalPropertyf("scp/api/ismaster"))
--- 1 = no control, 2 = has control
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1"))
-
--- ----------------------------------------------------------------------------
--- Property binder
--- ----------------------------------------------------------------------------
 local function defineProps(defs)
-	for _, d in ipairs(defs) do
-		defineProperty(d[1], d[3](d[2]))
-	end
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
 end
 
--- ----------------------------------------------------------------------------
--- Properties
--- ----------------------------------------------------------------------------
 defineProps({
-	-- Time / power / controls
-	{ "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
-	{ "diss_on", "tu154/custom/switchers/ovhd/diss_on", globalPropertyi },
-	{ "diss_mode_sw", "tu154/custom/switchers/ovhd/diss_mode", globalPropertyi },
-	{ "nvu_calc_set", "tu154/custom/switchers/ovhd/nvu_calc_set", globalPropertyi },
-	{ "wind_set", "tu154/custom/rotary/console/wind_set", globalPropertyf },
-	{ "wind_course_left", "tu154/custom/button/console/wind_course_left", globalPropertyi },
-	{ "wind_course_ctr", "tu154/custom/button/console/wind_course_ctr", globalPropertyi },
-	{ "wind_course_right", "tu154/custom/button/console/wind_course_right", globalPropertyi },
-	{ "wind_spd_left", "tu154/custom/button/console/wind_spd_left", globalPropertyi },
-	{ "wind_spd_ctr", "tu154/custom/button/console/wind_spd_ctr", globalPropertyi },
-	{ "wind_spd_right", "tu154/custom/button/console/wind_spd_right", globalPropertyi },
-	-- Aircraft state
-	{ "deg1", "sim/flightmodel/position/psi", globalPropertyf },
-	{ "deg2", "sim/flightmodel/position/hpath", globalPropertyf },
-	{ "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf },
-	{ "tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf },
-	{ "course_gpk", "tu154/custom/tks/course_gpk", globalPropertyf },
-	{ "acf_roll", "sim/flightmodel/position/true_phi", globalPropertyf },
-	{ "acf_pitch", "sim/flightmodel/position/true_theta", globalPropertyf },
-	-- Position / environment
-	{ "pos_x", "sim/flightmodel/position/local_x", globalPropertyf },
-	{ "pos_y", "sim/flightmodel/position/local_y", globalPropertyf },
-	{ "pos_z", "sim/flightmodel/position/local_z", globalPropertyf },
-	{ "wave_amplitude", "sim/weather/wave_amplitude", globalPropertyf },
-	-- Electrical
-	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
-	{ "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
-	{ "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-	-- DISS / NVU outputs & internal state
-	{ "diss_wind_course", "tu154/custom/nvu/diss_wind_course", globalPropertyf },
-	{ "diss_wind_spd", "tu154/custom/nvu/diss_wind_spd", globalPropertyf },
-	{ "diss_groundspeed", "tu154/custom/nvu/diss_groundspeed", globalPropertyf },
-	{ "diss_slip_angle", "tu154/custom/nvu/diss_slip_angle", globalPropertyf },
-	{ "diss_mode", "tu154/custom/nvu/diss_mode", globalPropertyi },
-	{ "diss_cc", "tu154/custom/nvu/diss_cc", globalPropertyf },
-	-- Failures
-	{ "diss_fail", "tu154/custom/failures/diss_fail", globalPropertyi },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    -- 1 = no control, 2 = has control
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+
+    -- ----------------------------------------------------------------------------
+    -- Property binder
+    -- ----------------------------------------------------------------------------
+
+    -- ----------------------------------------------------------------------------
+    -- Properties
+    -- ----------------------------------------------------------------------------
+    -- Time / power / controls
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "diss_on", "tu154/custom/switchers/ovhd/diss_on", globalPropertyi },
+    { "diss_mode_sw", "tu154/custom/switchers/ovhd/diss_mode", globalPropertyi },
+    { "nvu_calc_set", "tu154/custom/switchers/ovhd/nvu_calc_set", globalPropertyi },
+    -- { "wind_set", "tu154/custom/rotary/console/wind_set", globalPropertyf },
+    { "wind_course_left", "tu154/custom/button/console/wind_course_left", globalPropertyi },
+    { "wind_course_ctr", "tu154/custom/button/console/wind_course_ctr", globalPropertyi },
+    { "wind_course_right", "tu154/custom/button/console/wind_course_right", globalPropertyi },
+    { "wind_spd_left", "tu154/custom/button/console/wind_spd_left", globalPropertyi },
+    { "wind_spd_ctr", "tu154/custom/button/console/wind_spd_ctr", globalPropertyi },
+    { "wind_spd_right", "tu154/custom/button/console/wind_spd_right", globalPropertyi },
+    -- Aircraft state
+    { "deg1", "sim/flightmodel/position/psi", globalPropertyf },
+    { "deg2", "sim/flightmodel/position/hpath", globalPropertyf },
+    { "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf },
+    { "tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf },
+    { "course_gpk", "tu154/custom/tks/course_gpk", globalPropertyf },
+    { "acf_roll", "sim/flightmodel/position/true_phi", globalPropertyf },
+    -- { "acf_pitch", "sim/flightmodel/position/true_theta", globalPropertyf },
+    -- Position / environment
+    { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf },
+    { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf },
+    { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf },
+    { "wave_amplitude", "sim/weather/wave_amplitude", globalPropertyf },
+    -- Electrical
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    -- DISS / NVU outputs & internal state
+    { "diss_wind_course", "tu154/custom/nvu/diss_wind_course", globalPropertyf },
+    { "diss_wind_spd", "tu154/custom/nvu/diss_wind_spd", globalPropertyf },
+    { "diss_groundspeed", "tu154/custom/nvu/diss_groundspeed", globalPropertyf },
+    { "diss_slip_angle", "tu154/custom/nvu/diss_slip_angle", globalPropertyf },
+    { "diss_mode", "tu154/custom/nvu/diss_mode", globalPropertyi },
+    { "diss_cc", "tu154/custom/nvu/diss_cc", globalPropertyf },
+    -- Failures
+    { "diss_fail", "tu154/custom/failures/diss_fail", globalPropertyi },
 })
 
 -- ----------------------------------------------------------------------------

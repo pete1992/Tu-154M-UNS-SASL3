@@ -66,10 +66,10 @@ defineProps({
     {"weel_angle1", "sim/aircraft/gear/acf_nw_steerdeg1", globalPropertyf}, -- nosewheel steer angle 1
     {"weel_angle2", "sim/aircraft/gear/acf_nw_steerdeg2", globalPropertyf}, -- nosewheel steer angle 2
     -- Brakes
-    {"brake_L", "sim/flightmodel/controls/l_brake_add", globalPropertyf}, -- left brake
-    {"brake_R", "sim/flightmodel/controls/r_brake_add", globalPropertyf}, -- right brake
+    -- {"brake_L", "sim/flightmodel/controls/l_brake_add", globalPropertyf}, -- left brake
+    -- {"brake_R", "sim/flightmodel/controls/r_brake_add", globalPropertyf}, -- right brake
     -- Airspeed
-    {"indicated_airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf}, -- indicated airspeed
+    -- {"indicated_airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf}, -- indicated airspeed
     -- Elevators
     {"elevator_L", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf}, -- elevator left, deg (pos=TE down)
     {"elevator_R", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf}, -- elevator right, deg (pos=TE down)
@@ -107,7 +107,7 @@ defineProps({
     {"slider_7", "sim/cockpit2/switches/custom_slider_on[6]", globalProperty },
     {"slider_8", "sim/cockpit2/switches/custom_slider_on[7]", globalProperty },
     {"slider_9", "sim/cockpit2/switches/custom_slider_on[8]", globalProperty },
-    {"slider_10", "sim/cockpit2/switches/custom_slider_on[9]", globalProperty },
+    -- {"slider_10", "sim/cockpit2/switches/custom_slider_on[9]", globalProperty },
     {"slider_11", "sim/cockpit2/switches/custom_slider_on[10]", globalProperty },
     {"slider_12", "sim/cockpit2/switches/custom_slider_on[11]", globalProperty }, 
 	-- right tank fuel weight

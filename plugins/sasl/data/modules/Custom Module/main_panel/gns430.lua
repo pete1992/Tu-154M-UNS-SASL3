@@ -1,3 +1,4 @@
+-- gns430.lua
 -- this is GNS supplement logicS
 local function defineProps(defs)
     for _, def in ipairs(defs) do

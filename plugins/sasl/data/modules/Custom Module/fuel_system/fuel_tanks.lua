@@ -1,62 +1,77 @@
+-- fuel_tanks.lua
 -- this is fuel tanks manipulating logic
 
 -- fuel quantity
-defineProperty("tank1_w", globalProperty("sim/flightmodel/weight/m_fuel[0]")) -- fuel weight
-defineProperty("tank4_w", globalProperty("sim/flightmodel/weight/m_fuel[1]")) -- fuel weight
-defineProperty("tank2R_w", globalProperty("sim/flightmodel/weight/m_fuel[2]")) -- fuel weight
-defineProperty("tank2L_w", globalProperty("sim/flightmodel/weight/m_fuel[3]")) -- fuel weight
-defineProperty("tank3R_w", globalProperty("sim/flightmodel/weight/m_fuel[4]")) -- fuel weight
-defineProperty("tank3L_w", globalProperty("sim/flightmodel/weight/m_fuel[5]")) -- fuel weight
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("tank_all", globalPropertyf("sim/flightmodel/weight/m_fuel_total")) -- total fuel weight
+defineProps({
+    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel weight
+    { "tank4_w", "sim/flightmodel/weight/m_fuel[1]", globalProperty }, -- fuel weight
+    { "tank2R_w", "sim/flightmodel/weight/m_fuel[2]", globalProperty }, -- fuel weight
+    { "tank2L_w", "sim/flightmodel/weight/m_fuel[3]", globalProperty }, -- fuel weight
+    { "tank3R_w", "sim/flightmodel/weight/m_fuel[4]", globalProperty }, -- fuel weight
+    { "tank3L_w", "sim/flightmodel/weight/m_fuel[5]", globalProperty }, -- fuel weight
 
--- fuel tanks pumps control
-defineProperty("tank1_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[0]"))
-defineProperty("tank4_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[1]"))
-defineProperty("tank2R_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[2]"))
-defineProperty("tank2L_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[3]"))
-defineProperty("tank3R_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[4]"))
-defineProperty("tank3L_pump", globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[5]"))
+    { "tank_all", "sim/flightmodel/weight/m_fuel_total", globalPropertyf }, -- total fuel weight
 
-defineProperty("fuel_trans", globalPropertyi("tu154/custom/switchers/fuel/fuel_trans")) --   
-defineProperty("fuel_porc", globalPropertyi("tu154/custom/switchers/fuel/fuel_porc")) --  
+    -- fuel tanks pumps control
+    { "tank1_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[0]", globalProperty },
+    { "tank4_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[1]", globalProperty },
+    { "tank2R_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[2]", globalProperty },
+    { "tank2L_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[3]", globalProperty },
+    { "tank3R_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[4]", globalProperty },
+    { "tank3L_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[5]", globalProperty },
 
--- fuel pumps work
-defineProperty("pump_tank2_left_work", globalPropertyi("tu154/custom/fuel/pump_tank2_left_work")) -- number of working pumps
-defineProperty("pump_tank2_right_work", globalPropertyi("tu154/custom/fuel/pump_tank2_right_work"))
-defineProperty("pump_tank3_left_work", globalPropertyi("tu154/custom/fuel/pump_tank3_left_work"))
-defineProperty("pump_tank3_right_work", globalPropertyi("tu154/custom/fuel/pump_tank3_right_work"))
-defineProperty("pump_tank4_work", globalPropertyi("tu154/custom/fuel/pump_tank4_work"))
-defineProperty("pump_tank1_1_work", globalPropertyi("tu154/custom/fuel/pump_tank1_1_work"))
-defineProperty("pump_tank1_2_work", globalPropertyi("tu154/custom/fuel/pump_tank1_2_work"))
-defineProperty("pump_tank1_3_work", globalPropertyi("tu154/custom/fuel/pump_tank1_3_work"))
-defineProperty("pump_tank1_4_work", globalPropertyi("tu154/custom/fuel/pump_tank1_4_work"))
+    { "fuel_trans", "tu154/custom/switchers/fuel/fuel_trans", globalPropertyi }, --
+    { "fuel_porc", "tu154/custom/switchers/fuel/fuel_porc", globalPropertyi }, --
 
-defineProperty("reserv_trans", globalPropertyi("tu154/custom/fuel/reserv_trans"))
+    -- fuel pumps work
+    { "pump_tank2_left_work", "tu154/custom/fuel/pump_tank2_left_work", globalPropertyi }, -- number of working pumps
+    { "pump_tank2_right_work", "tu154/custom/fuel/pump_tank2_right_work", globalPropertyi },
+    { "pump_tank3_left_work", "tu154/custom/fuel/pump_tank3_left_work", globalPropertyi },
+    { "pump_tank3_right_work", "tu154/custom/fuel/pump_tank3_right_work", globalPropertyi },
+    { "pump_tank4_work", "tu154/custom/fuel/pump_tank4_work", globalPropertyi },
+    -- { "pump_tank1_1_work", "tu154/custom/fuel/pump_tank1_1_work", globalPropertyi },
+    -- { "pump_tank1_2_work", "tu154/custom/fuel/pump_tank1_2_work", globalPropertyi },
+    -- { "pump_tank1_3_work", "tu154/custom/fuel/pump_tank1_3_work", globalPropertyi },
+    -- { "pump_tank1_4_work", "tu154/custom/fuel/pump_tank1_4_work", globalPropertyi },
 
-defineProperty("apu_burn_fuel", globalPropertyf("tu154/custom/elec/apu_burning_fuel")) --     
+    { "reserv_trans", "tu154/custom/fuel/reserv_trans", globalPropertyi },
 
--- fuel flow per engine
-defineProperty("ENGN_FF_1", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]")) -- FF from sim kg/second
-defineProperty("ENGN_FF_2", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]")) -- FF from sim kg/second
-defineProperty("ENGN_FF_3", globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]")) -- FF from sim kg/second
+    { "apu_burn_fuel", "tu154/custom/elec/apu_burning_fuel", globalPropertyf }, --
 
--- altitude
-defineProperty("msl_alt", globalPropertyf("sim/flightmodel/position/elevation"))  -- phisical altitude MSL. meters
+    -- fuel flow per engine
+    -- { "ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]", globalProperty }, -- FF from sim kg/second
+    -- { "ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]", globalProperty }, -- FF from sim kg/second
+    -- { "ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]", globalProperty }, -- FF from sim kg/second
 
-defineProperty("gear_defl_L", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]")) --   
-defineProperty("gear_defl_R", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]")) --   
+    -- altitude
+    { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },  -- phisical altitude MSL. meters
 
--- failures
-defineProperty("rel_fuelcap", globalPropertyi("sim/operation/failures/rel_fuelcap")) -- Fuel Cap left off
-defineProperty("fuel_porc_fail", globalPropertyi("tu154/custom/failures/fuel_porc_fail"))
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "gear_defl_L", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, --
+    { "gear_defl_R", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, --
 
--- test
-defineProperty("test", globalPropertyf("sim/operation/failures/rel_fuepmp0")) --            
+    -- failures
+    { "rel_fuelcap", "sim/operation/failures/rel_fuelcap", globalPropertyi }, -- Fuel Cap left off
+    { "fuel_porc_fail", "tu154/custom/failures/fuel_porc_fail", globalPropertyi },
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    -- test
+    -- { "test", "sim/operation/failures/rel_fuepmp0", globalPropertyf }, --
+
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
+})
 
 --     - 160-240 /    .
 

@@ -1,3 +1,4 @@
+-- lights_system.lua
 -- this is overall light system
 
 components = {

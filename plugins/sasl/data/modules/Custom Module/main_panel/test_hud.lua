@@ -1,3 +1,4 @@
+-- test_hud.lua
 size = {100, 100}
 
 local count = 0

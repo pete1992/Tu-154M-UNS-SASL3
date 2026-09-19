@@ -1,3 +1,4 @@
+-- absu_fails.lua
 -- absu_fails.lua (refactored: bulk datarefs, helpers, MASTER logic)
 
 -----------------------------------------------------------------------
@@ -32,7 +33,7 @@ defineProps({
 
     -- SmartCopilot
     {"ismaster",            "scp/api/ismaster",                          globalPropertyf},
-    {"hascontrol_1",        "scp/api/hascontrol_1",                      globalPropertyf},
+    -- {"hascontrol_1",        "scp/api/hascontrol_1",                      globalPropertyf},
 })
 
 -----------------------------------------------------------------------

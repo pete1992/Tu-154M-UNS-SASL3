@@ -27,10 +27,6 @@ defineProps({
     { "sim_rud_2", "sim/flightmodel/engine/ENGN_thro_use[1]", globalProperty },
     -- Engine 3 effective throttle position
     { "sim_rud_3", "sim/flightmodel/engine/ENGN_thro_use[2]", globalProperty },
-    -- Left engine thrust-reverser deployment ratio
-    -- { "revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalProperty }, -- Unused here; no child or shared consumer.
-    -- Right engine thrust-reverser deployment ratio
-    -- { "revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalProperty }, -- Unused here; no child or shared consumer.
     -- Left engine propeller mode used for reverser control
     { "eng_modL", "sim/flightmodel/engine/ENGN_propmode[0]", globalProperty },
     -- Right engine propeller mode used for reverser control
@@ -90,8 +86,7 @@ defineProps({
     { "throttle_ratio_all", "sim/cockpit2/engine/actuators/throttle_ratio_all", globalPropertyf },
 	-- Master. 0 = plugin not found, 1 = slave 2 = master
     { "ismaster", "scp/api/ismaster", globalPropertyf },
--- Have control. 0 = plugin not found, 1 = no control 2 = has control
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Unused here; no child or shared consumer.
+	-- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
 
 set(override, 1) 

@@ -1,3 +1,4 @@
+-- ark15.lua
 -- this is ARK panel
 
 -- source
@@ -13,7 +14,7 @@ defineProps({
     { "active", "sim/cockpit2/radios/actuators/adf1_right_is_selected", globalPropertyf },  -- selector of active disk. 0 - left, 1 - right
     { "fail", "sim/operation/failures/rel_adf1", globalPropertyf },
     { "adf", "sim/cockpit2/radios/indicators/adf1_relative_bearing_deg", globalPropertyf },
-    { "audio_selection", "sim/cockpit2/radios/actuators/audio_selection_adf1", globalPropertyi },
+    -- { "audio_selection", "sim/cockpit2/radios/actuators/audio_selection_adf1", globalPropertyi },
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
     -- controls
     { "ark_mode", "tu154/custom/switchers/ovhd/ark_1_mode", globalPropertyi }, --   1 0 - , 1 - , 2 - , 3 -
@@ -42,7 +43,7 @@ defineProps({
     { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
 
 

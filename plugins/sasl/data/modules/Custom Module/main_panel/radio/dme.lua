@@ -1,4 +1,4 @@
--- dme.lua 
+-- dme.lua
 -- this is DME indicators
 size = {215, 70}
 
@@ -30,7 +30,7 @@ defineProps({
     { "dme_km_lit", "tu154/custom/lights/small/dme_km_left", globalPropertyf },
     { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-    { "fail", "sim/operation/failures/rel_dme", globalPropertyi },
+    -- { "fail", "sim/operation/failures/rel_dme", globalPropertyi },
     { "dme_fail", "tu154/custom/failures/dme1_fail", globalPropertyi },
 })
 

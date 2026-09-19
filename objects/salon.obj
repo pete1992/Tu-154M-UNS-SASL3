@@ -5,7 +5,7 @@ OBJ
 TEXTURE		salon.png
 TEXTURE_LIT	salon_LIT.png
 TEXTURE_NORMAL	salon_NML.png
-GLOBAL_specular 1.0
+#GLOBAL_specular 1.0
 # Legacy normal map: alpha controls gloss; blue is not a metalness mask.
 POINT_COUNTS	197892 0 0 664107
 

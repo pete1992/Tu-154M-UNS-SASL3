@@ -1,3 +1,4 @@
+-- scr_clock_crs.lua
 -- this is speed scale
 
 size = {480, 94}

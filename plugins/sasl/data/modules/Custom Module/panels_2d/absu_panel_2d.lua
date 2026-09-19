@@ -1,3 +1,4 @@
+-- absu_panel_2d.lua
 -- ABSU 2D panel.
 -- SASL 3 native component.
 --

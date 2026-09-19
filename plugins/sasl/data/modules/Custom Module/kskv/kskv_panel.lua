@@ -1,3 +1,4 @@
+-- kskv_panel.lua
 -- control panel for KSKV system
 
 -- controls on panel
@@ -104,7 +105,7 @@ defineProps({
     { "cabin_1_temp", "tu154/custom/bleed/cabin_1_temp", globalPropertyf }, --    1
     { "cabin_2_temp", "tu154/custom/bleed/cabin_2_temp", globalPropertyf }, --    2
 
-    { "hot_tube_t", "tu154/custom/bleed/hot_tube_t", globalPropertyf }, --
+    -- { "hot_tube_t", "tu154/custom/bleed/hot_tube_t", globalPropertyf }, --
 
     { "actual_cabin_alt", "sim/cockpit2/pressurization/indicators/cabin_altitude_ft", globalPropertyf },
     { "cabin_press_diff", "sim/cockpit2/pressurization/indicators/pressure_diffential_psi", globalPropertyf },

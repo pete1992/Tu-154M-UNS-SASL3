@@ -1,59 +1,74 @@
+-- hydro_logic_old_old.lua
 -- this is hydraulic logic
 
 -- controls
-defineProperty("accum_fill", globalPropertyi("tu154/custom/buttons/hydro/accum_fill")) --  
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("connect2to1", globalPropertyi("tu154/custom/switchers/hydro/connect2to1")) --  2   1 
-defineProperty("pump_2", globalPropertyi("tu154/custom/switchers/hydro/pump_2")) --  2   1 
-defineProperty("pump_3", globalPropertyi("tu154/custom/switchers/hydro/pump_3")) --  2   1 
+defineProps({
+    { "accum_fill", "tu154/custom/buttons/hydro/accum_fill", globalPropertyi }, --
 
--- sources
-defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
-defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
-defineProperty("rpm_high_3", globalPropertyf("tu154/custom/gauges/engine/rpm_high_3")) --     №3
+    { "connect2to1", "tu154/custom/switchers/hydro/connect2to1", globalPropertyi }, --  2   1
+    { "pump_2", "tu154/custom/switchers/hydro/pump_2", globalPropertyi }, --  2   1
+    { "pump_3", "tu154/custom/switchers/hydro/pump_3", globalPropertyi }, --  2   1
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+    -- sources
+    { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, --     №1
+    { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf }, --     №2
+    { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf }, --     №3
 
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
--- results
-defineProperty("gs_press_1", globalPropertyf("tu154/custom/hydro/gs_press_1")) --   1
-defineProperty("gs_press_2", globalPropertyf("tu154/custom/hydro/gs_press_2")) --   2
-defineProperty("gs_press_3", globalPropertyf("tu154/custom/hydro/gs_press_3")) --   3
-defineProperty("gs_press_4", globalPropertyf("tu154/custom/hydro/gs_press_4")) --   4
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("gs_qty_1", globalPropertyf("tu154/custom/hydro/gs_qty_1")) --    
-defineProperty("gs_qty_2", globalPropertyf("tu154/custom/hydro/gs_qty_2")) --    
-defineProperty("gs_qty_3", globalPropertyf("tu154/custom/hydro/gs_qty_3")) --    
-defineProperty("gs_qty_12_show", globalPropertyf("tu154/custom/hydro/gs_qty_12_show")) --    
-defineProperty("gs_qty_3_show", globalPropertyf("tu154/custom/hydro/gs_qty_3_show")) --    
+    -- results
+    { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, --   1
+    { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, --   2
+    { "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, --   3
+    { "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf }, --   4
 
--- failures
-defineProperty("hs_leak_1", globalPropertyi("tu154/custom/failures/hydro_leak_1")) -- leak
-defineProperty("hs_leak_2", globalPropertyi("tu154/custom/failures/hydro_leak_2")) -- leak
-defineProperty("hs_leak_3", globalPropertyi("tu154/custom/failures/hydro_leak_3")) -- leak
-defineProperty("hs_leak_4", globalPropertyi("tu154/custom/failures/hydro_leak_4")) -- leak
+    { "gs_qty_1", "tu154/custom/hydro/gs_qty_1", globalPropertyf }, --
+    { "gs_qty_2", "tu154/custom/hydro/gs_qty_2", globalPropertyf }, --
+    { "gs_qty_3", "tu154/custom/hydro/gs_qty_3", globalPropertyf }, --
+    { "gs_qty_12_show", "tu154/custom/hydro/gs_qty_12_show", globalPropertyf }, --
+    { "gs_qty_3_show", "tu154/custom/hydro/gs_qty_3_show", globalPropertyf }, --
 
-defineProperty("hydro_pump_fail_11", globalPropertyi("tu154/custom/failures/hydro_pump_fail_11"))
-defineProperty("hydro_pump_fail_12", globalPropertyi("tu154/custom/failures/hydro_pump_fail_12"))
-defineProperty("hydro_pump_fail_2", globalPropertyi("tu154/custom/failures/hydro_pump_fail_2"))
-defineProperty("hydro_pump_fail_3", globalPropertyi("tu154/custom/failures/hydro_pump_fail_3"))
+    -- failures
+    { "hs_leak_1", "tu154/custom/failures/hydro_leak_1", globalPropertyi }, -- leak
+    { "hs_leak_2", "tu154/custom/failures/hydro_leak_2", globalPropertyi }, -- leak
+    { "hs_leak_3", "tu154/custom/failures/hydro_leak_3", globalPropertyi }, -- leak
+    { "hs_leak_4", "tu154/custom/failures/hydro_leak_4", globalPropertyi }, -- leak
 
-defineProperty("hydro_elec_fail_2", globalPropertyi("tu154/custom/failures/hydro_elec_fail_2"))
-defineProperty("hydro_elec_fail_3", globalPropertyi("tu154/custom/failures/hydro_elec_fail_3"))
+    { "hydro_pump_fail_11", "tu154/custom/failures/hydro_pump_fail_11", globalPropertyi },
+    { "hydro_pump_fail_12", "tu154/custom/failures/hydro_pump_fail_12", globalPropertyi },
+    { "hydro_pump_fail_2", "tu154/custom/failures/hydro_pump_fail_2", globalPropertyi },
+    { "hydro_pump_fail_3", "tu154/custom/failures/hydro_pump_fail_3", globalPropertyi },
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "hydro_elec_fail_2", "tu154/custom/failures/hydro_elec_fail_2", globalPropertyi },
+    { "hydro_elec_fail_3", "tu154/custom/failures/hydro_elec_fail_3", globalPropertyi },
 
--- currents
-defineProperty("gs_pump_2_cc", globalPropertyf("tu154/custom/hydro/gs_pump_2_cc")) --   
-defineProperty("gs_pump_3_cc", globalPropertyf("tu154/custom/hydro/gs_pump_3_cc")) --   
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- currents
+    { "gs_pump_2_cc", "tu154/custom/hydro/gs_pump_2_cc", globalPropertyf }, --
+    { "gs_pump_3_cc", "tu154/custom/hydro/gs_pump_3_cc", globalPropertyf }, --
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local engine_pumps_t = { 
 {  -10000, 42},

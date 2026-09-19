@@ -1,21 +1,36 @@
+-- radio_fails.lua
 -- Radio fails
 
-defineProperty("rel_adf1", globalPropertyi("sim/operation/failures/rel_adf1"))
-defineProperty("rel_adf2", globalPropertyi("sim/operation/failures/rel_adf2"))
-defineProperty("nav1_fail", globalPropertyi("tu154/custom/failures/nav1_fail"))
-defineProperty("nav2_fail", globalPropertyi("tu154/custom/failures/nav2_fail"))
-defineProperty("dme1_fail", globalPropertyi("tu154/custom/failures/dme1_fail"))
-defineProperty("dme2_fail", globalPropertyi("tu154/custom/failures/dme2_fail"))
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("mrp_fail", globalPropertyi("tu154/custom/failures/mrp_fail"))
+defineProps({
+    { "rel_adf1", "sim/operation/failures/rel_adf1", globalPropertyi },
+    { "rel_adf2", "sim/operation/failures/rel_adf2", globalPropertyi },
+    { "nav1_fail", "tu154/custom/failures/nav1_fail", globalPropertyi },
+    { "nav2_fail", "tu154/custom/failures/nav2_fail", globalPropertyi },
+    { "dme1_fail", "tu154/custom/failures/dme1_fail", globalPropertyi },
+    { "dme2_fail", "tu154/custom/failures/dme2_fail", globalPropertyi },
 
--- define sources
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
+    { "mrp_fail", "tu154/custom/failures/mrp_fail", globalPropertyi },
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- define sources
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local fail_counter = 0
 local check_time = math.random(15, 30)

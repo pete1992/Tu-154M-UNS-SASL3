@@ -1,19 +1,35 @@
+-- failures_2d.lua
 -- failures and runtime palette
 
 size = {512, 700}
 
-defineProperty("save_state", globalPropertyi("tu154/custom/save_state")) --    
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- images
 defineProperty("bg_img", sasl.gl.loadImage("repair_tex.png"))
 
-defineProperty("show_fail_panel", globalPropertyi("tu154/custom/panels/show_fail_panel")) --   
+defineProps({
+    { "save_state", "tu154/custom/save_state", globalPropertyi }, --
 
-defineProperty("reset_state", globalPropertyi("tu154/custom/reset_state")) --   
+    -- images
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "show_fail_panel", "tu154/custom/panels/show_fail_panel", globalPropertyi }, --
 
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled")) --  
+    -- { "reset_state", "tu154/custom/reset_state", globalPropertyi }, --
+
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+
+    -- { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi }, --
+})
 
 local runtime_tbl = {}
 

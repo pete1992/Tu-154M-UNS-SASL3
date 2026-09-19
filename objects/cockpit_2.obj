@@ -5758,82 +5758,84 @@ ANIM_begin
 ANIM_end
 # Plane
 ####_alpha
+# Screw decals disabled: their rectangular cards remain visible in X-Plane 12.
+# Keep vertex/index data for reversibility, but submit none of these 49 cards.
 # Plane
 ATTR_no_hard
 # Plane
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14166 6
+# TRIS	14166 6
 # Plane.001
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14172 6
+# TRIS	14172 6
 # Plane.002
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14178 6
+# TRIS	14178 6
 # Plane.003
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14184 6
+# TRIS	14184 6
 # Plane.004
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14190 6
+# TRIS	14190 6
 # Plane.005
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14196 6
+# TRIS	14196 6
 # Plane.006
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14202 6
+# TRIS	14202 6
 # Plane.007
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14208 6
+# TRIS	14208 6
 # Plane.008
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14214 6
+# TRIS	14214 6
 # Plane.009
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14220 6
+# TRIS	14220 6
 # Plane.010
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14226 6
+# TRIS	14226 6
 # Plane.011
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14232 6
+# TRIS	14232 6
 # Plane.012
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14238 6
+# TRIS	14238 6
 # Plane.013
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14244 6
+# TRIS	14244 6
 # Plane.014
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14250 6
+# TRIS	14250 6
 # Plane.015
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14256 6
+# TRIS	14256 6
 # Plane.016
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14262 6
+# TRIS	14262 6
 # Plane.017
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14268 6
+# TRIS	14268 6
 # Plane.018
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14274 6
+# TRIS	14274 6
 # Plane.019
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14280 6
+# TRIS	14280 6
 # Plane.020
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14286 6
+# TRIS	14286 6
 # Plane.022
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14292 36
+# TRIS	14292 36
 # Plane.021
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14328 36
+# TRIS	14328 36
 # Plane.023
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14364 48
+# TRIS	14364 48
 # Plane.024
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
-TRIS	14412 48
+# TRIS	14412 48
 
 # Built with Blender 2.49. Exported with XPlane2Blender 3.10.

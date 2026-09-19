@@ -1,65 +1,80 @@
+-- kskv_cond.lua
 -- this is air conditioning part of KSKV logic
 
 -- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- internal
-defineProperty("air_usage_L", globalPropertyf("tu154/custom/bleed/air_usage_L")) --   
-defineProperty("air_usage_R", globalPropertyf("tu154/custom/bleed/air_usage_R")) --   
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("hot_tube_t", globalPropertyf("tu154/custom/bleed/hot_tube_t")) --     
-defineProperty("door_heat_tube_t", globalPropertyf("tu154/custom/bleed/door_heat_tube_t")) --     
-defineProperty("cockpit_tube_t", globalPropertyf("tu154/custom/bleed/cockpit_tube_t")) --     
-defineProperty("cabin1_tube_t", globalPropertyf("tu154/custom/bleed/cabin1_tube_t")) --      1
-defineProperty("cabin2_tube_t", globalPropertyf("tu154/custom/bleed/cabin2_tube_t")) --      2
-defineProperty("cold_tube1_t", globalPropertyf("tu154/custom/bleed/cold_tube1_t")) --    1
-defineProperty("cold_tube2_t", globalPropertyf("tu154/custom/bleed/cold_tube2_t")) --    2
+    -- internal
+    { "air_usage_L", "tu154/custom/bleed/air_usage_L", globalPropertyf }, --
+    { "air_usage_R", "tu154/custom/bleed/air_usage_R", globalPropertyf }, --
 
-defineProperty("cockpit_temp", globalPropertyf("tu154/custom/bleed/cockpit_temp")) --   
-defineProperty("cabin_1_temp", globalPropertyf("tu154/custom/bleed/cabin_1_temp")) --    1
-defineProperty("cabin_2_temp", globalPropertyf("tu154/custom/bleed/cabin_2_temp")) --    2
+    { "hot_tube_t", "tu154/custom/bleed/hot_tube_t", globalPropertyf }, --
+    { "door_heat_tube_t", "tu154/custom/bleed/door_heat_tube_t", globalPropertyf }, --
+    { "cockpit_tube_t", "tu154/custom/bleed/cockpit_tube_t", globalPropertyf }, --
+    { "cabin1_tube_t", "tu154/custom/bleed/cabin1_tube_t", globalPropertyf }, --      1
+    { "cabin2_tube_t", "tu154/custom/bleed/cabin2_tube_t", globalPropertyf }, --      2
+    { "cold_tube1_t", "tu154/custom/bleed/cold_tube1_t", globalPropertyf }, --    1
+    { "cold_tube2_t", "tu154/custom/bleed/cold_tube2_t", globalPropertyf }, --    2
 
--- controls
-defineProperty("cockpit_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/cockpit_temp_set")) --   
-defineProperty("cabin1_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/cabin1_temp_set")) --   
-defineProperty("cabin2_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/cabin2_temp_set")) --   
-defineProperty("cockpit_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/cockpit_mode_set")) --   . 0 - . 1 - , 2 - , 3 - 
-defineProperty("cabin1_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/cabin1_mode_set")) --   
-defineProperty("cabin2_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/cabin2_mode_set")) --   
+    { "cockpit_temp", "tu154/custom/bleed/cockpit_temp", globalPropertyf }, --
+    { "cabin_1_temp", "tu154/custom/bleed/cabin_1_temp", globalPropertyf }, --    1
+    { "cabin_2_temp", "tu154/custom/bleed/cabin_2_temp", globalPropertyf }, --    2
 
-defineProperty("left_sys_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/left_sys_temp_set")) --    
-defineProperty("right_sys_temp_set", globalPropertyi("tu154/custom/switchers/airbleed/right_sys_temp_set")) --    
-defineProperty("left_sys_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/left_sys_mode_set")) --    
-defineProperty("right_sys_mode_set", globalPropertyi("tu154/custom/switchers/airbleed/right_sys_mode_set")) --    
+    -- controls
+    { "cockpit_temp_set", "tu154/custom/switchers/airbleed/cockpit_temp_set", globalPropertyi }, --
+    { "cabin1_temp_set", "tu154/custom/switchers/airbleed/cabin1_temp_set", globalPropertyi }, --
+    { "cabin2_temp_set", "tu154/custom/switchers/airbleed/cabin2_temp_set", globalPropertyi }, --
+    { "cockpit_mode_set", "tu154/custom/switchers/airbleed/cockpit_mode_set", globalPropertyi }, --   . 0 - . 1 - , 2 - , 3 -
+    { "cabin1_mode_set", "tu154/custom/switchers/airbleed/cabin1_mode_set", globalPropertyi }, --
+    { "cabin2_mode_set", "tu154/custom/switchers/airbleed/cabin2_mode_set", globalPropertyi }, --
 
-defineProperty("door_heat", globalPropertyi("tu154/custom/switchers/eng/door_heat")) --  
+    { "left_sys_temp_set", "tu154/custom/switchers/airbleed/left_sys_temp_set", globalPropertyi }, --
+    { "right_sys_temp_set", "tu154/custom/switchers/airbleed/right_sys_temp_set", globalPropertyi }, --
+    { "left_sys_mode_set", "tu154/custom/switchers/airbleed/left_sys_mode_set", globalPropertyi }, --
+    { "right_sys_mode_set", "tu154/custom/switchers/airbleed/right_sys_mode_set", globalPropertyi }, --
 
-defineProperty("skv_faster_work", globalPropertyi("tu154/custom/switchers/airbleed/skv_faster_work")) -- -1 -  , 0 - , +1 -   
+    { "door_heat", "tu154/custom/switchers/eng/door_heat", globalPropertyi }, --
 
--- sources
-defineProperty("termo", globalPropertyf("sim/weather/temperature_ambient_c")) --  
-defineProperty("airspeed", globalPropertyf("sim/flightmodel/position/indicated_airspeed")) --  
+    { "skv_faster_work", "tu154/custom/switchers/airbleed/skv_faster_work", globalPropertyi }, -- -1 -  , 0 - , +1 -
 
-defineProperty("rpm_high_1", globalPropertyf("tu154/custom/gauges/engine/rpm_high_1")) --     №1
-defineProperty("rpm_high_2", globalPropertyf("tu154/custom/gauges/engine/rpm_high_2")) --     №2
-defineProperty("rpm_high_3", globalPropertyf("tu154/custom/gauges/engine/rpm_high_3")) --     №3
-defineProperty("apu_n1", globalPropertyf("tu154/custom/eng/apu_n1")) --  
+    -- sources
+    { "termo", "sim/weather/temperature_ambient_c", globalPropertyf }, --
+    { "airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf }, --
 
-defineProperty("eng_valve_1", globalPropertyi("tu154/custom/switchers/airbleed/eng_valve_1")) --    
-defineProperty("eng_valve_2", globalPropertyi("tu154/custom/switchers/airbleed/eng_valve_2")) --    
-defineProperty("eng_valve_3", globalPropertyi("tu154/custom/switchers/airbleed/eng_valve_3")) --    
-defineProperty("apu_air_doors", globalPropertyf("tu154/custom/eng/apu_air_doors")) --     
+    { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, --     №1
+    { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf }, --     №2
+    { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf }, --     №3
+    { "apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf }, --
 
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
+    { "eng_valve_1", "tu154/custom/switchers/airbleed/eng_valve_1", globalPropertyi }, --
+    { "eng_valve_2", "tu154/custom/switchers/airbleed/eng_valve_2", globalPropertyi }, --
+    { "eng_valve_3", "tu154/custom/switchers/airbleed/eng_valve_3", globalPropertyi }, --
+    { "apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf }, --
 
--- failures
-defineProperty("tth_left_fail", globalPropertyi("tu154/custom/failures/tth_left_fail")) --  
-defineProperty("tth_right_fail", globalPropertyi("tu154/custom/failures/tth_right_fail")) --  
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- failures
+    { "tth_left_fail", "tu154/custom/failures/tth_left_fail", globalPropertyi }, --
+    { "tth_right_fail", "tu154/custom/failures/tth_right_fail", globalPropertyi }, --
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local eng_temp_tbl = {{ -100000, 0.0 },    -- bugs walkaround
                   {  0, 00 }, -- 0.0

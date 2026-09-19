@@ -156,7 +156,7 @@ defineProps({
     { "ovhd_back_panel_flood", "tu154/custom/lights/ovhd_back_panel_flood", globalPropertyf },
     { "eng_panel_flood", "tu154/custom/lights/eng_panel_flood", globalPropertyf },
     { "azs_panel_flood", "tu154/custom/lights/azs_panel_flood", globalPropertyf },
-    { "left_spotlight_flood", "tu154/custom/lights/left_spotlight_flood", globalPropertyf },
+    -- { "left_spotlight_flood", "tu154/custom/lights/left_spotlight_flood", globalPropertyf },
     -- Lighting controls
     { "cabinl_flood_set", "tu154/custom/lights/cabinl_flood_set", globalPropertyi },
     { "mid_left_panel_int_set", "tu154/custom/lights/mid_left_panel_int_set", globalPropertyf },

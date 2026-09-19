@@ -6,68 +6,75 @@
 -----------------------------------------------------------------------
 -- Smartcopilot (keep separate)
 -----------------------------------------------------------------------
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster"))
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1"))
-
------------------------------------------------------------------------
--- Helper to bulk-define DataRefs
------------------------------------------------------------------------
 local function defineProps(defs)
-	for _, d in ipairs(defs) do
-		defineProperty(d[1], d[3](d[2]))
-	end
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
 end
 
------------------------------------------------------------------------
--- DataRefs
------------------------------------------------------------------------
 defineProps({
-	-- Engines / sources
-	{"rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf},
-	{"rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf},
-	{"rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf},
-	{"asu_press", "tu154/custom/asu/press", globalPropertyf},
-	{"apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf},
-	{"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
-	{"msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
-	-- Switches / controls
-	{"psvp_left_on", "tu154/custom/switchers/airbleed/psvp_left_on", globalPropertyi},
-	{"psvp_right_on", "tu154/custom/switchers/airbleed/psvp_right_on", globalPropertyi},
-	{"psvp_left_on_cap", "tu154/custom/switchers/airbleed/psvp_left_on_cap", globalPropertyi},
-	{"psvp_right_on_cap", "tu154/custom/switchers/airbleed/psvp_right_on_cap", globalPropertyi},
-	{"air_valve_left", "tu154/custom/switchers/airbleed/air_valve_left", globalPropertyi},
-	{"air_valve_right", "tu154/custom/switchers/airbleed/air_valve_right", globalPropertyi},
-	{"emerg_decompress", "tu154/custom/switchers/airbleed/emerg_decompress", globalPropertyi},
-	{"emerg_decompress_cap", "tu154/custom/switchers/airbleed/emerg_decompress_cap", globalPropertyi},
-	{"eng_valve_1", "tu154/custom/switchers/airbleed/eng_valve_1", globalPropertyi},
-	{"eng_valve_2", "tu154/custom/switchers/airbleed/eng_valve_2", globalPropertyi},
-	{"eng_valve_3", "tu154/custom/switchers/airbleed/eng_valve_3", globalPropertyi},
-	-- Failures
-	{"airbleed_1", "tu154/custom/failures/airbleed_1", globalPropertyi},
-	{"airbleed_2", "tu154/custom/failures/airbleed_2", globalPropertyi},
-	{"airbleed_3", "tu154/custom/failures/airbleed_3", globalPropertyi},
-	{"psvp_fail_left", "tu154/custom/failures/psvp_fail_left", globalPropertyi},
-	{"psvp_fail_right", "tu154/custom/failures/psvp_fail_right", globalPropertyi},
-	-- Gear / misc
-	{"gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty},
-	-- Outputs
-	{"air_usage_L", "tu154/custom/bleed/air_usage_L", globalPropertyf},
-	{"air_usage_R", "tu154/custom/bleed/air_usage_R", globalPropertyf},
-	{"eng_airvalve_1", "tu154/custom/bleed/eng_airvalve_1", globalPropertyf},
-	{"eng_airvalve_2", "tu154/custom/bleed/eng_airvalve_2", globalPropertyf},
-	{"eng_airvalve_3", "tu154/custom/bleed/eng_airvalve_3", globalPropertyf},
-	{"apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf},
-	-- Power
-	{"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-	{"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
-	-- Start system
-	{"start_sys_work", "tu154/custom/start/start_sys_work", globalPropertyf},
-	-- Sim actuators (SOVs)
-	{"engine_bleed_sov_1", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]", globalProperty},
-	{"engine_bleed_sov_2", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]", globalProperty},
-	{"engine_bleed_sov_3", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[2]", globalProperty},
-	-- Time
-	{"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+
+    -----------------------------------------------------------------------
+    -- Helper to bulk-define DataRefs
+    -----------------------------------------------------------------------
+
+    -----------------------------------------------------------------------
+    -- DataRefs
+    -----------------------------------------------------------------------
+    -- Engines / sources
+    {"rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf},
+    {"rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf},
+    {"rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf},
+    {"asu_press", "tu154/custom/asu/press", globalPropertyf},
+    {"apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf},
+    {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
+    {"msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
+    -- Switches / controls
+    {"psvp_left_on", "tu154/custom/switchers/airbleed/psvp_left_on", globalPropertyi},
+    {"psvp_right_on", "tu154/custom/switchers/airbleed/psvp_right_on", globalPropertyi},
+    -- {"psvp_left_on_cap", "tu154/custom/switchers/airbleed/psvp_left_on_cap", globalPropertyi},
+    -- {"psvp_right_on_cap", "tu154/custom/switchers/airbleed/psvp_right_on_cap", globalPropertyi},
+    {"air_valve_left", "tu154/custom/switchers/airbleed/air_valve_left", globalPropertyi},
+    {"air_valve_right", "tu154/custom/switchers/airbleed/air_valve_right", globalPropertyi},
+    -- {"emerg_decompress", "tu154/custom/switchers/airbleed/emerg_decompress", globalPropertyi},
+    -- {"emerg_decompress_cap", "tu154/custom/switchers/airbleed/emerg_decompress_cap", globalPropertyi},
+    {"eng_valve_1", "tu154/custom/switchers/airbleed/eng_valve_1", globalPropertyi},
+    {"eng_valve_2", "tu154/custom/switchers/airbleed/eng_valve_2", globalPropertyi},
+    {"eng_valve_3", "tu154/custom/switchers/airbleed/eng_valve_3", globalPropertyi},
+    -- Failures
+    {"airbleed_1", "tu154/custom/failures/airbleed_1", globalPropertyi},
+    {"airbleed_2", "tu154/custom/failures/airbleed_2", globalPropertyi},
+    {"airbleed_3", "tu154/custom/failures/airbleed_3", globalPropertyi},
+    {"psvp_fail_left", "tu154/custom/failures/psvp_fail_left", globalPropertyi},
+    {"psvp_fail_right", "tu154/custom/failures/psvp_fail_right", globalPropertyi},
+    -- Gear / misc
+    {"gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty},
+    -- Outputs
+    {"air_usage_L", "tu154/custom/bleed/air_usage_L", globalPropertyf},
+    {"air_usage_R", "tu154/custom/bleed/air_usage_R", globalPropertyf},
+    {"eng_airvalve_1", "tu154/custom/bleed/eng_airvalve_1", globalPropertyf},
+    {"eng_airvalve_2", "tu154/custom/bleed/eng_airvalve_2", globalPropertyf},
+    {"eng_airvalve_3", "tu154/custom/bleed/eng_airvalve_3", globalPropertyf},
+    {"apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf},
+    -- Power
+    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
+    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
+    -- Start system
+    {"start_sys_work", "tu154/custom/start/start_sys_work", globalPropertyf},
+    -- Sim actuators (SOVs)
+    {"engine_bleed_sov_1", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]", globalProperty},
+    {"engine_bleed_sov_2", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]", globalProperty},
+    {"engine_bleed_sov_3", "sim/cockpit2/bleedair/actuators/engine_bleed_sov[2]", globalProperty},
+    -- Time
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
 })
 
 -----------------------------------------------------------------------

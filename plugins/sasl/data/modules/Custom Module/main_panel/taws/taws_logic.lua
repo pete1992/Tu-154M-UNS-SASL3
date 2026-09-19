@@ -1,47 +1,62 @@
+-- taws_logic.lua
 -- TAWS main logic
 size = {1000, 770}
 
 -- controls
-defineProperty("but_view", globalPropertyi("tu154/custom/buttons/srpbz/but_view")) --  
-defineProperty("but_empty", globalPropertyi("tu154/custom/buttons/srpbz/but_empty")) --  -
-defineProperty("but_down", globalPropertyi("tu154/custom/buttons/srpbz/but_down")) --   
-defineProperty("but_up", globalPropertyi("tu154/custom/buttons/srpbz/but_up")) --  
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("egpws_alarm_1", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1")) --   
-defineProperty("egpws_alarm_2", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2")) --  
-defineProperty("egpws_alarm_1_cap", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1_cap")) --   
-defineProperty("egpws_alarm_2_cap", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2_cap")) --   
-defineProperty("egpws_relief", globalPropertyi("tu154/custom/switchers/ovhd/egpws_relief")) -- 
-defineProperty("egpws_mode", globalPropertyi("tu154/custom/switchers/ovhd/egpws_mode")) -- QNH - QFE
+defineProps({
+    { "but_view", "tu154/custom/buttons/srpbz/but_view", globalPropertyi }, --
+    { "but_empty", "tu154/custom/buttons/srpbz/but_empty", globalPropertyi }, --  -
+    { "but_down", "tu154/custom/buttons/srpbz/but_down", globalPropertyi }, --
+    { "but_up", "tu154/custom/buttons/srpbz/but_up", globalPropertyi }, --
 
-defineProperty("egpws_control", globalPropertyi("tu154/custom/buttons/ovhd/egpws_control")) --   
-defineProperty("egpws_contr_gs", globalPropertyi("tu154/custom/buttons/ovhd/egpws_contr_gs")) --   
+    -- { "egpws_alarm_1", "tu154/custom/switchers/ovhd/egpws_alarm_1", globalPropertyi }, --
+    -- { "egpws_alarm_2", "tu154/custom/switchers/ovhd/egpws_alarm_2", globalPropertyi }, --
+    -- { "egpws_alarm_1_cap", "tu154/custom/switchers/ovhd/egpws_alarm_1_cap", globalPropertyi }, --
+    -- { "egpws_alarm_2_cap", "tu154/custom/switchers/ovhd/egpws_alarm_2_cap", globalPropertyi }, --
+    -- { "egpws_relief", "tu154/custom/switchers/ovhd/egpws_relief", globalPropertyi }, --
+    -- { "egpws_mode", "tu154/custom/switchers/ovhd/egpws_mode", globalPropertyi }, -- QNH - QFE
 
--- power
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt")) --   115
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+    { "egpws_control", "tu154/custom/buttons/ovhd/egpws_control", globalPropertyi }, --
+    -- { "egpws_contr_gs", "tu154/custom/buttons/ovhd/egpws_contr_gs", globalPropertyi }, --
 
-defineProperty("rv_on", globalPropertyi("tu154/custom/switchers/ovhd/rv5_2_on"))  -- switcher
+    -- power
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, --   115
+    -- { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
-defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
+    { "rv_on", "tu154/custom/switchers/ovhd/rv5_2_on", globalPropertyi },  -- switcher
 
-defineProperty("taws_fail", globalPropertyi("tu154/custom/failures/taws_fail")) --  
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
 
--- sources
-defineProperty("vvi_L", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")) -- vertical speed in ft/min
-defineProperty("vvi_R", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_copilot"))
+    { "taws_fail", "tu154/custom/failures/taws_fail", globalPropertyi }, --
 
-defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))  --    
+    -- sources
+    -- { "vvi_L", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf }, -- vertical speed in ft/min
+    -- { "vvi_R", "sim/cockpit2/gauges/indicators/vvi_fpm_copilot", globalPropertyf },
 
--- results
-defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 - , 6 - 
-defineProperty("distance_set", globalPropertyi("tu154/custom/taws/distance_set")) --    , . 0 = 10, 1 = 20, 2 = 40, 3 = 80, 4 = 160, 5 = 320, 6 = 640
+    -- { "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf },  --
 
-defineProperty("taws_cc", globalPropertyf("tu154/custom/taws/taws_cc")) --    
+    -- results
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 - , 6 -
+    { "distance_set", "tu154/custom/taws/distance_set", globalPropertyi }, --    , . 0 = 10, 1 = 20, 2 = 40, 3 = 80, 4 = 160, 5 = 320, 6 = 640
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    { "taws_cc", "tu154/custom/taws/taws_cc", globalPropertyf }, --
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local but_view_last = 0
 local but_empt_last = 0

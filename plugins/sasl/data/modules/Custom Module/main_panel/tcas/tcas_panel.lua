@@ -1,3 +1,4 @@
+-- tcas_panel.lua
 -- this is TCAS panel
 size = {2048, 2048}
 
@@ -11,7 +12,7 @@ defineProps({
     { "tcas_on", "tu154/custom/switchers/ovhd/tcas_on", globalPropertyi },  --  TCAS
 
     { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-    { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
+    -- { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
     { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
     { "tcas_mode", "tu154/custom/switchers/tcas/tcas_mode", globalPropertyi },  --	 TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA
@@ -34,12 +35,12 @@ defineProps({
 
     { "level_mode", "tu154/custom/tcas/level_mode", globalPropertyi },  -- 1 = above, 0 = normal, -1 = below
     { "fl_mode", "tu154/custom/tcas/fl_mode", globalPropertyi },  -- 0 = absolute, 1 = relative
-    { "flt_id", "tu154/custom/tcas/flt_id", globalPropertyi },  -- 0 = cover, 1 = show / change code
+    -- { "flt_id", "tu154/custom/tcas/flt_id", globalPropertyi },  -- 0 = cover, 1 = show / change code
 
     { "xpdr_code", "sim/cockpit/radios/transponder_code", globalPropertyf },
-    { "xpdr_mode", "sim/cockpit/radios/transponder_mode", globalPropertyf },
+    -- { "xpdr_mode", "sim/cockpit/radios/transponder_mode", globalPropertyf },
     { "xpdr_led", "sim/cockpit/radios/transponder_light", globalPropertyf },
-    { "xpdr_fail", "sim/operation/failures/rel_xpndr", globalPropertyi },
+    -- { "xpdr_fail", "sim/operation/failures/rel_xpndr", globalPropertyi },
 
     -- time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
@@ -56,7 +57,7 @@ defineProps({
 
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
 
 ident_cmd = sasl.findCommand("sim/transponder/transponder_ident")  -- comand of transponder ident

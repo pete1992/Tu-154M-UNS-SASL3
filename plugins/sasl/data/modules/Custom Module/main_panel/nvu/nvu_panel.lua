@@ -1,3 +1,4 @@
+-- nvu_panel.lua
 -- Remaining cockpit services from the former NVU panel.
 -- Keep the BDK needle, shared switch sounds, switch initialization and lamp test.
 -- Retired NVU counters, entry buttons and coordinate/correction indications are gone.

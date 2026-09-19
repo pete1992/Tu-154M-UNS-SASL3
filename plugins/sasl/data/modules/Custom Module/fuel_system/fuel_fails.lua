@@ -1,32 +1,47 @@
+-- fuel_fails.lua
 -- fuel system fails
 
 -- failures
-defineProperty("fuel_porc_fail", globalPropertyi("tu154/custom/failures/fuel_porc_fail"))
-defineProperty("fuel_auto_fail", globalPropertyi("tu154/custom/failures/fuel_auto_fail"))
-defineProperty("fuel_level_fail", globalPropertyi("tu154/custom/failures/fuel_level_fail"))
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("fuel_pump_2l_fail", globalPropertyi("tu154/custom/failures/fuel_pump_2l_fail")) -- number of failed pumps
-defineProperty("fuel_pump_2r_fail", globalPropertyi("tu154/custom/failures/fuel_pump_2r_fail"))
-defineProperty("fuel_pump_3l_fail", globalPropertyi("tu154/custom/failures/fuel_pump_3l_fail"))
-defineProperty("fuel_pump_3r_fail", globalPropertyi("tu154/custom/failures/fuel_pump_3r_fail"))
-defineProperty("fuel_pump_1_fail", globalPropertyi("tu154/custom/failures/fuel_pump_1_fail"))
-defineProperty("fuel_pump_4_fail", globalPropertyi("tu154/custom/failures/fuel_pump_4_fail"))
+defineProps({
+    { "fuel_porc_fail", "tu154/custom/failures/fuel_porc_fail", globalPropertyi },
+    { "fuel_auto_fail", "tu154/custom/failures/fuel_auto_fail", globalPropertyi },
+    { "fuel_level_fail", "tu154/custom/failures/fuel_level_fail", globalPropertyi },
 
-defineProperty("fuel_meter_2l_fail", globalPropertyi("tu154/custom/failures/fuel_meter_2l_fail"))
-defineProperty("fuel_meter_2r_fail", globalPropertyi("tu154/custom/failures/fuel_meter_2r_fail"))
-defineProperty("fuel_meter_3l_fail", globalPropertyi("tu154/custom/failures/fuel_meter_3l_fail"))
-defineProperty("fuel_meter_3r_fail", globalPropertyi("tu154/custom/failures/fuel_meter_3r_fail"))
-defineProperty("fuel_meter_1_fail", globalPropertyi("tu154/custom/failures/fuel_meter_1_fail"))
-defineProperty("fuel_meter_4_fail", globalPropertyi("tu154/custom/failures/fuel_meter_4_fail"))
-defineProperty("fuel_meter_summ_fail", globalPropertyi("tu154/custom/failures/fuel_meter_summ"))
+    { "fuel_pump_2l_fail", "tu154/custom/failures/fuel_pump_2l_fail", globalPropertyi }, -- number of failed pumps
+    { "fuel_pump_2r_fail", "tu154/custom/failures/fuel_pump_2r_fail", globalPropertyi },
+    { "fuel_pump_3l_fail", "tu154/custom/failures/fuel_pump_3l_fail", globalPropertyi },
+    { "fuel_pump_3r_fail", "tu154/custom/failures/fuel_pump_3r_fail", globalPropertyi },
+    { "fuel_pump_1_fail", "tu154/custom/failures/fuel_pump_1_fail", globalPropertyi },
+    { "fuel_pump_4_fail", "tu154/custom/failures/fuel_pump_4_fail", globalPropertyi },
 
--- define sources
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
+    { "fuel_meter_2l_fail", "tu154/custom/failures/fuel_meter_2l_fail", globalPropertyi },
+    { "fuel_meter_2r_fail", "tu154/custom/failures/fuel_meter_2r_fail", globalPropertyi },
+    { "fuel_meter_3l_fail", "tu154/custom/failures/fuel_meter_3l_fail", globalPropertyi },
+    { "fuel_meter_3r_fail", "tu154/custom/failures/fuel_meter_3r_fail", globalPropertyi },
+    { "fuel_meter_1_fail", "tu154/custom/failures/fuel_meter_1_fail", globalPropertyi },
+    { "fuel_meter_4_fail", "tu154/custom/failures/fuel_meter_4_fail", globalPropertyi },
+    { "fuel_meter_summ_fail", "tu154/custom/failures/fuel_meter_summ", globalPropertyi },
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- define sources
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local fail_counter = 0
 local check_time = math.random(15, 30)

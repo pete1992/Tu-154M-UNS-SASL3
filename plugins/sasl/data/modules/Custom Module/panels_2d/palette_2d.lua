@@ -1,44 +1,62 @@
+-- palette_2d.lua
 -- this is the palette
 
 size = {251, 305}
 
-defineProperty("show_palette",globalPropertyi("tu154/custom/panels/show_palette")) --   
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("payload", globalPropertyf("sim/flightmodel/weight/m_fixed"))  -- payload weight, kg
-defineProperty("CG_load", globalPropertyf("sim/flightmodel/misc/cgz_ref_to_default")) -- Center of Gravity reference to default, m
-defineProperty("fuel_q_1", globalProperty("sim/flightmodel/weight/m_fuel[0]")) -- fuel quantity for tank 1
-defineProperty("fuel_q_4", globalProperty("sim/flightmodel/weight/m_fuel[1]")) -- fuel quantity for tank 4
-defineProperty("fuel_q_2R", globalProperty("sim/flightmodel/weight/m_fuel[2]")) -- fuel quantity for tank 2R
-defineProperty("fuel_q_2L", globalProperty("sim/flightmodel/weight/m_fuel[3]")) -- fuel quantity for tank 2L
-defineProperty("fuel_q_3R", globalProperty("sim/flightmodel/weight/m_fuel[4]")) -- fuel quantity for tank 3R
-defineProperty("fuel_q_3L", globalProperty("sim/flightmodel/weight/m_fuel[5]")) -- fuel quantity for tank 3L
-
-defineProperty("gear1_deflect", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))
-
--- The two panel faces occupy the top of the 512 px atlas. SASL 3 crop Y
--- coordinates start at the bottom, unlike the original source coordinates.
 local PALETTE_ATLAS_HEIGHT = 512
 
 local function paletteAtlasY(top, height)
 	return PALETTE_ATLAS_HEIGHT - top - height
 end
 
--- load images
 defineProperty("bg_img1", sasl.gl.loadImage("palette.png", 0, paletteAtlasY(0, 305), 251, 305))
+
 defineProperty("bg_img2", sasl.gl.loadImage("palette.png", 250, paletteAtlasY(0, 305), 251, 305))
 
 local palette_font = sasl.gl.loadFont("Verdana.ttf")
 
-defineProperty("cg_pos_actual", globalProperty("tu154/custom/misc/cg_pos_actual"))
-defineProperty("weight_actual", globalProperty("tu154/custom/misc/weight_actual"))
+defineProps({
+    { "show_palette", "tu154/custom/panels/show_palette", globalPropertyi }, --
 
--- save results
-defineProperty("v1_15", globalPropertyi("tu154/custom/speeds/v1_15")) -- 
-defineProperty("vr_15", globalPropertyi("tu154/custom/speeds/vr_15")) -- 
-defineProperty("v2_15", globalPropertyi("tu154/custom/speeds/v2_15")) -- 
-defineProperty("v1_28", globalPropertyi("tu154/custom/speeds/v1_28")) -- 
-defineProperty("vr_28", globalPropertyi("tu154/custom/speeds/vr_28")) -- 
-defineProperty("v2_28", globalPropertyi("tu154/custom/speeds/v2_28")) -- 
+    { "payload", "sim/flightmodel/weight/m_fixed", globalPropertyf },  -- payload weight, kg
+    { "CG_load", "sim/flightmodel/misc/cgz_ref_to_default", globalPropertyf }, -- Center of Gravity reference to default, m
+    { "fuel_q_1", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel quantity for tank 1
+    { "fuel_q_4", "sim/flightmodel/weight/m_fuel[1]", globalProperty }, -- fuel quantity for tank 4
+    { "fuel_q_2R", "sim/flightmodel/weight/m_fuel[2]", globalProperty }, -- fuel quantity for tank 2R
+    { "fuel_q_2L", "sim/flightmodel/weight/m_fuel[3]", globalProperty }, -- fuel quantity for tank 2L
+    { "fuel_q_3R", "sim/flightmodel/weight/m_fuel[4]", globalProperty }, -- fuel quantity for tank 3R
+    { "fuel_q_3L", "sim/flightmodel/weight/m_fuel[5]", globalProperty }, -- fuel quantity for tank 3L
+
+    { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty },
+
+    -- The two panel faces occupy the top of the 512 px atlas. SASL 3 crop Y
+    -- coordinates start at the bottom, unlike the original source coordinates.
+
+    -- load images
+
+    { "cg_pos_actual", "tu154/custom/misc/cg_pos_actual", globalProperty },
+    { "weight_actual", "tu154/custom/misc/weight_actual", globalProperty },
+
+    -- save results
+    { "v1_15", "tu154/custom/speeds/v1_15", globalPropertyi }, --
+    { "vr_15", "tu154/custom/speeds/vr_15", globalPropertyi }, --
+    { "v2_15", "tu154/custom/speeds/v2_15", globalPropertyi }, --
+    { "v1_28", "tu154/custom/speeds/v1_28", globalPropertyi }, --
+    { "vr_28", "tu154/custom/speeds/vr_28", globalPropertyi }, --
+    { "v2_28", "tu154/custom/speeds/v2_28", globalPropertyi }, --
+})
 
 local function calc_CG(weight, index) -- try to unify calculations of CG by diagramm
 	

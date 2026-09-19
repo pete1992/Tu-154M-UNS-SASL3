@@ -45,7 +45,7 @@ defineProps({
     { "cockpit_light_cc_right", "tu154/custom/elec/cockpit_light_cc_right", globalPropertyf },
     { "ext_light_cc_left", "tu154/custom/elec/ext_light_cc_left", globalPropertyf },
     { "ext_light_cc_right", "tu154/custom/elec/ext_light_cc_right", globalPropertyf },
-    { "apu_start_cc", "tu154/custom/elec/apu_start_cc", globalPropertyf },
+    -- { "apu_start_cc", "tu154/custom/elec/apu_start_cc", globalPropertyf },
     { "fuel_pumps_27_cc", "tu154/custom/elec/fuel_pumps_27_cc", globalPropertyf },
     { "ai_27_L_cc", "tu154/custom/antiice/ai_27_L_cc", globalPropertyf },
     { "ai_27_R_cc", "tu154/custom/antiice/ai_27_R_cc", globalPropertyf },
@@ -105,7 +105,7 @@ defineProps({
     -- SmartCopilot
     { "auasp_pow115_cc", "tu154/custom/elec/auasp_pow115_cc", globalPropertyf },
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 function update()

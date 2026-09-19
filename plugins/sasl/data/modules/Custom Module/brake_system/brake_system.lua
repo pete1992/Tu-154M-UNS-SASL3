@@ -1,3 +1,4 @@
+-- brake_system.lua
 -- this is the brakes system
 
 local function defineProps(defs)
@@ -7,11 +8,11 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"have_pedals", "tu154/custom/have_pedals", globalPropertyi},
+    -- {"have_pedals", "tu154/custom/have_pedals", globalPropertyi},
     -- Hydraulic pressure and timing.
     {"gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf},
-    {"gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf},
-    {"gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf},
+    -- {"gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf},
+    -- {"gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf},
     {"gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf},
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
     -- Simulator brakes.
@@ -22,8 +23,8 @@ defineProps({
     -- Aircraft controls, animation and internal brake demand.
     {"gear_blocks", "tu154/custom/anim/gear_blocks", globalPropertyf},
     {"brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf},
-    {"brake_emerg_L", "tu154/custom/controlls/brake_emerg_L", globalPropertyf},
-    {"brake_emerg_R", "tu154/custom/controlls/brake_emerg_R", globalPropertyf},
+    -- {"brake_emerg_L", "tu154/custom/controlls/brake_emerg_L", globalPropertyf},
+    -- {"brake_emerg_R", "tu154/custom/controlls/brake_emerg_R", globalPropertyf},
     {"parking_brake", "tu154/custom/controll/parking_brake", globalPropertyi},
     {"brake_L", "tu154/custom/controlls/brake_L", globalPropertyf},
     {"brake_R", "tu154/custom/controlls/brake_R", globalPropertyf},

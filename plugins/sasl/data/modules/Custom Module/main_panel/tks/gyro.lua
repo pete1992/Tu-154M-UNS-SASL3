@@ -1,3 +1,4 @@
+-- gyro.lua
 -- ============================================================================
 -- TKS / GA COURSE COMPUTATION
 -- Refactor goals:
@@ -28,13 +29,13 @@ end
 defineProps({
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },   -- 0 = plugin not found, 1 = slave, 2 = master
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control
 	-- Aircraft heading / attitude / position
 	{ "true_psi", "sim/flightmodel/position/true_psi", globalPropertyf },
 	{ "mag_psi", "sim/flightmodel/position/mag_psi", globalPropertyf },
 	{ "course_mk", "tu154/custom/tks/course_mk_1", globalPropertyf },
-	{ "cur", "sim/cockpit/gyros/psi_ind_degm4", globalPropertyf },
-	{ "roll", "sim/flightmodel/position/phi", globalPropertyf },
+	-- { "cur", "sim/cockpit/gyros/psi_ind_degm4", globalPropertyf },
+	-- { "roll", "sim/flightmodel/position/phi", globalPropertyf },
 	{ "pitch", "sim/flightmodel/position/true_theta", globalPropertyf },
 	{ "latitude", "sim/flightmodel/position/latitude", globalPropertyd },
 	{ "longitude", "sim/flightmodel/position/longitude", globalPropertyd },
@@ -44,7 +45,7 @@ defineProps({
 
 	-- TKS controls
 	{ "tks_mode", "tu154/custom/switchers/ovhd/tks_mode", globalPropertyi },
-	{ "tks_user", "tu154/custom/switchers/ovhd/tks_mode_left", globalPropertyi },
+	-- { "tks_user", "tu154/custom/switchers/ovhd/tks_mode_left", globalPropertyi },
 	{ "tks_source", "tu154/custom/switchers/ovhd/tks_mode_right", globalPropertyi },
 	{ "tks_course_set", "tu154/custom/switchers/ovhd/tks_course_set", globalPropertyi },
 	{ "tks_corrr_button", "tu154/custom/buttons/ovhd/tks_corrr_button", globalPropertyi },
@@ -53,23 +54,23 @@ defineProps({
 	{ "tks_on_1", "tu154/custom/switchers/ovhd/tks_on_1", globalPropertyi },
 	{ "tks_on_2", "tu154/custom/switchers/ovhd/tks_on_2", globalPropertyi },
 	{ "tks_heat", "tu154/custom/switchers/ovhd/tks_heat", globalPropertyi },
-	{ "tks_corr_1", "tu154/custom/switchers/ovhd/tks_corr_1", globalPropertyi },
-	{ "tks_corr_2", "tu154/custom/switchers/ovhd/tks_corr_2", globalPropertyi },
+	-- { "tks_corr_1", "tu154/custom/switchers/ovhd/tks_corr_1", globalPropertyi },
+	-- { "tks_corr_2", "tu154/custom/switchers/ovhd/tks_corr_2", globalPropertyi },
 
 	-- Stabilization
-	{ "stabil_ga_main", "tu154/custom/switchers/ovhd/stabil_ga_main", globalPropertyi },
-	{ "stabil_ga_reserv", "tu154/custom/switchers/ovhd/stabil_ga_reserv", globalPropertyi },
+	-- { "stabil_ga_main", "tu154/custom/switchers/ovhd/stabil_ga_main", globalPropertyi },
+	-- { "stabil_ga_reserv", "tu154/custom/switchers/ovhd/stabil_ga_reserv", globalPropertyi },
 
 	-- Electrical
 	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
-	{ "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
-	{ "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
+	-- { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+	-- { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
 	{ "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf },
-	{ "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf },
+	-- { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf },
 	{ "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf },
 	{ "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-	{ "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
-	{ "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
+	-- { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
+	-- { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
 	-- Failures
 	{ "fail_1", "sim/operation/failures/rel_ss_dgy", globalPropertyf },

@@ -1,3 +1,4 @@
+-- antiice_logic.lua
 -- Anti-ice system logic.
 
 -- Three windshield circuits drive native XP12 thermal sources; PPD switches
@@ -45,7 +46,7 @@ defineProps({
     { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
     { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
     -- Icing sources and environmental data
-    { "window_ice", "sim/flightmodel/failures/window_ice", globalPropertyf },
+    -- { "window_ice", "sim/flightmodel/failures/window_ice", globalPropertyf },
     -- The native accretion rate remains meaningful at zero/full ice and does not
     -- require corrupting a visible windshield's ice ratio to use it as a sensor.
     { "native_ice_rate", "sim/flightmodel/failures/ice_delta", globalPropertyf },
@@ -82,7 +83,7 @@ defineProps({
     -- Anti-ice outputs and simulator state
     { "ice_detected", "tu154/custom/antiice/ice_detected", globalPropertyi },
     { "ice_detect_ok", "tu154/custom/antiice/ice_detect_ok", globalPropertyi },
-    { "ice_window_heat_on", "sim/cockpit2/ice/ice_window_heat_on", globalPropertyi },
+    -- { "ice_window_heat_on", "sim/cockpit2/ice/ice_window_heat_on", globalPropertyi },
     -- This model uses XP12 thermal channels 0/1/2 for left/right/center front
     -- panes. Channel 3 is unused; passenger windows have no electric heater.
     { "native_heat_left", "sim/cockpit2/ice/ice_window_heat_on_window", intElement(0) },
@@ -129,7 +130,7 @@ defineProps({
     { "stab_heat_t", "tu154/custom/antiice/stab_heat_t", globalPropertyf },
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 -- Legacy source bindings kept disabled intentionally.

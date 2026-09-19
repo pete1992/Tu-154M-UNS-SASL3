@@ -1,3 +1,4 @@
+-- flight_controls.lua
 --[[
 Flight Controls Logic - Changelog
 
@@ -45,16 +46,16 @@ defineProps({
     { "overr", "sim/operation/override/override_control_surfaces", globalPropertyf }, -- X-Plane control-surface override.
     -- Control switches, trims and force-loader state
     { "speedbrake_ratio", "sim/cockpit2/controls/speedbrake_ratio", globalPropertyf }, -- Simulator speedbrake lever ratio.
-    { "elev_trimm_sw", "tu154/custom/controll/elev_trimm_switcher", globalPropertyi }, -- Elevator trim switch: -1 nose down, 0 neutral, +1 nose up.
-    { "ail_trimm_sw", "tu154/custom/controll/ail_trimm_sw", globalPropertyi }, -- Aileron trim switch.
-    { "rudd_trimm_sw", "tu154/custom/controll/rudd_trimm_sw", globalPropertyi }, -- Rudder trim switch.
+    -- { "elev_trimm_sw", "tu154/custom/controll/elev_trimm_switcher", globalPropertyi }, -- Elevator trim switch: -1 nose down, 0 neutral, +1 nose up.
+    -- { "ail_trimm_sw", "tu154/custom/controll/ail_trimm_sw", globalPropertyi }, -- Aileron trim switch.
+    -- { "rudd_trimm_sw", "tu154/custom/controll/rudd_trimm_sw", globalPropertyi }, -- Rudder trim switch.
     { "int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf }, -- Internal elevator trim position.
     { "int_roll_trim", "tu154/custom/trimmers/int_roll_trim", globalPropertyf }, -- Internal aileron trim position.
     { "int_yaw_trim", "tu154/custom/trimmers/int_yaw_trim", globalPropertyf }, -- Internal rudder trim position.
     { "buster_on_1", "tu154/custom/switchers/console/buster_on_1", globalPropertyi }, -- Booster channel 1 switch.
     { "buster_on_2", "tu154/custom/switchers/console/buster_on_2", globalPropertyi }, -- Booster channel 2 switch.
     { "buster_on_3", "tu154/custom/switchers/console/buster_on_3", globalPropertyi }, -- Booster channel 3 switch.
-    { "busters_cap", "tu154/custom/switchers/console/busters_cap", globalPropertyi }, -- Booster switch guard position.
+    -- { "busters_cap", "tu154/custom/switchers/console/busters_cap", globalPropertyi }, -- Booster switch guard position.
     { "control_force_pos", "tu154/custom/controls/control_force_pos", globalPropertyf }, -- Elevator force-loader position: 0 disconnected, 1 engaged.
     { "control_force_pos_rud", "tu154/custom/controls/control_force_pos_rud", globalPropertyf }, -- Rudder force-loader position: 0 disconnected, 1 engaged.
     { "contr_force_set", "tu154/custom/controll/contr_force_set", globalPropertyi }, -- Force-loader selector: -1 flight, 0 automatic, +1 takeoff/landing.
@@ -62,9 +63,9 @@ defineProps({
     { "hydro_ra56_elev_1", "tu154/custom/switchers/eng/hydro_ra56_elev_1", globalPropertyi }, -- RA-56 pitch hydraulic channel 1.
     { "hydro_ra56_elev_2", "tu154/custom/switchers/eng/hydro_ra56_elev_2", globalPropertyi }, -- RA-56 pitch hydraulic channel 2.
     { "hydro_ra56_elev_3", "tu154/custom/switchers/eng/hydro_ra56_elev_3", globalPropertyi }, -- RA-56 pitch hydraulic channel 3.
-    { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty },
-    { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty },
-    { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, -- Front gear vertical tire deflection.
+    -- { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty },
+    -- { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty },
+    -- { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, -- Front gear vertical tire deflection.
     { "gear2_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, -- Left main gear vertical tire deflection.
     { "gear3_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, -- Right main gear vertical tire deflection.
     -- Wing control surfaces
@@ -80,14 +81,14 @@ defineProps({
     { "roll_spoil_R", "sim/flightmodel/controls/wing2r_spo1def", globalPropertyf }, -- Right roll-spoiler deflection in degrees.
     { "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- Left inner flap position.
     { "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- Right inner flap position.
-    { "flap_mid_L", "sim/flightmodel/controls/wing2l_fla2def", globalPropertyf }, -- Left middle flap position.
-    { "flap_mid_R", "sim/flightmodel/controls/wing2r_fla2def", globalPropertyf }, -- Right middle flap position.
-    { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf }, -- Slat deployment ratio.
+    -- { "flap_mid_L", "sim/flightmodel/controls/wing2l_fla2def", globalPropertyf }, -- Left middle flap position.
+    -- { "flap_mid_R", "sim/flightmodel/controls/wing2r_fla2def", globalPropertyf }, -- Right middle flap position.
+    -- { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf }, -- Slat deployment ratio.
     -- Tail control surfaces
     { "elevator_L", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf }, -- Left elevator deflection in degrees; positive is trailing-edge down.
     { "elevator_R", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf }, -- Right elevator deflection in degrees; positive is trailing-edge down.
     { "rudder", "sim/flightmodel/controls/vstab2_rud1def", globalPropertyf }, -- Rudder deflection in degrees; positive is trailing-edge left.
-    { "stab_ratio", "sim/cockpit2/controls/elevator_trim", globalPropertyf }, -- Simulator pitch trim position.
+    -- { "stab_ratio", "sim/cockpit2/controls/elevator_trim", globalPropertyf }, -- Simulator pitch trim position.
     -- Hydraulic pressure
     { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, -- Hydraulic system 1 pressure.
     { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, -- Hydraulic system 2 pressure.
@@ -104,21 +105,21 @@ defineProps({
     -- Electrical power
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, -- Left 27 V bus voltage.
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, -- Right 27 V bus voltage.
-    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, -- 115 V bus 1 voltage.
-    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf }, -- 115 V bus 3 voltage.
-    { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf }, -- Left 36 V bus voltage.
-    { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, -- Right 36 V bus voltage.
-    { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, -- PTS-250 bus 1 voltage.
-    { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, -- PTS-250 bus 2 voltage.
+    -- { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, -- 115 V bus 1 voltage.
+    -- { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf }, -- 115 V bus 3 voltage.
+    -- { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf }, -- Left 36 V bus voltage.
+    -- { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, -- Right 36 V bus voltage.
+    -- { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, -- PTS-250 bus 1 voltage.
+    -- { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, -- PTS-250 bus 2 voltage.
     -- Spoiler deployment sources
     { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
     { "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf }, -- Engine 1 throttle animation.
     { "anim_rud2", "tu154/custom/controlls/throttle_2", globalPropertyf }, -- Engine 2 throttle animation.
     { "anim_rud3", "tu154/custom/controlls/throttle_3", globalPropertyf }, -- Engine 3 throttle animation.
-    { "anim_rud1_ENG", "tu154/custom/controlls/throttle_1_ENG", globalPropertyf }, -- Flight engineer engine 1 throttle animation.
-    { "anim_rud2_ENG", "tu154/custom/controlls/throttle_2_ENG", globalPropertyf }, -- Flight engineer engine 2 throttle animation.
-    { "anim_rud3_ENG", "tu154/custom/controlls/throttle_3_ENG", globalPropertyf }, -- Flight engineer engine 3 throttle animation.
+    -- { "anim_rud1_ENG", "tu154/custom/controlls/throttle_1_ENG", globalPropertyf }, -- Flight engineer engine 1 throttle animation.
+    -- { "anim_rud2_ENG", "tu154/custom/controlls/throttle_2_ENG", globalPropertyf }, -- Flight engineer engine 2 throttle animation.
+    -- { "anim_rud3_ENG", "tu154/custom/controlls/throttle_3_ENG", globalPropertyf }, -- Flight engineer engine 3 throttle animation.
     { "revers_L", "tu154/custom/controlls/revers_L", globalPropertyf }, -- Left reverser lever position.
     { "revers_R", "tu154/custom/controlls/revers_R", globalPropertyf }, -- Right reverser lever position.
     { "ias_L", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf }, -- Pilot indicated airspeed in knots.
@@ -126,9 +127,9 @@ defineProps({
     -- Electrical loads
     { "ctr_27_L_cc", "tu154/custom/control/ctr_27_L_cc", globalPropertyf }, -- Flight-control load on the left 27 V bus.
     { "ctr_27_R_cc", "tu154/custom/control/ctr_27_R_cc", globalPropertyf }, -- Flight-control load on the right 27 V bus.
-    { "ctr_115_1_cc", "tu154/custom/control/ctr_115_1_cc", globalPropertyf }, -- Flight-control load on 115 V bus 1.
-    { "ctr_115_2_cc", "tu154/custom/control/ctr_115_2_cc", globalPropertyf }, -- Flight-control load on 115 V bus 2.
-    { "ctr_115_3_cc", "tu154/custom/control/ctr_115_3_cc", globalPropertyf }, -- Flight-control load on 115 V bus 3.
+    -- { "ctr_115_1_cc", "tu154/custom/control/ctr_115_1_cc", globalPropertyf }, -- Flight-control load on 115 V bus 1.
+    -- { "ctr_115_2_cc", "tu154/custom/control/ctr_115_2_cc", globalPropertyf }, -- Flight-control load on 115 V bus 2.
+    -- { "ctr_115_3_cc", "tu154/custom/control/ctr_115_3_cc", globalPropertyf }, -- Flight-control load on 115 V bus 3.
     -- ABSU commands and flight data
     { "absu_contr_pitch", "tu154/custom/absu/contr_pitch", globalPropertyf }, -- ABSU RA-56 pitch actuator command.
     { "absu_contr_roll", "tu154/custom/absu/contr_roll", globalPropertyf }, -- ABSU RA-56 roll actuator command.
@@ -137,7 +138,7 @@ defineProps({
     { "machno", "sim/flightmodel/misc/machno", globalPropertyf }, -- Mach number.
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- SmartCopilot: 0 unavailable, 1 slave, 2 master.
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control.
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control.
     -- Failures
     { "ail_fail_left", "tu154/custom/failures/ail_fail_left", globalPropertyi }, -- Left aileron failure flag.
     { "ail_fail_right", "tu154/custom/failures/ail_fail_right", globalPropertyi }, -- Right aileron failure flag.

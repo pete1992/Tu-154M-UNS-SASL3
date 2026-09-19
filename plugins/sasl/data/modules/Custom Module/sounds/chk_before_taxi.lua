@@ -1,91 +1,106 @@
+-- chk_before_taxi.lua
 -- this is before taxi checklist
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- time of frame
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("side",globalPropertyi("tu154/custom/checklist/side")) --   . 0 -  , 1 -  
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
 
-defineProperty("fishka_1",globalPropertyi("tu154/custom/checklist/fishka_1")) --  . 0 - , 1 - 
-defineProperty("fishka_2",globalPropertyi("tu154/custom/checklist/fishka_2")) --  . 0 - , 1 - 
-defineProperty("fishka_3",globalPropertyi("tu154/custom/checklist/fishka_3")) --  . 0 - , 1 - 
-defineProperty("fishka_4",globalPropertyi("tu154/custom/checklist/fishka_4")) --  . 0 - , 1 - 
-defineProperty("fishka_5",globalPropertyi("tu154/custom/checklist/fishka_5")) --  . 0 - , 1 - 
-defineProperty("fishka_6",globalPropertyi("tu154/custom/checklist/fishka_6")) --  . 0 - , 1 - 
-defineProperty("fishka_7",globalPropertyi("tu154/custom/checklist/fishka_7")) --  . 0 - , 1 - 
-defineProperty("fishka_8",globalPropertyi("tu154/custom/checklist/fishka_8")) --  . 0 - , 1 - 
-defineProperty("fishka_9",globalPropertyi("tu154/custom/checklist/fishka_9")) --  . 0 - , 1 - 
-defineProperty("fishka_10",globalPropertyi("tu154/custom/checklist/fishka_10")) --  . 0 - , 1 - 
-defineProperty("fishka_11",globalPropertyi("tu154/custom/checklist/fishka_11")) --  . 0 - , 1 - 
-defineProperty("fishka_12",globalPropertyi("tu154/custom/checklist/fishka_12")) --  . 0 - , 1 - 
-defineProperty("fishka_13",globalPropertyi("tu154/custom/checklist/fishka_13")) --  . 0 - , 1 - 
-defineProperty("fishka_14",globalPropertyi("tu154/custom/checklist/fishka_14")) --  . 0 - , 1 - 
-defineProperty("fishka_15",globalPropertyi("tu154/custom/checklist/fishka_15")) --  . 0 - , 1 - 
-defineProperty("fishka_16",globalPropertyi("tu154/custom/checklist/fishka_16")) --  . 0 - , 1 - 
-defineProperty("fishka_17",globalPropertyi("tu154/custom/checklist/fishka_17")) --  . 0 - , 1 - 
-defineProperty("fishka_18",globalPropertyi("tu154/custom/checklist/fishka_18")) --  . 0 - , 1 - 
-defineProperty("fishka_19",globalPropertyi("tu154/custom/checklist/fishka_19")) --  . 0 - , 1 - 
-defineProperty("fishka_20",globalPropertyi("tu154/custom/checklist/fishka_20")) --  . 0 - , 1 - 
+    -- { "side", "tu154/custom/checklist/side", globalPropertyi }, --   . 0 -  , 1 -
 
-defineProperty("checklist_selected",globalPropertyi("tu154/custom/checklist/checklist_selected")) --  
+    { "fishka_1", "tu154/custom/checklist/fishka_1", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_2", "tu154/custom/checklist/fishka_2", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_3", "tu154/custom/checklist/fishka_3", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_4", "tu154/custom/checklist/fishka_4", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_5", "tu154/custom/checklist/fishka_5", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_6", "tu154/custom/checklist/fishka_6", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_7", "tu154/custom/checklist/fishka_7", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_8", "tu154/custom/checklist/fishka_8", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_9", "tu154/custom/checklist/fishka_9", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_10", "tu154/custom/checklist/fishka_10", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_11", "tu154/custom/checklist/fishka_11", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_12", "tu154/custom/checklist/fishka_12", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_13", "tu154/custom/checklist/fishka_13", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_14", "tu154/custom/checklist/fishka_14", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_15", "tu154/custom/checklist/fishka_15", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_16", "tu154/custom/checklist/fishka_16", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_17", "tu154/custom/checklist/fishka_17", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_18", "tu154/custom/checklist/fishka_18", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_19", "tu154/custom/checklist/fishka_19", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_20", "tu154/custom/checklist/fishka_20", globalPropertyi }, --  . 0 - , 1 -
 
--- sources
-defineProperty("gen_1_on", globalPropertyi("tu154/custom/switchers/eng/gen_1_on")) --   1. -1 - , 0 - , +1 - 
-defineProperty("gen_2_on", globalPropertyi("tu154/custom/switchers/eng/gen_2_on")) --   1. -1 - , 0 - , +1 - 
-defineProperty("gen_3_on", globalPropertyi("tu154/custom/switchers/eng/gen_3_on")) --   1. -1 - , 0 - , +1 - 
+    { "checklist_selected", "tu154/custom/checklist/checklist_selected", globalPropertyi }, --
 
-defineProperty("bat1_on", globalPropertyi("tu154/custom/switchers/eng/bat1_on")) --  1
-defineProperty("bat2_on", globalPropertyi("tu154/custom/switchers/eng/bat2_on")) --  2
-defineProperty("bat3_on", globalPropertyi("tu154/custom/switchers/eng/bat3_on")) --  3
-defineProperty("bat4_on", globalPropertyi("tu154/custom/switchers/eng/bat4_on")) --  4
+    -- sources
+    { "gen_1_on", "tu154/custom/switchers/eng/gen_1_on", globalPropertyi }, --   1. -1 - , 0 - , +1 -
+    { "gen_2_on", "tu154/custom/switchers/eng/gen_2_on", globalPropertyi }, --   1. -1 - , 0 - , +1 -
+    { "gen_3_on", "tu154/custom/switchers/eng/gen_3_on", globalPropertyi }, --   1. -1 - , 0 - , +1 -
 
-defineProperty("gen_fail_1", globalPropertyf("tu154/custom/lights/small/gen_fail_1")) --   
-defineProperty("gen_fail_2", globalPropertyf("tu154/custom/lights/small/gen_fail_2")) --   
-defineProperty("gen_fail_3", globalPropertyf("tu154/custom/lights/small/gen_fail_3")) --   
+    { "bat1_on", "tu154/custom/switchers/eng/bat1_on", globalPropertyi }, --  1
+    { "bat2_on", "tu154/custom/switchers/eng/bat2_on", globalPropertyi }, --  2
+    { "bat3_on", "tu154/custom/switchers/eng/bat3_on", globalPropertyi }, --  3
+    { "bat4_on", "tu154/custom/switchers/eng/bat4_on", globalPropertyi }, --  4
 
-defineProperty("left_bus_use_bat", globalPropertyf("tu154/custom/lights/small/left_bus_use_bat")) --    
-defineProperty("right_bus_use_bat", globalPropertyf("tu154/custom/lights/small/right_bus_use_bat")) --    
+    { "gen_fail_1", "tu154/custom/lights/small/gen_fail_1", globalPropertyf }, --
+    { "gen_fail_2", "tu154/custom/lights/small/gen_fail_2", globalPropertyf }, --
+    { "gen_fail_3", "tu154/custom/lights/small/gen_fail_3", globalPropertyf }, --
 
-defineProperty("sard_cabin_press_set", globalPropertyf("tu154/custom/switchers/sard/sard_cabin_press_set")) --    
-defineProperty("skv_bleed_fail_1", globalPropertyf("tu154/custom/lights/small/skv_bleed_fail_1")) --  
-defineProperty("skv_bleed_fail_2", globalPropertyf("tu154/custom/lights/small/skv_bleed_fail_2")) --  
-defineProperty("skv_bleed_fail_3", globalPropertyf("tu154/custom/lights/small/skv_bleed_fail_3")) --  
+    { "left_bus_use_bat", "tu154/custom/lights/small/left_bus_use_bat", globalPropertyf }, --
+    { "right_bus_use_bat", "tu154/custom/lights/small/right_bus_use_bat", globalPropertyf }, --
 
-defineProperty("skv_bleed_closed_1", globalPropertyf("tu154/custom/lights/small/skv_bleed_closed_1")) --  
-defineProperty("skv_bleed_closed_2", globalPropertyf("tu154/custom/lights/small/skv_bleed_closed_2")) --  
-defineProperty("skv_bleed_closed_3", globalPropertyf("tu154/custom/lights/small/skv_bleed_closed_3")) --  
+    { "sard_cabin_press_set", "tu154/custom/switchers/sard/sard_cabin_press_set", globalPropertyf }, --
+    { "skv_bleed_fail_1", "tu154/custom/lights/small/skv_bleed_fail_1", globalPropertyf }, --
+    { "skv_bleed_fail_2", "tu154/custom/lights/small/skv_bleed_fail_2", globalPropertyf }, --
+    { "skv_bleed_fail_3", "tu154/custom/lights/small/skv_bleed_fail_3", globalPropertyf }, --
 
-defineProperty("nvu_on_lit", globalPropertyf("tu154/custom/lights/small/nvu_on")) --  
+    { "skv_bleed_closed_1", "tu154/custom/lights/small/skv_bleed_closed_1", globalPropertyf }, --
+    { "skv_bleed_closed_2", "tu154/custom/lights/small/skv_bleed_closed_2", globalPropertyf }, --
+    { "skv_bleed_closed_3", "tu154/custom/lights/small/skv_bleed_closed_3", globalPropertyf }, --
 
-defineProperty("nav1_pow_cc", globalPropertyf("tu154/custom/radio/nav1_pow_cc"))
-defineProperty("nav2_pow_cc", globalPropertyf("tu154/custom/radio/nav2_pow_cc"))
+    { "nvu_on_lit", "tu154/custom/lights/small/nvu_on", globalPropertyf }, --
 
-defineProperty("ark15_L_cc", globalPropertyf("tu154/custom/radio/ark15_L_cc")) --   
-defineProperty("ark15_R_cc", globalPropertyf("tu154/custom/radio/ark15_R_cc")) --   
+    { "nav1_pow_cc", "tu154/custom/radio/nav1_pow_cc", globalPropertyf },
+    { "nav2_pow_cc", "tu154/custom/radio/nav2_pow_cc", globalPropertyf },
 
-defineProperty("xpdr_mode", globalPropertyf("sim/cockpit/radios/transponder_mode"))
+    { "ark15_L_cc", "tu154/custom/radio/ark15_L_cc", globalPropertyf }, --
+    { "ark15_R_cc", "tu154/custom/radio/ark15_R_cc", globalPropertyf }, --
 
-defineProperty("buster_on_1", globalPropertyi("tu154/custom/switchers/console/buster_on_1")) --  
-defineProperty("buster_on_2", globalPropertyi("tu154/custom/switchers/console/buster_on_2")) --  
-defineProperty("buster_on_3", globalPropertyi("tu154/custom/switchers/console/buster_on_3")) --  
-defineProperty("busters_cap", globalPropertyi("tu154/custom/switchers/console/busters_cap")) --   
-defineProperty("contr_force_set", globalPropertyi("tu154/custom/controll/contr_force_set")) --    . -1 - , 0 , +1 - -
+    { "xpdr_mode", "sim/cockpit/radios/transponder_mode", globalPropertyf },
 
-defineProperty("mgv_contr_fail", globalPropertyi("tu154/custom/bkk/mgv_contr_fail")) --    -   
-defineProperty("pkp_fail_left", globalPropertyi("tu154/custom/bkk/pkp_fail_left")) --    -   
-defineProperty("pkp_fail_right", globalPropertyi("tu154/custom/bkk/pkp_fail_right")) --    -   	
-defineProperty("pitch_corr_hdl_1", globalPropertyf("tu154/custom/gauges/ahz/pitch_corr_L")) --     + 
-defineProperty("pitch_corr_hdl_2", globalPropertyf("tu154/custom/gauges/ahz/pitch_corr_R")) --     + 
+    -- { "buster_on_1", "tu154/custom/switchers/console/buster_on_1", globalPropertyi }, --
+    -- { "buster_on_2", "tu154/custom/switchers/console/buster_on_2", globalPropertyi }, --
+    -- { "buster_on_3", "tu154/custom/switchers/console/buster_on_3", globalPropertyi }, --
+    { "busters_cap", "tu154/custom/switchers/console/busters_cap", globalPropertyi }, --
+    { "contr_force_set", "tu154/custom/controll/contr_force_set", globalPropertyi }, --    . -1 - , 0 , +1 - -
 
-defineProperty("course_ga_1", globalPropertyf("tu154/custom/tks/course_ga_1")) --   1
-defineProperty("course_ga_2", globalPropertyf("tu154/custom/tks/course_ga_2")) --   2
-defineProperty("course_bgmk_1", globalPropertyf("tu154/custom/tks/course_bgmk_1")) --   1
-defineProperty("course_bgmk_2", globalPropertyf("tu154/custom/tks/course_bgmk_2")) --   2
+    { "mgv_contr_fail", "tu154/custom/bkk/mgv_contr_fail", globalPropertyi }, --    -
+    { "pkp_fail_left", "tu154/custom/bkk/pkp_fail_left", globalPropertyi }, --    -
+    { "pkp_fail_right", "tu154/custom/bkk/pkp_fail_right", globalPropertyi }, --    -
+    { "pitch_corr_hdl_1", "tu154/custom/gauges/ahz/pitch_corr_L", globalPropertyf }, --     +
+    { "pitch_corr_hdl_2", "tu154/custom/gauges/ahz/pitch_corr_R", globalPropertyf }, --     +
 
-defineProperty("absu_work", globalPropertyf("tu154/custom/lights/absu_work")) --  
-defineProperty("absu_roll_mode", globalPropertyi("tu154/custom/gauges/console/absu_roll_mode")) --   . 0 - , 1 - , 2 - 
-defineProperty("absu_pitch_mode", globalPropertyi("tu154/custom/gauges/console/absu_pitch_mode")) --   . 0 - , 1 - , 2 - 
+    { "course_ga_1", "tu154/custom/tks/course_ga_1", globalPropertyf }, --   1
+    { "course_ga_2", "tu154/custom/tks/course_ga_2", globalPropertyf }, --   2
+    { "course_bgmk_1", "tu154/custom/tks/course_bgmk_1", globalPropertyf }, --   1
+    { "course_bgmk_2", "tu154/custom/tks/course_bgmk_2", globalPropertyf }, --   2
 
-defineProperty("window_heat_1", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_1")) --  . -1 - , 0 - , 1 - 
-defineProperty("window_heat_2", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_2")) --  . -1 - , 0 - , 1 - 
-defineProperty("window_heat_3", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_3")) --  . -1 - , 0 - , 1 - 
+    { "absu_work", "tu154/custom/lights/absu_work", globalPropertyf }, --
+    { "absu_roll_mode", "tu154/custom/gauges/console/absu_roll_mode", globalPropertyi }, --   . 0 - , 1 - , 2 -
+    { "absu_pitch_mode", "tu154/custom/gauges/console/absu_pitch_mode", globalPropertyi }, --   . 0 - , 1 - , 2 -
+
+    { "window_heat_1", "tu154/custom/switchers/ovhd/window_heat_1", globalPropertyi }, --  . -1 - , 0 - , 1 -
+    { "window_heat_2", "tu154/custom/switchers/ovhd/window_heat_2", globalPropertyi }, --  . -1 - , 0 - , 1 -
+    { "window_heat_3", "tu154/custom/switchers/ovhd/window_heat_3", globalPropertyi }, --  . -1 - , 0 - , 1 -
+})
 
 local checklist_started = false
 local stage = 0

@@ -1,3 +1,4 @@
+-- start_panel.lua
 --[[
 Changelog
 - Grouped the original SASL property bindings through defineProps() while preserving names, Dataref paths and order.
@@ -69,7 +70,7 @@ defineProps({
     -- SmartCopilot master state: 0 unavailable, 1 slave, 2 master
     { "ismaster", "scp/api/ismaster", globalPropertyf },
     -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 -- Panel sounds

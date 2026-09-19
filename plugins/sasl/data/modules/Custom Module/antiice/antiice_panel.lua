@@ -1,3 +1,4 @@
+-- antiice_panel.lua
 -- Anti-ice panel: switches, diagnostic lamps and temperature indications.
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -39,26 +40,26 @@ defineProps({
     { "stab_heat_t", "tu154/custom/antiice/stab_heat_t", globalPropertyf },
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
-    { "ice_inlet_heat_1", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[0]", globalProperty },
-    { "ice_inlet_heat_2", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[1]", globalProperty },
-    { "ice_inlet_heat_3", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[2]", globalProperty },
+    -- { "ice_inlet_heat_1", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[0]", globalProperty },
+    -- { "ice_inlet_heat_2", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[1]", globalProperty },
+    -- { "ice_inlet_heat_3", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[2]", globalProperty },
     { "eng_heat_open_1", "tu154/custom/antiice/eng_heat_open_1", globalPropertyi },
     { "eng_heat_open_2", "tu154/custom/antiice/eng_heat_open_2", globalPropertyi },
     { "eng_heat_open_3", "tu154/custom/antiice/eng_heat_open_3", globalPropertyi },
-    { "ice_surfce_heat_on", "sim/cockpit2/ice/ice_surfce_heat_on", globalPropertyi },
+    -- { "ice_surfce_heat_on", "sim/cockpit2/ice/ice_surfce_heat_on", globalPropertyi },
     { "ice_detected", "tu154/custom/antiice/ice_detected", globalPropertyi },
     { "ice_detect_ok", "tu154/custom/antiice/ice_detect_ok", globalPropertyi },
     -- failures
     { "ppd_3_heat_fail", "tu154/custom/antiice/ppd_3_heat_fail", globalPropertyi },
-    { "rel_ice_window_heat", "sim/operation/failures/rel_ice_window_heat", globalPropertyi },
-    { "rel_ice_inlet_heat1", "sim/operation/failures/rel_ice_inlet_heat", globalPropertyi },
-    { "rel_ice_inlet_heat2", "sim/operation/failures/rel_ice_inlet_heat2", globalPropertyi },
-    { "rel_ice_inlet_heat3", "sim/operation/failures/rel_ice_inlet_heat3", globalPropertyi },
+    -- { "rel_ice_window_heat", "sim/operation/failures/rel_ice_window_heat", globalPropertyi },
+    -- { "rel_ice_inlet_heat1", "sim/operation/failures/rel_ice_inlet_heat", globalPropertyi },
+    -- { "rel_ice_inlet_heat2", "sim/operation/failures/rel_ice_inlet_heat2", globalPropertyi },
+    -- { "rel_ice_inlet_heat3", "sim/operation/failures/rel_ice_inlet_heat3", globalPropertyi },
     { "rel_ice_pitot_heat1", "sim/operation/failures/rel_ice_pitot_heat1", globalPropertyi },
     { "rel_ice_pitot_heat2", "sim/operation/failures/rel_ice_pitot_heat2", globalPropertyi },
     { "rel_ice_pitot_heat_stby", "sim/operation/failures/rel_ice_pitot_heat_stby", globalPropertyi },
-    { "rel_ice_surf_heat", "sim/operation/failures/rel_ice_surf_heat", globalPropertyi },
-    { "rel_ice_surf_heat2", "sim/operation/failures/rel_ice_surf_heat2", globalPropertyi },
+    -- { "rel_ice_surf_heat", "sim/operation/failures/rel_ice_surf_heat", globalPropertyi },
+    -- { "rel_ice_surf_heat2", "sim/operation/failures/rel_ice_surf_heat2", globalPropertyi },
     { "wing_heating", "tu154/custom/antiice/wing_heating", globalPropertyi },
     { "slat_heating", "tu154/custom/antiice/slat_heating", globalPropertyi },
     -- engines

@@ -1,3 +1,4 @@
+-- sc_controls.lua
 -- this is flight controls override script for SmartCopilot
 
 local function defineProps(defs)

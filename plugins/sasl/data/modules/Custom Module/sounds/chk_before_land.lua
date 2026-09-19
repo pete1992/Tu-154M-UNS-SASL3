@@ -1,51 +1,66 @@
+-- chk_before_land.lua
 -- this is after pressure set checklist
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- time of frame
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("side",globalPropertyi("tu154/custom/checklist/side")) --   . 0 -  , 1 -  
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
 
-defineProperty("fishka_1",globalPropertyi("tu154/custom/checklist/fishka_1")) --  . 0 - , 1 - 
-defineProperty("fishka_2",globalPropertyi("tu154/custom/checklist/fishka_2")) --  . 0 - , 1 - 
-defineProperty("fishka_3",globalPropertyi("tu154/custom/checklist/fishka_3")) --  . 0 - , 1 - 
-defineProperty("fishka_4",globalPropertyi("tu154/custom/checklist/fishka_4")) --  . 0 - , 1 - 
-defineProperty("fishka_5",globalPropertyi("tu154/custom/checklist/fishka_5")) --  . 0 - , 1 - 
-defineProperty("fishka_6",globalPropertyi("tu154/custom/checklist/fishka_6")) --  . 0 - , 1 - 
-defineProperty("fishka_7",globalPropertyi("tu154/custom/checklist/fishka_7")) --  . 0 - , 1 - 
-defineProperty("fishka_8",globalPropertyi("tu154/custom/checklist/fishka_8")) --  . 0 - , 1 - 
-defineProperty("fishka_9",globalPropertyi("tu154/custom/checklist/fishka_9")) --  . 0 - , 1 - 
-defineProperty("fishka_10",globalPropertyi("tu154/custom/checklist/fishka_10")) --  . 0 - , 1 - 
-defineProperty("fishka_11",globalPropertyi("tu154/custom/checklist/fishka_11")) --  . 0 - , 1 - 
-defineProperty("fishka_12",globalPropertyi("tu154/custom/checklist/fishka_12")) --  . 0 - , 1 - 
-defineProperty("fishka_13",globalPropertyi("tu154/custom/checklist/fishka_13")) --  . 0 - , 1 - 
-defineProperty("fishka_14",globalPropertyi("tu154/custom/checklist/fishka_14")) --  . 0 - , 1 - 
-defineProperty("fishka_15",globalPropertyi("tu154/custom/checklist/fishka_15")) --  . 0 - , 1 - 
-defineProperty("fishka_16",globalPropertyi("tu154/custom/checklist/fishka_16")) --  . 0 - , 1 - 
-defineProperty("fishka_17",globalPropertyi("tu154/custom/checklist/fishka_17")) --  . 0 - , 1 - 
-defineProperty("fishka_18",globalPropertyi("tu154/custom/checklist/fishka_18")) --  . 0 - , 1 - 
-defineProperty("fishka_19",globalPropertyi("tu154/custom/checklist/fishka_19")) --  . 0 - , 1 - 
-defineProperty("fishka_20",globalPropertyi("tu154/custom/checklist/fishka_20")) --  . 0 - , 1 - 
+    -- { "side", "tu154/custom/checklist/side", globalPropertyi }, --   . 0 -  , 1 -
 
-defineProperty("checklist_selected",globalPropertyi("tu154/custom/checklist/checklist_selected")) --  
+    { "fishka_1", "tu154/custom/checklist/fishka_1", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_2", "tu154/custom/checklist/fishka_2", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_3", "tu154/custom/checklist/fishka_3", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_4", "tu154/custom/checklist/fishka_4", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_5", "tu154/custom/checklist/fishka_5", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_6", "tu154/custom/checklist/fishka_6", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_7", "tu154/custom/checklist/fishka_7", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_8", "tu154/custom/checklist/fishka_8", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_9", "tu154/custom/checklist/fishka_9", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_10", "tu154/custom/checklist/fishka_10", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_11", "tu154/custom/checklist/fishka_11", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_12", "tu154/custom/checklist/fishka_12", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_13", "tu154/custom/checklist/fishka_13", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_14", "tu154/custom/checklist/fishka_14", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_15", "tu154/custom/checklist/fishka_15", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_16", "tu154/custom/checklist/fishka_16", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_17", "tu154/custom/checklist/fishka_17", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_18", "tu154/custom/checklist/fishka_18", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_19", "tu154/custom/checklist/fishka_19", globalPropertyi }, --  . 0 - , 1 -
+    { "fishka_20", "tu154/custom/checklist/fishka_20", globalPropertyi }, --  . 0 - , 1 -
 
--- sources
+    { "checklist_selected", "tu154/custom/checklist/checklist_selected", globalPropertyi }, --
 
-defineProperty("stab_ind", globalPropertyf("tu154/custom/gauges/misc/stab_ind")) --   
-defineProperty("elevator_ind", globalPropertyf("tu154/custom/gauges/misc/elevator_ind")) --   
-defineProperty("flap_left_ind", globalPropertyf("tu154/custom/gauges/misc/flap_left_ind")) --   
-defineProperty("flap_right_ind", globalPropertyf("tu154/custom/gauges/misc/flap_right_ind")) --   
-defineProperty("slats_extended", globalPropertyf("tu154/custom/lights/slats_extended")) --  
+    -- sources
 
-defineProperty("joy_pitch", globalPropertyf("tu154/custom/SC/yoke_pitch_ratio")) 
+    { "stab_ind", "tu154/custom/gauges/misc/stab_ind", globalPropertyf }, --
+    { "elevator_ind", "tu154/custom/gauges/misc/elevator_ind", globalPropertyf }, --
+    { "flap_left_ind", "tu154/custom/gauges/misc/flap_left_ind", globalPropertyf }, --
+    { "flap_right_ind", "tu154/custom/gauges/misc/flap_right_ind", globalPropertyf }, --
+    { "slats_extended", "tu154/custom/lights/slats_extended", globalPropertyf }, --
 
-defineProperty("gears_green_left", globalPropertyf("tu154/custom/lights/gears_green_left")) --  
-defineProperty("gears_green_front", globalPropertyf("tu154/custom/lights/gears_green_front")) --  
-defineProperty("gears_green_right", globalPropertyf("tu154/custom/lights/gears_green_right")) --  
-defineProperty("gear_lever", globalPropertyi("tu154/custom/controll/gear_lever")) --   . -1 - , 0 - , +1 - 
+    { "joy_pitch", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf },
 
-defineProperty("to_rudder", globalPropertyf("tu154/custom/lights/to_rudder")) -- - 
-defineProperty("to_elevator", globalPropertyf("tu154/custom/lights/to_elevator")) -- - 
+    { "gears_green_left", "tu154/custom/lights/gears_green_left", globalPropertyf }, --
+    { "gears_green_front", "tu154/custom/lights/gears_green_front", globalPropertyf }, --
+    { "gears_green_right", "tu154/custom/lights/gears_green_right", globalPropertyf }, --
+    { "gear_lever", "tu154/custom/controll/gear_lever", globalPropertyi }, --   . -1 - , 0 - , +1 -
 
-defineProperty("landing_ext_set_L", globalPropertyi("tu154/custom/lights/landing_ext_set_L")) --   
-defineProperty("landing_ext_set_R", globalPropertyi("tu154/custom/lights/landing_ext_set_R")) --   
+    { "to_rudder", "tu154/custom/lights/to_rudder", globalPropertyf }, -- -
+    { "to_elevator", "tu154/custom/lights/to_elevator", globalPropertyf }, -- -
+
+    { "landing_ext_set_L", "tu154/custom/lights/landing_ext_set_L", globalPropertyi }, --
+    { "landing_ext_set_R", "tu154/custom/lights/landing_ext_set_R", globalPropertyi }, --
+})
 
 local checklist_started = false
 local stage = 0

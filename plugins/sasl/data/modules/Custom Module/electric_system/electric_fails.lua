@@ -1,7 +1,13 @@
 -- electric_fails.lua
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        _G[d[1]] = d[3](d[2])
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
@@ -38,11 +44,11 @@ defineProps({
     {"vu1_amp", "tu154/custom/elec/vu1_amp", globalPropertyf}, -- VU1 current (A)
     {"vu2_amp", "tu154/custom/elec/vu2_amp", globalPropertyf}, -- VU2 current (A)
     {"vu3_amp", "tu154/custom/elec/vu_res_amp", globalPropertyf}, -- VU3 (reserve) current (A)
-})
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local function bool2int(v) return v and 1 or 0 end
 

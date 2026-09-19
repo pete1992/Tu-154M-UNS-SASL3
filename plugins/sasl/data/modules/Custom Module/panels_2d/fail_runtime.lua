@@ -1,3 +1,4 @@
+-- fail_runtime.lua
 -- this script draws table of runtimes
 
 size = {100, 100}

@@ -1,62 +1,76 @@
--- flaps.lua 
+-- flaps.lua
 -- this is flaps, slats and hor-stab logic
 
-defineProperty("external_view", globalPropertyi("sim/graphics/view/view_is_external")) -- enviroment
--- sim positions
-defineProperty("flap_inn_L", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def")) -- inner flaps left
-defineProperty("flap_inn_R", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def")) -- inner flaps right
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("flap_mid_L", globalPropertyf("sim/flightmodel/controls/wing2l_fla2def")) -- middle flaps left
-defineProperty("flap_mid_R", globalPropertyf("sim/flightmodel/controls/wing2r_fla2def")) -- middle flaps right
---defineProperty("slats", globalPropertyf("sim/flightmodel/controls/slatrat")) -- slats position. this one works
-defineProperty("slats", globalPropertyf("sim/flightmodel2/controls/slat1_deploy_ratio")) -- slats position. this one works too
-defineProperty("stab_ratio", globalPropertyf("sim/cockpit2/controls/elevator_trim")) -- sim pitch trimmer
--- controls
-defineProperty("sim_flap_ratio", globalPropertyf("sim/cockpit2/controls/flap_ratio")) -- sim flaps ratio control. use for axis and commands
+defineProps({
+    { "external_view", "sim/graphics/view/view_is_external", globalPropertyi }, -- enviroment
+    -- sim positions
+    { "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- inner flaps left
+    { "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- inner flaps right
 
-defineProperty("flaps_lever", globalPropertyf("tu154/custom/controll/flaps_lever")) -- sim flaps ratio control. use for axis and commands
-defineProperty("flaps_sel", globalPropertyi("tu154/custom/switchers/flaps_sel")) --    . -1 - , 0 - , +1 - 
+    { "flap_mid_L", "sim/flightmodel/controls/wing2l_fla2def", globalPropertyf }, -- middle flaps left
+    { "flap_mid_R", "sim/flightmodel/controls/wing2r_fla2def", globalPropertyf }, -- middle flaps right
+    --defineProperty("slats", globalPropertyf("sim/flightmodel/controls/slatrat")) -- slats position. this one works
+    { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf }, -- slats position. this one works too
+    { "stab_ratio", "sim/cockpit2/controls/elevator_trim", globalPropertyf }, -- sim pitch trimmer
+    -- controls
+    { "sim_flap_ratio", "sim/cockpit2/controls/flap_ratio", globalPropertyf }, -- sim flaps ratio control. use for axis and commands
 
-defineProperty("slat_man", globalPropertyi("tu154/custom/switchers/slat_man")) --   . -1 - , 0 , +1 - 
-defineProperty("slat_man_cap", globalPropertyi("tu154/custom/switchers/slat_man_cap")) --    
+    { "flaps_lever", "tu154/custom/controll/flaps_lever", globalPropertyf }, -- sim flaps ratio control. use for axis and commands
+    { "flaps_sel", "tu154/custom/switchers/flaps_sel", globalPropertyi }, --    . -1 - , 0 - , +1 -
 
-defineProperty("stab_man_cap", globalPropertyi("tu154/custom/controll/stab_man_cap")) --   
-defineProperty("stab_manual", globalPropertyi("tu154/custom/controll/stab_manual")) --  . 0 - , +1 - 
-defineProperty("stab_setting", globalPropertyi("tu154/custom/controll/stab_setting")) --    . 0 - , 1 - , 2 - 	1
+    { "slat_man", "tu154/custom/switchers/slat_man", globalPropertyi }, --   . -1 - , 0 , +1 -
+    { "slat_man_cap", "tu154/custom/switchers/slat_man_cap", globalPropertyi }, --
 
--- other sources
+    { "stab_man_cap", "tu154/custom/controll/stab_man_cap", globalPropertyi }, --
+    { "stab_manual", "tu154/custom/controll/stab_manual", globalPropertyi }, --  . 0 - , +1 -
+    { "stab_setting", "tu154/custom/controll/stab_setting", globalPropertyi }, --    . 0 - , 1 - , 2 - 	1
 
--- hydraulics
-defineProperty("gs_press_1", globalPropertyf("tu154/custom/hydro/gs_press_1")) --   1
-defineProperty("gs_press_2", globalPropertyf("tu154/custom/hydro/gs_press_2")) --   2
-defineProperty("gs_press_3", globalPropertyf("tu154/custom/hydro/gs_press_3")) --   3
+    -- other sources
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- time of frame
+    -- hydraulics
+    { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, --   1
+    { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, --   2
+    -- { "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, --   3
 
--- power
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
 
-defineProperty("bus36_volt_left", globalPropertyf("tu154/custom/elec/bus36_volt_left")) --   36 
-defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right")) --   36 
+    -- power
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+    { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf }, --   36
+    { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, --   36
 
-defineProperty("ctr_115_1_cc", globalPropertyf("tu154/custom/control/ctr_115_1_cc")) --   
-defineProperty("ctr_115_3_cc", globalPropertyf("tu154/custom/control/ctr_115_3_cc")) --   
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    { "ctr_115_1_cc", "tu154/custom/control/ctr_115_1_cc", globalPropertyf }, --
+    { "ctr_115_3_cc", "tu154/custom/control/ctr_115_3_cc", globalPropertyf }, --
 
--- failures
-defineProperty("flap_fail_left", globalPropertyi("tu154/custom/failures/flap_fail_left")) -- 
-defineProperty("flap_fail_right", globalPropertyi("tu154/custom/failures/flap_fail_right")) -- 
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
-defineProperty("stab_eng_fail", globalPropertyi("tu154/custom/failures/stab_eng_fail")) -- 
-defineProperty("stab_automatic_fail", globalPropertyi("tu154/custom/failures/stab_automatic_fail")) -- 
-defineProperty("slats_fail", globalPropertyi("tu154/custom/failures/slats_fail")) -- 
+    -- failures
+    { "flap_fail_left", "tu154/custom/failures/flap_fail_left", globalPropertyi }, --
+    { "flap_fail_right", "tu154/custom/failures/flap_fail_right", globalPropertyi }, --
+
+    { "stab_eng_fail", "tu154/custom/failures/stab_eng_fail", globalPropertyi }, --
+    { "stab_automatic_fail", "tu154/custom/failures/stab_automatic_fail", globalPropertyi }, --
+    { "slats_fail", "tu154/custom/failures/slats_fail", globalPropertyi }, --
+})
 
 flaps_cmd_up = sasl.findCommand("sim/flight_controls/flaps_up")
 flaps_cmd_down = sasl.findCommand("sim/flight_controls/flaps_down")

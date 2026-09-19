@@ -1,3 +1,4 @@
+-- fuel_pumps.lua
 -- this is fuel pumps logic
 
 local function defineProps(defs)
@@ -33,7 +34,7 @@ defineProps({
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
     { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-    { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
+    -- { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
 
     -- Failures (pump values count the failed pumps)
     { "fuel_auto_fail", "tu154/custom/failures/fuel_auto_fail", globalPropertyi },

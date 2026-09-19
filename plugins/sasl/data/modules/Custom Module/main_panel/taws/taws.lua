@@ -1,3 +1,4 @@
+-- taws.lua
 -- this is main TAWS script
 size = {1000, 770}
 

@@ -1,3 +1,4 @@
+-- test_draw.lua
 -- test drawing to texture
 size = {1024, 1024}
 

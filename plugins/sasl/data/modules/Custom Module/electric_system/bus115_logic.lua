@@ -1,3 +1,4 @@
+-- bus115_logic.lua
 --[[
 Changelog
 - Preserved all 26 original Dataref bindings, paths, constructors, and binding order.
@@ -18,16 +19,22 @@ Changelog
 -- the APU generator, or the GPU according to the explicit priority table below.
 
 -- SmartCopilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster"))
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1"))
-
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
 defineProps({
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+
     -- Generator and GPU voltages
     { "gen1_volt_bus", "tu154/custom/elec/gen1_volt", globalPropertyf },
     { "gen2_volt_bus", "tu154/custom/elec/gen2_volt", globalPropertyf },
@@ -50,8 +57,8 @@ defineProps({
     { "bus115_1_amp", "tu154/custom/elec/bus115_1_amp", globalPropertyf },
     { "bus115_2_amp", "tu154/custom/elec/bus115_2_amp", globalPropertyf },
     { "bus115_3_amp", "tu154/custom/elec/bus115_3_amp", globalPropertyf },
-    { "bus115_em_1_amp", "tu154/custom/elec/bus115_em_1_amp", globalPropertyf },
-    { "bus115_em_2_amp", "tu154/custom/elec/bus115_em_2_amp", globalPropertyf },
+    -- { "bus115_em_1_amp", "tu154/custom/elec/bus115_em_1_amp", globalPropertyf },
+    -- { "bus115_em_2_amp", "tu154/custom/elec/bus115_em_2_amp", globalPropertyf },
     -- Generator and GPU output currents
     { "gen1_amp", "tu154/custom/elec/gen1_amp", globalPropertyf },
     { "gen2_amp", "tu154/custom/elec/gen2_amp", globalPropertyf },

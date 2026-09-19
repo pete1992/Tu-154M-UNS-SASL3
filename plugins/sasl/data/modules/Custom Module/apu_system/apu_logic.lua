@@ -1,3 +1,4 @@
+-- apu_logic.lua
 -- this is APU calculations
 
 local function defineProps(defs)
@@ -53,10 +54,10 @@ defineProps({
     -- { "reset_state", "tu154/custom/reset_state", globalPropertyi }, -- No reset-state consumer in this component.
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 plugin unavailable, 1 slave, 2 master
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 0 plugin unavailable, 1 no control, 2 has control
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 0 plugin unavailable, 1 no control, 2 has control
     -- APU failures
     { "apu_start_fail", "tu154/custom/failures/apu_start_fail", globalPropertyi }, -- Starter failure
-    { "apu_gen_fail", "tu154/custom/failures/apu_gen_fail", globalPropertyi }, -- Generator failure
+    -- { "apu_gen_fail", "tu154/custom/failures/apu_gen_fail", globalPropertyi }, -- Generator failure
     { "apu_runtime", "tu154/custom/failures/apu_runtime", globalPropertyf }, -- APU operating time
     { "apu_fail_oilt", "tu154/custom/failures/apu_fail_oilt", globalPropertyi }, -- Oil temperature failure
     { "apu_fail_egt", "tu154/custom/failures/apu_fail_egt", globalPropertyi }, -- Exhaust gas temperature failure

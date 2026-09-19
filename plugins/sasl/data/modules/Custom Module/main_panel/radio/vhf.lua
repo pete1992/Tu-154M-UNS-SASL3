@@ -1,19 +1,26 @@
+-- vhf.lua
 -- this is VHF radio
 size = {420, 90}
 
 
 defineProperty("num", 0)
 -- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
-
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
 defineProps({
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+
     { "frequency", "sim/cockpit2/radios/actuators/com1_frequency_hz_833", globalPropertyf },
     { "freq_sby", "sim/cockpit2/radios/actuators/com1_standby_frequency_hz_833", globalPropertyf },
     { "vhf_left", "tu154/custom/rotary/ovhd/vhf_1_left", globalPropertyi },

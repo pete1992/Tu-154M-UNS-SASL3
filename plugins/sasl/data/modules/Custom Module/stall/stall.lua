@@ -1,4 +1,4 @@
--- aggressive_stall.lua
+-- stall.lua
 -- Tu-154M: flow-driven asymmetric stall supplement for X-Plane 12 / SASL 3.
 -- Version 4.4.0-XP12.
 
@@ -78,8 +78,22 @@ References
 -- local defineProps Function
 local function defineProps(defs)
     for _, def in ipairs(defs) do
-        defineProperty(def[1], def[3](def[2]))
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
+end
+
+local function diagnosticFloat(path)
+    return createGlobalPropertyf(path, 0, false, false, true)
+end
+
+local function diagnosticInt(path)
+    return createGlobalPropertyi(path, 0, false, false, true)
 end
 
 defineProps({
@@ -117,18 +131,9 @@ defineProps({
     {"roll_plugin", "sim/flightmodel/forces/L_plug_acf", globalPropertyf},
     {"pitch_plugin", "sim/flightmodel/forces/M_plug_acf", globalPropertyf},
     {"yaw_plugin", "sim/flightmodel/forces/N_plug_acf", globalPropertyf},
-})
 
+    -- SASL-owned diagnostics; published for DataRefTool and custom recorders.
 
--- SASL-owned diagnostics; published for DataRefTool and custom recorders.
-local function diagnosticFloat(path)
-    return createGlobalPropertyf(path, 0, false, false, true)
-end
-local function diagnosticInt(path)
-    return createGlobalPropertyi(path, 0, false, false, true)
-end
-
-defineProps({
     {"diag_state", "tu154/custom/stall_xp12/state", diagnosticInt},
     {"diag_side", "tu154/custom/stall_xp12/side", diagnosticInt},
     {"diag_alpha_entry", "tu154/custom/stall_xp12/alpha_entry_deg", diagnosticFloat},
@@ -162,7 +167,7 @@ local ENTRY_ELEVATOR_MAX = -18.0
 local UNCOMMANDED_ALPHA_MARGIN = 1.25
 local ENTRY_CONFIRM_TIME = 0.20
 local DEVELOPED_TIME = 1.10
-local RECOVERY_ALPHA = 9.00
+local RECOVERY_ALPHA = 5.00
 local RECOVERY_CONFIRM_TIME = 0.40
 local RECOVERY_FADE_TIME = 1.25
 local REENTRY_BLEND_TIME = 0.20
@@ -170,12 +175,12 @@ local DYNAMIC_PRESSURE_MAX = 3600.0
 local WING_REFERENCE_AREA = 202.1870
 local WING_MOMENT_CHORD = 6.4234
 local WING_SPAN = 37.55
-local ROLL_DAMPING_COEFFICIENT = 0.08
-local YAW_DAMPING_COEFFICIENT = 0.10
+local ROLL_DAMPING_COEFFICIENT = 0.12
+local YAW_DAMPING_COEFFICIENT = 0.02
 local MAX_ROLL_MOMENT = 600000.0
 local MAX_PITCH_MOMENT = 900000.0
-local MAX_YAW_MOMENT = 350000.0
-local PITCH_COMPENSATION_FRACTION = 0.80
+local MAX_YAW_MOMENT = 950000.0
+local PITCH_COMPENSATION_FRACTION = 0.90
 local MAX_PITCH_CM = 0.23
 local NATIVE_PITCH_FILTER_TIME = 0.12
 

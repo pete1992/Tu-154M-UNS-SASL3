@@ -1,3 +1,4 @@
+-- tcas_draw.lua
 -- this is tcas screen draw script
 size = {482, 530}
 
@@ -13,7 +14,21 @@ defineProperty("blu_up_img", sasl.gl.loadImage("tcas_marks.png", 470, 4, 9, 18))
 defineProperty("yel_up_img", sasl.gl.loadImage("tcas_marks.png", 482, 4, 9, 18))
 defineProperty("red_up_img", sasl.gl.loadImage("tcas_marks.png", 494, 4, 9, 18))
 defineProperty("table_draw")
-defineProperty("tcas_range_set", globalPropertyi("tu154/custom/tcas/range_set"))
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
+
+defineProps({
+    { "tcas_range_set", "tu154/custom/tcas/range_set", globalPropertyi },
+})
 
 local font = sasl.gl.loadBitmapFont('tcas_scr.fnt')
 

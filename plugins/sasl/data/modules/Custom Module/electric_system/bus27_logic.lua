@@ -1,3 +1,4 @@
+-- bus27_logic.lua
 --[[
 Changelog
 - Grouped all 56 Dataref bindings through defineProps().
@@ -82,7 +83,7 @@ defineProps({
     { "apu_start_bus", "tu154/custom/elec/apu_start_bus", globalPropertyf },
     { "apu_start_cc", "tu154/custom/elec/apu_start_cc", globalPropertyf },
     -- APU control
-    { "apu_main_switch", "tu154/custom/switchers/eng/apu_main_switch", globalPropertyi },
+    -- { "apu_main_switch", "tu154/custom/switchers/eng/apu_main_switch", globalPropertyi },
     -- Ground detection
     { "gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
     -- 27 V bus results
@@ -100,7 +101,7 @@ defineProps({
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 -- Source IDs currently produced by this module:

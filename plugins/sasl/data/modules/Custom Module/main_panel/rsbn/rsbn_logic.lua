@@ -1,3 +1,4 @@
+-- rsbn_logic.lua
 -- RSBN logic: selects the nearest beacon on the tuned channel and
 -- provides slant range and azimuth to the gauges
 
@@ -13,7 +14,7 @@ end
 
 defineProps({
     -- Controls
-    { "rsbn_control_strobe",   "tu154/custom/buttons/ovhd/rsbn_control_strobe", globalPropertyi },
+    -- { "rsbn_control_strobe",   "tu154/custom/buttons/ovhd/rsbn_control_strobe", globalPropertyi },
     { "rsbn_control_azimuth",  "tu154/custom/buttons/ovhd/rsbn_control_azimuth", globalPropertyi },
     { "rsbn_control_distance", "tu154/custom/buttons/ovhd/rsbn_control_distance", globalPropertyi },
 
@@ -21,7 +22,7 @@ defineProps({
     { "rsbn_ch_one", "tu154/custom/buttons/ovhd/rsbn_ch_one", globalPropertyi },
 
     { "rsbn_on",    "tu154/custom/switchers/ovhd/rsbn_on", globalPropertyi },
-    { "rsbn_recon", "tu154/custom/switchers/ovhd/rsbn_recon", globalPropertyi },
+    -- { "rsbn_recon", "tu154/custom/switchers/ovhd/rsbn_recon", globalPropertyi },
 
     -- Aircraft position
     { "latitude",  "sim/flightmodel/position/latitude", globalPropertyd },

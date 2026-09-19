@@ -1,49 +1,64 @@
+-- taws_panel.lua
 -- this TAWS panel logic
 
 -- panel controls
-defineProperty("but_view", globalPropertyi("tu154/custom/buttons/srpbz/but_view")) --  
-defineProperty("but_empty", globalPropertyi("tu154/custom/buttons/srpbz/but_empty")) --  -
-defineProperty("but_down", globalPropertyi("tu154/custom/buttons/srpbz/but_down")) --   
-defineProperty("but_up", globalPropertyi("tu154/custom/buttons/srpbz/but_up")) --  
-defineProperty("brightness", globalPropertyf("tu154/custom/rotary/srpbz/brightness")) --  
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- overhead controls
-defineProperty("egpws_alarm_1", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1")) --   
-defineProperty("egpws_alarm_2", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2")) --  
-defineProperty("egpws_alarm_1_cap", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1_cap")) --   
-defineProperty("egpws_alarm_2_cap", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2_cap")) --   
-defineProperty("egpws_relief", globalPropertyi("tu154/custom/switchers/ovhd/egpws_relief")) -- 
-defineProperty("egpws_mode", globalPropertyi("tu154/custom/switchers/ovhd/egpws_mode")) -- QNH - QFE
+defineProps({
+    { "but_view", "tu154/custom/buttons/srpbz/but_view", globalPropertyi }, --
+    { "but_empty", "tu154/custom/buttons/srpbz/but_empty", globalPropertyi }, --  -
+    { "but_down", "tu154/custom/buttons/srpbz/but_down", globalPropertyi }, --
+    { "but_up", "tu154/custom/buttons/srpbz/but_up", globalPropertyi }, --
+    { "brightness", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
 
-defineProperty("egpws_control", globalPropertyi("tu154/custom/buttons/ovhd/egpws_control")) --   
-defineProperty("egpws_contr_gs", globalPropertyi("tu154/custom/buttons/ovhd/egpws_contr_gs")) --   
+    -- overhead controls
+    { "egpws_alarm_1", "tu154/custom/switchers/ovhd/egpws_alarm_1", globalPropertyi }, --
+    { "egpws_alarm_2", "tu154/custom/switchers/ovhd/egpws_alarm_2", globalPropertyi }, --
+    { "egpws_alarm_1_cap", "tu154/custom/switchers/ovhd/egpws_alarm_1_cap", globalPropertyi }, --
+    { "egpws_alarm_2_cap", "tu154/custom/switchers/ovhd/egpws_alarm_2_cap", globalPropertyi }, --
+    { "egpws_relief", "tu154/custom/switchers/ovhd/egpws_relief", globalPropertyi }, --
+    { "egpws_mode", "tu154/custom/switchers/ovhd/egpws_mode", globalPropertyi }, -- QNH - QFE
 
--- lamps
-defineProperty("pull_up_lamp", globalPropertyf("tu154/custom/lights/pull_up")) --  
-defineProperty("check_alt_left_lamp", globalPropertyf("tu154/custom/lights/check_alt_left")) --  
-defineProperty("check_alt_right_lamp", globalPropertyf("tu154/custom/lights/check_alt_right")) --  
-defineProperty("warning_terrain_lamp", globalPropertyf("tu154/custom/lights/warning_terrain")) --  
-defineProperty("gs_low_lamp", globalPropertyf("tu154/custom/lights/gs_low")) --  
-defineProperty("srpbz_fail_lamp", globalPropertyf("tu154/custom/lights/srpbz_fail")) --  
+    { "egpws_control", "tu154/custom/buttons/ovhd/egpws_control", globalPropertyi }, --
+    { "egpws_contr_gs", "tu154/custom/buttons/ovhd/egpws_contr_gs", globalPropertyi }, --
 
--- other sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    -- lamps
+    { "pull_up_lamp", "tu154/custom/lights/pull_up", globalPropertyf }, --
+    { "check_alt_left_lamp", "tu154/custom/lights/check_alt_left", globalPropertyf }, --
+    { "check_alt_right_lamp", "tu154/custom/lights/check_alt_right", globalPropertyf }, --
+    { "warning_terrain_lamp", "tu154/custom/lights/warning_terrain", globalPropertyf }, --
+    { "gs_low_lamp", "tu154/custom/lights/gs_low", globalPropertyf }, --
+    { "srpbz_fail_lamp", "tu154/custom/lights/srpbz_fail", globalPropertyf }, --
 
-defineProperty("test_lamps", globalPropertyi("tu154/custom/buttons/lamp_test_front")) --     
-defineProperty("day_night_set", globalPropertyf("tu154/custom/lights/day_night_set")) --   - . 0 - , 1 - .    .
+    -- other sources
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("taws_message", globalPropertyi("tu154/custom/taws/taws_message")) -- 
--- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain, 
--- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
+    { "test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi }, --
+    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, --   - . 0 - , 1 - .    .
 
-defineProperty("taws_alt_left", globalPropertyi("tu154/custom/taws/taws_alt_left")) --     
-defineProperty("taws_alt_right", globalPropertyi("tu154/custom/taws/taws_alt_right")) --     
+    { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi }, --
+    -- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain,
+    -- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
 
-defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 - , 6 - , 10 - 
+    { "taws_alt_left", "tu154/custom/taws/taws_alt_left", globalPropertyi }, --
+    { "taws_alt_right", "tu154/custom/taws/taws_alt_right", globalPropertyi }, --
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 - , 6 - , 10 -
+
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+})
 
 -- sounds
 local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')

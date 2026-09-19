@@ -1,3 +1,4 @@
+-- scr_clock_spd.lua
 -- this is speed scale
 
 size = {180, 350}

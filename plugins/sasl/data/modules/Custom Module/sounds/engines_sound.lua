@@ -1,56 +1,71 @@
+-- engines_sound.lua
 -- this is engines sounds
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("external_view", globalPropertyi("sim/graphics/view/view_is_external")) -- enviroment
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
--- engines
-defineProperty("eng1_N1", globalProperty("sim/flightmodel/engine/ENGN_N2_[0]")) -- engine 1 rpm
-defineProperty("eng2_N1", globalProperty("sim/flightmodel/engine/ENGN_N2_[1]")) -- engine 2 rpm
-defineProperty("eng3_N1", globalProperty("sim/flightmodel/engine/ENGN_N2_[2]")) -- engine 3 rpm
+    { "external_view", "sim/graphics/view/view_is_external", globalPropertyi }, -- enviroment
 
-defineProperty("apd_working_1", globalPropertyf("tu154/custom/start/apd_working_1")) --   
-defineProperty("apd_working_2", globalPropertyf("tu154/custom/start/apd_working_2")) --   
-defineProperty("apd_working_3", globalPropertyf("tu154/custom/start/apd_working_3")) --   
+    -- engines
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty }, -- engine 3 rpm
 
-defineProperty("eng_working_1", globalProperty("sim/flightmodel2/engines/engine_is_burning_fuel[0]"))
-defineProperty("eng_working_2", globalProperty("sim/flightmodel2/engines/engine_is_burning_fuel[1]"))
-defineProperty("eng_working_3", globalProperty("sim/flightmodel2/engines/engine_is_burning_fuel[2]"))
+    { "apd_working_1", "tu154/custom/start/apd_working_1", globalPropertyf }, --
+    { "apd_working_2", "tu154/custom/start/apd_working_2", globalPropertyf }, --
+    { "apd_working_3", "tu154/custom/start/apd_working_3", globalPropertyf }, --
 
-defineProperty("apu_n1", globalPropertyf("tu154/custom/eng/apu_n1")) --  
+    { "eng_working_1", "sim/flightmodel2/engines/engine_is_burning_fuel[0]", globalProperty },
+    { "eng_working_2", "sim/flightmodel2/engines/engine_is_burning_fuel[1]", globalProperty },
+    { "eng_working_3", "sim/flightmodel2/engines/engine_is_burning_fuel[2]", globalProperty },
 
--- camera position
-defineProperty("cam_HDG", globalPropertyf("sim/graphics/view/view_heading")) -- CW from true north
-defineProperty("cam_X", globalPropertyf("sim/graphics/view/view_x")) -- The location of the camera, X coordinate (OpenGL)
-defineProperty("cam_Y", globalPropertyf("sim/graphics/view/view_y")) -- The location of the camera, Y coordinate (OpenGL)
-defineProperty("cam_Z", globalPropertyf("sim/graphics/view/view_z")) -- The location of the camera, Z coordinate (OpenGL)
+    { "apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf }, --
 
--- pilot head
-defineProperty("pilot_hdg", globalPropertyf("sim/graphics/view/pilots_head_psi")) -- CW from forward in cockpit
-defineProperty("pilot_X", globalPropertyf("sim/aircraft/view/acf_peX")) -- Position of pilot's head relative to CG
-defineProperty("pilot_Y", globalPropertyf("sim/aircraft/view/acf_peY")) -- Position of pilot's head relative to CG
-defineProperty("pilot_Z", globalPropertyf("sim/aircraft/view/acf_peZ")) -- Position of pilot's head relative to CG
+    -- camera position
+    { "cam_HDG", "sim/graphics/view/view_heading", globalPropertyf }, -- CW from true north
+    { "cam_X", "sim/graphics/view/view_x", globalPropertyf }, -- The location of the camera, X coordinate (OpenGL)
+    { "cam_Y", "sim/graphics/view/view_y", globalPropertyf }, -- The location of the camera, Y coordinate (OpenGL)
+    { "cam_Z", "sim/graphics/view/view_z", globalPropertyf }, -- The location of the camera, Z coordinate (OpenGL)
 
--- acf position
-defineProperty("acf_hdg", globalPropertyf("sim/flightmodel/position/psi")) -- degrees	The true heading of the aircraft in degrees from the Z axis - OpenGL coordinates
-defineProperty("acf_X", globalPropertyf("sim/flightmodel/position/local_x")) -- The location of the plane in OpenGL coordinates
-defineProperty("acf_Y", globalPropertyf("sim/flightmodel/position/local_y")) -- The location of the plane in OpenGL coordinates
-defineProperty("acf_Z", globalPropertyf("sim/flightmodel/position/local_z")) -- The location of the plane in OpenGL coordinates
+    -- pilot head
+    -- { "pilot_hdg", "sim/graphics/view/pilots_head_psi", globalPropertyf }, -- CW from forward in cockpit
+    -- { "pilot_X", "sim/aircraft/view/acf_peX", globalPropertyf }, -- Position of pilot's head relative to CG
+    -- { "pilot_Y", "sim/aircraft/view/acf_peY", globalPropertyf }, -- Position of pilot's head relative to CG
+    { "pilot_Z", "sim/aircraft/view/acf_peZ", globalPropertyf }, -- Position of pilot's head relative to CG
 
-defineProperty("cockpit_window_left", globalPropertyf("tu154/custom/anim/cockpit_window_left")) --  
-defineProperty("cockpit_window_right", globalPropertyf("tu154/custom/anim/cockpit_window_right")) --  
+    -- acf position
+    { "acf_hdg", "sim/flightmodel/position/psi", globalPropertyf }, -- degrees	The true heading of the aircraft in degrees from the Z axis - OpenGL coordinates
+    { "acf_X", "sim/flightmodel/position/local_x", globalPropertyf }, -- The location of the plane in OpenGL coordinates
+    { "acf_Y", "sim/flightmodel/position/local_y", globalPropertyf }, -- The location of the plane in OpenGL coordinates
+    { "acf_Z", "sim/flightmodel/position/local_z", globalPropertyf }, -- The location of the plane in OpenGL coordinates
 
-defineProperty("pax_door_1", globalPropertyf("tu154/custom/anim/pax_door_1")) --    
-defineProperty("pax_door_2", globalPropertyf("tu154/custom/anim/pax_door_2")) --    
-defineProperty("pax_door_3", globalPropertyf("tu154/custom/anim/pax_door_3")) --    
+    { "cockpit_window_left", "tu154/custom/anim/cockpit_window_left", globalPropertyf }, --
+    { "cockpit_window_right", "tu154/custom/anim/cockpit_window_right", globalPropertyf }, --
 
-defineProperty("cockpit_door", globalPropertyf("tu154/custom/anim/cockpit_door")) --    
+    { "pax_door_1", "tu154/custom/anim/pax_door_1", globalPropertyf }, --
+    { "pax_door_2", "tu154/custom/anim/pax_door_2", globalPropertyf }, --
+    { "pax_door_3", "tu154/custom/anim/pax_door_3", globalPropertyf }, --
 
-defineProperty("eng_main_vol", globalPropertyf("sim/operation/sound/engine_volume_ratio")) --    
-defineProperty("main_sound_on", globalPropertyi("sim/operation/sound/sound_on")) --  
+    { "cockpit_door", "tu154/custom/anim/cockpit_door", globalPropertyf }, --
 
-defineProperty("revers_flap_L", globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")) -- reverse on left engine
-defineProperty("revers_flap_R", globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]")) -- reverse on right engine
+    { "eng_main_vol", "sim/operation/sound/engine_volume_ratio", globalPropertyf }, --
+    { "main_sound_on", "sim/operation/sound/sound_on", globalPropertyi }, --
+
+    { "revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalProperty }, -- reverse on left engine
+    { "revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalProperty }, -- reverse on right engine
+})
 
 -- sounds files
 local inn_middle_left_1 = sasl.al.loadSample('Custom Sounds/engines/inn_middle_left.wav')

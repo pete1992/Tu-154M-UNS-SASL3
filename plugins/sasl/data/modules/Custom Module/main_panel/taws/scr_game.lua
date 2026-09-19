@@ -1,17 +1,32 @@
+-- scr_game.lua
 -- this is the Space Invaders game
 size = {500, 385}
 
-defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 - 
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
+defineProps({
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 -
 
--- controls
-defineProperty("but_view", globalPropertyi("tu154/custom/buttons/srpbz/but_view")) --  
-defineProperty("but_empty", globalPropertyi("tu154/custom/buttons/srpbz/but_empty")) --  -
-defineProperty("but_down", globalPropertyi("tu154/custom/buttons/srpbz/but_down")) --   
-defineProperty("but_up", globalPropertyi("tu154/custom/buttons/srpbz/but_up")) --  
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+
+    -- controls
+    -- { "but_view", "tu154/custom/buttons/srpbz/but_view", globalPropertyi }, --
+    { "but_empty", "tu154/custom/buttons/srpbz/but_empty", globalPropertyi }, --  -
+    { "but_down", "tu154/custom/buttons/srpbz/but_down", globalPropertyi }, --
+    { "but_up", "tu154/custom/buttons/srpbz/but_up", globalPropertyi }, --
+})
 
 local pong_sound = sasl.al.loadSample('Custom Sounds/pong.wav') --
 local sqr_sound = sasl.al.loadSample('Custom Sounds/square.wav') --

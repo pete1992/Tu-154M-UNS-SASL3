@@ -1,3 +1,4 @@
+-- fuel_panel.lua
 -- fuel system panel
 
 -- gauges
@@ -62,8 +63,8 @@ defineProps({
     { "reserv_pump_test", "tu154/custom/buttons/eng/reserv_pump_test", globalPropertyi }, --
 
     -- lamps
-    { "fuel_2500", "tu154/custom/lights/small/fuel_2500", globalPropertyf }, --   2500
-    { "fuel_tank1_used", "tu154/custom/lights/small/fuel_tank1_used", globalPropertyf }, --    1
+    -- { "fuel_2500", "tu154/custom/lights/small/fuel_2500", globalPropertyf }, --   2500
+    -- { "fuel_tank1_used", "tu154/custom/lights/small/fuel_tank1_used", globalPropertyf }, --    1
     { "fuel_tank3_left_fail", "tu154/custom/lights/small/fuel_tank3_left_fail", globalPropertyf }, --    3
     { "fuel_tank2_left_fail", "tu154/custom/lights/small/fuel_tank2_left_fail", globalPropertyf }, --    2
     { "fuel_tank2_right_fail", "tu154/custom/lights/small/fuel_tank2_right_fail", globalPropertyf }, --    2
@@ -113,7 +114,7 @@ defineProps({
     { "ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]", globalProperty }, -- FF from sim kg/second
 
     -- fuel tanks
-    { "total_w", "sim/flightmodel/weight/m_fuel_total", globalPropertyf }, -- fuel weight
+    -- { "total_w", "sim/flightmodel/weight/m_fuel_total", globalPropertyf }, -- fuel weight
 
     { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel weight
     { "tank4_w", "sim/flightmodel/weight/m_fuel[1]", globalProperty }, -- fuel weight
@@ -129,7 +130,7 @@ defineProps({
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
     -- bus parameters
     { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-    { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
+    -- { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
     { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
     -- lamps sources
@@ -161,19 +162,19 @@ defineProps({
 
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 
     -- failures
-    { "fuel_auto_fail", "tu154/custom/failures/fuel_auto_fail", globalPropertyi },
+    -- { "fuel_auto_fail", "tu154/custom/failures/fuel_auto_fail", globalPropertyi },
     { "fuel_level_fail", "tu154/custom/failures/fuel_level_fail", globalPropertyi },
-    { "fuel_porc_fail", "tu154/custom/failures/fuel_porc_fail", globalPropertyi },
+    -- { "fuel_porc_fail", "tu154/custom/failures/fuel_porc_fail", globalPropertyi },
 
-    { "fuel_pump_2l_fail", "tu154/custom/failures/fuel_pump_2l_fail", globalPropertyi }, -- number of failed pumps
-    { "fuel_pump_2r_fail", "tu154/custom/failures/fuel_pump_2r_fail", globalPropertyi },
-    { "fuel_pump_3l_fail", "tu154/custom/failures/fuel_pump_3l_fail", globalPropertyi },
-    { "fuel_pump_3r_fail", "tu154/custom/failures/fuel_pump_3r_fail", globalPropertyi },
+    -- { "fuel_pump_2l_fail", "tu154/custom/failures/fuel_pump_2l_fail", globalPropertyi }, -- number of failed pumps
+    -- { "fuel_pump_2r_fail", "tu154/custom/failures/fuel_pump_2r_fail", globalPropertyi },
+    -- { "fuel_pump_3l_fail", "tu154/custom/failures/fuel_pump_3l_fail", globalPropertyi },
+    -- { "fuel_pump_3r_fail", "tu154/custom/failures/fuel_pump_3r_fail", globalPropertyi },
     --defineProperty("fuel_pump_1_fail", globalPropertyi("tu154/custom/failures/fuel_pump_1_fail"))
-    { "fuel_pump_4_fail", "tu154/custom/failures/fuel_pump_4_fail", globalPropertyi },
+    -- { "fuel_pump_4_fail", "tu154/custom/failures/fuel_pump_4_fail", globalPropertyi },
 
     { "fuel_meter_2l_fail", "tu154/custom/failures/fuel_meter_2l_fail", globalPropertyi },
     { "fuel_meter_2r_fail", "tu154/custom/failures/fuel_meter_2r_fail", globalPropertyi },

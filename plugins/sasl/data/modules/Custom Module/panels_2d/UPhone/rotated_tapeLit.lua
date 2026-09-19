@@ -1,3 +1,4 @@
+-- rotated_tapeLit.lua
 -- scrollable rotatable tape
 
 -- tape image

@@ -1,3 +1,4 @@
+-- side_draw.lua
 -- this is side drawing logic
 
 size = {800, 600}

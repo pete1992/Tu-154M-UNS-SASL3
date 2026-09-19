@@ -1,4 +1,4 @@
--- lights_commands.lua
+-- light_commands.lua
 --[[
 Changelog
 - Grouped all property bindings through a local defineProps() helper while preserving all existing property names, Dataref paths, constructors, and their original order.
@@ -24,10 +24,10 @@ end
 defineProps({
     { "nav_lights_set", "tu154/custom/lights/nav_lights_set", globalPropertyi },
     { "strobe_set", "tu154/custom/lights/strobe_set", globalPropertyi },
-    { "wing_light_left_set", "tu154/custom/lights/wing_light_left_set", globalPropertyi },
-    { "wing_light_right_set", "tu154/custom/lights/wing_light_right_set", globalPropertyi },
+    -- { "wing_light_left_set", "tu154/custom/lights/wing_light_left_set", globalPropertyi },
+    -- { "wing_light_right_set", "tu154/custom/lights/wing_light_right_set", globalPropertyi },
     { "tail_light_set", "tu154/custom/lights/tail_light_set", globalPropertyi },
-    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyi },
+    -- { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyi },
     { "landing_ext_set_L", "tu154/custom/lights/landing_ext_set_L", globalPropertyi },
     { "landing_ext_set_R", "tu154/custom/lights/landing_ext_set_R", globalPropertyi },
     { "landing_mode_set_L", "tu154/custom/lights/landing_mode_set_L", globalPropertyi },

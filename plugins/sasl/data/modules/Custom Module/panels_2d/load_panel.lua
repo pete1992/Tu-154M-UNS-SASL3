@@ -1,3 +1,4 @@
+-- load_panel.lua
 --[[
 Changelog
 - Grouped all Dataref property bindings through a local defineProps() helper while preserving every existing property name, Dataref path, constructor, and binding order.
@@ -19,25 +20,31 @@ Changelog
 size = {1024, 683}
 
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
 -- General panel state and timing.
-defineProps({
-    { "save_state", "tu154/custom/save_state", globalPropertyi },
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
-    { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi },
-    { "show_load_panel", "tu154/custom/panels/show_load_panel", globalPropertyi },
-})
-
--- Panel images are SASL properties, not Datarefs.
 defineProperty("bg_img", sasl.gl.loadImage("load_panel.png"))
+
 defineProperty("bg_img_rus", sasl.gl.loadImage("load_panel_RUS.png"))
 
--- Payload inputs, aircraft state, and load results.
 defineProps({
+    { "save_state", "tu154/custom/save_state", globalPropertyi },
+    -- { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi },
+    { "show_load_panel", "tu154/custom/panels/show_load_panel", globalPropertyi },
+
+    -- Panel images are SASL properties, not Datarefs.
+
+    -- Payload inputs, aircraft state, and load results.
     { "crew_num_pr", "tu154/custom/payload/crew_num", globalPropertyi },
     { "zone_1_pr", "tu154/custom/payload/zone_1", globalPropertyi },
     { "zone_2_pr", "tu154/custom/payload/zone_2", globalPropertyi },
@@ -61,9 +68,9 @@ defineProps({
     { "tank_2R_pr", "tu154/custom/payload/tank_2R", globalPropertyi },
     { "tank_3L_pr", "tu154/custom/payload/tank_3L", globalPropertyi },
     { "tank_3R_pr", "tu154/custom/payload/tank_3R", globalPropertyi },
-    { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
-    { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
-    { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
+    -- { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
+    -- { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
+    -- { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
     { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty },
     { "payload", "sim/flightmodel/weight/m_fixed", globalPropertyf },
     { "CG_load", "sim/flightmodel/misc/cgz_ref_to_default", globalPropertyf },

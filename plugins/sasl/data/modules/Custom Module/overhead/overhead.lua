@@ -1,3 +1,4 @@
+-- overhead.lua
 -- Overhead control sounds, cold-and-dark cap initialization, and cap interlocks
 
 local function defineProps(defs)

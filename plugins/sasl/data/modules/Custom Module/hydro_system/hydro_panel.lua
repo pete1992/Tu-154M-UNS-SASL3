@@ -1,80 +1,95 @@
+-- hydro_panel.lua
 -- this is hydraulic panel
 
 -- gauges
-defineProperty("pressure_ind_1", globalPropertyf("tu154/custom/gauges/hydro/pressure_ind_1")) --    1
-defineProperty("pressure_ind_2", globalPropertyf("tu154/custom/gauges/hydro/pressure_ind_2")) --    2
-defineProperty("pressure_ind_3", globalPropertyf("tu154/custom/gauges/hydro/pressure_ind_3")) --    3
-defineProperty("pressure_ind_emerg", globalPropertyf("tu154/custom/gauges/hydro/pressure_ind_emerg")) --    
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("qty_12", globalPropertyf("tu154/custom/gauges/hydro/qty_12")) -- 
-defineProperty("qty_3", globalPropertyf("tu154/custom/gauges/hydro/qty_3")) -- 
+defineProps({
+    { "pressure_ind_1", "tu154/custom/gauges/hydro/pressure_ind_1", globalPropertyf }, --    1
+    { "pressure_ind_2", "tu154/custom/gauges/hydro/pressure_ind_2", globalPropertyf }, --    2
+    { "pressure_ind_3", "tu154/custom/gauges/hydro/pressure_ind_3", globalPropertyf }, --    3
+    { "pressure_ind_emerg", "tu154/custom/gauges/hydro/pressure_ind_emerg", globalPropertyf }, --
 
-defineProperty("gear_brake_press_L", globalPropertyf("tu154/custom/gauges/console/gear_brake_press_L")) --   
-defineProperty("gear_brake_press_R", globalPropertyf("tu154/custom/gauges/console/gear_brake_press_R")) --   
+    { "qty_12", "tu154/custom/gauges/hydro/qty_12", globalPropertyf }, --
+    { "qty_3", "tu154/custom/gauges/hydro/qty_3", globalPropertyf }, --
 
--- controls
-defineProperty("lamp_test_hydro", globalPropertyi("tu154/custom/buttons/lamp_test_hydro")) --      
-defineProperty("lamp_test_front", globalPropertyi("tu154/custom/buttons/lamp_test_front")) --      
+    { "gear_brake_press_L", "tu154/custom/gauges/console/gear_brake_press_L", globalPropertyf }, --
+    { "gear_brake_press_R", "tu154/custom/gauges/console/gear_brake_press_R", globalPropertyf }, --
 
-defineProperty("qty_test_12", globalPropertyi("tu154/custom/buttons/hydro/qty_test_12")) --  
-defineProperty("qty_test_3", globalPropertyi("tu154/custom/buttons/hydro/qty_test_3")) --  
+    -- controls
+    { "lamp_test_hydro", "tu154/custom/buttons/lamp_test_hydro", globalPropertyi }, --
+    { "lamp_test_front", "tu154/custom/buttons/lamp_test_front", globalPropertyi }, --
 
-defineProperty("accum_fill", globalPropertyi("tu154/custom/buttons/hydro/accum_fill")) --  
+    { "qty_test_12", "tu154/custom/buttons/hydro/qty_test_12", globalPropertyi }, --
+    { "qty_test_3", "tu154/custom/buttons/hydro/qty_test_3", globalPropertyi }, --
 
-defineProperty("connect2to1", globalPropertyi("tu154/custom/switchers/hydro/connect2to1")) --  2   1 
-defineProperty("connect2to1_cap", globalPropertyi("tu154/custom/switchers/hydro/connect2to1_cap")) --  2   1 
-defineProperty("pump_2", globalPropertyi("tu154/custom/switchers/hydro/pump_2")) --  2   1 
-defineProperty("pump_3", globalPropertyi("tu154/custom/switchers/hydro/pump_3")) --  2   1 
+    { "accum_fill", "tu154/custom/buttons/hydro/accum_fill", globalPropertyi }, --
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "connect2to1", "tu154/custom/switchers/hydro/connect2to1", globalPropertyi }, --  2   1
+    { "connect2to1_cap", "tu154/custom/switchers/hydro/connect2to1_cap", globalPropertyi }, --  2   1
+    { "pump_2", "tu154/custom/switchers/hydro/pump_2", globalPropertyi }, --  2   1
+    { "pump_3", "tu154/custom/switchers/hydro/pump_3", globalPropertyi }, --  2   1
 
--- lamps
-defineProperty("eng_hydr_fail_1", globalPropertyf("tu154/custom/lights/small/eng_hydr_fail_1")) --    1. 
-defineProperty("eng_hydr_fail_2", globalPropertyf("tu154/custom/lights/small/eng_hydr_fail_2")) --    2. 
-defineProperty("eng_hydr_fail_3", globalPropertyf("tu154/custom/lights/small/eng_hydr_fail_3")) --    3. 
-defineProperty("eng_hydr_fail_4", globalPropertyf("tu154/custom/lights/small/eng_hydr_fail_4")) --    . 
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("front_hydr_fail_1", globalPropertyf("tu154/custom/lights/small/front_hydr_fail_1")) --    1. 
-defineProperty("front_hydr_fail_2", globalPropertyf("tu154/custom/lights/small/front_hydr_fail_2")) --    2. 
-defineProperty("front_hydr_fail_3", globalPropertyf("tu154/custom/lights/small/front_hydr_fail_3")) --    3. 
-defineProperty("front_hydr_fail_4", globalPropertyf("tu154/custom/lights/small/front_hydr_fail_4")) --    . 
+    -- lamps
+    { "eng_hydr_fail_1", "tu154/custom/lights/small/eng_hydr_fail_1", globalPropertyf }, --    1.
+    { "eng_hydr_fail_2", "tu154/custom/lights/small/eng_hydr_fail_2", globalPropertyf }, --    2.
+    { "eng_hydr_fail_3", "tu154/custom/lights/small/eng_hydr_fail_3", globalPropertyf }, --    3.
+    { "eng_hydr_fail_4", "tu154/custom/lights/small/eng_hydr_fail_4", globalPropertyf }, --    .
 
--- sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    { "front_hydr_fail_1", "tu154/custom/lights/small/front_hydr_fail_1", globalPropertyf }, --    1.
+    { "front_hydr_fail_2", "tu154/custom/lights/small/front_hydr_fail_2", globalPropertyf }, --    2.
+    { "front_hydr_fail_3", "tu154/custom/lights/small/front_hydr_fail_3", globalPropertyf }, --    3.
+    { "front_hydr_fail_4", "tu154/custom/lights/small/front_hydr_fail_4", globalPropertyf }, --    .
 
-defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right")) --   36 
-defineProperty("bus36_volt_pts250_1", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_1")) --   36  1
+    -- sources
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("gs_press_1", globalPropertyf("tu154/custom/hydro/gs_press_1")) --   1
-defineProperty("gs_press_2", globalPropertyf("tu154/custom/hydro/gs_press_2")) --   2
-defineProperty("gs_press_3", globalPropertyf("tu154/custom/hydro/gs_press_3")) --   3
-defineProperty("gs_press_4", globalPropertyf("tu154/custom/hydro/gs_press_4")) --   4
+    { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, --   36
+    { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, --   36  1
 
-defineProperty("gs_qty_12_show", globalPropertyf("tu154/custom/hydro/gs_qty_12_show")) --    
-defineProperty("gs_qty_3_show", globalPropertyf("tu154/custom/hydro/gs_qty_3_show")) --    
+    { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, --   1
+    { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, --   2
+    { "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, --   3
+    { "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf }, --   4
 
---defineProperty("l_brake_add", globalPropertyf("sim/flightmodel/controls/l_brake_add")) -- Left Brake
---defineProperty("r_brake_add", globalPropertyf("sim/flightmodel/controls/r_brake_add")) -- Right Brake
+    { "gs_qty_12_show", "tu154/custom/hydro/gs_qty_12_show", globalPropertyf }, --
+    { "gs_qty_3_show", "tu154/custom/hydro/gs_qty_3_show", globalPropertyf }, --
 
-defineProperty("l_brake_add", globalPropertyf("tu154/custom/brakes/int_brakes_L")) --   
-defineProperty("r_brake_add", globalPropertyf("tu154/custom/brakes/int_brakes_R")) --   
+    --defineProperty("l_brake_add", globalPropertyf("sim/flightmodel/controls/l_brake_add")) -- Left Brake
+    --defineProperty("r_brake_add", globalPropertyf("sim/flightmodel/controls/r_brake_add")) -- Right Brake
 
---defineProperty("l_brake_add", globalPropertyf("tu154/custom/SC/brakes/int_brakes_L")) 
---defineProperty("r_brake_add", globalPropertyf("tu154/custom/SC/brakes/int_brakes_R")) 
+    { "l_brake_add", "tu154/custom/brakes/int_brakes_L", globalPropertyf }, --
+    { "r_brake_add", "tu154/custom/brakes/int_brakes_R", globalPropertyf }, --
 
---defineProperty("l_brake_add", globalPropertyf("tu154/custom/controlls/brake_L")) -- 
---defineProperty("r_brake_add", globalPropertyf("tu154/custom/controlls/brake_R")) -- 
+    --defineProperty("l_brake_add", globalPropertyf("tu154/custom/SC/brakes/int_brakes_L"))
+    --defineProperty("r_brake_add", globalPropertyf("tu154/custom/SC/brakes/int_brakes_R"))
 
-defineProperty("parkbrake", globalPropertyf("sim/flightmodel/controls/parkbrake")) -- Parking Brake
---defineProperty("parkbrake", globalPropertyf("tu154/custom/SC/controls/parkbrake")) 
+    --defineProperty("l_brake_add", globalPropertyf("tu154/custom/controlls/brake_L")) --
+    --defineProperty("r_brake_add", globalPropertyf("tu154/custom/controlls/brake_R")) --
 
-defineProperty("brake_emerg", globalPropertyf("tu154/custom/controlls/brake_emerg")) --  
+    { "parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf }, -- Parking Brake
+    --defineProperty("parkbrake", globalPropertyf("tu154/custom/SC/controls/parkbrake"))
 
--- failures
-defineProperty("rel_lbrakes", globalPropertyi("sim/operation/failures/rel_lbrakes")) -- Left Brakes
-defineProperty("rel_rbrakes", globalPropertyi("sim/operation/failures/rel_rbrakes")) -- Right Brakes
+    { "brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf }, --
+
+    -- failures
+    { "rel_lbrakes", "sim/operation/failures/rel_lbrakes", globalPropertyi }, -- Left Brakes
+    { "rel_rbrakes", "sim/operation/failures/rel_rbrakes", globalPropertyi }, -- Right Brakes
+})
 
 -- sounds
 local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')

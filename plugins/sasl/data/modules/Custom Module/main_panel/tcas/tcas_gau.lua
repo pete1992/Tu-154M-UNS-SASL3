@@ -22,13 +22,13 @@ defineProps({
     {"mode_set", "tu154/custom/tcas/mode_set", globalPropertyi},
     {"tcas_range_set", "tu154/custom/tcas/range_set", globalPropertyi},
     {"level_mode", "tu154/custom/tcas/level_mode", globalPropertyi},
-    {"fl_mode", "tu154/custom/tcas/fl_mode", globalPropertyi},
-    {"flt_id", "tu154/custom/tcas/flt_id", globalPropertyi},
+    -- {"fl_mode", "tu154/custom/tcas/fl_mode", globalPropertyi},
+    -- {"flt_id", "tu154/custom/tcas/flt_id", globalPropertyi},
     {"ra_scale_set", "tu154/custom/tcas/ra_scale_set", globalPropertyi},
     {"vvi_fail", "sim/operation/failures/rel_ss_vvi", globalPropertyi},
   --  {"vvi_show", "tu154/custom/tcas/vvi_left", globalPropertyf},
     {"ismaster", "scp/api/ismaster", globalPropertyf},
-    {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
+    -- {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
 })
 
 -- Main VSI textures

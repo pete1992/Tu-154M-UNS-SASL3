@@ -1,3 +1,4 @@
+-- arm406.lua
 -- ARM-406 / PDU-406: manual-only, simulated emergency locator transmitter.
 -- The B2 T154.arm406 self-test supplied the ten-second test concept. Emergency
 -- operation is implemented here with the existing M panel properties and SASL

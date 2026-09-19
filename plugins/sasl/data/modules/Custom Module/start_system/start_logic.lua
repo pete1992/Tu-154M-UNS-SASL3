@@ -30,7 +30,7 @@ end
 
 defineProps({
     -- Starter-panel guard
-    { "starter_cap", "tu154/custom/switchers/eng/starter_cap", globalPropertyi },
+    -- { "starter_cap", "tu154/custom/switchers/eng/starter_cap", globalPropertyi },
     -- Starter-system power switch
     { "starter_switch", "tu154/custom/switchers/eng/starter_switch", globalPropertyi },
     -- Engine selector
@@ -68,23 +68,23 @@ defineProps({
     { "sim_ignition3", "sim/cockpit2/engine/actuators/ignition_on[2]",
         globalProperty },
     -- Starter duration, engine 1 mapping
-    { "sim_starter1", "sim/cockpit/engine/starter_duration[1]",
-        globalProperty },
+    -- { "sim_starter1", "sim/cockpit/engine/starter_duration[1]",
+        -- globalProperty },
     -- Starter duration, engine 2 mapping
-    { "sim_starter2", "sim/cockpit/engine/starter_duration[0]",
-        globalProperty },
+    -- { "sim_starter2", "sim/cockpit/engine/starter_duration[0]",
+        -- globalProperty },
     -- Starter duration, engine 3 mapping
-    { "sim_starter3", "sim/cockpit/engine/starter_duration[2]",
-        globalProperty },
+    -- { "sim_starter3", "sim/cockpit/engine/starter_duration[2]",
+        -- globalProperty },
     -- Starter torque state, engine 1 mapping
-    { "sim_start1", "sim/flightmodel2/engines/starter_making_torque[1]",
-        globalProperty },
+    -- { "sim_start1", "sim/flightmodel2/engines/starter_making_torque[1]",
+        -- globalProperty },
     -- Starter torque state, engine 2 mapping
-    { "sim_start2", "sim/flightmodel2/engines/starter_making_torque[0]",
-        globalProperty },
+    -- { "sim_start2", "sim/flightmodel2/engines/starter_making_torque[0]",
+        -- globalProperty },
     -- Starter torque state, engine 3 mapping
-    { "sim_start3", "sim/flightmodel2/engines/starter_making_torque[2]",
-        globalProperty },
+    -- { "sim_start3", "sim/flightmodel2/engines/starter_making_torque[2]",
+        -- globalProperty },
 
     -- Left 27 V bus voltage
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
@@ -140,7 +140,7 @@ defineProps({
     -- Simulator pause state
     { "sim_paused", "sim/time/paused", globalPropertyi },
     -- Simulator running time
-    { "sim_run_time", "sim/time/total_running_time_sec", globalPropertyf },
+    -- { "sim_run_time", "sim/time/total_running_time_sec", globalPropertyf },
     -- Starter-system air pressure
     { "starter_pressure", "tu154/custom/start/starter_pressure", globalPropertyf },
     -- APD operating state, engine 1
@@ -158,27 +158,27 @@ defineProps({
     -- Starter-system fuel command, engine 3
     { "fuel_in_3", "tu154/custom/start/fuel_in_3", globalPropertyi },
     -- Starter torque ratio
-    { "starter_torq", "sim/aircraft/engine/acf_starter_torque_ratio", globalPropertyf },
+    -- { "starter_torq", "sim/aircraft/engine/acf_starter_torque_ratio", globalPropertyf },
     -- Starter maximum RPM ratio
     { "starter_rpm", "sim/aircraft/engine/acf_starter_max_rpm_ratio", globalPropertyf },
     -- Jet-engine spool-up time
-    { "jet_spoolup_time", "sim/aircraft/engine/acf_spooltime_jet", globalPropertyf },
+    -- { "jet_spoolup_time", "sim/aircraft/engine/acf_spooltime_jet", globalPropertyf },
     -- SmartCopilot master state: 0 unavailable, 1 slave, 2 master
     { "ismaster", "scp/api/ismaster", globalPropertyf },
     -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
     -- Legacy X-Plane APU starter switch
-    { "APU_switch", "sim/cockpit/engine/APU_switch", globalPropertyf },
+    -- { "APU_switch", "sim/cockpit/engine/APU_switch", globalPropertyf },
     -- Legacy X-Plane APU running state
-    { "APU_running", "sim/cockpit/engine/APU_running", globalPropertyf },
+    -- { "APU_running", "sim/cockpit/engine/APU_running", globalPropertyf },
     -- Legacy X-Plane APU N1
-    { "APU_N1", "sim/cockpit/engine/APU_N1", globalPropertyf },
+    -- { "APU_N1", "sim/cockpit/engine/APU_N1", globalPropertyf },
     -- Legacy X-Plane APU bleed-air actuator
-    { "apu_bleed", "sim/cockpit2/bleedair/actuators/apu_bleed", globalPropertyf },
+    -- { "apu_bleed", "sim/cockpit2/bleedair/actuators/apu_bleed", globalPropertyf },
     -- External ASU air pressure
     { "asu_press", "tu154/custom/asu/press", globalPropertyf },
     -- Legacy simulator-version alias retained for compatibility
-    { "sim_vers", "sim/version/xplane_internal_version", globalPropertyi },
+    -- { "sim_vers", "sim/version/xplane_internal_version", globalPropertyi },
 })
 
 -- Simulator starter commands.

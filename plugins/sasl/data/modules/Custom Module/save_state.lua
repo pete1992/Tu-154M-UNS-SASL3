@@ -12,6 +12,8 @@ defineProps({
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
     {"starter_torq", "sim/aircraft/engine/acf_starter_torque_ratio", globalPropertyf},
     {"hardware_cockpit", "tu154/custom/hardware_cockpit", globalPropertyi},
+    {"show_yoke", "tu154/custom/anim/show_yokes", globalPropertyi},
+    {"yoke_hide_slider", "sim/cockpit2/switches/custom_slider_on[8]", globalProperty},
     {"fuel_q_1", "sim/flightmodel/weight/m_fuel[0]", globalProperty},
     {"fuel_q_4", "sim/flightmodel/weight/m_fuel[1]", globalProperty},
     {"fuel_q_2R", "sim/flightmodel/weight/m_fuel[2]", globalProperty},
@@ -259,6 +261,7 @@ local stateEntries = {
     {"starterTRQ", starter_torq, 100, 0.01, true},
     {"crewvo", enable_crew_vo},
     {"hardwareCockpit", hardware_cockpit},
+    {"show_yoke", show_yoke}, -- Restore the user's yoke visibility preference.
     {"tankone", fuel_q_1},
     {"tankfour", fuel_q_4},
     {"tanktwoL", fuel_q_2L},
@@ -557,6 +560,11 @@ local function readFile()
         if value ~= nil then
             decodeValue(entry, value)
         end
+    end
+
+    -- The animation derives yoke visibility from the inverse slider state each frame.
+    if values["show_yoke"] ~= nil then
+        set(yoke_hide_slider, 1 - values["show_yoke"])
     end
 
     -- Russian and English object visibility are complementary.

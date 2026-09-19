@@ -27,10 +27,10 @@ defineProps({
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     { "external_view", "sim/graphics/view/view_is_external", globalPropertyi },
     -- Radio altimeter
-    { "dh_set_L", "tu154/custom/gauges/alt/radioalt_dh_left", globalPropertyf },
-    { "dh_set_R", "tu154/custom/gauges/alt/radioalt_dh_right", globalPropertyf },
-    { "rv_angle_L", "tu154/custom/gauges/alt/radioalt_needle_left", globalPropertyf },
-    { "rv_angle_R", "tu154/custom/gauges/alt/radioalt_needle_right", globalPropertyf },
+    -- { "dh_set_L", "tu154/custom/gauges/alt/radioalt_dh_left", globalPropertyf },
+    -- { "dh_set_R", "tu154/custom/gauges/alt/radioalt_dh_right", globalPropertyf },
+    -- { "rv_angle_L", "tu154/custom/gauges/alt/radioalt_needle_left", globalPropertyf },
+    -- { "rv_angle_R", "tu154/custom/gauges/alt/radioalt_needle_right", globalPropertyf },
     { "rv5_dh_signal_left", "tu154/custom/misc/rv5_dh_signal_left", globalPropertyi },
     { "rv5_dh_signal_right", "tu154/custom/misc/rv5_dh_signal_right", globalPropertyi },
     -- ABSU
@@ -44,7 +44,7 @@ defineProps({
     { "speaker_auasp", "tu154/custom/alarm/speaker_auasp", globalPropertyi },
     { "speaker_fuel", "tu154/custom/alarm/speaker_fuel", globalPropertyi },
     { "speaker_speed", "tu154/custom/alarm/speaker_speed", globalPropertyi },
-    { "speaker_absu", "tu154/custom/alarm/speaker_absu", globalPropertyi },
+    -- { "speaker_absu", "tu154/custom/alarm/speaker_absu", globalPropertyi },
     { "fire_siren", "tu154/custom/fire/fire_siren", globalPropertyi },
     -- Warning controls
     { "srd_buzzer", "tu154/custom/switchers/eng/srd_buzzer", globalPropertyi },
@@ -74,14 +74,14 @@ defineProps({
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
     { "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf },
     -- Flaps
-    { "flaps_lever", "tu154/custom/controll/flaps_lever", globalPropertyf },
+    -- { "flaps_lever", "tu154/custom/controll/flaps_lever", globalPropertyf },
     -- X-Plane sound volume controls
-    { "engine_volume_ratio", "sim/operation/sound/engine_volume_ratio", globalPropertyf },
-    { "prop_volume_ratio", "sim/operation/sound/prop_volume_ratio", globalPropertyf },
+    -- { "engine_volume_ratio", "sim/operation/sound/engine_volume_ratio", globalPropertyf },
+    -- { "prop_volume_ratio", "sim/operation/sound/prop_volume_ratio", globalPropertyf },
     { "ground_volume_ratio", "sim/operation/sound/ground_volume_ratio", globalPropertyf },
     { "weather_volume_ratio", "sim/operation/sound/weather_volume_ratio", globalPropertyf },
     { "warning_volume_ratio", "sim/operation/sound/warning_volume_ratio", globalPropertyf },
-    { "radio_volume_ratio", "sim/operation/sound/radio_volume_ratio", globalPropertyf },
+    -- { "radio_volume_ratio", "sim/operation/sound/radio_volume_ratio", globalPropertyf },
     { "fan_volume_ratio", "sim/operation/sound/fan_volume_ratio", globalPropertyf },
     -- Failures
     { "main_alarm_fail", "tu154/custom/failures/main_alarm_fail", globalPropertyi },
@@ -89,7 +89,7 @@ defineProps({
     { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 local function playPanelSample(sample, looped)

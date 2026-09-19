@@ -1,3 +1,4 @@
+-- diss_panel.lua
 -- Ready for script
 
 -- ============================================================================
@@ -41,8 +42,8 @@ defineProps({
 	{ "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf },
 
 	-- Electrical (kept even if not directly used in this script)
-	{ "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
-	{ "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+	-- { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+	-- { "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
 	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
 	{ "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 

@@ -1,30 +1,45 @@
+-- hydro_fails.lua
 -- hydro fails
 
 -- failures
-defineProperty("hs_leak_1", globalPropertyi("tu154/custom/failures/hydro_leak_1")) -- leak
-defineProperty("hs_leak_2", globalPropertyi("tu154/custom/failures/hydro_leak_2")) -- leak
-defineProperty("hs_leak_3", globalPropertyi("tu154/custom/failures/hydro_leak_3")) -- leak
-defineProperty("hs_leak_4", globalPropertyi("tu154/custom/failures/hydro_leak_4")) -- leak
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("hydro_pump_fail_11", globalPropertyi("tu154/custom/failures/hydro_pump_fail_11")) -- fail
-defineProperty("hydro_pump_fail_12", globalPropertyi("tu154/custom/failures/hydro_pump_fail_12")) -- fail
-defineProperty("hydro_pump_fail_2", globalPropertyi("tu154/custom/failures/hydro_pump_fail_2")) -- fail
-defineProperty("hydro_pump_fail_3", globalPropertyi("tu154/custom/failures/hydro_pump_fail_3")) -- fail
+defineProps({
+    { "hs_leak_1", "tu154/custom/failures/hydro_leak_1", globalPropertyi }, -- leak
+    { "hs_leak_2", "tu154/custom/failures/hydro_leak_2", globalPropertyi }, -- leak
+    { "hs_leak_3", "tu154/custom/failures/hydro_leak_3", globalPropertyi }, -- leak
+    { "hs_leak_4", "tu154/custom/failures/hydro_leak_4", globalPropertyi }, -- leak
 
-defineProperty("hydro_elec_fail_2", globalPropertyi("tu154/custom/failures/hydro_elec_fail_2")) -- fail
-defineProperty("hydro_elec_fail_3", globalPropertyi("tu154/custom/failures/hydro_elec_fail_3")) -- fail
+    { "hydro_pump_fail_11", "tu154/custom/failures/hydro_pump_fail_11", globalPropertyi }, -- fail
+    { "hydro_pump_fail_12", "tu154/custom/failures/hydro_pump_fail_12", globalPropertyi }, -- fail
+    { "hydro_pump_fail_2", "tu154/custom/failures/hydro_pump_fail_2", globalPropertyi }, -- fail
+    { "hydro_pump_fail_3", "tu154/custom/failures/hydro_pump_fail_3", globalPropertyi }, -- fail
 
-defineProperty("system_qty_1", globalPropertyf("tu154/custom/hydro/gs_qty_1")) --    
-defineProperty("system_qty_2", globalPropertyf("tu154/custom/hydro/gs_qty_2")) --    
-defineProperty("system_qty_3", globalPropertyf("tu154/custom/hydro/gs_qty_3")) --    
+    { "hydro_elec_fail_2", "tu154/custom/failures/hydro_elec_fail_2", globalPropertyi }, -- fail
+    { "hydro_elec_fail_3", "tu154/custom/failures/hydro_elec_fail_3", globalPropertyi }, -- fail
 
--- define sources
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
+    { "system_qty_1", "tu154/custom/hydro/gs_qty_1", globalPropertyf }, --
+    { "system_qty_2", "tu154/custom/hydro/gs_qty_2", globalPropertyf }, --
+    { "system_qty_3", "tu154/custom/hydro/gs_qty_3", globalPropertyf }, --
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- define sources
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local fail_counter = 0
 local check_time = math.random(15, 30)

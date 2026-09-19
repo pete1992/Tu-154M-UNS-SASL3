@@ -1,34 +1,49 @@
+-- spu.lua
 -- this is simple SPU logic
 size = {140, 180}
 
 -- define property table
-defineProperty("audio_selection_com1", globalPropertyi("sim/cockpit2/radios/actuators/audio_selection_com1"))
-defineProperty("audio_selection_com2", globalPropertyi("sim/cockpit2/radios/actuators/audio_selection_com2"))
-defineProperty("audio_selection_nav1", globalPropertyi("sim/cockpit2/radios/actuators/audio_selection_nav1"))
-defineProperty("audio_selection_nav2", globalPropertyi("sim/cockpit2/radios/actuators/audio_selection_nav2"))
-defineProperty("audio_selection_adf1", globalPropertyi("sim/cockpit2/radios/actuators/audio_selection_adf1"))
-defineProperty("audio_selection_adf2", globalPropertyi("sim/cockpit2/radios/actuators/audio_selection_adf2"))
---defineProperty("audio_dme_enabled", globalPropertyi("sim/cockpit2/radios/actuators/audio_dme_enabled"))
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("com1_right_is_selected", globalPropertyi("sim/cockpit2/radios/actuators/com1_right_is_selected"))
+defineProps({
+    { "audio_selection_com1", "sim/cockpit2/radios/actuators/audio_selection_com1", globalPropertyi },
+    { "audio_selection_com2", "sim/cockpit2/radios/actuators/audio_selection_com2", globalPropertyi },
+    { "audio_selection_nav1", "sim/cockpit2/radios/actuators/audio_selection_nav1", globalPropertyi },
+    { "audio_selection_nav2", "sim/cockpit2/radios/actuators/audio_selection_nav2", globalPropertyi },
+    { "audio_selection_adf1", "sim/cockpit2/radios/actuators/audio_selection_adf1", globalPropertyi },
+    { "audio_selection_adf2", "sim/cockpit2/radios/actuators/audio_selection_adf2", globalPropertyi },
+    --defineProperty("audio_dme_enabled", globalPropertyi("sim/cockpit2/radios/actuators/audio_dme_enabled"))
 
-defineProperty("VHF2Freq", globalPropertyf("sim/cockpit2/radios/actuators/com2_frequency_hz"))  -- set the frequency
-defineProperty("VHF1Freq", globalPropertyf("sim/cockpit2/radios/actuators/com1_frequency_hz"))  -- set the frequency
+    { "com1_right_is_selected", "sim/cockpit2/radios/actuators/com1_right_is_selected", globalPropertyi },
 
-defineProperty("spu_power_sw", globalPropertyi("tu154/custom/switchers/spu_1_power"))
-defineProperty("spu_mode", globalPropertyi("tu154/custom/switchers/spu_1_mode"))
-defineProperty("spu_source", globalPropertyi("tu154/custom/switchers/spu_1_source"))
-defineProperty("bus27_L", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus27_R", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
+    { "VHF2Freq", "sim/cockpit2/radios/actuators/com2_frequency_hz", globalPropertyf },  -- set the frequency
+    { "VHF1Freq", "sim/cockpit2/radios/actuators/com1_frequency_hz", globalPropertyf },  -- set the frequency
 
-defineProperty("vhf_1_on", globalPropertyi("tu154/custom/switchers/ovhd/vhf_1_on"))  -- power switch
-defineProperty("vhf_2_on", globalPropertyi("tu154/custom/switchers/ovhd/vhf_2_on"))  -- power switch
+    { "spu_power_sw", "tu154/custom/switchers/spu_1_power", globalPropertyi },
+    -- { "spu_mode", "tu154/custom/switchers/spu_1_mode", globalPropertyi },
+    { "spu_source", "tu154/custom/switchers/spu_1_source", globalPropertyi },
+    { "bus27_L", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_R", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
-defineProperty("ark_mode_1", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_mode")) --   1 0 - , 1 - , 2 - , 3 - 
-defineProperty("ark_mode_2", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_mode")) --   2 0 - , 1 - , 2 - , 3 - 
+    { "vhf_1_on", "tu154/custom/switchers/ovhd/vhf_1_on", globalPropertyi },  -- power switch
+    { "vhf_2_on", "tu154/custom/switchers/ovhd/vhf_2_on", globalPropertyi },  -- power switch
 
-defineProperty("com1_power", globalPropertyi("sim/cockpit2/radios/actuators/com1_power"))
-defineProperty("com2_power", globalPropertyi("sim/cockpit2/radios/actuators/com2_power"))
+    { "ark_mode_1", "tu154/custom/switchers/ovhd/ark_1_mode", globalPropertyi }, --   1 0 - , 1 - , 2 - , 3 -
+    { "ark_mode_2", "tu154/custom/switchers/ovhd/ark_2_mode", globalPropertyi }, --   2 0 - , 1 - , 2 - , 3 -
+
+    -- { "com1_power", "sim/cockpit2/radios/actuators/com1_power", globalPropertyi },
+    -- { "com2_power", "sim/cockpit2/radios/actuators/com2_power", globalPropertyi },
+})
 
 local switch_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
 local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')

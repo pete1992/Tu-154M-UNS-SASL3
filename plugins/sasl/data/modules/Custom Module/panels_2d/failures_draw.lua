@@ -1,3 +1,4 @@
+-- failures_draw.lua
 -- this script draws table of failures
 
 size = {100, 100}

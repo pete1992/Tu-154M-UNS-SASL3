@@ -1,3 +1,4 @@
+-- apu_fails.lua
 --[[
 Changelog
 - Restored the legacy APU random-failure module for SASL 3 use.

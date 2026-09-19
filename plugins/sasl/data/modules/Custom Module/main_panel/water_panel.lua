@@ -1,3 +1,4 @@
+-- water_panel.lua
 -- Water panel on the flight engineer's upper panel
 
 local function defineProps(defs)

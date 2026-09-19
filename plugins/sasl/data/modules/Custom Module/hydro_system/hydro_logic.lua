@@ -1,3 +1,4 @@
+-- hydro_logic.lua
 -- this is hydraulic logic
 
 -- controls
@@ -74,7 +75,7 @@ defineProps({
     { "l_brake_add", "tu154/custom/brakes/int_brakes_L", globalPropertyf }, --
     { "r_brake_add", "tu154/custom/brakes/int_brakes_R", globalPropertyf }, --
 
-    { "parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf }, -- Parking Brake
+    -- { "parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf }, -- Parking Brake
 
     { "brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf }, --
     { "brake_emerg_L", "tu154/custom/controlls/brake_emerg_L", globalPropertyf }, --
@@ -118,10 +119,10 @@ defineProps({
     { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },  -- deploy of right gear
     { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },  -- deploy of left gear
 
-    { "gears_retr_lock", "tu154/custom/switchers/gears_retr_lock", globalPropertyi }, --
+    -- { "gears_retr_lock", "tu154/custom/switchers/gears_retr_lock", globalPropertyi }, --
     { "gears_ext_3GS", "tu154/custom/switchers/gears_ext_3GS", globalPropertyi }, --    3
     { "emerg_gear_ext", "tu154/custom/controll/emerg_gear_ext", globalPropertyi }, --
-    { "gear_lever", "tu154/custom/controll/gear_lever", globalPropertyi }, --   . -1 - , 0 - , +1 -
+    -- { "gear_lever", "tu154/custom/controll/gear_lever", globalPropertyi }, --   . -1 - , 0 - , +1 -
 
     -- busters
     { "buster_on_1", "tu154/custom/switchers/console/buster_on_1", globalPropertyi }, --
@@ -134,7 +135,7 @@ defineProps({
 
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
 
 

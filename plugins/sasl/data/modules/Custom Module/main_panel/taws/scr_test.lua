@@ -1,21 +1,36 @@
+-- scr_test.lua
 -- this is the clock screen of TAWS
 size = {1000, 770}
 
-defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  
-defineProperty("brt_handle", globalPropertyf("tu154/custom/rotary/srpbz/brightness")) --  
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("taws_english", globalPropertyi("tu154/custom/taws/taws_english")) --  . 0 - , 1 - 	0
-defineProperty("taws_message", globalPropertyi("tu154/custom/taws/taws_message")) -- 
--- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain, 
--- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
+defineProps({
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -
+    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
 
-defineProperty("taws_eng_phrase", globalPropertyi("tu154/custom/sounds/taws_eng_phrase")) --     
-defineProperty("taws_rus_phrase", globalPropertyi("tu154/custom/sounds/taws_rus_phrase")) --     
+    { "taws_english", "tu154/custom/taws/taws_english", globalPropertyi }, --  . 0 - , 1 - 	0
+    { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi }, --
+    -- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain,
+    -- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
 
-defineProperty("gs_msg_vol", globalPropertyf("tu154/custom/taws/gs_msg_vol")) --   
+    { "taws_eng_phrase", "tu154/custom/sounds/taws_eng_phrase", globalPropertyi }, --
+    { "taws_rus_phrase", "tu154/custom/sounds/taws_rus_phrase", globalPropertyi }, --
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    -- { "gs_msg_vol", "tu154/custom/taws/gs_msg_vol", globalPropertyf }, --
+
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+})
 
 -- images
 defineProperty("screen_img_img", sasl.gl.loadImage("taws_clock.png", 0, 0, 1000, 770))

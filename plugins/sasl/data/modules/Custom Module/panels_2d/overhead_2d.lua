@@ -1,211 +1,226 @@
+-- overhead_2d.lua
 -- this is overhead 2D panel
 size = {1458, 1013}
 
-defineProperty("hide_eng_objects", globalPropertyi("tu154/custom/lang/hide_eng_objects")) --    . 1 = RUS
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("show_ohvd_panel",globalPropertyi("tu154/custom/panels/show_ohvd_panel")) --    
+defineProps({
+    { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi }, --    . 1 = RUS
 
--- switchers
-defineProperty("var_left", globalPropertyi("tu154/custom/switchers/ovhd/var_left"))  -- .  
-defineProperty("var_right", globalPropertyi("tu154/custom/switchers/ovhd/var_right"))  -- .  
-defineProperty("auasp_on", globalPropertyi("tu154/custom/switchers/ovhd/auasp_on"))  -- . 
-defineProperty("auasp_contr", globalPropertyi("tu154/custom/switchers/ovhd/auasp_contr"))  -- .  
-defineProperty("eup_on", globalPropertyi("tu154/custom/switchers/ovhd/eup_on"))  --  
-defineProperty("agr_on", globalPropertyi("tu154/custom/switchers/ovhd/agr_on"))  --  
-defineProperty("bkk_contr", globalPropertyi("tu154/custom/switchers/ovhd/bkk_contr"))  --  . -1 - 2, 0 - , +1 - 1
-defineProperty("bkk_on", globalPropertyi("tu154/custom/switchers/ovhd/bkk_on"))  --  
-defineProperty("sau_stu_on", globalPropertyi("tu154/custom/switchers/ovhd/sau_stu_on"))  --   
-defineProperty("pkp_left_on", globalPropertyi("tu154/custom/switchers/ovhd/pkp_left_on"))  --  	
-defineProperty("pkp_right_on", globalPropertyi("tu154/custom/switchers/ovhd/pkp_right_on"))  -- 	 
-defineProperty("mgv_contr", globalPropertyi("tu154/custom/switchers/ovhd/mgv_contr"))  --  
-defineProperty("tks_on_1", globalPropertyi("tu154/custom/switchers/ovhd/tks_on_1"))  --   1
-defineProperty("tks_on_2", globalPropertyi("tu154/custom/switchers/ovhd/tks_on_2"))  --   2
-defineProperty("tks_heat", globalPropertyi("tu154/custom/switchers/ovhd/tks_heat"))  --  
-defineProperty("tks_corr_1", globalPropertyi("tu154/custom/switchers/ovhd/tks_corr_1"))  --   2 - 1
-defineProperty("tks_corr_2", globalPropertyi("tu154/custom/switchers/ovhd/tks_corr_2"))  --   2 - 2
-defineProperty("curs_pnp_mode_1", globalPropertyi("tu154/custom/switchers/ovhd/curs_pnp_mode_1"))  --   . 0 - , 1 - 
-defineProperty("curs_pnp_mode_2", globalPropertyi("tu154/custom/switchers/ovhd/curs_pnp_mode_2"))  --   . 0 - , 1 - 
-defineProperty("svs_on", globalPropertyi("tu154/custom/switchers/ovhd/svs_on"))  --  
-defineProperty("svs_heat", globalPropertyi("tu154/custom/switchers/ovhd/svs_heat"))  --  
-defineProperty("kln_on", globalPropertyi("tu154/custom/switchers/ovhd/kln_on"))  --  
+    { "show_ohvd_panel", "tu154/custom/panels/show_ohvd_panel", globalPropertyi }, --
 
----
-defineProperty("tcas_on", globalPropertyi("tu154/custom/switchers/ovhd/tcas_on"))  --  TCAS
-defineProperty("emerg_light_on", globalPropertyi("tu154/custom/switchers/ovhd/emerg_light_on"))  --  
-defineProperty("curs_np_on_1", globalPropertyi("tu154/custom/switchers/ovhd/curs_np_on_1"))  --   1
-defineProperty("curs_np_on_2", globalPropertyi("tu154/custom/switchers/ovhd/curs_np_on_2"))  --   2
-defineProperty("tra_67_on", globalPropertyi("tu154/custom/switchers/ovhd/tra_67_on"))  --  67
-defineProperty("rsbn_on", globalPropertyi("tu154/custom/switchers/ovhd/rsbn_on"))  --  
-defineProperty("rsbn_recon", globalPropertyi("tu154/custom/switchers/ovhd/rsbn_recon"))  --  
-defineProperty("rv5_1_on", globalPropertyi("tu154/custom/switchers/ovhd/rv5_1_on"))  -- 5 1
-defineProperty("rv5_2_on", globalPropertyi("tu154/custom/switchers/ovhd/rv5_2_on"))  -- 5 2
-defineProperty("vhf_1_on", globalPropertyi("tu154/custom/switchers/ovhd/vhf_1_on"))  --  1
-defineProperty("vhf_2_on", globalPropertyi("tu154/custom/switchers/ovhd/vhf_2_on"))  --  2
-defineProperty("stabil_ga_main", globalPropertyi("tu154/custom/switchers/ovhd/stabil_ga_main"))  --     
-defineProperty("stabil_ga_reserv", globalPropertyi("tu154/custom/switchers/ovhd/stabil_ga_reserv"))  --   
-defineProperty("micron_1_on", globalPropertyi("tu154/custom/switchers/ovhd/micron_1_on"))  --  1
-defineProperty("micron_2_on", globalPropertyi("tu154/custom/switchers/ovhd/micron_2_on"))  --  2
-defineProperty("spu_on", globalPropertyi("tu154/custom/switchers/ovhd/spu_on"))  -- 
-defineProperty("sgs_on", globalPropertyi("tu154/custom/switchers/ovhd/sgs_on"))  -- 
-defineProperty("sd75_1_on", globalPropertyi("tu154/custom/switchers/ovhd/sd75_1_on"))  -- 75 1
-defineProperty("sd75_2_on", globalPropertyi("tu154/custom/switchers/ovhd/sd75_2_on"))  -- 75 2
----
-defineProperty("uvid_on", globalPropertyi("tu154/custom/switchers/ovhd/uvid_on"))  --  
-defineProperty("vbe_1_on", globalPropertyi("tu154/custom/switchers/ovhd/vbe_1_on"))  --  1
-defineProperty("vbe_2_on", globalPropertyi("tu154/custom/switchers/ovhd/vbe_2_on"))  --  2
-defineProperty("mars_on", globalPropertyi("tu154/custom/switchers/ovhd/mars_on"))  -- 
+    -- switchers
+    { "var_left", "tu154/custom/switchers/ovhd/var_left", globalPropertyi },  -- .
+    { "var_right", "tu154/custom/switchers/ovhd/var_right", globalPropertyi },  -- .
+    { "auasp_on", "tu154/custom/switchers/ovhd/auasp_on", globalPropertyi },  -- .
+    { "auasp_contr", "tu154/custom/switchers/ovhd/auasp_contr", globalPropertyi },  -- .
+    { "eup_on", "tu154/custom/switchers/ovhd/eup_on", globalPropertyi },  --
+    { "agr_on", "tu154/custom/switchers/ovhd/agr_on", globalPropertyi },  --
+    { "bkk_contr", "tu154/custom/switchers/ovhd/bkk_contr", globalPropertyi },  --  . -1 - 2, 0 - , +1 - 1
+    { "bkk_on", "tu154/custom/switchers/ovhd/bkk_on", globalPropertyi },  --
+    { "sau_stu_on", "tu154/custom/switchers/ovhd/sau_stu_on", globalPropertyi },  --
+    { "pkp_left_on", "tu154/custom/switchers/ovhd/pkp_left_on", globalPropertyi },  --
+    { "pkp_right_on", "tu154/custom/switchers/ovhd/pkp_right_on", globalPropertyi },  --
+    { "mgv_contr", "tu154/custom/switchers/ovhd/mgv_contr", globalPropertyi },  --
+    { "tks_on_1", "tu154/custom/switchers/ovhd/tks_on_1", globalPropertyi },  --   1
+    { "tks_on_2", "tu154/custom/switchers/ovhd/tks_on_2", globalPropertyi },  --   2
+    { "tks_heat", "tu154/custom/switchers/ovhd/tks_heat", globalPropertyi },  --
+    { "tks_corr_1", "tu154/custom/switchers/ovhd/tks_corr_1", globalPropertyi },  --   2 - 1
+    { "tks_corr_2", "tu154/custom/switchers/ovhd/tks_corr_2", globalPropertyi },  --   2 - 2
+    { "curs_pnp_mode_1", "tu154/custom/switchers/ovhd/curs_pnp_mode_1", globalPropertyi },  --   . 0 - , 1 -
+    { "curs_pnp_mode_2", "tu154/custom/switchers/ovhd/curs_pnp_mode_2", globalPropertyi },  --   . 0 - , 1 -
+    { "svs_on", "tu154/custom/switchers/ovhd/svs_on", globalPropertyi },  --
+    { "svs_heat", "tu154/custom/switchers/ovhd/svs_heat", globalPropertyi },  --
+    { "kln_on", "tu154/custom/switchers/ovhd/kln_on", globalPropertyi },  --
 
-defineProperty("vent_1", globalPropertyi("tu154/custom/switchers/ovhd/vent_1"))  --  
-defineProperty("vent_2", globalPropertyi("tu154/custom/switchers/ovhd/vent_2"))  --  2
-defineProperty("vent_3", globalPropertyi("tu154/custom/switchers/ovhd/vent_3"))  --  
+    ---
+    { "tcas_on", "tu154/custom/switchers/ovhd/tcas_on", globalPropertyi },  --  TCAS
+    { "emerg_light_on", "tu154/custom/switchers/ovhd/emerg_light_on", globalPropertyi },  --
+    { "curs_np_on_1", "tu154/custom/switchers/ovhd/curs_np_on_1", globalPropertyi },  --   1
+    { "curs_np_on_2", "tu154/custom/switchers/ovhd/curs_np_on_2", globalPropertyi },  --   2
+    { "tra_67_on", "tu154/custom/switchers/ovhd/tra_67_on", globalPropertyi },  --  67
+    { "rsbn_on", "tu154/custom/switchers/ovhd/rsbn_on", globalPropertyi },  --
+    { "rsbn_recon", "tu154/custom/switchers/ovhd/rsbn_recon", globalPropertyi },  --
+    { "rv5_1_on", "tu154/custom/switchers/ovhd/rv5_1_on", globalPropertyi },  -- 5 1
+    { "rv5_2_on", "tu154/custom/switchers/ovhd/rv5_2_on", globalPropertyi },  -- 5 2
+    { "vhf_1_on", "tu154/custom/switchers/ovhd/vhf_1_on", globalPropertyi },  --  1
+    { "vhf_2_on", "tu154/custom/switchers/ovhd/vhf_2_on", globalPropertyi },  --  2
+    { "stabil_ga_main", "tu154/custom/switchers/ovhd/stabil_ga_main", globalPropertyi },  --
+    { "stabil_ga_reserv", "tu154/custom/switchers/ovhd/stabil_ga_reserv", globalPropertyi },  --
+    { "micron_1_on", "tu154/custom/switchers/ovhd/micron_1_on", globalPropertyi },  --  1
+    { "micron_2_on", "tu154/custom/switchers/ovhd/micron_2_on", globalPropertyi },  --  2
+    { "spu_on", "tu154/custom/switchers/ovhd/spu_on", globalPropertyi },  --
+    { "sgs_on", "tu154/custom/switchers/ovhd/sgs_on", globalPropertyi },  --
+    { "sd75_1_on", "tu154/custom/switchers/ovhd/sd75_1_on", globalPropertyi },  -- 75 1
+    { "sd75_2_on", "tu154/custom/switchers/ovhd/sd75_2_on", globalPropertyi },  -- 75 2
+    ---
+    { "uvid_on", "tu154/custom/switchers/ovhd/uvid_on", globalPropertyi },  --
+    { "vbe_1_on", "tu154/custom/switchers/ovhd/vbe_1_on", globalPropertyi },  --  1
+    { "vbe_2_on", "tu154/custom/switchers/ovhd/vbe_2_on", globalPropertyi },  --  2
+    { "mars_on", "tu154/custom/switchers/ovhd/mars_on", globalPropertyi },  --
 
-defineProperty("arm406", globalPropertyi("tu154/custom/switchers/ovhd/arm406"))  --  406
-defineProperty("ushdb_mode_1", globalPropertyi("tu154/custom/switchers/ovhd/ushdb_mode_1"))  --    1. 0 - , 1 - VOR
-defineProperty("ushdb_mode_2", globalPropertyi("tu154/custom/switchers/ovhd/ushdb_mode_2"))  --    2. 0 - , 1 - VOR
+    { "vent_1", "tu154/custom/switchers/ovhd/vent_1", globalPropertyi },  --
+    { "vent_2", "tu154/custom/switchers/ovhd/vent_2", globalPropertyi },  --  2
+    -- { "vent_3", "tu154/custom/switchers/ovhd/vent_3", globalPropertyi },  --
 
-defineProperty("diss_on", globalPropertyi("tu154/custom/switchers/ovhd/diss_on")) --  
-defineProperty("diss_mode", globalPropertyi("tu154/custom/switchers/ovhd/diss_mode")) --  . 0 - , 1 - 
-defineProperty("nvu_calc_set", globalPropertyi("tu154/custom/switchers/ovhd/nvu_calc_set")) -- . -1 -    , 0 -   , 1 -   
+    { "arm406", "tu154/custom/switchers/ovhd/arm406", globalPropertyi },  --  406
+    { "ushdb_mode_1", "tu154/custom/switchers/ovhd/ushdb_mode_1", globalPropertyi },  --    1. 0 - , 1 - VOR
+    { "ushdb_mode_2", "tu154/custom/switchers/ovhd/ushdb_mode_2", globalPropertyi },  --    2. 0 - , 1 - VOR
 
-defineProperty("sign_belts", globalPropertyi("tu154/custom/switchers/ovhd/sign_belts")) --   
-defineProperty("sign_nosmoke", globalPropertyi("tu154/custom/switchers/ovhd/sign_nosmoke")) --   
-defineProperty("sign_exit", globalPropertyi("tu154/custom/switchers/ovhd/sign_exit")) --   
+    { "diss_on", "tu154/custom/switchers/ovhd/diss_on", globalPropertyi }, --
+    { "diss_mode", "tu154/custom/switchers/ovhd/diss_mode", globalPropertyi }, --  . 0 - , 1 -
+    { "nvu_calc_set", "tu154/custom/switchers/ovhd/nvu_calc_set", globalPropertyi }, -- . -1 -    , 0 -   , 1 -
 
-defineProperty("egpws_alarm_1", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1")) --   
-defineProperty("egpws_alarm_2", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2")) --  
-defineProperty("egpws_relief", globalPropertyi("tu154/custom/switchers/ovhd/egpws_relief")) -- 
-defineProperty("egpws_mode", globalPropertyi("tu154/custom/switchers/ovhd/egpws_mode")) -- QNH - QFE
+    { "sign_belts", "tu154/custom/switchers/ovhd/sign_belts", globalPropertyi }, --
+    { "sign_nosmoke", "tu154/custom/switchers/ovhd/sign_nosmoke", globalPropertyi }, --
+    { "sign_exit", "tu154/custom/switchers/ovhd/sign_exit", globalPropertyi }, --
 
-defineProperty("window_heat_1", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_1")) --  . -1 - , 0 - , 1 - 
-defineProperty("window_heat_2", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_2")) --  . -1 - , 0 - , 1 - 
-defineProperty("window_heat_3", globalPropertyi("tu154/custom/switchers/ovhd/window_heat_3")) --  . -1 - , 0 - , 1 - 
+    { "egpws_alarm_1", "tu154/custom/switchers/ovhd/egpws_alarm_1", globalPropertyi }, --
+    { "egpws_alarm_2", "tu154/custom/switchers/ovhd/egpws_alarm_2", globalPropertyi }, --
+    { "egpws_relief", "tu154/custom/switchers/ovhd/egpws_relief", globalPropertyi }, --
+    { "egpws_mode", "tu154/custom/switchers/ovhd/egpws_mode", globalPropertyi }, -- QNH - QFE
 
-defineProperty("pitot_heat_1", globalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_1")) --   
-defineProperty("pitot_heat_2", globalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_2")) --   
-defineProperty("pitot_heat_3", globalPropertyi("tu154/custom/switchers/ovhd/pitot_heat_3")) --   
+    { "window_heat_1", "tu154/custom/switchers/ovhd/window_heat_1", globalPropertyi }, --  . -1 - , 0 - , 1 -
+    { "window_heat_2", "tu154/custom/switchers/ovhd/window_heat_2", globalPropertyi }, --  . -1 - , 0 - , 1 -
+    { "window_heat_3", "tu154/custom/switchers/ovhd/window_heat_3", globalPropertyi }, --  . -1 - , 0 - , 1 -
 
--- buttons
-defineProperty("tks_signal_off", globalPropertyi("tu154/custom/buttons/ovhd/tks_signal_off"))  --    
-defineProperty("svs_contr", globalPropertyi("tu154/custom/buttons/ovhd/svs_contr"))  --   
+    { "pitot_heat_1", "tu154/custom/switchers/ovhd/pitot_heat_1", globalPropertyi }, --
+    { "pitot_heat_2", "tu154/custom/switchers/ovhd/pitot_heat_2", globalPropertyi }, --
+    { "pitot_heat_3", "tu154/custom/switchers/ovhd/pitot_heat_3", globalPropertyi }, --
 
-defineProperty("egpws_control", globalPropertyi("tu154/custom/buttons/ovhd/egpws_control")) --   
-defineProperty("egpws_contr_gs", globalPropertyi("tu154/custom/buttons/ovhd/egpws_contr_gs")) --   
+    -- buttons
+    { "tks_signal_off", "tu154/custom/buttons/ovhd/tks_signal_off", globalPropertyi },  --
+    { "svs_contr", "tu154/custom/buttons/ovhd/svs_contr", globalPropertyi },  --
 
--- RSBN
-defineProperty("rsbn_ch_ten", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_ch_ten")) --   
-defineProperty("rsbn_ch_one", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_ch_one")) --   
+    { "egpws_control", "tu154/custom/buttons/ovhd/egpws_control", globalPropertyi }, --
+    { "egpws_contr_gs", "tu154/custom/buttons/ovhd/egpws_contr_gs", globalPropertyi }, --
 
-defineProperty("rsbn_control_strobe", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_strobe")) --   
-defineProperty("rsbn_control_azimuth", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_azimuth")) --    
-defineProperty("rsbn_control_distance", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_distance")) --    
+    -- RSBN
+    { "rsbn_ch_ten", "tu154/custom/buttons/ovhd/rsbn_ch_ten", globalPropertyi }, --
+    { "rsbn_ch_one", "tu154/custom/buttons/ovhd/rsbn_ch_one", globalPropertyi }, --
 
--- course MP
-defineProperty("nav_1", globalPropertyf("sim/cockpit2/radios/actuators/nav1_frequency_hz"))  -- set the frequency
-defineProperty("nav_1_left", globalPropertyi("tu154/custom/rotary/ovhd/nav_1_left")) --  
-defineProperty("nav_1_right", globalPropertyi("tu154/custom/rotary/ovhd/nav_1_right")) --  
+    { "rsbn_control_strobe", "tu154/custom/buttons/ovhd/rsbn_control_strobe", globalPropertyi }, --
+    { "rsbn_control_azimuth", "tu154/custom/buttons/ovhd/rsbn_control_azimuth", globalPropertyi }, --
+    { "rsbn_control_distance", "tu154/custom/buttons/ovhd/rsbn_control_distance", globalPropertyi }, --
 
-defineProperty("nav_1_mile_km", globalPropertyi("tu154/custom/switchers/nav_1_mile_km")) --   - 
+    -- course MP
+    { "nav_1", "sim/cockpit2/radios/actuators/nav1_frequency_hz", globalPropertyf },  -- set the frequency
+    { "nav_1_left", "tu154/custom/rotary/ovhd/nav_1_left", globalPropertyi }, --
+    { "nav_1_right", "tu154/custom/rotary/ovhd/nav_1_right", globalPropertyi }, --
 
-defineProperty("nav_1_but_1", globalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_1")) --  1
-defineProperty("nav_1_but_2", globalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_2")) --  2
-defineProperty("nav_1_but_3", globalPropertyi("tu154/custom/buttons/ovhd/nav_1_but_3")) --  3
+    { "nav_1_mile_km", "tu154/custom/switchers/nav_1_mile_km", globalPropertyi }, --   -
 
-defineProperty("nav_2", globalPropertyf("sim/cockpit2/radios/actuators/nav2_frequency_hz"))  -- set the frequency
-defineProperty("nav_2_left", globalPropertyi("tu154/custom/rotary/ovhd/nav_2_left")) --  
-defineProperty("nav_2_right", globalPropertyi("tu154/custom/rotary/ovhd/nav_2_right")) --  
+    { "nav_1_but_1", "tu154/custom/buttons/ovhd/nav_1_but_1", globalPropertyi }, --  1
+    { "nav_1_but_2", "tu154/custom/buttons/ovhd/nav_1_but_2", globalPropertyi }, --  2
+    { "nav_1_but_3", "tu154/custom/buttons/ovhd/nav_1_but_3", globalPropertyi }, --  3
 
-defineProperty("nav_2_mile_km", globalPropertyi("tu154/custom/switchers/nav_2_mile_km")) --   - 
+    { "nav_2", "sim/cockpit2/radios/actuators/nav2_frequency_hz", globalPropertyf },  -- set the frequency
+    { "nav_2_left", "tu154/custom/rotary/ovhd/nav_2_left", globalPropertyi }, --
+    { "nav_2_right", "tu154/custom/rotary/ovhd/nav_2_right", globalPropertyi }, --
 
-defineProperty("nav_2_but_1", globalPropertyi("tu154/custom/buttons/ovhd/nav_2_but_1")) --  1
-defineProperty("nav_2_but_2", globalPropertyi("tu154/custom/buttons/ovhd/nav_2_but_2")) --  2
-defineProperty("nav_2_but_3", globalPropertyi("tu154/custom/buttons/ovhd/nav_2_but_3")) --  3
+    { "nav_2_mile_km", "tu154/custom/switchers/nav_2_mile_km", globalPropertyi }, --   -
 
--- VHF
-defineProperty("vhf_1", globalPropertyf("sim/cockpit2/radios/actuators/com1_frequency_hz"))  -- set the frequency
-defineProperty("vhf_1_left", globalPropertyi("tu154/custom/rotary/ovhd/vhf_1_left"))  -- knob
-defineProperty("vhf_1_right", globalPropertyi("tu154/custom/rotary/ovhd/vhf_1_right"))  -- knob
+    { "nav_2_but_1", "tu154/custom/buttons/ovhd/nav_2_but_1", globalPropertyi }, --  1
+    { "nav_2_but_2", "tu154/custom/buttons/ovhd/nav_2_but_2", globalPropertyi }, --  2
+    { "nav_2_but_3", "tu154/custom/buttons/ovhd/nav_2_but_3", globalPropertyi }, --  3
 
-defineProperty("vhf_2", globalPropertyf("sim/cockpit2/radios/actuators/com2_frequency_hz"))  -- set the frequency
-defineProperty("vhf_2_left", globalPropertyi("tu154/custom/rotary/ovhd/vhf_2_left"))  -- knob
-defineProperty("vhf_2_right", globalPropertyi("tu154/custom/rotary/ovhd/vhf_2_right"))  -- knob
+    -- VHF
+    { "vhf_1", "sim/cockpit2/radios/actuators/com1_frequency_hz", globalPropertyf },  -- set the frequency
+    { "vhf_1_left", "tu154/custom/rotary/ovhd/vhf_1_left", globalPropertyi },  -- knob
+    { "vhf_1_right", "tu154/custom/rotary/ovhd/vhf_1_right", globalPropertyi },  -- knob
 
--- ARK
-defineProperty("ark_1_mode", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_mode")) --   1 0 - , 1 - , 2 - , 3 - 
-defineProperty("ark_1_channel", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_channel")) --   1
-defineProperty("ark_1_hundr_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_hundr_left")) --   1 - 17
-defineProperty("ark_1_tens_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_tens_left")) --   1 - 10 (0)
-defineProperty("ark_1_ones_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_ones_left")) --   0 - 9
-defineProperty("ark_1_hundr_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_hundr_right")) --   1 - 17
-defineProperty("ark_1_tens_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_tens_right")) --   1 - 10 (0)
-defineProperty("ark_1_ones_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_1_ones_right")) --   0 - 9
+    { "vhf_2", "sim/cockpit2/radios/actuators/com2_frequency_hz", globalPropertyf },  -- set the frequency
+    { "vhf_2_left", "tu154/custom/rotary/ovhd/vhf_2_left", globalPropertyi },  -- knob
+    { "vhf_2_right", "tu154/custom/rotary/ovhd/vhf_2_right", globalPropertyi },  -- knob
 
-defineProperty("ark_1_ramka", globalPropertyi("tu154/custom/buttons/ovhd/ark_1_ramka")) --  
+    -- ARK
+    { "ark_1_mode", "tu154/custom/switchers/ovhd/ark_1_mode", globalPropertyi }, --   1 0 - , 1 - , 2 - , 3 -
+    { "ark_1_channel", "tu154/custom/switchers/ovhd/ark_1_channel", globalPropertyi }, --   1
+    { "ark_1_hundr_left", "tu154/custom/switchers/ovhd/ark_1_hundr_left", globalPropertyi }, --   1 - 17
+    { "ark_1_tens_left", "tu154/custom/switchers/ovhd/ark_1_tens_left", globalPropertyi }, --   1 - 10 (0)
+    { "ark_1_ones_left", "tu154/custom/switchers/ovhd/ark_1_ones_left", globalPropertyi }, --   0 - 9
+    { "ark_1_hundr_right", "tu154/custom/switchers/ovhd/ark_1_hundr_right", globalPropertyi }, --   1 - 17
+    { "ark_1_tens_right", "tu154/custom/switchers/ovhd/ark_1_tens_right", globalPropertyi }, --   1 - 10 (0)
+    { "ark_1_ones_right", "tu154/custom/switchers/ovhd/ark_1_ones_right", globalPropertyi }, --   0 - 9
 
-defineProperty("ark_2_mode", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_mode")) --   1 0 - , 1 - , 2 - , 3 - 
-defineProperty("ark_2_channel", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_channel")) --   1
-defineProperty("ark_2_hundr_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_hundr_left")) --   1 - 17
-defineProperty("ark_2_tens_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_tens_left")) --   1 - 10 (0)
-defineProperty("ark_2_ones_left", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_ones_left")) --   0 - 9
-defineProperty("ark_2_hundr_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_hundr_right")) --   1 - 17
-defineProperty("ark_2_tens_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_tens_right")) --   1 - 10 (0)
-defineProperty("ark_2_ones_right", globalPropertyi("tu154/custom/switchers/ovhd/ark_2_ones_right")) --   0 - 9
+    { "ark_1_ramka", "tu154/custom/buttons/ovhd/ark_1_ramka", globalPropertyi }, --
 
-defineProperty("ark_2_ramka", globalPropertyi("tu154/custom/buttons/ovhd/ark_2_ramka")) --  
+    { "ark_2_mode", "tu154/custom/switchers/ovhd/ark_2_mode", globalPropertyi }, --   1 0 - , 1 - , 2 - , 3 -
+    { "ark_2_channel", "tu154/custom/switchers/ovhd/ark_2_channel", globalPropertyi }, --   1
+    { "ark_2_hundr_left", "tu154/custom/switchers/ovhd/ark_2_hundr_left", globalPropertyi }, --   1 - 17
+    { "ark_2_tens_left", "tu154/custom/switchers/ovhd/ark_2_tens_left", globalPropertyi }, --   1 - 10 (0)
+    { "ark_2_ones_left", "tu154/custom/switchers/ovhd/ark_2_ones_left", globalPropertyi }, --   0 - 9
+    { "ark_2_hundr_right", "tu154/custom/switchers/ovhd/ark_2_hundr_right", globalPropertyi }, --   1 - 17
+    { "ark_2_tens_right", "tu154/custom/switchers/ovhd/ark_2_tens_right", globalPropertyi }, --   1 - 10 (0)
+    { "ark_2_ones_right", "tu154/custom/switchers/ovhd/ark_2_ones_right", globalPropertyi }, --   0 - 9
 
--- TKS
-defineProperty("tks_mode", globalPropertyi("tu154/custom/switchers/ovhd/tks_mode")) --   0 - , 1 - , 2 - 
-defineProperty("tks_user", globalPropertyi("tu154/custom/switchers/ovhd/tks_mode_left")) --  0 - , 1 - 
-defineProperty("tks_source", globalPropertyi("tu154/custom/switchers/ovhd/tks_mode_right")) --   0 - , 1 - 
-defineProperty("tks_course_set", globalPropertyi("tu154/custom/switchers/ovhd/tks_course_set")) --  
-defineProperty("tks_corrr_button", globalPropertyi("tu154/custom/buttons/ovhd/tks_corrr_button")) --  
-defineProperty("tks_lat_set", globalPropertyf("tu154/custom/rotary/ovhd/tks_lat_set")) --   
+    { "ark_2_ramka", "tu154/custom/buttons/ovhd/ark_2_ramka", globalPropertyi }, --
 
-defineProperty("tks_main_fail", globalPropertyf("tu154/custom/lights/small/tks_main_fail")) --     
-defineProperty("tks_contr_fail", globalPropertyf("tu154/custom/lights/small/tks_contr_fail")) --     
+    -- TKS
+    { "tks_mode", "tu154/custom/switchers/ovhd/tks_mode", globalPropertyi }, --   0 - , 1 - , 2 -
+    { "tks_user", "tu154/custom/switchers/ovhd/tks_mode_left", globalPropertyi }, --  0 - , 1 -
+    { "tks_source", "tu154/custom/switchers/ovhd/tks_mode_right", globalPropertyi }, --   0 - , 1 -
+    { "tks_course_set", "tu154/custom/switchers/ovhd/tks_course_set", globalPropertyi }, --
+    { "tks_corrr_button", "tu154/custom/buttons/ovhd/tks_corrr_button", globalPropertyi }, --
+    { "tks_lat_set", "tu154/custom/rotary/ovhd/tks_lat_set", globalPropertyf }, --
 
--- SO72
-defineProperty("transponder_mode", globalPropertyi("tu154/custom/switchers/ovhd/transponder_mode"))
-defineProperty("transponder_control", globalPropertyi("tu154/custom/buttons/ovhd/transponder_control"))
-defineProperty("transponder_sign", globalPropertyi("tu154/custom/buttons/ovhd/transponder_sign"))
-defineProperty("transponder_but_1", globalPropertyi("tu154/custom/buttons/ovhd/transponder_but_1"))
-defineProperty("transponder_but_2", globalPropertyi("tu154/custom/buttons/ovhd/transponder_but_2"))
-defineProperty("transponder_but_3", globalPropertyi("tu154/custom/buttons/ovhd/transponder_but_3"))
-defineProperty("transponder_but_4", globalPropertyi("tu154/custom/buttons/ovhd/transponder_but_4"))
-defineProperty("transponder_emerg", globalPropertyi("tu154/custom/buttons/ovhd/transponder_emerg"))
-defineProperty("transponder_emerg_cap", globalPropertyi("tu154/custom/buttons/ovhd/transponder_emerg_cap"))
-defineProperty("xpdr_code", globalPropertyf("sim/cockpit/radios/transponder_code"))
+    { "tks_main_fail", "tu154/custom/lights/small/tks_main_fail", globalPropertyf }, --
+    { "tks_contr_fail", "tu154/custom/lights/small/tks_contr_fail", globalPropertyf }, --
 
--- caps
-defineProperty("bkk_contr_cap", globalPropertyi("tu154/custom/switchers/ovhd/bkk_contr_cap"))  --    
-defineProperty("bkk_on_cap", globalPropertyi("tu154/custom/switchers/ovhd/bkk_on_cap"))  --   
-defineProperty("sau_stu_cap", globalPropertyi("tu154/custom/switchers/ovhd/sau_stu_cap"))  --    
-defineProperty("pkp_left_cap", globalPropertyi("tu154/custom/switchers/ovhd/pkp_left_cap"))  --   
-defineProperty("pkp_right_cap", globalPropertyi("tu154/custom/switchers/ovhd/pkp_right_cap"))  --   
-defineProperty("mgv_contr_cap", globalPropertyi("tu154/custom/switchers/ovhd/mgv_contr_cap"))  -- 	  
-defineProperty("emerg_light_cap", globalPropertyi("tu154/custom/switchers/ovhd/emerg_light_cap"))  --   
+    -- SO72
+    { "transponder_mode", "tu154/custom/switchers/ovhd/transponder_mode", globalPropertyi },
+    { "transponder_control", "tu154/custom/buttons/ovhd/transponder_control", globalPropertyi },
+    { "transponder_sign", "tu154/custom/buttons/ovhd/transponder_sign", globalPropertyi },
+    { "transponder_but_1", "tu154/custom/buttons/ovhd/transponder_but_1", globalPropertyi },
+    { "transponder_but_2", "tu154/custom/buttons/ovhd/transponder_but_2", globalPropertyi },
+    { "transponder_but_3", "tu154/custom/buttons/ovhd/transponder_but_3", globalPropertyi },
+    { "transponder_but_4", "tu154/custom/buttons/ovhd/transponder_but_4", globalPropertyi },
+    { "transponder_emerg", "tu154/custom/buttons/ovhd/transponder_emerg", globalPropertyi },
+    { "transponder_emerg_cap", "tu154/custom/buttons/ovhd/transponder_emerg_cap", globalPropertyi },
+    { "xpdr_code", "sim/cockpit/radios/transponder_code", globalPropertyf },
 
-defineProperty("egpws_alarm_1_cap", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_1_cap")) --   
-defineProperty("egpws_alarm_2_cap", globalPropertyi("tu154/custom/switchers/ovhd/egpws_alarm_2_cap")) --   
+    -- caps
+    { "bkk_contr_cap", "tu154/custom/switchers/ovhd/bkk_contr_cap", globalPropertyi },  --
+    { "bkk_on_cap", "tu154/custom/switchers/ovhd/bkk_on_cap", globalPropertyi },  --
+    { "sau_stu_cap", "tu154/custom/switchers/ovhd/sau_stu_cap", globalPropertyi },  --
+    { "pkp_left_cap", "tu154/custom/switchers/ovhd/pkp_left_cap", globalPropertyi },  --
+    { "pkp_right_cap", "tu154/custom/switchers/ovhd/pkp_right_cap", globalPropertyi },  --
+    { "mgv_contr_cap", "tu154/custom/switchers/ovhd/mgv_contr_cap", globalPropertyi },  --
+    { "emerg_light_cap", "tu154/custom/switchers/ovhd/emerg_light_cap", globalPropertyi },  --
 
--- lamps
-defineProperty("heat_ok_1", globalPropertyf("tu154/custom/lights/small/heat_ok_1")) --    
-defineProperty("heat_ok_2", globalPropertyf("tu154/custom/lights/small/heat_ok_2")) --    
-defineProperty("heat_ok_3", globalPropertyf("tu154/custom/lights/small/heat_ok_3")) --    
+    { "egpws_alarm_1_cap", "tu154/custom/switchers/ovhd/egpws_alarm_1_cap", globalPropertyi }, --
+    { "egpws_alarm_2_cap", "tu154/custom/switchers/ovhd/egpws_alarm_2_cap", globalPropertyi }, --
 
-defineProperty("bkk_ok", globalPropertyf("tu154/custom/lights/small/bkk_ok")) --   
+    -- lamps
+    { "heat_ok_1", "tu154/custom/lights/small/heat_ok_1", globalPropertyf }, --
+    { "heat_ok_2", "tu154/custom/lights/small/heat_ok_2", globalPropertyf }, --
+    { "heat_ok_3", "tu154/custom/lights/small/heat_ok_3", globalPropertyf }, --
 
-defineProperty("transponder_red", globalPropertyf("tu154/custom/lights/small/transponder_red"))
-defineProperty("transponder_green", globalPropertyf("tu154/custom/lights/small/transponder_green"))
+    { "bkk_ok", "tu154/custom/lights/small/bkk_ok", globalPropertyf }, --
 
--- power
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    -- { "transponder_red", "tu154/custom/lights/small/transponder_red", globalPropertyf },
+    -- { "transponder_green", "tu154/custom/lights/small/transponder_green", globalPropertyf },
 
-defineProperty("bus36_volt_pts250_2", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_2"))
-defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right"))
+    -- power
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+    { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf },
+    { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf },
+
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
+})
 
 -- The source atlas coordinates were authored from the PNG's top edge, while
 -- SASL 3 loadImage() measures Y from the bottom edge.

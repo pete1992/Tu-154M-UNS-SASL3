@@ -1,3 +1,4 @@
+-- tcas_text.lua
 -- this is TCAS main screen
 size = {170, 45}
 

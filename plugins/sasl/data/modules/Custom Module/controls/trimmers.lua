@@ -42,18 +42,18 @@ defineProps({
     { "int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf },
     { "int_roll_trim", "tu154/custom/trimmers/int_roll_trim", globalPropertyf },
     { "int_yaw_trim", "tu154/custom/trimmers/int_yaw_trim", globalPropertyf },
-    { "absu_roll_mode", "tu154/custom/gauges/console/absu_roll_mode", globalPropertyi },
+    -- { "absu_roll_mode", "tu154/custom/gauges/console/absu_roll_mode", globalPropertyi },
     { "absu_pitch_mode", "tu154/custom/gauges/console/absu_pitch_mode", globalPropertyi },
 
     -- Electrical power and current loads
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
-    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
+    -- { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    -- { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
     { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
     { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf },
-    { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf },
-    { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf },
+    -- { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf },
+    -- { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf },
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     { "ctr_27_L_cc", "tu154/custom/control/ctr_27_L_cc", globalPropertyf },
     { "ctr_27_R_cc", "tu154/custom/control/ctr_27_R_cc", globalPropertyf },
@@ -62,7 +62,7 @@ defineProps({
 
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 
     -- Failures
     { "rel_trim_rud", "sim/operation/failures/rel_trim_rud", globalPropertyi },

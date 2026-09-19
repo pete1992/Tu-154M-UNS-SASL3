@@ -1,3 +1,4 @@
+-- bgmk.lua
 -- ============================================================================
 -- TKS BGMK COURSE COMPUTATION
 -- Refactor goals:
@@ -28,7 +29,7 @@ end
 defineProps({
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },   -- 0 = plugin not found, 1 = slave, 2 = master
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- 1 = no control, 2 = has control
 	-- Inputs
 	{ "course_ga_1", "tu154/custom/tks/course_ga_1", globalPropertyf },
 	{ "course_ga_2", "tu154/custom/tks/course_ga_2", globalPropertyf },
@@ -41,9 +42,9 @@ defineProps({
 	-- Electrical
 	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
 	{ "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
-	{ "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
+	-- { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
 	{ "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf },
-	{ "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf },
+	-- { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf },
 	{ "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf },
 
 	-- Controls

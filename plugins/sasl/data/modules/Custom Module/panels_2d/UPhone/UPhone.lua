@@ -1,9 +1,24 @@
+-- UPhone.lua
 size = {241, 446}
 
 defineProperty("bg", sasl.gl.loadImage("UPhone.png", 0, 0, 241, 446))
 defineProperty("APPS", sasl.gl.loadImage("UPhone.png", 260, 0, 205, 305))
 defineProperty("digitsImage", sasl.gl.loadImage("UPhone.png", 493, 0, 14, 280))
-defineProperty("uphone_subpanel",globalPropertyi("tu154/custom/panels/show_phone")) --   
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
+
+defineProps({
+    { "uphone_subpanel", "tu154/custom/panels/show_phone", globalPropertyi }, --
+})
 
 local program = 0
 

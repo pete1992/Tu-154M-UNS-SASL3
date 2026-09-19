@@ -1,3 +1,4 @@
+-- eng_fails.lua
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))

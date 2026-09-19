@@ -11,7 +11,7 @@ end
 defineProps({
     -- SmartCopilot
     {"ismaster", "scp/api/ismaster", globalPropertyf},
-    {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
+    -- {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
 })
 
 components = {

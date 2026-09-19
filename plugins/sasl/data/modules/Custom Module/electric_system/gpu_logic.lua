@@ -1,4 +1,4 @@
--- gpu_logic.lua 
+-- gpu_logic.lua
 --[[
 Changelog
 - Grouped all 20 original Dataref bindings through defineProps() while preserving names, paths, constructors, and order.
@@ -17,16 +17,21 @@ Changelog
 
 -- Hobart 60 kVA GPU logic.
 
-defineProperty("xp_version", globalPropertyi("sim/version/xplane_internal_version"))
-local XP11 = get(xp_version) < 120000
-
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
 defineProps({
+    { "xp_version", "sim/version/xplane_internal_version", globalPropertyi },
+
     -- GPU state and controls
     { "gpu_present", "tu154/custom/anim/gpu_present", globalPropertyi },
     { "gpu_work_anim", "tu154/custom/anim/gpu_work", globalPropertyf },
@@ -59,8 +64,10 @@ defineProps({
 
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
+
+local XP11 = get(xp_version) < 120000
 
 local GPU_START_RATE = 0.25       -- 4 seconds from stopped to running
 local GPU_STOP_RATE = 0.10        -- 10 seconds from running to stopped

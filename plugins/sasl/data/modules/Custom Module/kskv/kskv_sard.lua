@@ -32,9 +32,9 @@ defineProps({
     { "start_sys_work", "tu154/custom/start/start_sys_work", globalPropertyf },
     -- Controls
     { "sard_cabin_press_set", "tu154/custom/switchers/sard/sard_cabin_press_set", globalPropertyf },
-    { "sard_abs_press_set", "tu154/custom/switchers/sard/sard_abs_press_set", globalPropertyf },
+    -- { "sard_abs_press_set", "tu154/custom/switchers/sard/sard_abs_press_set", globalPropertyf },
     { "sard_diff_set", "tu154/custom/switchers/sard/sard_diff_set", globalPropertyf },
-    { "sard_spd_set", "tu154/custom/switchers/sard/sard_spd_set", globalPropertyf },
+    -- { "sard_spd_set", "tu154/custom/switchers/sard/sard_spd_set", globalPropertyf },
     { "emerg_decompress", "tu154/custom/switchers/airbleed/emerg_decompress", globalPropertyi },
     { "sard_disable", "tu154/custom/switchers/eng/sard_disable", globalPropertyi },
     -- Windows and doors
@@ -49,7 +49,7 @@ defineProps({
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },
     { "msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf },
     -- Pressurization outputs
-    { "dump_to_altitude_on", "sim/cockpit2/pressurization/actuators/dump_to_altitude_on", globalPropertyi },
+    -- { "dump_to_altitude_on", "sim/cockpit2/pressurization/actuators/dump_to_altitude_on", globalPropertyi },
     { "cabin_altitude_ft", "sim/cockpit2/pressurization/actuators/cabin_altitude_ft", globalPropertyf },
     { "cabin_vvi_fpm", "sim/cockpit2/pressurization/actuators/cabin_vvi_fpm", globalPropertyf },
     { "dump_all_on", "sim/cockpit2/pressurization/actuators/dump_all_on", globalPropertyi },
@@ -59,7 +59,7 @@ defineProps({
  --   { "acf_has_press_controls", "sim/aircraft/view/acf_has_press_controls", globalPropertyf },
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 -- set(acf_has_press_controls, 1)

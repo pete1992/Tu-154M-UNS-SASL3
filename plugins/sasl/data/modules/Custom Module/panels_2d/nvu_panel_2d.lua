@@ -1,70 +1,85 @@
+-- nvu_panel_2d.lua
 -- this is NVU panel
 size = {636, 786}
 
-defineProperty("hide_eng_objects", globalPropertyi("tu154/custom/lang/hide_eng_objects")) --    . 1 = RUS
-defineProperty("show_nvu_panel",globalPropertyi("tu154/custom/panels/show_nvu_panel")) --   
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- controls
-defineProperty("nvu_param_sel", globalPropertyi("tu154/custom/switchers/console/nvu_param_sel")) --     . -4 - Z, -3 - S, -2 - Zm, -1 - Sm, 0 - off, 1 - Sn, 2 - Zn, 3 - S, 4 - Z
-defineProperty("nvu_turn_sel", globalPropertyi("tu154/custom/switchers/console/nvu_turn_sel")) --    , -1 - , 0 - , 1 - 5, 2 - 10, 3 - 15, 4 - 20, 5 - 25
-defineProperty("nvu_power_on", globalPropertyi("tu154/custom/switchers/console/nvu_power_on")) --  
-defineProperty("nvu_calc_on", globalPropertyi("tu154/custom/switchers/console/nvu_calc_on")) --  
-defineProperty("nvu_corr_on", globalPropertyi("tu154/custom/switchers/console/nvu_corr_on")) --  
-defineProperty("nvu_left_btn", globalPropertyi("tu154/custom/buttons/nvu/nvu_left_btn")) --   
-defineProperty("nvu_ctr_btn", globalPropertyi("tu154/custom/buttons/nvu/nvu_ctr_btn")) --   
-defineProperty("nvu_right_btn", globalPropertyi("tu154/custom/buttons/nvu/nvu_right_btn")) --   
-defineProperty("zpu_1_left_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_1_left_btn")) --   
-defineProperty("zpu_1_ctr_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_1_ctr_btn")) --   
-defineProperty("zpu_1_right_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_1_right_btn")) --   
-defineProperty("zpu_2_left_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_2_left_btn")) --   
-defineProperty("zpu_2_ctr_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_2_ctr_btn")) --   
-defineProperty("zpu_2_right_btn", globalPropertyi("tu154/custom/buttons/nvu/zpu_2_right_btn")) --   
--- internal datarefs
-defineProperty("current_Z1", globalPropertyf("tu154/custom/nvu/current_Z1")) -- Z1
-defineProperty("current_S1", globalPropertyf("tu154/custom/nvu/current_S1")) -- S1
-defineProperty("next_Z1", globalPropertyf("tu154/custom/nvu/next_Z1")) -- Z1
-defineProperty("next_S1", globalPropertyf("tu154/custom/nvu/next_S1")) -- S1
-defineProperty("current_Z2", globalPropertyf("tu154/custom/nvu/current_Z2")) -- Z2
-defineProperty("current_S2", globalPropertyf("tu154/custom/nvu/current_S2")) -- S2
-defineProperty("next_Z2", globalPropertyf("tu154/custom/nvu/next_Z2")) -- Z2
-defineProperty("next_S2", globalPropertyf("tu154/custom/nvu/next_S2")) -- S2
-defineProperty("zpu1", globalPropertyf("tu154/custom/nvu/zpu1")) -- ZPU1
-defineProperty("zpu2", globalPropertyf("tu154/custom/nvu/zpu2")) -- ZPU2
--- gauges
-defineProperty("map_angle", globalPropertyf("tu154/custom/gauges/console/map_angle")) --  
-defineProperty("obs_1", globalPropertyf("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")) -- OBS course
-defineProperty("obs_2", globalPropertyf("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot")) -- OBS course
-defineProperty("nav_course_1", globalPropertyi("tu154/custom/rotary/console/nav_1_course")) --   
-defineProperty("nav_course_2", globalPropertyi("tu154/custom/rotary/console/nav_2_course")) --   
--- lamps
-defineProperty("nvu_on_lit", globalPropertyf("tu154/custom/lights/small/nvu_on")) --  
-defineProperty("nvu_corr_lit", globalPropertyf("tu154/custom/lights/small/nvu_corr")) --  
-defineProperty("nvu_1_active", globalPropertyf("tu154/custom/lights/nvu_1_active")) --    
-defineProperty("nvu_2_active", globalPropertyf("tu154/custom/lights/nvu_2_active")) --    
-defineProperty("nav_1_to_lit", globalPropertyf("tu154/custom/lights/small/nav_1_to"))
-defineProperty("nav_1_from_lit", globalPropertyf("tu154/custom/lights/small/nav_1_from"))
-defineProperty("nav_2_to_lit", globalPropertyf("tu154/custom/lights/small/nav_2_to"))
-defineProperty("nav_2_from_lit", globalPropertyf("tu154/custom/lights/small/nav_2_from"))
--- DISS
-defineProperty("wind_set", globalPropertyf("tu154/custom/rotary/console/wind_set")) --  
-defineProperty("wind_course_left", globalPropertyi("tu154/custom/button/console/wind_course_left")) --     
-defineProperty("wind_course_ctr", globalPropertyi("tu154/custom/button/console/wind_course_ctr")) --     
-defineProperty("wind_course_right", globalPropertyi("tu154/custom/button/console/wind_course_right")) --     
-defineProperty("wind_spd_left", globalPropertyi("tu154/custom/button/console/wind_spd_left")) --     
-defineProperty("wind_spd_ctr", globalPropertyi("tu154/custom/button/console/wind_spd_ctr")) --     
-defineProperty("wind_spd_right", globalPropertyi("tu154/custom/button/console/wind_spd_right")) --     
-defineProperty("diss_wind_course", globalPropertyf("tu154/custom/nvu/diss_wind_course")) --    
-defineProperty("diss_wind_spd", globalPropertyf("tu154/custom/nvu/diss_wind_spd")) --    
-defineProperty("diss_abs_angle_1", globalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_1")) --   
-defineProperty("diss_abs_angle_10", globalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_10")) --   
-defineProperty("diss_abs_angle_100", globalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_100")) --   
-defineProperty("diss_plus_angle_1", globalPropertyf("tu154/custom/gauges/misc/diss_plus_angle_1")) --   
-defineProperty("diss_plus_angle_10", globalPropertyf("tu154/custom/gauges/misc/diss_plus_angle_10")) --   
-defineProperty("diss_minus_angle_1", globalPropertyf("tu154/custom/gauges/misc/diss_minus_angle_1")) --   
-defineProperty("diss_minus_angle_10", globalPropertyf("tu154/custom/gauges/misc/diss_minus_angle_10")) --   
-defineProperty("diss_wind_spd_1", globalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_1")) --   
-defineProperty("diss_wind_spd_10", globalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_10")) --   
-defineProperty("diss_wind_spd_100", globalPropertyf("tu154/custom/gauges/misc/diss_wind_spd_100")) --   
+defineProps({
+    { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi }, --    . 1 = RUS
+    { "show_nvu_panel", "tu154/custom/panels/show_nvu_panel", globalPropertyi }, --
+
+    -- controls
+    { "nvu_param_sel", "tu154/custom/switchers/console/nvu_param_sel", globalPropertyi }, --     . -4 - Z, -3 - S, -2 - Zm, -1 - Sm, 0 - off, 1 - Sn, 2 - Zn, 3 - S, 4 - Z
+    { "nvu_turn_sel", "tu154/custom/switchers/console/nvu_turn_sel", globalPropertyi }, --    , -1 - , 0 - , 1 - 5, 2 - 10, 3 - 15, 4 - 20, 5 - 25
+    { "nvu_power_on", "tu154/custom/switchers/console/nvu_power_on", globalPropertyi }, --
+    { "nvu_calc_on", "tu154/custom/switchers/console/nvu_calc_on", globalPropertyi }, --
+    { "nvu_corr_on", "tu154/custom/switchers/console/nvu_corr_on", globalPropertyi }, --
+    { "nvu_left_btn", "tu154/custom/buttons/nvu/nvu_left_btn", globalPropertyi }, --
+    { "nvu_ctr_btn", "tu154/custom/buttons/nvu/nvu_ctr_btn", globalPropertyi }, --
+    { "nvu_right_btn", "tu154/custom/buttons/nvu/nvu_right_btn", globalPropertyi }, --
+    { "zpu_1_left_btn", "tu154/custom/buttons/nvu/zpu_1_left_btn", globalPropertyi }, --
+    { "zpu_1_ctr_btn", "tu154/custom/buttons/nvu/zpu_1_ctr_btn", globalPropertyi }, --
+    { "zpu_1_right_btn", "tu154/custom/buttons/nvu/zpu_1_right_btn", globalPropertyi }, --
+    { "zpu_2_left_btn", "tu154/custom/buttons/nvu/zpu_2_left_btn", globalPropertyi }, --
+    { "zpu_2_ctr_btn", "tu154/custom/buttons/nvu/zpu_2_ctr_btn", globalPropertyi }, --
+    { "zpu_2_right_btn", "tu154/custom/buttons/nvu/zpu_2_right_btn", globalPropertyi }, --
+    -- internal datarefs
+    { "current_Z1", "tu154/custom/nvu/current_Z1", globalPropertyf }, -- Z1
+    { "current_S1", "tu154/custom/nvu/current_S1", globalPropertyf }, -- S1
+    { "next_Z1", "tu154/custom/nvu/next_Z1", globalPropertyf }, -- Z1
+    { "next_S1", "tu154/custom/nvu/next_S1", globalPropertyf }, -- S1
+    { "current_Z2", "tu154/custom/nvu/current_Z2", globalPropertyf }, -- Z2
+    { "current_S2", "tu154/custom/nvu/current_S2", globalPropertyf }, -- S2
+    { "next_Z2", "tu154/custom/nvu/next_Z2", globalPropertyf }, -- Z2
+    { "next_S2", "tu154/custom/nvu/next_S2", globalPropertyf }, -- S2
+    { "zpu1", "tu154/custom/nvu/zpu1", globalPropertyf }, -- ZPU1
+    { "zpu2", "tu154/custom/nvu/zpu2", globalPropertyf }, -- ZPU2
+    -- gauges
+    { "map_angle", "tu154/custom/gauges/console/map_angle", globalPropertyf }, --
+    { "obs_1", "sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot", globalPropertyf }, -- OBS course
+    { "obs_2", "sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot", globalPropertyf }, -- OBS course
+    -- { "nav_course_1", "tu154/custom/rotary/console/nav_1_course", globalPropertyi }, --
+    -- { "nav_course_2", "tu154/custom/rotary/console/nav_2_course", globalPropertyi }, --
+    -- lamps
+    { "nvu_on_lit", "tu154/custom/lights/small/nvu_on", globalPropertyf }, --
+    { "nvu_corr_lit", "tu154/custom/lights/small/nvu_corr", globalPropertyf }, --
+    { "nvu_1_active", "tu154/custom/lights/nvu_1_active", globalPropertyf }, --
+    { "nvu_2_active", "tu154/custom/lights/nvu_2_active", globalPropertyf }, --
+    { "nav_1_to_lit", "tu154/custom/lights/small/nav_1_to", globalPropertyf },
+    { "nav_1_from_lit", "tu154/custom/lights/small/nav_1_from", globalPropertyf },
+    { "nav_2_to_lit", "tu154/custom/lights/small/nav_2_to", globalPropertyf },
+    { "nav_2_from_lit", "tu154/custom/lights/small/nav_2_from", globalPropertyf },
+    -- DISS
+    { "wind_set", "tu154/custom/rotary/console/wind_set", globalPropertyf }, --
+    { "wind_course_left", "tu154/custom/button/console/wind_course_left", globalPropertyi }, --
+    { "wind_course_ctr", "tu154/custom/button/console/wind_course_ctr", globalPropertyi }, --
+    { "wind_course_right", "tu154/custom/button/console/wind_course_right", globalPropertyi }, --
+    { "wind_spd_left", "tu154/custom/button/console/wind_spd_left", globalPropertyi }, --
+    { "wind_spd_ctr", "tu154/custom/button/console/wind_spd_ctr", globalPropertyi }, --
+    { "wind_spd_right", "tu154/custom/button/console/wind_spd_right", globalPropertyi }, --
+    -- { "diss_wind_course", "tu154/custom/nvu/diss_wind_course", globalPropertyf }, --
+    -- { "diss_wind_spd", "tu154/custom/nvu/diss_wind_spd", globalPropertyf }, --
+    { "diss_abs_angle_1", "tu154/custom/gauges/misc/diss_abs_angle_1", globalPropertyf }, --
+    { "diss_abs_angle_10", "tu154/custom/gauges/misc/diss_abs_angle_10", globalPropertyf }, --
+    { "diss_abs_angle_100", "tu154/custom/gauges/misc/diss_abs_angle_100", globalPropertyf }, --
+    { "diss_plus_angle_1", "tu154/custom/gauges/misc/diss_plus_angle_1", globalPropertyf }, --
+    { "diss_plus_angle_10", "tu154/custom/gauges/misc/diss_plus_angle_10", globalPropertyf }, --
+    { "diss_minus_angle_1", "tu154/custom/gauges/misc/diss_minus_angle_1", globalPropertyf }, --
+    { "diss_minus_angle_10", "tu154/custom/gauges/misc/diss_minus_angle_10", globalPropertyf }, --
+    { "diss_wind_spd_1", "tu154/custom/gauges/misc/diss_wind_spd_1", globalPropertyf }, --
+    { "diss_wind_spd_10", "tu154/custom/gauges/misc/diss_wind_spd_10", globalPropertyf }, --
+    { "diss_wind_spd_100", "tu154/custom/gauges/misc/diss_wind_spd_100", globalPropertyf }, --
+})
 -- images
 defineProperty("bg_img", sasl.gl.loadImage("nvu_tex.png", 0, 0, 636, 786))
 defineProperty("bg_img_RUS", sasl.gl.loadImage("nvu_tex_RUS.png", 0, 0, 636, 786))

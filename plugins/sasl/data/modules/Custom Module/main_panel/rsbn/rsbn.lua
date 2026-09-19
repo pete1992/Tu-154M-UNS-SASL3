@@ -1,3 +1,4 @@
+-- rsbn.lua
 -- this is main RSBN script
 
 components = {

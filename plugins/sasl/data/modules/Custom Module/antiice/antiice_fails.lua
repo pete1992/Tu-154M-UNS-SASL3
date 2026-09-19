@@ -1,3 +1,4 @@
+-- antiice_fails.lua
 -- Anti-ice failures: keep native failure enums separate from custom boolean failures.
 local function defineProps(defs)
     for _, d in ipairs(defs) do

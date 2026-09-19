@@ -1,42 +1,58 @@
+-- rsbn_panel.lua
 -- this is RSBN panel
 
 -- controls
-defineProperty("rsbn_control_strobe", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_strobe")) --   
-defineProperty("rsbn_control_azimuth", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_azimuth")) --    
-defineProperty("rsbn_control_distance", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_control_distance")) --    
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("rsbn_ch_ten", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_ch_ten")) --   
-defineProperty("rsbn_ch_one", globalPropertyi("tu154/custom/buttons/ovhd/rsbn_ch_one")) --   
+defineProps({
+    { "rsbn_control_strobe", "tu154/custom/buttons/ovhd/rsbn_control_strobe", globalPropertyi }, --
+    { "rsbn_control_azimuth", "tu154/custom/buttons/ovhd/rsbn_control_azimuth", globalPropertyi }, --
+    { "rsbn_control_distance", "tu154/custom/buttons/ovhd/rsbn_control_distance", globalPropertyi }, --
 
-defineProperty("rsbn_on", globalPropertyi("tu154/custom/switchers/ovhd/rsbn_on")) --  
-defineProperty("rsbn_recon", globalPropertyi("tu154/custom/switchers/ovhd/rsbn_recon")) --  
+    { "rsbn_ch_ten", "tu154/custom/buttons/ovhd/rsbn_ch_ten", globalPropertyi }, --
+    { "rsbn_ch_one", "tu154/custom/buttons/ovhd/rsbn_ch_one", globalPropertyi }, --
 
-defineProperty("test_lamps", globalPropertyi("tu154/custom/buttons/lamp_test_front")) --    
-defineProperty("day_night_set", globalPropertyf("tu154/custom/lights/day_night_set")) --   - . 0 - , 1 - .    .
+    -- { "rsbn_on", "tu154/custom/switchers/ovhd/rsbn_on", globalPropertyi }, --
+    -- { "rsbn_recon", "tu154/custom/switchers/ovhd/rsbn_recon", globalPropertyi }, --
 
--- gauges
-defineProperty("rsbn_azimuth_ind", globalPropertyf("tu154/custom/gauges/misc/rsbn_azimuth_ind")) --  
-defineProperty("rsbn_distance_km", globalPropertyf("tu154/custom/gauges/misc/rsbn_distance_km")) --  
-defineProperty("rsbn_km_one", globalPropertyf("tu154/custom/gauges/misc/rsbn_km_one")) --   
-defineProperty("rsbn_km_ten", globalPropertyf("tu154/custom/gauges/misc/rsbn_km_ten")) --   
-defineProperty("rsbn_km_hun", globalPropertyf("tu154/custom/gauges/misc/rsbn_km_hun")) --   
+    { "test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi }, --
+    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, --   - . 0 - , 1 - .    .
 
--- lamps
-defineProperty("dist_autonom", globalPropertyf("tu154/custom/lights/dist_autonom")) -- 
-defineProperty("azimuth_autonom", globalPropertyf("tu154/custom/lights/azimuth_autonom")) -- 
+    -- gauges
+    { "rsbn_azimuth_ind", "tu154/custom/gauges/misc/rsbn_azimuth_ind", globalPropertyf }, --
+    { "rsbn_distance_km", "tu154/custom/gauges/misc/rsbn_distance_km", globalPropertyf }, --
+    { "rsbn_km_one", "tu154/custom/gauges/misc/rsbn_km_one", globalPropertyf }, --
+    { "rsbn_km_ten", "tu154/custom/gauges/misc/rsbn_km_ten", globalPropertyf }, --
+    { "rsbn_km_hun", "tu154/custom/gauges/misc/rsbn_km_hun", globalPropertyf }, --
+
+    -- lamps
+    { "dist_autonom", "tu154/custom/lights/dist_autonom", globalPropertyf }, --
+    { "azimuth_autonom", "tu154/custom/lights/azimuth_autonom", globalPropertyf }, --
+
+    -- sources
+    { "distance", "tu154/custom/rsbn/distance", globalPropertyf }, --
+    { "azimuth", "tu154/custom/rsbn/azimuth", globalPropertyf }, --
+
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+
+    -- other sources
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
+})
 
 set(dist_autonom, 1)
+
 set(azimuth_autonom, 1)
-
--- sources
-defineProperty("distance", globalPropertyf("tu154/custom/rsbn/distance")) --    
-defineProperty("azimuth", globalPropertyf("tu154/custom/rsbn/azimuth")) --   
-
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-
--- other sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
 
 local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
 local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')

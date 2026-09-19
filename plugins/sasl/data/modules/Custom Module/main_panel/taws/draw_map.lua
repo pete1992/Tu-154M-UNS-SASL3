@@ -1,3 +1,4 @@
+-- draw_map.lua
 -- try to draw map
 size = {100, 80}
 

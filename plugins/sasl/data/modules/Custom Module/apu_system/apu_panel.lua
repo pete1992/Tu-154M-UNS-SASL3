@@ -1,3 +1,4 @@
+-- apu_panel.lua
 --[[
 Changelog
 - Uses the project-wide defineProps() helper instead of defining a local copy.
@@ -43,27 +44,27 @@ defineProps({
     { "apu_oil_q", "tu154/custom/eng/apu_oil_q", globalPropertyf }, -- APU oil quantity
     { "apu_oil_p", "tu154/custom/eng/apu_oil_p", globalPropertyf }, -- APU oil pressure
     { "apu_egt", "tu154/custom/eng/apu_egt", globalPropertyf }, -- APU exhaust gas temperature
-    { "apu_air_press", "tu154/custom/eng/apu_air_press", globalPropertyf }, -- Air pressure available for engine start
+    -- { "apu_air_press", "tu154/custom/eng/apu_air_press", globalPropertyf }, -- Air pressure available for engine start
     { "apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf }, -- Bleed-air door position
     { "apu_fuel_p", "tu154/custom/eng/apu_fuel_p", globalPropertyf }, -- APU fuel pressure
     -- Electrical state
-    { "apu_start_bus", "tu154/custom/elec/apu_start_bus", globalPropertyf }, -- APU start bus voltage
-    { "apu_start_cc", "tu154/custom/elec/apu_start_cc", globalPropertyf }, -- APU starter current draw
+    -- { "apu_start_bus", "tu154/custom/elec/apu_start_bus", globalPropertyf }, -- APU start bus voltage
+    -- { "apu_start_cc", "tu154/custom/elec/apu_start_cc", globalPropertyf }, -- APU starter current draw
     { "apu_start_seq", "tu154/custom/elec/apu_start_seq", globalPropertyi }, -- APU start sequence active
     -- Animation state
     { "apu_doors", "tu154/custom/anim/apu_doors", globalPropertyf }, -- APU external door position, 0 closed to 1 open
-    { "cockpit_window_left", "tu154/custom/anim/cockpit_window_left", globalPropertyf }, -- Left cockpit window position
-    { "cockpit_window_right", "tu154/custom/anim/cockpit_window_right", globalPropertyf }, -- Right cockpit window position
+    -- { "cockpit_window_left", "tu154/custom/anim/cockpit_window_left", globalPropertyf }, -- Left cockpit window position
+    -- { "cockpit_window_right", "tu154/custom/anim/cockpit_window_right", globalPropertyf }, -- Right cockpit window position
     -- Other sources
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, -- Left 27 V bus voltage
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, -- Right 27 V bus voltage
-    { "outside_air_temp", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf }, -- Outside air temperature
+    -- { "outside_air_temp", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf }, -- Outside air temperature
     -- Lamp sources
     { "test_lamps", "tu154/custom/buttons/lamp_test_apu", globalPropertyi }, -- APU panel lamp-test button
     { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, -- Day/night lamp brightness selector
     { "gear_vent_set", "tu154/custom/switchers/eng/gear_fan", globalPropertyi }, -- Landing gear ventilation switch
     -- Environment
-    { "external_view", "sim/graphics/view/view_is_external", globalPropertyi },
+    -- { "external_view", "sim/graphics/view/view_is_external", globalPropertyi },
     -- Time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- Frame time
     -- Default X-Plane APU bridge
@@ -88,20 +89,20 @@ defineProps({
     { "native_pack_center", "sim/cockpit2/bleedair/actuators/pack_center", globalPropertyi },
     { "native_pack_right", "sim/cockpit2/bleedair/actuators/pack_right", globalPropertyi },
     -- Aircraft and camera coordinates
-    { "local_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- Aircraft X position
-    { "local_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- Aircraft Y position
-    { "local_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- Aircraft Z position
-    { "view_x", "sim/graphics/view/view_x", globalPropertyf }, -- Camera X position
-    { "view_y", "sim/graphics/view/view_y", globalPropertyf }, -- Camera Y position
-    { "view_z", "sim/graphics/view/view_z", globalPropertyf }, -- Camera Z position
+    -- { "local_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- Aircraft X position
+    -- { "local_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- Aircraft Y position
+    -- { "local_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- Aircraft Z position
+    -- { "view_x", "sim/graphics/view/view_x", globalPropertyf }, -- Camera X position
+    -- { "view_y", "sim/graphics/view/view_y", globalPropertyf }, -- Camera Y position
+    -- { "view_z", "sim/graphics/view/view_z", globalPropertyf }, -- Camera Z position
     -- Failures
-    { "apu_start_fail", "tu154/custom/failures/apu_start_fail", globalPropertyi }, -- Starter failure
-    { "apu_gen_fail", "tu154/custom/failures/apu_gen_fail", globalPropertyi }, -- Generator failure
+    -- { "apu_start_fail", "tu154/custom/failures/apu_start_fail", globalPropertyi }, -- Starter failure
+    -- { "apu_gen_fail", "tu154/custom/failures/apu_gen_fail", globalPropertyi }, -- Generator failure
     { "apu_pta6_fail", "tu154/custom/failures/apu_pta6_fail", globalPropertyi }, -- PTA-6A tachometer converter failure
-    { "apu_fail_oilt", "tu154/custom/failures/apu_fail_oilt", globalPropertyi }, -- Oil-temperature failure
-    { "apu_fail_egt", "tu154/custom/failures/apu_fail_egt", globalPropertyi }, -- EGT failure
-    { "apu_fail_fuel_left", "tu154/custom/failures/apu_fail_fuel_left", globalPropertyi }, -- Residual-fuel start failure
-    { "apu_fail", "tu154/custom/failures/apu_fail", globalPropertyi }, -- Runtime-related APU failure
+    -- { "apu_fail_oilt", "tu154/custom/failures/apu_fail_oilt", globalPropertyi }, -- Oil-temperature failure
+    -- { "apu_fail_egt", "tu154/custom/failures/apu_fail_egt", globalPropertyi }, -- EGT failure
+    -- { "apu_fail_fuel_left", "tu154/custom/failures/apu_fail_fuel_left", globalPropertyi }, -- Residual-fuel start failure
+    -- { "apu_fail", "tu154/custom/failures/apu_fail", globalPropertyi }, -- Runtime-related APU failure
     { "apu_press_fail", "tu154/custom/failures/apu_press_fail", globalPropertyi }, -- APU bleed-air failure
 })
 

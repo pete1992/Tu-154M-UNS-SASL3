@@ -1,3 +1,4 @@
+-- absu_mode.lua
 -- this is ABSU modes logic
 
 local function defineProps(defs)

@@ -1,3 +1,4 @@
+-- electric_panel.lua
 --[[
 Changelog
 - Preserved the existing refactored Dataref layout and all 115 defineProps() entries.
@@ -68,7 +69,7 @@ defineProps({
 
     -- Timing and sources
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- Simulation frame time
-    {"sim_run_time", "sim/time/total_running_time_sec", globalPropertyf}, -- Total simulation run time
+    -- {"sim_run_time", "sim/time/total_running_time_sec", globalPropertyf}, -- Total simulation run time
 
     -- Battery and generator sources
     {"bat_volt_1", "tu154/custom/elec/bat_volt_1", globalPropertyf}, -- Battery 1 voltage

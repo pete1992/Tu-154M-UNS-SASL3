@@ -1,3 +1,4 @@
+-- fire_panel.lua
 -- this is fire system panel
 -- controls
 local function defineProps(defs)
@@ -107,9 +108,9 @@ defineProps({
     { "engine_fire_state_3", "tu154/custom/fire/engine_fire_state_3", globalPropertyi }, --  . 0 - , 1 - , 2 -
     { "engine_fire_state_4", "tu154/custom/fire/engine_fire_state_4", globalPropertyi }, --  . 0 - , 1 - , 2 -
 
-    { "engine_fuel_cut_1", "tu154/custom/fire/engine_fuel_cut_1", globalPropertyi }, --
-    { "engine_fuel_cut_2", "tu154/custom/fire/engine_fuel_cut_2", globalPropertyi }, --
-    { "engine_fuel_cut_3", "tu154/custom/fire/engine_fuel_cut_3", globalPropertyi }, --
+    -- { "engine_fuel_cut_1", "tu154/custom/fire/engine_fuel_cut_1", globalPropertyi }, --
+    -- { "engine_fuel_cut_2", "tu154/custom/fire/engine_fuel_cut_2", globalPropertyi }, --
+    -- { "engine_fuel_cut_3", "tu154/custom/fire/engine_fuel_cut_3", globalPropertyi }, --
 
     { "fire_vlv_open_1", "tu154/custom/fuel/fire_vlv_open_1", globalPropertyf }, --
     { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf }, --

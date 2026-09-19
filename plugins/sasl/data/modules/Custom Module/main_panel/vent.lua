@@ -1,3 +1,4 @@
+-- vent.lua
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         defineProperty(def[1], def[3](def[2]))

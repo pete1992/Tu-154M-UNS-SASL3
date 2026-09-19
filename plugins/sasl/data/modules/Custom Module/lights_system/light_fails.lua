@@ -1,27 +1,42 @@
+-- light_fails.lua
 -- light system failures
 
 -- failures
-defineProperty("lan_lamp_fail_FL", globalPropertyi("tu154/custom/failures/lan_lamp_fail_FL")) --    
-defineProperty("lan_lamp_fail_FR", globalPropertyi("tu154/custom/failures/lan_lamp_fail_FR")) --    
-defineProperty("lan_lamp_fail_WL", globalPropertyi("tu154/custom/failures/lan_lamp_fail_WL")) --    
-defineProperty("lan_lamp_fail_WR", globalPropertyi("tu154/custom/failures/lan_lamp_fail_WR")) --    
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("rel_lites_nav", globalPropertyi("sim/operation/failures/rel_lites_nav")) -- 
-defineProperty("rel_lites_beac", globalPropertyi("sim/operation/failures/rel_lites_beac")) -- 
+defineProps({
+    { "lan_lamp_fail_FL", "tu154/custom/failures/lan_lamp_fail_FL", globalPropertyi }, --
+    { "lan_lamp_fail_FR", "tu154/custom/failures/lan_lamp_fail_FR", globalPropertyi }, --
+    { "lan_lamp_fail_WL", "tu154/custom/failures/lan_lamp_fail_WL", globalPropertyi }, --
+    { "lan_lamp_fail_WR", "tu154/custom/failures/lan_lamp_fail_WR", globalPropertyi }, --
 
--- sources
-defineProperty("sim_lan_FL", globalProperty("sim/cockpit2/switches/landing_lights_switch[7]")) -- front left landing light
-defineProperty("sim_lan_FR", globalProperty("sim/cockpit2/switches/landing_lights_switch[6]")) -- front right landing light
-defineProperty("sim_lan_WL", globalProperty("sim/cockpit2/switches/landing_lights_switch[5]")) -- wing left landing light
-defineProperty("sim_lan_WR", globalProperty("sim/cockpit2/switches/landing_lights_switch[4]")) -- wing right landing light
+    { "rel_lites_nav", "sim/operation/failures/rel_lites_nav", globalPropertyi }, --
+    { "rel_lites_beac", "sim/operation/failures/rel_lites_beac", globalPropertyi }, --
 
--- define sources
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
+    -- sources
+    { "sim_lan_FL", "sim/cockpit2/switches/landing_lights_switch[7]", globalProperty }, -- front left landing light
+    { "sim_lan_FR", "sim/cockpit2/switches/landing_lights_switch[6]", globalProperty }, -- front right landing light
+    { "sim_lan_WL", "sim/cockpit2/switches/landing_lights_switch[5]", globalProperty }, -- wing left landing light
+    { "sim_lan_WR", "sim/cockpit2/switches/landing_lights_switch[4]", globalProperty }, -- wing right landing light
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- define sources
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local timeToFail_FL = (5 + math.random(5)) * 60 -- 20 minutes + random time up to 20 min
 local timeToFail_FR = (5 + math.random(5)) * 60

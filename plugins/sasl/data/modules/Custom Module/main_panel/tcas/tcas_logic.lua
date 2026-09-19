@@ -1,151 +1,166 @@
+-- tcas_logic.lua
 -- this is TCAS calculation and signal generations
 size = {2048, 2048}
 -- controls
-defineProperty("tcas_on", globalPropertyi("tu154/custom/switchers/ovhd/tcas_on"))  --  TCAS
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("tcas_range_set", globalPropertyi("tu154/custom/tcas/range_set"))  --   . 0 = 3, 1 = 5, 2 = 10, 3 = 15 nm
-defineProperty("mode_set", globalPropertyi("tu154/custom/tcas/mode_set"))  --  TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA	4
+defineProps({
+    { "tcas_on", "tu154/custom/switchers/ovhd/tcas_on", globalPropertyi },  --  TCAS
 
-defineProperty("level_mode", globalPropertyi("tu154/custom/tcas/level_mode"))  -- 1 = above, 0 = normal, -1 = below
-defineProperty("fl_mode", globalPropertyi("tu154/custom/tcas/fl_mode"))  -- 0 = absolute, 1 = relative
-defineProperty("flt_id", globalPropertyi("tu154/custom/tcas/flt_id"))  -- 0 = cover, 1 = show / change code
+    { "tcas_range_set", "tu154/custom/tcas/range_set", globalPropertyi },  --   . 0 = 3, 1 = 5, 2 = 10, 3 = 15 nm
+    { "mode_set", "tu154/custom/tcas/mode_set", globalPropertyi },  --  TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA	4
 
-defineProperty("tcas_mode_rot", globalPropertyi("tu154/custom/switchers/tcas/tcas_mode"))  --  TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA	3
+    { "level_mode", "tu154/custom/tcas/level_mode", globalPropertyi },  -- 1 = above, 0 = normal, -1 = below
+    { "fl_mode", "tu154/custom/tcas/fl_mode", globalPropertyi },  -- 0 = absolute, 1 = relative
+    -- { "flt_id", "tu154/custom/tcas/flt_id", globalPropertyi },  -- 0 = cover, 1 = show / change code
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "tcas_mode_rot", "tu154/custom/switchers/tcas/tcas_mode", globalPropertyi },  --  TCAS. -1 = test, 0 - stby, 1 = alt off, 2 = alt on, 3 = TA, 4 = TARA	3
 
-defineProperty("tcas_ident_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_ident_btn"))  --  IDENT
-defineProperty("tcas_fcn_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_fcn_btn"))  --  FCN
-defineProperty("tcas_left_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_left_btn"))  --  <
-defineProperty("tcas_right_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_right_btn"))  --  >
-defineProperty("tcas_ent_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_ent_btn"))  --  ENT
-defineProperty("tcas_atc_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_atc_btn"))  --  ATC
-defineProperty("tcas_alt_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_alt_btn"))  --  ALT
-defineProperty("tcas_rng_dn_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_rng_dn_btn"))  --  RNG DN
-defineProperty("tcas_rng_up_btn", globalPropertyi("tu154/custom/buttons/tcas/tcas_rng_up_btn"))  --  RNG UP
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
-defineProperty("tcas_rot_big", globalPropertyi("tu154/custom/switchers/tcas/tcas_rot_big"))  --  
+    { "tcas_ident_btn", "tu154/custom/buttons/tcas/tcas_ident_btn", globalPropertyi },  --  IDENT
+    { "tcas_fcn_btn", "tu154/custom/buttons/tcas/tcas_fcn_btn", globalPropertyi },  --  FCN
+    { "tcas_left_btn", "tu154/custom/buttons/tcas/tcas_left_btn", globalPropertyi },  --  <
+    { "tcas_right_btn", "tu154/custom/buttons/tcas/tcas_right_btn", globalPropertyi },  --  >
+    { "tcas_ent_btn", "tu154/custom/buttons/tcas/tcas_ent_btn", globalPropertyi },  --  ENT
+    -- { "tcas_atc_btn", "tu154/custom/buttons/tcas/tcas_atc_btn", globalPropertyi },  --  ATC
+    -- { "tcas_alt_btn", "tu154/custom/buttons/tcas/tcas_alt_btn", globalPropertyi },  --  ALT
+    { "tcas_rng_dn_btn", "tu154/custom/buttons/tcas/tcas_rng_dn_btn", globalPropertyi },  --  RNG DN
+    { "tcas_rng_up_btn", "tu154/custom/buttons/tcas/tcas_rng_up_btn", globalPropertyi },  --  RNG UP
 
-defineProperty("alt_svs", globalPropertyf("tu154/custom/svs/altitude")) -- Altitude by 1013 hpa
+    { "tcas_rot_big", "tu154/custom/switchers/tcas/tcas_rot_big", globalPropertyi },  --
 
-defineProperty("rv_angle", globalPropertyf("tu154/custom/gauges/alt/radioalt_needle_left"))  -- RV needle
-defineProperty("rv_flag", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
-defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))  --    
-defineProperty("screen_mode", globalPropertyi("tu154/custom/tcas/screen_mode"))  --   . 0 =  , -1 = , 1 = test
+    { "alt_svs", "tu154/custom/svs/altitude", globalPropertyf }, -- Altitude by 1013 hpa
 
-defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-defineProperty("bus115_2_volt", globalPropertyf("tu154/custom/elec/bus115_2_volt"))
-defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
+    -- { "rv_angle", "tu154/custom/gauges/alt/radioalt_needle_left", globalPropertyf },  -- RV needle
+    { "rv_flag", "tu154/custom/gauges/alt/radioalt_flag_left", globalPropertyf },  -- RV flag
+    { "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf },  --
+    { "screen_mode", "tu154/custom/tcas/screen_mode", globalPropertyi },  --   . 0 =  , -1 = , 1 = test
 
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    -- { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
-defineProperty("xpdr_code", globalPropertyf("sim/cockpit/radios/transponder_code"))
-defineProperty("xpdr_mode", globalPropertyf("sim/cockpit/radios/transponder_mode")) 
-defineProperty("xpdr_led", globalPropertyf("sim/cockpit/radios/transponder_light"))
-defineProperty("xpdr_fail", globalPropertyi("sim/operation/failures/rel_xpndr"))
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
+    -- { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
 
-defineProperty("ovhd_mode", globalPropertyi("tu154/custom/switchers/ovhd/transponder_mode"))
+    -- { "xpdr_code", "sim/cockpit/radios/transponder_code", globalPropertyf },
+    { "xpdr_mode", "sim/cockpit/radios/transponder_mode", globalPropertyf },
+    -- { "xpdr_led", "sim/cockpit/radios/transponder_light", globalPropertyf },
+    -- { "xpdr_fail", "sim/operation/failures/rel_xpndr", globalPropertyi },
 
-defineProperty("var_on_1", globalPropertyi("tu154/custom/switchers/ovhd/var_left"))  -- . var
-defineProperty("var_on_2", globalPropertyi("tu154/custom/switchers/ovhd/var_right"))  -- . var
+    { "ovhd_mode", "tu154/custom/switchers/ovhd/transponder_mode", globalPropertyi },
 
--- other aircrafts
-defineProperty("acf_1_x", globalPropertyf("sim/multiplayer/position/plane1_x"))  -- x
-defineProperty("acf_1_y", globalPropertyf("sim/multiplayer/position/plane1_y"))  -- x
-defineProperty("acf_1_z", globalPropertyf("sim/multiplayer/position/plane1_z"))  -- x
+    { "var_on_1", "tu154/custom/switchers/ovhd/var_left", globalPropertyi },  -- . var
+    { "var_on_2", "tu154/custom/switchers/ovhd/var_right", globalPropertyi },  -- . var
 
-defineProperty("acf_2_x", globalPropertyf("sim/multiplayer/position/plane2_x"))  -- x
-defineProperty("acf_2_y", globalPropertyf("sim/multiplayer/position/plane2_y"))  -- x
-defineProperty("acf_2_z", globalPropertyf("sim/multiplayer/position/plane2_z"))  -- x
+    -- other aircrafts
+    { "acf_1_x", "sim/multiplayer/position/plane1_x", globalPropertyf },  -- x
+    { "acf_1_y", "sim/multiplayer/position/plane1_y", globalPropertyf },  -- x
+    { "acf_1_z", "sim/multiplayer/position/plane1_z", globalPropertyf },  -- x
 
-defineProperty("acf_3_x", globalPropertyf("sim/multiplayer/position/plane3_x"))  -- x
-defineProperty("acf_3_y", globalPropertyf("sim/multiplayer/position/plane3_y"))  -- x
-defineProperty("acf_3_z", globalPropertyf("sim/multiplayer/position/plane3_z"))  -- x
+    { "acf_2_x", "sim/multiplayer/position/plane2_x", globalPropertyf },  -- x
+    { "acf_2_y", "sim/multiplayer/position/plane2_y", globalPropertyf },  -- x
+    { "acf_2_z", "sim/multiplayer/position/plane2_z", globalPropertyf },  -- x
 
-defineProperty("acf_4_x", globalPropertyf("sim/multiplayer/position/plane4_x"))  -- x
-defineProperty("acf_4_y", globalPropertyf("sim/multiplayer/position/plane4_y"))  -- x
-defineProperty("acf_4_z", globalPropertyf("sim/multiplayer/position/plane4_z"))  -- x
+    { "acf_3_x", "sim/multiplayer/position/plane3_x", globalPropertyf },  -- x
+    { "acf_3_y", "sim/multiplayer/position/plane3_y", globalPropertyf },  -- x
+    { "acf_3_z", "sim/multiplayer/position/plane3_z", globalPropertyf },  -- x
 
-defineProperty("acf_5_x", globalPropertyf("sim/multiplayer/position/plane5_x"))  -- x
-defineProperty("acf_5_y", globalPropertyf("sim/multiplayer/position/plane5_y"))  -- x
-defineProperty("acf_5_z", globalPropertyf("sim/multiplayer/position/plane5_z"))  -- x
+    { "acf_4_x", "sim/multiplayer/position/plane4_x", globalPropertyf },  -- x
+    { "acf_4_y", "sim/multiplayer/position/plane4_y", globalPropertyf },  -- x
+    { "acf_4_z", "sim/multiplayer/position/plane4_z", globalPropertyf },  -- x
 
-defineProperty("acf_6_x", globalPropertyf("sim/multiplayer/position/plane6_x"))  -- x
-defineProperty("acf_6_y", globalPropertyf("sim/multiplayer/position/plane6_y"))  -- x
-defineProperty("acf_6_z", globalPropertyf("sim/multiplayer/position/plane6_z"))  -- x
+    { "acf_5_x", "sim/multiplayer/position/plane5_x", globalPropertyf },  -- x
+    { "acf_5_y", "sim/multiplayer/position/plane5_y", globalPropertyf },  -- x
+    { "acf_5_z", "sim/multiplayer/position/plane5_z", globalPropertyf },  -- x
 
-defineProperty("acf_7_x", globalPropertyf("sim/multiplayer/position/plane7_x"))  -- x
-defineProperty("acf_7_y", globalPropertyf("sim/multiplayer/position/plane7_y"))  -- x
-defineProperty("acf_7_z", globalPropertyf("sim/multiplayer/position/plane7_z"))  -- x
+    { "acf_6_x", "sim/multiplayer/position/plane6_x", globalPropertyf },  -- x
+    { "acf_6_y", "sim/multiplayer/position/plane6_y", globalPropertyf },  -- x
+    { "acf_6_z", "sim/multiplayer/position/plane6_z", globalPropertyf },  -- x
 
-defineProperty("acf_8_x", globalPropertyf("sim/multiplayer/position/plane8_x"))  -- x
-defineProperty("acf_8_y", globalPropertyf("sim/multiplayer/position/plane8_y"))  -- x
-defineProperty("acf_8_z", globalPropertyf("sim/multiplayer/position/plane8_z"))  -- x
+    { "acf_7_x", "sim/multiplayer/position/plane7_x", globalPropertyf },  -- x
+    { "acf_7_y", "sim/multiplayer/position/plane7_y", globalPropertyf },  -- x
+    { "acf_7_z", "sim/multiplayer/position/plane7_z", globalPropertyf },  -- x
 
-defineProperty("acf_9_x", globalPropertyf("sim/multiplayer/position/plane9_x"))  -- x
-defineProperty("acf_9_y", globalPropertyf("sim/multiplayer/position/plane9_y"))  -- x
-defineProperty("acf_9_z", globalPropertyf("sim/multiplayer/position/plane9_z"))  -- x
+    { "acf_8_x", "sim/multiplayer/position/plane8_x", globalPropertyf },  -- x
+    { "acf_8_y", "sim/multiplayer/position/plane8_y", globalPropertyf },  -- x
+    { "acf_8_z", "sim/multiplayer/position/plane8_z", globalPropertyf },  -- x
 
-defineProperty("acf_10_x", globalPropertyf("sim/multiplayer/position/plane10_x"))  -- x
-defineProperty("acf_10_y", globalPropertyf("sim/multiplayer/position/plane10_y"))  -- x
-defineProperty("acf_10_z", globalPropertyf("sim/multiplayer/position/plane10_z"))  -- x
+    { "acf_9_x", "sim/multiplayer/position/plane9_x", globalPropertyf },  -- x
+    { "acf_9_y", "sim/multiplayer/position/plane9_y", globalPropertyf },  -- x
+    { "acf_9_z", "sim/multiplayer/position/plane9_z", globalPropertyf },  -- x
 
-defineProperty("acf_11_x", globalPropertyf("sim/multiplayer/position/plane11_x"))  -- x
-defineProperty("acf_11_y", globalPropertyf("sim/multiplayer/position/plane11_y"))  -- x
-defineProperty("acf_11_z", globalPropertyf("sim/multiplayer/position/plane11_z"))  -- x
+    { "acf_10_x", "sim/multiplayer/position/plane10_x", globalPropertyf },  -- x
+    { "acf_10_y", "sim/multiplayer/position/plane10_y", globalPropertyf },  -- x
+    { "acf_10_z", "sim/multiplayer/position/plane10_z", globalPropertyf },  -- x
 
-defineProperty("acf_12_x", globalPropertyf("sim/multiplayer/position/plane12_x"))  -- x
-defineProperty("acf_12_y", globalPropertyf("sim/multiplayer/position/plane12_y"))  -- x
-defineProperty("acf_12_z", globalPropertyf("sim/multiplayer/position/plane12_z"))  -- x
+    { "acf_11_x", "sim/multiplayer/position/plane11_x", globalPropertyf },  -- x
+    { "acf_11_y", "sim/multiplayer/position/plane11_y", globalPropertyf },  -- x
+    { "acf_11_z", "sim/multiplayer/position/plane11_z", globalPropertyf },  -- x
 
-defineProperty("acf_13_x", globalPropertyf("sim/multiplayer/position/plane13_x"))  -- x
-defineProperty("acf_13_y", globalPropertyf("sim/multiplayer/position/plane13_y"))  -- x
-defineProperty("acf_13_z", globalPropertyf("sim/multiplayer/position/plane13_z"))  -- x
+    { "acf_12_x", "sim/multiplayer/position/plane12_x", globalPropertyf },  -- x
+    { "acf_12_y", "sim/multiplayer/position/plane12_y", globalPropertyf },  -- x
+    { "acf_12_z", "sim/multiplayer/position/plane12_z", globalPropertyf },  -- x
 
-defineProperty("acf_14_x", globalPropertyf("sim/multiplayer/position/plane14_x"))  -- x
-defineProperty("acf_14_y", globalPropertyf("sim/multiplayer/position/plane14_y"))  -- x
-defineProperty("acf_14_z", globalPropertyf("sim/multiplayer/position/plane14_z"))  -- x
+    { "acf_13_x", "sim/multiplayer/position/plane13_x", globalPropertyf },  -- x
+    { "acf_13_y", "sim/multiplayer/position/plane13_y", globalPropertyf },  -- x
+    { "acf_13_z", "sim/multiplayer/position/plane13_z", globalPropertyf },  -- x
 
-defineProperty("acf_15_x", globalPropertyf("sim/multiplayer/position/plane15_x"))  -- x
-defineProperty("acf_15_y", globalPropertyf("sim/multiplayer/position/plane15_y"))  -- x
-defineProperty("acf_15_z", globalPropertyf("sim/multiplayer/position/plane15_z"))  -- x
+    { "acf_14_x", "sim/multiplayer/position/plane14_x", globalPropertyf },  -- x
+    { "acf_14_y", "sim/multiplayer/position/plane14_y", globalPropertyf },  -- x
+    { "acf_14_z", "sim/multiplayer/position/plane14_z", globalPropertyf },  -- x
 
-defineProperty("acf_16_x", globalPropertyf("sim/multiplayer/position/plane16_x"))  -- x
-defineProperty("acf_16_y", globalPropertyf("sim/multiplayer/position/plane16_y"))  -- x
-defineProperty("acf_16_z", globalPropertyf("sim/multiplayer/position/plane16_z"))  -- x
+    { "acf_15_x", "sim/multiplayer/position/plane15_x", globalPropertyf },  -- x
+    { "acf_15_y", "sim/multiplayer/position/plane15_y", globalPropertyf },  -- x
+    { "acf_15_z", "sim/multiplayer/position/plane15_z", globalPropertyf },  -- x
 
-defineProperty("acf_17_x", globalPropertyf("sim/multiplayer/position/plane17_x"))  -- x
-defineProperty("acf_17_y", globalPropertyf("sim/multiplayer/position/plane17_y"))  -- x
-defineProperty("acf_17_z", globalPropertyf("sim/multiplayer/position/plane17_z"))  -- x
+    { "acf_16_x", "sim/multiplayer/position/plane16_x", globalPropertyf },  -- x
+    { "acf_16_y", "sim/multiplayer/position/plane16_y", globalPropertyf },  -- x
+    { "acf_16_z", "sim/multiplayer/position/plane16_z", globalPropertyf },  -- x
 
-defineProperty("acf_18_x", globalPropertyf("sim/multiplayer/position/plane18_x"))  -- x
-defineProperty("acf_18_y", globalPropertyf("sim/multiplayer/position/plane18_y"))  -- x
-defineProperty("acf_18_z", globalPropertyf("sim/multiplayer/position/plane18_z"))  -- x
+    { "acf_17_x", "sim/multiplayer/position/plane17_x", globalPropertyf },  -- x
+    { "acf_17_y", "sim/multiplayer/position/plane17_y", globalPropertyf },  -- x
+    { "acf_17_z", "sim/multiplayer/position/plane17_z", globalPropertyf },  -- x
 
-defineProperty("acf_19_x", globalPropertyf("sim/multiplayer/position/plane19_x"))  -- x
-defineProperty("acf_19_y", globalPropertyf("sim/multiplayer/position/plane19_y"))  -- x
-defineProperty("acf_19_z", globalPropertyf("sim/multiplayer/position/plane19_z"))  -- x
+    { "acf_18_x", "sim/multiplayer/position/plane18_x", globalPropertyf },  -- x
+    { "acf_18_y", "sim/multiplayer/position/plane18_y", globalPropertyf },  -- x
+    { "acf_18_z", "sim/multiplayer/position/plane18_z", globalPropertyf },  -- x
 
--- defineProperty("acf_20_x", globalPropertyf("sim/multiplayer/position/plane20_x"))  -- x
--- defineProperty("acf_20_y", globalPropertyf("sim/multiplayer/position/plane20_y"))  -- x
--- defineProperty("acf_20_z", globalPropertyf("sim/multiplayer/position/plane20_z"))  -- x
+    { "acf_19_x", "sim/multiplayer/position/plane19_x", globalPropertyf },  -- x
+    { "acf_19_y", "sim/multiplayer/position/plane19_y", globalPropertyf },  -- x
+    { "acf_19_z", "sim/multiplayer/position/plane19_z", globalPropertyf },  -- x
 
--- local aircraft coordinates
-defineProperty("pos_x", globalPropertyf("sim/flightmodel/position/local_x")) -- longtitude. positive from W to E
-defineProperty("pos_y", globalPropertyf("sim/flightmodel/position/local_y")) -- altitude. positive UP
-defineProperty("pos_z", globalPropertyf("sim/flightmodel/position/local_z")) -- latitude. positive from N to S
+    -- defineProperty("acf_20_x", globalPropertyf("sim/multiplayer/position/plane20_x"))  -- x
+    -- defineProperty("acf_20_y", globalPropertyf("sim/multiplayer/position/plane20_y"))  -- x
+    -- defineProperty("acf_20_z", globalPropertyf("sim/multiplayer/position/plane20_z"))  -- x
 
-defineProperty("course", globalPropertyf("sim/flightmodel/position/psi")) -- angle between -Z axis and airplane's nose
-defineProperty("course_fly", globalPropertyf("sim/flightmodel/position/hpath")) -- course, where aircraft actually flies
+    -- local aircraft coordinates
+    { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- longtitude. positive from W to E
+    { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- altitude. positive UP
+    { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- latitude. positive from N to S
 
-defineProperty("ra_scale_set", globalPropertyi("tu154/custom/tcas/ra_scale_set"))  -- RA mode scale set. 0 = none.
-defineProperty("vvi", globalPropertyf("sim/flightmodel/position/vh_ind"))  -- vertical velocity of our acf
-defineProperty("traffic_det", globalPropertyi("tu154/custom/tcas/traffic_det"))  --     
+    { "course", "sim/flightmodel/position/psi", globalPropertyf }, -- angle between -Z axis and airplane's nose
+    -- { "course_fly", "sim/flightmodel/position/hpath", globalPropertyf }, -- course, where aircraft actually flies
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    { "ra_scale_set", "tu154/custom/tcas/ra_scale_set", globalPropertyi },  -- RA mode scale set. 0 = none.
+    { "vvi", "sim/flightmodel/position/vh_ind", globalPropertyf },  -- vertical velocity of our acf
+    { "traffic_det", "tu154/custom/tcas/traffic_det", globalPropertyi },  --
+
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+})
 
 local MASTER = get(ismaster) ~= 1
 

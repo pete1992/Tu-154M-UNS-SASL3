@@ -1,52 +1,67 @@
+-- control_fails.lua
 -- controls fails
 
 -- failures logic
 
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
--- failures
-defineProperty("flap_fail_left", globalPropertyi("tu154/custom/failures/flap_fail_left")) -- 
-defineProperty("flap_fail_right", globalPropertyi("tu154/custom/failures/flap_fail_right")) -- 
-defineProperty("stab_eng_fail", globalPropertyi("tu154/custom/failures/stab_eng_fail")) -- 
-defineProperty("stab_automatic_fail", globalPropertyi("tu154/custom/failures/stab_automatic_fail")) -- 
-defineProperty("slats_fail", globalPropertyi("tu154/custom/failures/slats_fail")) -- 
-defineProperty("ail_fail_left", globalPropertyi("tu154/custom/failures/ail_fail_left")) -- 
-defineProperty("ail_fail_right", globalPropertyi("tu154/custom/failures/ail_fail_right")) -- 
-defineProperty("fail_spoil_inn_left", globalPropertyi("tu154/custom/failures/fail_spoil_inn_left")) -- 
-defineProperty("fail_spoil_inn_right", globalPropertyi("tu154/custom/failures/fail_spoil_inn_right")) -- 
-defineProperty("fail_spoil_mid_left", globalPropertyi("tu154/custom/failures/fail_spoil_mid_left")) -- 
-defineProperty("fail_spoil_mid_right", globalPropertyi("tu154/custom/failures/fail_spoil_mid_right")) -- 
-defineProperty("fail_spoil_out_left", globalPropertyi("tu154/custom/failures/fail_spoil_out_left")) -- 
-defineProperty("fail_spoil_out_right", globalPropertyi("tu154/custom/failures/fail_spoil_out_right")) -- 
-defineProperty("rudder_fail", globalPropertyi("tu154/custom/failures/rudder_fail")) -- 
-defineProperty("elev_fail_left", globalPropertyi("tu154/custom/failures/elev_fail_left")) -- 
-defineProperty("elev_fail_right", globalPropertyi("tu154/custom/failures/elev_fail_right")) -- 
-defineProperty("retract1_fail", globalPropertyi("sim/operation/failures/rel_lagear1")) -- fail of retract gear
-defineProperty("retract2_fail", globalPropertyi("sim/operation/failures/rel_lagear2")) -- fail of retract gear
-defineProperty("retract3_fail", globalPropertyi("sim/operation/failures/rel_lagear3")) -- fail of retract gear
-defineProperty("actuator_fail", globalPropertyi("sim/operation/failures/rel_gear_act")) -- actuator fail. bugs workaround
-defineProperty("rel_collapse1", globalPropertyi("sim/operation/failures/rel_collapse1"))
-defineProperty("rel_collapse2", globalPropertyi("sim/operation/failures/rel_collapse2"))
-defineProperty("rel_collapse3", globalPropertyi("sim/operation/failures/rel_collapse3"))
-defineProperty("rel_trim_rud", globalPropertyi("sim/operation/failures/rel_trim_rud")) -- 
-defineProperty("rel_trim_ail", globalPropertyi("sim/operation/failures/rel_trim_ail")) -- 
-defineProperty("rel_trim_elv", globalPropertyi("sim/operation/failures/rel_trim_elv")) -- 
-defineProperty("trim_emerg_elv_fail", globalPropertyi("tu154/custom/failures/trim_emerg_elv_fail")) --
-defineProperty("rel_tire1", globalPropertyi("sim/operation/failures/rel_tire1")) -- Landing gear tire blowout
-defineProperty("rel_tire2", globalPropertyi("sim/operation/failures/rel_tire2")) -- Landing gear tire blowout
-defineProperty("rel_tire3", globalPropertyi("sim/operation/failures/rel_tire3")) -- Landing gear tire blowout
-defineProperty("rel_tire4", globalPropertyi("sim/operation/failures/rel_tire4")) -- Landing gear tire blowout
-defineProperty("rel_tire5", globalPropertyi("sim/operation/failures/rel_tire5")) -- Landing gear tire blowout
-defineProperty("ias", globalPropertyf("sim/flightmodel/position/indicated_airspeed"))  -- IAS
-defineProperty("flap_inn_L", globalPropertyf("sim/flightmodel/controls/wing1l_fla1def")) -- inner flaps left
-defineProperty("flap_inn_R", globalPropertyf("sim/flightmodel/controls/wing1r_fla1def")) -- inner flaps right
-defineProperty("slats", globalPropertyf("sim/flightmodel2/controls/slat1_deploy_ratio")) -- slats position. this one works too
-defineProperty("stab_ratio", globalPropertyf("sim/cockpit2/controls/elevator_trim")) -- sim pitch trimmer
-defineProperty("gear1_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[0]"))  -- deploy of front gear
-defineProperty("gear2_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[1]"))  -- deploy of right gear
-defineProperty("gear3_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[2]"))  -- deploy of left gear
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
+
+defineProps({
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+    -- failures
+    { "flap_fail_left", "tu154/custom/failures/flap_fail_left", globalPropertyi }, --
+    { "flap_fail_right", "tu154/custom/failures/flap_fail_right", globalPropertyi }, --
+    { "stab_eng_fail", "tu154/custom/failures/stab_eng_fail", globalPropertyi }, --
+    { "stab_automatic_fail", "tu154/custom/failures/stab_automatic_fail", globalPropertyi }, --
+    { "slats_fail", "tu154/custom/failures/slats_fail", globalPropertyi }, --
+    { "ail_fail_left", "tu154/custom/failures/ail_fail_left", globalPropertyi }, --
+    { "ail_fail_right", "tu154/custom/failures/ail_fail_right", globalPropertyi }, --
+    { "fail_spoil_inn_left", "tu154/custom/failures/fail_spoil_inn_left", globalPropertyi }, --
+    { "fail_spoil_inn_right", "tu154/custom/failures/fail_spoil_inn_right", globalPropertyi }, --
+    { "fail_spoil_mid_left", "tu154/custom/failures/fail_spoil_mid_left", globalPropertyi }, --
+    { "fail_spoil_mid_right", "tu154/custom/failures/fail_spoil_mid_right", globalPropertyi }, --
+    { "fail_spoil_out_left", "tu154/custom/failures/fail_spoil_out_left", globalPropertyi }, --
+    { "fail_spoil_out_right", "tu154/custom/failures/fail_spoil_out_right", globalPropertyi }, --
+    { "rudder_fail", "tu154/custom/failures/rudder_fail", globalPropertyi }, --
+    { "elev_fail_left", "tu154/custom/failures/elev_fail_left", globalPropertyi }, --
+    { "elev_fail_right", "tu154/custom/failures/elev_fail_right", globalPropertyi }, --
+    { "retract1_fail", "sim/operation/failures/rel_lagear1", globalPropertyi }, -- fail of retract gear
+    { "retract2_fail", "sim/operation/failures/rel_lagear2", globalPropertyi }, -- fail of retract gear
+    { "retract3_fail", "sim/operation/failures/rel_lagear3", globalPropertyi }, -- fail of retract gear
+    { "actuator_fail", "sim/operation/failures/rel_gear_act", globalPropertyi }, -- actuator fail. bugs workaround
+    { "rel_collapse1", "sim/operation/failures/rel_collapse1", globalPropertyi },
+    { "rel_collapse2", "sim/operation/failures/rel_collapse2", globalPropertyi },
+    { "rel_collapse3", "sim/operation/failures/rel_collapse3", globalPropertyi },
+    { "rel_trim_rud", "sim/operation/failures/rel_trim_rud", globalPropertyi }, --
+    { "rel_trim_ail", "sim/operation/failures/rel_trim_ail", globalPropertyi }, --
+    { "rel_trim_elv", "sim/operation/failures/rel_trim_elv", globalPropertyi }, --
+    { "trim_emerg_elv_fail", "tu154/custom/failures/trim_emerg_elv_fail", globalPropertyi }, --
+    { "rel_tire1", "sim/operation/failures/rel_tire1", globalPropertyi }, -- Landing gear tire blowout
+    { "rel_tire2", "sim/operation/failures/rel_tire2", globalPropertyi }, -- Landing gear tire blowout
+    { "rel_tire3", "sim/operation/failures/rel_tire3", globalPropertyi }, -- Landing gear tire blowout
+    { "rel_tire4", "sim/operation/failures/rel_tire4", globalPropertyi }, -- Landing gear tire blowout
+    { "rel_tire5", "sim/operation/failures/rel_tire5", globalPropertyi }, -- Landing gear tire blowout
+    { "ias", "sim/flightmodel/position/indicated_airspeed", globalPropertyf },  -- IAS
+    { "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- inner flaps left
+    { "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- inner flaps right
+    { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf }, -- slats position. this one works too
+    { "stab_ratio", "sim/cockpit2/controls/elevator_trim", globalPropertyf }, -- sim pitch trimmer
+    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },  -- deploy of front gear
+    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },  -- deploy of right gear
+    { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },  -- deploy of left gear
+})
 
 local fail_counter = 0
 local check_time = math.random(15, 30)

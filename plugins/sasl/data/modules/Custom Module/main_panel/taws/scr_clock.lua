@@ -1,19 +1,34 @@
+-- scr_clock.lua
 -- this is the clock screen of TAWS
 size = {1000, 770}
 
-defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  
-defineProperty("brt_handle", globalPropertyf("tu154/custom/rotary/srpbz/brightness")) --  
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("course_fly", globalPropertyf("sim/flightmodel/position/hpath")) -- course, where aircraft actually flies
+defineProps({
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -
+    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
 
-defineProperty("latitude", globalPropertyf("sim/flightmodel/position/latitude")) -- degrees	The latitude of the aircraft
-defineProperty("longitude", globalPropertyf("sim/flightmodel/position/longitude")) -- degrees The longitude of the aircraft
-defineProperty("speed", globalPropertyf("sim/flightmodel/position/groundspeed"))
+    { "course_fly", "sim/flightmodel/position/hpath", globalPropertyf }, -- course, where aircraft actually flies
 
-defineProperty("sim_time", globalPropertyf("sim/time/zulu_time_sec"))  -- zulu time
+    { "latitude", "sim/flightmodel/position/latitude", globalPropertyf }, -- degrees	The latitude of the aircraft
+    { "longitude", "sim/flightmodel/position/longitude", globalPropertyf }, -- degrees The longitude of the aircraft
+    { "speed", "sim/flightmodel/position/groundspeed", globalPropertyf },
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "sim_time", "sim/time/zulu_time_sec", globalPropertyf },  -- zulu time
+
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+})
 
 -- images
 defineProperty("screen_img_img", sasl.gl.loadImage("taws_clock.png", 0, 0, 1000, 770))

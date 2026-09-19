@@ -1,3 +1,4 @@
+-- UHUD.lua
 size = {205, 305}
 
 defineProperty("overlay", sasl.gl.loadImage("UHUD.png", 0, 0, 205, 305))
@@ -9,13 +10,27 @@ defineProperty("search", sasl.gl.loadImage("UHUD.png", 0, 387, 205, 125))
 defineProperty("warning", sasl.gl.loadImage("UHUD.png", 0, 307, 205, 78))
 defineProperty("understood", sasl.gl.loadImage("UHUD.png", 381, 433, 107, 21))
 
-defineProperty("pitch", globalPropertyf("sim/flightmodel/position/theta"))
-defineProperty("roll", globalPropertyf("sim/flightmodel/position/phi"))
-defineProperty("speed", globalPropertyf("sim/flightmodel/position/groundspeed"))
-defineProperty("altitude", globalPropertyf("sim/flightmodel/position/elevation"))
-defineProperty("heading", globalPropertyf("sim/flightmodel/position/hpath"))
-defineProperty("vert", globalPropertyf("sim/flightmodel/position/vh_ind_fpm"))
-defineProperty("run_time", globalPropertyf("sim/time/total_running_time_sec"))
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
+
+defineProps({
+    { "pitch", "sim/flightmodel/position/theta", globalPropertyf },
+    { "roll", "sim/flightmodel/position/phi", globalPropertyf },
+    { "speed", "sim/flightmodel/position/groundspeed", globalPropertyf },
+    { "altitude", "sim/flightmodel/position/elevation", globalPropertyf },
+    { "heading", "sim/flightmodel/position/hpath", globalPropertyf },
+    -- { "vert", "sim/flightmodel/position/vh_ind_fpm", globalPropertyf },
+    { "run_time", "sim/time/total_running_time_sec", globalPropertyf },
+})
 
 local GS = 0
 local Alt = 0

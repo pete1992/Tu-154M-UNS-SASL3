@@ -1,29 +1,44 @@
+-- scr_map_side.lua
 -- this is side view map
 --include("corr_tbl.lua")
 size = {1000, 770}
 
-defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("distance_set", globalPropertyi("tu154/custom/taws/distance_set")) --    , . 0 = 10, 1 = 20, 2 = 40, 3 = 80, 4 = 160, 5 = 320, 6 = 640
+defineProps({
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -
 
-defineProperty("brt_handle", globalPropertyf("tu154/custom/rotary/srpbz/brightness")) --  
+    { "distance_set", "tu154/custom/taws/distance_set", globalPropertyi }, --    , . 0 = 10, 1 = 20, 2 = 40, 3 = 80, 4 = 160, 5 = 320, 6 = 640
 
--- map parameters
-defineProperty("pos_x", globalPropertyf("sim/flightmodel/position/local_x")) -- longtitude. positive from W to E
-defineProperty("pos_y", globalPropertyf("sim/flightmodel/position/local_y")) -- altitude. positive UP
-defineProperty("pos_z", globalPropertyf("sim/flightmodel/position/local_z")) -- latitude. positive from N to S
+    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
 
-defineProperty("speed", globalPropertyf("sim/flightmodel/position/groundspeed"))
-defineProperty("course", globalPropertyf("sim/flightmodel/position/psi")) -- angle between -Z axis and airplane's nose
-defineProperty("course_fly", globalPropertyf("sim/flightmodel/position/hpath")) -- course, where aircraft actually flies
-defineProperty("elevation", globalPropertyf("sim/flightmodel/position/elevation"))
+    -- map parameters
+    { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- longtitude. positive from W to E
+    { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- altitude. positive UP
+    { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- latitude. positive from N to S
 
-defineProperty("gear1_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[0]"))  -- deploy of front gear
-defineProperty("gear2_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[1]"))  -- deploy of right gear
-defineProperty("gear3_deploy", globalProperty("sim/aircraft/parts/acf_gear_deploy[2]"))  -- deploy of left gear
+    { "speed", "sim/flightmodel/position/groundspeed", globalPropertyf },
+    { "course", "sim/flightmodel/position/psi", globalPropertyf }, -- angle between -Z axis and airplane's nose
+    { "course_fly", "sim/flightmodel/position/hpath", globalPropertyf }, -- course, where aircraft actually flies
+    { "elevation", "sim/flightmodel/position/elevation", globalPropertyf },
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },  -- deploy of front gear
+    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },  -- deploy of right gear
+    { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },  -- deploy of left gear
+
+    -- time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+})
 
 -- images
 -- SASL crop coordinates start at the lower-left; the TAWS artwork occupies the upper 770 px of the 1024 px texture.

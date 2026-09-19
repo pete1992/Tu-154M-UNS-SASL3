@@ -1,12 +1,27 @@
+-- crew_voices.lua
 -- this is the crew voices logic
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- time of frame
-defineProperty("hide_rus_objects", globalPropertyi("tu154/custom/lang/hide_rus_objects")) --    
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
+defineProps({
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
+    { "hide_rus_objects", "tu154/custom/lang/hide_rus_objects", globalPropertyi }, --
 
-defineProperty("replay_mode", globalPropertyi("sim/operation/prefs/replay_mode"))
-defineProperty("enable_crew_vo", globalPropertyi("tu154/custom/sounds/enable_crew_vo")) --   
+    -- Smart Copilot
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
+
+    { "replay_mode", "sim/operation/prefs/replay_mode", globalPropertyi },
+    { "enable_crew_vo", "tu154/custom/sounds/enable_crew_vo", globalPropertyi }, --
+})
 
 include("voice_tables.lua")
 include("voice_func.lua")

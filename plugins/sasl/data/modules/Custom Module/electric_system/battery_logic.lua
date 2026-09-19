@@ -24,7 +24,7 @@ defineProps({
 	{ "sim_bat_on", "sim/cockpit2/electrical/battery_on[0]", globalProperty },
     -- SmartCopilot ownership
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 -- Battery charge/discharge and temperature logic

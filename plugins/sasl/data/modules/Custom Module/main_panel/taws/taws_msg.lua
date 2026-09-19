@@ -1,14 +1,29 @@
+-- taws_msg.lua
 -- this is voice and text messages logic
 size = {1000, 770}
 
-defineProperty("taws_message", globalPropertyi("tu154/custom/taws/taws_message")) -- 
--- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain, 
--- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
-defineProperty("hide_eng_objects", globalPropertyi("tu154/custom/lang/hide_eng_objects")) --    . 1 = RUS
-defineProperty("taws_english", globalPropertyi("tu154/custom/taws/taws_english")) --  . 0 - , 1 - 	0
-defineProperty("brt_handle", globalPropertyf("tu154/custom/rotary/srpbz/brightness")) --  
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("mode_set", globalPropertyi("tu154/custom/taws/mode_set")) --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  
+defineProps({
+    { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi }, --
+    -- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain,
+    -- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
+    { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi }, --    . 1 = RUS
+    { "taws_english", "tu154/custom/taws/taws_english", globalPropertyi }, --  . 0 - , 1 - 	0
+    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
+
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -
+})
 
 local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
 
