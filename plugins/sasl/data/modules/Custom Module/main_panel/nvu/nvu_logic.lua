@@ -28,7 +28,6 @@ function update()
     -- Report GPS power, not route validity: a powered GPS need not have a leg yet.
     local brightness = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
     set(nvu_on_lit, get(gps_power) > 0 and brightness or 0)
-
     -- current_counter still includes this load. The removed NVU draws no current.
     set(nvu_cc, 0)
 end
