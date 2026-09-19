@@ -14,9 +14,7 @@ defineProps({
     { "fail", "sim/operation/failures/rel_adf1", globalPropertyf },
     { "adf", "sim/cockpit2/radios/indicators/adf1_relative_bearing_deg", globalPropertyf },
     { "audio_selection", "sim/cockpit2/radios/actuators/audio_selection_adf1", globalPropertyi },
-
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
-
     -- controls
     { "ark_mode", "tu154/custom/switchers/ovhd/ark_1_mode", globalPropertyi }, --   1 0 - , 1 - , 2 - , 3 -
     { "ark_channel", "tu154/custom/switchers/ovhd/ark_1_channel", globalPropertyi }, --   1
@@ -26,30 +24,22 @@ defineProps({
     { "ark_hundr_right", "tu154/custom/switchers/ovhd/ark_1_hundr_right", globalPropertyi }, --   1 - 17
     { "ark_tens_right", "tu154/custom/switchers/ovhd/ark_1_tens_right", globalPropertyi }, --   1 - 10 (0)
     { "ark_ones_right", "tu154/custom/switchers/ovhd/ark_1_ones_right", globalPropertyi }, --   0 - 9
-
     { "ark_ramka", "tu154/custom/buttons/ovhd/ark_1_ramka", globalPropertyi }, --
-
     -- light
     { "ark_left_lit", "tu154/custom/lights/ark1_left_lit", globalPropertyf }, --     1
     { "ark_right_lit", "tu154/custom/lights/ark1_right_lit", globalPropertyf }, --     1
     { "ark_all_lit", "tu154/custom/lights/ark1_all_lit", globalPropertyf }, --   1
-
     -- power
     { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus36_volt", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
-
     { "ark15_cc", "tu154/custom/radio/ark15_L_cc", globalPropertyf }, --
-
     -- failures
-
     -- results
     { "adf_bear", "tu154/custom/radio/adf_bear_1", globalPropertyf },
-
     -- engines
     { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
     { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
     { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
-
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
     { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
@@ -60,14 +50,10 @@ local notLoaded = true
 local start_timer = 0
 
 local function sw_reset()
-
 	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
 		set(ark_mode, 0)
-	
 	end
-	
 	notLoaded = false
-
 end
 
 local rot_small_sound = sasl.al.loadSample('Custom Sounds/ark_inn.wav')
