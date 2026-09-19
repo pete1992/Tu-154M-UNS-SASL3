@@ -1,38 +1,51 @@
--- this is the door lights panel
+-- door_panel.lua
+-- Door, hatch and steering annunciator panel.
 
--- controlls
-defineProperty("test_lamps", globalPropertyi("tu154/custom/buttons/lamp_test_doors")) --     
-defineProperty("day_night_set", globalPropertyf("tu154/custom/lights/day_night_set")) --   - . 0 - , 1 - .    .
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- other sources
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+defineProps({
+    -- Lamp controls
+    { "test_lamps", "tu154/custom/buttons/lamp_test_doors", globalPropertyi },
+    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf },
 
-defineProperty("nosewheel_turn_enable", globalPropertyi("tu154/custom/switchers/nosewheel_turn_enable")) --      
-defineProperty("nosewheel_turn_sel", globalPropertyi("tu154/custom/switchers/nosewheel_turn_sel")) --     . 0 - 10, 1 - 63
+    -- Power, timing and steering controls
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+    -- { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- Unused: no time-dependent logic in this component.
+    { "nosewheel_turn_enable", "tu154/custom/switchers/nosewheel_turn_enable", globalPropertyi },
+    { "nosewheel_turn_sel", "tu154/custom/switchers/nosewheel_turn_sel", globalPropertyi }, -- 0 = 10 degrees, 1 = 63 degrees
 
--- lamps
-defineProperty("other_hatches", globalPropertyf("tu154/custom/lights/other_hatches")) --    
-defineProperty("left_front_pax_door", globalPropertyf("tu154/custom/lights/left_front_pax_door")) --    
-defineProperty("left_mid_pax_door", globalPropertyf("tu154/custom/lights/left_mid_pax_door")) --    
-defineProperty("right_mid_pax_door", globalPropertyf("tu154/custom/lights/right_mid_pax_door")) --    
-defineProperty("cargo_front_door", globalPropertyf("tu154/custom/lights/cargo_front_door")) --   
-defineProperty("cargo_back_door", globalPropertyf("tu154/custom/lights/cargo_back_door")) --   
-defineProperty("turn63_lamp", globalPropertyf("tu154/custom/lights/turn63_lamp")) --  63 
-defineProperty("nosewheel_turn_off", globalPropertyf("tu154/custom/lights/nosewheel_turn_off")) --   
-defineProperty("busters_off", globalPropertyf("tu154/custom/lights/busters_off")) --  
+    -- Annunciator outputs
+    { "other_hatches", "tu154/custom/lights/other_hatches", globalPropertyf },
+    { "left_front_pax_door", "tu154/custom/lights/left_front_pax_door", globalPropertyf },
+    { "left_mid_pax_door", "tu154/custom/lights/left_mid_pax_door", globalPropertyf },
+    { "right_mid_pax_door", "tu154/custom/lights/right_mid_pax_door", globalPropertyf },
+    { "cargo_front_door", "tu154/custom/lights/cargo_front_door", globalPropertyf },
+    { "cargo_back_door", "tu154/custom/lights/cargo_back_door", globalPropertyf },
+    { "turn63_lamp", "tu154/custom/lights/turn63_lamp", globalPropertyf },
+    { "nosewheel_turn_off", "tu154/custom/lights/nosewheel_turn_off", globalPropertyf },
+    { "busters_off", "tu154/custom/lights/busters_off", globalPropertyf },
 
--- hatches
-defineProperty("cargo_1", globalPropertyf("tu154/custom/anim/cargo_1")) --    1. 0 - , 1 - 
-defineProperty("cargo_2", globalPropertyf("tu154/custom/anim/cargo_2")) --    1. 0 - , 1 - 
-defineProperty("pax_door_1", globalPropertyf("tu154/custom/anim/pax_door_1")) --    
-defineProperty("pax_door_2", globalPropertyf("tu154/custom/anim/pax_door_2")) --    
-defineProperty("pax_door_3", globalPropertyf("tu154/custom/anim/pax_door_3")) --    
+    -- Door and switch-cover positions
+    { "cargo_1", "tu154/custom/anim/cargo_1", globalPropertyf },
+    { "cargo_2", "tu154/custom/anim/cargo_2", globalPropertyf },
+    { "pax_door_1", "tu154/custom/anim/pax_door_1", globalPropertyf },
+    { "pax_door_2", "tu154/custom/anim/pax_door_2", globalPropertyf },
+    { "pax_door_3", "tu154/custom/anim/pax_door_3", globalPropertyf },
+    { "busters_cap", "tu154/custom/switchers/console/busters_cap", globalPropertyi },
+})
 
-defineProperty("busters_cap", globalPropertyi("tu154/custom/switchers/console/busters_cap")) --   
-
-local passed = get(frame_time)
+-- local passed = get(frame_time) -- Unused initialization; no consumer of passed.
 
 local function lamps()
 	local day_night = 1 - get(day_night_set) * 0.25

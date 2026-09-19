@@ -1,527 +1,75 @@
--- this is NVU panel
+-- Remaining cockpit services from the former NVU panel.
+-- Keep the BDK needle, shared switch sounds, switch initialization and lamp test.
+-- Retired NVU counters, entry buttons and coordinate/correction indications are gone.
 
--- controls
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
 defineProps({
-    { "nvu_param_sel", "tu154/custom/switchers/console/nvu_param_sel", globalPropertyi }, --     . -4 - Z, -3 - S, -2 - Zm, -1 - Sm, 0 - off, 1 - Sn, 2 - Zn, 3 - S, 4 - Z
-    { "nvu_turn_sel", "tu154/custom/switchers/console/nvu_turn_sel", globalPropertyi }, --    , -1 - , 0 - , 1 - 5, 2 - 10, 3 - 15, 4 - 20, 5 - 25
-    { "nvu_power_on", "tu154/custom/switchers/console/nvu_power_on", globalPropertyi }, --
-    { "nvu_calc_on", "tu154/custom/switchers/console/nvu_calc_on", globalPropertyi }, --
-    { "nvu_corr_on", "tu154/custom/switchers/console/nvu_corr_on", globalPropertyi }, --
-    { "nvu_left_btn", "tu154/custom/buttons/nvu/nvu_left_btn", globalPropertyi }, --
-    { "nvu_ctr_btn", "tu154/custom/buttons/nvu/nvu_ctr_btn", globalPropertyi }, --
-    { "nvu_right_btn", "tu154/custom/buttons/nvu/nvu_right_btn", globalPropertyi }, --
-    { "zpu_1_left_btn", "tu154/custom/buttons/nvu/zpu_1_left_btn", globalPropertyi }, --
-    { "zpu_1_ctr_btn", "tu154/custom/buttons/nvu/zpu_1_ctr_btn", globalPropertyi }, --
-    { "zpu_1_right_btn", "tu154/custom/buttons/nvu/zpu_1_right_btn", globalPropertyi }, --
-    { "zpu_2_left_btn", "tu154/custom/buttons/nvu/zpu_2_left_btn", globalPropertyi }, --
-    { "zpu_2_ctr_btn", "tu154/custom/buttons/nvu/zpu_2_ctr_btn", globalPropertyi }, --
-    { "zpu_2_right_btn", "tu154/custom/buttons/nvu/zpu_2_right_btn", globalPropertyi }, --
-    -- internal datarefs
-    { "current_Z1", "tu154/custom/nvu/current_Z1", globalPropertyf }, -- Z1
-    { "current_S1", "tu154/custom/nvu/current_S1", globalPropertyf }, -- S1
-    { "next_Z1", "tu154/custom/nvu/next_Z1", globalPropertyf }, -- Z1
-    { "next_S1", "tu154/custom/nvu/next_S1", globalPropertyf }, -- S1
-    { "current_Z2", "tu154/custom/nvu/current_Z2", globalPropertyf }, -- Z2
-    { "current_S2", "tu154/custom/nvu/current_S2", globalPropertyf }, -- S2
-    { "next_Z2", "tu154/custom/nvu/next_Z2", globalPropertyf }, -- Z2
-    { "next_S2", "tu154/custom/nvu/next_S2", globalPropertyf }, -- S2
-    { "zpu1", "tu154/custom/nvu/zpu1", globalPropertyf }, -- ZPU1
-    { "zpu2", "tu154/custom/nvu/zpu2", globalPropertyf }, -- ZPU2
-    -- gauges - numbers
-    { "current_Z1_1", "tu154/custom/nvu/current_Z1_1", globalPropertyf }, -- Z1
-    { "current_Z1_10", "tu154/custom/nvu/current_Z1_10", globalPropertyf }, -- Z1
-    { "current_Z1_100", "tu154/custom/nvu/current_Z1_100", globalPropertyf }, -- Z1
-    { "current_Z1_1000", "tu154/custom/nvu/current_Z1_1000", globalPropertyf }, -- Z1
-    { "current_Z1_min_1", "tu154/custom/nvu/current_Z1_min_1", globalPropertyf }, -- Z1
-    { "current_Z1_min_10", "tu154/custom/nvu/current_Z1_min_10", globalPropertyf }, -- Z1
-    { "current_Z1_min_100", "tu154/custom/nvu/current_Z1_min_100", globalPropertyf }, -- Z1
-    { "current_Z1_min_1000", "tu154/custom/nvu/current_Z1_min_1000", globalPropertyf }, -- Z1
-    { "current_S1_1", "tu154/custom/nvu/current_S1_1", globalPropertyf }, -- S1
-    { "current_S1_10", "tu154/custom/nvu/current_S1_10", globalPropertyf }, -- S1
-    { "current_S1_100", "tu154/custom/nvu/current_S1_100", globalPropertyf }, -- S1
-    { "current_S1_1000", "tu154/custom/nvu/current_S1_1000", globalPropertyf }, -- S1
-    { "current_S1_min_1", "tu154/custom/nvu/current_S1_min_1", globalPropertyf }, -- S1
-    { "current_S1_min_10", "tu154/custom/nvu/current_S1_min_10", globalPropertyf }, -- S1
-    { "current_S1_min_100", "tu154/custom/nvu/current_S1_min_100", globalPropertyf }, -- S1
-    { "current_S1_min_1000", "tu154/custom/nvu/current_S1_min_1000", globalPropertyf }, -- S1
-    { "next_Z1_1", "tu154/custom/nvu/next_Z1_1", globalPropertyf }, -- Z1
-    { "next_Z1_10", "tu154/custom/nvu/next_Z1_10", globalPropertyf }, -- Z1
-    { "next_Z1_100", "tu154/custom/nvu/next_Z1_100", globalPropertyf }, -- Z1
-    { "next_Z1_1000", "tu154/custom/nvu/next_Z1_1000", globalPropertyf }, -- Z1
-    { "next_Z1_min_1", "tu154/custom/nvu/next_Z1_min_1", globalPropertyf }, -- Z1
-    { "next_Z1_min_10", "tu154/custom/nvu/next_Z1_min_10", globalPropertyf }, -- Z1
-    { "next_Z1_min_100", "tu154/custom/nvu/next_Z1_min_100", globalPropertyf }, -- Z1
-    { "next_Z1_min_1000", "tu154/custom/nvu/next_Z1_min_1000", globalPropertyf }, -- Z1
-    { "next_S1_1", "tu154/custom/nvu/next_S1_1", globalPropertyf }, -- S1
-    { "next_S1_10", "tu154/custom/nvu/next_S1_10", globalPropertyf }, -- S1
-    { "next_S1_100", "tu154/custom/nvu/next_S1_100", globalPropertyf }, -- S1
-    { "next_S1_1000", "tu154/custom/nvu/next_S1_1000", globalPropertyf }, -- S1
-    { "next_S1_min_1", "tu154/custom/nvu/next_S1_min_1", globalPropertyf }, -- S1
-    { "next_S1_min_10", "tu154/custom/nvu/next_S1_min_10", globalPropertyf }, -- S1
-    { "next_S1_min_100", "tu154/custom/nvu/next_S1_min_100", globalPropertyf }, -- S1
-    { "next_S1_min_1000", "tu154/custom/nvu/next_S1_min_1000", globalPropertyf }, -- S1
-    ----
-    { "current_Z2_1", "tu154/custom/nvu/current_Z2_1", globalPropertyf }, -- Z2
-    { "current_Z2_10", "tu154/custom/nvu/current_Z2_10", globalPropertyf }, -- Z2
-    { "current_Z2_100", "tu154/custom/nvu/current_Z2_100", globalPropertyf }, -- Z2
-    { "current_Z2_1000", "tu154/custom/nvu/current_Z2_1000", globalPropertyf }, -- Z2
-    { "current_Z2_min_1", "tu154/custom/nvu/current_Z2_min_1", globalPropertyf }, -- Z2
-    { "current_Z2_min_10", "tu154/custom/nvu/current_Z2_min_10", globalPropertyf }, -- Z2
-    { "current_Z2_min_100", "tu154/custom/nvu/current_Z2_min_100", globalPropertyf }, -- Z2
-    { "current_Z2_min_1000", "tu154/custom/nvu/current_Z2_min_1000", globalPropertyf }, -- Z2
-    { "current_S2_1", "tu154/custom/nvu/current_S2_1", globalPropertyf }, -- S2
-    { "current_S2_10", "tu154/custom/nvu/current_S2_10", globalPropertyf }, -- S2
-    { "current_S2_100", "tu154/custom/nvu/current_S2_100", globalPropertyf }, -- S2
-    { "current_S2_1000", "tu154/custom/nvu/current_S2_1000", globalPropertyf }, -- S2
-    { "current_S2_min_1", "tu154/custom/nvu/current_S2_min_1", globalPropertyf }, -- S2
-    { "current_S2_min_10", "tu154/custom/nvu/current_S2_min_10", globalPropertyf }, -- S2
-    { "current_S2_min_100", "tu154/custom/nvu/current_S2_min_100", globalPropertyf }, -- S2
-    { "current_S2_min_1000", "tu154/custom/nvu/current_S2_min_1000", globalPropertyf }, -- S2
-    { "next_Z2_1", "tu154/custom/nvu/next_Z2_1", globalPropertyf }, -- Z2
-    { "next_Z2_10", "tu154/custom/nvu/next_Z2_10", globalPropertyf }, -- Z2
-    { "next_Z2_100", "tu154/custom/nvu/next_Z2_100", globalPropertyf }, -- Z2
-    { "next_Z2_1000", "tu154/custom/nvu/next_Z2_1000", globalPropertyf }, -- Z2
-    { "next_Z2_min_1", "tu154/custom/nvu/next_Z2_min_1", globalPropertyf }, -- Z2
-    { "next_Z2_min_10", "tu154/custom/nvu/next_Z2_min_10", globalPropertyf }, -- Z2
-    { "next_Z2_min_100", "tu154/custom/nvu/next_Z2_min_100", globalPropertyf }, -- Z2
-    { "next_Z2_min_1000", "tu154/custom/nvu/next_Z2_min_1000", globalPropertyf }, -- Z2
-    { "next_S2_1", "tu154/custom/nvu/next_S2_1", globalPropertyf }, -- S2
-    { "next_S2_10", "tu154/custom/nvu/next_S2_10", globalPropertyf }, -- S2
-    { "next_S2_100", "tu154/custom/nvu/next_S2_100", globalPropertyf }, -- S2
-    { "next_S2_1000", "tu154/custom/nvu/next_S2_1000", globalPropertyf }, -- S2
-    { "next_S2_min_1", "tu154/custom/nvu/next_S2_min_1", globalPropertyf }, -- S2
-    { "next_S2_min_10", "tu154/custom/nvu/next_S2_min_10", globalPropertyf }, -- S2
-    { "next_S2_min_100", "tu154/custom/nvu/next_S2_min_100", globalPropertyf }, -- S2
-    { "next_S2_min_1000", "tu154/custom/nvu/next_S2_min_1000", globalPropertyf }, -- S2
-    ---------
-    { "Z1_minus_cap", "tu154/custom/nvu/z1_minus_cap", globalPropertyf }, -- digits cap
-    { "Z1_plus_cap", "tu154/custom/nvu/z1_plus_cap", globalPropertyf }, -- digits cap
-    { "S1_minus_cap", "tu154/custom/nvu/s1_minus_cap", globalPropertyf }, -- digits cap
-    { "S1_plus_cap", "tu154/custom/nvu/s1_plus_cap", globalPropertyf }, -- digits cap
-    { "Z2_minus_cap", "tu154/custom/nvu/z2_minus_cap", globalPropertyf }, -- digits cap
-    { "Z2_plus_cap", "tu154/custom/nvu/z2_plus_cap", globalPropertyf }, -- digits cap
-    { "S2_minus_cap", "tu154/custom/nvu/s2_minus_cap", globalPropertyf }, -- digits cap
-    { "S2_plus_cap", "tu154/custom/nvu/s2_plus_cap", globalPropertyf }, -- digits cap
-    { "Z1_next_minus_cap", "tu154/custom/nvu/z1_next_minus_cap", globalPropertyf }, -- digits cap
-    { "Z1_next_plus_cap", "tu154/custom/nvu/z1_next_plus_cap", globalPropertyf }, -- digits cap
-    { "S1_next_minus_cap", "tu154/custom/nvu/s1_next_minus_cap", globalPropertyf }, -- digits cap
-    { "S1_next_plus_cap", "tu154/custom/nvu/s1_next_plus_cap", globalPropertyf }, -- digits cap
-    { "Z2_next_minus_cap", "tu154/custom/nvu/z2_next_minus_cap", globalPropertyf }, -- digits cap
-    { "Z2_next_plus_cap", "tu154/custom/nvu/z2_next_plus_cap", globalPropertyf }, -- digits cap
-    { "S2_next_minus_cap", "tu154/custom/nvu/s2_next_minus_cap", globalPropertyf }, -- digits cap
-    { "S2_next_plus_cap", "tu154/custom/nvu/s2_next_plus_cap", globalPropertyf }, -- digits cap
-    --------
-    { "zpu1_01", "tu154/custom/nvu/zpu1_01", globalPropertyf }, -- ZPU
-    { "zpu1_1", "tu154/custom/nvu/zpu1_1", globalPropertyf }, -- ZPU
-    { "zpu1_10", "tu154/custom/nvu/zpu1_10", globalPropertyf }, -- ZPU
-    { "zpu1_100", "tu154/custom/nvu/zpu1_100", globalPropertyf }, -- ZPU
-    { "zpu2_01", "tu154/custom/nvu/zpu2_01", globalPropertyf }, -- ZPU
-    { "zpu2_1", "tu154/custom/nvu/zpu2_1", globalPropertyf }, -- ZPU
-    { "zpu2_10", "tu154/custom/nvu/zpu2_10", globalPropertyf }, -- ZPU
-    { "zpu2_100", "tu154/custom/nvu/zpu2_100", globalPropertyf }, -- ZPU
-    ---
-    { "map_angle", "tu154/custom/gauges/console/map_angle", globalPropertyf }, --
-    -- lamps
-    { "nvu_on_lit", "tu154/custom/lights/small/nvu_on", globalPropertyf }, --
-    { "nvu_corr_lit", "tu154/custom/lights/small/nvu_corr", globalPropertyf }, --
-    { "nvu_1_active", "tu154/custom/lights/nvu_1_active", globalPropertyf }, --
-    { "nvu_2_active", "tu154/custom/lights/nvu_2_active", globalPropertyf }, --
-    { "nvu_fail_lit", "tu154/custom/lights/nvu_fail", globalPropertyf }, --
-    { "nvu_vor_automat", "tu154/custom/lights/nvu_vor_automat", globalPropertyf }, -- -VOR
-    { "correct_on_lit", "tu154/custom/lights/correct_on", globalPropertyf }, --
-    { "change_ch_o", "tu154/custom/lights/change_ch_o", globalPropertyf }, --
-    -- other sources
-    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
-    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
-    { "nvu_changing_ort", "tu154/custom/nvu/nvu_changing_ort", globalPropertyi }, --
-    { "nvu_fail", "tu154/custom/nvu/nvu_fail", globalPropertyi }, --
-    { "nvu_mode", "tu154/custom/nvu/nvu_mode", globalPropertyi }, --  . 0 = , 1 = , 2 = , 3 =
-    { "nvu_active", "tu154/custom/nvu/nvu_active", globalPropertyi }, --   . 1 - 2
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
-    { "test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi }, --
-    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, --   - . 0 - , 1 - .    .
-    { "rsbn_distance", "tu154/custom/rsbn/distance", globalPropertyf }, --
-    { "rsbn_azimuth", "tu154/custom/rsbn/azimuth", globalPropertyf }, --
-    { "compas_big_needle", "tu154/custom/gauges/misc/compas_big_needle", globalPropertyf }, --
-    { "compas_small_needle", "tu154/custom/gauges/misc/compas_small_needle", globalPropertyf }, --
-    { "compas_knob", "tu154/custom/gauges/misc/compas_knob", globalPropertyf }, --
-    -- engines
-    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
-    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
-    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
+    -- This switch still has a cockpit manipulator; aircraft_init sets its start state.
+    { "nvu_power_on", "tu154/custom/switchers/console/nvu_power_on", globalPropertyi },
+    -- Shared sound trigger used by UNS, radio, Kontur, EGPWS and other xTlua systems.
+    { "switch_sound_trigger", "tu154/custom/switchers/console/nvu_corr_on", globalPropertyi },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty },
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty },
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty },
+
+    -- BDK needle still animated by cockpit_1_RUS.obj.
+    { "compas_big_needle", "tu154/custom/gauges/misc/compas_big_needle", globalPropertyf },
+    { "compas_knob", "tu154/custom/gauges/misc/compas_knob", globalPropertyf },
+
+    -- These four annunciators reach the cockpit via T154.zsmooth_lights.
+    { "test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+    { "nvu_fail_lit", "tu154/custom/lights/nvu_fail", globalPropertyf },
+    { "nvu_vor_automat", "tu154/custom/lights/nvu_vor_automat", globalPropertyf },
+    { "correct_on_lit", "tu154/custom/lights/correct_on", globalPropertyf },
+    { "change_ch_o", "tu154/custom/lights/change_ch_o", globalPropertyf },
 })
 
-
-local notLoaded = true
-local start_timer = 0
-
-local function sw_reset()
-
-	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
-		set(nvu_power_on, 0)
-	
-	end
-	
-	notLoaded = false
-
-end
-
 local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
-local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
-
-local passed = get(frame_time)
-
-local function digit_counter_09(value) -- general function for 5 digit (or less) counters. pre-last digit changes when last moves from 9 to 0
-
-	local x_1 = value % 10
-	local x_10 = math.floor((value % 100) * 0.1) + math.max(math.max((x_1  - 9), 0), 0)
-	local x_100 = math.floor((value % 1000) * 0.01) + math.max(math.max((x_10 - 9), 0), 0)
-	local x_1000 = math.floor((value % 10000) * 0.001) + math.max(math.max((x_100 - 9), 0), 0)
-	local x_10000 = math.floor((value % 100000) * 0.0001) + math.max(math.max((x_1000 - 9), 0), 0)
-
-	return x_1, x_10, x_100, x_1000, x_10000
-
-end
-
-local Z1_act = 0
-local S1_act = 0
-
-local Z2_act = 0
-local S2_act = 0
-
-local function counters()
-
-	------------------------------
-	-- current Z1 counters
-	local cur_Z1 = get(current_Z1)
-	
-	local delta_Z1 = cur_Z1 - Z1_act 
-		
-	if delta_Z1 > 1 then Z1_act = Z1_act + passed * 20
-	elseif delta_Z1 < -1 then Z1_act = Z1_act - passed * 20
-	else Z1_act = Z1_act + delta_Z1 * passed * 20
-	end
-	
-	local cur_z1_pls_1, cur_z1_pls_10, cur_z1_pls_100, cur_z1_pls_1000 = digit_counter_09(Z1_act)
-	
-	local cur_z1_min_1, cur_z1_min_10, cur_z1_min_100, cur_z1_min_1000 = digit_counter_09(-Z1_act)
-	
-	set(current_Z1_1, cur_z1_pls_1)
-	set(current_Z1_10, cur_z1_pls_10)
-	set(current_Z1_100, cur_z1_pls_100)
-	set(current_Z1_1000, cur_z1_pls_1000)
-	
-	set(current_Z1_min_1, cur_z1_min_1)
-	set(current_Z1_min_10, cur_z1_min_10)
-	set(current_Z1_min_100, cur_z1_min_100)
-	set(current_Z1_min_1000, cur_z1_min_1000)
-	
-	set(Z1_minus_cap, math.min(1, 1 + math.max(-1, -Z1_act)))
-	set(Z1_plus_cap,  math.min(1, 1 + math.max(-1, Z1_act)))
-	
-	------------------------------------
-	-- current S1 counters
-	local cur_S1 = get(current_S1)
-	
-	local delta_S1 = cur_S1 - S1_act 
-		
-	if delta_S1 > 1 then S1_act = S1_act + passed * 20
-	elseif delta_S1 < -1 then S1_act = S1_act - passed * 20
-	else S1_act = S1_act + delta_S1 * passed * 20
-	end
-	
-	local cur_S1_pls_1, cur_S1_pls_10, cur_S1_pls_100, cur_S1_pls_1000 = digit_counter_09(S1_act)
-	
-	local cur_S1_min_1, cur_S1_min_10, cur_S1_min_100, cur_S1_min_1000 = digit_counter_09(-S1_act)
-	
-	set(current_S1_1, cur_S1_pls_1)
-	set(current_S1_10, cur_S1_pls_10)
-	set(current_S1_100, cur_S1_pls_100)
-	set(current_S1_1000, cur_S1_pls_1000)
-	
-	set(current_S1_min_1, cur_S1_min_1)
-	set(current_S1_min_10, cur_S1_min_10)
-	set(current_S1_min_100, cur_S1_min_100)
-	set(current_S1_min_1000, cur_S1_min_1000)
-	
-	set(S1_minus_cap,  math.min(1, 1 + math.max(-1, -S1_act)))
-	set(S1_plus_cap,  math.min(1, 1 + math.max(-1, S1_act)))	
-	
-	-----------------------------
-	-- current Z2 counters
-	local cur_Z2 = get(current_Z2)
-	
-	local delta_Z2 = cur_Z2 - Z2_act 
-		
-	if delta_Z2 > 1 then Z2_act = Z2_act + passed * 20
-	elseif delta_Z2 < -1 then Z2_act = Z2_act - passed * 20
-	else Z2_act = Z2_act + delta_Z2 * passed * 20
-	end
-	
-	local cur_Z2_pls_1, cur_Z2_pls_10, cur_Z2_pls_100, cur_Z2_pls_1000 = digit_counter_09(Z2_act)
-	
-	local cur_Z2_min_1, cur_Z2_min_10, cur_Z2_min_100, cur_Z2_min_1000 = digit_counter_09(-Z2_act)
-	
-	set(current_Z2_1, cur_Z2_pls_1)
-	set(current_Z2_10, cur_Z2_pls_10)
-	set(current_Z2_100, cur_Z2_pls_100)
-	set(current_Z2_1000, cur_Z2_pls_1000)
-	
-	set(current_Z2_min_1, cur_Z2_min_1)
-	set(current_Z2_min_10, cur_Z2_min_10)
-	set(current_Z2_min_100, cur_Z2_min_100)
-	set(current_Z2_min_1000, cur_Z2_min_1000)
-	
-	set(Z2_minus_cap,  math.min(1, 1 + math.max(-1, -Z2_act)))
-	set(Z2_plus_cap,  math.min(1, 1 + math.max(-1, Z2_act)))
-	
-	---------------------------
-	-- current S2 counters
-	local cur_S2 = get(current_S2)
-	
-	local delta_S2 = cur_S2 - S2_act 
-		
-	if delta_S2 > 1 then S2_act = S2_act + passed * 20
-	elseif delta_S2 < -1 then S2_act = S2_act - passed * 20
-	else S2_act = S2_act + delta_S2 * passed * 20
-	end
-	
-	local cur_S2_pls_1, cur_S2_pls_10, cur_S2_pls_100, cur_S2_pls_1000 = digit_counter_09(S2_act)
-	
-	local cur_S2_min_1, cur_S2_min_10, cur_S2_min_100, cur_S2_min_1000 = digit_counter_09(-S2_act)
-	
-	set(current_S2_1, cur_S2_pls_1)
-	set(current_S2_10, cur_S2_pls_10)
-	set(current_S2_100, cur_S2_pls_100)
-	set(current_S2_1000, cur_S2_pls_1000)
-	
-	set(current_S2_min_1, cur_S2_min_1)
-	set(current_S2_min_10, cur_S2_min_10)
-	set(current_S2_min_100, cur_S2_min_100)
-	set(current_S2_min_1000, cur_S2_min_1000)
-	
-	set(S2_minus_cap,  math.min(1, 1 + math.max(-1, -S2_act)))
-	set(S2_plus_cap,  math.min(1, 1 + math.max(-1, S2_act)))
-	
-	--------------------------
-	-- next values
-	
-	------------------------------
-	-- next Z1 counters
-	local nxt_Z1 = get(next_Z1)
-	
-	local nxt_z1_pls_1, nxt_z1_pls_10, nxt_z1_pls_100, nxt_z1_pls_1000 = digit_counter_09(nxt_Z1)
-	
-	local nxt_z1_min_1, nxt_z1_min_10, nxt_z1_min_100, nxt_z1_min_1000 = digit_counter_09(-nxt_Z1)
-	
-	set(next_Z1_1, nxt_z1_pls_1)
-	set(next_Z1_10, nxt_z1_pls_10)
-	set(next_Z1_100, nxt_z1_pls_100)
-	set(next_Z1_1000, nxt_z1_pls_1000)
-	
-	set(next_Z1_min_1, nxt_z1_min_1)
-	set(next_Z1_min_10, nxt_z1_min_10)
-	set(next_Z1_min_100, nxt_z1_min_100)
-	set(next_Z1_min_1000, nxt_z1_min_1000)
-	
-	set(Z1_next_minus_cap,  math.min(1, 1 + math.max(-1, -nxt_Z1)))
-	set(Z1_next_plus_cap,  math.min(1, 1 + math.max(-1, nxt_Z1)))
-	
-	------------------------------------
-	-- next S1 counters
-	local nxt_S1 = get(next_S1)
-	
-	local nxt_S1_pls_1, nxt_S1_pls_10, nxt_S1_pls_100, nxt_S1_pls_1000 = digit_counter_09(nxt_S1)
-	
-	local nxt_S1_min_1, nxt_S1_min_10, nxt_S1_min_100, nxt_S1_min_1000 = digit_counter_09(-nxt_S1)
-	
-	set(next_S1_1, nxt_S1_pls_1)
-	set(next_S1_10, nxt_S1_pls_10)
-	set(next_S1_100, nxt_S1_pls_100)
-	set(next_S1_1000, nxt_S1_pls_1000)
-	
-	set(next_S1_min_1, nxt_S1_min_1)
-	set(next_S1_min_10, nxt_S1_min_10)
-	set(next_S1_min_100, nxt_S1_min_100)
-	set(next_S1_min_1000, nxt_S1_min_1000)
-	
-	set(S1_next_minus_cap,  math.min(1, 1 + math.max(-1, -nxt_S1)))
-	set(S1_next_plus_cap,  math.min(1, 1 + math.max(-1, nxt_S1)))	
-	
-	-----------------------------
-	-- next Z1 counters
-	local nxt_Z2 = get(next_Z2)
-	
-	local nxt_Z2_pls_1, nxt_Z2_pls_10, nxt_Z2_pls_100, nxt_Z2_pls_1000 = digit_counter_09(nxt_Z2)
-	
-	local nxt_Z2_min_1, nxt_Z2_min_10, nxt_Z2_min_100, nxt_Z2_min_1000 = digit_counter_09(-nxt_Z2)
-	
-	set(next_Z2_1, nxt_Z2_pls_1)
-	set(next_Z2_10, nxt_Z2_pls_10)
-	set(next_Z2_100, nxt_Z2_pls_100)
-	set(next_Z2_1000, nxt_Z2_pls_1000)
-	
-	set(next_Z2_min_1, nxt_Z2_min_1)
-	set(next_Z2_min_10, nxt_Z2_min_10)
-	set(next_Z2_min_100, nxt_Z2_min_100)
-	set(next_Z2_min_1000, nxt_Z2_min_1000)
-	
-	set(Z2_next_minus_cap,  math.min(1, 1 + math.max(-1, -nxt_Z2)))
-	set(Z2_next_plus_cap,  math.min(1, 1 + math.max(-1, nxt_Z2)))
-	
-	---------------------------
-	-- next S2 counters
-	local nxt_S2 = get(next_S2)
-	
-	local nxt_S2_pls_1, nxt_S2_pls_10, nxt_S2_pls_100, nxt_S2_pls_1000 = digit_counter_09(nxt_S2)
-	
-	local nxt_S2_min_1, nxt_S2_min_10, nxt_S2_min_100, nxt_S2_min_1000 = digit_counter_09(-nxt_S2)
-	
-	set(next_S2_1, nxt_S2_pls_1)
-	set(next_S2_10, nxt_S2_pls_10)
-	set(next_S2_100, nxt_S2_pls_100)
-	set(next_S2_1000, nxt_S2_pls_1000)
-	
-	set(next_S2_min_1, nxt_S2_min_1)
-	set(next_S2_min_10, nxt_S2_min_10)
-	set(next_S2_min_100, nxt_S2_min_100)
-	set(next_S2_min_1000, nxt_S2_min_1000)
-	
-	set(S2_next_minus_cap,  math.min(1, 1 + math.max(-1, -nxt_S2)))
-	set(S2_next_plus_cap,  math.min(1, 1 + math.max(-1, nxt_S2)))
-	
-	------------------------
-	-- ZPU counters --
-	------------------------
-	
-	-- ZPU1 counters
-	local zpu1_ctr = get(zpu1) * 10
-	
-	local zpu1_d_01, zpu1_d_1, zpu1_d_10, zpu1_d_100 = digit_counter_09(zpu1_ctr)
-	
-	set(zpu1_01, zpu1_d_01)
-	set(zpu1_1, zpu1_d_1)
-	set(zpu1_10, zpu1_d_10)
-	set(zpu1_100, zpu1_d_100)
-
-	-- ZPU2 counters
-	local zpu2_ctr = get(zpu2) * 10
-	
-	local zpu2_d_01, zpu2_d_1, zpu2_d_10, zpu2_d_100 = digit_counter_09(zpu2_ctr)
-	
-	set(zpu2_01, zpu2_d_01)
-	set(zpu2_1, zpu2_d_1)
-	set(zpu2_10, zpu2_d_10)
-	set(zpu2_100, zpu2_d_100)
-	
-end
-
-local switchers_summ = 0
-
-local function switchers()
-	
-	local summ = get(nvu_power_on) + get(nvu_calc_on) + get(nvu_corr_on)
-	
-	if summ ~= switchers_summ then sasl.al.playSample(switcher_sound, false) end
-	
-	switchers_summ = summ
-
-end
-
-local but_summ = 0
-
-local function buttons()
-
-	local summ = get(nvu_left_btn) + get(nvu_ctr_btn) + get(nvu_right_btn) + get(zpu_1_left_btn) + get(zpu_1_ctr_btn) + get(zpu_1_right_btn)
-	summ = summ + get(zpu_2_left_btn) + get(zpu_2_ctr_btn) + get(zpu_2_right_btn)
-	
-	if summ ~= but_summ then sasl.al.playSample(button_sound, false) end
-	
-	but_summ = summ
-
-end
-
-local rot_summ = 0
-
-local function rotary()
-	
-	local summ = get(nvu_param_sel) + get(nvu_turn_sel)
-	
-	if summ ~= rot_summ then sasl.al.playSample(rotary_sound, false) end
-	
-	rot_summ = summ
-
-end
-
-local function lamps()
-	local test_btn = get(test_lamps) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
-	
-	local day_night = 1 - get(day_night_set) * 0.25
-	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0) * day_night
-	local small_lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
-	
-	local mode = get(nvu_mode)
-	local active = get(nvu_active)
-	
-	local nvu_on_lit_brt = bool2int(mode > 0 and get(nvu_fail) == 0) * small_lamps_brt
-	set(nvu_on_lit, nvu_on_lit_brt)
-	
-	local nvu_corr_lit_brt = bool2int(mode == 3) * small_lamps_brt
-	set(nvu_corr_lit, nvu_corr_lit_brt)
-	
-	local nvu_1_active_brt = bool2int(active == 1 and mode > 0) * small_lamps_brt
-	set(nvu_1_active, nvu_1_active_brt)
-	
-	local nvu_2_active_brt = bool2int(active == 2 and mode > 0) * small_lamps_brt
-	set(nvu_2_active, nvu_2_active_brt)
-	
-	local nvu_fail_lit_brt = math.max(bool2int(get(nvu_fail) == 1) * lamps_brt, test_btn)
-	set(nvu_fail_lit, nvu_fail_lit_brt)
-	
-	local nvu_vor_automat_brt = math.max(bool2int(false) * lamps_brt, test_btn) -- temp
-	set(nvu_vor_automat, nvu_vor_automat_brt)
-	
-	local correct_on_lit_brt = math.max(bool2int(mode == 3 and get(rsbn_distance) ~= 0) * lamps_brt, test_btn)
-	set(correct_on_lit, correct_on_lit_brt)
-	
-	local change_ch_o_brt = math.max(bool2int(get(nvu_changing_ort) == 1) * lamps_brt, test_btn)
-	set(change_ch_o, change_ch_o_brt)
-
-end
+local switch_state = 0
+local sound_trigger = 0
+local start_timer = 0
+local initialized = false
 
 function update()
-	
-	passed = get(frame_time)
-	
-	counters()
-	switchers()
-	buttons()
-	rotary()
-	lamps()
-	
-	-- BDK corrector
-	local knob = get(compas_knob)
-	set(compas_small_needle, knob)
-	set(compas_big_needle, knob * 36)
-	
-	-- map angle limits
-	local map_ang = get(map_angle)
-	
-	while map_ang > 360 do map_ang = map_ang - 360 end
-	while map_ang < 0 do map_ang = map_ang + 360 end
-	
-	set(map_angle, map_ang)
+    -- Compare separately so simultaneous opposite changes do not cancel a click.
+    local power = get(nvu_power_on)
+    local trigger = get(switch_sound_trigger)
+    if power ~= switch_state or trigger ~= sound_trigger then
+        sasl.al.playSample(switcher_sound, false)
+    end
+    switch_state = power
+    sound_trigger = trigger
 
-	start_timer = start_timer + passed
-	
-	if notLoaded and start_timer > 0.3 then
-		sw_reset()
-	end
+    set(compas_big_needle, get(compas_knob) * 36)
+
+    -- Retired NVU functions cannot assert operational indications.
+    -- Preserve the original front-panel lamp-test voltage scaling.
+    local test = get(test_lamps) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
+    set(nvu_fail_lit, test)
+    set(nvu_vor_automat, test)
+    set(correct_on_lit, test)
+    set(change_ch_o, test)
+
+    if not initialized then
+        start_timer = start_timer + get(frame_time)
+        if start_timer > 0.3 then
+            if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+                set(nvu_power_on, 0)
+            end
+            initialized = true
+        end
+    end
 end

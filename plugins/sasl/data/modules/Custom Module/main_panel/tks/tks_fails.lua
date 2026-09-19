@@ -1,3 +1,4 @@
+-- tks_fails.lua
 -- ============================================================================
 -- TKS FAILURE INJECTION
 -- Refactor goals:
@@ -7,24 +8,30 @@
 --
 -- ============================================================================
 
------------------------------------------------------------------------
--- Smartcopilot
------------------------------------------------------------------------
-defineProperty("ismaster",    globalPropertyf("scp/api/ismaster"))   -- 0 = plugin not found, 1 = slave, 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- 1 = no control, 2 = has control
 -- ----------------------------------------------------------------------------
 -- Property binder
 -- ----------------------------------------------------------------------------
 local function defineProps(defs)
-	for _, d in ipairs(defs) do
-		defineProperty(d[1], d[3](d[2]))
-	end
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
 end
 
 -- ----------------------------------------------------------------------------
 -- Properties
 -- ----------------------------------------------------------------------------
 defineProps({
+	-- SmartCopilot: only the master injects failures.
+	{ "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master
+	-- Unused: control ownership does not gate failure injection.
+	-- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+
 	-- Failures
 	{ "gyro_fail_1", "sim/operation/failures/rel_ss_dgy", globalPropertyi },
 	{ "gyro_fail_2", "sim/operation/failures/rel_cop_dgy", globalPropertyi },

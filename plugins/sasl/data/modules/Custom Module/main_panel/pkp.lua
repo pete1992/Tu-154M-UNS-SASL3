@@ -21,7 +21,16 @@ defineProps({
 
     { "absu_pnp_mode", "tu154/custom/absu/absu_pnp_mode_1", globalPropertyi }, --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
 
-    { "nvu_res_z", "tu154/custom/nvu/nvu_res_z", globalPropertyf }, --
+    -- Unused: NAV follows the existing ABSU GPS1 bridge, not legacy NVU coordinates.
+    -- { "nvu_res_z", "tu154/custom/nvu/nvu_res_z", globalPropertyf },
+    { "GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf },
+    { "GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf },
+    { "GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi },
+    { "gps_power", "sim/cockpit2/radios/actuators/gps_power", globalPropertyi },
+    { "gps_fromto", "sim/cockpit/radios/gps_fromto", globalPropertyi },
+    { "gps_course", "sim/cockpit/radios/gps_course_degtm", globalPropertyf },
+    { "gps_dev", "sim/cockpit/radios/gps_hdef_dot", globalPropertyf },
+    { "gps_nm_per_dot", "sim/cockpit/radios/gps_hdef_nm_per_dot", globalPropertyf },
 
     -- ABSU
     { "absu_roll_ind", "tu154/custom/absu/absu_roll_ind", globalPropertyf }, --
@@ -109,6 +118,10 @@ local h_plank_act = 0
 
 local absu_v_act = 0
 local absu_h_act = 0
+
+local function finite(value)
+    return type(value) == "number" and value == value and math.abs(value) < math.huge
+end
 
 function update()
 	local passed = get(frame_time)
@@ -271,9 +284,18 @@ function update()
 			glidesl_pl = -get(nav_gs_2)
 		end
 		
-	elseif power and mode == 1 then -- NVU
-	
-		course_pl = -get(nvu_res_z) * 0.1
+	elseif power and mode == 1 then -- NAV: same GPS1 guidance and validity as ABSU.
+		local fromto = get(gps_fromto)
+		local scale = get(gps_nm_per_dot)
+		local deviation = get(GNS430_dev)
+		local valid = get(gps_power) > 0 and (fromto == 1 or fromto == 2)
+			and get(GNS430_flag) == 0
+			and finite(get(GNS430_dtk)) and finite(deviation)
+			and finite(get(gps_course)) and finite(get(gps_dev))
+			and finite(scale) and scale > 0
+		-- ABSU cross-track Z is -CDI * NM/dot * 1.852 km. Preserve the PKP
+		-- -Z * 0.1 indication scale/sign, but center an unavailable GPS signal.
+		course_pl = valid and deviation * scale * 1.852 * 0.1 or 0
 		glidesl_pl = 0
 	
 	elseif power then

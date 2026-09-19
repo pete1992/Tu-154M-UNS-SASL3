@@ -1,32 +1,42 @@
--- RV-5  
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("external_view", globalPropertyi("sim/graphics/view/view_is_external"))
+-- rv5.lua
+-- RV-5 radio altimeter logic.
 
--- radio altitude
-defineProperty("altitude", globalPropertyf("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot"))  -- altitude, measured by gauge
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- controls
-defineProperty("dh_set", globalPropertyf("tu154/custom/gauges/alt/radioalt_dh_left"))  -- DH angle
-defineProperty("test_btn", globalPropertyf("tu154/custom/gauges/alt/radioalt_button_left"))  -- Test button
+defineProps({
+    -- Timing and radio altitude
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    -- { "external_view", "sim/graphics/view/view_is_external", globalPropertyi }, -- Unused: no view-dependent logic.
+    { "altitude", "sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot", globalPropertyf },
 
-defineProperty("rv_on", globalPropertyi("tu154/custom/switchers/ovhd/rv5_1_on"))  -- switcher
+    -- Controls and failure state; the right-side instance overrides these defaults.
+    { "dh_set", "tu154/custom/gauges/alt/radioalt_dh_left", globalPropertyf }, -- DH angle
+    { "test_btn", "tu154/custom/gauges/alt/radioalt_button_left", globalPropertyf },
+    { "rv_on", "tu154/custom/switchers/ovhd/rv5_1_on", globalPropertyi },
+    { "rv_fail", "tu154/custom/failures/rv1_fail", globalPropertyi },
 
-defineProperty("rv_fail", globalPropertyi("tu154/custom/failures/rv1_fail"))  -- fail
+    -- Electrical power
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
 
--- power
-defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("bus115_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-
--- results
-defineProperty("rv_angle", globalPropertyf("tu154/custom/gauges/alt/radioalt_needle_left"))  -- RV needle
-defineProperty("rv_flag", globalPropertyf("tu154/custom/gauges/alt/radioalt_flag_left"))  -- RV flag
-defineProperty("rv5_alt", globalPropertyf("tu154/custom/misc/rv5_alt_left"))  --    
-
-defineProperty("rv5_dh_signal", globalPropertyi("tu154/custom/misc/rv5_dh_signal_left"))
-
-defineProperty("rv_lamp", globalPropertyf("tu154/custom/lights/small/rv5_left_dh"))  -- RV lamp
-
-defineProperty("rv_", globalPropertyf("tu154/custom/elec/rv5_left_cc"))  -- Current consumption
+    -- Indications and current consumption
+    { "rv_angle", "tu154/custom/gauges/alt/radioalt_needle_left", globalPropertyf },
+    { "rv_flag", "tu154/custom/gauges/alt/radioalt_flag_left", globalPropertyf },
+    { "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf },
+    { "rv5_dh_signal", "tu154/custom/misc/rv5_dh_signal_left", globalPropertyi },
+    { "rv_lamp", "tu154/custom/lights/small/rv5_left_dh", globalPropertyf },
+    { "rv_", "tu154/custom/elec/rv5_left_cc", globalPropertyf },
+})
 
 local alt2angle = {
 {-100000, 0},

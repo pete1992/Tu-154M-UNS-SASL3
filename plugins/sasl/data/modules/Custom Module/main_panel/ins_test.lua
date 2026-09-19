@@ -1,16 +1,28 @@
--- this is a test logic for INS calculations..
+-- ins_test.lua
+-- Test logic for INS calculations.
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- world DataRefs
-defineProperty("groundspeed", globalPropertyf("sim/flightmodel/position/groundspeed")) -- groundspeed
-
-defineProperty("latitude", globalPropertyd("sim/flightmodel/position/latitude")) -- real latitude position
-defineProperty("longitude", globalPropertyd("sim/flightmodel/position/longitude")) -- The longitude of the aircraft
-defineProperty("elevation", globalPropertyd("sim/flightmodel/position/elevation")) -- The longitude of the aircraft
-
-defineProperty("true_course", globalPropertyf("sim/flightmodel/position/hpath")) -- true course, that aircraft moves to
+defineProps({
+    -- Time and aircraft motion
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf },
+    { "latitude", "sim/flightmodel/position/latitude", globalPropertyd },
+    { "longitude", "sim/flightmodel/position/longitude", globalPropertyd },
+    -- Unused by this component and its navigation helpers.
+    -- { "elevation", "sim/flightmodel/position/elevation", globalPropertyd },
+    { "true_course", "sim/flightmodel/position/hpath", globalPropertyf },
+})
 	
 include("nav_funcs.lua")
 

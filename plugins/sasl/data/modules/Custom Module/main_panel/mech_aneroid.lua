@@ -1,65 +1,68 @@
--- this is some aneroid-mechanic gauges logic.
+-- mech_aneroid.lua
+-- Mechanical airspeed, vertical-speed and pressure instruments.
 
--- sources
-defineProperty("vvi_L", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")) -- vertical speed in ft/min
-defineProperty("vvi_R", globalPropertyf("sim/cockpit2/gauges/indicators/vvi_fpm_copilot"))
-defineProperty("vvi_cab", globalPropertyf("sim/cockpit2/pressurization/indicators/cabin_vvi_fpm"))
--- get(vvi) * 0.00508 -- m/s
-defineProperty("ias_L", globalPropertyf("sim/cockpit2/gauges/indicators/airspeed_kts_pilot")) -- indicated airspeed in KTS
-defineProperty("ias_R", globalPropertyf("sim/cockpit2/gauges/indicators/airspeed_kts_copilot"))
--- get(ias) * 1.852 -- km/hr
-defineProperty("actual_cabin_alt", globalPropertyf("sim/cockpit2/pressurization/indicators/cabin_altitude_ft"))
-defineProperty("cabin_press_diff", globalPropertyf("sim/cockpit2/pressurization/indicators/pressure_diffential_psi"))
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- current altitude
-defineProperty("msl_alt", globalPropertyf("sim/flightmodel/position/elevation"))  -- phisical altitude MSL. meters
-defineProperty("msl_press", globalPropertyf("sim/weather/barometer_sealevel_inhg"))  -- pressire at sea level in.Hg
+defineProps({
+    -- Simulator gauge sources: vertical speed in ft/min, airspeed in knots.
+    { "vvi_L", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf },
+    { "vvi_R", "sim/cockpit2/gauges/indicators/vvi_fpm_copilot", globalPropertyf },
+    { "vvi_cab", "sim/cockpit2/pressurization/indicators/cabin_vvi_fpm", globalPropertyf },
+    { "ias_L", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf },
+    { "ias_R", "sim/cockpit2/gauges/indicators/airspeed_kts_copilot", globalPropertyf },
+    { "actual_cabin_alt", "sim/cockpit2/pressurization/indicators/cabin_altitude_ft", globalPropertyf },
+    { "cabin_press_diff", "sim/cockpit2/pressurization/indicators/pressure_diffential_psi", globalPropertyf },
 
--- failures
-defineProperty("static_fail_L", globalPropertyi("sim/operation/failures/rel_static"))  -- static fail
-defineProperty("static_fail_R", globalPropertyi("sim/operation/failures/rel_static2"))  -- static fail
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    -- Altitude and sea-level pressure
+    { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf }, -- Meters MSL
+    { "msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf }, -- inHg
 
--- caps
-defineProperty("sensors_caps", globalPropertyi("tu154/custom/anim/sensors_caps"))  --   
+    -- Static failures and timing
+    { "static_fail_L", "sim/operation/failures/rel_static", globalPropertyi },
+    { "static_fail_R", "sim/operation/failures/rel_static2", globalPropertyi },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    -- { "sensors_caps", "tu154/custom/anim/sensors_caps", globalPropertyi }, -- Unused: the old caps check is commented out.
 
--- gauges
-defineProperty("kus_ias_left", globalPropertyf("tu154/custom/gauges/speed/kus_ias_left")) --    730 
-defineProperty("kus_tas_left", globalPropertyf("tu154/custom/gauges/speed/kus_tas_left")) --    730 
+    -- Airspeed, vertical-speed and cabin gauge outputs
+    { "kus_ias_left", "tu154/custom/gauges/speed/kus_ias_left", globalPropertyf },
+    { "kus_tas_left", "tu154/custom/gauges/speed/kus_tas_left", globalPropertyf },
+    { "kus_ias_right", "tu154/custom/gauges/speed/kus_ias_right", globalPropertyf },
+    { "kus_tas_right", "tu154/custom/gauges/speed/kus_tas_right", globalPropertyf },
+    { "kus_ias_eng", "tu154/custom/gauges/speed/kus_ias_eng", globalPropertyf },
+    { "kus_tas_eng", "tu154/custom/gauges/speed/kus_tas_eng", globalPropertyf },
+    { "ias_left", "tu154/custom/gauges/speed/ias_left", globalPropertyf },
+    { "ias_right", "tu154/custom/gauges/speed/ias_right", globalPropertyf },
+    { "var75", "tu154/custom/gauges/alt/var75", globalPropertyf },
+    { "var30", "tu154/custom/gauges/alt/var30", globalPropertyf },
+    { "var30_cabin", "tu154/custom/gauges/airbleed/cabin_vvi", globalPropertyf },
+    { "cabin_diff", "tu154/custom/gauges/airbleed/cabin_diff", globalPropertyf },
+    { "cabin_alt", "tu154/custom/gauges/airbleed/cabin_alt", globalPropertyf },
 
-defineProperty("kus_ias_right", globalPropertyf("tu154/custom/gauges/speed/kus_ias_right")) --    730 2
-defineProperty("kus_tas_right", globalPropertyf("tu154/custom/gauges/speed/kus_tas_right")) --    730 2
+    -- Altimeter outputs and pressure settings; triangle pointers are not used here.
+    { "vd15_alt_left", "tu154/custom/gauges/alt/vd15_alt_left", globalPropertyf },
+    -- { "vd15_tri_needle_left", "tu154/custom/gauges/alt/vd15_tri_needle_left", globalPropertyf }, -- Unused in this component.
+    { "vd15_pressure_left", "tu154/custom/gauges/alt/vd15_pressure_left", globalPropertyf },
+    { "vd15_alt_right", "tu154/custom/gauges/alt/vd15_alt_right", globalPropertyf },
+    -- { "vd15_tri_needle_right", "tu154/custom/gauges/alt/vd15_tri_needle_right", globalPropertyf }, -- Unused in this component.
+    { "vd15_pressure_right", "tu154/custom/gauges/alt/vd15_pressure_right", globalPropertyf },
+    { "vd15_alt_eng", "tu154/custom/gauges/alt/vd15_alt_eng", globalPropertyf },
+    -- { "vd15_tri_needle_eng", "tu154/custom/gauges/alt/vd15_tri_needle_eng", globalPropertyf }, -- Unused in this component.
+    { "vd15_pressure_eng", "tu154/custom/gauges/alt/vd15_pressure_eng", globalPropertyf },
 
-defineProperty("kus_ias_eng", globalPropertyf("tu154/custom/gauges/speed/kus_ias_eng")) --    730 
-defineProperty("kus_tas_eng", globalPropertyf("tu154/custom/gauges/speed/kus_tas_eng")) --    730 
-
-defineProperty("ias_left", globalPropertyf("tu154/custom/gauges/speed/ias_left")) --   
-defineProperty("ias_right", globalPropertyf("tu154/custom/gauges/speed/ias_right")) --   2
-
-defineProperty("var75", globalPropertyf("tu154/custom/gauges/alt/var75")) --  75 
-defineProperty("var30", globalPropertyf("tu154/custom/gauges/alt/var30")) --  30 
-
-defineProperty("var30_cabin", globalPropertyf("tu154/custom/gauges/airbleed/cabin_vvi")) --  
-defineProperty("cabin_diff", globalPropertyf("tu154/custom/gauges/airbleed/cabin_diff")) --  
-defineProperty("cabin_alt", globalPropertyf("tu154/custom/gauges/airbleed/cabin_alt")) --   
-
--- altimeters
-defineProperty("vd15_alt_left", globalPropertyf("tu154/custom/gauges/alt/vd15_alt_left")) --   15 
-defineProperty("vd15_tri_needle_left", globalPropertyf("tu154/custom/gauges/alt/vd15_tri_needle_left")) --    15 
-defineProperty("vd15_pressure_left", globalPropertyf("tu154/custom/gauges/alt/vd15_pressure_left")) --   15 
-
-defineProperty("vd15_alt_right", globalPropertyf("tu154/custom/gauges/alt/vd15_alt_right")) --   15 2
-defineProperty("vd15_tri_needle_right", globalPropertyf("tu154/custom/gauges/alt/vd15_tri_needle_right")) --    15 2
-defineProperty("vd15_pressure_right", globalPropertyf("tu154/custom/gauges/alt/vd15_pressure_right")) --   15 2
-
-defineProperty("vd15_alt_eng", globalPropertyf("tu154/custom/gauges/alt/vd15_alt_eng")) --   15 
-defineProperty("vd15_tri_needle_eng", globalPropertyf("tu154/custom/gauges/alt/vd15_tri_needle_eng")) --    15 
-defineProperty("vd15_pressure_eng", globalPropertyf("tu154/custom/gauges/alt/vd15_pressure_eng")) --   15 
-
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- SmartCopilot authority
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Unused: output authority uses ismaster only.
+})
 
 local alt_kus_tbl = {{ -50000000, 0.5},    -- bugs workaround
 				  { 0, 1 },    -- on standard pressure zero level

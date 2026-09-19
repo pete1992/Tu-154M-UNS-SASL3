@@ -1,3 +1,4 @@
+-- km5.lua
 -- ============================================================================
 -- KM-5 (MK COURSE) INDICATOR LOGIC
 -- Refactor goals:
@@ -7,25 +8,30 @@
 -- - Keep all comments in English (line comments only)
 -- ============================================================================
 
------------------------------------------------------------------------
--- Smartcopilot
------------------------------------------------------------------------
-defineProperty("ismaster",    globalPropertyf("scp/api/ismaster"))   -- 0 = plugin not found, 1 = slave, 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- 1 = no control, 2 = has control
-
 -- ----------------------------------------------------------------------------
 -- Property binder
 -- ----------------------------------------------------------------------------
 local function defineProps(defs)
-	for _, d in ipairs(defs) do
-		defineProperty(d[1], d[3](d[2]))
-	end
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
 end
 
 -- ----------------------------------------------------------------------------
 -- Properties
 -- ----------------------------------------------------------------------------
 defineProps({
+	-- SmartCopilot
+	{ "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master
+	-- Unused: this instrument only checks the master/slave role.
+	-- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+
 	-- Inputs
 	{ "mag_psi", "sim/flightmodel/position/mag_psi", globalPropertyf },
 	{ "frame_time", "tu154/custom/time/frame_time", globalPropertyf },

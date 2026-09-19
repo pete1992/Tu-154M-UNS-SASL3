@@ -1,14 +1,28 @@
--- termometers
--- sources
-defineProperty("thermo", globalPropertyf("sim/cockpit2/temperature/outside_air_temp_degc")) -- outside temperature
+-- termo.lua
+-- Outside-air temperature indicator.
 
-defineProperty("bus27_volt_left", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right")) --   27
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- results
-defineProperty("thermo_outside", globalPropertyf("tu154/custom/gauges/misc/thermo_outside")) --   
+defineProps({
+    -- Temperature source, electrical supply and frame time
+    { "thermo", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf },
+    -- { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, -- Unused: this indicator uses the right bus only.
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+
+    -- Instrument output
+    { "thermo_outside", "tu154/custom/gauges/misc/thermo_outside", globalPropertyf },
+})
 
 local termENG_act = -55
 function update()

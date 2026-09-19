@@ -1,15 +1,32 @@
--- this is the ABSU indicators
+-- absu_indicator.lua
+-- ABSU control-position indicators.
 
--- sources
-defineProperty("absu_contr_pitch", globalPropertyf("tu154/custom/absu/contr_pitch")) --   56  
-defineProperty("absu_contr_roll", globalPropertyf("tu154/custom/absu/contr_roll")) --   56  
-defineProperty("absu_contr_yaw", globalPropertyf("tu154/custom/absu/contr_yaw")) --   56  
-defineProperty("int_pitch_trim", globalPropertyf("tu154/custom/trimmers/int_pitch_trim")) --    
-defineProperty("gear1_deflect", globalProperty("sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]"))  -- vertical deflection of front gear
--- results
-defineProperty("rudder_pos_ind", globalPropertyf("tu154/custom/gauges/misc/rudder_pos_ind")) --   
-defineProperty("aileron_pos_ind", globalPropertyf("tu154/custom/gauges/misc/aileron_pos_ind")) --   
-defineProperty("elevator_pos_ind", globalPropertyf("tu154/custom/gauges/misc/elevator_pos_ind")) --   
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
+
+defineProps({
+    -- Control inputs and nosewheel strut deflection
+    { "absu_contr_pitch", "tu154/custom/absu/contr_pitch", globalPropertyf },
+    { "absu_contr_roll", "tu154/custom/absu/contr_roll", globalPropertyf },
+    { "absu_contr_yaw", "tu154/custom/absu/contr_yaw", globalPropertyf },
+    { "int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf },
+    -- SASL array indices are 1-based: element 1 is native gear[0].
+    { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 1 },
+
+    -- Indicator outputs
+    { "rudder_pos_ind", "tu154/custom/gauges/misc/rudder_pos_ind", globalPropertyf },
+    { "aileron_pos_ind", "tu154/custom/gauges/misc/aileron_pos_ind", globalPropertyf },
+    { "elevator_pos_ind", "tu154/custom/gauges/misc/elevator_pos_ind", globalPropertyf },
+})
 
 function update()
 	set(rudder_pos_ind, get(absu_contr_yaw) / 0.4)

@@ -1,23 +1,37 @@
--- this is turn indicator
-defineProperty("turn", globalPropertyf("sim/cockpit2/gauges/indicators/turn_rate_heading_deg_pilot"))
-defineProperty("slip", globalPropertyf("sim/flightmodel/misc/slip"))
+-- eup53.lua
+-- Turn-and-slip indicator.
 
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- power
-defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-defineProperty("eup_on", globalPropertyi("tu154/custom/switchers/ovhd/eup_on"))
+defineProps({
+    -- Motion inputs and frame time
+    { "turn", "sim/cockpit2/gauges/indicators/turn_rate_heading_deg_pilot", globalPropertyf },
+    { "slip", "sim/flightmodel/misc/slip", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
 
--- fail
-defineProperty("eup_fail", globalPropertyi("sim/operation/failures/rel_ss_tsi"))
+    -- Power and failure state
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "eup_on", "tu154/custom/switchers/ovhd/eup_on", globalPropertyi },
+    { "eup_fail", "sim/operation/failures/rel_ss_tsi", globalPropertyi },
 
--- results
-defineProperty("slip_rate_ind", globalPropertyf("tu154/custom/gauges/misc/slip_rate_ind")) --  
-defineProperty("turn_rate_ind", globalPropertyf("tu154/custom/gauges/misc/turn_rate_ind")) --  
+    -- Instrument outputs
+    { "slip_rate_ind", "tu154/custom/gauges/misc/slip_rate_ind", globalPropertyf },
+    { "turn_rate_ind", "tu154/custom/gauges/misc/turn_rate_ind", globalPropertyf },
 
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- SmartCopilot authority: 0 = absent, 1 = slave, 2 = master
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Unused in this leaf component.
+})
 
 local slip_act = 0
 local turn_act = 0

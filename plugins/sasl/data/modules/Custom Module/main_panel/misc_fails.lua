@@ -1,52 +1,61 @@
--- all other systems fails
+-- misc_fails.lua
+-- Failure injection for miscellaneous aircraft systems.
 
--- custom fails
-defineProperty("diss_fail", globalPropertyi("tu154/custom/failures/diss_fail"))
-defineProperty("nvu_fail", globalPropertyi("tu154/custom/failures/nvu_fail"))
-defineProperty("radar_fail", globalPropertyi("tu154/custom/failures/radar_fail"))
-defineProperty("rsbn_fail", globalPropertyi("tu154/custom/failures/rsbn_fail"))
-defineProperty("taws_fail", globalPropertyi("tu154/custom/failures/taws_fail"))
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("acs1_fail", globalPropertyi("tu154/custom/failures/acs1_fail"))
-defineProperty("acs2_fail", globalPropertyi("tu154/custom/failures/acs2_fail"))
-defineProperty("acs3_fail", globalPropertyi("tu154/custom/failures/acs3_fail"))
+defineProps({
+    -- Aircraft failures
+    { "diss_fail", "tu154/custom/failures/diss_fail", globalPropertyi },
+    { "nvu_fail", "tu154/custom/failures/nvu_fail", globalPropertyi },
+    { "radar_fail", "tu154/custom/failures/radar_fail", globalPropertyi },
+    { "rsbn_fail", "tu154/custom/failures/rsbn_fail", globalPropertyi },
+    { "taws_fail", "tu154/custom/failures/taws_fail", globalPropertyi },
+    { "acs1_fail", "tu154/custom/failures/acs1_fail", globalPropertyi },
+    { "acs2_fail", "tu154/custom/failures/acs2_fail", globalPropertyi },
+    { "acs3_fail", "tu154/custom/failures/acs3_fail", globalPropertyi },
+    { "agr_fail", "tu154/custom/failures/agr_fail", globalPropertyi },
+    { "bkk_fail", "tu154/custom/failures/bkk_fail", globalPropertyi },
+    { "pitot1", "tu154/custom/failures/pitot1", globalPropertyi },
+    { "pitot2", "tu154/custom/failures/pitot2", globalPropertyi },
+    { "static1", "tu154/custom/failures/static1", globalPropertyi },
+    { "static2", "tu154/custom/failures/static2", globalPropertyi },
+    { "mgv_fail", "tu154/custom/failures/mgv_fail", globalPropertyi },
+    { "rv1_fail", "tu154/custom/failures/rv1_fail", globalPropertyi },
+    { "rv2_fail", "tu154/custom/failures/rv2_fail", globalPropertyi },
+    { "AOA", "tu154/custom/failures/AOA", globalPropertyi },
+    { "uvid15_fail", "tu154/custom/failures/uvid15_fail", globalPropertyi },
 
-defineProperty("agr_fail", globalPropertyi("tu154/custom/failures/agr_fail"))
-defineProperty("bkk_fail", globalPropertyi("tu154/custom/failures/bkk_fail"))
+    -- Simulator failures
+    { "rel_ss_alt", "sim/operation/failures/rel_ss_alt", globalPropertyi },
+    { "rel_cop_alt", "sim/operation/failures/rel_cop_alt", globalPropertyi },
+    { "rel_ss_tsi", "sim/operation/failures/rel_ss_tsi", globalPropertyi },
+    { "rel_adc_comp", "sim/operation/failures/rel_adc_comp", globalPropertyi },
+    { "rel_ss_ahz", "sim/operation/failures/rel_ss_ahz", globalPropertyi },
+    { "rel_cop_ahz", "sim/operation/failures/rel_cop_ahz", globalPropertyi },
+    { "rel_stall_warn", "sim/operation/failures/rel_stall_warn", globalPropertyi },
+    { "rel_ss_vvi", "sim/operation/failures/rel_ss_vvi", globalPropertyi },
+    { "rel_cop_vvi", "sim/operation/failures/rel_cop_vvi", globalPropertyi },
+    -- { "rel_bird_strike", "sim/operation/failures/rel_bird_strike", globalPropertyi },
 
-defineProperty("pitot1", globalPropertyi("tu154/custom/failures/pitot1"))
-defineProperty("pitot2", globalPropertyi("tu154/custom/failures/pitot2"))
-defineProperty("static1", globalPropertyi("tu154/custom/failures/static1"))
-defineProperty("static2", globalPropertyi("tu154/custom/failures/static2"))
+    -- Time and failure settings
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
 
-defineProperty("mgv_fail", globalPropertyi("tu154/custom/failures/mgv_fail"))
-defineProperty("rv1_fail", globalPropertyi("tu154/custom/failures/rv1_fail"))
-defineProperty("rv2_fail", globalPropertyi("tu154/custom/failures/rv2_fail"))
-defineProperty("AOA", globalPropertyi("tu154/custom/failures/AOA"))
-defineProperty("uvid15_fail", globalPropertyi("tu154/custom/failures/uvid15_fail"))
-
--- sim fails
-
-defineProperty("rel_ss_alt", globalPropertyi("sim/operation/failures/rel_ss_alt"))
-defineProperty("rel_cop_alt", globalPropertyi("sim/operation/failures/rel_cop_alt"))
-defineProperty("rel_ss_tsi", globalPropertyi("sim/operation/failures/rel_ss_tsi"))
-
-defineProperty("rel_adc_comp", globalPropertyi("sim/operation/failures/rel_adc_comp"))
-defineProperty("rel_ss_ahz", globalPropertyi("sim/operation/failures/rel_ss_ahz"))
-defineProperty("rel_cop_ahz", globalPropertyi("sim/operation/failures/rel_cop_ahz"))
-defineProperty("rel_stall_warn", globalPropertyi("sim/operation/failures/rel_stall_warn"))
-defineProperty("rel_ss_vvi", globalPropertyi("sim/operation/failures/rel_ss_vvi"))
-defineProperty("rel_cop_vvi", globalPropertyi("sim/operation/failures/rel_cop_vvi"))
-
---defineProperty("rel_bird_strike", globalPropertyi("sim/operation/failures/rel_bird_strike"))
-
--- define sources
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
-defineProperty("failures_enabled", globalPropertyi("tu154/custom/failures/failures_enabled"))
-
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- SmartCopilot: only the master injects failures.
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master
+    -- Unused: control ownership does not gate failure injection.
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
+})
 
 local fail_counter = 0
 local check_time = math.random(15, 30)

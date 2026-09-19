@@ -1,16 +1,28 @@
--- this is USVP gauge (true airspeed and groundspeed)
+-- usvp.lua
+-- USVP true-airspeed and groundspeed indicator.
 
--- sources
-defineProperty("tas_svs", globalPropertyf("tu154/custom/svs/true_airspeed")) -- TAS
-defineProperty("diss_groundspeed", globalPropertyf("tu154/custom/nvu/diss_groundspeed")) --    
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
--- controls
-defineProperty("speed_mid_flag", globalPropertyi("tu154/custom/gauges/speed/speed_mid_flag")) --      0 - , 1 - 
+defineProps({
+    -- Speed inputs and frame time
+    { "tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf },
+    { "diss_groundspeed", "tu154/custom/nvu/diss_groundspeed", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
 
--- result
-defineProperty("speed_mid_needle", globalPropertyf("tu154/custom/gauges/speed/speed_mid_needle")) --     
+    -- Source selector and instrument output
+    { "speed_mid_flag", "tu154/custom/gauges/speed/speed_mid_flag", globalPropertyi },
+    { "speed_mid_needle", "tu154/custom/gauges/speed/speed_mid_needle", globalPropertyf },
+})
 
 local speed_act = 0
 

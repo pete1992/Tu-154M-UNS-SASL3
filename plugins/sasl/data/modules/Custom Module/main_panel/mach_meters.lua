@@ -1,18 +1,32 @@
--- this is mach meters logic
+-- mach_meters.lua
+-- Captain and copilot Mach indicators.
 
--- source
-defineProperty("mach", globalPropertyf("sim/flightmodel/misc/machno")) -- Mach number
-defineProperty("mach_svs", globalPropertyf("tu154/custom/svs/machno")) -- Mach number
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("rel_pitot", globalPropertyi("sim/operation/failures/rel_pitot")) -- Pitot 1 - Blockage
-defineProperty("rel_pitot2", globalPropertyi("sim/operation/failures/rel_pitot2")) -- Pitot 2 - Blockage
+defineProps({
+    -- Mach sources and pitot failures
+    { "mach", "sim/flightmodel/misc/machno", globalPropertyf },
+    { "mach_svs", "tu154/custom/svs/machno", globalPropertyf },
+    -- { "rel_pitot", "sim/operation/failures/rel_pitot", globalPropertyi }, -- Unused: the captain's input is already supplied by SVS.
+    { "rel_pitot2", "sim/operation/failures/rel_pitot2", globalPropertyi },
 
--- time
-defineProperty("frame_time", globalPropertyf("tu154/custom/time/frame_time")) -- flight time
+    -- Timing
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
 
--- results
-defineProperty("mach_ind_left", globalPropertyf("tu154/custom/gauges/speed/mach_left")) --   
-defineProperty("mach_ind_right", globalPropertyf("tu154/custom/gauges/speed/mach_right")) --   2
+    -- Indicator outputs
+    { "mach_ind_left", "tu154/custom/gauges/speed/mach_left", globalPropertyf },
+    { "mach_ind_right", "tu154/custom/gauges/speed/mach_right", globalPropertyf },
+})
 
 local mach_ind_L = 0
 local mach_ind_R = 0

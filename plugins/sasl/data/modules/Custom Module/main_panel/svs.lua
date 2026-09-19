@@ -1,46 +1,56 @@
--- this is SVS logic
+-- svs.lua
+-- SVS air data system logic.
 
--- sources
-defineProperty("mach_sim", globalPropertyf("sim/flightmodel/misc/machno")) -- Mach number
+local function defineProps(defs)
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
+    end
+end
 
-defineProperty("msl_alt", globalPropertyf("sim/flightmodel/position/elevation"))  -- phisical altitude MSL. meters
-defineProperty("msl_press", globalPropertyf("sim/weather/barometer_sealevel_inhg"))  -- pressire at sea level in.Hg
+defineProps({
+    -- Simulator air data
+    { "mach_sim", "sim/flightmodel/misc/machno", globalPropertyf },
+    { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf }, -- Meters MSL
+    { "msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf }, -- Sea-level pressure in inHg
+    -- { "airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf }, -- Unused: TAS uses true_airspeed directly.
+    { "true_airspeed", "sim/flightmodel/position/true_airspeed", globalPropertyf }, -- Meters per second
 
-defineProperty("airspeed", globalPropertyf("sim/flightmodel/position/indicated_airspeed")) -- indicated airspeed in KTS
-defineProperty("true_airspeed", globalPropertyf("sim/flightmodel/position/true_airspeed")) -- indicated true airspeed in m/s
+    -- Controls
+    { "svs_contr", "tu154/custom/buttons/ovhd/svs_contr", globalPropertyi },
+    { "svs_on", "tu154/custom/switchers/ovhd/svs_on", globalPropertyi },
+    { "svs_heat", "tu154/custom/switchers/ovhd/svs_heat", globalPropertyi },
 
--- controls
-defineProperty("svs_contr", globalPropertyi("tu154/custom/buttons/ovhd/svs_contr")) --   
-defineProperty("svs_on", globalPropertyi("tu154/custom/switchers/ovhd/svs_on")) --  
-defineProperty("svs_heat", globalPropertyi("tu154/custom/switchers/ovhd/svs_heat")) --  
+    -- Failures
+    { "rel_pitot", "sim/operation/failures/rel_pitot", globalPropertyi },
+    { "rel_pitot2", "sim/operation/failures/rel_pitot2", globalPropertyi },
+    { "static_fail_L", "sim/operation/failures/rel_static", globalPropertyi },
+    { "static_fail_R", "sim/operation/failures/rel_static2", globalPropertyi },
+    { "svs_fail", "sim/operation/failures/rel_adc_comp", globalPropertyi },
 
--- failures
-defineProperty("rel_pitot", globalPropertyi("sim/operation/failures/rel_pitot")) -- Pitot 1 - Blockage
-defineProperty("rel_pitot2", globalPropertyi("sim/operation/failures/rel_pitot2")) -- Pitot 2 - Blockage
-defineProperty("static_fail_L", globalPropertyi("sim/operation/failures/rel_static"))  -- static fail
-defineProperty("static_fail_R", globalPropertyi("sim/operation/failures/rel_static2"))  -- static fail
-defineProperty("svs_fail", globalPropertyi("sim/operation/failures/rel_adc_comp"))  -- static fail
+    -- Indications
+    { "mach_svs", "tu154/custom/svs/machno", globalPropertyf },
+    { "alt_svs", "tu154/custom/svs/altitude", globalPropertyf }, -- Altitude at standard pressure
+    { "tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf },
 
--- results
-defineProperty("mach_svs", globalPropertyf("tu154/custom/svs/machno")) -- Mach number
-defineProperty("alt_svs", globalPropertyf("tu154/custom/svs/altitude")) -- Altitude by 1013 hpa
-defineProperty("tas_svs", globalPropertyf("tu154/custom/svs/true_airspeed")) -- TAS
+    -- Electrical power and current consumption
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus36_volt", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
+    { "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "svs27_cc", "tu154/custom/svs/power_27cc", globalPropertyf },
+    { "svs36_cc", "tu154/custom/svs/power_36cc", globalPropertyf },
+    { "svs115_cc", "tu154/custom/svs/power_115cc", globalPropertyf },
+    -- { "sensors_caps", "tu154/custom/anim/sensors_caps", globalPropertyi }, -- Unused: the old caps check is commented out.
 
--- power
-defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left")) --   27
-defineProperty("bus36_volt", globalPropertyf("tu154/custom/elec/bus36_volt_left")) --   36
-defineProperty("bus115_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt")) --    115
-
-defineProperty("svs27_cc", globalPropertyf("tu154/custom/svs/power_27cc")) --  
-defineProperty("svs36_cc", globalPropertyf("tu154/custom/svs/power_36cc")) --  
-defineProperty("svs115_cc", globalPropertyf("tu154/custom/svs/power_115cc")) --  
-
--- caps
-defineProperty("sensors_caps", globalPropertyi("tu154/custom/anim/sensors_caps"))  --   
-
--- Smart Copilot
-defineProperty("ismaster", globalPropertyf("scp/api/ismaster")) -- Master. 0 = plugin not found, 1 = slave 2 = master
-defineProperty("hascontrol_1", globalPropertyf("scp/api/hascontrol_1")) -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    -- SmartCopilot authority
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master
+    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Unused: output authority uses ismaster only.
+})
 
 --[[
 
