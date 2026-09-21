@@ -1,5 +1,11 @@
 state = {
     ['legacyPopups'] = {
+        ['absu_2d_panel'] = {
+            [1] = 253;
+            [2] = 1103;
+            [3] = 757.24140625;
+            [4] = 492.99140625;
+        };
         ['uphone'] = {
             [1] = 40;
             [2] = 357;
@@ -48,21 +54,40 @@ state = {
             [3] = 525.196875;
             [4] = 649.0640625;
         };
-        ['absu_2d_panel'] = {
-            [1] = 253;
-            [2] = 1103;
-            [3] = 757.24140625;
-            [4] = 492.99140625;
-        };
     };
     ['contextWindows'] = {
+        ['absu_2d_panel'] = {
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['position'] = {
+                [1] = -74;
+                [2] = 869;
+                [3] = 917;
+                [4] = 597;
+            };
+            ['visible'] = false;
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 917;
+                    [4] = 597;
+                };
+            };
+        };
         ['uphone'] = {
+            ['mode'] = {
+                [1] = 0;
+            };
             ['position'] = {
                 [1] = 40;
                 [2] = 20;
                 [3] = 241;
                 [4] = 446;
             };
+            ['visible'] = false;
             ['initState'] = {
                 ['visible'] = false;
                 ['position'] = {
@@ -72,22 +97,8 @@ state = {
                     [4] = 446;
                 };
             };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['visible'] = false;
         };
         ['camera_panel'] = {
-            ['visible'] = false;
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 512;
-                    [4] = 512;
-                };
-                ['visible'] = false;
-            };
             ['mode'] = {
                 [1] = 0;
             };
@@ -97,18 +108,18 @@ state = {
                 [3] = 512;
                 [4] = 512;
             };
-        };
-        ['palette'] = {
             ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
-                    [3] = 351.4;
-                    [4] = 427;
+                    [3] = 512;
+                    [4] = 512;
                 };
-                ['visible'] = false;
             };
+        };
+        ['palette'] = {
             ['mode'] = {
                 [1] = 0;
             };
@@ -118,18 +129,18 @@ state = {
                 [3] = 351;
                 [4] = 427;
             };
-        };
-        ['ovhd_2d_panel'] = {
             ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
-                    [2] = 0;
-                    [3] = 1458;
-                    [4] = 1013;
+                    [2] = 50;
+                    [3] = 351.4;
+                    [4] = 427;
                 };
-                ['visible'] = false;
             };
+        };
+        ['ovhd_2d_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
@@ -139,18 +150,18 @@ state = {
                 [3] = 1528;
                 [4] = 1061;
             };
-        };
-        ['payload_panel'] = {
             ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
-                    [2] = 50;
-                    [3] = 1024;
-                    [4] = 683;
+                    [2] = 0;
+                    [3] = 1458;
+                    [4] = 1013;
                 };
-                ['visible'] = false;
             };
+        };
+        ['payload_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
@@ -160,18 +171,18 @@ state = {
                 [3] = 1024;
                 [4] = 683;
             };
-        };
-        ['ground_srv_panel'] = {
             ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
-                    [3] = 655;
-                    [4] = 880;
+                    [3] = 1024;
+                    [4] = 683;
                 };
-                ['visible'] = false;
             };
+        };
+        ['ground_srv_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
@@ -181,18 +192,18 @@ state = {
                 [3] = 651;
                 [4] = 875;
             };
-        };
-        ['checklist_panel_2d'] = {
             ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
-                    [3] = 300;
-                    [4] = 1062.5;
+                    [3] = 655;
+                    [4] = 880;
                 };
-                ['visible'] = false;
             };
+        };
+        ['checklist_panel_2d'] = {
             ['mode'] = {
                 [1] = 0;
             };
@@ -202,18 +213,18 @@ state = {
                 [3] = 300;
                 [4] = 1062;
             };
-        };
-        ['nvu_2D_panel'] = {
             ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
-                    [2] = 0;
-                    [3] = 636;
-                    [4] = 786;
+                    [2] = 50;
+                    [3] = 300;
+                    [4] = 1062.5;
                 };
-                ['visible'] = false;
             };
+        };
+        ['nvu_2D_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
@@ -223,26 +234,15 @@ state = {
                 [3] = 636;
                 [4] = 786;
             };
-        };
-        ['absu_2d_panel'] = {
             ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
-                    [2] = 50;
-                    [3] = 917;
-                    [4] = 597;
+                    [2] = 0;
+                    [3] = 636;
+                    [4] = 786;
                 };
-                ['visible'] = false;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = -74;
-                [2] = 869;
-                [3] = 917;
-                [4] = 597;
             };
         };
     };

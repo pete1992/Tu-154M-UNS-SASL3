@@ -1,274 +1,1388 @@
-[TU154 INFO]: Initializing...
-[TU154 INFO]: [DISPLAY] Monitor 0: 0, 0, 2560, 1440
-[TU154 INFO]: Path to module: I:\X-Plane 12/Aircraft/Laminar Research/Tu-154M-UNS-SASL3/plugins/sasl/data/modules/main.lua
-[TU154 INFO]: Loading module...
-[TU154 INFO]: [LUA]: loading	module
-[TU154 INFO]: [LUA]: "module"	This is the Tu154M 2.0.9
-[TU154 INFO]: [LUA]: "module"	Lua version is	Lua 5.1
-[TU154 INFO]: [LUA]: loading	dataref_creator_1
-[TU154 INFO]: [LUA]: loading	dataref_creator_2
-[TU154 INFO]: [LUA]: loading	dataref_creator_3
-[TU154 INFO]: [LUA]: loading	dataref_creator_4
-[TU154 INFO]: [LUA]: loading	save_state
-[TU154 INFO]: [LUA]: loading	time_logic
-[TU154 INFO]: [LUA]: loading	aircraft_init
-[TU154 INFO]: [LUA]: loading	gps_source
-[TU154 INFO]: [LUA]: loading	flap_aero
-[TU154 INFO]: [LUA]: loading	main_panel
-[TU154 INFO]: [LUA]: loading	vers
-[TU154 INFO]: [LUA]: "vers"	Tu154 M UNS rewritten by pete1992 v2.0.9
-[TU154 INFO]: [LUA]: "vers"	based on the Tu-154 by Felis for X-Plane
-[TU154 INFO]: [LUA]: "vers"	and on the Community Edition
-[TU154 INFO]: [LUA]: loading	sc_controls
-[TU154 INFO]: [LUA]: loading	achs1
-[TU154 INFO]: [LUA]: loading	clock24
-[TU154 INFO]: [LUA]: loading	mech_aneroid
-[TU154 INFO]: [LUA]: loading	svs
-[TU154 INFO]: [LUA]: loading	termo
-[TU154 INFO]: [LUA]: loading	uvid_15fk
-[TU154 INFO]: [LUA]: loading	mach_meters
-[TU154 INFO]: [LUA]: loading	uap14
-[TU154 INFO]: [LUA]: loading	eup53
-[TU154 INFO]: [LUA]: loading	agr
-[TU154 INFO]: [LUA]: loading	pkp
-[TU154 INFO]: [LUA]: loading	mgv
-[TU154 INFO]: [LUA]: loading	bkk
-[TU154 INFO]: [LUA]: loading	vbe_altimeter
-[TU154 INFO]: [LUA]: loading	textureLit
-[TU154 INFO]: [LUA]: loading	needle
-[TU154 INFO]: [LUA]: loading	texture
-[TU154 INFO]: [LUA]: loading	digitstape
-[TU154 INFO]: [LUA]: loading	rectangle_ctr
-[TU154 INFO]: [LUA]: loading	rv5
-[TU154 INFO]: [LUA]: loading	msrp_clock
-[TU154 INFO]: [LUA]: loading	digitstapeLit
-[TU154 INFO]: [LUA]: loading	door_panel
-[TU154 INFO]: [LUA]: loading	tcas
-[TU154 INFO]: [LUA]: loading	tcas_panel
-[TU154 INFO]: [LUA]: loading	tcas_text
-[TU154 INFO]: [LUA]: loading	text_draw
-[TU154 INFO]: [LUA]: loading	rectangle
-[TU154 INFO]: [LUA]: loading	so72_panel
-[TU154 INFO]: [LUA]: loading	tcas_logic
-[TU154 INFO]: [LUA]: loading	tcas_draw
-[TU154 INFO]: [LUA]: loading	tcas_gau
-[TU154 INFO]: [LUA]: loading	fl_text
-[TU154 INFO]: [LUA]: loading	needleLit
-[TU154 INFO]: [LUA]: loading	taws
-[TU154 INFO]: [LUA]: loading	taws_panel
-[TU154 INFO]: [LUA]: loading	taws_logic
-[TU154 INFO]: [LUA]: loading	taws_warn_logic
-[TU154 INFO]: [LUA]: loading	taws_sound
-[TU154 INFO]: [LUA]: loading	scr_welcome
-[TU154 INFO]: [LUA]: loading	scr_map_top
-[TU154 INFO]: [LUA]: loading	draw_map
-[TU154 INFO]: [LUA]: loading	scr_map_side
-[TU154 INFO]: [LUA]: loading	side_draw
-[TU154 INFO]: [LUA]: loading	scr_clock
-[TU154 INFO]: [LUA]: loading	scr_clock_spd
-[TU154 INFO]: [LUA]: loading	scr_clock_sec
-[TU154 INFO]: [LUA]: loading	scr_clock_crs
-[TU154 INFO]: [LUA]: loading	scr_test
-[TU154 INFO]: [LUA]: loading	scr_game
-[TU154 INFO]: [LUA]: loading	taws_msg
-[TU154 INFO]: [LUA]: loading	tks
-[TU154 INFO]: [LUA]: loading	km5
-[TU154 INFO]: [LUA]: loading	gyro
-[TU154 INFO]: [LUA]: loading	ush3
-[TU154 INFO]: [LUA]: loading	bgmk
-[TU154 INFO]: [LUA]: loading	tks_panel
-[TU154 INFO]: [LUA]: loading	tks_fails
-[TU154 INFO]: [LUA]: loading	pnp
-[TU154 INFO]: [LUA]: loading	rmi
-[TU154 INFO]: [LUA]: loading	diss
-[TU154 INFO]: [LUA]: loading	diss_panel
-[TU154 INFO]: [LUA]: loading	diss_logic
-[TU154 INFO]: [LUA]: loading	usvp
-[TU154 INFO]: [LUA]: loading	rsbn
-[TU154 INFO]: [LUA]: loading	rsbn_panel
-[TU154 INFO]: [LUA]: loading	rsbn_logic
-[TU154 INFO]: [LUA]: including	nav_funcs.lua
-[TU154 INFO]: [LUA]: "rsbn_logic"	RSBN: rsbn.dat read OK, 215 beacons
-[TU154 INFO]: [LUA]: loading	radio
-[TU154 INFO]: [LUA]: loading	vhf
-[TU154 INFO]: [LUA]: loading	course_mp
-[TU154 INFO]: [LUA]: loading	ark15
-[TU154 INFO]: [LUA]: loading	dme
-[TU154 INFO]: [LUA]: loading	spu
-[TU154 INFO]: [LUA]: loading	mrp
-[TU154 INFO]: [LUA]: loading	radio_fails
-[TU154 INFO]: [LUA]: loading	nvu
-[TU154 INFO]: [LUA]: loading	nvu_logic
-[TU154 INFO]: [LUA]: loading	nvu_panel
-[TU154 INFO]: [LUA]: loading	absu
-[TU154 INFO]: [LUA]: loading	absu_commands
-[TU154 INFO]: [LUA]: loading	absu_panel
-[TU154 INFO]: [LUA]: loading	absu_ppn13
-[TU154 INFO]: [LUA]: loading	absu_mode
-[TU154 INFO]: [LUA]: loading	absu_controls
-[TU154 INFO]: [LUA]: loading	absu_at
-[TU154 INFO]: [LUA]: loading	absu_indicator
-[TU154 INFO]: [LUA]: loading	absu_fails
-[TU154 INFO]: [LUA]: loading	misc_lamps
-[TU154 INFO]: [LUA]: loading	arm406
-[TU154 INFO]: [LUA]: loading	radar
-[TU154 INFO]: [LUA]: loading	vent
-[TU154 INFO]: [LUA]: loading	water_panel
-[TU154 INFO]: [LUA]: loading	gns430
-[TU154 INFO]: [LUA]: loading	misc_fails
-[TU154 INFO]: [LUA]: loading	overhead
-[TU154 INFO]: [LUA]: loading	animation
-[TU154 INFO]: [LUA]: loading	ext_anim
-[TU154 INFO]: [LUA]: loading	rain_mask
-[TU154 INFO]: [LUA]: loading	asu
-[TU154 INFO]: [LUA]: loading	electric_system
-[TU154 INFO]: [LUA]: loading	battery_logic
-[TU154 INFO]: [LUA]: loading	generators_logic
-[TU154 INFO]: [LUA]: loading	current_counter
-[TU154 INFO]: [LUA]: loading	bus36_logic
-[TU154 INFO]: [LUA]: loading	bus27_logic
-[TU154 INFO]: [LUA]: loading	bus115_logic
-[TU154 INFO]: [LUA]: loading	gpu_logic
-[TU154 INFO]: [LUA]: loading	electric_fails
-[TU154 INFO]: [LUA]: loading	electric_panel
-[TU154 INFO]: [LUA]: loading	lights_system
-[TU154 INFO]: [LUA]: loading	light_commands
-[TU154 INFO]: [LUA]: loading	light_panel
-[TU154 INFO]: [LUA]: loading	cockpit_lights
-[TU154 INFO]: [LUA]: loading	ext_lights
-[TU154 INFO]: [LUA]: loading	light_fails
-[TU154 INFO]: [LUA]: loading	apu_system
-[TU154 INFO]: [LUA]: loading	apu_logic
-[TU154 INFO]: [LUA]: loading	apu_panel
-[TU154 INFO]: [LUA]: loading	apu_fails
-[TU154 INFO]: [LUA]: loading	engines_system
-[TU154 INFO]: [LUA]: loading	engines_panel
-[TU154 INFO]: [LUA]: loading	engine_gauges
-[TU154 INFO]: [LUA]: loading	rud_logic
-[TU154 INFO]: [LUA]: loading	vibration_logic
-[TU154 INFO]: [LUA]: loading	eng_fails
-[TU154 INFO]: [LUA]: loading	fuel_system
-[TU154 INFO]: [LUA]: loading	fuel_panel
-[TU154 INFO]: [LUA]: loading	fuel_tanks
-[TU154 INFO]: [LUA]: loading	fuel_pumps
-[TU154 INFO]: [LUA]: loading	fuel_engines
-[TU154 INFO]: [LUA]: loading	fuel_fails
-[TU154 INFO]: [LUA]: loading	hydro_system
-[TU154 INFO]: [LUA]: loading	hydro_panel
-[TU154 INFO]: [LUA]: loading	hydro_logic
-[TU154 INFO]: [LUA]: loading	hydro_fails
-[TU154 INFO]: [LUA]: loading	kskv
-[TU154 INFO]: [LUA]: loading	kskv_panel
-[TU154 INFO]: [LUA]: loading	kskv_bleed
-[TU154 INFO]: [LUA]: loading	kskv_cond
-[TU154 INFO]: [LUA]: loading	kskv_sard
-[TU154 INFO]: [LUA]: loading	kskv_fails
-[TU154 INFO]: [LUA]: loading	start_system
-[TU154 INFO]: [LUA]: loading	start_panel
-[TU154 INFO]: [LUA]: loading	start_logic
-[TU154 INFO]: [LUA]: loading	controls
-[TU154 INFO]: [LUA]: loading	controls_panel
-[TU154 INFO]: [LUA]: loading	flight_controls
-[TU154 INFO]: [LUA]: loading	trimmers
-[TU154 INFO]: [LUA]: loading	flaps
-[TU154 INFO]: [LUA]: loading	nosewheel
-[TU154 INFO]: [LUA]: loading	landing_gears
-[TU154 INFO]: [LUA]: loading	control_fails
-[TU154 INFO]: [LUA]: loading	stall
-[TU154 INFO]: [LUA]: loading	fire_system
-[TU154 INFO]: [LUA]: loading	fire_panel
-[TU154 INFO]: [LUA]: loading	fire_logic
-[TU154 INFO]: [LUA]: loading	antiice
-[TU154 INFO]: [LUA]: loading	antiice_panel
-[TU154 INFO]: [LUA]: loading	antiice_logic
-[TU154 INFO]: [LUA]: loading	antiice_fails
-[TU154 INFO]: [LUA]: loading	msrp
-[TU154 INFO]: [LUA]: loading	msrp_panel
-[TU154 INFO]: [LUA]: loading	msrp_logic
-[TU154 INFO]: [LUA]: loading	brake_system
-[TU154 INFO]: [LUA]: loading	sounds
-[TU154 INFO]: [LUA]: loading	cabin_sounds
-[TU154 INFO]: [LUA]: loading	engines_sound
-[TU154 INFO]: [LUA]: loading	crew_voices
-[TU154 INFO]: [LUA]: including	voice_tables.lua
-[TU154 INFO]: [LUA]: including	voice_func.lua
-[TU154 INFO]: [LUA]: including	voice_talk.lua
-[TU154 INFO]: [LUA]: including	chk_before_start.lua
-[TU154 INFO]: [LUA]: including	chk_before_taxi.lua
-[TU154 INFO]: [LUA]: including	chk_on_taxi.lua
-[TU154 INFO]: [LUA]: including	chk_before_lineup.lua
-[TU154 INFO]: [LUA]: including	chk_before_takeoff.lua
-[TU154 INFO]: [LUA]: including	chk_before_descend.lua
-[TU154 INFO]: [LUA]: including	chk_after_press_set.lua
-[TU154 INFO]: [LUA]: including	chk_before_base.lua
-[TU154 INFO]: [LUA]: including	chk_before_land.lua
-[TU154 INFO]: [LUA]: loading	panels_2d
-[TU154 INFO]: [LUA]: loading	palette_2d
-[TU154 INFO]: [LUA]: loading	interactive
-[TU154 INFO]: [LUA]: loading	load_panel
-[TU154 INFO]: [LUA]: including	fuel_tables.lua
-[TU154 INFO]: [LUA]: loading	rectangle_ctr_fuel
-[TU154 INFO]: [LUA]: loading	absu_panel_2d
-[TU154 INFO]: [LUA]: loading	switch_lit
-[TU154 INFO]: [LUA]: loading	free_texture_lit
-[TU154 INFO]: [LUA]: loading	tape_lit
-[TU154 INFO]: [LUA]: loading	overhead_2d
-[TU154 INFO]: [LUA]: loading	nvu_panel_2d
-[TU154 INFO]: [LUA]: loading	checklist_panel_2d
-[TU154 INFO]: [LUA]: loading	ground_panel
-[TU154 INFO]: [LUA]: loading	lever_hor
-[TU154 INFO]: [LUA]: loading	free_texture
-[TU154 INFO]: [LUA]: loading	camera
-[TU154 INFO]: [LUA]: loading	failures_2d
-[TU154 INFO]: [LUA]: loading	fail_runtime
-[TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.8122
-[TU154 INFO]: Module loaded
-[TU154 INFO]: Initializing modules...
-[TU154 INFO]: Modules initialization done
-[TU154 INFO]: [LUA]: "aircraft_init"	[Aircraft initialization] Engines-running controls applied
-[TU154 INFO]: [LUA]: "crew_voices"	PREPARE
-[TU154 INFO]: [LUA]: "save_state"	State restored: OK
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=FUEL_PRESSURE rpm=55.01 n2_raw=66.71 oil_psi=40.67 fuel_pressure=0 vibration=16.87 chips=0 fire=0 egt_C=188.34 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=FUEL_PRESSURE rpm=54.57 n2_raw=66.16 oil_psi=40.58 fuel_pressure=0 vibration=16.82 chips=0 fire=0 egt_C=194.86 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=CLEAR rpm=50.02 n2_raw=59.99 oil_psi=39.72 fuel_pressure=0 vibration=16.42 chips=0 fire=0 egt_C=67.54 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=CLEAR rpm=50.00 n2_raw=59.96 oil_psi=39.72 fuel_pressure=0 vibration=16.42 chips=0 fire=0 egt_C=69.73 reverse_transit=0
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=EGT rpm=20.33 n2_raw=23.27 oil_psi=30.52 fuel_pressure=1 vibration=10.28 chips=0 fire=0 egt_C=722.20 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=CLEAR rpm=36.53 n2_raw=43.28 oil_psi=36.34 fuel_pressure=1 vibration=15.16 chips=0 fire=0 egt_C=709.90 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=EGT rpm=20.35 n2_raw=23.28 oil_psi=30.52 fuel_pressure=1 vibration=10.28 chips=0 fire=0 egt_C=718.94 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=CLEAR rpm=36.55 n2_raw=43.32 oil_psi=36.35 fuel_pressure=1 vibration=15.16 chips=0 fire=0 egt_C=709.73 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=EGT rpm=20.31 n2_raw=23.24 oil_psi=30.51 fuel_pressure=1 vibration=10.26 chips=0 fire=0 egt_C=713.20 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=CLEAR rpm=36.57 n2_raw=43.34 oil_psi=36.35 fuel_pressure=1 vibration=15.16 chips=0 fire=0 egt_C=709.05 reverse_transit=0
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
-[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
-[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.264
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=2 delta=-0.172
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
-[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.2 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=2 delta=-0.490
-[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
-[TU154 INFO]: Disabling...
-[TU154 INFO]: [LUA]: "stall"	XP12 asymmetric stall supplement v4.4.0 released
-[TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended
-[TU154 INFO]: [LUA]: "flight_controls"	flight controls released
-[TU154 INFO]: [LUA]: "rud_logic"	throttles released
-[TU154 INFO]: [LUA]: "gns430"	GPS reset
-[TU154 INFO]: SASL plugin stopped...
+[B777 INFO]: Initializing...
+[B777 INFO]: Looking for preload scripts...
+[B777 INFO]: [LUA]: Splash screen created...
+[B777 INFO]: [DISPLAY] Main Screen Bounds: 0, 0, 2144, 1171
+[B777 INFO]: Path to module: D:\Work/X-Plane/Aircraft/boeing787777_main/modules/main.lua
+[B777 INFO]: Loading module...
+[B777 INFO]: [LUA]: loading	module
+[B777 INFO]: [LUA]: requesting	jitutils 
+[B777 INFO]: [LUA]: Enabling JIT compilation
+[B777 INFO]: [LUA]: including	redefines.lua
+[B777 INFO]: [LUA]: including	math.lib.lua
+[B777 INFO]: [LUA]: including	generalHelpers.lib.lua
+[B777 INFO]: [LUA]: requesting	model.lua 
+[B777 INFO]: [LUA]: XP Version.: 12431
+[B777 INFO]: [LUA]: requesting	mmPreload.lua 
+[B777 INFO]: [LUA]: Package Name: Developer_Package
+[B777 INFO]: [LUA]: Model version: 2.6.1 (20601, 020601)
+[B777 INFO]: [LUA]: Running on MS Windows
+[B777 INFO]: [LUA]: including	mm.lua
+[B777 INFO]: [LUA]: requesting	mmTelemetry.lua 
+[B777 INFO]: [LUA]: requesting	../submoduleHost.lib.lua 
+[B777 INFO]: [LUA]: requesting	mmInputState 
+[B777 INFO]: [LUA]: requesting	mmGlobalState 
+[B777 INFO]: [LUA]: requesting	mmOutputState 
+[B777 INFO]: [LUA]: including	mmCpp.lua
+[B777 INFO]: [LUA]: loading	welcomeWidget
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	contextWindow777787.lua 
+[B777 INFO]: [LUA]: loading	timeLogic
+[B777 INFO]: [LUA]: loading	fsAccess
+[B777 INFO]: [LUA]: requesting	xpFfi 
+[B777 DEBUG]: [LUA]: "sim/operation/failures/mean_time_between_failure_hrs": Casting float to int
+[B777 INFO]: [LUA]: requesting	exAnimNames 
+[B777 INFO]: [LUA]: requesting	serviceNames 
+[B777 INFO]: [LUA]: requesting	ckptAnimList 
+[B777 INFO]: [LUA]: requesting	ckptAnimCb 
+[B777 INFO]: [LUA]: requesting	tutorialNames 
+[B777 DEBUG]: [LUA]: "1-sim/ckpt/mask/anim": Casting float to int
+[B777 INFO]: [LUA]: requesting	lampList 
+[B777 INFO]: [LUA]: requesting	buttonList 
+[B777 INFO]: [LUA]: loading	tinyInfoWidget
+[B777 INFO]: [LUA]: requesting	replay.lib.lua 
+[B777 INFO]: [LUA]: loading	dynamics
+[B777 INFO]: [LUA]: requesting	dynamics/export.lua 
+[B777 INFO]: [LUA]: requesting	200ERGE 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/modules/../data/dynamics/B777/B772ER/GE90-90B/centroid.lua 
+[B777 INFO]: [LUA]: "dynamics"	Using dynamic model from 200ERGE
+[B777 INFO]: [LUA]: requesting	dynamics/testConfig.lua 
+[B777 INFO]: [LUA]: loading	bus629
+[B777 INFO]: [LUA]: requesting	radiosOnBus 
+[B777 INFO]: [LUA]: requesting	airDataOnBus 
+[B777 INFO]: [LUA]: requesting	terrWxrTcasOnBus 
+[B777 INFO]: [LUA]: requesting	sourceSelectSwitch 
+[B777 INFO]: [LUA]: requesting	radiosOnBus 
+[B777 INFO]: [LUA]: requesting	airDataOnBus 
+[B777 INFO]: [LUA]: loading	options
+[B777 INFO]: [LUA]: requesting	jitutils 
+[B777 INFO]: [LUA]: requesting	menu.lua 
+[B777 INFO]: [LUA]: loading	opt
+[B777 INFO]: [LUA]: loading	interaction
+[B777 INFO]: [LUA]: requesting	clicksystem 
+[B777 INFO]: [LUA]: requesting	clicksystemHelpers 
+[B777 INFO]: [LUA]: requesting	cockpitHelper 
+[B777 INFO]: [LUA]: requesting	replay.lib.lua 
+[B777 INFO]: [LUA]: loading	efb
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	contextWindow777787.lua 
+[B777 INFO]: [LUA]: requesting	shaders/displayShader.lua 
+[B777 INFO]: [LUA]: requesting	menu.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	frustum.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbKeyboard.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/system/efbSystemApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbBaseApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/amm/efbAmmApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbBaseApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/charts/efbChartsApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbBaseApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/efbPilotUtilitiesApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbBaseApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/docBrowser/efbDocApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbBaseApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/docBrowser/browserUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/efbOptApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbBaseApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/perf/landingDist.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/perf/grid.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/perf/landingField.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/perf/grid.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/perf/v1.lua 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/data/dynamics/B777/B772ER/GE90-90B//perfTables.lua 
+[B777 INFO]: [LUA]: requesting	efb/mainPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/system/pages/mainPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/system/pages/identPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/amm/amm.lua 
+[B777 INFO]: [LUA]: requesting	efb/amm/pages/ammMainPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/airportSearch.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/opt.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/takeOffPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/selectingEoProcedurePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/performanceWtAndBlPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/fastFuelPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/arptLandingSearchPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/arptTakeOffSearchPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/addArptPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/takeOffPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/nonNormalProcedurePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/landingEnroutePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/arptInfoPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/opt/pages/takeOffInfoPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/charts/charts.lua 
+[B777 INFO]: [LUA]: requesting	efb/charts/pages/chartsMainPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/airportSearch.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pilotUtilities.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/mainPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/lengthConversionPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/elements.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/keyboard.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/weightConversionPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/keyboard.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/speedConversionPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/keyboard.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/volumeConversionPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/keyboard.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/timerPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/keyboard.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/timeZoneConversionPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/keyboard.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/temperatureConversionPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/keyboard.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/pressurePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/keyboard.lua 
+[B777 INFO]: [LUA]: requesting	efb/pilotUtilities/pages/alarmPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/docBrowser/docBrowser.lua 
+[B777 INFO]: [LUA]: requesting	efb/docBrowser/pages/mainPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/docBrowser/browserUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/shortcutsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/simulationPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/generalPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/general2Page.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/graphicsEffectsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/soundPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/interactionPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/interactionPage2.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/foPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/foPage2.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/foPage3.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/foProceduresSetup.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/subtitlesPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/checklistPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/equipmentPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/avionicsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/efisPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/efisPage2.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/groundopsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/configsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/cabinconfigPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/cargoconfigPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/freightconfigPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/weightsummaryPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/paxloadPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/carloadPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/situationsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/autoSaveSituationsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/externalServicesPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/navigraphPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	simbrief/simbrief.lua 
+[B777 INFO]: [LUA]: requesting	xml/XmlParser 
+[B777 INFO]: [LUA]: requesting	xml/xmlhandler/tree 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/acarsCpdlcPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/briefingPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/flightPlanOverviewPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/icaoFlightPlanPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/navLogPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/notamsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/briefingWeatherPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/windsLogPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/weightOverviewPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/fuelOverviewPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/airplanePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/doorsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/servicePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/maintenancePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/processPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/toiletPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/hydraulicsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/gearPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/enginesElecPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/enginesPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/oxyPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/hatchPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/issuesPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/testsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/pushbackPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/cabinPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/cabinTempPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/cabinLightsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/mmelPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/mmel/mmelData.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/mmelInfoPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/commandsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/walkaroundPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/wbPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/simpleLoad.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/cgPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/paxconfigPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/fuelloadPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbUtils.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/tripfuelPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/loadPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/trainingPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/scenarioPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/attitudePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/windshearPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/tcasPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/interceptPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/generalFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/icingFailurePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/engineFailurePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/engineStartPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/groundFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/scenarios/failureScenariosPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/scenarios/editFailureScenariosPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/scenarios/createFailureScenariosPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/positionPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui 
+[B777 INFO]: [LUA]: requesting	gui/elements 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failurecontrolPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/engineFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/gearFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/fctlFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/elecFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/airFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/fuelFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/hydFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/fireiceFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/sensorFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/deiceFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/cbFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/autoflightFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/navSrcFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/commFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/warningFailuresPage.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/pages/failures/failuresGuiUtils.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/efbCustomApp.lua 
+[B777 INFO]: [LUA]: requesting	efb/efbBaseApp.lua 
+[B777 INFO]: [LUA]: requesting	simbrief/simbrief.lua 
+[B777 INFO]: [LUA]: requesting	efb/custom/mmel/mmelData.lua 
+[B777 INFO]: [LUA]: loading	gedw
+[B777 INFO]: [LUA]: loading	sensors
+[B777 INFO]: [LUA]: loading	service
+[B777 INFO]: [LUA]: requesting	menu 
+[B777 INFO]: [LUA]: loading	communication
+[B777 INFO]: [LUA]: loading	pushback
+[B777 INFO]: [LUA]: requesting	contextWindow777787.lua 
+[B777 INFO]: [LUA]: loading	fuelsystem
+[B777 INFO]: [LUA]: loading	electrical
+[B777 INFO]: [LUA]: requesting	electricalCore.lib.lua 
+[B777 INFO]: [LUA]: requesting	ckptAnimCb 
+[B777 INFO]: [LUA]: loading	fire
+[B777 INFO]: [LUA]: loading	apu
+[B777 INFO]: [LUA]: loading	engines
+[B777 INFO]: [LUA]: requesting	controllerN1 instance
+[B777 INFO]: [LUA]: requesting	controllerEPR instance
+[B777 INFO]: [LUA]: requesting	controllerN1 instance
+[B777 INFO]: [LUA]: requesting	controllerEPR instance
+[B777 INFO]: [LUA]: loading	efis
+[B777 INFO]: [LUA]: including	dataProvider.lib.lua
+[B777 INFO]: [LUA]: requesting	dataProviderPfdLib.lua 
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	bus629/fmcOnBus 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	tmcs/definitions 
+[B777 INFO]: [LUA]: requesting	dataProviderNdLib.lua 
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	dataProviderEicasLib.lua 
+[B777 INFO]: [LUA]: requesting	tmcs/definitions 
+[B777 INFO]: [LUA]: requesting	ckptAnimCb 
+[B777 INFO]: [LUA]: requesting	dataPreparationEfisLib.lua 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	efisControlPanel.lua 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	frustum.lua 
+[B777 INFO]: [LUA]: requesting	contextWindow777787.lua 
+[B777 INFO]: [LUA]: requesting	shaders/displayShader 
+[B777 INFO]: [LUA]: loading	eng
+[B777 INFO]: [LUA]: loading	stat
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	elec
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	hyd
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	fuel
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	air
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	door
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	gear
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	fctl
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	chkl
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/chkl/pages/mainPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/chkl/chklElements.lua 
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	efis/chkl/pages/chklDisplayPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/chkl/chklElements.lua 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	efis/chkl/pages/resetsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/chkl/chklElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/chkl/pages/nonNormalPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/chkl/pages/notesPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/chkl/chklElements.lua 
+[B777 INFO]: [LUA]: loading	comm
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/efisVarLib.lua 
+[B777 INFO]: [LUA]: requesting	bus629/fmcOnBus 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/altitudeRequestPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/routeRequestPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/newMessagesPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/speedRequestPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/clearanceRequestPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/whenCanWeExpectPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/emergencyReportPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/logonStatusPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/freeTextMessagePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/atcPages/positionReportPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/messageViewer.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/reviewPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/acarsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/adsPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/vhfPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/hfPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/satcomPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/automaticMessagePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/masterPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/printerPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/managerPages/systemInformationPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/reviewPages/atcDownlinkPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/reviewPages/atcUplinkPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/reviewPages/weatherPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/flightInfoPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/flightInfoPages/atisRequestPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/flightInfoPages/departureClearancePage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/flightInfoPages/twipRequestPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/pages/flightInfoPages/freeTextFltInfoPage.lua 
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: requesting	efis/cpdlc/cpdlcElements.lua 
+[B777 INFO]: [LUA]: loading	cam
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	pfd
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	tmcs/definitions 
+[B777 INFO]: [LUA]: loading	nd
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-modules/cpp-modules-mono/bundle/cpp-modules/navigation-modules/lua/NavModulesDefsFfi.lua 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-modules/cpp-modules-mono/bundle/cpp-modules/navigation-modules/lua/AfdsDefsFfi.lua 
+[B777 INFO]: [LUA]: loading	eicas
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: loading	mMain
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mAircond
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mApu
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mAir
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mIce
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mHyd
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mFctl
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mFlaps
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mGear
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mBrks
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mGpws
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mFire
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mWarn
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mFuel
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mFqty
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mEpcs
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mNavSrc
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mElec
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mCb
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mAudio
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mPref
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mProp
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mExcdL
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mExcdR
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mEmerLtBat
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	mSens
+[B777 INFO]: [LUA]: requesting	efisFuncLib 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	stdMaintGui instance
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	cpdlc
+[B777 INFO]: [LUA]: requesting	cpp-libs/stsff-acars/bundle/lua/acarsIo 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-acars/bundle/lua/AcarsFfi.lua 
+[B777 INFO]: [LUA]: loading	sound
+[B777 INFO]: [LUA]: requesting	replay.lib.lua 
+[B777 INFO]: [LUA]: requesting	replay.lib.lua 
+[B777 INFO]: [LUA]: requesting	raas 
+[B777 INFO]: [LUA]: requesting	sound_voices.lua 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/sounds/sound_voices_gen.lua 
+[B777 INFO]: [LUA]: requesting	soundMathHelpers.lua 
+[B777 INFO]: [LUA]: requesting	soundsystem.lua 
+[B777 INFO]: [LUA]: requesting	sound_scene_gen_200.lua 
+[B777 INFO]: [LUA]: requesting	sound_audio_panel 
+[B777 INFO]: [LUA]: requesting	sound_hf.lua 
+[B777 INFO]: [LUA]: requesting	sound_queue.lua 
+[B777 INFO]: [LUA]: requesting	sound_vhf.lua 
+[B777 INFO]: [LUA]: requesting	sound_space_calc.lua 
+[B777 INFO]: [LUA]: loading	debugger
+[B777 INFO]: [LUA]: loading	airsystem
+[B777 INFO]: [LUA]: loading	mask
+[B777 INFO]: [LUA]: loading	radar
+[B777 INFO]: [LUA]: requesting	cpp-libs/stsff-radar/bundle/lua/radarIo 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-radar/bundle/lua/ffiIo.lua 
+[B777 INFO]: [LUA]: requesting	radar/radarConf 
+[B777 INFO]: [LUA]: requesting	radar/wxrRadar1 
+[B777 INFO]: [LUA]: requesting	efisVarLib.lua 
+[B777 INFO]: [LUA]: requesting	radar/wxrRadar2 
+[B777 INFO]: [LUA]: requesting	efisVarLib.lua 
+[B777 INFO]: [LUA]: requesting	efisVarLib.lua 
+[B777 INFO]: [LUA]: loading	ice
+[B777 INFO]: [LUA]: requesting	deiceTruckLogic.lua 
+[B777 INFO]: [LUA]: loading	failures
+[B777 INFO]: [LUA]: loading	indicators
+[B777 INFO]: [LUA]: requesting	replay.lib.lua 
+[B777 INFO]: [LUA]: loading	flightcontrols
+[B777 INFO]: [LUA]: requesting	ace instance
+[B777 INFO]: [LUA]: requesting	ace instance
+[B777 INFO]: [LUA]: requesting	ace instance
+[B777 INFO]: [LUA]: requesting	ace instance
+[B777 INFO]: [LUA]: requesting	pfc 
+[B777 INFO]: [LUA]: loading	warning
+[B777 INFO]: [LUA]: requesting	inhibit 
+[B777 INFO]: [LUA]: loading	reflections
+[B777 INFO]: [LUA]: loading	checklist
+[B777 INFO]: [LUA]: requesting	checklist772.lua 
+[B777 INFO]: [LUA]: requesting	checklist.lib.lua 
+[B777 INFO]: [LUA]: requesting	AUTOMATIC FLIGHT 
+[B777 INFO]: [LUA]: requesting	FLIGHT MANAGEMENT NAVIGATION 
+[B777 INFO]: [LUA]: requesting	UNANNUNCIATED CHECKLISTS 
+[B777 INFO]: [LUA]: requesting	ANTI-ICE RAIN 
+[B777 INFO]: [LUA]: requesting	AIR SYSTEMS 
+[B777 INFO]: [LUA]: requesting	ELECTRICAL 
+[B777 INFO]: [LUA]: requesting	ENGINES, APU 
+[B777 INFO]: [LUA]: requesting	HYDRAULICS, RAT 
+[B777 INFO]: [LUA]: requesting	FLIGHT CONTROLS 
+[B777 INFO]: [LUA]: requesting	LANDING GEAR 
+[B777 INFO]: [LUA]: requesting	WARNING SYSTEM 
+[B777 INFO]: [LUA]: requesting	FIRE PROTECTION 
+[B777 INFO]: [LUA]: requesting	FUEL 
+[B777 INFO]: [LUA]: requesting	APLN GENL, EMER EQIP, DOORS, WINDOWS 
+[B777 INFO]: [LUA]: requesting	FLIGHT INSTRUMENTS, DISPLAYS 
+[B777 INFO]: [LUA]: requesting	COMMUNICATIONS, DATALINK 
+[B777 INFO]: [LUA]: requesting	AMPLIFIED 
+[B777 INFO]: [LUA]: requesting	SUPPLEMENTARY 
+[B777 INFO]: [LUA]: requesting	EMERGENCY 
+[B777 INFO]: [LUA]: loading	stbyInst
+[B777 INFO]: [LUA]: requesting	stbyInstData.lua 
+[B777 INFO]: [LUA]: requesting	stbyInstVariables 
+[B777 INFO]: [LUA]: requesting	stbyInstFuncLib 
+[B777 INFO]: [LUA]: requesting	stbyInstVariables 
+[B777 INFO]: [LUA]: requesting	frustum.lua 
+[B777 INFO]: [LUA]: requesting	shaders/displayShader 
+[B777 INFO]: [LUA]: requesting	contextWindow777787.lua 
+[B777 INFO]: [LUA]: requesting	attitudeIndicator.lua 
+[B777 INFO]: [LUA]: requesting	stbyInstVariables 
+[B777 INFO]: [LUA]: requesting	speedIndicator.lua 
+[B777 INFO]: [LUA]: requesting	stbyInstVariables 
+[B777 INFO]: [LUA]: requesting	stbyInstFuncLib 
+[B777 INFO]: [LUA]: requesting	standbyAltimeter.lua 
+[B777 INFO]: [LUA]: requesting	stbyInstVariables 
+[B777 INFO]: [LUA]: requesting	stbyInstFuncLib 
+[B777 INFO]: [LUA]: requesting	isfd.lua 
+[B777 INFO]: [LUA]: requesting	stbyInstVariables 
+[B777 INFO]: [LUA]: requesting	stbyInstFuncLib 
+[B777 INFO]: [LUA]: requesting	trimIndicators.lua 
+[B777 INFO]: [LUA]: requesting	stbyInstVariables 
+[B777 INFO]: [LUA]: requesting	clock 
+[B777 INFO]: [LUA]: requesting	stbyInstVariables 
+[B777 INFO]: [LUA]: requesting	stbyInstFuncLib 
+[B777 INFO]: [LUA]: loading	cduModule
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cdu 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduRenderer 
+[B777 INFO]: [LUA]: requesting	cduInput 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	frustum.lua 
+[B777 INFO]: [LUA]: requesting	shaders/displayShader 
+[B777 INFO]: [LUA]: requesting	shaders/displayShader 
+[B777 INFO]: [LUA]: requesting	contextWindow777787.lua 
+[B777 INFO]: [LUA]: loading	hydraulics
+[B777 INFO]: [LUA]: loading	animations
+[B777 INFO]: [LUA]: requesting	replay.lib.lua 
+[B777 INFO]: [LUA]: requesting	frustum.lua 
+[B777 INFO]: [LUA]: loading	ground
+[B777 INFO]: [LUA]: loading	gearsystem
+[B777 INFO]: [LUA]: loading	mcp
+[B777 INFO]: [LUA]: requesting	contextWindow777787.lua 
+[B777 INFO]: [LUA]: loading	crew
+[B777 INFO]: [LUA]: requesting	menu 
+[B777 INFO]: [LUA]: requesting	procedureStateMachine 
+[B777 INFO]: [LUA]: loading	lights
+[B777 INFO]: [LUA]: requesting	replay.lib.lua 
+[B777 INFO]: [LUA]: loading	foPanel
+[B777 INFO]: [LUA]: requesting	stsff-gui/stsff-gui.lua 
+[B777 INFO]: [LUA]: requesting	gui/elements.lua 
+[B777 INFO]: [LUA]: loading	loadsheet
+[B777 INFO]: [LUA]: loading	audioPanels
+[B777 INFO]: [LUA]: loading	subtitles
+[B777 INFO]: [LUA]: requesting	contextWindow777787.lua 
+[B777 INFO]: [LUA]: loading	infoWindow
+[B777 INFO]: [LUA]: loading	voiceRecognition
+[B777 INFO]: [LUA]: loading	scenarios
+[B777 INFO]: [LUA]: loading	radioAltimeter
+[B777 INFO]: [LUA]: loading	radios
+[B777 INFO]: [LUA]: requesting	radioControlPanel 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	radioTransceiver 
+[B777 INFO]: [LUA]: requesting	radioReceiver 
+[B777 INFO]: [LUA]: loading	transponder
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	cpp-libs/stsff-tcas/bundle/lua/tcasIo 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-tcas/bundle/lua/TcasFfi.lua 
+[B777 INFO]: [LUA]: loading	miscDevices
+[B777 INFO]: [LUA]: loading	supernumeraryControlPanel
+[B777 INFO]: [LUA]: loading	tmcs
+[B777 INFO]: [LUA]: requesting	tmcs/definitions 
+[B777 INFO]: [LUA]: requesting	tmcs/atPart 
+[B777 INFO]: [LUA]: requesting	tmcs/definitions 
+[B777 INFO]: [LUA]: requesting	tmcs/asm 
+[B777 INFO]: [LUA]: loading	monitors
+[B777 INFO]: [LUA]: loading	raas
+[B777 INFO]: [LUA]: loading	airports
+[B777 INFO]: [LUA]: loading	ndbl
+[B777 INFO]: [LUA]: requesting	cpp-libs/stsff-ndbl-lua/bundle/lua/ndblLuaIo 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-ndbl-lua/bundle/lua/ndblLuaFfi.lua 
+[B777 INFO]: [LUA]: loading	extRender
+[B777 INFO]: [LUA]: loading	navigraph
+[B777 INFO]: [LUA]: requesting	json 
+[B777 INFO]: [LUA]: loading	thirdParty
+[B777 INFO]: [LUA]: loading	satcom
+[B777 INFO]: [LUA]: loading	autosave
+[B777 INFO]: [LUA]: loading	aiAircraft
+[B777 INFO]: [LUA]: requesting	replay.lib.lua 
+[B777 INFO]: [LUA]: loading	miscTraining
+[B777 INFO]: [LUA]: loading	remoteDevices
+[B777 INFO]: [LUA]: requesting	cpp-libs/stsff-remote-devices/bundle/lua/remoteDevicesIo 
+[B777 INFO]: [LUA]: requesting	D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-remote-devices/bundle/lua/RemoteDevicesFfi.lua 
+[B777 INFO]: [LUA]: onLoadCPP ==================================================================================== onLoadCPP
+[B777 INFO]: [LUA]: [MM]:	"navigation-modules.win_cmdls"	loaded library with C++ modules
+[B777 INFO]: [LUA]: [MM]:	"gps"	loaded CPP module from <navigation-modules.win_cmdls>
+[B777 INFO]: [LUA]: [MM]:	"adirs"	loaded CPP module from <navigation-modules.win_cmdls>
+[B777 INFO]: [LUA]: [MM]:	"BoeingFmc"	loaded CPP module from <navigation-modules.win_cmdls>
+[B777 INFO]: [LUA]: [MM]:	"afds"	loaded CPP module from <navigation-modules.win_cmdls>
+[B777 INFO]: [LUA]: onConstructCPP ==================================================================================== onConstructCPP
+[B777 INFO]: [LUA]: [MM]:	"gps"	constructed
+[B777 INFO]: [LUA]: [MM]:	"adirs"	constructed
+[B777 INFO]: [LUA]: [MM]:	"BoeingFmc"	constructed
+[B777 INFO]: [LUA]: [MM]:	"afds"	constructed
+[B777 INFO]: [LUA]: Available states: default, last
+[B777 INFO]: Scripts loading time: 4.2307
+[B777 INFO]: Module loaded
+[B777 INFO]: [LUA]: onSceneryLoaded ==================================================================================== onSceneryLoaded
+[B777 INFO]: [LUA]: onAirportLoaded ==================================================================================== onAirportLoaded
+[B777 INFO]: [LUA]: "fsAccess"	onAirportLoad
+[B777 INFO]: [LUA]: "fsAccess"	flight index: 	1
+[B777 INFO]: GlGraphics2D: OpenGL Zink driver detected
+[B777 INFO]: Initializing modules...
+[B777 INFO]: Modules initialization done
+[B777 INFO]: [LUA]: Init modules with the state: default
+[B777 INFO]: [LUA]: onLoadDataForState [default] ==================================================================================== onLoadDataForState [default]
+[B777 INFO]: [LUA]: onInit1 ==================================================================================== onInit1
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: Telemetry: false
+[B777 INFO]: [LUA]: including	airsystem/pressurization.lua
+[B777 INFO]: [LUA]: "airsystem > pressurization"	PRESSURIZATION found module iO
+[B777 INFO]: [LUA]: "airsystem > pressurization"	PRESSURIZATION onInit1
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: "airports"	Loading library: D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-airports/bundle/stsff-airports.dll
+[B777 INFO]: [LUA]: "navigraph"	Loading library: D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-navigraph/bundle/stsff-navigraph.dll
+[B777 INFO]: [LUA]: onInit2 ==================================================================================== onInit2
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 DEBUG]: [LUA]: reading cockpit helper file D:\Work/X-Plane/Aircraft/boeing787777_main/data/777cockpit.inf
+[B777 INFO]: [LUA]: requesting	interaction/clickzonelist.lua 
+[B777 INFO]: [LUA]: requesting	interaction/clickzoneShortcuts.lua 
+[B777 DEBUG]: [LUA]: Click-zones initialized 1
+[B777 DEBUG]: [LUA]: reverseLevers zone has no animation
+[B777 DEBUG]: [LUA]: windowHandleLeftFake zone has no animation
+[B777 DEBUG]: [LUA]: windowHandleRightFake zone has no animation
+[B777 DEBUG]: [LUA]: synchFoMins zone has no animation
+[B777 DEBUG]: [LUA]: synchFoBaro zone has no animation
+[B777 DEBUG]: [LUA]: synchCptBaro zone has no animation
+[B777 DEBUG]: [LUA]: printerCut zone has no animation
+[B777 DEBUG]: [LUA]: hatchGPU zone has no animation
+[B777 DEBUG]: [LUA]: cargoControlFwd zone has no animation
+[B777 DEBUG]: [LUA]: cargoHandlingFwd zone has no animation
+[B777 DEBUG]: [LUA]: waterFwd zone has no animation
+[B777 DEBUG]: [LUA]: condAirR zone has no animation
+[B777 DEBUG]: [LUA]: condAirL zone has no animation
+[B777 DEBUG]: [LUA]: pneumatic zone has no animation
+[B777 DEBUG]: [LUA]: refuelL zone has no animation
+[B777 DEBUG]: [LUA]: refuelR zone has no animation
+[B777 DEBUG]: [LUA]: hydraulic zone has no animation
+[B777 DEBUG]: [LUA]: cargoControlAft zone has no animation
+[B777 DEBUG]: [LUA]: cargoHandlingAft zone has no animation
+[B777 DEBUG]: [LUA]: waterAft zone has no animation
+[B777 DEBUG]: [LUA]: hatchGearsProc zone has no animation
+[B777 DEBUG]: [LUA]: lavatory zone has no animation
+[B777 DEBUG]: [LUA]: groundGear zone has no animation
+[B777 DEBUG]: [LUA]: fwdCarDoorManual zone has no animation
+[B777 DEBUG]: [LUA]: gearDoorManualRelease zone has no animation
+[B777 DEBUG]: [LUA]: aftCarDoorManual zone has no animation
+[B777 DEBUG]: [LUA]: cup1 zone has no animation
+[B777 DEBUG]: [LUA]: cup2 zone has no animation
+[B777 DEBUG]: [LUA]: cup3 zone has no animation
+[B777 DEBUG]: [LUA]: toilet10 zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleL1 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleL1 zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleR1 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleR1 zone has no animation
+[B777 DEBUG]: [LUA]: toilet9 zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleL2 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleL2 zone has no animation
+[B777 DEBUG]: [LUA]: toilet8 zone has no animation
+[B777 DEBUG]: [LUA]: toilet6 zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleR2 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleR2 zone has no animation
+[B777 DEBUG]: [LUA]: toilet5 zone has no animation
+[B777 DEBUG]: [LUA]: toilet4 zone has no animation
+[B777 DEBUG]: [LUA]: synchCptMins zone has no animation
+[B777 DEBUG]: [LUA]: toilet7 zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleL4 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleL4 zone has no animation
+[B777 DEBUG]: [LUA]: crewrest zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleR4 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleR4 zone has no animation
+[B777 DEBUG]: [LUA]: toilet3 zone has no animation
+[B777 DEBUG]: [LUA]: toilet1 zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleL5 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleL5 zone has no animation
+[B777 DEBUG]: [LUA]: toilet2 zone has no animation
+[B777 DEBUG]: [LUA]: toilet11 zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleR5 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleR5 zone has no animation
+[B777 DEBUG]: [LUA]: windowHandleRightShortFake zone has no animation
+[B777 DEBUG]: [LUA]: windowHandleLeftShortFake zone has no animation
+[B777 DEBUG]: [LUA]: hatchTankR zone has no animation
+[B777 DEBUG]: [LUA]: hatchTankL zone has no animation
+[B777 DEBUG]: [LUA]: hatchAPU zone has no animation
+[B777 DEBUG]: [LUA]: loadsheet2 zone has no animation
+[B777 DEBUG]: [LUA]: loadsheet1 zone has no animation
+[B777 DEBUG]: [LUA]: penVirtual zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush10 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush9 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush8 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush7 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush1 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush2 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush4 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush5 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush6 zone has no animation
+[B777 DEBUG]: [LUA]: handky zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlushF zone has no animation
+[B777 DEBUG]: [LUA]: toiletF zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleL3 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleL3 zone has no animation
+[B777 DEBUG]: [LUA]: doorArmHandleR3 zone has no animation
+[B777 DEBUG]: [LUA]: doorHandleR3 zone has no animation
+[B777 DEBUG]: [LUA]: toilet12 zone has no animation
+[B777 DEBUG]: [LUA]: toilet13 zone has no animation
+[B777 DEBUG]: [LUA]: toilet14 zone has no animation
+[B777 DEBUG]: [LUA]: toilet15 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush12 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush13 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush14 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush15 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush11 zone has no animation
+[B777 DEBUG]: [LUA]: toiletFlush3 zone has no animation
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: "airsystem > pressurization"	PRESSURIZATION onInit2
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: "voiceRecognition"	Initializing voice recognition library...
+[B777 INFO]: [LUA]: "voiceRecognition"	Voice recognition library can't be initialized: 	Can't create ALC device
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: onInit3 ==================================================================================== onInit3
+[B777 INFO]: [LUA]: loading	rectangle
+[B777 INFO]: [LUA]: loading	interactive
+[B777 INFO]: [LUA]: "engines"	starting with engines running
+[B777 INFO]: [LUA]: requesting	cpp-modules/navigation-modules/lua/navModulesFfiIo 
+[B777 INFO]: [LUA]: "remoteDevices"	Registered remote device cptOutbd at http://127.0.0.1:18390/device/cptOutbd
+[B777 INFO]: [LUA]: "remoteDevices"	Registered remote device cptInbd at http://127.0.0.1:18390/device/cptInbd
+[B777 INFO]: [LUA]: "remoteDevices"	Registered remote device cUpr at http://127.0.0.1:18390/device/cUpr
+[B777 INFO]: [LUA]: "remoteDevices"	Registered remote device cLwr at http://127.0.0.1:18390/device/cLwr
+[B777 INFO]: [LUA]: "remoteDevices"	Registered remote device foInbd at http://127.0.0.1:18390/device/foInbd
+[B777 INFO]: [LUA]: "remoteDevices"	Registered remote device foOutbd at http://127.0.0.1:18390/device/foOutbd
+[B777 INFO]: [LUA]: "airsystem > pressurization"	PRESSURIZATION onInit3
+[B777 DEBUG]: [LUA]: isfd:	loading Default isRunning state:	default
+[B777 INFO]: [LUA]: requesting	cduModule/pages/mainPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/testPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/navRadPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/efisControlPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	efisVarLib 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/efisOptionsPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/dspModesPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/dspSynopticsPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/fmcPages 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduModule/cduFailures 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/mainPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/testPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/navRadPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/efisControlPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/efisOptionsPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/dspModesPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/dspSynopticsPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/fmcPages 
+[B777 INFO]: [LUA]: requesting	cduModule/cduFailures 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/mainPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/testPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/navRadPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/efisControlPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/efisOptionsPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/dspModesPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/dspSynopticsPage 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/fmcPages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/interphonePage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/directoryPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/paPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/purserPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/gndPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/ppaPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/doorsPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/doorsGndPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/loadPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/gndloadPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/masterPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/pages/loadCargoPage 
+[B777 INFO]: [LUA]: requesting	cduUtils 
+[B777 INFO]: [LUA]: requesting	cduMessages 
+[B777 INFO]: [LUA]: requesting	cduModule/cduFailures 
+[B777 INFO]: [LUA]: requesting	cduModule/remote/ws_server instance
+[B777 INFO]: [LUA]: requesting	sha1 
+[B777 INFO]: [LUA]: requesting	json 
+[B777 INFO]: [LUA]: WebSocket server started on port 18387
+[B777 INFO]: [LUA]: requesting	cduModule/remote/ws_server instance
+[B777 INFO]: [LUA]: requesting	sha1 
+[B777 INFO]: [LUA]: requesting	json 
+[B777 INFO]: [LUA]: WebSocket server started on port 18388
+[B777 INFO]: [LUA]: requesting	cduModule/remote/ws_server instance
+[B777 INFO]: [LUA]: requesting	sha1 
+[B777 INFO]: [LUA]: requesting	json 
+[B777 INFO]: [LUA]: WebSocket server started on port 18389
+[B777 INFO]: [LUA]: AT[	2	]: Mode has been set to:	ARMED
+[B777 INFO]: [LUA]: AT[	2	]: ^^^ Reason:	AT: on loading to default
+[B777 INFO]: [LUA]: onInit4 ==================================================================================== onInit4
+[B777 INFO]: [LUA]: "options"	interaction	tooltipOption	3
+[B777 INFO]: [LUA]: "options"	interaction	tooltipBackground	2
+[B777 INFO]: [LUA]: "remoteDevices"	Registered remote device EFB 1 at http://127.0.0.1:18390/device/efb-1
+[B777 INFO]: [LUA]: "remoteDevices"	Registered remote device EFB 2 at http://127.0.0.1:18390/device/efb-2
+[B777 DEBUG]: [LUA]: Left CDU: Cdu ScratchPad was cleared.
+[B777 DEBUG]: [LUA]: Left CDU: Active page is set to: MAIN
+[B777 DEBUG]: [LUA]: Left CDU: Reset has been performed
+[B777 DEBUG]: [LUA]: Right CDU: Cdu ScratchPad was cleared.
+[B777 DEBUG]: [LUA]: Right CDU: Active page is set to: MAIN
+[B777 DEBUG]: [LUA]: Right CDU: Reset has been performed
+[B777 DEBUG]: [LUA]: Center CDU: Cdu ScratchPad was cleared.
+[B777 DEBUG]: [LUA]: Center CDU: Active page is set to: MAIN
+[B777 DEBUG]: [LUA]: Center CDU: Reset has been performed
+[B777 INFO]: [LUA]: onInit5 ==================================================================================== onInit5
+[B777 INFO]: [LUA]: "airsystem > pressurization"	PRESSURIZATION onInit5
+[B777 INFO]: [LUA]: onFinalInit ==================================================================================== onFinalInit
+[B777 INFO]: [LUA]: onDrawStart ==================================================================================== onDrawStart
+[B777 INFO]: [LUA]: onUpdateStart ==================================================================================== onUpdateStart
+[B777 INFO]: [LUA]: [SOUND]: --------------------------------------------
+[B777 INFO]: [LUA]: [SOUND]: GE90 XX XP12 remap table selected
+[B777 INFO]: [LUA]: [SOUND]: N2 remap is created
+[B777 INFO]: [LUA]: [SOUND]: idle n2 remap: 	69.998631494411	->	70
+[B777 INFO]: [LUA]: [SOUND]: n2 remapped range: 	42	-	75
+[B777 INFO]: [LUA]: [SOUND]: --------------------------------------------
+[B777 INFO]: [LUA]: PRESSURIZATION: POWERDOWN: no pressure
+[B777 INFO]: [LUA]: "airsystem > pressurization"	PRESSURIZATION update
+[B777 INFO]: [LUA]: TEST
+[B777 INFO]: [LUA]: AT[	2	]: set at arm switch {side, state}:	2	true
+[B777 INFO]: [LUA]: AT[	2	]: set at arm switch {side, state}:	1	true
+[B777 INFO]: [LUA]: "navigraph"	Subscription to Navigraph Charts is active: true
+[B777 INFO]: [LUA]: "cpdlc"	ACARS: 2232z | VHF RADIO NORMAL | -1 -1 -1 0 -1 -1 | 0
+[B777 INFO]: [LUA]: "cpdlc"	ACARS: 2232z | NO VHF LINK | 0 -1 -1 0 -1 -1 | 0
+[B777 INFO]: [LUA]: "cpdlc"	ACARS: 2232z | SATCOM NORMAL | 0 -1 -1 0 0 -1 | 0
+[B777 INFO]: [LUA]: "cpdlc"	ACARS: 2232z | SATCOM LINK ESTABLISHED | 0 1 -1 0 0 -1 | 2
+[B777 INFO]: [LUA]: "cpdlc"	ACARS: 2232z | ACARS SATCOM MODE | 0 1 -1 0 0 -1 | 2
+[B777 INFO]: [LUA]: "cpdlc"	ACARS: 2232z | ACARS LINK ESTABLISHED | 0 1 -1 0 0 -1 | 2
+[B777 INFO]: [LUA]: "airports"	Airports internal database is loaded successfully
+[B777 INFO]: [LUA]: "options"	interaction	tooltipLocation	1
+[B777 INFO]: [LUA]: "options"	interaction	tooltipOption	3
+[B777 INFO]: [LUA]: "options"	interaction	tooltipBackground	2
+[B777 INFO]: [LUA]: Splash screen done
+[B777 INFO]: [LUA]: "ground"	all objects unloaded
+[B777 INFO]: [LUA]: PRESSURIZATION: POWERUP: pressure
+[B777 INFO]: [LUA]: PRESSURIZATION: GROUND: on ground
+[B777 INFO]: [LUA]: "communication"	cabin call sent
+[B777 INFO]: Disabling...
+[B777 INFO]: [LUA]: onFinalizeModules ==================================================================================== onFinalizeModules
+[B777 INFO]: [LUA]: onSaveState [default] ==================================================================================== onSaveState [default]
+[B777 INFO]: [LUA]: onSaveState [last] ==================================================================================== onSaveState [last]
+[B777 DEBUG]: [LUA]: isfd:	saving state:	last
+[B777 DEBUG]: [LUA]: clocks:	saving state:	last
+[B777 INFO]: [LUA]: onDeInit2 ==================================================================================== onDeInit2
+[B777 INFO]: [LUA]: onDeInit1 ==================================================================================== onDeInit1
+[B777 INFO]: [LUA]: "airports"	Unloading library: D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-airports/bundle/stsff-airports.dll
+[B777 INFO]: [LUA]: "navigraph"	Unloading library: D:\Work/X-Plane/Aircraft/boeing787777_main/modules/cpp-libs/stsff-navigraph/bundle/stsff-navigraph.dll
+[B777 INFO]: [LUA]: onFinal ==================================================================================== onFinal
+[B777 INFO]: [LUA]: "options"	interaction	tooltipLocation	1
+[B777 INFO]: [LUA]: "options"	interaction	tooltipOption	3
+[B777 INFO]: [LUA]: "options"	interaction	tooltipBackground	2
+[B777 INFO]: [LUA]: onShutdown ==================================================================================== onShutdown
+[B777 INFO]: [LUA]: onDestroyCPP ==================================================================================== onDestroyCPP
+[B777 INFO]: [LUA]: [MM]:	"gps"	destructed
+[B777 INFO]: [LUA]: [MM]:	"adirs"	destructed
+[B777 INFO]: [LUA]: [MM]:	"BoeingFmc"	destructed
+[B777 INFO]: [LUA]: [MM]:	"afds"	destructed
+[B777 INFO]: [LUA]: onLibrariesShutdown ==================================================================================== onLibrariesShutdown
+[B777 INFO]: SASL plugin stopped...

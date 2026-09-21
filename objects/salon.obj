@@ -5,7 +5,7 @@ OBJ
 TEXTURE		salon.png
 TEXTURE_LIT	salon_LIT.png
 TEXTURE_NORMAL	salon_NML.png
-#GLOBAL_specular 1.0
+GLOBAL_specular 1.0
 # Legacy normal map: alpha controls gloss; blue is not a metalness mask.
 POINT_COUNTS	197892 0 0 664107
 
@@ -264444,6 +264444,8 @@ ATTR_light_level  0.000  1.000 tu154/custom/lights/cabin_2d_light
 TRIS	458262 144
 # Plane.190
 ATTR_light_level  0.000  1.000 tu154/custom/lights/cabin_2d_light
+# Avoid sunlight shadow artifacts on the four cabin curtain pairs.
+ATTR_no_shadow
 TRIS	458406 8412
 # Plane.191
 ATTR_light_level  0.000  1.000 tu154/custom/lights/cabin_2d_light
@@ -264454,6 +264456,7 @@ TRIS	475230 8412
 # Plane.193
 ATTR_light_level  0.000  1.000 tu154/custom/lights/cabin_2d_light
 TRIS	483642 8412
+ATTR_shadow
 # Cube.112
 ATTR_light_level  0.000  1.000 tu154/custom/lights/cabin_2d_light
 TRIS	492054 108
