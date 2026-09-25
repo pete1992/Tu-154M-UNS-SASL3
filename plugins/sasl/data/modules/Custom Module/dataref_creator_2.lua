@@ -82,8 +82,8 @@ createGlobalPropertyf("tu154/custom/elec/gen3_amp", 0																) --
 createGlobalPropertyf("tu154/custom/elec/gen4_amp", 0																) --   
 createGlobalPropertyf("tu154/custom/elec/gpu_amp", 0																) --   
 createGlobalPropertyf("tu154/custom/thermo/cockpit_temp", 20																) --   
-createGlobalPropertyf("tu154/custom/thermo/cabin1_temp", 20																) --    1
-createGlobalPropertyf("tu154/custom/thermo/cabin2_temp", 20																) --    2
+-- createGlobalPropertyf("tu154/custom/thermo/cabin1_temp", 20																) --    1
+-- createGlobalPropertyf("tu154/custom/thermo/cabin2_temp", 20																) --    2
 createGlobalPropertyf("tu154/custom/elec/apu_start_bus", 27																) --    
 createGlobalPropertyf("tu154/custom/elec/apu_start_cc", 0																) --   
 createGlobalPropertyi("tu154/custom/elec/apu_start_seq", 0																) --    
@@ -93,14 +93,14 @@ createGlobalPropertyf("tu154/custom/elec/cockpit_light_cc_right", 0													
 createGlobalPropertyf("tu154/custom/elec/cockpit_light_cc_115", 0																) --    115    
 createGlobalPropertyf("tu154/custom/elec/ext_light_cc_left", 0																) --       
 createGlobalPropertyf("tu154/custom/elec/ext_light_cc_right", 0																) --       
-createGlobalPropertyf("tu154/custom/elec/ext_light_cc_115", 0																) --       
+-- createGlobalPropertyf("tu154/custom/elec/ext_light_cc_115", 0																) --       
 createGlobalPropertyf("tu154/custom/eng/apu_n1", 0																) --  
 createGlobalPropertyf("tu154/custom/eng/apu_oil_t", 0																) --   
 createGlobalPropertyf("tu154/custom/eng/apu_oil_q", 0																) --   
 createGlobalPropertyf("tu154/custom/eng/apu_oil_p", 0																) --   
 createGlobalPropertyf("tu154/custom/eng/apu_fuel_p", 0																) --   
 createGlobalPropertyf("tu154/custom/eng/apu_egt", 0																) --    
-createGlobalPropertyf("tu154/custom/eng/apu_air_press", 0																) --     
+-- createGlobalPropertyf("tu154/custom/eng/apu_air_press", 0																) --     
 createGlobalPropertyf("tu154/custom/eng/apu_air_doors", 0																) --     
 createGlobalPropertyi("tu154/custom/eng/apu_system_on", 0																) --   
 createGlobalPropertyf("tu154/custom/eng/vibration_1", 0																) --  
@@ -183,9 +183,9 @@ createGlobalPropertyi("tu154/custom/fire/engine_fire_state_1", 0																
 createGlobalPropertyi("tu154/custom/fire/engine_fire_state_2", 0																) --  . 0 - , 1 - , 2 - 
 createGlobalPropertyi("tu154/custom/fire/engine_fire_state_3", 0																) --  . 0 - , 1 - , 2 - 
 createGlobalPropertyi("tu154/custom/fire/engine_fire_state_4", 0																) --  . 0 - , 1 - , 2 - 
-createGlobalPropertyi("tu154/custom/fire/engine_fuel_cut_1", 0																) --  
-createGlobalPropertyi("tu154/custom/fire/engine_fuel_cut_2", 0																) --  
-createGlobalPropertyi("tu154/custom/fire/engine_fuel_cut_3", 0																) --  
+-- createGlobalPropertyi("tu154/custom/fire/engine_fuel_cut_1", 0																) --  
+-- createGlobalPropertyi("tu154/custom/fire/engine_fuel_cut_2", 0																) --  
+-- createGlobalPropertyi("tu154/custom/fire/engine_fuel_cut_3", 0																) --  
 createGlobalPropertyi("tu154/custom/fire/fire_detected", 0																) --  
 createGlobalPropertyf("tu154/custom/fire/fire_sys_cc", 0																) --   
 createGlobalPropertyf("tu154/custom/antiice/wing_heat_t", 15																) --   
@@ -209,7 +209,7 @@ createGlobalPropertyf("tu154/custom/msrp/msrp_27_R_cc", 0																) --
 createGlobalPropertyf("tu154/custom/control/ctr_27_L_cc", 0																) --   
 createGlobalPropertyf("tu154/custom/control/ctr_27_R_cc", 0																) --   
 createGlobalPropertyf("tu154/custom/control/ctr_115_1_cc", 0																) --   
-createGlobalPropertyf("tu154/custom/control/ctr_115_2_cc", 0																) --   
+-- createGlobalPropertyf("tu154/custom/control/ctr_115_2_cc", 0																) --   
 createGlobalPropertyf("tu154/custom/control/ctr_115_3_cc", 0																) --   
 createGlobalPropertyf("tu154/custom/control/ctr_36L_cc", 0																) --   
 createGlobalPropertyf("tu154/custom/control/ctr_36R_cc", 0																) --   
@@ -236,7 +236,7 @@ createGlobalPropertyi("tu154/custom/tcas/mode_set", 4																) --  TCAS.
 createGlobalPropertyi("tu154/custom/tcas/screen_mode", 0																) --    .  -1 = , 0 =  , 1 = above mode, 2 = FL mode, 3 = FLT ID, 4 = PLN BIT, 5 = test, 6 = range set, 11-14 = code set, 100 = no power
 createGlobalPropertyi("tu154/custom/tcas/level_mode", 0																) -- 1 = above, 0 = normal, -1 = below
 createGlobalPropertyi("tu154/custom/tcas/fl_mode", 0																) -- fl mode. 0 = absolute, 1 = relative
-createGlobalPropertyi("tu154/custom/tcas/flt_id", 0																) -- flight ID. 0 = cover, 1 = show / change code
+-- createGlobalPropertyi("tu154/custom/tcas/flt_id", 0																) -- flight ID. 0 = cover, 1 = show / change code
 createGlobalPropertyi("tu154/custom/tcas/ra_scale_set", 0																) -- RA mode scale set. 0 = none.
 createGlobalPropertyi("tu154/custom/tcas/traffic_det", 0																) --     
 createGlobalPropertyf("tu154/custom/svs/altitude", 0																) -- ,  
@@ -258,7 +258,7 @@ createGlobalPropertyi("tu154/custom/taws/distance_set", 0																) --   
 createGlobalPropertyf("tu154/custom/taws/taws_cc", 0																) --    
 createGlobalPropertyi("tu154/custom/taws/taws_message", 0																) --  . 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain, 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
 createGlobalPropertyi("tu154/custom/taws/taws_english", 0																) --  . 0 - , 1 - 
-createGlobalPropertyf("tu154/custom/taws/gs_msg_int", 5																) --   
+-- createGlobalPropertyf("tu154/custom/taws/gs_msg_int", 5																) --   
 createGlobalPropertyf("tu154/custom/taws/gs_msg_vol", 1																) --   
 createGlobalPropertyi("tu154/custom/taws/taws_alt_left", 0																) --     
 createGlobalPropertyi("tu154/custom/taws/taws_alt_right", 0																) --     
@@ -402,7 +402,7 @@ createGlobalPropertyi("tu154/custom/alarm/main_pressure", 0) --
 createGlobalPropertyi("tu154/custom/alarm/speaker_auasp", 0) --     
 createGlobalPropertyi("tu154/custom/alarm/speaker_fuel", 0) --   2500   1
 createGlobalPropertyi("tu154/custom/alarm/speaker_speed", 0) --  
-createGlobalPropertyi("tu154/custom/alarm/speaker_absu", 0) --     
+-- createGlobalPropertyi("tu154/custom/alarm/speaker_absu", 0) --     
 createGlobalPropertyi("tu154/custom/checklist/side", 0) --   . 0 -  , 1 -  
 createGlobalPropertyi("tu154/custom/checklist/fishka_1", 1) --  . 0 - , 1 - 
 createGlobalPropertyi("tu154/custom/checklist/fishka_2", 1) --  . 0 - , 1 - 
@@ -473,14 +473,14 @@ createGlobalPropertyf("tu154/custom/SC/yoke_heading_ratio", 0) --
 createGlobalPropertyf("tu154/custom/SC/engine/ENGN_thro_0", 0) --  
 createGlobalPropertyf("tu154/custom/SC/engine/ENGN_thro_1", 0) --  
 createGlobalPropertyf("tu154/custom/SC/engine/ENGN_thro_2", 0) --  
-createGlobalPropertyf("tu154/custom/SC/engine/ENGN_propmode_0", 0) --  
-createGlobalPropertyf("tu154/custom/SC/engine/ENGN_propmode_2", 0) --  
+-- createGlobalPropertyf("tu154/custom/SC/engine/ENGN_propmode_0", 0) --  
+-- createGlobalPropertyf("tu154/custom/SC/engine/ENGN_propmode_2", 0) --  
 createGlobalPropertyf("tu154/custom/SC/gear/tire_steer_command_deg", 0) --   
-createGlobalPropertyf("tu154/custom/SC/controls/l_brake_add", 0) --  
-createGlobalPropertyf("tu154/custom/SC/controls/r_brake_add", 0) --  
-createGlobalPropertyf("tu154/custom/SC/brakes/int_brakes_L", 0) --  
-createGlobalPropertyf("tu154/custom/SC/brakes/int_brakes_R", 0) --  
-createGlobalPropertyf("tu154/custom/SC/controls/parkbrake", 0) --  
+-- createGlobalPropertyf("tu154/custom/SC/controls/l_brake_add", 0) --  
+-- createGlobalPropertyf("tu154/custom/SC/controls/r_brake_add", 0) --  
+-- createGlobalPropertyf("tu154/custom/SC/brakes/int_brakes_L", 0) --  
+-- createGlobalPropertyf("tu154/custom/SC/brakes/int_brakes_R", 0) --  
+-- createGlobalPropertyf("tu154/custom/SC/controls/parkbrake", 0) --  
 createGlobalPropertyi("tu154/custom/speeds/v1_15", 0) --  V1
 createGlobalPropertyi("tu154/custom/speeds/vr_15", 0) --  Vr
 createGlobalPropertyi("tu154/custom/speeds/v2_15", 0) --  V2

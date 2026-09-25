@@ -1,5 +1,5 @@
-createGlobalPropertyi("tu154/custom/save_state_enabled", 1) 
-createGlobalPropertyi("tu154/custom/reset_state", 0) 
+-- createGlobalPropertyi("tu154/custom/save_state_enabled", 1) 
+-- createGlobalPropertyi("tu154/custom/reset_state", 0) 
 createGlobalPropertyi("tu154/custom/save_state", 0)  
 createGlobalPropertyi("tu154/custom/hardware_cockpit", 0)
 createGlobalPropertyf("tu154/custom/time/frame_time", 0.1) 
@@ -36,7 +36,7 @@ createGlobalPropertyf("tu154/custom/anim/cockpit_window_right", 0) --
 createGlobalPropertyi("tu154/custom/anim/show_gns", 1) -- Native GNS430 faceplate visibility.
 createGlobalPropertyi("tu154/custom/anim/RXP", 0) --    RXP
 createGlobalPropertyi("tu154/custom/anim/show_yokes", 1) --   
-createGlobalPropertyi("tu154/custom/anim/show_chairs", 1) --   
+-- createGlobalPropertyi("tu154/custom/anim/show_chairs", 1) --   
 createGlobalPropertyf("tu154/custom/anim/rise_chair_arm_L", 0) --   
 createGlobalPropertyf("tu154/custom/anim/rise_chair_arm_R", 0) --   
 createGlobalPropertyi("tu154/custom/anim/table_up_L", 0) --  
@@ -60,8 +60,8 @@ createGlobalPropertyi("tu154/custom/anim/ladder_2_call", 0) --
 createGlobalPropertyi("tu154/custom/anim/catering_call", 0) -- 
 createGlobalPropertyi("tu154/custom/anim/fuel_tanker_call", 0) -- 
 createGlobalPropertyf("tu154/custom/anim/reverse_mid", 0) --    
-createGlobalPropertyi("tu154/custom/buttons/clock_24_left", 0) --   24- . 0 - , 1 -  (  )
-createGlobalPropertyi("tu154/custom/buttons/clock_24_right", 0) --   24- 
+-- createGlobalPropertyi("tu154/custom/buttons/clock_24_left", 0) --   24- . 0 - , 1 -  (  )
+-- createGlobalPropertyi("tu154/custom/buttons/clock_24_right", 0) --   24- 
 createGlobalPropertyf("tu154/custom/gauges/clock_24_hours", 0) --  
 createGlobalPropertyf("tu154/custom/gauges/clock_24_mins", 0) --  
 createGlobalPropertyf("tu154/custom/gauges/clock_24_red", 0) --  
@@ -351,7 +351,7 @@ createGlobalPropertyf("tu154/custom/gauges/misc/rsbn_km_one", 0) --
 createGlobalPropertyf("tu154/custom/gauges/misc/rsbn_km_ten", 0) --   
 createGlobalPropertyf("tu154/custom/gauges/misc/rsbn_km_hun", 0) --   
 createGlobalPropertyf("tu154/custom/gauges/misc/compas_big_needle", 0) --     2
-createGlobalPropertyf("tu154/custom/gauges/misc/compas_small_needle", 0) --     2
+-- createGlobalPropertyf("tu154/custom/gauges/misc/compas_small_needle", 0) --     2
 createGlobalPropertyf("tu154/custom/gauges/misc/compas_knob", 0) --    2
 createGlobalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_1", 1) --   
 createGlobalPropertyf("tu154/custom/gauges/misc/diss_abs_angle_10", 2) --   
@@ -843,94 +843,94 @@ createGlobalPropertyi("tu154/custom/switchers/console/nvu_turn_sel", 0) --    , 
 createGlobalPropertyi("tu154/custom/switchers/console/nvu_power_on", 1) --  
 createGlobalPropertyi("tu154/custom/switchers/console/nvu_calc_on", 0) --  
 createGlobalPropertyi("tu154/custom/switchers/console/nvu_corr_on", 0) --  
-createGlobalPropertyf("tu154/custom/nvu/current_Z1_1", 4) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/current_Z1_10", 3) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/current_Z1_100", 2) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/current_Z1_1000", 1) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_1", 4) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_10", 3) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_100", 2) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_1000", 1) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/current_S1_1", 4) -- S1
-createGlobalPropertyf("tu154/custom/nvu/current_S1_10", 3) -- S1
-createGlobalPropertyf("tu154/custom/nvu/current_S1_100", 2) -- S1
-createGlobalPropertyf("tu154/custom/nvu/current_S1_1000", 1) -- S1
-createGlobalPropertyf("tu154/custom/nvu/current_S1_min_1", 4) -- S1
-createGlobalPropertyf("tu154/custom/nvu/current_S1_min_10", 3) -- S1
-createGlobalPropertyf("tu154/custom/nvu/current_S1_min_100", 2) -- S1
-createGlobalPropertyf("tu154/custom/nvu/current_S1_min_1000", 1) -- S1
-createGlobalPropertyf("tu154/custom/nvu/next_Z1_1", 4) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/next_Z1_10", 3) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/next_Z1_100", 2) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/next_Z1_1000", 1) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_1", 4) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_10", 3) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_100", 2) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_1000", 1) -- Z1
-createGlobalPropertyf("tu154/custom/nvu/next_S1_1", 4) -- S1
-createGlobalPropertyf("tu154/custom/nvu/next_S1_10", 3) -- S1
-createGlobalPropertyf("tu154/custom/nvu/next_S1_100", 2) -- S1
-createGlobalPropertyf("tu154/custom/nvu/next_S1_1000", 1) -- S1
-createGlobalPropertyf("tu154/custom/nvu/next_S1_min_1", 4) -- S1
-createGlobalPropertyf("tu154/custom/nvu/next_S1_min_10", 3) -- S1
-createGlobalPropertyf("tu154/custom/nvu/next_S1_min_100", 2) -- S1
-createGlobalPropertyf("tu154/custom/nvu/next_S1_min_1000", 1) -- S1
-createGlobalPropertyf("tu154/custom/nvu/current_Z2_1", 4) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/current_Z2_10", 3) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/current_Z2_100", 2) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/current_Z2_1000", 1) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/current_S2_1", 4) -- S2
-createGlobalPropertyf("tu154/custom/nvu/current_S2_10", 3) -- S2
-createGlobalPropertyf("tu154/custom/nvu/current_S2_100", 2) -- S2
-createGlobalPropertyf("tu154/custom/nvu/current_S2_1000", 1) -- S2
-createGlobalPropertyf("tu154/custom/nvu/next_Z2_1", 4) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/next_Z2_10", 3) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/next_Z2_100", 2) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/next_Z2_1000", 1) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/next_S2_1", 4) -- S2
-createGlobalPropertyf("tu154/custom/nvu/next_S2_10", 3) -- S2
-createGlobalPropertyf("tu154/custom/nvu/next_S2_100", 2) -- S2
-createGlobalPropertyf("tu154/custom/nvu/next_S2_1000", 1) -- S2
-createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_1", 4) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_10", 3) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_100", 2) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_1000", 1) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/current_S2_min_1", 4) -- S2
-createGlobalPropertyf("tu154/custom/nvu/current_S2_min_10", 3) -- S2
-createGlobalPropertyf("tu154/custom/nvu/current_S2_min_100", 2) -- S2
-createGlobalPropertyf("tu154/custom/nvu/current_S2_min_1000", 1) -- S2
-createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_1", 4) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_10", 3) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_100", 2) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_1000", 1) -- Z2
-createGlobalPropertyf("tu154/custom/nvu/next_S2_min_1", 4) -- S2
-createGlobalPropertyf("tu154/custom/nvu/next_S2_min_10", 3) -- S2
-createGlobalPropertyf("tu154/custom/nvu/next_S2_min_100", 2) -- S2
-createGlobalPropertyf("tu154/custom/nvu/next_S2_min_1000", 1) -- S2
-createGlobalPropertyf("tu154/custom/nvu/zpu1_01", 5) -- ZPU
-createGlobalPropertyf("tu154/custom/nvu/zpu1_1", 3) -- ZPU
-createGlobalPropertyf("tu154/custom/nvu/zpu1_10", 2) -- ZPU
-createGlobalPropertyf("tu154/custom/nvu/zpu1_100", 1) -- ZPU
-createGlobalPropertyf("tu154/custom/nvu/zpu2_01", 5) -- ZPU
-createGlobalPropertyf("tu154/custom/nvu/zpu2_1", 3) -- ZPU
-createGlobalPropertyf("tu154/custom/nvu/zpu2_10", 2) -- ZPU
-createGlobalPropertyf("tu154/custom/nvu/zpu2_100", 1) -- ZPU
-createGlobalPropertyf("tu154/custom/nvu/z1_minus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/z1_plus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/s1_minus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/s1_plus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/z2_minus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/z2_plus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/s2_minus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/s2_plus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/z1_next_minus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/z1_next_plus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/s1_next_minus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/s1_next_plus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/z2_next_minus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/z2_next_plus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/s2_next_minus_cap", 1) -- digits cap
-createGlobalPropertyf("tu154/custom/nvu/s2_next_plus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z1_1", 4) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z1_10", 3) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z1_100", 2) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z1_1000", 1) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_1", 4) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_10", 3) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_100", 2) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z1_min_1000", 1) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/current_S1_1", 4) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/current_S1_10", 3) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/current_S1_100", 2) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/current_S1_1000", 1) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/current_S1_min_1", 4) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/current_S1_min_10", 3) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/current_S1_min_100", 2) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/current_S1_min_1000", 1) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z1_1", 4) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z1_10", 3) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z1_100", 2) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z1_1000", 1) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_1", 4) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_10", 3) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_100", 2) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z1_min_1000", 1) -- Z1
+-- createGlobalPropertyf("tu154/custom/nvu/next_S1_1", 4) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/next_S1_10", 3) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/next_S1_100", 2) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/next_S1_1000", 1) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/next_S1_min_1", 4) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/next_S1_min_10", 3) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/next_S1_min_100", 2) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/next_S1_min_1000", 1) -- S1
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z2_1", 4) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z2_10", 3) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z2_100", 2) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z2_1000", 1) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/current_S2_1", 4) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/current_S2_10", 3) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/current_S2_100", 2) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/current_S2_1000", 1) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z2_1", 4) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z2_10", 3) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z2_100", 2) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z2_1000", 1) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/next_S2_1", 4) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/next_S2_10", 3) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/next_S2_100", 2) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/next_S2_1000", 1) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_1", 4) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_10", 3) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_100", 2) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/current_Z2_min_1000", 1) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/current_S2_min_1", 4) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/current_S2_min_10", 3) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/current_S2_min_100", 2) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/current_S2_min_1000", 1) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_1", 4) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_10", 3) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_100", 2) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/next_Z2_min_1000", 1) -- Z2
+-- createGlobalPropertyf("tu154/custom/nvu/next_S2_min_1", 4) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/next_S2_min_10", 3) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/next_S2_min_100", 2) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/next_S2_min_1000", 1) -- S2
+-- createGlobalPropertyf("tu154/custom/nvu/zpu1_01", 5) -- ZPU
+-- createGlobalPropertyf("tu154/custom/nvu/zpu1_1", 3) -- ZPU
+-- createGlobalPropertyf("tu154/custom/nvu/zpu1_10", 2) -- ZPU
+-- createGlobalPropertyf("tu154/custom/nvu/zpu1_100", 1) -- ZPU
+-- createGlobalPropertyf("tu154/custom/nvu/zpu2_01", 5) -- ZPU
+-- createGlobalPropertyf("tu154/custom/nvu/zpu2_1", 3) -- ZPU
+-- createGlobalPropertyf("tu154/custom/nvu/zpu2_10", 2) -- ZPU
+-- createGlobalPropertyf("tu154/custom/nvu/zpu2_100", 1) -- ZPU
+-- createGlobalPropertyf("tu154/custom/nvu/z1_minus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/z1_plus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/s1_minus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/s1_plus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/z2_minus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/z2_plus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/s2_minus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/s2_plus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/z1_next_minus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/z1_next_plus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/s1_next_minus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/s1_next_plus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/z2_next_minus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/z2_next_plus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/s2_next_minus_cap", 1) -- digits cap
+-- createGlobalPropertyf("tu154/custom/nvu/s2_next_plus_cap", 1) -- digits cap
 createGlobalPropertyi("tu154/custom/buttons/nvu/nvu_left_btn", 0) --   
 createGlobalPropertyi("tu154/custom/buttons/nvu/nvu_ctr_btn", 0) --   
 createGlobalPropertyi("tu154/custom/buttons/nvu/nvu_right_btn", 0) --   
@@ -1000,11 +1000,11 @@ createGlobalPropertyf("tu154/custom/lights/ovhd_front_panel_flood", 0) --
 createGlobalPropertyf("tu154/custom/lights/ovhd_back_panel_flood", 0) --      
 createGlobalPropertyf("tu154/custom/lights/eng_panel_flood", 0) --    
 createGlobalPropertyf("tu154/custom/lights/azs_panel_flood", 0) --   
-createGlobalPropertyf("tu154/custom/lights/cargo_light_1", 0) --    1
-createGlobalPropertyf("tu154/custom/lights/cargo_light_2", 0) --    2
-createGlobalPropertyf("tu154/custom/lights/tech_light", 0) --  -
-createGlobalPropertyf("tu154/custom/lights/gear_nacelle_light", 0) --   
-createGlobalPropertyf("tu154/custom/lights/left_spotlight_flood", 0) --   
+-- createGlobalPropertyf("tu154/custom/lights/cargo_light_1", 0) --    1
+-- createGlobalPropertyf("tu154/custom/lights/cargo_light_2", 0) --    2
+-- createGlobalPropertyf("tu154/custom/lights/tech_light", 0) --  -
+-- createGlobalPropertyf("tu154/custom/lights/gear_nacelle_light", 0) --   
+-- createGlobalPropertyf("tu154/custom/lights/left_spotlight_flood", 0) --   
 createGlobalPropertyf("tu154/custom/lights/ark1_left_lit", 0) --     1
 createGlobalPropertyf("tu154/custom/lights/ark1_right_lit", 0) --     1
 createGlobalPropertyf("tu154/custom/lights/ark1_all_lit", 0) --   1
@@ -1111,7 +1111,7 @@ createGlobalPropertyf("tu154/custom/lights/dist_autonom", 0) --
 createGlobalPropertyf("tu154/custom/lights/diss_memory", 0) --  
 createGlobalPropertyf("tu154/custom/lights/azimuth_autonom", 0) --  
 createGlobalPropertyf("tu154/custom/lights/srpbz_fail", 0) --  
-createGlobalPropertyf("tu154/custom/lights/tcas_ident", 0) --   
+-- createGlobalPropertyf("tu154/custom/lights/tcas_ident", 0) --   
 createGlobalPropertyf("tu154/custom/lights/other_hatches", 0) --    
 createGlobalPropertyf("tu154/custom/lights/left_front_pax_door", 0) --    
 createGlobalPropertyf("tu154/custom/lights/left_mid_pax_door", 0) --    
@@ -1227,8 +1227,8 @@ createGlobalPropertyf("tu154/custom/lights/small/transponder_red", 0) --
 createGlobalPropertyf("tu154/custom/lights/small/transponder_green", 0) --    
 createGlobalPropertyf("tu154/custom/lights/small/tks_main_fail", 0) --     
 createGlobalPropertyf("tu154/custom/lights/small/tks_contr_fail", 0) --     
-createGlobalPropertyf("tu154/custom/lights/small/rls_ready", 0) --  
-createGlobalPropertyf("tu154/custom/lights/small/rls_weather", 0) --  
+-- createGlobalPropertyf("tu154/custom/lights/small/rls_ready", 0) --  
+-- createGlobalPropertyf("tu154/custom/lights/small/rls_weather", 0) --  
 createGlobalPropertyf("tu154/custom/lights/small/stu_roll", 0) --  
 createGlobalPropertyf("tu154/custom/lights/small/stu_pitch", 0) --  
 createGlobalPropertyf("tu154/custom/lights/small/stu_toga", 0) -- 
@@ -1380,9 +1380,9 @@ createGlobalPropertyi("tu154/custom/lights/beacon_light_T", 1) --
 createGlobalPropertyf("tu154/custom/lights/sard_panel_lit", 0) --   
 createGlobalPropertyf("tu154/custom/lights/nvu_1_active", 0) --    
 createGlobalPropertyf("tu154/custom/lights/nvu_2_active", 0) --    
-createGlobalPropertyf("tu154/custom/lights/oil_qty_work_1", 1) --    
-createGlobalPropertyf("tu154/custom/lights/oil_qty_work_2", 1) --    
-createGlobalPropertyf("tu154/custom/lights/oil_qty_work_3", 1) --    
+-- createGlobalPropertyf("tu154/custom/lights/oil_qty_work_1", 1) --    
+-- createGlobalPropertyf("tu154/custom/lights/oil_qty_work_2", 1) --    
+-- createGlobalPropertyf("tu154/custom/lights/oil_qty_work_3", 1) --    
 createGlobalPropertyi("tu154/custom/switchers/wiper_left", 0) --   . -1 - , 0 - , +1 - 
 createGlobalPropertyi("tu154/custom/switchers/wiper_right", 0) --   . -1 - , 0 - , +1 - 
 createGlobalPropertyf("tu154/custom/anim/wiper_angle_left", 0) --     . 0 - 62

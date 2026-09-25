@@ -5,7 +5,7 @@ OBJ
 TEXTURE		cockpit_2.png
 TEXTURE_LIT	cockpit_2_LIT.png
 TEXTURE_NORMAL	cockpit_2_NML.png
-GLOBAL_specular 1.0
+#GLOBAL_specular 1.0
 # Blue stores image brightness, not material F0; retain dielectric reflections.
 POINT_COUNTS	4223 0 0 14460
 
