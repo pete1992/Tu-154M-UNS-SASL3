@@ -1,4 +1,195 @@
 state = {
+    ['contextWindows'] = {
+        ['ovhd_2d_panel'] = {
+            ['position'] = {
+                [1] = 469;
+                [2] = 364;
+                [3] = 1528;
+                [4] = 1061;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 0;
+                    [3] = 1458;
+                    [4] = 1013;
+                };
+                ['visible'] = false;
+            };
+            ['visible'] = false;
+        };
+        ['ground_srv_panel'] = {
+            ['position'] = {
+                [1] = 1605;
+                [2] = 392;
+                [3] = 651;
+                [4] = 875;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 655;
+                    [4] = 880;
+                };
+                ['visible'] = false;
+            };
+            ['visible'] = false;
+        };
+        ['checklist_panel_2d'] = {
+            ['position'] = {
+                [1] = 394;
+                [2] = 329;
+                [3] = 300;
+                [4] = 1062;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 300;
+                    [4] = 1062.5;
+                };
+                ['visible'] = false;
+            };
+            ['visible'] = false;
+        };
+        ['nvu_2D_panel'] = {
+            ['position'] = {
+                [1] = 50;
+                [2] = 0;
+                [3] = 636;
+                [4] = 786;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 0;
+                    [3] = 636;
+                    [4] = 786;
+                };
+                ['visible'] = false;
+            };
+            ['visible'] = false;
+        };
+        ['absu_2d_panel'] = {
+            ['position'] = {
+                [1] = -74;
+                [2] = 869;
+                [3] = 917;
+                [4] = 597;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 917;
+                    [4] = 597;
+                };
+                ['visible'] = false;
+            };
+            ['visible'] = false;
+        };
+        ['uphone'] = {
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 40;
+                    [2] = 20;
+                    [3] = 241;
+                    [4] = 446;
+                };
+                ['visible'] = false;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['position'] = {
+                [1] = 40;
+                [2] = 20;
+                [3] = 241;
+                [4] = 446;
+            };
+            ['visible'] = false;
+        };
+        ['camera_panel'] = {
+            ['position'] = {
+                [1] = 50;
+                [2] = 258;
+                [3] = 512;
+                [4] = 512;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 512;
+                    [4] = 512;
+                };
+                ['visible'] = false;
+            };
+            ['visible'] = false;
+        };
+        ['palette'] = {
+            ['position'] = {
+                [1] = 50;
+                [2] = 343;
+                [3] = 351;
+                [4] = 427;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 351.4;
+                    [4] = 427;
+                };
+                ['visible'] = false;
+            };
+            ['visible'] = false;
+        };
+        ['payload_panel'] = {
+            ['position'] = {
+                [1] = 953;
+                [2] = 564;
+                [3] = 1024;
+                [4] = 683;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 1024;
+                    [4] = 683;
+                };
+                ['visible'] = false;
+            };
+            ['visible'] = false;
+        };
+    };
     ['legacyPopups'] = {
         ['ovhd_2d_panel'] = {
             [1] = 337;
@@ -53,197 +244,6 @@ state = {
             [2] = 326;
             [3] = 845.6;
             [4] = 564.00859375;
-        };
-    };
-    ['contextWindows'] = {
-        ['ovhd_2d_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = 469;
-                [2] = 364;
-                [3] = 1528;
-                [4] = 1061;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 0;
-                    [3] = 1458;
-                    [4] = 1013;
-                };
-            };
-        };
-        ['ground_srv_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = 1605;
-                [2] = 392;
-                [3] = 651;
-                [4] = 875;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 655;
-                    [4] = 880;
-                };
-            };
-        };
-        ['checklist_panel_2d'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = 394;
-                [2] = 329;
-                [3] = 300;
-                [4] = 1062;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 300;
-                    [4] = 1062.5;
-                };
-            };
-        };
-        ['nvu_2D_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = 50;
-                [2] = 0;
-                [3] = 636;
-                [4] = 786;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 0;
-                    [3] = 636;
-                    [4] = 786;
-                };
-            };
-        };
-        ['absu_2d_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = -74;
-                [2] = 869;
-                [3] = 917;
-                [4] = 597;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 917;
-                    [4] = 597;
-                };
-            };
-        };
-        ['uphone'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = 40;
-                [2] = 20;
-                [3] = 241;
-                [4] = 446;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 40;
-                    [2] = 20;
-                    [3] = 241;
-                    [4] = 446;
-                };
-            };
-        };
-        ['camera_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = 50;
-                [2] = 258;
-                [3] = 512;
-                [4] = 512;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 512;
-                    [4] = 512;
-                };
-            };
-        };
-        ['palette'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = 50;
-                [2] = 343;
-                [3] = 351;
-                [4] = 427;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 351.4;
-                    [4] = 427;
-                };
-            };
-        };
-        ['payload_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['position'] = {
-                [1] = 953;
-                [2] = 564;
-                [3] = 1024;
-                [4] = 683;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 1024;
-                    [4] = 683;
-                };
-            };
         };
     };
 };

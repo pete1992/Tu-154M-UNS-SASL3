@@ -22,13 +22,13 @@ components = {
 	-- clock
 	achs1 {},
 	-- clock on the rear side panel
-	clock24 {},
+	-- clock24 {}, -- Output ownership moved to xTlua T154.clock24 (worker).
 	-- aneroid instruments
 	mech_aneroid {},
 	-- SVS system
 	svs {},
 	-- thermometers
-	termo {},
+	-- termo {}, -- Output ownership moved to xTlua T154.termo (main-thread timer).
 	-- feet altimeter
 	uvid_15fk {},
 	-- Mach meters
