@@ -128,6 +128,8 @@ defineProps({
 
 	{ "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
 	{ "sim_paused", "sim/time/paused", globalPropertyi }, -- Paused input changes are not go-around requests.
+	{ "on_ground", "sim/flightmodel/failures/onground_any", globalPropertyi }, -- Confirm rollout, not merely a low radio altitude.
+	{ "ground_speed", "sim/flightmodel/position/groundspeed", globalPropertyf }, -- Metres per second.
 
 -- Throttles
 	-- { "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf }, -- Servo animation is not pilot input; unused here.
@@ -302,6 +304,15 @@ local loc_loss_time, gs_loss_time = 0, 0
 local app_button_last, gs_button_last = false, false
 local gs_auto_armed = false
 local katet_mode_last = get(katet_mode)
+local flight_reset_pending = true
+local landing_seen_airborne = false
+local landing_ground_time = 0
+
+-- A new flight can reuse this component and its DataRefs without reloading Lua.
+-- Reset transient guidance, not the independent pilot/copilot HSI selectors.
+function onAirportLoaded()
+	flight_reset_pending = true
+end
 
 local function finite_number(value)
 	return type(value) == "number" and value == value and value > -math.huge and value < math.huge
@@ -360,7 +371,38 @@ function update()
 	set(autopilot_mode, 0)
 	
 local MASTER = get(ismaster) ~= 1	
+-- Consume the lifecycle event on a slave too; later control transfer is not
+-- a new flight and must not erase the master's synchronized guidance modes.
+if not MASTER then flight_reset_pending = false end
 if MASTER then	
+	if flight_reset_pending then
+		flight_reset_pending = false
+		set(roll_main_mode, 1)
+		set(pitch_main_mode, 1)
+		set(roll_sub_mode, 1)
+		set(pitch_sub_mode, 1)
+		set(toga_command, 0)
+		TOGA_mode, TOGA_button, AP_button = false, false, false
+		gs_auto_armed = false
+		loc_valid_time, gs_valid_time = 0, 0
+		loc_loss_time, gs_loss_time = 0, 0
+		ils_source, ils_frequency = 1, nil
+		app_button_last, gs_button_last = get(absu_app) == 1, get(absu_gs) == 1
+		pitch_wheel_last = get(absu_pitch_wheel)
+		katet_mode_last = katet_mode_now
+		power_counter, state_checked = 0, false
+		landing_seen_airborne, landing_ground_time = false, 0
+		pilot_throttle_inputs_initialized = false
+		rud_toga = false
+		set(absu_course_out, 0)
+		set(absu_gs_out, 0)
+		set(triangle_lamp_signal, 0)
+		set(man_roll_lamp, 0)
+		set(man_pitch_lamp, 0)
+		set(man_toga_lamp, 0)
+		set(absu_fail_signal, 0)
+		signal_timer = 0
+	end
 	
 	-- initial variables
 	-- sync
@@ -376,6 +418,20 @@ if MASTER then
 	
 	local passed = get(frame_time)
 	if not finite_number(passed) or passed < 0 then passed = 0 end
+
+	-- Complete an approach only on a sustained, slow rollout. A bounce, a low
+	-- pass or a go-around must not cancel airborne LOC/GS guidance.
+	local rollout_complete = false
+	if get(on_ground) == 0 then
+		landing_seen_airborne, landing_ground_time = true, 0
+	elseif landing_seen_airborne and get(sim_paused) == 0 then
+		landing_ground_time = landing_ground_time + math.min(passed, 0.1)
+		local speed = get(ground_speed)
+		if landing_ground_time >= 2 and finite_number(speed) and speed < 40 then
+			rollout_complete = pitch_submode ~= 6 and not TOGA_mode and not rud_toga
+			if rollout_complete then landing_seen_airborne = false end
+		end
+	end
 	
 	local stab_btn = get(absu_stab) == 1
 	
@@ -399,7 +455,7 @@ if MASTER then
 	-- KATET selects the ILS reception profile, not HSI display or engagement.
 	local katet_source_changed = katet_mode_now ~= katet_mode_last
 
-	if not radio_landing_allowed or katet_source_changed then
+	if not radio_landing_allowed or katet_source_changed or rollout_complete then
 		-- Deliberate source/Enroute cancellation must precede reception-loss
 		-- handling, which would otherwise disconnect captured AP channels.
 		if roll_submode == 6 or roll_submode == 10 then roll_submode = 1 end
@@ -407,6 +463,11 @@ if MASTER then
 		gs_auto_armed = false
 		loc_valid_time, gs_valid_time = 0, 0
 		loc_loss_time, gs_loss_time = 0, 0
+		if rollout_complete then
+			set(absu_course_out, 0)
+			set(absu_gs_out, 0)
+			set(triangle_lamp_signal, 0)
+		end
 	end
 	if not radio_landing_allowed then
 		-- Enroute also releases active go-around guidance, not the AP channels.
@@ -502,6 +563,7 @@ if MASTER then
 	local gs_button = get(absu_gs) == 1
 	local app_pressed = app_button and not app_button_last
 	local gs_pressed = gs_button and not gs_button_last
+	if rollout_complete then app_pressed, gs_pressed = false, false end
 	app_button_last, gs_button_last = app_button, gs_button
 	local approach_captured = land_prep and (roll_submode == 6 or pitch_submode == 5)
 	local nav1_ils = finite_number(get(freq_1)) and isILS(get(freq_1))

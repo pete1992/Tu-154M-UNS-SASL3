@@ -32,6 +32,7 @@ defineProps({
     -- { "egpws_contr_gs", "tu154/custom/buttons/ovhd/egpws_contr_gs", globalPropertyi }, --
 
     -- power
+    { "srpbz_on", "tu154/custom/kontur/srpbz", globalPropertyf }, -- physical TAWS master switch
     { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, --   115
     -- { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
 
@@ -72,7 +73,7 @@ local MASTER = get(ismaster) ~= 1
 	
 if MASTER then	
 
-	local power = get(bus115_1_volt) > 110 and get(bus27_volt) > 13 and get(rv_on) == 1
+	local power = get(srpbz_on) > 0 and get(bus115_1_volt) > 110 and get(bus27_volt) > 13 and get(rv_on) == 1
 	
 	if not power then
 		set(mode_set, 0)

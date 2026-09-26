@@ -2,8 +2,14 @@
 -- taws sound logic
 
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
@@ -13,6 +19,18 @@ defineProps({
     {"taws_eng_phrase", "tu154/custom/sounds/taws_eng_phrase", globalPropertyi},
     {"taws_rus_phrase", "tu154/custom/sounds/taws_rus_phrase", globalPropertyi},
     {"external_view", "sim/graphics/view/view_is_external", globalPropertyi},
+    -- Enforce controls at playback too: cross-plugin phrase writes are asynchronous.
+    {"taws_mode", "tu154/custom/taws/mode_set", globalPropertyi},
+    {"taws_message", "tu154/custom/taws/taws_message", globalPropertyi},
+    {"srpbz", "tu154/custom/kontur/srpbz", globalPropertyf},
+    {"egpws_alarm_1", "tu154/custom/switchers/ovhd/egpws_alarm_1", globalPropertyi},
+    {"egpws_alarm_2", "tu154/custom/switchers/ovhd/egpws_alarm_2", globalPropertyi},
+    {"dis_sound", "tu154/custom/egpws/dis_sound", globalPropertyf},
+    {"dis_gear", "tu154/custom/egpws/dis_gear", globalPropertyf},
+    {"dis_flaps", "tu154/custom/egpws/dis_flaps", globalPropertyf},
+    {"dis_rppz", "tu154/custom/egpws/dis_rppz", globalPropertyf},
+    {"dis_gs", "tu154/custom/egpws/dis_gs", globalPropertyf},
+    {"taws_bus36_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf},
     -- Native alert level; PWS mode alone only describes takeoff/approach readiness.
     {"windshear_warning", "sim/cockpit2/annunciators/windshear_warning_systems", globalPropertyi},
     {"windshear_auto", "tu154/custom/wx2000_windshear", globalPropertyf},
@@ -70,6 +88,85 @@ local rus_too_low_flaps = eng_too_low_flaps
 local rus_too_low_gear = eng_too_low_gear
 local rus_too_low_terrain = eng_too_low_terrain
 
+-- Both voices use the same warning IDs (11..20); their height-callout IDs differ.
+-- Keeping sample handles here also lets an OFF switch stop a phrase already playing.
+local voice_samples = {
+    {
+        [1] = eng_alt_50, [2] = eng_alt_200, [3] = eng_alt_500, [4] = eng_alt_1000,
+        [11] = eng_check_alt, [12] = eng_dont_sink, [13] = eng_glideslope,
+        [14] = eng_pull_up, [15] = eng_sink_rate, [16] = eng_terrain,
+        [17] = eng_terrain_ahead, [18] = eng_too_low_flaps,
+        [19] = eng_too_low_gear, [20] = eng_too_low_terrain,
+    },
+    {
+        [1] = rus_alt_5, [2] = rus_alt_10, [3] = rus_alt_20, [4] = rus_alt_30,
+        [5] = rus_alt_40, [6] = rus_alt_50, [7] = rus_alt_60, [8] = rus_alt_70,
+        [9] = rus_alt_100, [10] = rus_alt_200, [11] = rus_check_alt,
+        [12] = rus_dont_sink, [13] = rus_glideslope, [14] = rus_pull_up,
+        [15] = rus_sink_rate, [16] = rus_terrain, [17] = rus_terrain_ahead,
+        [18] = rus_too_low_flaps, [19] = rus_too_low_gear, [20] = rus_too_low_terrain,
+        [21] = rus_alt_300, [22] = rus_alt_400, [23] = rus_alt_500,
+        [24] = rus_alt_1000, [25] = rus_alt_2500,
+    },
+}
+
+local rppz_phrases = { [12] = true, [14] = true, [15] = true,
+    [16] = true, [17] = true, [20] = true }
+
+local function updateTawsSound()
+    local eng_phrase = get(taws_eng_phrase)
+    local rus_phrase = get(taws_rus_phrase)
+    -- Drop both requests even when muted or in an external view, never queue them
+    -- for a later unmute, voice-selection change, or return to the cockpit.
+    set(taws_eng_phrase, 0)
+    set(taws_rus_phrase, 0)
+
+    local mode = get(taws_mode)
+    local message = get(taws_message)
+    local test_mode = mode == 5
+    local sound_enabled = get(external_view) == 0 and get(srpbz) > 0
+        and ((mode > 0 and mode < 4) or test_mode)
+        and (get(weather_bus36) > 5 or get(taws_bus36_right) > 5)
+    -- The built-in test temporarily raises dis_* as test indications, not mute requests.
+    local muted = not test_mode and get(dis_sound) > 0
+    local warnings_enabled = get(egpws_alarm_1) == 1
+    local flaps_disabled = get(egpws_alarm_2) ~= 1
+        or (not test_mode and get(dis_flaps) > 0)
+    local gear_disabled = not test_mode and get(dis_gear) > 0
+    local terrain_disabled = not test_mode and get(dis_rppz) > 0
+    local gs_disabled = not test_mode and get(dis_gs) > 0
+
+    local function allowed(phrase)
+        if not sound_enabled or muted then return false end
+        if phrase < 11 or phrase > 20 then return true end -- height callout, not warning
+        if not warnings_enabled then return false end
+        if phrase == 18 and flaps_disabled then return false end
+        if phrase == 19 and gear_disabled then return false end
+        if phrase == 13 and gs_disabled then return false end
+        -- The source cancels these warnings as soon as the approach/signal or gear
+        -- condition clears. Reject a late cross-plugin replay and stop its old sample.
+        if not test_mode and phrase == 13 and message ~= 13 then return false end
+        if not test_mode and phrase == 19 and message ~= 8 then return false end
+        if rppz_phrases[phrase] and terrain_disabled then return false end
+        return true
+    end
+
+    for _, samples in ipairs(voice_samples) do
+        for phrase, sample in pairs(samples) do
+            if not allowed(phrase) and sasl.al.isSamplePlaying(sample) then
+                sasl.al.stopSample(sample)
+            end
+        end
+    end
+
+    local english = get(taws_english) == 1
+    local phrase = english and eng_phrase or rus_phrase
+    local sample = voice_samples[english and 1 or 2][phrase]
+    if sample and allowed(phrase) then
+        sasl.al.playSample(sample, false)
+    end
+end
+
 local windshear_sample = nil
 local windshear_sample_loaded = false
 
@@ -99,72 +196,28 @@ local function updateWindshearSound()
 end
 
 function update()
-
     updateWindshearSound()
-	
-	if get(taws_english) == 1 and get(external_view) == 0 then -- english mode
-	
-		local num = get(taws_eng_phrase)
-		
-		if num == 0 then
-			
-		-- play selected sample
-		elseif num == 1 then sasl.al.playSample(eng_alt_50, false)
-		elseif num == 2 then sasl.al.playSample(eng_alt_200, false)
-		elseif num == 3 then sasl.al.playSample(eng_alt_500, false)
-		elseif num == 4 then sasl.al.playSample(eng_alt_1000, false)
-		elseif num == 11 then sasl.al.playSample(eng_check_alt, false)
-		elseif num == 12 then sasl.al.playSample(eng_dont_sink, false)
-		elseif num == 13 then sasl.al.playSample(eng_glideslope, false)
-		elseif num == 14 then sasl.al.playSample(eng_pull_up, false)
-		elseif num == 15 then sasl.al.playSample(eng_sink_rate, false)
-		elseif num == 16 then sasl.al.playSample(eng_terrain, false)
-		elseif num == 17 then sasl.al.playSample(eng_terrain_ahead, false)
-		elseif num == 18 then sasl.al.playSample(eng_too_low_flaps, false)
-		elseif num == 19 then sasl.al.playSample(eng_too_low_gear, false)
-		elseif num == 20 then sasl.al.playSample(eng_too_low_terrain, false)
-		
-		end
-		
-		set(taws_eng_phrase, 0) -- reset number of sample
-		
-	elseif get(external_view) == 0 then -- russian mode
-	
-		local num = get(taws_rus_phrase)
-	
-		if num == 0 then 
-			
-		elseif num == 1 then sasl.al.playSample(rus_alt_5, false)
-		elseif num == 2 then sasl.al.playSample(rus_alt_10, false)
-		elseif num == 3 then sasl.al.playSample(rus_alt_20, false)
-		elseif num == 4 then sasl.al.playSample(rus_alt_30, false)
-		elseif num == 5 then sasl.al.playSample(rus_alt_40, false)
-		elseif num == 6 then sasl.al.playSample(rus_alt_50, false)
-		elseif num == 7 then sasl.al.playSample(rus_alt_60, false)
-		elseif num == 8 then sasl.al.playSample(rus_alt_70, false)
-		elseif num == 9 then sasl.al.playSample(rus_alt_100, false)
-		elseif num == 10 then sasl.al.playSample(rus_alt_200, false)
-		elseif num == 11 then sasl.al.playSample(rus_check_alt, false)
-		elseif num == 12 then sasl.al.playSample(rus_dont_sink, false)
-		elseif num == 13 then sasl.al.playSample(rus_glideslope, false)
-		elseif num == 14 then sasl.al.playSample(rus_pull_up, false)
-		elseif num == 15 then sasl.al.playSample(rus_sink_rate, false)
-		elseif num == 16 then sasl.al.playSample(rus_terrain, false)
-		elseif num == 17 then sasl.al.playSample(rus_terrain_ahead, false)
-		elseif num == 18 then sasl.al.playSample(rus_too_low_flaps, false)
-		elseif num == 19 then sasl.al.playSample(rus_too_low_gear, false)
-		elseif num == 20 then sasl.al.playSample(rus_too_low_terrain, false)
-		elseif num == 21 then sasl.al.playSample(rus_alt_300, false)
-		elseif num == 22 then sasl.al.playSample(rus_alt_400, false)
-		elseif num == 23 then sasl.al.playSample(rus_alt_500, false)
-		elseif num == 24 then sasl.al.playSample(rus_alt_1000, false)
-		elseif num == 25 then sasl.al.playSample(rus_alt_2500, false)
-	
-		end
-	
-		set(taws_rus_phrase, 0)  -- reset number of sample
-	
-	end
-	
+    updateTawsSound()
 end
 
+local function stopAllSounds()
+    set(taws_eng_phrase, 0)
+    set(taws_rus_phrase, 0)
+    for _, samples in ipairs(voice_samples) do
+        for _, sample in pairs(samples) do
+            if sasl.al.isSamplePlaying(sample) then sasl.al.stopSample(sample) end
+        end
+    end
+    if windshear_sample and sasl.al.isSamplePlaying(windshear_sample) then
+        sasl.al.stopSample(windshear_sample)
+    end
+end
+
+function onAirportLoaded(flightIndex)
+    -- A new flight/reposition must not retain a phrase from the previous approach.
+    stopAllSounds()
+end
+
+function onModuleShutdown(isError)
+    stopAllSounds()
+end

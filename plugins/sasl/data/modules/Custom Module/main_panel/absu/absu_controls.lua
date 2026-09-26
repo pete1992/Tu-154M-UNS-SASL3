@@ -295,6 +295,26 @@ S.roll_show       = get(bkk_roll)
 S.pitch_need_smth = S.pitch_show
 S.roll_need_smth  = S.roll_show
 
+-- Airport/new-flight loading does not necessarily reload this Lua component.
+-- Never differentiate a new approach against the previous flight's samples.
+function onAirportLoaded()
+    S.loc_guidance_valid, S.gs_guidance_valid = false, false
+    S.ils_source, S.ils_frequency = nil, nil
+    S.dev_last, S.ILS_spd_smth, S.ILS_dev_smth = 0, 0, 0
+    S.GS_last, S.GS_smth, S.GS_est = 0, 0, 0
+    S.ILS_roll_need, S.GS_pitch_need = 0, 0
+    S.pitch_show, S.roll_show = 10, 25
+    roll_transition_timer, pitch_transition_timer = 0, 0
+    previous_roll_submode, previous_pitch_submode = 0, 0
+    roll_transition_factor, pitch_transition_factor = 0, 0
+    if get(ismaster) ~= 1 then
+        set(absu_roll_ind, 25)
+        set(absu_pitch_ind, 10)
+        set(absu_roll_flag, 1)
+        set(absu_pitch_flag, 1)
+    end
+end
+
 -----------------------------------------------------------------------
 -- Forward declarations (now take S)
 -----------------------------------------------------------------------
@@ -932,6 +952,23 @@ function update()
 
   else
     S.roll_show = 25; S.pitch_show = 10
+  end
+
+  -- Preparation switches and the HSI LD display are not active FD guidance.
+  -- Park each unused axis instead of leaving a valid-looking centered bar
+  -- after RESET, Enroute selection, landing or the start of another flight.
+  local roll_guidance = roll_mode >= 1 and
+      ((nav_on and roll_submode >= 3 and roll_submode <= 5)
+       or (app_on and (roll_submode == 6 or roll_submode == 7)))
+  local pitch_guidance = pitch_mode >= 1 and app_on
+      and (pitch_submode == 5 or pitch_submode == 6)
+  if not needles_on or not roll_guidance then
+    flag_roll = 1
+    S.roll_show = 25
+  end
+  if not needles_on or not pitch_guidance then
+    flag_pitch = 1
+    S.pitch_show = 10
   end
 
   -- ILS guidance and its annunciation must use the same selected receiver.

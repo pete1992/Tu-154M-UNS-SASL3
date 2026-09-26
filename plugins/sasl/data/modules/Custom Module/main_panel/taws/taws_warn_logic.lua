@@ -35,6 +35,7 @@ defineProps({
     -- { "deflection_mtr_1", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, --
     { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, --
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, --
+    { "on_ground", "sim/flightmodel/failures/onground_all", globalPropertyi },
     { "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- inner flaps left
     { "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- inner flaps right
     { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, --     №1
@@ -44,6 +45,10 @@ defineProps({
     { "nav_gs", "tu154/custom/radio/nav1_gs", globalPropertyf },
     -- { "nav_cs_flag", "tu154/custom/radio/nav1_cs_flag", globalPropertyi },
     { "nav_gs_flag", "tu154/custom/radio/nav1_gs_flag", globalPropertyi },
+    { "nav2_gs", "tu154/custom/radio/nav2_gs", globalPropertyf },
+    { "nav2_gs_flag", "tu154/custom/radio/nav2_gs_flag", globalPropertyi },
+    { "use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi },
+    { "katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi }, -- 0 = Enroute, 1 = Landing
     -- time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
     -- controls
@@ -55,6 +60,10 @@ defineProps({
     { "egpws_mode", "tu154/custom/switchers/ovhd/egpws_mode", globalPropertyi }, -- QNH - QFE
     -- { "egpws_control", "tu154/custom/buttons/ovhd/egpws_control", globalPropertyi }, --
     { "egpws_contr_gs", "tu154/custom/buttons/ovhd/egpws_contr_gs", globalPropertyi }, --
+    { "dis_gear", "tu154/custom/egpws/dis_gear", globalPropertyf },
+    { "dis_flaps", "tu154/custom/egpws/dis_flaps", globalPropertyf },
+    { "dis_rppz", "tu154/custom/egpws/dis_rppz", globalPropertyf },
+    { "dis_gs", "tu154/custom/egpws/dis_gs", globalPropertyf },
     -- results
     { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi }, --
     -- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain,
@@ -90,6 +99,12 @@ local sound_counter = 2
 
 local flight_phase = 0
 local last_flight_phase = 0
+local departure_descent_time = 0
+local gear_warning_time = 0
+local gs_warning_time = 0
+local last_nav_source = get(use_second_nav)
+local warning_mode_active = false
+local was_on_ground = get(on_ground) > 0
 
 local gs_msg_counter = 7
 
@@ -121,13 +136,45 @@ local function terrainAltitude(x, y, z)
     return localAltitude(hitX, hitY, hitZ), wet
 end
 
+local function resetWarningState()
+    -- A new flight or re-powered receiver must not differentiate old samples
+    -- or carry a departure/approach latch over from the previous flight.
+    rv_last = get(rv5_alt)
+    elev_last = get(elevation)
+    alt_high_to = get(alt_svs)
+    sm_rv_vvi = 0
+    too_low_flaps_timer = 0
+    flight_phase, last_flight_phase = 0, 0
+    was_on_ground = get(on_ground) > 0
+    departure_descent_time, gear_warning_time, gs_warning_time = 0, 0, 0
+    mode7_counter = 0
+    mode7_left_done, mode7_center_done, mode7_right_done = false, false, false
+    res_left, res_ctr, res_right = 0, 0, 0
+    mode_1_2_active, mode_3_active, mode_4_active = false, false, false
+    mode_5_active, mode_7_active = true, false
+    last_nav_source = get(use_second_nav)
+    sound_counter = 2
+    set(taws_message, 0)
+    set(taws_rus_phrase, 0)
+    set(taws_eng_phrase, 0)
+    set(taws_alt_left, 0)
+    set(taws_alt_right, 0)
+end
+
+function onAirportLoaded()
+    resetWarningState()
+    warning_mode_active = false
+end
+
 function update()
 	local mode = get(mode_set)
 	
 	local MASTER = true --get(ismaster) ~= 1	
 
 	if mode > 0 and mode < 4 then
-		local passed = get(frame_time)
+		if not warning_mode_active then resetWarningState() end
+		warning_mode_active = true
+		local passed = math.max(0, math.min(get(frame_time), 0.1))
 		-- define sources
 		local baro_alt = get(alt_svs)
 		
@@ -152,30 +199,43 @@ function update()
 		
 		local takeoff = false -- temp
 		
-		local GSlope = get(nav_gs)
-		local GSflag = get(nav_gs_flag)
+		local nav_source = get(use_second_nav)
+		local GSlope = nav_source == 1 and get(nav2_gs) or get(nav_gs)
+		local GSflag = nav_source == 1 and get(nav2_gs_flag) or get(nav_gs_flag)
+		if nav_source ~= last_nav_source then gs_warning_time = 0 end
+		last_nav_source = nav_source
 		
 		--print(sm_rv_vvi)
 		
 		-- calculate flight phase
-		local gear_touch = get(deflection_mtr_2) > 0.05 or get(deflection_mtr_3) > 0.05
+		local gear_touch = get(on_ground) > 0 or get(deflection_mtr_2) > 0.05 or get(deflection_mtr_3) > 0.05
 		local eng_TO = get(rpm_high_1) > 90 and get(rpm_high_2) > 90 and get(rpm_high_3) > 90
-		
-		if gear_touch then 
+
+		-- Keep the departure phase through gear retraction/reduced thrust. A
+		-- sustained descent returns to approach monitoring, even below 500 m.
+		if (last_flight_phase == 1 or last_flight_phase == 5) and baro_vvi < -0.5 then
+			departure_descent_time = departure_descent_time + passed
+		else departure_descent_time = 0 end
+		if gear_touch then
 			flight_phase = 0  -- on ground
-		elseif gears and eng_TO and not gear_touch and rv_alt < 500 and last_flight_phase == 0 then 
+		elseif was_on_ground or (last_flight_phase == 0 and rv_alt < 500 and baro_vvi > 0.5) then
 			flight_phase = 1 -- take off
-		elseif not gears and rv_alt >= 500 and last_flight_phase == 1 then 
+		elseif (last_flight_phase == 3 or last_flight_phase == 4) and eng_TO and baro_vvi > 0.5 then
+			flight_phase = 5 -- go around; test before landing configuration
+		elseif (last_flight_phase == 1 or last_flight_phase == 5) and rv_alt < 500 and departure_descent_time < 3 then
+			flight_phase = last_flight_phase
+		elseif not gears and rv_alt >= 500 then
 			flight_phase = 2  -- cruise flight
 		elseif (gears or flaps) and rv_alt > 500 then 
 			flight_phase = 3  -- flight near airport
 		elseif gears and flaps and rv_alt <= 500 then 
 			flight_phase = 4  -- approach
-		elseif last_flight_phase == 4 and eng_TO then 
-			flight_phase = 5 -- go around
+		else
+			flight_phase = 2 -- airborne without landing configuration (also airborne starts)
 		end
 		
 		last_flight_phase = flight_phase
+		was_on_ground = gear_touch
 		
 		-- activate and deactivate some modes
 		if not gear_touch and rv_alt > 30 then mode_1_2_active = true
@@ -283,15 +343,19 @@ function update()
 		local gs_interval = 7
 		local gs_vol = 1
 		
-		if rv_alt <= 300 and rv_alt > 150 and GSlope < -120/250 and gears and mode_5_active then 
+		-- A parked/invalid GS needle, the unused receiver, departure and Enroute
+		-- are not an ILS approach. Retain warnings on a real manual ILS approach.
+		local gs_approach = GSflag == 0 and finiteNumber(GSlope) and get(katet_nav_mode) == 1
+			and gears and mode_5_active and mode_4_active and baro_vvi <= 0.5
+		if rv_alt <= 300 and rv_alt > 150 and GSlope < -120/250 and gs_approach then
 			mode_5_res = 1 
 			gs_vol = 0.5 
 			gs_interval = 1.875 * rv_alt / (GSlope * 250)
-		elseif rv_alt <= 150 and rv_alt >= 60 and GSlope < -120/250 and gears and mode_5_active then 
+		elseif rv_alt <= 150 and rv_alt >= 60 and GSlope < -120/250 and gs_approach then
 			mode_5_res = 1 
 			gs_vol = 1
 			gs_interval = 1.875 * rv_alt / (GSlope * 250)
-		elseif rv_alt >= 30 and rv_alt < 60 and GSlope < line(rv_alt, 30, -200/250, 60, -120/250) and gears and mode_5_active then 
+		elseif rv_alt >= 30 and rv_alt < 60 and GSlope < line(rv_alt, 30, -200/250, 60, -120/250) and gs_approach then
 			mode_5_res = 1 
 			gs_vol = 1
 			gs_interval = 112.5 / (GSlope * 250)
@@ -547,6 +611,51 @@ function update()
 		if mode7_counter > 1 then mode7_counter = 0 end
 		
 		mode_7_res = math.max(res_left, res_ctr, res_right)
+
+		-- Apply inhibits and confirmation at the producer, before taws_sound
+		-- runs in this SASL update. Post-processing in xTlua is too late to
+		-- reject a one-frame warning already passed to the audio component.
+		local warnings_enabled = get(egpws_alarm_1) == 1
+		if not warnings_enabled or get(dis_rppz) > 0 then
+			mode_1_res, mode_2A_res, mode_2B_res = 0, 0, 0
+			mode_3A_res, mode_3B_res, mode_7_res = 0, 0, 0
+			if mode_4A_res == 2 then mode_4A_res = 0 end
+			if mode_4B_res == 2 then mode_4B_res = 0 end
+		end
+		if not warnings_enabled or get(dis_gear) > 0 then
+			if mode_4A_res == 1 then mode_4A_res = 0 end
+		end
+		if not warnings_enabled or get(dis_flaps) > 0 or not flaps_warn then
+			if mode_4B_res == 1 then mode_4B_res = 0 end
+		end
+		if not warnings_enabled or get(dis_gs) > 0 then mode_5_res = 0 end
+		if not warnings_enabled then
+			mode_6_res = 0
+			set(taws_alt_left, 0)
+			set(taws_alt_right, 0)
+		end
+		if mode_4A_res == 1 then gear_warning_time = gear_warning_time + passed
+		else gear_warning_time = 0 end
+		if mode_4A_res == 1 and gear_warning_time < 1.2 then mode_4A_res = 0 end
+		if mode_5_res == 1 then gs_warning_time = gs_warning_time + passed
+		else gs_warning_time = 0 end
+		if gs_warning_time < 1.5 then mode_5_res = 0 end
+
+		-- Clear a cancelled warning immediately, not at the next voice repeat.
+		local active_messages = {
+			[1] = mode_1_res == 2 or mode_2A_res == 2 or mode_2B_res == 2 or mode_7_res == 2,
+			[4] = mode_2A_res == 1 or mode_2B_res == 1, [5] = mode_7_res == 1,
+			[6] = mode_4A_res == 2 or mode_4B_res == 2, [8] = mode_4A_res == 1,
+			[9] = mode_4B_res == 1, [10] = mode_6_res == 1, [11] = mode_1_res == 1,
+			[12] = mode_3A_res == 1 or mode_3B_res == 1, [13] = mode_5_res == 1,
+		}
+		local current_message = get(taws_message)
+		if current_message > 0 and not active_messages[current_message] then
+			set(taws_message, 0)
+			if get(taws_rus_phrase) >= 11 and get(taws_rus_phrase) <= 20 then set(taws_rus_phrase, 0) end
+			if get(taws_eng_phrase) >= 11 and get(taws_eng_phrase) <= 20 then set(taws_eng_phrase, 0) end
+			sound_counter = 0
+		end
 		
 		--set(taws_english, 0)
 		
@@ -673,7 +782,10 @@ function update()
 		set(taws_eng_phrase, 0)
 		set(taws_alt_left, 0)
 		set(taws_alt_right, 0)
-		
+		warning_mode_active = false
+
+	else
+		warning_mode_active = false
 	end
 
 end

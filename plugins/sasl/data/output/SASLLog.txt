@@ -222,22 +222,20 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.7914
+[TU154 INFO]: Scripts loading time: 0.7748
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
 [TU154 INFO]: [LUA]: "aircraft_init"	[Aircraft initialization] Engines-running controls applied
 [TU154 INFO]: [LUA]: "crew_voices"	PREPARE
-[TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
 [TU154 INFO]: [LUA]: "save_state"	State restored: OK
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
-[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
 [TU154 INFO]: [LUA]: "crew_voices"	CLIMB
 [TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	DESCEND
 [TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
 [TU154 INFO]: [LUA]: "crew_voices"	DESCEND
@@ -245,22 +243,12 @@
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	DESCEND
 [TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=C_off bus27=28.5/28.5 bus36=37.2 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
-[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.3 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.155
-[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
-[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: [LUA]: "crew_voices"	DESCEND
 [TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
 [TU154 INFO]: [LUA]: "crew_voices"	DESCEND
 [TU154 INFO]: [LUA]: "save_state"	State saved: OK
-[TU154 INFO]: Disabling...
-[TU154 INFO]: [LUA]: "stall"	XP12 asymmetric stall supplement v4.4.0 released
-[TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended
-[TU154 INFO]: [LUA]: "flight_controls"	flight controls released
-[TU154 INFO]: [LUA]: "rud_logic"	throttles released
-[TU154 INFO]: [LUA]: "gns430"	GPS reset
-[TU154 INFO]: SASL plugin stopped...
+[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=pilot_throttle bus27=28.5/28.5 bus36=37.2 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1 lever=1 delta=-0.264
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
