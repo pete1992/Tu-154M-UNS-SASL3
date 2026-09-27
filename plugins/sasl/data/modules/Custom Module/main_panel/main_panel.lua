@@ -250,7 +250,7 @@ components = {
 	-- Doppler system
 	diss {},
 	-- true and ground speed
-	usvp {},
+	-- usvp {}, -- Sole needle owner: xTlua T154.usvp (main-thread timer).
 	-- short-range radio navigation system
 	rsbn {},
 	-- radio panel

@@ -977,15 +977,17 @@ function update()
   local pitch_signal_failed = (pitch_submode == 5 and not gs_valid)
       or (pitch_submode ~= 5 and get(nav_gs_flag_1) == 1)
 
-  -- failure flags
+  -- Manual annunciators retain earlier disconnects until acknowledged. A
+  -- latched warning on the other axis is not a current guidance failure;
+  -- otherwise two old warnings invalidate even a newly captured, valid ILS.
   if (get(man_roll_lamp) == 1 and
-      (get(absu_calc_roll_fail) == 1 or roll_signal_failed or get(tks_fail_left) + get(tks_fail_right) == 2 or get(man_pitch_lamp) == 1))
+      (get(absu_calc_roll_fail) == 1 or roll_signal_failed or get(tks_fail_left) + get(tks_fail_right) == 2))
       or get(absu_speed_test_2) == 1 then
     flag_roll = 1; S.roll_show = 25
   end
 
   if (get(man_pitch_lamp) == 1 and
-      (get(absu_calc_pitch_fail) == 1 or pitch_signal_failed or get(man_roll_lamp) == 1))
+      (get(absu_calc_pitch_fail) == 1 or pitch_signal_failed))
       or get(absu_speed_test_2) == 1 then
     flag_pitch = 1; S.pitch_show = 10
   end

@@ -36,6 +36,7 @@ defineProps({
     -- ----------------------------------------------------------------------------
     -- Time / power / controls
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "running_time", "sim/time/total_running_time_sec", globalPropertyf },
     { "diss_on", "tu154/custom/switchers/ovhd/diss_on", globalPropertyi },
     { "diss_mode_sw", "tu154/custom/switchers/ovhd/diss_mode", globalPropertyi },
     { "nvu_calc_set", "tu154/custom/switchers/ovhd/nvu_calc_set", globalPropertyi },
@@ -155,6 +156,37 @@ local last_auto_spd_ms  = wind_spd_act_ms
 local last_auto_g_spd   = 0
 local last_auto_slip    = 0
 local last_auto_age_s   = 1e9
+
+-- DISS is the sole publisher of its measurements, including the legacy
+-- 180-second power-up hold formerly imposed by T154.systems after this update.
+-- Use the same elapsed-time clock, not the capped per-frame integration delta.
+local warmup_start = nil
+local warmup_complete = false
+local warmup_snapshot = nil
+
+local function warmup_active(power)
+	if not power then
+		warmup_start = nil
+		warmup_complete = false
+		warmup_snapshot = nil
+		return false
+	end
+	if warmup_complete then return false end
+	local now = get(running_time)
+	if warmup_start == nil then
+		warmup_start = now
+		warmup_snapshot = {
+			wind_course = get(diss_wind_course),
+			wind_spd = get(diss_wind_spd),
+			groundspeed = get(diss_groundspeed),
+			slip = get(diss_slip_angle),
+		}
+	end
+	if now - warmup_start < 180 then return true end
+	warmup_complete = true
+	warmup_snapshot = nil
+	return false
+end
 
 -- ----------------------------------------------------------------------------
 -- Update loop
@@ -392,13 +424,26 @@ function update()
 	-- ----------------------------------------------------------------------------
 	-- Write outputs (preserve original MASTER logic exactly)
 	-- ----------------------------------------------------------------------------
+	-- Track power/time on both peers so authority transfer neither restarts a
+	-- completed warm-up nor skips a power cycle observed while this peer was slave.
+	local warming_up = warmup_active(power)
 	local MASTER = get(ismaster) ~= 1
 	if MASTER then
-		set(diss_wind_course, wind_dir_abs_act)
-		set(diss_wind_spd, wind_spd_act_ms * 3.6)
-		set(diss_groundspeed, g_spd * 3.6)
-		set(diss_slip_angle, slip_angle)
-		set(diss_mode, mode)
+		-- Keep calculations above running behind the publication hold. Mode 0
+		-- with diss_cc > 0 identifies warm-up for the single USVP needle owner.
+		-- On release publish the actual mode (auto/manual/test), not a forced 1.
+		if warming_up then
+			set(diss_wind_course, warmup_snapshot.wind_course)
+			set(diss_wind_spd, warmup_snapshot.wind_spd)
+			set(diss_groundspeed, warmup_snapshot.groundspeed)
+			set(diss_slip_angle, warmup_snapshot.slip)
+			set(diss_mode, 0)
+		else
+			set(diss_wind_course, wind_dir_abs_act)
+			set(diss_wind_spd, wind_spd_act_ms * 3.6)
+			set(diss_groundspeed, g_spd * 3.6)
+			set(diss_slip_angle, slip_angle)
+			set(diss_mode, mode)
+		end
 	end
 end
-

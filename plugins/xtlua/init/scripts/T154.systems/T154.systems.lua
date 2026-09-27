@@ -36,7 +36,7 @@ local DATAREFS = {
     simDR_36vr = "tu154/custom/elec/bus36_volt_right",
     simDR_on_ground = "sim/flightmodel/failures/onground_all",
     simDR_passed = "sim/operation/misc/frame_rate_period",
-    simDR_time = "sim/time/total_running_time_sec",
+    -- simDR_time = "sim/time/total_running_time_sec", -- DISS warm-up moved to diss_logic.lua.
     -- Flight controls, trim and hydraulics
     -- simDR_thr1 = "tu154/custom/controlls/throttle_1", -- Unused binding; no child or external consumer.
     -- simDR_thr2 = "tu154/custom/controlls/throttle_2", -- Unused binding; no child or external consumer.
@@ -44,7 +44,7 @@ local DATAREFS = {
     simDR_yoke_p = "tu154/custom/controlls/yoke_pitch",
     simDR_yoke_r = "tu154/custom/controlls/yoke_roll",
     simDR_pitch_trim = "tu154/custom/trimmers/int_pitch_trim",
-    simDR_emerg_trim = "tu154/custom/switchers/console/emerg_elev_trimm",
+    -- simDR_emerg_trim = "tu154/custom/switchers/console/emerg_elev_trimm", -- Unused in this module; other modules bind independently.
     simDR_hyd1_press = "tu154/custom/hydro/gs_press_1",
     simDR_hyd2_press = "tu154/custom/hydro/gs_press_2",
     simDR_hyd3_press = "tu154/custom/hydro/gs_press_3",
@@ -52,25 +52,26 @@ local DATAREFS = {
     -- ABSU / STU and checklist controls
     simDR_gliss_lit = "tu154/custom/lights/button/absu_gz",
     -- simDR_at_mode = "tu154/custom/absu/stu_mode", -- Unused binding; no child or external consumer.
-    simDR_sw_sound = "tu154/custom/switchers/console/nvu_corr_on",
+    -- simDR_sw_sound = "tu154/custom/switchers/console/nvu_corr_on", -- Unused in this module; other modules bind independently.
     -- simDR_spd_but = "tu154/custom/buttons/console/absu_stab_speed", -- Unused binding; no child or external consumer.
     -- simDR_spd_but_lit = "tu154/custom/lights/button/absu_stab_spd", -- Unused binding; no child or external consumer.
     simDR_absu_turn = "tu154/custom/switchers/console/absu_turn_handle",
     simDR_absu_zk = "tu154/custom/buttons/console/absu_zk",
     simDR_absu_reset = "tu154/custom/buttons/console/absu_reset",
     simDR_absu_nvu = "tu154/custom/buttons/console/absu_nvu",
-    simDR_absu_pitch_mode = "tu154/custom/absu/pitch_sub_mode",
+    -- simDR_absu_pitch_mode = "tu154/custom/absu/pitch_sub_mode", -- Unused binding; no external consumer.
     simDR_checklist_select = "tu154/custom/checklist/checklist_selected",
     -- simDR_gpss = "sim/cockpit2/autopilot/gpss_status", -- Unused binding; no child or external consumer.
-    -- DISS / NVU
-    simDR_diss_cc = "tu154/custom/nvu/diss_cc",
-    simDR_diss_mode = "tu154/custom/nvu/diss_mode",
-    simDR_diss_slip = "tu154/custom/nvu/diss_slip_angle",
-    simDR_diss_gs = "tu154/custom/nvu/diss_groundspeed",
-    simDR_diss_wnd_spd = "tu154/custom/nvu/diss_wind_spd",
-    simDR_diss_wnd_crs = "tu154/custom/nvu/diss_wind_course",
-    simDR_mid_flag = "tu154/custom/gauges/speed/speed_mid_flag",
-    simDR_needle = "tu154/custom/gauges/speed/speed_mid_needle",
+    -- Ownership moved: DISS outputs to diss_logic.lua, USVP needle to T154.usvp.
+    -- No remaining consumers in this module or external users of these bindings.
+    -- simDR_diss_cc = "tu154/custom/nvu/diss_cc",
+    -- simDR_diss_mode = "tu154/custom/nvu/diss_mode",
+    -- simDR_diss_slip = "tu154/custom/nvu/diss_slip_angle",
+    -- simDR_diss_gs = "tu154/custom/nvu/diss_groundspeed",
+    -- simDR_diss_wnd_spd = "tu154/custom/nvu/diss_wind_spd",
+    -- simDR_diss_wnd_crs = "tu154/custom/nvu/diss_wind_course",
+    -- simDR_mid_flag = "tu154/custom/gauges/speed/speed_mid_flag",
+    -- simDR_needle = "tu154/custom/gauges/speed/speed_mid_needle",
     -- APU
     simDR_apu_start_ready = "tu154/custom/lights/apu/start_ready",
     simDR_lamp_test_apu = "tu154/custom/buttons/lamp_test_apu",
@@ -81,7 +82,7 @@ local DATAREFS = {
     simDR_light_l_ext = "tu154/custom/lights/landing_ext_set_L",
     simDR_light_r_ext = "tu154/custom/lights/landing_ext_set_R",
     simDR_gear_blocks = "tu154/custom/anim/gear_blocks",
-    simDR_gear_fan = "tu154/custom/switchers/eng/gear_fan",
+    -- simDR_gear_fan = "tu154/custom/switchers/eng/gear_fan", -- Unused in this module; other modules bind independently.
     simDR_park_brake = "tu154/custom/controll/parking_brake",
     simDR_brake_l = "tu154/custom/gauges/console/gear_brake_press_L",
     simDR_brake_r = "tu154/custom/gauges/console/gear_brake_press_R",
@@ -122,8 +123,8 @@ local DATAREFS = {
     -- simDR_katet_gns_flag = "tu154/custom/SC/GNS430_flag",
     -- Indicators, test controls and legacy animation helpers
     simDR_lit_test_front = "tu154/custom/buttons/lamp_test_front",
-    simDR_ping_pong = "sim/graphics/animation/ping_pong_2",
-    simDR_sin_wave = "sim/graphics/animation/sin_wave_2",
+    -- simDR_ping_pong = "sim/graphics/animation/ping_pong_2", -- Unused in this module; other modules bind independently.
+    -- simDR_sin_wave = "sim/graphics/animation/sin_wave_2", -- Unused in this module; other modules bind independently.
     simDRgeartestup = "tu154/custom/buttons/lamp_test_upper_gear",
     simDR_but_sound = "tu154/custom/buttons/srpbz/but_down",
     -- simDR_flood_front = "tu154/custom/lights/front_panel_flood", -- Unused binding; no child or external consumer.
@@ -178,12 +179,6 @@ local stu_toga = 0
 local at1 = 0
 local at2 = 0
 local checklist_num = 0
-local diss_timer = 0
-local diss_timer_start = 1
-local diss_spd = 0
-local diss_slip = 0
-local diss_wnd_spd = 0
-local diss_wnd_crs = 0
 local current_pitch_trim = 0
 local current_pitch_trim_stu = 0
 local absu_turn_zero = 0
@@ -514,40 +509,8 @@ if simDR_checklist_select > 0 then
 end   
     
     
--- DISS warm-up -----------------------------------------------------------
--- Freeze DISS outputs for 180 seconds after power-up, then enable normal mode.
-if simDR_diss_cc > 0 and diss_timer_start > 0 then
-    if diss_timer == 0 then
-        diss_timer = simDR_time
-        diss_spd = simDR_diss_gs
-        diss_slip = simDR_diss_slip
-        diss_wnd_spd = simDR_diss_wnd_spd
-        diss_wnd_crs = simDR_diss_wnd_crs
-    end
-    if (simDR_time - diss_timer) < 180 then
-        simDR_diss_gs = diss_spd
-        simDR_diss_slip = diss_slip
-        simDR_diss_wnd_spd = diss_wnd_spd
-        simDR_diss_wnd_crs = diss_wnd_crs
-        simDR_diss_mode = 0
-        if simDR_mid_flag > 0 then
-            simDR_needle  = 0
-        end
-    else
-        simDR_diss_mode = 1
-        diss_timer = 0
-        diss_timer_start = 0
-        diss_spd = 0
-        diss_slip = 0
-        diss_wnd_spd = 0
-        diss_wnd_crs = 0
-    end
-end
-    
-if simDR_diss_cc < 1 then
-        diss_timer = 0
-        diss_timer_start = 1
-end
+-- DISS warm-up now belongs to its measurement producer, diss_logic.lua.
+-- USVP source selection, damping and warm-up masking belong to T154.usvp.
     
 
 -- Total hydraulic-loss control limitation -------------------------------

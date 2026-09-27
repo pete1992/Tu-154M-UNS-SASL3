@@ -12,8 +12,9 @@ SDK-Registrierung, repräsentative native Implementierungen, Fehlerpfade und Res
 Nicht pauschal auditiert wurden sämtliche vendorten LuaJIT-, ImGui- und SDK-Dateien.
 
 Die installierte `win.xpl` ist nicht byteidentisch mit der im untersuchten Repository enthaltenen Binärdatei.
-Gleiche Versionsbezeichnung beweist deshalb weder denselben Quellstand noch dieselben Funktionen.
-Der aktuelle Auftrag ersetzt oder kompiliert die Plugin-Binärdatei nicht. Die beiden Instrumentenports
+Der Repository-Eigentümer bestätigt die Funktionsgleichheit trotz unterschiedlicher Compilerläufe;
+die Hashabweichung ist deshalb kein Portierungsblocker. Die Hashes dienen nur der Build-Zuordnung.
+Der aktuelle Auftrag ersetzt oder kompiliert die Plugin-Binärdatei nicht. Die Instrumentenports
 verwenden den klassischen API-Pfad; neue XLua-2-Grafikfunktionen werden dafür nicht vorausgesetzt.
 
 SHA-256 zur späteren Zuordnung:
@@ -21,7 +22,7 @@ SHA-256 zur späteren Zuordnung:
 - Repository `win.xpl`: `A8AB4EB80A83EEE537F7362FE70E15FA607EB747CDB23347BBD90AC6A6C2ADE4`.
 - Installierte `win.xpl`: `2F8349C91BEEE9C99A8331D99B485B80F69D75D362D584128742C92A606E79BF`.
 - `init/init.lua` stimmt bytegenau überein. Der installierte Worker-Bootstrap ergänzt JIT-Optionen;
-  `init_v2.lua` unterscheidet sich nur in Zeilenenden. Das ersetzt keinen Binärnachweis.
+  `init_v2.lua` unterscheidet sich nur in Zeilenenden. Funktionstests erfolgen mit der installierten Binärdatei.
 
 Quellcodebefund, Mock-/Syntaxprüfung und echter Simulatorlauf werden getrennt dokumentiert.
 Die in den Repository-READMEs genannten `tests/check_*.ps1`-/Lua-Prüfungen sind im untersuchten
@@ -142,14 +143,21 @@ danach Fehlerpfade, Reload, Disable/Enable, Flugzeugwechsel und Shutdown im Simu
 | --- | --- | --- |
 | 1 – aktueller Pilot | `main_panel/clock24.lua`, `main_panel/termo.lua` | Bestehende Ausgabewege und Creator erhalten; Timing und Startinitialisierung vergleichen |
 | 2 – kleine Instrumente | `eup53.lua`, `mach_meters.lua`, `mech_aneroid.lua`, danach `tks/km5.lua` | Numerischen Teil isolieren; Framefilter, Stromausfall, Achsen/Einheiten und Synchronisation prüfen |
-| 3 – gekoppelte Instrumente | `svs.lua`, `rv5.lua`, `usvp.lua`, `door_panel.lua`, `ins_test.lua`, `misc_fails.lua`, `tks/tks_fails.lua` | Abhängigkeiten und Ausgabeautorität vor Reihenfolge festlegen; Ton/UI gegebenenfalls SASL belassen |
+| 3 – gekoppelte Instrumente | `svs.lua`, `rv5.lua`, `door_panel.lua`, `ins_test.lua`, `misc_fails.lua`, `tks/tks_fails.lua` | Abhängigkeiten und Ausgabeautorität vor Reihenfolge festlegen; Ton/UI gegebenenfalls SASL belassen; USVP bereits separat zusammengeführt |
 | 4 – größere Systeme | Ausgewählte elektrische/Animations-/Umweltberechnungen | Mehrinstanzen, Verbraucherreihenfolge und Rückkopplung vollständig erfassen |
 | 5 – Renderer-Pilot | Ein kleines nichtkritisches Instrument oder Diagnosefenster | Worker-Snapshot → `xlua2_main`; erst nach den nativen Freigabeschranken |
 | 6 – zuletzt | ABSU, AT, ILS/KATET, Engine/Start, vollständiges TAWS/EGPWS | Eigene Regressionstests und Flugphasenabnahme; kein bloßer Übersetzungsauftrag |
 
-**USVP-Sonderfall:** `usvp.lua` schreibt `tu154/custom/gauges/speed/speed_mid_needle`.
-`T154.systems.lua` schreibt denselben Ausgang unter seinen eigenen Bedingungen ebenfalls.
-Vor einem Port muss eine gemeinsame Schreibzuständigkeit festgelegt werden, statt einen dritten Schreiber hinzuzufügen.
+**USVP-Zuständigkeit geklärt (26.09.2026):** `T154.usvp` ist jetzt der einzige aktive Schreiber von
+`tu154/custom/gauges/speed/speed_mid_needle`; der frühere SASL-Hosteintrag ist deaktiviert.
+Quellenauswahl, bisherige Euler-Dämpfung und Anlaufsperre liegen gemeinsam im klassischen Main-Modul.
+Die DISS-Anlaufphase wurde aus `T154.systems` zum Messwertproduzenten `diss_logic.lua` verlegt:
+Dieser veröffentlicht allein seine Werte und den tatsächlichen Modus. USVP erkennt die Anlaufphase
+an `diss_cc > 0` zusammen mit `diss_mode == 0`. Keine zweite Uhr und kein zusätzlicher DataRef nötig.
+Der DISS-Geländeprobe-/Messalgorithmus bleibt SASL; die Kabinendruck-Zuständigkeit in
+`mech_aneroid.lua`/`T154.zmisc` wurde in diesem Schritt nicht verändert.
+USVP-Abnahme: 16.690 Offline-Assertions sowie echter TAS/GS-, Anlauf-, Strom-, Pause-,
+Replay- und Reload-Test; siehe [USVP-Testprotokoll](USVP_CONSOLIDATION_TEST_2026-09-26.md).
 **Mehrinstanzen:** `rv5.lua` wird links/rechts mit abweichenden Bindings instanziiert; `battery_logic.lua`
 hat getrennte Batterieparameter und internen Zustand. Ein gemeinsames Lua-Local darf diese Instanzen nicht zusammenlegen.
 `nvu_logic.lua` ist kein Anlass, entfernte NVU-Navigation wieder einzuführen; GPS/FMS/VOR-Auswahl und bestehende Verbraucher erhalten.

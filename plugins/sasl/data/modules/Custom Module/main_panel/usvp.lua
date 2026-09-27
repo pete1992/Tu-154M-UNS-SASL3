@@ -1,5 +1,7 @@
 -- usvp.lua
 -- USVP true-airspeed and groundspeed indicator.
+-- Inactive migration reference; main_panel no longer loads this component.
+-- Active owner: xTlua init/scripts/T154.usvp/T154.usvp.lua.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do

@@ -81,7 +81,6 @@
 [TU154 INFO]: [LUA]: loading	diss
 [TU154 INFO]: [LUA]: loading	diss_panel
 [TU154 INFO]: [LUA]: loading	diss_logic
-[TU154 INFO]: [LUA]: loading	usvp
 [TU154 INFO]: [LUA]: loading	rsbn
 [TU154 INFO]: [LUA]: loading	rsbn_panel
 [TU154 INFO]: [LUA]: loading	rsbn_logic
@@ -220,17 +219,15 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 0.4002
+[TU154 INFO]: Scripts loading time: 0.8298
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
 [TU154 INFO]: [LUA]: "aircraft_init"	[Aircraft initialization] Engines-running controls applied
 [TU154 INFO]: [LUA]: "crew_voices"	PREPARE
-[TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
 [TU154 INFO]: [LUA]: "save_state"	State restored: OK
-[TU154 INFO]: [LUA]: "aircraft_init"	[Aircraft initialization] Cold-and-dark controls applied
+[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
 [TU154 INFO]: [LUA]: "aircraft_init"	[Aircraft initialization] Engines-running controls applied
-[TU154 INFO]: [LUA]: "save_state"	State saved: OK
 [TU154 INFO]: Disabling...
 [TU154 INFO]: [LUA]: "stall"	XP12 asymmetric stall supplement v4.4.0 released
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended
