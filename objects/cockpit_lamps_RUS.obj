@@ -66506,8 +66506,13 @@ ATTR_light_level 0.000000 1.000000 tu154/custom/lights/controll_pitch_new
 TRIS 99597 18
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/yoke_sign_new
 TRIS 99615 18
+# Landing warning display: this side must select LD and the ILS profile.
+ANIM_begin
+ANIM_hide 0.000000 3.000000 tu154/custom/absu/absu_pnp_mode_1
+ANIM_hide 1.000000 2.000000 tu154/custom/katet/mode
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/triangle_new
 TRIS 99633 18
+ANIM_end
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/controll_thrust_new
 TRIS 99651 18
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/course_lim_new
@@ -66628,8 +66633,13 @@ ATTR_light_level 0.000000 1.000000 tu154/custom/lights/course_lim_new
 TRIS 100611 18
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/controll_thrust_new
 TRIS 100629 18
+# Landing warning display: this side must select LD and the ILS profile.
+ANIM_begin
+ANIM_hide 0.000000 3.000000 tu154/custom/absu/absu_pnp_mode_2
+ANIM_hide 1.000000 2.000000 tu154/custom/katet/mode
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/triangle_new
 TRIS 100647 18
+ANIM_end
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/yoke_sign_new
 TRIS 100665 18
 ATTR_light_level 0.000000 1.000000 tu154/custom/lights/controll_roll_new

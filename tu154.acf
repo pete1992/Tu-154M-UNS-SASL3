@@ -47886,7 +47886,7 @@ P acf/_idle_rat/0 0.300000012
 P acf/_idle_rat/1 0.550000012
 P acf/_idle_rat/count 2
 P acf/_incidence_with_flaps 0
-P acf/_inlet_compression_efficiency 0.699999988
+P acf/_inlet_compression_efficiency 0.950000000
 P acf/_inlet_max_KEAS 800.000000000
 P acf/_inlet_max_temp_C 800.000000000
 P acf/_integrated_approach_navigation 0

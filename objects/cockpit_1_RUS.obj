@@ -182271,12 +182271,18 @@ ATTR_light_level 0.000000 1.000000 tu154/custom/lights/left_panel_int
 TRIS 205674 126
 ANIM_end
 ANIM_begin
+# Landing warning flag: this side must select LD and the ILS profile.
+ANIM_hide 0.000000 3.000000 tu154/custom/absu/absu_pnp_mode_1
+ANIM_hide 1.000000 2.000000 tu154/custom/katet/mode
 ANIM_trans -0.543800 -1.521330 -21.633200 -0.543800 -1.521330 -21.633200 0.000000 0.000000 none
 ANIM_rotate 0.000000 0.139173 0.990268 60.000000 0.000000 0.000000 1.000000 tu154/custom/gauges/ahz/dir_roll_flag_L
 ANIM_trans 0.543800 1.521330 21.633200 0.543800 1.521330 21.633200 0.000000 0.000000 none
 TRIS 205800 72
 ANIM_end
 ANIM_begin
+# Landing warning flag: this side must select LD and the ILS profile.
+ANIM_hide 0.000000 3.000000 tu154/custom/absu/absu_pnp_mode_1
+ANIM_hide 1.000000 2.000000 tu154/custom/katet/mode
 ANIM_trans -0.467921 -1.506680 -21.635300 -0.467921 -1.506680 -21.635300 0.000000 0.000000 none
 ANIM_rotate 0.000000 0.139174 0.990268 60.000000 0.000000 0.000000 1.000000 tu154/custom/gauges/ahz/dir_pitch_flag_L
 ANIM_trans 0.467921 1.506680 21.635300 0.467921 1.506680 21.635300 0.000000 0.000000 none
@@ -182333,6 +182339,9 @@ ATTR_light_level_reset
 TRIS 209649 144
 ANIM_end
 ANIM_begin
+# Landing warning flag: this side must select LD and the ILS profile.
+ANIM_hide 0.000000 3.000000 tu154/custom/absu/absu_pnp_mode_2
+ANIM_hide 1.000000 2.000000 tu154/custom/katet/mode
 ANIM_trans 0.466800 -1.522330 -21.633200 0.466800 -1.522330 -21.633200 0.000000 0.000000 none
 ANIM_rotate 0.000000 0.139173 0.990268 60.000000 0.000000 0.000000 1.000000 tu154/custom/gauges/ahz/dir_roll_flag_R
 ANIM_trans -0.466800 1.522330 21.633200 -0.466800 1.522330 21.633200 0.000000 0.000000 none
@@ -182340,6 +182349,9 @@ ATTR_light_level 0.000000 1.000000 tu154/custom/lights/right_panel_int
 TRIS 209793 72
 ANIM_end
 ANIM_begin
+# Landing warning flag: this side must select LD and the ILS profile.
+ANIM_hide 0.000000 3.000000 tu154/custom/absu/absu_pnp_mode_2
+ANIM_hide 1.000000 2.000000 tu154/custom/katet/mode
 ANIM_trans 0.542700 -1.508680 -21.635300 0.542700 -1.508680 -21.635300 0.000000 0.000000 none
 ANIM_rotate 0.000000 0.139173 0.990268 60.000000 0.000000 0.000000 1.000000 tu154/custom/gauges/ahz/dir_pitch_flag_R
 ANIM_trans -0.542700 1.508680 21.635300 -0.542700 1.508680 21.635300 0.000000 0.000000 none
