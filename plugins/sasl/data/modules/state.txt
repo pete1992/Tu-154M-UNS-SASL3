@@ -1,5 +1,17 @@
 state = {
     ['legacyPopups'] = {
+        ['ovhd_2d_panel'] = {
+            [1] = 337;
+            [2] = 1132;
+            [3] = 1203.9890625;
+            [4] = 836.51640625;
+        };
+        ['ground_srv_panel'] = {
+            [1] = 126;
+            [2] = 224;
+            [3] = 540.88671875;
+            [4] = 726.6875;
+        };
         ['checklist_panel_2d'] = {
             [1] = 461;
             [2] = 212;
@@ -42,32 +54,53 @@ state = {
             [3] = 845.6;
             [4] = 564.00859375;
         };
-        ['ovhd_2d_panel'] = {
-            [1] = 337;
-            [2] = 1132;
-            [3] = 1203.9890625;
-            [4] = 836.51640625;
-        };
-        ['ground_srv_panel'] = {
-            [1] = 126;
-            [2] = 224;
-            [3] = 540.88671875;
-            [4] = 726.6875;
-        };
     };
     ['contextWindows'] = {
-        ['checklist_panel_2d'] = {
+        ['ovhd_2d_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
+            ['visible'] = false;
+            ['position'] = {
+                [1] = 749;
+                [2] = 536;
+                [3] = 1528;
+                [4] = 1061;
+            };
             ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 0;
+                    [3] = 1458;
+                    [4] = 1013;
+                };
                 ['visible'] = false;
+            };
+        };
+        ['ground_srv_panel'] = {
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
+            ['position'] = {
+                [1] = 1605;
+                [2] = 392;
+                [3] = 651;
+                [4] = 875;
+            };
+            ['initState'] = {
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
-                    [3] = 300;
-                    [4] = 1062.5;
+                    [3] = 655;
+                    [4] = 880;
                 };
+                ['visible'] = false;
+            };
+        };
+        ['checklist_panel_2d'] = {
+            ['mode'] = {
+                [1] = 0;
             };
             ['visible'] = false;
             ['position'] = {
@@ -76,19 +109,19 @@ state = {
                 [3] = 300;
                 [4] = 1062;
             };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 300;
+                    [4] = 1062.5;
+                };
+                ['visible'] = false;
+            };
         };
         ['nvu_2D_panel'] = {
             ['mode'] = {
                 [1] = 0;
-            };
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 0;
-                    [3] = 636;
-                    [4] = 786;
-                };
             };
             ['visible'] = false;
             ['position'] = {
@@ -97,10 +130,26 @@ state = {
                 [3] = 636;
                 [4] = 786;
             };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 0;
+                    [3] = 636;
+                    [4] = 786;
+                };
+                ['visible'] = false;
+            };
         };
         ['uphone'] = {
             ['mode'] = {
                 [1] = 0;
+            };
+            ['visible'] = false;
+            ['position'] = {
+                [1] = 40;
+                [2] = 20;
+                [3] = 241;
+                [4] = 446;
             };
             ['initState'] = {
                 ['visible'] = false;
@@ -111,26 +160,10 @@ state = {
                     [4] = 446;
                 };
             };
-            ['visible'] = false;
-            ['position'] = {
-                [1] = 40;
-                [2] = 20;
-                [3] = 241;
-                [4] = 446;
-            };
         };
         ['palette'] = {
             ['mode'] = {
                 [1] = 0;
-            };
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 351.4;
-                    [4] = 427;
-                };
             };
             ['visible'] = false;
             ['position'] = {
@@ -139,19 +172,19 @@ state = {
                 [3] = 351;
                 [4] = 427;
             };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 351.4;
+                    [4] = 427;
+                };
+                ['visible'] = false;
+            };
         };
         ['camera_panel'] = {
             ['mode'] = {
                 [1] = 0;
-            };
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 512;
-                    [4] = 512;
-                };
             };
             ['visible'] = false;
             ['position'] = {
@@ -160,19 +193,19 @@ state = {
                 [3] = 512;
                 [4] = 512;
             };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 512;
+                    [4] = 512;
+                };
+                ['visible'] = false;
+            };
         };
         ['absu_2d_panel'] = {
             ['mode'] = {
                 [1] = 0;
-            };
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 917;
-                    [4] = 597;
-                };
             };
             ['visible'] = false;
             ['position'] = {
@@ -181,19 +214,19 @@ state = {
                 [3] = 917;
                 [4] = 597;
             };
+            ['initState'] = {
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 917;
+                    [4] = 597;
+                };
+                ['visible'] = false;
+            };
         };
         ['payload_panel'] = {
             ['mode'] = {
                 [1] = 0;
-            };
-            ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 1024;
-                    [4] = 683;
-                };
             };
             ['visible'] = false;
             ['position'] = {
@@ -202,47 +235,14 @@ state = {
                 [3] = 1022;
                 [4] = 681;
             };
-        };
-        ['ovhd_2d_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
             ['initState'] = {
-                ['visible'] = false;
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 0;
-                    [3] = 1458;
-                    [4] = 1013;
-                };
-            };
-            ['visible'] = false;
-            ['position'] = {
-                [1] = 749;
-                [2] = 536;
-                [3] = 1528;
-                [4] = 1061;
-            };
-        };
-        ['ground_srv_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
-            ['initState'] = {
-                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
-                    [3] = 655;
-                    [4] = 880;
+                    [3] = 1024;
+                    [4] = 683;
                 };
-            };
-            ['visible'] = false;
-            ['position'] = {
-                [1] = 1605;
-                [2] = 392;
-                [3] = 651;
-                [4] = 875;
+                ['visible'] = false;
             };
         };
     };

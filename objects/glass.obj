@@ -1272,7 +1272,10 @@ IDX	788
 ANIM_begin
 	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_4
 ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_4
+# Fixed cockpit panes are rendered by the native rain/reflector pair.
+ATTR_draw_disable
 TRIS	0 648
+ATTR_draw_enable
 ANIM_end
 # salon_walls.042
 ATTR_light_level  0.000  1.000 tu154/custom/light/no_LIT
