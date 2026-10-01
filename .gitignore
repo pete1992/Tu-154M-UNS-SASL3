@@ -8,3 +8,4 @@ tests
 .codex-tests 
 /tests/
 /.codex-tests/
+*.bak
