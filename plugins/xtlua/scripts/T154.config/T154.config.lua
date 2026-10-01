@@ -15,9 +15,6 @@ dofile("json/json.lua")
 simDR_livery_path = find_dataref("sim/aircraft/view/acf_livery_path")
 
 
---*********************************************--
---** CREATE READ-WRITE CUSTOM DATAREFS **--
---**********************************************--
 -- Holds all SimConfig options
 T154_simconfig_data = deferred_dataref("tu154/custom/t154cfg/simconfig", "string")
 T154_newsimconfig_data = deferred_dataref("tu154/custom/t154cfg/newsimconfig", "number")

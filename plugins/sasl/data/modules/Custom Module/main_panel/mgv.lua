@@ -9,52 +9,25 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
-
-    --defineProperty("pitch_sim", globalPropertyf("sim/cockpit2/gauges/indicators/pitch_electric_deg_pilot"))
-    --defineProperty("roll_sim", globalPropertyf("sim/cockpit2/gauges/indicators/roll_electric_deg_pilot"))
-
+	-- flight time
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, 
     { "pitch_sim", "sim/flightmodel/position/theta", globalPropertyf },
     { "roll_sim", "sim/flightmodel/position/phi", globalPropertyf },
-
     { "N1", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
     { "N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
     { "N3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
-
     -- controls
-    --defineProperty("pitch_corr_hdl", globalPropertyf("tu154/custom/gauges/ahz/pitch_corr_L")) --     +
-    { "mgv_contr", "tu154/custom/switchers/ovhd/mgv_contr", globalPropertyi }, --
-
+    { "mgv_contr", "tu154/custom/switchers/ovhd/mgv_contr", globalPropertyi },
     { "arrest_btn", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
-    --defineProperty("mgv_contr", globalPropertyi("tu154/custom/switchers/ovhd/mgv_contr")) --
-
-    -- power
-    --defineProperty("bus27_volt", globalPropertyf("tu154/custom/elec/bus27_volt_left"))
-
     { "bus36_volt", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
-    { "mgv_ctr_power_cc", "tu154/custom/bkk/mgv_ctr_power_cc", globalPropertyf }, --
-    --[[
-    defineProperty("bus36_volt_left", globalPropertyf("tu154/custom/elec/bus36_volt_left")) --   36
-    defineProperty("bus36_volt_right", globalPropertyf("tu154/custom/elec/bus36_volt_right")) --   36
-    defineProperty("bus36_volt_pts250_1", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_1")) --   36  1
-    defineProperty("bus36_volt_pts250_2", globalPropertyf("tu154/custom/elec/bus36_volt_pts250_2")) --   36  2
-
-    defineProperty("bus115_1_volt", globalPropertyf("tu154/custom/elec/bus115_1_volt"))
-    defineProperty("bus115_2_volt", globalPropertyf("tu154/custom/elec/bus115_2_volt"))
-    defineProperty("bus115_3_volt", globalPropertyf("tu154/custom/elec/bus115_3_volt"))
-    --]]
+    { "mgv_ctr_power_cc", "tu154/custom/bkk/mgv_ctr_power_cc", globalPropertyf },
     -- results
     { "res_pitch", "tu154/custom/gyro/mgv_contr_pitch", globalPropertyf }, --    +
-    { "res_roll", "tu154/custom/gyro/mgv_contr_roll", globalPropertyf }, --    +
-
-    { "ahz_flag", "tu154/custom/gyro/mgv_contr_flag", globalPropertyi }, --
-    --defineProperty("mgv_contr_fail", globalPropertyi("tu154/custom/bkk/mgv_contr_fail")) --    -
-
+    { "res_roll", "tu154/custom/gyro/mgv_contr_roll", globalPropertyf},
+    { "ahz_flag", "tu154/custom/gyro/mgv_contr_flag", globalPropertyi},
     { "mgv_fail", "tu154/custom/failures/mgv_fail", globalPropertyi }, --
-
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
 
 

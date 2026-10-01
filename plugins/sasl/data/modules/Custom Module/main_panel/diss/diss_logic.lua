@@ -22,25 +22,19 @@ local function defineProps(defs)
     end
 end
 
-defineProps({
-    { "ismaster", "scp/api/ismaster", globalPropertyf },
-    -- 1 = no control, 2 = has control
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 
-    -- ----------------------------------------------------------------------------
-    -- Property binder
-    -- ----------------------------------------------------------------------------
-
-    -- ----------------------------------------------------------------------------
+	-- ----------------------------------------------------------------------------
     -- Properties
     -- ----------------------------------------------------------------------------
+
+defineProps({
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
     -- Time / power / controls
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
     { "running_time", "sim/time/total_running_time_sec", globalPropertyf },
     { "diss_on", "tu154/custom/switchers/ovhd/diss_on", globalPropertyi },
     { "diss_mode_sw", "tu154/custom/switchers/ovhd/diss_mode", globalPropertyi },
     { "nvu_calc_set", "tu154/custom/switchers/ovhd/nvu_calc_set", globalPropertyi },
-    -- { "wind_set", "tu154/custom/rotary/console/wind_set", globalPropertyf },
     { "wind_course_left", "tu154/custom/button/console/wind_course_left", globalPropertyi },
     { "wind_course_ctr", "tu154/custom/button/console/wind_course_ctr", globalPropertyi },
     { "wind_course_right", "tu154/custom/button/console/wind_course_right", globalPropertyi },
@@ -54,12 +48,11 @@ defineProps({
     { "tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf },
     { "course_gpk", "tu154/custom/tks/course_gpk", globalPropertyf },
     { "acf_roll", "sim/flightmodel/position/true_phi", globalPropertyf },
-    -- { "acf_pitch", "sim/flightmodel/position/true_theta", globalPropertyf },
     -- Position / environment
     { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf },
     { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf },
     { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf },
-    { "wave_amplitude", "sim/weather/wave_amplitude", globalPropertyf },
+    {"wave_amplitude", "sim/weather/wave_amplitude", globalPropertyf},
     -- Electrical
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },

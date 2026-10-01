@@ -8,51 +8,36 @@ local function defineProps(defs)
 end
 
 defineProps({
--- controls
-	{ "katet_mode", "tu154/custom/katet/mode", globalPropertyi }, -- 0 = ILS/CAT III, 1 = KATET/CAT II, 2 = SP-50/CAT I profiles.
-	{ "katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi }, -- 0 = Enroute, 1 = Landing
-	-- { "absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi }, --  .  -
+	-- controls
+	-- 0 = ILS/CAT III, 
+	-- 1 = KATET/CAT II,
+	-- 2 = SP-50/CAT I profiles
+	{ "katet_mode", "tu154/custom/katet/mode", globalPropertyi },
+	-- 0 = Enroute, 1 = Landing
+	{ "katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi },
 	{ "absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi }, --
 	{ "absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi }, -- Pilot HSI LD indication only.
 	{ "approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi }, -- KATET radio-approach preparation, not HSI selection.
 	{ "approach_category", "tu154/custom/absu/approach_category", globalPropertyi }, -- Selected simulation profile, not autoland capability.
-	-- { "absu_needles_on", "tu154/custom/switchers/console/absu_needles_on", globalPropertyi }, --
 	{ "absu_speed_mode", "tu154/custom/switchers/console/absu_speed_mode", globalPropertyi }, --  . 0 - , 1 - , 2 - 1, 3 - 2, 4 -
-	-- { "absu_speed_change", "tu154/custom/switchers/console/absu_speed_change", globalPropertyi }, --   .
-	-- { "absu_speed_off", "tu154/custom/switchers/console/absu_speed_off", globalPropertyi }, --  1  2
-	-- { "absu_speed_prepare", "tu154/custom/switchers/console/absu_speed_prepare", globalPropertyi }, --
-	-- { "absu_speed_us_right_left", "tu154/custom/switchers/console/absu_speed_us_right_left", globalPropertyi }, --
-
 	{ "absu_roll_ch_on", "tu154/custom/switchers/console/absu_roll_ch_on", globalPropertyi }, --
 	{ "absu_pitch_ch_on", "tu154/custom/switchers/console/absu_pitch_ch_on", globalPropertyi }, --
-	-- { "absu_smooth_on", "tu154/custom/switchers/console/absu_smooth_on", globalPropertyi }, --  " "
-
 	{ "absu_turn_handle", "tu154/custom/switchers/console/absu_turn_handle", globalPropertyi }, --
 	{ "absu_pitch_wheel", "tu154/custom/switchers/console/absu_pitch_wheel", globalPropertyf }, --  ,
-
 	{ "hydro_ra56_rud_1", "tu154/custom/switchers/eng/hydro_ra56_rud_1", globalPropertyi }, --  56
 	{ "hydro_ra56_rud_2", "tu154/custom/switchers/eng/hydro_ra56_rud_2", globalPropertyi }, --  56
 	{ "hydro_ra56_rud_3", "tu154/custom/switchers/eng/hydro_ra56_rud_3", globalPropertyi }, --  56
-
 	{ "hydro_ra56_ail_1", "tu154/custom/switchers/eng/hydro_ra56_ail_1", globalPropertyi }, --  56
 	{ "hydro_ra56_ail_2", "tu154/custom/switchers/eng/hydro_ra56_ail_2", globalPropertyi }, --  56
 	{ "hydro_ra56_ail_3", "tu154/custom/switchers/eng/hydro_ra56_ail_3", globalPropertyi }, --  56
-
 	{ "hydro_ra56_elev_1", "tu154/custom/switchers/eng/hydro_ra56_elev_1", globalPropertyi }, --  56
 	{ "hydro_ra56_elev_2", "tu154/custom/switchers/eng/hydro_ra56_elev_2", globalPropertyi }, --  56
 	{ "hydro_ra56_elev_3", "tu154/custom/switchers/eng/hydro_ra56_elev_3", globalPropertyi }, --  56
-
 	{ "sau_stu_on", "tu154/custom/switchers/ovhd/sau_stu_on", globalPropertyi }, --
-
---defineProperty("tro_comm_1", globalProperty("sim/flightmodel/engine/ENGN_thro[0]"))
---defineProperty("tro_comm_2", globalProperty("sim/flightmodel/engine/ENGN_thro[1]"))
---defineProperty("tro_comm_3", globalProperty("sim/flightmodel/engine/ENGN_thro[2]"))
-
 	{ "tro_comm_1", "tu154/custom/SC/engine/ENGN_thro_0", globalPropertyf },
 	{ "tro_comm_2", "tu154/custom/SC/engine/ENGN_thro_1", globalPropertyf },
 	{ "tro_comm_3", "tu154/custom/SC/engine/ENGN_thro_2", globalPropertyf },
-
--- buttons
+	-- buttons
 	{ "absu_zk", "tu154/custom/buttons/console/absu_zk", globalPropertyi }, --
 	{ "absu_reset", "tu154/custom/buttons/console/absu_reset", globalPropertyi }, --
 	{ "absu_nvu", "tu154/custom/buttons/console/absu_nvu", globalPropertyi }, --
@@ -60,36 +45,23 @@ defineProps({
 	{ "absu_az2", "tu154/custom/buttons/console/absu_az2", globalPropertyi }, --   2
 	{ "absu_app", "tu154/custom/buttons/console/absu_app", globalPropertyi }, --
 	{ "absu_gs", "tu154/custom/buttons/console/absu_gs", globalPropertyi }, --
-	{ "absu_stab_m", "tu154/custom/buttons/console/absu_stab_m", globalPropertyi }, --  M
-	{ "absu_stab_v", "tu154/custom/buttons/console/absu_stab_v", globalPropertyi }, --  V
-	{ "absu_stab_h", "tu154/custom/buttons/console/absu_stab_h", globalPropertyi }, --  H
-	{ "absu_stab", "tu154/custom/buttons/console/absu_stab", globalPropertyi }, --
-
-	-- { "absu_arrest", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
-	-- { "absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi }, --
-	-- { "absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2", globalPropertyi }, --
-
-	-- { "absu_stab_speed", "tu154/custom/buttons/console/absu_stab_speed", globalPropertyi }, --  C
-	-- { "absu_throt_off_1", "tu154/custom/buttons/console/absu_throt_off_1", globalPropertyi }, --   1
-	-- { "absu_throt_off_2", "tu154/custom/buttons/console/absu_throt_off_2", globalPropertyi }, --   2
-	-- { "absu_throt_off_3", "tu154/custom/buttons/console/absu_throt_off_3", globalPropertyi }, --   3
-
--- power
+	--  Stab M
+	{ "absu_stab_m", "tu154/custom/buttons/console/absu_stab_m", globalPropertyi },
+	--  Stab V
+	{ "absu_stab_v", "tu154/custom/buttons/console/absu_stab_v", globalPropertyi }, 
+	--  Stab H
+	{ "absu_stab_h", "tu154/custom/buttons/console/absu_stab_h", globalPropertyi },
+	{ "absu_stab", "tu154/custom/buttons/console/absu_stab", globalPropertyi },
+	-- power
 	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
 	{ "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
-
-	-- { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, --    115
 	{ "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf }, --    115
-
 	{ "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf }, --   36
 	{ "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, --   36
 	{ "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, --   36  1
-	-- { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, --   36  2
-
 	{ "absu_power_cc", "tu154/custom/absu_power_cc", globalPropertyf }, --
-
--- other sources
--- The NVU-labelled button selects GPS1 for the HSI and ABSU.
+	-- other sources
+	-- The NVU-labelled button selects GPS1 for the HSI and ABSU.
 	{ "nav_select", "tu154/custom/switchers/nav_select", globalPropertyi },
 	{ "hsi_source_pilot", "sim/cockpit2/radios/actuators/HSI_source_select_pilot", globalPropertyi },
 	{ "hsi_source_copilot", "sim/cockpit2/radios/actuators/HSI_source_select_copilot", globalPropertyi },
@@ -103,91 +75,59 @@ defineProps({
 	{ "GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi },
 	{ "freq_1", "sim/cockpit2/radios/actuators/nav1_frequency_hz", globalPropertyf }, -- set the frequency
 	{ "freq_2", "sim/cockpit2/radios/actuators/nav2_frequency_hz", globalPropertyf }, -- set the frequency
-
 	{ "nav_cs_flag_1", "tu154/custom/radio/nav1_cs_flag", globalPropertyi },
 	{ "nav_gs_flag_1", "tu154/custom/radio/nav1_gs_flag", globalPropertyi },
-
 	{ "nav_cs_flag_2", "tu154/custom/radio/nav2_cs_flag", globalPropertyi },
 	{ "nav_gs_flag_2", "tu154/custom/radio/nav2_gs_flag", globalPropertyi },
-
 	{ "nav_gs_1", "tu154/custom/radio/nav1_gs", globalPropertyf }, -- glideslope
 	{ "nav_gs_2", "tu154/custom/radio/nav2_gs", globalPropertyf },
 	{ "nav_power_1", "tu154/custom/radio/nav1_pow_cc", globalPropertyf },
 	{ "nav_power_2", "tu154/custom/radio/nav2_pow_cc", globalPropertyf },
 	{ "nav_fail_1", "tu154/custom/failures/nav1_fail", globalPropertyi },
 	{ "nav_fail_2", "tu154/custom/failures/nav2_fail", globalPropertyi },
-
-	{ "svs_on", "tu154/custom/switchers/ovhd/svs_on", globalPropertyi }, --
-	{ "svs_fail", "sim/operation/failures/rel_adc_comp", globalPropertyi }, -- static fail
-
-	{ "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf }, --
-	{ "rv_flag", "tu154/custom/gauges/alt/radioalt_flag_left", globalPropertyf }, -- RV flag
-
-	{ "absu_course_out", "tu154/custom/absu_course_out", globalPropertyi }, -- flying outside the course limits
-	{ "absu_gs_out", "tu154/custom/absu_gs_out", globalPropertyi }, -- flying outside the course limits
-
-	{ "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
-	{ "sim_paused", "sim/time/paused", globalPropertyi }, -- Paused input changes are not go-around requests.
-	{ "on_ground", "sim/flightmodel/failures/onground_any", globalPropertyi }, -- Confirm rollout, not merely a low radio altitude.
+	{"svs_on", "tu154/custom/switchers/ovhd/svs_on", globalPropertyi},
+	-- static fail
+	{"svs_fail", "sim/operation/failures/rel_adc_comp", globalPropertyi},
+	{ "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf },
+	 -- RV flag
+	{ "rv_flag", "tu154/custom/gauges/alt/radioalt_flag_left", globalPropertyf },
+	-- flying outside the course limits
+	{ "absu_course_out", "tu154/custom/absu_course_out", globalPropertyi },
+	 -- flying outside the course limits
+	{ "absu_gs_out", "tu154/custom/absu_gs_out", globalPropertyi },
+	{"frame_time", "tu154/custom/time/frame_time", globalPropertyf},	-- time of frame
+	{ "sim_paused", "sim/time/paused", globalPropertyi },
+	-- Paused input changes are not go-around requests.
+	{ "on_ground", "sim/flightmodel/failures/onground_any", globalPropertyi },
+	-- Confirm rollout, not merely a low radio altitude
 	{ "ground_speed", "sim/flightmodel/position/groundspeed", globalPropertyf }, -- Metres per second.
-
--- Throttles
-	-- { "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf }, -- Servo animation is not pilot input; unused here.
-	-- { "anim_rud2", "tu154/custom/controlls/throttle_2", globalPropertyf }, -- Servo animation is not pilot input; unused here.
-	-- { "anim_rud3", "tu154/custom/controlls/throttle_3", globalPropertyf }, -- Servo animation is not pilot input; unused here.
--- flaps
+	-- flaps
 	{ "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- inner flaps left
 	{ "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- inner flaps right
-
--- joystick
---defineProperty("joy_pitch", globalPropertyf("sim/cockpit2/controls/yoke_pitch_ratio")) -- pitch position of joytick
---defineProperty("joy_roll", globalPropertyf("sim/cockpit2/controls/yoke_roll_ratio")) -- roll position of joystick
---defineProperty("joy_yaw", globalPropertyf("sim/cockpit2/controls/yoke_heading_ratio")) -- yaw position of joystick
-
 	{ "joy_pitch", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf },
 	{ "joy_roll", "tu154/custom/SC/yoke_roll_ratio", globalPropertyf },
-	-- { "joy_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf },
-
 	{ "manip_pitch", "sim/cockpit2/controls/yoke_pitch_ratio", globalPropertyf },
 	{ "manip_roll", "sim/cockpit2/controls/yoke_roll_ratio", globalPropertyf },
-
---sim/cockpit2/controls/yoke_roll_ratio	sim/cockpit2/controls/yoke_pitch_ratio
-
 	{ "pkp_fail_left", "tu154/custom/gauges/ahz/ahz_flag_L", globalPropertyf }, --
 	{ "pkp_fail_right", "tu154/custom/gauges/ahz/ahz_flag_R", globalPropertyf }, --
-	{ "mgv_contr_fail", "tu154/custom/gyro/mgv_contr_flag", globalPropertyf }, --
-
-	-- { "pressure_ind_1", "tu154/custom/gauges/hydro/pressure_ind_1", globalPropertyf }, --    1
-	-- { "pressure_ind_2", "tu154/custom/gauges/hydro/pressure_ind_2", globalPropertyf }, --    2
-	-- { "pressure_ind_3", "tu154/custom/gauges/hydro/pressure_ind_3", globalPropertyf }, --    3
-
-	{ "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, --   1
-	{ "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, --   2
-	{ "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, --   3
-	-- { "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf }, --   4
-
-	{ "tks_fail_left", "tu154/custom/tks/fail_left", globalPropertyi }, --
-	{ "tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi }, --
-
+	{ "mgv_contr_fail", "tu154/custom/gyro/mgv_contr_flag", globalPropertyf },
+	{"gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf},
+	{ "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf },
+	{ "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf },
+	{ "tks_fail_left", "tu154/custom/tks/fail_left", globalPropertyi },
+	{ "tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi },
 	{ "outer_marker", "sim/cockpit/misc/outer_marker_lit", globalPropertyi },
-
--- results
+	-- results
 	{ "roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi }, --     . 0 - , 1 -  - 2 -
 	{ "pitch_main_mode", "tu154/custom/absu/pitch_main_mode", globalPropertyi }, --     . 0 - , 1 -  - 2 -
-
 	{ "roll_sub_mode", "tu154/custom/absu/roll_sub_mode", globalPropertyi }, --    . 0 - , 1 - , 2 - , 3 - , 4 - 1, 5 - 2, 6 - , 7 - , 10
 	{ "pitch_sub_mode", "tu154/custom/absu/pitch_sub_mode", globalPropertyi }, --    . 0 - , 1 - , 2 - V, 3 - M, 4 - H, 5 - , 6 - , 10 -
-
 	{ "absu_pnp_mode_1", "tu154/custom/absu/absu_pnp_mode_1", globalPropertyi }, --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
 	{ "absu_pnp_mode_2", "tu154/custom/absu/absu_pnp_mode_2", globalPropertyi }, --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
-
 	{ "autopilot_mode", "sim/cockpit/autopilot/autopilot_mode", globalPropertyi }, --
 	{ "native_at_mode", "sim/cockpit2/autopilot/autothrottle_enabled", globalPropertyi }, -- A native servo movement is not pilot intent.
-
-	{ "toga_command", "tu154/custom/absu/toga_comm", globalPropertyi }, --
-
-	{ "absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi }, --
-
+	{ "toga_command", "tu154/custom/absu/toga_comm", globalPropertyi },
+	{ "absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi },
 	{ "damp_roll_lamp", "tu154/custom/absu/damp_roll_lamp", globalPropertyi }, --
 	{ "damp_pitch_lamp", "tu154/custom/absu/damp_pitch_lamp", globalPropertyi }, --
 	{ "damp_yaw_lamp", "tu154/custom/absu/damp_yaw_lamp", globalPropertyi }, --
@@ -197,18 +137,15 @@ defineProps({
 	{ "man_pitch_lamp", "tu154/custom/absu/man_pitch_lamp", globalPropertyi }, --
 	{ "man_toga_lamp", "tu154/custom/absu/man_toga_lamp", globalPropertyi }, --
 	{ "triangle_lamp_signal", "tu154/custom/absu/triangle_lamp_signal", globalPropertyi }, --
-
--- Smart Copilot
+	-- Smart Copilot
 	{ "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
 	{ "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
-	{ "control_thro_other", "tu154/custom/SC/control_thro_other", globalPropertyf }, -- Selected throttle-input owner.
-
--- failures
+	{ "control_thro_other", "tu154/custom/SC/control_thro_other", globalPropertyf }, -- Selected throttle-input owner
+	-- failures
 	{ "absu_ra56_roll_fail", "tu154/custom/failures/absu_ra56_roll_fail", globalPropertyi }, --  ra56
 	{ "absu_ra56_pitch_fail", "tu154/custom/failures/absu_ra56_pitch_fail", globalPropertyi }, --  ra56
 	{ "absu_ra56_yaw_fail", "tu154/custom/failures/absu_ra56_yaw_fail", globalPropertyi }, --  ra56
-
--- failures
+	-- failures
 	{ "absu_damp_roll_fail", "tu154/custom/failures/absu_damp_roll_fail", globalPropertyi }, --
 	{ "absu_damp_pitch_fail", "tu154/custom/failures/absu_damp_pitch_fail", globalPropertyi }, --
 	{ "absu_damp_yaw_fail", "tu154/custom/failures/absu_damp_yaw_fail", globalPropertyi }, --
@@ -217,7 +154,6 @@ defineProps({
 	{ "absu_calc_toga_fail", "tu154/custom/failures/absu_calc_toga_fail", globalPropertyi }, --
 	{ "absu_calc_roll_fail", "tu154/custom/failures/absu_calc_roll_fail", globalPropertyi }, --
 	{ "absu_calc_pitch_fail", "tu154/custom/failures/absu_calc_pitch_fail", globalPropertyi }, --
-
 	{ "absu_fail_signal", "tu154/custom/absu/absu_fail_signal", globalPropertyi }, --
 })
 

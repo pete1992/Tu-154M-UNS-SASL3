@@ -27,52 +27,36 @@ defineProps({
 	{ "diss_on", "tu154/custom/switchers/ovhd/diss_on", globalPropertyi },
 	{ "diss_mode", "tu154/custom/switchers/ovhd/diss_mode", globalPropertyi },
 	{ "nvu_calc_set", "tu154/custom/switchers/ovhd/nvu_calc_set", globalPropertyi },
-
 	{ "wind_set", "tu154/custom/rotary/console/wind_set", globalPropertyf },
-
 	{ "wind_course_left", "tu154/custom/button/console/wind_course_left", globalPropertyi },
 	{ "wind_course_ctr", "tu154/custom/button/console/wind_course_ctr", globalPropertyi },
 	{ "wind_course_right", "tu154/custom/button/console/wind_course_right", globalPropertyi },
-
 	{ "wind_spd_left", "tu154/custom/button/console/wind_spd_left", globalPropertyi },
 	{ "wind_spd_ctr", "tu154/custom/button/console/wind_spd_ctr", globalPropertyi },
 	{ "wind_spd_right", "tu154/custom/button/console/wind_spd_right", globalPropertyi },
-
 	{ "test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi },
 	{ "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf },
-
-	-- Electrical (kept even if not directly used in this script)
-	-- { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
-	-- { "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
 	{ "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
 	{ "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
-
 	-- NVU / DISS values
 	{ "diss_wind_course", "tu154/custom/nvu/diss_wind_course", globalPropertyf },
 	{ "diss_wind_spd", "tu154/custom/nvu/diss_wind_spd", globalPropertyf },
-	{ "diss_mode_set", "tu154/custom/nvu/diss_mode", globalPropertyi },
-
+	{"diss_mode_set", "tu154/custom/nvu/diss_mode", globalPropertyi},
 	-- Gauges / indicators
 	{ "diss_abs_angle_1", "tu154/custom/gauges/misc/diss_abs_angle_1", globalPropertyf },
 	{ "diss_abs_angle_10", "tu154/custom/gauges/misc/diss_abs_angle_10", globalPropertyf },
 	{ "diss_abs_angle_100", "tu154/custom/gauges/misc/diss_abs_angle_100", globalPropertyf },
-
 	{ "diss_plus_angle_1", "tu154/custom/gauges/misc/diss_plus_angle_1", globalPropertyf },
 	{ "diss_plus_angle_10", "tu154/custom/gauges/misc/diss_plus_angle_10", globalPropertyf },
-
 	{ "diss_minus_angle_1", "tu154/custom/gauges/misc/diss_minus_angle_1", globalPropertyf },
 	{ "diss_minus_angle_10", "tu154/custom/gauges/misc/diss_minus_angle_10", globalPropertyf },
-
 	{ "diss_wind_spd_1", "tu154/custom/gauges/misc/diss_wind_spd_1", globalPropertyf },
 	{ "diss_wind_spd_10", "tu154/custom/gauges/misc/diss_wind_spd_10", globalPropertyf },
 	{ "diss_wind_spd_100", "tu154/custom/gauges/misc/diss_wind_spd_100", globalPropertyf },
-
 	-- Lamps
 	{ "diss_memory", "tu154/custom/lights/diss_memory", globalPropertyf },
-
 	-- Time / engine state
-	{ "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
-
+	{"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
 	{ "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty },
 	{ "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty },
 	{ "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty },
