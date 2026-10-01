@@ -4,3 +4,7 @@
 .codex-tests/**
 AGENTS.md
 CHECKLIST.ace
+tests
+.codex-tests 
+/tests/
+/.codex-tests/
