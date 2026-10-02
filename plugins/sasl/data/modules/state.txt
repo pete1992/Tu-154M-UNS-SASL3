@@ -57,99 +57,92 @@ state = {
     };
     ['contextWindows'] = {
         ['ovhd_2d_panel'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
             ['visible'] = false;
-            ['position'] = {
-                [1] = 749;
-                [2] = 536;
-                [3] = 1528;
-                [4] = 1061;
-            };
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 0;
                     [3] = 1458;
                     [4] = 1013;
                 };
-                ['visible'] = false;
             };
-        };
-        ['ground_srv_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
-            ['visible'] = false;
             ['position'] = {
-                [1] = 1605;
-                [2] = 392;
-                [3] = 651;
-                [4] = 875;
+                [1] = 749;
+                [2] = 536;
+                [3] = 1528;
+                [4] = 1061;
             };
+        };
+        ['ground_srv_panel'] = {
+            ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 655;
                     [4] = 880;
                 };
-                ['visible'] = false;
             };
-        };
-        ['checklist_panel_2d'] = {
             ['mode'] = {
                 [1] = 0;
             };
-            ['visible'] = false;
             ['position'] = {
-                [1] = 394;
-                [2] = 329;
-                [3] = 300;
-                [4] = 1062;
+                [1] = 1605;
+                [2] = 392;
+                [3] = 651;
+                [4] = 875;
             };
+        };
+        ['checklist_panel_2d'] = {
+            ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 300;
                     [4] = 1062.5;
                 };
-                ['visible'] = false;
             };
-        };
-        ['nvu_2D_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
-            ['visible'] = false;
             ['position'] = {
-                [1] = 50;
-                [2] = 0;
-                [3] = 636;
-                [4] = 786;
+                [1] = 394;
+                [2] = 329;
+                [3] = 300;
+                [4] = 1062;
             };
+        };
+        ['nvu_2D_panel'] = {
+            ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 0;
                     [3] = 636;
                     [4] = 786;
                 };
-                ['visible'] = false;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['position'] = {
+                [1] = 50;
+                [2] = 0;
+                [3] = 636;
+                [4] = 786;
             };
         };
         ['uphone'] = {
             ['mode'] = {
                 [1] = 0;
-            };
-            ['visible'] = false;
-            ['position'] = {
-                [1] = 40;
-                [2] = 20;
-                [3] = 241;
-                [4] = 446;
             };
             ['initState'] = {
                 ['visible'] = false;
@@ -160,89 +153,96 @@ state = {
                     [4] = 446;
                 };
             };
-        };
-        ['palette'] = {
-            ['mode'] = {
-                [1] = 0;
-            };
             ['visible'] = false;
             ['position'] = {
-                [1] = 50;
-                [2] = 343;
-                [3] = 351;
-                [4] = 427;
+                [1] = 40;
+                [2] = 20;
+                [3] = 241;
+                [4] = 446;
             };
+        };
+        ['palette'] = {
+            ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 351.4;
                     [4] = 427;
                 };
-                ['visible'] = false;
             };
-        };
-        ['camera_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
-            ['visible'] = false;
             ['position'] = {
                 [1] = 50;
-                [2] = 258;
-                [3] = 512;
-                [4] = 512;
+                [2] = 343;
+                [3] = 351;
+                [4] = 427;
             };
+        };
+        ['camera_panel'] = {
+            ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 512;
                     [4] = 512;
                 };
-                ['visible'] = false;
             };
-        };
-        ['absu_2d_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
-            ['visible'] = false;
             ['position'] = {
-                [1] = -4;
-                [2] = 833;
-                [3] = 917;
-                [4] = 597;
+                [1] = 50;
+                [2] = 258;
+                [3] = 512;
+                [4] = 512;
             };
+        };
+        ['absu_2d_panel'] = {
+            ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 917;
                     [4] = 597;
                 };
-                ['visible'] = false;
             };
-        };
-        ['payload_panel'] = {
             ['mode'] = {
                 [1] = 0;
             };
-            ['visible'] = false;
             ['position'] = {
-                [1] = 953;
-                [2] = 564;
-                [3] = 1022;
-                [4] = 681;
+                [1] = -4;
+                [2] = 833;
+                [3] = 917;
+                [4] = 597;
             };
+        };
+        ['payload_panel'] = {
+            ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 1024;
                     [4] = 683;
                 };
-                ['visible'] = false;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['position'] = {
+                [1] = 953;
+                [2] = 564;
+                [3] = 1022;
+                [4] = 681;
             };
         };
     };

@@ -64,7 +64,6 @@ defineProps({
 
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 local XP11 = get(xp_version) < 120000
@@ -81,7 +80,6 @@ local GPU_OVERLOAD_LIMIT = 900
 local gpu_start_out = sasl.al.loadSample("Custom Sounds/gpu_start_out.wav")
 local gpu_run_out = sasl.al.loadSample("Custom Sounds/gpu_run_out.wav")
 local gpu_stop_out = sasl.al.loadSample("Custom Sounds/gpu_stop_out.wav")
-
 local gpu_start_inn = sasl.al.loadSample("Custom Sounds/gpu_start_inn.wav")
 local gpu_run_inn = sasl.al.loadSample("Custom Sounds/gpu_run_inn.wav")
 local gpu_stop_inn = sasl.al.loadSample("Custom Sounds/gpu_stop_inn.wav")
@@ -289,7 +287,6 @@ local function updateGpuSounds(dt)
     sasl.al.setSampleGain(gpu_start_out, outside_gain)
     sasl.al.setSampleGain(gpu_run_out, outside_gain)
     sasl.al.setSampleGain(gpu_stop_out, outside_gain)
-
     sasl.al.setSampleGain(gpu_start_inn, inside_gain)
     sasl.al.setSampleGain(gpu_run_inn, inside_gain)
     sasl.al.setSampleGain(gpu_stop_inn, inside_gain)
@@ -301,12 +298,10 @@ function update()
     if dt <= 0 then
         return
     end
-
     -- Electrical GPU state is master-owned. Sound rendering remains local
     -- and follows synchronized GPU Datarefs on SmartCopilot slaves.
     if get(ismaster) ~= 1 then
         updateElectricalState(dt)
     end
-
     updateGpuSounds(dt)
 end

@@ -37,7 +37,6 @@ defineProps({
     {"test_absu", "tu154/custom/manipulators/buttons/absu/ppn13_test_absu", globalPropertyi},
     {"test_svk",  "tu154/custom/manipulators/buttons/absu/ppn13_test_svk",  globalPropertyi},
     {"lid",       "tu154/custom/manipulators/buttons/absu/ppn13_lid",       globalPropertyi},
-
     -- Animated object outputs.
     {"ack_anim",       "tu154/custom/manipulators/buttons/absu/ppn13_ack_anim",       globalPropertyf},
     {"flt_anim",       "tu154/custom/manipulators/buttons/absu/ppn13_flt_anim",       globalPropertyf},
@@ -50,7 +49,6 @@ defineProps({
     {"test_absu_anim", "tu154/custom/manipulators/switches/absu/ppn13_test_absu_anim", globalPropertyf},
     {"test_svk_anim",  "tu154/custom/manipulators/switches/absu/ppn13_test_svk_anim",  globalPropertyf},
     {"lid_anim",       "tu154/custom/manipulators/caps/ppn13_lid",                    globalPropertyf},
-
     -- Hydraulic switches and indications used by the failure scan.
     {"hydro_ra56_rud_1",  "tu154/custom/switchers/eng/hydro_ra56_rud_1",  globalPropertyi},
     {"hydro_ra56_rud_2",  "tu154/custom/switchers/eng/hydro_ra56_rud_2",  globalPropertyi},
@@ -64,7 +62,6 @@ defineProps({
     {"pressure_ind_1", "tu154/custom/gauges/hydro/pressure_ind_1", globalPropertyf},
     {"pressure_ind_2", "tu154/custom/gauges/hydro/pressure_ind_2", globalPropertyf},
     {"pressure_ind_3", "tu154/custom/gauges/hydro/pressure_ind_3", globalPropertyf},
-
     -- ABSU failures.
     {"absu_ra56_roll_fail",  "tu154/custom/failures/absu_ra56_roll_fail",  globalPropertyi},
     {"absu_ra56_pitch_fail", "tu154/custom/failures/absu_ra56_pitch_fail", globalPropertyi},
@@ -74,7 +71,6 @@ defineProps({
     {"absu_damp_yaw_fail",   "tu154/custom/failures/absu_damp_yaw_fail",   globalPropertyi},
     {"absu_contr_roll_fail", "tu154/custom/failures/absu_contr_roll_fail", globalPropertyi},
     {"absu_contr_pitch_fail","tu154/custom/failures/absu_contr_pitch_fail",globalPropertyi},
-
     -- ABSU readiness sources.
     {"pkp_fail_left",  "tu154/custom/bkk/pkp_fail_left",  globalPropertyi},
     {"pkp_fail_right", "tu154/custom/bkk/pkp_fail_right", globalPropertyi},
@@ -83,15 +79,12 @@ defineProps({
     {"tks_fail_left",  "tu154/custom/tks/fail_left",  globalPropertyi},
     {"tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi},
     {"absu_nav_on",       "tu154/custom/switchers/console/absu_nav_on",       globalPropertyi},
-    -- {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi}, -- HSI display selection only.
     {"approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi}, -- Independent approach readiness.
     {"absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2",    globalPropertyi},
-
     -- Power and lamp test.
     {"bus27_volt_left",  "tu154/custom/elec/bus27_volt_left",  globalPropertyf},
     {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
     {"test_lights",      "tu154/custom/buttons/lamp_test_pa56", globalPropertyi},
-
     -- PPN-13 annunciator outputs.
     {"servo_pitch_lt", "tu154/custom/systems/absu/ppn13/servo_pitch_lt", globalPropertyf},
     {"servo_roll_lt",  "tu154/custom/systems/absu/ppn13/servo_roll_lt",  globalPropertyf},

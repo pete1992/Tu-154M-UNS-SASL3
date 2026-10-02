@@ -846,14 +846,14 @@ IDX 565
 IDX 615
 TRIS 0 888
 ANIM_begin
-ANIM_trans_begin tu154ce/anim/cockpit_window_right
+ANIM_trans_begin tu154/custom/anim/cockpit_window_right
 ANIM_trans_key 0.000000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.200000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.400000 0.000000 0.000000 0.000000
 ANIM_trans_key 1.000000 0.146800 -0.048700 0.388100
 ANIM_trans_end
 ANIM_trans 0.830300 -1.492600 -21.641899 0.830300 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 0.000000 1.000000 tu154ce/anim/cockpit_window_right
+ANIM_rotate_begin 0.000000 0.000000 1.000000 tu154/custom/anim/cockpit_window_right
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 -5.340000
@@ -861,7 +861,7 @@ ANIM_rotate_key 1.000000 -5.510000
 ANIM_rotate_end
 ANIM_trans -0.830300 1.492600 21.641899 -0.830300 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans 0.830300 -1.492600 -21.641899 0.830300 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154ce/anim/cockpit_window_right
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/cockpit_window_right
 ANIM_rotate_key 0.000000 -0.000000
 ANIM_rotate_key 0.200000 -0.000000
 ANIM_rotate_key 0.400000 -7.550000
@@ -869,7 +869,7 @@ ANIM_rotate_key 1.000000 -7.840000
 ANIM_rotate_end
 ANIM_trans -0.830300 1.492600 21.641899 -0.830300 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans 0.830300 -1.492600 -21.641899 0.830300 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154ce/anim/cockpit_window_right
+ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/anim/cockpit_window_right
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 3.240000
@@ -879,14 +879,14 @@ ANIM_trans -0.830300 1.492600 21.641899 -0.830300 1.492600 21.641899 0.000000 0.
 TRIS 888 48
 ANIM_end
 ANIM_begin
-ANIM_trans_begin tu154ce/anim/cockpit_window_left
+ANIM_trans_begin tu154/custom/anim/cockpit_window_left
 ANIM_trans_key 0.000000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.200000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.400000 0.000000 0.000000 0.000000
 ANIM_trans_key 1.000000 -0.146900 -0.048700 0.388100
 ANIM_trans_end
 ANIM_trans -0.829900 -1.492600 -21.641899 -0.829900 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 0.000000 1.000000 tu154ce/anim/cockpit_window_left
+ANIM_rotate_begin 0.000000 0.000000 1.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 5.340000
@@ -894,7 +894,7 @@ ANIM_rotate_key 1.000000 5.510000
 ANIM_rotate_end
 ANIM_trans 0.829900 1.492600 21.641899 0.829900 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans -0.829900 -1.492600 -21.641899 -0.829900 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154ce/anim/cockpit_window_left
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 -0.000000
 ANIM_rotate_key 0.200000 -0.000000
 ANIM_rotate_key 0.400000 7.550000
@@ -902,19 +902,19 @@ ANIM_rotate_key 1.000000 7.840000
 ANIM_rotate_end
 ANIM_trans 0.829900 1.492600 21.641899 0.829900 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans -0.829900 -1.492600 -21.641899 -0.829900 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154ce/anim/cockpit_window_left
+ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 3.240000
 ANIM_rotate_key 1.000000 -0.000000
 ANIM_rotate_end
 ANIM_trans 0.829900 1.492600 21.641899 0.829900 1.492600 21.641899 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154ce/anim/window_ice_4
+ATTR_light_level 0.000000 1.000000 tu154/custom/anim/window_ice_4
 TRIS 936 51
 ANIM_end
 ANIM_begin
 ANIM_trans 1.848200 -2.058000 -8.547900 1.848200 -2.058000 -8.547900 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154ce/anim/pax_door_3
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/pax_door_3
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -926,7 +926,7 @@ ANIM_rotate_end
 ANIM_trans -1.848200 2.058000 8.547900 -1.848200 2.058000 8.547900 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans 1.822400 -2.050000 -8.101800 1.822400 -2.050000 -8.101800 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154ce/anim/pax_door_3
+ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154/custom/anim/pax_door_3
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -936,13 +936,13 @@ ANIM_rotate_key 0.900000 120.000000
 ANIM_rotate_key 1.000000 130.000000
 ANIM_rotate_end
 ANIM_trans -1.822400 2.050000 8.101800 -1.822400 2.050000 8.101800 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154ce/light/no_LIT
+ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
 TRIS 987 24
 ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans -1.875000 -1.970100 -7.152700 -1.875000 -1.970100 -7.152700 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154ce/anim/pax_door_2
+ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154/custom/anim/pax_door_2
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -954,7 +954,7 @@ ANIM_rotate_end
 ANIM_trans 1.875000 1.970100 7.152700 1.875000 1.970100 7.152700 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans -1.798200 -1.961000 -6.636400 -1.798200 -1.961000 -6.636400 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154ce/anim/pax_door_2
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/pax_door_2
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -970,7 +970,7 @@ ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans -1.713500 -1.970100 -18.169701 -1.713500 -1.970100 -18.169701 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154ce/anim/pax_door_1
+ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154/custom/anim/pax_door_1
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -982,7 +982,7 @@ ANIM_rotate_end
 ANIM_trans 1.713500 1.970100 18.169701 1.713500 1.970100 18.169701 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans -1.721800 -2.131400 -17.648098 -1.721800 -2.131400 -17.648098 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154ce/anim/pax_door_1
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/pax_door_1
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -997,7 +997,7 @@ ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans 7.220100 -2.915300 0.167600 7.220100 -2.915300 0.167600 0.000000 0.000000 none
-ANIM_rotate_begin 0.529927 0.000000 -0.848043 tu154ce/anim/wing_flx_right
+ANIM_rotate_begin 0.529927 0.000000 -0.848043 tu154/custom/anim/wing_flx_right
 ANIM_rotate_key -1.000000 1.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 0.000000
@@ -1005,7 +1005,7 @@ ANIM_rotate_end
 ANIM_trans -7.220100 2.915300 -0.167600 -7.220100 2.915300 -0.167600 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans 7.209900 -3.364900 0.183800 7.209900 -3.364900 0.183800 0.000000 0.000000 none
-ANIM_rotate_begin -0.529927 0.000000 0.848043 tu154ce/anim/wing_flx_right
+ANIM_rotate_begin -0.529927 0.000000 0.848043 tu154/custom/anim/wing_flx_right
 ANIM_rotate_key -1.000000 0.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 1.000000
@@ -1013,7 +1013,7 @@ ANIM_rotate_end
 ANIM_trans -7.209900 3.364900 -0.183800 -7.209900 3.364900 -0.183800 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans 14.042299 -3.101700 5.042600 14.042299 -3.101700 5.042600 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 0.000000 -1.000000 tu154ce/anim/wing_flx_right
+ANIM_rotate_begin 0.000000 0.000000 -1.000000 tu154/custom/anim/wing_flx_right
 ANIM_rotate_key -1.000000 1.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 0.000000
@@ -1021,13 +1021,13 @@ ANIM_rotate_end
 ANIM_trans -14.042299 3.101700 -5.042600 -14.042299 3.101700 -5.042600 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans 14.042299 -3.380500 5.064799 14.042299 -3.380500 5.064799 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 0.000000 1.000000 tu154ce/anim/wing_flx_right
+ANIM_rotate_begin 0.000000 0.000000 1.000000 tu154/custom/anim/wing_flx_right
 ANIM_rotate_key -1.000000 0.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 1.000000
 ANIM_rotate_end
 ANIM_trans -14.042299 3.380500 -5.064799 -14.042299 3.380500 -5.064799 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154ce/light/no_LIT
+ATTR_light_level 0.000000 1.000000 tu154/custom/light/no_LIT
 TRIS 1059 543
 ANIM_end
 ANIM_end
@@ -1035,7 +1035,7 @@ ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans -7.220000 -2.915300 0.167600 -7.220000 -2.915300 0.167600 0.000000 0.000000 none
-ANIM_rotate_begin 0.529927 0.000000 0.848043 tu154ce/anim/wing_flx_left
+ANIM_rotate_begin 0.529927 0.000000 0.848043 tu154/custom/anim/wing_flx_left
 ANIM_rotate_key -1.000000 1.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 0.000000
@@ -1043,7 +1043,7 @@ ANIM_rotate_end
 ANIM_trans 7.220000 2.915300 -0.167600 7.220000 2.915300 -0.167600 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans -7.210000 -3.364900 0.183800 -7.210000 -3.364900 0.183800 0.000000 0.000000 none
-ANIM_rotate_begin -0.529927 0.000000 -0.848043 tu154ce/anim/wing_flx_left
+ANIM_rotate_begin -0.529927 0.000000 -0.848043 tu154/custom/anim/wing_flx_left
 ANIM_rotate_key -1.000000 0.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 1.000000
@@ -1051,7 +1051,7 @@ ANIM_rotate_end
 ANIM_trans 7.210000 3.364900 -0.183800 7.210000 3.364900 -0.183800 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans -14.042000 -3.101600 5.042600 -14.042000 -3.101600 5.042600 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 0.000000 1.000000 tu154ce/anim/wing_flx_left
+ANIM_rotate_begin 0.000000 0.000000 1.000000 tu154/custom/anim/wing_flx_left
 ANIM_rotate_key -1.000000 1.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 0.000000
@@ -1059,7 +1059,7 @@ ANIM_rotate_end
 ANIM_trans 14.042000 3.101600 -5.042600 14.042000 3.101600 -5.042600 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans -14.042000 -3.380500 5.064799 -14.042000 -3.380500 5.064799 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 0.000000 -1.000000 tu154ce/anim/wing_flx_left
+ANIM_rotate_begin 0.000000 0.000000 -1.000000 tu154/custom/anim/wing_flx_left
 ANIM_rotate_key -1.000000 0.000000
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 1.000000 1.000000

@@ -27,8 +27,6 @@ defineProps({
     {"failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi},
     {"have_pedals", "tu154/custom/have_pedals", globalPropertyi},
     -- GPS installation is detected live, never restored from a saved preference.
-    -- {"show_gns", "tu154/custom/anim/show_gns", globalPropertyi},
-    -- {"show_RXP", "tu154/custom/anim/RXP", globalPropertyi},
     {"pnp_1_crs", "tu154/custom/gauges/compas/pkp_obs_set_L", globalPropertyf},
     {"pnp_2_crs", "tu154/custom/gauges/compas/pkp_obs_set_R", globalPropertyf},
     {"pnp_1_obs", "tu154/custom/gauges/compas/pkp_helper_course_L", globalPropertyf},

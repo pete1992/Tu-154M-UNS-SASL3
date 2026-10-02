@@ -7,7 +7,7 @@ TEXTURE_LIT glass2_LIT.png
 RAIN_scale 0.5
 GLOBAL_specular 1.0
 THERMAL_texture windshield_thermal_side.png
-THERMAL_source2 0 tu154b2/custom/antiice/side_windows_rate tu154b2/custom/antiice/cockpit_windows_heat
+THERMAL_source2 0 tu154/custom/antiice/side_windows_rate tu154/custom/antiice/cockpit_windows_heat
 
 
 POINT_COUNTS 770 0 0 2226
@@ -1012,7 +1012,7 @@ IDX 763
 ATTR_hard 
 ANIM_begin
 ANIM_trans -1.713500 -1.970100 -18.169701 -1.713500 -1.970100 -18.169701 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154b2/custom/anim/pax_door_1
+ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154/custom/anim/pax_door_1
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -1024,7 +1024,7 @@ ANIM_rotate_end
 ANIM_trans 1.713500 1.970100 18.169701 1.713500 1.970100 18.169701 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans -1.721800 -2.131400 -17.648100 -1.721800 -2.131400 -17.648100 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154b2/custom/anim/pax_door_1
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/pax_door_1
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -1039,7 +1039,7 @@ ANIM_end
 ANIM_end
 ANIM_begin
 ANIM_trans -1.875000 -1.970100 -7.152700 -1.875000 -1.970100 -7.152700 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154b2/custom/anim/pax_door_2
+ANIM_rotate_begin 0.000000 -1.000000 0.000000 tu154/custom/anim/pax_door_2
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -1051,7 +1051,7 @@ ANIM_rotate_end
 ANIM_trans 1.875000 1.970100 7.152700 1.875000 1.970100 7.152700 0.000000 0.000000 none
 ANIM_begin
 ANIM_trans -1.798200 -1.961000 -6.636400 -1.798200 -1.961000 -6.636400 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154b2/custom/anim/pax_door_2
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/pax_door_2
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 30.000000
@@ -1065,14 +1065,14 @@ TRIS 1962 48
 ANIM_end
 ANIM_end
 ANIM_begin
-ANIM_trans_begin tu154b2/custom/anim/cockpit_window_right
+ANIM_trans_begin tu154/custom/anim/cockpit_window_right
 ANIM_trans_key 0.000000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.200000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.400000 0.000000 0.000000 0.000000
 ANIM_trans_key 1.000000 0.146800 -0.048700 0.388100
 ANIM_trans_end
 ANIM_trans 0.816474 -1.492600 -21.641899 0.816474 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin -0.013824 0.000000 0.999905 tu154b2/custom/anim/cockpit_window_right
+ANIM_rotate_begin -0.013824 0.000000 0.999905 tu154/custom/anim/cockpit_window_right
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 -5.340000
@@ -1080,7 +1080,7 @@ ANIM_rotate_key 1.000000 -5.510000
 ANIM_rotate_end
 ANIM_trans -0.816474 1.492600 21.641899 -0.816474 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans 0.830300 -1.492600 -21.641899 0.830300 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154b2/custom/anim/cockpit_window_right
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/cockpit_window_right
 ANIM_rotate_key 0.000000 -0.000000
 ANIM_rotate_key 0.200000 -0.000000
 ANIM_rotate_key 0.400000 -7.550000
@@ -1088,25 +1088,25 @@ ANIM_rotate_key 1.000000 -7.840000
 ANIM_rotate_end
 ANIM_trans -0.830300 1.492600 21.641899 -0.830300 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans 0.802649 -1.492600 -21.641899 0.802649 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154b2/custom/anim/cockpit_window_right
+ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/anim/cockpit_window_right
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 3.240000
 ANIM_rotate_key 1.000000 -0.000000
 ANIM_rotate_end
 ANIM_trans -0.802649 1.492600 21.641899 -0.802649 1.492600 21.641899 0.000000 0.000000 none
-ATTR_light_level 0.000000 1.000000 tu154b2/custom/anim/window_ice_4
+ATTR_light_level 0.000000 1.000000 tu154/custom/anim/window_ice_4
 TRIS 2010 108
 ANIM_end
 ANIM_begin
-ANIM_trans_begin tu154b2/custom/anim/cockpit_window_left
+ANIM_trans_begin tu154/custom/anim/cockpit_window_left
 ANIM_trans_key 0.000000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.200000 0.000000 0.000000 0.000000
 ANIM_trans_key 0.400000 0.000000 0.000000 0.000000
 ANIM_trans_key 1.000000 -0.146900 -0.048700 0.388100
 ANIM_trans_end
 ANIM_trans -0.816234 -1.492600 -21.641899 -0.816234 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.013665 0.000000 0.999907 tu154b2/custom/anim/cockpit_window_left
+ANIM_rotate_begin 0.013665 0.000000 0.999907 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 5.340000
@@ -1114,7 +1114,7 @@ ANIM_rotate_key 1.000000 5.510000
 ANIM_rotate_end
 ANIM_trans 0.816234 1.492600 21.641899 0.816234 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans -0.829900 -1.492600 -21.641899 -0.829900 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154b2/custom/anim/cockpit_window_left
+ANIM_rotate_begin 0.000000 1.000000 0.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 -0.000000
 ANIM_rotate_key 0.200000 -0.000000
 ANIM_rotate_key 0.400000 7.550000
@@ -1122,7 +1122,7 @@ ANIM_rotate_key 1.000000 7.840000
 ANIM_rotate_end
 ANIM_trans 0.829900 1.492600 21.641899 0.829900 1.492600 21.641899 0.000000 0.000000 none
 ANIM_trans -0.802567 -1.492600 -21.641899 -0.802567 -1.492600 -21.641899 0.000000 0.000000 none
-ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154b2/custom/anim/cockpit_window_left
+ANIM_rotate_begin 1.000000 0.000000 0.000000 tu154/custom/anim/cockpit_window_left
 ANIM_rotate_key 0.000000 0.000000
 ANIM_rotate_key 0.200000 0.000000
 ANIM_rotate_key 0.400000 3.240000

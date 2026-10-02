@@ -12439,9 +12439,9 @@ DREF sim/cockpit2/engine/indicators/N1_percent[1]
 DREF sim/cockpit2/switches/puffers_on
 DREF sim/flightmodel/failures/smoking
 DREF sim/cockpit2/electrical/APU_N1_percent
-DREF tu154b2/custom/eng/apu_n1
+DREF tu154/custom/eng/apu_n1
 DREF sim/flightmodel2/position/true_airspeed
-DREF tu154b2/custom/eng/apu_egt
+DREF tu154/custom/eng/apu_egt
 END_EMITTER
 EMITTER
  NAME Gun
@@ -12910,8 +12910,8 @@ DREF sim/cockpit2/switches/puffers_on
 DREF sim/flightmodel/failures/smoking
 DREF sim/cockpit2/switches/dump_water
 DREF 
-DREF tu154b2/custom/anim/deice2
-DREF tu154b2/custom/anim/deice
+DREF tu154/custom/anim/deice2
+DREF tu154/custom/anim/deice
 END_EMITTER
 EMITTER
  NAME de_ice2
@@ -13050,7 +13050,7 @@ DREF sim/cockpit2/switches/puffers_on
 DREF sim/flightmodel/failures/smoking
 DREF sim/cockpit2/switches/dump_water
 DREF 
-DREF tu154b2/custom/anim/deice2
+DREF tu154/custom/anim/deice2
 END_EMITTER
  TEX_CELLS_X 8
  TEX_CELLS_Y 8

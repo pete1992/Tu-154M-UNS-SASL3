@@ -4,9 +4,9 @@ OBJ
 
 TEXTURE Cabin_Rain.png
 GLOBAL_specular 1.0
-RAIN_scale 0.25
+RAIN_scale 0.75
 THERMAL_texture Cabin_Rain_thermal.png
-THERMAL_source2 0 tu154b2/custom/antiice/cockpit_windows_rate tu154b2/custom/antiice/cockpit_windows_heat
+THERMAL_source2 0 tu154/custom/antiice/cockpit_windows_rate tu154/custom/antiice/cockpit_windows_heat
 POINT_COUNTS	2706	0	0	2706
 
 VT	1.6680902	-1.2643121	5.0305109	0.94642633	0.27602792	0.16758852	0.047332346	0.21705957

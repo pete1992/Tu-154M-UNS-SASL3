@@ -16,11 +16,9 @@ end
 defineProps({
 	-- SmartCopilot: 0 = absent, 1 = slave, 2 = master; control: 1 = none, 2 = held
 	{"ismaster", "scp/api/ismaster", globalPropertyf},
-	-- {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf}, -- Unused binding; no child or external consumer.
 	-- Controls
 	{"joy_pitch", "tu154/custom/SC/yoke_pitch_ratio", globalPropertyf},
 	{"joy_roll", "tu154/custom/SC/yoke_roll_ratio", globalPropertyf},
-	-- {"joy_yaw", "tu154/custom/SC/yoke_heading_ratio", globalPropertyf}, -- Unused binding; no child or external consumer.
 	-- Timing
 	{"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, 
 	-- Hydraulics pressures
@@ -43,11 +41,9 @@ defineProps({
 	{"ZK_select", "tu154/custom/switchers/ZK_select", globalPropertyi},
 	{"absu_smooth_on", "tu154/custom/switchers/console/absu_smooth_on", globalPropertyi},
 	{"absu_nav_on", "tu154/custom/switchers/console/absu_nav_on", globalPropertyi},
-	-- {"absu_landing_on", "tu154/custom/switchers/console/absu_landing_on", globalPropertyi}, -- HSI display selection only.
 	{"approach_enabled", "tu154/custom/absu/approach_enabled", globalPropertyi},
 	{"absu_needles_on", "tu154/custom/switchers/console/absu_needles_on", globalPropertyi},
 	-- STU speed test buttons
-	-- {"absu_speed_test_1", "tu154/custom/buttons/console/absu_speed_test_1", globalPropertyi}, -- Unused binding; no child or external consumer.
 	{"absu_speed_test_2", "tu154/custom/buttons/console/absu_speed_test_2", globalPropertyi},
 	-- ABSU navigation source
 	{"absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi},
@@ -61,15 +57,11 @@ defineProps({
 	-- Angular rates and accelerations
 	{"roll_rate", "sim/flightmodel/position/P", globalPropertyf},
 	{"pitch_rate", "sim/flightmodel/position/Q", globalPropertyf},
-	-- {"yaw_rate", "sim/flightmodel/position/R", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"roll_acc", "sim/flightmodel/position/P_dot", globalPropertyf},
-	-- {"pitch_acc", "sim/flightmodel/position/Q_dot", globalPropertyf}, -- Unused binding; no child or external consumer.
-	-- {"yaw_acc", "sim/flightmodel/position/R_dot", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"slip", "sim/cockpit2/gauges/indicators/sideslip_degrees", globalPropertyf},
 	-- SVS
 	{"mach_svs", "tu154/custom/svs/machno", globalPropertyf},
 	{"alt_svs", "tu154/custom/svs/altitude", globalPropertyf},
-	-- {"tas_svs", "tu154/custom/svs/true_airspeed", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"ias", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf},
 	-- ABSU modes
 	{"roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi},
@@ -81,15 +73,12 @@ defineProps({
 	{"bkk_roll", "tu154/custom/bkk/bkk_roll", globalPropertyf},
 	-- TKS
 	{"course_gpk", "tu154/custom/tks/course_gpk", globalPropertyf},
-	-- {"course_gmk", "tu154/custom/tks/course_gmk", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"tks_fail_left", "tu154/custom/tks/fail_left", globalPropertyi},
 	{"tks_fail_right", "tu154/custom/tks/fail_right", globalPropertyi},
 	-- DISS
 	{"diss_groundspeed", "tu154/custom/nvu/diss_groundspeed", globalPropertyf},
 	{"diss_slip_angle", "tu154/custom/nvu/diss_slip_angle", globalPropertyf},
 	-- Course/ILS
-	-- {"obs_1", "sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot", globalPropertyf}, -- Unused binding; no child or external consumer.
-	-- {"obs_2", "sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot", globalPropertyf}, -- Unused binding; no child or external consumer.
 	{"nav_cs_1", "tu154/custom/radio/nav1_cs", globalPropertyf},
 	{"nav_cs_2", "tu154/custom/radio/nav2_cs", globalPropertyf},
 	{"nav_gs_1", "tu154/custom/radio/nav1_gs", globalPropertyf},
@@ -100,8 +89,6 @@ defineProps({
 	{"nav_gs_flag_1", "tu154/custom/radio/nav1_gs_flag", globalPropertyi},
 	{"nav_cs_flag_2", "tu154/custom/radio/nav2_cs_flag", globalPropertyi},
 	{"nav_gs_flag_2", "tu154/custom/radio/nav2_gs_flag", globalPropertyi},
-	-- {"cr_flag_1", "sim/cockpit2/radios/indicators/nav1_flag_from_to_pilot", globalPropertyf}, -- Unused binding; no child or external consumer.
-	-- {"cr_flag_2", "sim/cockpit2/radios/indicators/nav2_flag_from_to_pilot", globalPropertyf}, -- Unused binding; no child or external consumer.
 	-- GPS1 passthrough and validity; no alternate navigation source
 	{"GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf},
 	{"GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf},
@@ -139,8 +126,6 @@ defineProps({
 	{"absu_damp_roll_fail", "tu154/custom/failures/absu_damp_roll_fail", globalPropertyi},
 	{"absu_damp_pitch_fail", "tu154/custom/failures/absu_damp_pitch_fail", globalPropertyi},
 	{"absu_damp_yaw_fail", "tu154/custom/failures/absu_damp_yaw_fail", globalPropertyi},
-	-- {"absu_contr_roll_fail", "tu154/custom/failures/absu_contr_roll_fail", globalPropertyi}, -- Unused binding; no child or external consumer.
-	-- {"absu_contr_pitch_fail", "tu154/custom/failures/absu_contr_pitch_fail", globalPropertyi}, -- Unused binding; no child or external consumer.
 	{"absu_calc_toga_fail", "tu154/custom/failures/absu_calc_toga_fail", globalPropertyi},
 	{"absu_calc_roll_fail", "tu154/custom/failures/absu_calc_roll_fail", globalPropertyi},
 	{"absu_calc_pitch_fail", "tu154/custom/failures/absu_calc_pitch_fail", globalPropertyi},
