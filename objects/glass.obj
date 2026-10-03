@@ -1334,7 +1334,10 @@ ANIM_begin
 	# fuselage.027
 	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_4
 	ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_4
+	# Sliding pane is rendered by the animated native rain/reflector pair.
+	ATTR_draw_disable
 	TRIS	1752 108
+	ATTR_draw_enable
 ANIM_end
 # fuselage.028
 ANIM_begin
@@ -1365,7 +1368,10 @@ ANIM_begin
 	# fuselage.028
 	ANIM_hide	0.000 0.001	tu154/custom/anim/window_ice_4
 	ATTR_light_level  0.000  1.000 tu154/custom/anim/window_ice_4
+	# Sliding pane is rendered by the animated native rain/reflector pair.
+	ATTR_draw_disable
 	TRIS	1860 108
+	ATTR_draw_enable
 ANIM_end
 # salon_walls
 ANIM_begin

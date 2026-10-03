@@ -1,4 +1,4 @@
-print("This is the Tu154M 2.0.9")
+print("This is the Tu154M 2.5.0")
 size = { 4096, 4096 }
 print("Lua version is", _VERSION)
 panelWidth3d = 4096
