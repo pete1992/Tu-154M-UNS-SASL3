@@ -11,8 +11,14 @@ Changelog
 
 -- controls
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
@@ -104,20 +110,20 @@ defineProps({
     {"rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf}, --     №2
     {"rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf}, --     №3
 
-    {"revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]", globalProperty}, -- reverse on left engine
-    {"revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio[2]", globalProperty}, -- reverse on right engine
+    {"revers_flap_L", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio", globalPropertyfae, 1}, -- reverse on left engine
+    {"revers_flap_R", "sim/flightmodel2/engines/thrust_reverser_deploy_ratio", globalPropertyfae, 3}, -- reverse on right engine
 
-    {"chip_detect1", "sim/cockpit/warnings/annunciators/chip_detected[0]", globalProperty}, -- chip in engine1
-    {"chip_detect2", "sim/cockpit/warnings/annunciators/chip_detected[1]", globalProperty}, -- chip in engine1
-    {"chip_detect3", "sim/cockpit/warnings/annunciators/chip_detected[2]", globalProperty}, -- chip in engine1
+    {"chip_detect1", "sim/cockpit2/annunciators/chip_detected", globalPropertyiae, 1}, -- chip in engine1
+    {"chip_detect2", "sim/cockpit2/annunciators/chip_detected", globalPropertyiae, 2}, -- chip in engine1
+    {"chip_detect3", "sim/cockpit2/annunciators/chip_detected", globalPropertyiae, 3}, -- chip in engine1
 
     -- {"fuel_p_1", "sim/cockpit2/engine/indicators/fuel_pressure_psi[0]", globalProperty},
     -- {"fuel_p_2", "sim/cockpit2/engine/indicators/fuel_pressure_psi[1]", globalProperty},
     -- {"fuel_p_3", "sim/cockpit2/engine/indicators/fuel_pressure_psi[2]", globalProperty},
 
-    {"oil_p_1", "sim/cockpit2/engine/indicators/oil_pressure_psi[0]", globalProperty},
-    {"oil_p_2", "sim/cockpit2/engine/indicators/oil_pressure_psi[1]", globalProperty},
-    {"oil_p_3", "sim/cockpit2/engine/indicators/oil_pressure_psi[2]", globalProperty},
+    {"oil_p_1", "sim/cockpit2/engine/indicators/oil_pressure_psi", globalPropertyfae, 1},
+    {"oil_p_2", "sim/cockpit2/engine/indicators/oil_pressure_psi", globalPropertyfae, 2},
+    {"oil_p_3", "sim/cockpit2/engine/indicators/oil_pressure_psi", globalPropertyfae, 3},
 
     {"eng_fuel_press_1", "tu154/custom/fuel/eng_fuel_press_1", globalPropertyi}, --      .   -
     {"eng_fuel_press_2", "tu154/custom/fuel/eng_fuel_press_2", globalPropertyi}, --      .   -
@@ -125,7 +131,7 @@ defineProps({
 
     {"throttle_lock", "tu154/custom/controlls/throttle_lock", globalPropertyf},
 
-    {"tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty}, -- fuel weight
+    {"tank1_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1}, -- fuel weight
     {"pump_tank2_left_work", "tu154/custom/fuel/pump_tank2_left_work", globalPropertyi},
     {"pump_tank2_right_work", "tu154/custom/fuel/pump_tank2_right_work", globalPropertyi},
     {"pump_tank3_left_work", "tu154/custom/fuel/pump_tank3_left_work", globalPropertyi},
@@ -156,18 +162,18 @@ defineProps({
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- flight time
 
 -- engines
-    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty}, -- engine 1 rpm
-    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty}, -- engine 2 rpm
-    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty}, -- engine 3 rpm
-    {"eng1_N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty}, -- engine 1 HP rotor rpm
-    {"eng2_N2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty}, -- engine 2 HP rotor rpm
-    {"eng3_N2", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty}, -- engine 3 HP rotor rpm
+    {"eng1_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 1}, -- engine 1 rpm
+    {"eng2_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 2}, -- engine 2 rpm
+    {"eng3_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 3}, -- engine 3 rpm
+    {"eng1_N2", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 1}, -- engine 1 HP rotor rpm
+    {"eng2_N2", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 2}, -- engine 2 HP rotor rpm
+    {"eng3_N2", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 3}, -- engine 3 HP rotor rpm
 
     {"fire_main_switch", "tu154/custom/switchers/eng/fire_main_switch", globalPropertyi},
 
-    {"sim_engine_on_fire1", "sim/operation/failures/rel_engfir0", globalPropertyi},  -- left engine on fire
-    {"sim_engine_on_fire2", "sim/operation/failures/rel_engfir1", globalPropertyi},  -- mid engine on fire
-    {"sim_engine_on_fire3", "sim/operation/failures/rel_engfir2", globalPropertyi},  -- right engine on fire
+    {"sim_engine_on_fire1", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 1},  -- left engine on fire
+    {"sim_engine_on_fire2", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 2},  -- mid engine on fire
+    {"sim_engine_on_fire3", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 3},  -- right engine on fire
 
     {"egt_1", "tu154/custom/gauges/eng/egt_1", globalPropertyf}, --   1
     {"egt_2", "tu154/custom/gauges/eng/egt_2", globalPropertyf}, --   2
@@ -193,8 +199,18 @@ local function pressureWarningsEnabled(n2)
 end
 
 -- Record the actual warning source without masking or changing any engine limits.
-local last_warning_causes = {"", "", ""}
+local last_warning_masks = {0, 0, 0}
 local function reportEngineWarning(engine, rpm, n2, oil_p, reverse_transit, vibr, chips, fuel_p, fire, egt, oil_pressure_fault, fuel_pressure_fault)
+    -- Each warning combination has one mask; build its text only on a change.
+    local mask = 0
+    if oil_pressure_fault then mask = mask + 1 end
+    if vibr > 55 then mask = mask + 2 end
+    if chips == 1 then mask = mask + 4 end
+    if fuel_pressure_fault then mask = mask + 8 end
+    if fire == 6 then mask = mask + 16 end
+    if egt > 710 then mask = mask + 32 end
+    if mask == last_warning_masks[engine] then return end
+
     local causes = {}
     if oil_pressure_fault then causes[#causes + 1] = "OIL_PRESSURE" end
     if vibr > 55 then causes[#causes + 1] = "VIBRATION" end
@@ -204,8 +220,7 @@ local function reportEngineWarning(engine, rpm, n2, oil_p, reverse_transit, vibr
     if egt > 710 then causes[#causes + 1] = "EGT" end
 
     local signature = table.concat(causes, ",")
-    if signature == last_warning_causes[engine] then return end
-    last_warning_causes[engine] = signature
+    last_warning_masks[engine] = mask
 
     logInfo(string.format(
         "[Engine warning] engine=%d causes=%s rpm=%.2f n2_raw=%.2f oil_psi=%.2f fuel_pressure=%d vibration=%.2f chips=%d fire=%d egt_C=%.2f reverse_transit=%d",
@@ -337,7 +352,7 @@ local function lamps_eng1()
 	local oil_pressure_fault = pressure_warnings and oil_p < 10
 	local fuel_pressure_fault = pressure_warnings and fuel_p == 0
 	local reverse_transit = rev_L < revers_flap_L_last and rev_L > 0.05 and rev_L < 0.95
-	local fire = get(fire_main_switch) * get(sim_engine_on_fire1)
+	local fire = get(fire_main_switch) * bool2int(get(sim_engine_on_fire1) > 0) * 6
 	local egt = get(egt_1)
 
 	eng_1_fail_src = bool2int(oil_pressure_fault or vibr > 55 or chip_det == 1 or fuel_pressure_fault or fire == 6 or egt > 710)
@@ -413,7 +428,7 @@ local function lamps_eng2()
 	local pressure_warnings = pressureWarningsEnabled(n2)
 	local oil_pressure_fault = pressure_warnings and oil_p < 10
 	local fuel_pressure_fault = pressure_warnings and fuel_p == 0
-	local fire = get(fire_main_switch) * get(sim_engine_on_fire2)
+	local fire = get(fire_main_switch) * bool2int(get(sim_engine_on_fire2) > 0) * 6
 	local egt = get(egt_2)
 
 	eng_2_fail_src = bool2int(oil_pressure_fault or vibr > 55 or chip_det == 1 or fuel_pressure_fault or fire == 6 or egt > 710)
@@ -493,7 +508,7 @@ local function lamps_eng3()
 	local oil_pressure_fault = pressure_warnings and oil_p < 10
 	local fuel_pressure_fault = pressure_warnings and fuel_p == 0
 	local reverse_transit = rev_R < revers_flap_R_last and rev_R > 0.05 and rev_R < 0.95
-	local fire = get(fire_main_switch) * get(sim_engine_on_fire3)
+	local fire = get(fire_main_switch) * bool2int(get(sim_engine_on_fire3) > 0) * 6
 	local egt = get(egt_3)
 
 	eng_3_fail_src = bool2int(oil_pressure_fault or vibr > 55 or chip_det == 1 or fuel_pressure_fault or fire == 6 or egt > 710)

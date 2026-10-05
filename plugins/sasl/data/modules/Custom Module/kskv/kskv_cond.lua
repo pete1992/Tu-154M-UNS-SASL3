@@ -51,7 +51,7 @@ defineProps({
     { "skv_faster_work", "tu154/custom/switchers/airbleed/skv_faster_work", globalPropertyi }, -- -1 -  , 0 - , +1 -
 
     -- sources
-    { "termo", "sim/weather/temperature_ambient_c", globalPropertyf }, --
+    { "termo", "sim/weather/aircraft/temperature_ambient_deg_c", globalPropertyf }, --
     { "airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf }, --
 
     { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf }, --     №1

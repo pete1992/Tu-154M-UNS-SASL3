@@ -16,7 +16,7 @@
 [TU154 INFO]: [LUA]: loading	flap_aero
 [TU154 INFO]: [LUA]: loading	main_panel
 [TU154 INFO]: [LUA]: loading	vers
-[TU154 INFO]: [LUA]: "vers"	Tu154 M UNS rewritten by pete1992 v2.4.9
+[TU154 INFO]: [LUA]: "vers"	Tu154 M UNS rewritten by pete1992 v2.5.0
 [TU154 INFO]: [LUA]: "vers"	based on the Tu-154 by Felis for X-Plane
 [TU154 INFO]: [LUA]: "vers"	and on the Community Edition
 [TU154 INFO]: [LUA]: loading	sc_controls
@@ -194,6 +194,7 @@
 [TU154 INFO]: [LUA]: including	chk_after_press_set.lua
 [TU154 INFO]: [LUA]: including	chk_before_base.lua
 [TU154 INFO]: [LUA]: including	chk_before_land.lua
+[TU154 INFO]: [LUA]: loading	cockpit_control_sounds
 [TU154 INFO]: [LUA]: loading	panels_2d
 [TU154 INFO]: [LUA]: loading	palette_2d
 [TU154 INFO]: [LUA]: loading	interactive
@@ -214,19 +215,51 @@
 [TU154 INFO]: [LUA]: loading	failures_2d
 [TU154 INFO]: [LUA]: loading	fail_runtime
 [TU154 INFO]: [LUA]: loading	failures_draw
-[TU154 INFO]: Scripts loading time: 1.0170
+[TU154 INFO]: Scripts loading time: 0.5410
 [TU154 INFO]: Module loaded
 [TU154 INFO]: Initializing modules...
 [TU154 INFO]: Modules initialization done
 [TU154 INFO]: [LUA]: "aircraft_init"	[Aircraft initialization] Engines-running controls applied
 [TU154 INFO]: [LUA]: "crew_voices"	PREPARE
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=FIRE rpm=19.84 n2_raw=19.02 oil_psi=31.47 fuel_pressure=1 vibration=7.36 chips=0 fire=6 egt_C=0.00 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=FIRE rpm=19.90 n2_raw=19.08 oil_psi=31.49 fuel_pressure=1 vibration=7.38 chips=0 fire=6 egt_C=0.00 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=FIRE rpm=19.97 n2_raw=19.17 oil_psi=31.52 fuel_pressure=1 vibration=7.41 chips=0 fire=6 egt_C=0.00 reverse_transit=0
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI BEFORE TAKEOFF
 [TU154 INFO]: [LUA]: "save_state"	State restored: OK
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=CLEAR rpm=0.00 n2_raw=0.00 oil_psi=31.47 fuel_pressure=0 vibration=0.00 chips=0 fire=0 egt_C=0.00 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=CLEAR rpm=0.00 n2_raw=0.00 oil_psi=31.49 fuel_pressure=0 vibration=0.00 chips=0 fire=0 egt_C=0.00 reverse_transit=0
-[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=CLEAR rpm=0.00 n2_raw=0.00 oil_psi=31.52 fuel_pressure=0 vibration=0.00 chips=0 fire=0 egt_C=0.00 reverse_transit=0
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	TAKEOFF
+[TU154 INFO]: [LUA]: "crew_voices"	CLIMB
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=C_off bus27=28.5/28.5 bus36=37.2 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "crew_voices"	FLIGHT
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	DESCEND
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "crew_voices"	APPROACH
+[TU154 INFO]: [LUA]: "absu_at"	AT disengage 3->2 reason=C_off bus27=28.5/28.5 bus36=37.2 bus115=121.8 prepare=1 channels=1/1 channel_off=0 fail=0/0 rud=1/1/1
+[TU154 INFO]: [LUA]: "crew_voices"	TAXI AFTER LANDING
+[TU154 INFO]: [LUA]: "save_state"	State saved: OK
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=FUEL_PRESSURE rpm=55.73 n2_raw=67.64 oil_psi=40.81 fuel_pressure=0 vibration=16.93 chips=0 fire=0 egt_C=188.52 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=FUEL_PRESSURE rpm=55.70 n2_raw=67.60 oil_psi=40.80 fuel_pressure=0 vibration=16.93 chips=0 fire=0 egt_C=189.31 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=FUEL_PRESSURE rpm=55.72 n2_raw=67.64 oil_psi=40.81 fuel_pressure=0 vibration=16.93 chips=0 fire=0 egt_C=188.59 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=CLEAR rpm=50.02 n2_raw=59.99 oil_psi=39.73 fuel_pressure=0 vibration=16.43 chips=0 fire=0 egt_C=61.66 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=CLEAR rpm=50.01 n2_raw=59.97 oil_psi=39.72 fuel_pressure=0 vibration=16.42 chips=0 fire=0 egt_C=62.22 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=CLEAR rpm=50.02 n2_raw=59.99 oil_psi=39.72 fuel_pressure=0 vibration=16.43 chips=0 fire=0 egt_C=61.69 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=1 causes=FUEL_PRESSURE rpm=36.42 n2_raw=81.64 oil_psi=42.90 fuel_pressure=0 vibration=15.17 chips=0 fire=0 egt_C=69.17 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=2 causes=FUEL_PRESSURE rpm=36.22 n2_raw=69.60 oil_psi=41.12 fuel_pressure=0 vibration=15.15 chips=0 fire=0 egt_C=69.86 reverse_transit=0
+[TU154 INFO]: [LUA]: "engines_panel"	[Engine warning] engine=3 causes=FUEL_PRESSURE rpm=36.09 n2_raw=81.64 oil_psi=42.90 fuel_pressure=0 vibration=15.14 chips=0 fire=0 egt_C=69.22 reverse_transit=0
 [TU154 INFO]: Disabling...
 [TU154 INFO]: [LUA]: "stall"	XP12 asymmetric stall supplement v4.5.0 released
 [TU154 INFO]: [LUA]: "landing_gears"	gears reset to extended

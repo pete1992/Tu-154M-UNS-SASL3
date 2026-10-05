@@ -96,7 +96,8 @@ function update()
 	
 if get(ismaster) ~= 1 then		
 	
-	local FAIL = get(failures_enabled)
+	local failure_level = get(failures_enabled)
+	local FAIL = failure_level
 	
 	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 	
@@ -110,58 +111,62 @@ if get(ismaster) ~= 1 then
 			check_time = math.random(15, 30)
 			
 			-- random failures
-			if get(flap_fail_left) ~= 1 then set(flap_fail_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(flap_fail_right) ~= 1 then set(flap_fail_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(flap_fail_left) ~= 1 then set(flap_fail_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(flap_fail_right) ~= 1 then set(flap_fail_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			
 			-- stab engines
 			stabEng1 = bool2int(get(stab_eng_fail) >= 1)
 			stabEng2 = bool2int(get(stab_eng_fail) == 2)
 			
+			if failure_level >= 2 then -- LOW retains causal damage only.
 			if stabEng1 ~= 1 then stabEng1 = bool2int(math.random() < 0.00001 * FAIL * 0.3 * stab_counter)
 			elseif stabEng2 ~= 1 then stabEng2 = bool2int(math.random() < 0.00001 * FAIL * 0.3 * stab_counter) end
+			end
 			
 			set(stab_eng_fail, stabEng1 + stabEng2)
 			--if get(stab_eng_fail) ~= 1 then set(stab_eng_fail, bool2int(math.random() < 0.00001) * 1) end
 			
-			if get(stab_automatic_fail) ~= 1 then set(stab_automatic_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(stab_automatic_fail) ~= 1 then set(stab_automatic_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			
 			-- slats
 			slat1 = bool2int(get(slats_fail) >= 1)
 			slat2 = bool2int(get(slats_fail) == 2)
 			
+			if failure_level >= 2 then -- LOW retains causal damage only.
 			if slat1 ~= 1 then slat1 = bool2int(math.random() < 0.00001 * FAIL * 0.3 * slat_counter)
 			elseif slat2 ~= 1 then slat2 = bool2int(math.random() < 0.00001 * FAIL * 0.3 * slat_counter) end
+			end
 			
 			set(slats_fail, slat1 + slat2)
 			--if get(slats_fail) ~= 1 then set(slats_fail, bool2int(math.random() < 0.00001) * 1) end
 			
-			if get(ail_fail_left) ~= 1 then set(ail_fail_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(ail_fail_right) ~= 1 then set(ail_fail_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(ail_fail_left) ~= 1 then set(ail_fail_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(ail_fail_right) ~= 1 then set(ail_fail_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			
-			if get(fail_spoil_inn_left) ~= 1 then set(fail_spoil_inn_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(fail_spoil_inn_right) ~= 1 then set(fail_spoil_inn_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(fail_spoil_mid_left) ~= 1 then set(fail_spoil_mid_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(fail_spoil_mid_right) ~= 1 then set(fail_spoil_mid_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(fail_spoil_out_left) ~= 1 then set(fail_spoil_out_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(fail_spoil_out_right) ~= 1 then set(fail_spoil_out_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(fail_spoil_inn_left) ~= 1 then set(fail_spoil_inn_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(fail_spoil_inn_right) ~= 1 then set(fail_spoil_inn_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(fail_spoil_mid_left) ~= 1 then set(fail_spoil_mid_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(fail_spoil_mid_right) ~= 1 then set(fail_spoil_mid_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(fail_spoil_out_left) ~= 1 then set(fail_spoil_out_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(fail_spoil_out_right) ~= 1 then set(fail_spoil_out_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			
-			if get(rudder_fail) ~= 1 then set(rudder_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(elev_fail_left) ~= 1 then set(elev_fail_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(elev_fail_right) ~= 1 then set(elev_fail_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(rudder_fail) ~= 1 then set(rudder_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(elev_fail_left) ~= 1 then set(elev_fail_left, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(elev_fail_right) ~= 1 then set(elev_fail_right, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			
-			if get(retract1_fail) ~= 6 then set(retract1_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(retract2_fail) ~= 6 then set(retract2_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(retract3_fail) ~= 6 then set(retract3_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(actuator_fail) ~= 6 then set(actuator_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			if failure_level >= 2 and get(retract1_fail) ~= 6 then set(retract1_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			if failure_level >= 2 and get(retract2_fail) ~= 6 then set(retract2_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			if failure_level >= 2 and get(retract3_fail) ~= 6 then set(retract3_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			if failure_level >= 2 and get(actuator_fail) ~= 6 then set(actuator_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
 			
 			--if get(rel_collapse1) ~= 1 then set(rel_collapse1, bool2int(math.random() < 0.00001) * 1) end
 			--if get(rel_collapse2) ~= 1 then set(rel_collapse2, bool2int(math.random() < 0.00001) * 1) end
 			--if get(rel_collapse3) ~= 1 then set(rel_collapse3, bool2int(math.random() < 0.00001) * 1) end
 			
-			if get(rel_trim_rud) ~= 6 then set(rel_trim_rud, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(rel_trim_ail) ~= 6 then set(rel_trim_ail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(rel_trim_elv) ~= 6 then set(rel_trim_elv, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(trim_emerg_elv_fail) ~= 1 then set(trim_emerg_elv_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			if failure_level >= 2 and get(rel_trim_rud) ~= 6 then set(rel_trim_rud, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			if failure_level >= 2 and get(rel_trim_ail) ~= 6 then set(rel_trim_ail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			if failure_level >= 2 and get(rel_trim_elv) ~= 6 then set(rel_trim_elv, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			if failure_level >= 2 and get(trim_emerg_elv_fail) ~= 1 then set(trim_emerg_elv_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			
 		end
 		
@@ -172,9 +177,17 @@ if get(ismaster) ~= 1 then
 		if airspeed > interpolate(flap_lim_tbl, get(flap_inn_L)) + (3 - FAIL) * 20 and get(flap_fail_left) ~= 1 then set(flap_fail_left, bool2int(math.random() < 0.1 * FAIL * 0.3) * 1) end 
 		if airspeed > interpolate(flap_lim_tbl, get(flap_inn_R)) + (3 - FAIL) * 20 and get(flap_fail_right) ~= 1 then set(flap_fail_right, bool2int(math.random() < 0.1 * FAIL * 0.3) * 1) end 
 		-- slats
+		-- Read the shared failure count before applying new overspeed damage.
+		local slat_failures = get(slats_fail)
+		slat1 = bool2int(slat_failures >= 1)
+		slat2 = bool2int(slat_failures == 2)
 		if airspeed > 430 + (3 - FAIL) * 20 and get(slats) > 0.5 and slat1 ~= 1 then slat1 = bool2int(math.random() < 0.1 * FAIL * 0.3) end  
 		if airspeed > 430 + (3 - FAIL) * 20 and get(slats) > 0.5 and slat2 ~= 1 then slat2 = bool2int(math.random() < 0.1 * FAIL * 0.3) end 
 		
+		-- Commit damage immediately so periodic checks and motor control retain it.
+		local damaged_slat_motors = slat1 + slat2
+		if damaged_slat_motors ~= slat_failures then set(slats_fail, damaged_slat_motors) end
+
 		slat_counter = slat_counter + (bool2int(slat_last ~= get(slats)) * FAIL * 0.5 - 0.7) * passed * 0.2
 		slat_last = get(slats)
 		

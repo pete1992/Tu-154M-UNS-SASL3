@@ -51,7 +51,8 @@ function update()
 
     if not MASTER then return end
 
-    local FAIL = get(failures_enabled) or 0
+    local failure_level = get(failures_enabled) or 0
+    local FAIL = failure_level
     -- same shaping as original
     FAIL = FAIL * 0.05 * (4 ^ (FAIL * 0.5))
 
@@ -62,6 +63,7 @@ function update()
             check_time = math.random(15, 30)
 
             -- base probability used below mirrors original scaling
+            if failure_level >= 2 then -- LOW retains causal damage only.
             local p = 0.00001 * FAIL * 0.3
 
             -- AT channels
@@ -116,6 +118,7 @@ function update()
             if get(absu_calc_toga_fail)   ~= 1 then set(absu_calc_toga_fail,   bool2int(math.random() < p)) end
             if get(absu_calc_roll_fail)   ~= 1 then set(absu_calc_roll_fail,   bool2int(math.random() < p)) end
             if get(absu_calc_pitch_fail)  ~= 1 then set(absu_calc_pitch_fail,  bool2int(math.random() < p)) end
+            end
         end
     else
         -- reset all failures when disabled

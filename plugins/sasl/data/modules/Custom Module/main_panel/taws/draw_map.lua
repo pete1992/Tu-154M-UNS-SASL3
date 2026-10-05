@@ -17,10 +17,12 @@ function draw()
 	local cor_y = 80 / y_sz
 	
 	for x = 1, x_sz, 1 do
+		local draw_row = drawTable[x]
 		for y = 1, y_sz, 1 do
-			local r = colorTable[drawTable[x][y]][1]
-			local g = colorTable[drawTable[x][y]][2]
-			local b = colorTable[drawTable[x][y]][3]
+			local color = colorTable[draw_row[y]]
+			local r = color[1]
+			local g = color[2]
+			local b = color[3]
 			sasl.gl.drawRectangle((x-1) * cor_x, (y-1) * cor_y, cor_x, cor_y, r, g, b, 1)
 		end
 	end

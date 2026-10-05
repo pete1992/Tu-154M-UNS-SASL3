@@ -51,7 +51,8 @@ local MASTER = get(ismaster) ~= 1
 	
 if MASTER then	
 
-	local FAIL = get(failures_enabled)
+	local failure_level = get(failures_enabled)
+	local FAIL = failure_level
 	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 	-- check failures
 	if FAIL > 0 then
@@ -63,6 +64,7 @@ if MASTER then
 			check_time = math.random(15, 30)
 			
 			-- random failures
+			if failure_level >= 2 then -- LOW retains causal damage only.
 			if get(hs_leak_1) ~= 1 then set(hs_leak_1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(hs_leak_2) ~= 1 then set(hs_leak_2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(hs_leak_3) ~= 1 then set(hs_leak_3, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
@@ -75,6 +77,7 @@ if MASTER then
 			
 			if get(hydro_elec_fail_2) ~= 1 then set(hydro_elec_fail_2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(hydro_elec_fail_3) ~= 1 then set(hydro_elec_fail_3, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			end
 			
 		end
 		

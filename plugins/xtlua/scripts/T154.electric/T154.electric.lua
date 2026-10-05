@@ -3,6 +3,7 @@ Changelog
 2026-10-04
 - Run ordered electrical batches in xTlua and return state through owned mailboxes.
 - Validate request sequences; leave public aircraft DataRef writes to SASL.
+- Use compact dense/delta protocol v2; DataRef names never cross the mailbox.
 ]]
 
 -- Numeric electric worker. SASL alone commits public aircraft DataRefs.
@@ -38,14 +39,13 @@ local function report(message)
 end
 
 local function process(packet)
-    local request = Packet.validate_request(Packet.unpack(packet))
+    local request = Packet.unpack_request(packet, Core)
     if request.session == last_session and request.id <= last_id then return end
-    local started = os.clock()
     local core = Core.new(request.frames[1].inputs, request.state, nil, ".")
     for _, frame in ipairs(request.frames) do
         core:step(frame.inputs)
     end
-    local response = Packet.pack({
+    local response = Packet.pack_response({
         version = Packet.VERSION,
         session = request.session,
         id = request.id,
@@ -53,8 +53,7 @@ local function process(packet)
         last = request.last,
         state = core:export(),
         outputs = core:outputs(),
-        elapsed_ms = math.max(0, (os.clock() - started) * 1000),
-    })
+    }, Core)
     electric_worker_response = response
     last_session, last_id = request.session, request.id
     last_error = nil

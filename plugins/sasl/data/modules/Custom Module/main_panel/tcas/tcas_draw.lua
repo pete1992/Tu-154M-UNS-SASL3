@@ -32,6 +32,10 @@ defineProps({
 
 local font = sasl.gl.loadBitmapFont('tcas_scr.fnt')
 
+local label_cyan = {0, 1, 1, 1}
+local label_yellow = {1, 1, 0, 1}
+local label_red = {1, 0, 0, 1}
+
 function draw()
 	
 	local targets = get(table_draw)
@@ -81,17 +85,17 @@ function draw()
 				local above = targets[i][3] < 0 and -1 or 1
 				
 				if mark == 2 or mark == 1 then
-					sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, {0, 1, 1, 1})
+					sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, label_cyan)
 					if rate == -1 then sasl.gl.drawTexture(blu_dn, x + 24, y, 18, 26, 1,1,1)
 					elseif rate == 1 then sasl.gl.drawTexture(blu_up, x + 24, y, 18, 26, 1,1,1)
 				end
 				elseif mark == 3 then
-					sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, {1, 1, 0, 1})
+					sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, label_yellow)
 					if rate == -1 then sasl.gl.drawTexture(yel_dn, x + 24, y, 18, 26, 1,1,1)
 					elseif rate == 1 then sasl.gl.drawTexture(yel_up, x + 24, y, 18, 26, 1,1,1)
 					end
 						elseif mark == 4 then
-							sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, {1, 0, 0, 1})
+							sasl.gl.drawBitmapText(font, x-10, y + above * 27 + 2, text, TEXT_ALIGN_LEFT, label_red)
 							if rate == -1 then sasl.gl.drawTexture(red_dn, x + 24, y, 18, 26, 1,1,1)
 						elseif rate == 1 then sasl.gl.drawTexture(red_up, x + 24, y, 18, 26, 1,1,1)
 					end

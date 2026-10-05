@@ -3,6 +3,7 @@ Changelog
 2026-10-04
 - Coordinate batteries, generators, currents, 36 V, 27 V, 115 V and GPU in source order.
 - Preserve per-module timing, saved state, SmartCopilot gates and GPU command revisions.
+- Export only worker-owned values and expose stable compact transport binding order.
 ]]
 
 -- Ordered electrical model shared by the worker and its synchronous fallback.
@@ -114,6 +115,21 @@ for _, definition in ipairs(Core.bindings) do
 end
 Core.urgent[Core.gpu_command] = true
 
+-- Stable transport order shared by SASL and xTlua. Worker requests only need
+-- external inputs; worker-owned feedback travels once in the saved state.
+-- External outputs (currently GPU presence) are included because they can also
+-- be changed by the simulator-side adapter and therefore act as commands.
+Core.owned_bindings, Core.transport_bindings = {}, {}
+for _, definition in ipairs(Core.bindings) do
+    local key = definition.key
+    if Core.owned[key] then
+        Core.owned_bindings[#Core.owned_bindings + 1] = definition
+    end
+    if not Core.owned[key] or Core.external_outputs[key] then
+        Core.transport_bindings[#Core.transport_bindings + 1] = definition
+    end
+end
+
 function Core.new(initial, saved, random)
     assert(type(initial) == "table", "electrical inputs missing")
     local self = {
@@ -161,6 +177,12 @@ function Core.new(initial, saved, random)
         for _, definition in ipairs(Core.bindings) do
             local key = definition.key
             local value = inputs[key]
+            -- Compact worker packets omit values already owned by the numerical
+            -- model. Local SASL replays still provide the full captured snapshot.
+            if value == nil and not slave and Core.owned[key]
+                and not Core.external_outputs[key] then
+                value = self.values[key]
+            end
             assert(finite(value), "invalid electrical sample: " .. key)
             -- A queued frame must not overwrite newly calculated feedback with
             -- an older published bus value. Slave snapshots are authoritative.
@@ -183,8 +205,14 @@ function Core.new(initial, saved, random)
     end
 
     function self:export()
+        -- External inputs are supplied again with the next worker batch, so
+        -- carrying them in every checkpoint only duplicates transport data.
+        local values = {}
+        for _, definition in ipairs(Core.owned_bindings) do
+            values[definition.key] = self.values[definition.key]
+        end
         local state = {
-            values = copy(self.values), models = {},
+            values = values, models = {},
             gpu_command_revision = self.gpu_command_revision,
         }
         for _, item in ipairs(self.components) do

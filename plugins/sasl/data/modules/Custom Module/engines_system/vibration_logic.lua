@@ -10,8 +10,14 @@ Changelog
 
 -- local defineProps Function
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
@@ -23,29 +29,29 @@ defineProps({
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
     -- Engine failures
-    { "eng1_fail", "sim/operation/failures/rel_engfai0", globalPropertyf }, -- engine fail
-    { "eng2_fail", "sim/operation/failures/rel_engfai1", globalPropertyf },
-    { "eng3_fail", "sim/operation/failures/rel_engfai2", globalPropertyf },
+    { "eng1_fail", "sim/operation/failures/rel_engfai0", globalPropertyi }, -- engine fail
+    { "eng2_fail", "sim/operation/failures/rel_engfai1", globalPropertyi },
+    { "eng3_fail", "sim/operation/failures/rel_engfai2", globalPropertyi },
 
     -- Engine fires
-    { "eng1_fire", "sim/operation/failures/rel_engfir0", globalPropertyf }, -- engine fire
-    { "eng2_fire", "sim/operation/failures/rel_engfir1", globalPropertyf },
-    { "eng3_fire", "sim/operation/failures/rel_engfir2", globalPropertyf },
+    { "eng1_fire", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 1 }, -- engine fire
+    { "eng2_fire", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 2 },
+    { "eng3_fire", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 3 },
 
     -- Oil pressure
-    { "eng1_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi[0]", globalProperty },  -- oil pressure
-    { "eng2_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi[1]", globalProperty },
-    { "eng3_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi[2]", globalProperty },
+    { "eng1_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi", globalPropertyfae, 1 },  -- oil pressure
+    { "eng2_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi", globalPropertyfae, 2 },
+    { "eng3_oil_p", "sim/flightmodel/engine/ENGN_oil_press_psi", globalPropertyfae, 3 },
 
     -- Engine chip detection
-    { "chip_detect1", "sim/cockpit/warnings/annunciators/chip_detected[0]", globalProperty }, -- chip in engine
-    { "chip_detect2", "sim/cockpit/warnings/annunciators/chip_detected[1]", globalProperty }, -- chip in engine
-    { "chip_detect3", "sim/cockpit/warnings/annunciators/chip_detected[2]", globalProperty }, -- chip in engine
+    { "chip_detect1", "sim/cockpit2/annunciators/chip_detected", globalPropertyiae, 1 }, -- chip in engine
+    { "chip_detect2", "sim/cockpit2/annunciators/chip_detected", globalPropertyiae, 2 }, -- chip in engine
+    { "chip_detect3", "sim/cockpit2/annunciators/chip_detected", globalPropertyiae, 3 }, -- chip in engine
 
     -- Engine speed
-    { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty }, -- engine rpm in % of N2
-    { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
-    { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
+    { "eng_rpm1", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 1 }, -- engine rpm in % of N2
+    { "eng_rpm2", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 2 },
+    { "eng_rpm3", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 3 },
 
     -- Compressor stalls
     { "comsta0", "sim/operation/failures/rel_comsta0", globalPropertyi }, -- compressor stall
@@ -53,9 +59,9 @@ defineProps({
     { "comsta2", "sim/operation/failures/rel_comsta2", globalPropertyi },
 
     -- Engine throttle
-    { "sim_rud_1", "sim/flightmodel/engine/ENGN_thro_use[0]", globalProperty },
-    { "sim_rud_2", "sim/flightmodel/engine/ENGN_thro_use[1]", globalProperty },
-    { "sim_rud_3", "sim/flightmodel/engine/ENGN_thro_use[2]", globalProperty },
+    { "sim_rud_1", "sim/flightmodel/engine/ENGN_thro_use", globalPropertyfae, 1 },
+    { "sim_rud_2", "sim/flightmodel/engine/ENGN_thro_use", globalPropertyfae, 2 },
+    { "sim_rud_3", "sim/flightmodel/engine/ENGN_thro_use", globalPropertyfae, 3 },
 
     -- Results
     { "vibration_1", "tu154/custom/eng/vibration_1", globalPropertyf }, --
@@ -137,12 +143,12 @@ function update()
 	vibro3 = vibro3 + fail3 * rpm3 / 5
 	
 	-- vibration may slowly increase on engine fire
-	if get(eng1_fire) == 6 and fire_counter1 < 100 then fire_counter1 = math.min(100, fire_counter1 + passed * 0.8 * rpm1 * (rud1 + 0.5) / 100) 
-	elseif get(eng1_fire) < 6 and fire_counter1 > 0 then fire_counter1 = math.max(0, fire_counter1 - passed * 2) end
-	if get(eng2_fire) == 6 and fire_counter2 < 100 then fire_counter2 = math.min(100, fire_counter2 + passed * 0.8 * rpm2 * (rud2 + 0.5) / 100) 
-	elseif get(eng2_fire) < 6 and fire_counter2 > 0 then fire_counter2 = math.max(0, fire_counter2 - passed * 2) end
-	if get(eng3_fire) == 6 and fire_counter3 < 100 then fire_counter3 = math.min(100, fire_counter3 + passed * 0.8 * rpm3 * (rud3 + 0.5) / 100)
-	elseif get(eng3_fire) < 6 and fire_counter3 > 0 then fire_counter3 = math.max(0, fire_counter3 - passed * 2) end
+	if get(eng1_fire) > 0 and fire_counter1 < 100 then fire_counter1 = math.min(100, fire_counter1 + passed * 0.8 * rpm1 * (rud1 + 0.5) / 100)
+	elseif get(eng1_fire) <= 0 and fire_counter1 > 0 then fire_counter1 = math.max(0, fire_counter1 - passed * 2) end
+	if get(eng2_fire) > 0 and fire_counter2 < 100 then fire_counter2 = math.min(100, fire_counter2 + passed * 0.8 * rpm2 * (rud2 + 0.5) / 100)
+	elseif get(eng2_fire) <= 0 and fire_counter2 > 0 then fire_counter2 = math.max(0, fire_counter2 - passed * 2) end
+	if get(eng3_fire) > 0 and fire_counter3 < 100 then fire_counter3 = math.min(100, fire_counter3 + passed * 0.8 * rpm3 * (rud3 + 0.5) / 100)
+	elseif get(eng3_fire) <= 0 and fire_counter3 > 0 then fire_counter3 = math.max(0, fire_counter3 - passed * 2) end
 	
 	-- vibration may increase if engine destroying
 	if get(chip_detect1) == 1 and chip_counter1 < 100 then chip_counter1 = math.min(100, chip_counter1 + passed * rpm1 * (rud1 + 0.5) / 100) end

@@ -2,19 +2,25 @@
 -- this is fuel pumps logic
 
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
 defineProps({
     -- Fuel quantities
-    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty },
-    { "tank4_w", "sim/flightmodel/weight/m_fuel[1]", globalProperty },
-    { "tank2R_w", "sim/flightmodel/weight/m_fuel[2]", globalProperty },
-    { "tank2L_w", "sim/flightmodel/weight/m_fuel[3]", globalProperty },
-    { "tank3R_w", "sim/flightmodel/weight/m_fuel[4]", globalProperty },
-    { "tank3L_w", "sim/flightmodel/weight/m_fuel[5]", globalProperty },
+    { "tank1_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 },
+    { "tank4_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 2 },
+    { "tank2R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 3 },
+    { "tank2L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 4 },
+    { "tank3R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 5 },
+    { "tank3L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 6 },
 
     -- Controls
     { "pump_tank2_left", "tu154/custom/switchers/fuel/pump_tank2_left", globalPropertyi },
@@ -84,8 +90,7 @@ local pump_4_P = 1
 
 -- Hold the pressure endpoints while the pump state is unchanged. Letting a
 -- powered pump decay at full pressure makes the start permissive flicker at low FPS.
-local function pumpPressure(pressure, running, passed)
-    local change = math.max(0, passed) * 0.8
+local function pumpPressure(pressure, running, change)
     if running then return math.min(1, pressure + change) end
     return math.max(0, pressure - change)
 end
@@ -229,15 +234,16 @@ function update()
 	end
 	
 	-- calculate pressures
-	pump_2L_P = pumpPressure(pump_2L_P, pump2L_work > 0, passed)
-	pump_2R_P = pumpPressure(pump_2R_P, pump2R_work > 0, passed)
-	pump_3L_P = pumpPressure(pump_3L_P, pump3L_work > 0, passed)
-	pump_3R_P = pumpPressure(pump_3R_P, pump3R_work > 0, passed)
-	pump_4_P = pumpPressure(pump_4_P, pump4_work > 0, passed)
-	pump_1_1_P = pumpPressure(pump_1_1_P, pump1_1_work > 0, passed)
-	pump_1_2_P = pumpPressure(pump_1_2_P, pump1_2_work > 0, passed)
-	pump_1_3_P = pumpPressure(pump_1_3_P, pump1_3_work > 0, passed)
-	pump_1_4_P = pumpPressure(pump_1_4_P, pump1_4_work > 0, passed)
+	local pressure_change = math.max(0, passed) * 0.8
+	pump_2L_P = pumpPressure(pump_2L_P, pump2L_work > 0, pressure_change)
+	pump_2R_P = pumpPressure(pump_2R_P, pump2R_work > 0, pressure_change)
+	pump_3L_P = pumpPressure(pump_3L_P, pump3L_work > 0, pressure_change)
+	pump_3R_P = pumpPressure(pump_3R_P, pump3R_work > 0, pressure_change)
+	pump_4_P = pumpPressure(pump_4_P, pump4_work > 0, pressure_change)
+	pump_1_1_P = pumpPressure(pump_1_1_P, pump1_1_work > 0, pressure_change)
+	pump_1_2_P = pumpPressure(pump_1_2_P, pump1_2_work > 0, pressure_change)
+	pump_1_3_P = pumpPressure(pump_1_3_P, pump1_3_work > 0, pressure_change)
+	pump_1_4_P = pumpPressure(pump_1_4_P, pump1_4_work > 0, pressure_change)
 	
 	-- calculate electrics
 	local bus_1_load = (pump1_1_work + pump1_3_work) * 8.3 + (pump4_work + pump2L_work * 0.5 + pump2R_work * 0.5 + (pump3L_work * 0.3 + pump3R_work * 0.3) * 2) * 2.6

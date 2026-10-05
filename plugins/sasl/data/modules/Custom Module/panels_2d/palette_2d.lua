@@ -267,6 +267,14 @@ else
 	CG_return = false
 end
 
+-- Fuel index coefficients are immutable and shared by every update.
+local FUEL_INDEX = {
+	["tank_1_idx"] = -0.0011993,
+	["tank_2_idx"] = -0.0000509,
+	["tank_3_idx"] = 0.0014161,
+	["tank_4_idx"] = -0.00194
+}
+
 function update()
 	
 	-- get current weight and ZFW CG
@@ -296,12 +304,6 @@ function update()
 	local tank3L = get(fuel_q_3L)
 	local tank3R = get(fuel_q_3R)
 	
-	local index = {
-		["tank_1_idx"] = -0.0011993,
-		["tank_2_idx"] = -0.0000509,
-		["tank_3_idx"] = 0.0014161,
-		["tank_4_idx"] = -0.00194
-	}	
 	
 	local current_weight = current_ZFW + tank1 + tank4 + tank2L + tank2R + tank3L + tank3R
 	
@@ -309,7 +311,7 @@ function update()
 	
 	local ZFW_idx = calc_idx(current_ZFW, current_ZFW_CG)
 	
-	local current_idx = ZFW_idx + index["tank_1_idx"] * tank1 + index["tank_2_idx"] * (tank2L + tank2R) + index["tank_3_idx"] * (tank3L + tank3R) + index["tank_4_idx"] * tank4
+	local current_idx = ZFW_idx + FUEL_INDEX["tank_1_idx"] * tank1 + FUEL_INDEX["tank_2_idx"] * (tank2L + tank2R) + FUEL_INDEX["tank_3_idx"] * (tank3L + tank3R) + FUEL_INDEX["tank_4_idx"] * tank4
 
 	local current_CG = calc_CG(current_weight, current_idx)
 	

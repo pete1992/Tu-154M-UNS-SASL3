@@ -4,7 +4,13 @@
 -- controls on panel
 local function defineProps(defs)
     for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+        local prop
+        if d[4] ~= nil then
+            prop = d[3](d[2], d[4])
+        else
+            prop = d[3](d[2])
+        end
+        defineProperty(d[1], prop)
     end
 end
 
@@ -121,9 +127,9 @@ defineProps({
     -- time
 
     -- engines
-    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
-    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
-    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
+    { "eng1_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 1 }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 2 }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 3 }, -- engine 3 rpm
 })
 
 local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')

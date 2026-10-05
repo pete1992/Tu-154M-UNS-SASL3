@@ -47,6 +47,8 @@ defineProps({
     { "rel_cop_vvi", "sim/operation/failures/rel_cop_vvi", globalPropertyi },
     -- { "rel_bird_strike", "sim/operation/failures/rel_bird_strike", globalPropertyi },
 
+    -- X-Plane random scheduling is independent of the aircraft failure rolls.
+    { "native_random_failures", "sim/operation/failures/enable_random_failures", globalPropertyi },
     -- Time and failure settings
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
@@ -60,14 +62,42 @@ defineProps({
 local fail_counter = 0
 local check_time = math.random(15, 30)
 
+-- Restore only the scheduler preference captured by this component.
+-- Actual failure enums and the simulator MTBF duration remain untouched.
+local native_random_preference = nil
+
+local function restoreNativeRandomFailures()
+    if native_random_preference ~= nil then
+        set(native_random_failures, native_random_preference)
+        native_random_preference = nil
+    end
+end
+
+local function updateNativeRandomFailures(low_mode)
+    if low_mode then
+        local current = get(native_random_failures)
+        if native_random_preference == nil then native_random_preference = current end
+        if current ~= 0 then set(native_random_failures, 0) end
+    else
+        restoreNativeRandomFailures()
+    end
+end
+
+function onModuleShutdown(isError)
+    restoreNativeRandomFailures()
+end
+
 function update()
 	local passed = get(frame_time)
 	
 local MASTER = get(ismaster) ~= 1	
+if not MASTER then updateNativeRandomFailures(get(failures_enabled) == 1) end
 	
 if MASTER then	
 
-	local FAIL = get(failures_enabled)
+	local failure_level = get(failures_enabled)
+	local FAIL = failure_level
+    updateNativeRandomFailures(failure_level == 1)
 	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 	-- check failures
 	if FAIL > 0 then
@@ -79,6 +109,7 @@ if MASTER then
 			check_time = math.random(15, 30)
 			
 			-- random failures
+			if failure_level >= 2 then -- LOW retains causal damage only.
 			if get(diss_fail) ~= 1 then set(diss_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(nvu_fail) ~= 1 then set(nvu_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(radar_fail) ~= 1 then set(radar_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
@@ -113,6 +144,7 @@ if MASTER then
 			if get(rel_stall_warn) ~= 6 then set(rel_stall_warn, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
 			if get(rel_ss_vvi) ~= 6 then set(rel_ss_vvi, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
 			if get(rel_cop_vvi) ~= 6 then set(rel_cop_vvi, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			end
 			
 		end
 		

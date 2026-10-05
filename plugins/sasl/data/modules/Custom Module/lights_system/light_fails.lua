@@ -64,7 +64,8 @@ local MASTER = get(ismaster) ~= 1
 	
 if MASTER then	
 	
-	local FAIL = get(failures_enabled)
+	local failure_level = get(failures_enabled)
+	local FAIL = failure_level
 	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 	-- check failures
 	if FAIL > 0 then
@@ -94,6 +95,7 @@ if MASTER then
 			check_time = math.random(15, 30)
 			
 			-- random failures
+			if failure_level >= 2 then -- LOW retains causal damage only.
 			if get(lan_lamp_fail_FL) ~= 1 then set(lan_lamp_fail_FL, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(lan_lamp_fail_FR) ~= 1 then set(lan_lamp_fail_FR, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(lan_lamp_fail_WL) ~= 1 then set(lan_lamp_fail_WL, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
@@ -101,6 +103,7 @@ if MASTER then
 			
 			if get(rel_lites_nav) ~= 6 then set(rel_lites_nav, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
 			if get(rel_lites_beac) ~= 6 then set(rel_lites_beac, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			end
 			
 		end
 		

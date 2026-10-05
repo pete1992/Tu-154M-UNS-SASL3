@@ -217,19 +217,19 @@ local acf_x = get(acf_X)
 local acf_y = get(acf_Y)
 local acf_z = get(acf_Z)
 
-local function out_balance (src_x, src_z, src_hdg, src_cone, fade_deg, fade_dist)
+local function out_balance (src_x, src_z, src_hdg, src_cone, fade_deg, fade_dist, heading_cos, heading_sin)
 
 	-- need to calculate the world location of the sound source
-	local hdg_rad = math.rad(acf_hd)
-	local x_s = acf_x + src_x * math.cos(hdg_rad) - src_z * math.sin(hdg_rad)
-	local z_s = acf_z - src_x * math.sin(hdg_rad) + src_z * math.cos(hdg_rad)
+	local x_s = acf_x + src_x * heading_cos - src_z * heading_sin
+	local z_s = acf_z - src_x * heading_sin + src_z * heading_cos
 	
-	local angle2source = cam_hd + math.deg(math.atan2(cam_x - x_s, cam_z - z_s)) -- angle from camera to the source
+	local source_bearing = math.deg(math.atan2(cam_x - x_s, cam_z - z_s))
+	local angle2source = cam_hd + source_bearing -- angle from camera to the source
 	
 	while angle2source > 180 do angle2source = angle2source - 360 end
 	while angle2source < -180 do angle2source = angle2source + 360 end
 	
-	local angle2cam = math.deg(math.atan2(cam_x - x_s, cam_z - z_s)) + acf_hd + src_hdg - 180 -- angle from source to camera
+	local angle2cam = source_bearing + acf_hd + src_hdg - 180 -- angle from source to camera
 	
 	while angle2cam > 180 do angle2cam = angle2cam - 360 end
 	while angle2cam < -180 do angle2cam = angle2cam + 360 end
@@ -517,15 +517,20 @@ function update()
 	
 		sasl.al.setSampleGain(inn_reverse, 0)
 	
-		local eng_1_L, eng_1_R = out_balance (-3.24, 9.18, 0, 90, 120, 700)
-		local eng_2_L, eng_2_R = out_balance (0, 15, 0, 90, 120, 700)
-		local eng_3_L, eng_3_R = out_balance (3.24, 9.18, 0, 90, 120, 700)
+		-- All exterior sources use the same heading sampled during this update.
+		local heading_rad = math.rad(acf_hd)
+		local heading_cos = math.cos(heading_rad)
+		local heading_sin = math.sin(heading_rad)
+
+		local eng_1_L, eng_1_R = out_balance (-3.24, 9.18, 0, 90, 120, 700, heading_cos, heading_sin)
+		local eng_2_L, eng_2_R = out_balance (0, 15, 0, 90, 120, 700, heading_cos, heading_sin)
+		local eng_3_L, eng_3_R = out_balance (3.24, 9.18, 0, 90, 120, 700, heading_cos, heading_sin)
 		
-		local starter_L, starter_R = out_balance (0, 12, 0, 180, 100, 700)
+		local starter_L, starter_R = out_balance (0, 12, 0, 180, 100, 700, heading_cos, heading_sin)
 		
-		local noise_L, noise_R = out_balance (0, 10, 180, 30 + rev_flaps, 80 + rev_flaps * 0.5, 1500)
+		local noise_L, noise_R = out_balance (0, 10, 180, 30 + rev_flaps, 80 + rev_flaps * 0.5, 1500, heading_cos, heading_sin)
 		
-		local apu_L, apu_R = out_balance (0, 15, 180, 120, 100, 500)
+		local apu_L, apu_R = out_balance (0, 15, 180, 120, 100, 500, heading_cos, heading_sin)
 		
 		sasl.al.setSampleGain(out_behind_left_1, 1200 * noise_L * rpm_gain_1 ^ 3 * main_vol * (0.5 + 0.5 * work_1))
 		sasl.al.setSampleGain(out_behind_right_1, 1200 * noise_R * rpm_gain_1 ^ 3 * main_vol * (0.5 + 0.5 * work_1))

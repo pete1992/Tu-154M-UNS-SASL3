@@ -48,23 +48,16 @@ defineProps({
     { "apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf }, -- Bleed-air door position
     { "apu_fuel_p", "tu154/custom/eng/apu_fuel_p", globalPropertyf }, -- APU fuel pressure
     -- Electrical state
-    -- { "apu_start_bus", "tu154/custom/elec/apu_start_bus", globalPropertyf }, -- APU start bus voltage
-    -- { "apu_start_cc", "tu154/custom/elec/apu_start_cc", globalPropertyf }, -- APU starter current draw
     { "apu_start_seq", "tu154/custom/elec/apu_start_seq", globalPropertyi }, -- APU start sequence active
     -- Animation state
     { "apu_doors", "tu154/custom/anim/apu_doors", globalPropertyf }, -- APU external door position, 0 closed to 1 open
-    -- { "cockpit_window_left", "tu154/custom/anim/cockpit_window_left", globalPropertyf }, -- Left cockpit window position
-    -- { "cockpit_window_right", "tu154/custom/anim/cockpit_window_right", globalPropertyf }, -- Right cockpit window position
     -- Other sources
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, -- Left 27 V bus voltage
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, -- Right 27 V bus voltage
-    -- { "outside_air_temp", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf }, -- Outside air temperature
     -- Lamp sources
     { "test_lamps", "tu154/custom/buttons/lamp_test_apu", globalPropertyi }, -- APU panel lamp-test button
     { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, -- Day/night lamp brightness selector
     { "gear_vent_set", "tu154/custom/switchers/eng/gear_fan", globalPropertyi }, -- Landing gear ventilation switch
-    -- Environment
-    -- { "external_view", "sim/graphics/view/view_is_external", globalPropertyi },
     -- Time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- Frame time
     -- Default X-Plane APU bridge
@@ -88,21 +81,7 @@ defineProps({
     { "native_pack_left", "sim/cockpit2/bleedair/actuators/pack_left", globalPropertyi },
     { "native_pack_center", "sim/cockpit2/bleedair/actuators/pack_center", globalPropertyi },
     { "native_pack_right", "sim/cockpit2/bleedair/actuators/pack_right", globalPropertyi },
-    -- Aircraft and camera coordinates
-    -- { "local_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- Aircraft X position
-    -- { "local_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- Aircraft Y position
-    -- { "local_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- Aircraft Z position
-    -- { "view_x", "sim/graphics/view/view_x", globalPropertyf }, -- Camera X position
-    -- { "view_y", "sim/graphics/view/view_y", globalPropertyf }, -- Camera Y position
-    -- { "view_z", "sim/graphics/view/view_z", globalPropertyf }, -- Camera Z position
-    -- Failures
-    -- { "apu_start_fail", "tu154/custom/failures/apu_start_fail", globalPropertyi }, -- Starter failure
-    -- { "apu_gen_fail", "tu154/custom/failures/apu_gen_fail", globalPropertyi }, -- Generator failure
     { "apu_pta6_fail", "tu154/custom/failures/apu_pta6_fail", globalPropertyi }, -- PTA-6A tachometer converter failure
-    -- { "apu_fail_oilt", "tu154/custom/failures/apu_fail_oilt", globalPropertyi }, -- Oil-temperature failure
-    -- { "apu_fail_egt", "tu154/custom/failures/apu_fail_egt", globalPropertyi }, -- EGT failure
-    -- { "apu_fail_fuel_left", "tu154/custom/failures/apu_fail_fuel_left", globalPropertyi }, -- Residual-fuel start failure
-    -- { "apu_fail", "tu154/custom/failures/apu_fail", globalPropertyi }, -- Runtime-related APU failure
     { "apu_press_fail", "tu154/custom/failures/apu_press_fail", globalPropertyi }, -- APU bleed-air failure
 })
 
@@ -113,9 +92,36 @@ local passed = get(frame_time)
 
 local native_start_valves = nil
 
+-- Remember a native pressure enum only when this bridge actually overlays it.
+-- Externally active failures and observed external repairs keep their ownership.
+local native_pressure_previous = nil
+
+local function updateNativeAPUPressure()
+    local current = get(rel_APU_press)
+    local custom_failed = get(apu_press_fail) == 1
+    if native_pressure_previous ~= nil and current ~= 6 then
+        native_pressure_previous = nil
+    end
+    if custom_failed then
+        if current ~= 6 then
+            native_pressure_previous = current
+            set(rel_APU_press, 6)
+            current = 6
+        end
+    elseif native_pressure_previous ~= nil then
+        set(rel_APU_press, native_pressure_previous)
+        current = native_pressure_previous
+        native_pressure_previous = nil
+    end
+    return current
+end
+
+
 -- Keeps the default X-Plane APU active as a bridge for simulator systems.
 local function default_APU()
     if get(ismaster) == 1 then
+        -- Relinquish local bookkeeping without repairing an inherited native failure.
+        native_pressure_previous = nil
         return
     end
 
@@ -132,9 +138,9 @@ local function default_APU()
         end
 
         -- Generator switching belongs to generators_logic.lua.
-        set(rel_APU_press, get(apu_press_fail) == 1 and 6 or 0)
+        local native_pressure = updateNativeAPUPressure()
         local bleed_ready = custom_running and get(apu_n1) > 92
-            and get(apu_air_doors) > 0.05 and get(apu_press_fail) == 0
+            and get(apu_air_doors) > 0.05 and get(apu_press_fail) == 0 and native_pressure ~= 6
         set(native_apu_bleed, bleed_ready and 1 or 0)
         set(native_gpu_bleed, get(asu_press) > 0 and 1 or 0)
 
@@ -228,14 +234,11 @@ local function gauges()
         oil_t_angle = -75
     end
 
-    -- n1_angle = 99
-    -- EGT_angle = 300
-    -- oil_t_angle = 100
-
     -- Smooth gauge movement using frame time.
     n1_actual = n1_actual + (n1_angle - n1_actual) * (1 - math.exp(-passed * 5))
-    EGT_actual = EGT_actual + (EGT_angle - EGT_actual) * (1 - math.exp(-passed * 3))
-    oil_t_actual = oil_t_actual + (oil_t_angle - oil_t_actual) * (1 - math.exp(-passed * 3))
+    local temperature_gain = 1 - math.exp(-passed * 3)
+    EGT_actual = EGT_actual + (EGT_angle - EGT_actual) * temperature_gain
+    oil_t_actual = oil_t_actual + (oil_t_angle - oil_t_actual) * temperature_gain
 
     set(apu_rpm, n1_actual)
     set(apu_egt_gau, EGT_actual)
@@ -367,5 +370,4 @@ function update()
     check_controls()
     lamps()
     gauges()
-    -- apu_sound()
 end

@@ -64,6 +64,10 @@ defineProps({
     { "apu_fail_fuel_left", "tu154/custom/failures/apu_fail_fuel_left", globalPropertyi }, -- Residual fuel failure during start
     { "apu_fail", "tu154/custom/failures/apu_fail", globalPropertyi }, -- Runtime-related APU failure
     { "apu_press_fail", "tu154/custom/failures/apu_press_fail", globalPropertyi }, -- APU bleed air failure
+    -- Native active failure enums block starter/fuel permission without custom latches.
+    { "native_apu_fail", "sim/operation/failures/rel_apu", globalPropertyi },
+    { "native_apu_fire", "sim/operation/failures/rel_apu_fire", globalPropertyi },
+    { "native_pressure_fail", "sim/operation/failures/rel_APU_press", globalPropertyi },
     -- Global failure control
     { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
 })
@@ -176,6 +180,12 @@ if MASTER then
 	apu_fail_OIL_T = 1 - get(apu_fail_oilt)
 	local failures_active = get(failures_enabled) > 0
 	starter_work = 1 - get(apu_start_fail)
+	local native_failed = get(native_apu_fail) == 6 or get(native_apu_fire) == 6
+	if native_failed then
+		apu_burning_fuel = 0
+		apu_starter = 0
+		apd_work_time = 100
+	end
 	if not failures_active then
 		apu_fail_last_fuel = 1
 		apu_fail_EGT = 1
@@ -201,7 +211,7 @@ if MASTER then
 	elseif apu_doors_pos < 0 then apu_doors_pos = 0 end
 	
 	-- air bleed doors
-	if bus_R > 13 and RPM > 92 and get(apu_press_fail) == 0 then
+	if bus_R > 13 and RPM > 92 and get(apu_press_fail) == 0 and get(native_pressure_fail) ~= 6 then
 		bleed_doors_pos = bleed_doors_pos + get(apu_air_bleed) * passed * 0.2
 	elseif bus_R > 13 then
 		bleed_doors_pos = bleed_doors_pos - passed * 0.2
@@ -280,7 +290,7 @@ if MASTER then
 	end		
 	
 	-- start button
-	if power_apu > 13 and system_on == 1 and get(apu_start) == 1 and apd_work_time > 35 and apu_doors_pos > 0.9 then
+	if power_apu > 13 and system_on == 1 and get(apu_start) == 1 and apd_work_time > 35 and apu_doors_pos > 0.9 and not native_failed then
 		apd_work_time = 0
 		starter_RPM_check = false
 	end

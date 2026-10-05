@@ -15,22 +15,22 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel weight
-    { "tank4_w", "sim/flightmodel/weight/m_fuel[1]", globalProperty }, -- fuel weight
-    { "tank2R_w", "sim/flightmodel/weight/m_fuel[2]", globalProperty }, -- fuel weight
-    { "tank2L_w", "sim/flightmodel/weight/m_fuel[3]", globalProperty }, -- fuel weight
-    { "tank3R_w", "sim/flightmodel/weight/m_fuel[4]", globalProperty }, -- fuel weight
-    { "tank3L_w", "sim/flightmodel/weight/m_fuel[5]", globalProperty }, -- fuel weight
+    { "tank1_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 }, -- fuel weight
+    { "tank4_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 2 }, -- fuel weight
+    { "tank2R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 3 }, -- fuel weight
+    { "tank2L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 4 }, -- fuel weight
+    { "tank3R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 5 }, -- fuel weight
+    { "tank3L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 6 }, -- fuel weight
 
     { "tank_all", "sim/flightmodel/weight/m_fuel_total", globalPropertyf }, -- total fuel weight
 
     -- fuel tanks pumps control
-    { "tank1_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[0]", globalProperty },
-    { "tank4_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[1]", globalProperty },
-    { "tank2R_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[2]", globalProperty },
-    { "tank2L_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[3]", globalProperty },
-    { "tank3R_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[4]", globalProperty },
-    { "tank3L_pump", "sim/cockpit2/fuel/fuel_tank_pump_on[5]", globalProperty },
+    { "tank1_pump", "sim/cockpit2/fuel/fuel_tank_pump_on", globalPropertyiae, 1 },
+    { "tank4_pump", "sim/cockpit2/fuel/fuel_tank_pump_on", globalPropertyiae, 2 },
+    { "tank2R_pump", "sim/cockpit2/fuel/fuel_tank_pump_on", globalPropertyiae, 3 },
+    { "tank2L_pump", "sim/cockpit2/fuel/fuel_tank_pump_on", globalPropertyiae, 4 },
+    { "tank3R_pump", "sim/cockpit2/fuel/fuel_tank_pump_on", globalPropertyiae, 5 },
+    { "tank3L_pump", "sim/cockpit2/fuel/fuel_tank_pump_on", globalPropertyiae, 6 },
 
     { "fuel_trans", "tu154/custom/switchers/fuel/fuel_trans", globalPropertyi }, --
     { "fuel_porc", "tu154/custom/switchers/fuel/fuel_porc", globalPropertyi }, --
@@ -58,8 +58,8 @@ defineProps({
     -- altitude
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },  -- phisical altitude MSL. meters
 
-    { "gear_defl_L", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, --
-    { "gear_defl_R", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, --
+    { "gear_defl_L", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 2 }, --
+    { "gear_defl_R", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 3 }, --
 
     -- failures
     { "rel_fuelcap", "sim/operation/failures/rel_fuelcap", globalPropertyi }, -- Fuel Cap left off

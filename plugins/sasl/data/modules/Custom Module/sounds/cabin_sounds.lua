@@ -475,7 +475,8 @@ function update()
     local run_failures_locally = get(ismaster) ~= 1
 
     if run_failures_locally then
-        local fail_level = get(failures_enabled)
+        local failure_level = get(failures_enabled)
+        local fail_level = failure_level
         fail_level = fail_level * 0.05 * 4 ^ (fail_level * 0.5)
 
         if fail_level > 0 then
@@ -485,6 +486,7 @@ function update()
                 STATE.fail_counter = 0
                 STATE.check_time = math.random(15, 30)
 
+                if failure_level >= 2 then -- LOW retains causal damage only.
                 if get(main_alarm_fail) ~= 1 then
                     set(
                         main_alarm_fail,
@@ -497,6 +499,7 @@ function update()
                         speaker_alarm_fail,
                         bool2int(math.random() < 0.00001 * fail_level * 0.3)
                     )
+                end
                 end
             end
         else

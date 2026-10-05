@@ -80,7 +80,8 @@ function update()
 	local MASTER = get(ismaster) ~= 1
 
 	if MASTER then
-		local FAIL = get(failures_enabled)
+		local failure_level = get(failures_enabled)
+		local FAIL = failure_level
 
 		-- Preserve original scaling exactly
 		FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
@@ -93,6 +94,7 @@ function update()
 				check_time = math.random(15, 30)
 
 				-- Preserve original probability and per-device scaling exactly
+				if failure_level >= 2 then -- LOW retains causal damage only.
 				local p = 0.0001 * FAIL * 0.3
 
 				maybe_set_failure(gyro_fail_1, 6, p)
@@ -101,6 +103,7 @@ function update()
 				maybe_set_failure(tks_km2_fail, 1, p)
 				maybe_set_failure(tks_bgmk1_fail, 1, p)
 				maybe_set_failure(tks_bgmk2_fail, 1, p)
+				end
 			end
 		else
 			fail_counter = 0

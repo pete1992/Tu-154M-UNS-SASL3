@@ -251,7 +251,8 @@ function update()
 	right_blake = right_blake * bool2int(get(rel_rbrakes) ~= 6)
 
 if get(ismaster) ~= 1 then			
-	local FAIL = get(failures_enabled)
+	local failure_level = get(failures_enabled)
+	local FAIL = failure_level
 	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 	
 	if FAIL > 0 then
@@ -260,14 +261,16 @@ if get(ismaster) ~= 1 then
 			fail_counter = 0
 			check_time = math.random(15, 30)
 			-- random failures
+			if failure_level >= 2 then -- LOW retains causal damage only.
 			if get(rel_lbrakes) ~= 1 then set(rel_lbrakes, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
 			if get(rel_rbrakes) ~= 1 then set(rel_rbrakes, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
+			end
 			-- runtime failure
 			if get(brake_runtime_left) == 0 and left_blake > 0.1 then
-				if get(rel_lbrakes) ~= 1 then set(rel_lbrakes, bool2int(math.random() < 0.1) * 6) end
+				if (failure_level ~= 1 or get(rel_lbrakes) == 0) and get(rel_lbrakes) ~= 1 then set(rel_lbrakes, bool2int(math.random() < 0.1) * 6) end
 			end
 			if get(brake_runtime_right) == 0 and right_blake > 0.1 then
-				if get(rel_rbrakes) ~= 1 then set(rel_rbrakes, bool2int(math.random() < 0.1) * 6) end
+				if (failure_level ~= 1 or get(rel_rbrakes) == 0) and get(rel_rbrakes) ~= 1 then set(rel_rbrakes, bool2int(math.random() < 0.1) * 6) end
 			end
 		end
 		

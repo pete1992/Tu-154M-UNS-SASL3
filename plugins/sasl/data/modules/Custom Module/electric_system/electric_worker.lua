@@ -1,8 +1,11 @@
+-- electric_worker.lua
+
 --[[
 Changelog
 2026-10-04
 - Capture frame inputs, publish worker results and expose fallback diagnostics.
 - Use explicit one-based offsets and full buffer lengths for SASL string transfers.
+- Use compact protocol v2 with a 16 KiB mailbox instead of the former 128 KiB buffer.
 ]]
 
 -- Main-thread electrical adapter. The numerical model runs in xTlua whenever

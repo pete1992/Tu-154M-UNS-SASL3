@@ -18,7 +18,13 @@ Changelog
 -- local defineProps Function
 local function defineProps(defs)
     for _, def in ipairs(defs) do
-        defineProperty(def[1], def[3](def[2]))
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
@@ -68,27 +74,27 @@ defineProps({
     {"fuel_temp_2", "tu154/custom/gauges/eng/fuel_temp_2", globalPropertyf},
 
     -- X-Plane 12 engine sources
-    {"sim_egt_1", "sim/flightmodel2/engines/EGT_deg_C[0]", globalProperty},
-    {"sim_egt_2", "sim/flightmodel2/engines/EGT_deg_C[1]", globalProperty},
-    {"sim_egt_3", "sim/flightmodel2/engines/EGT_deg_C[2]", globalProperty},
-    {"eng1_N1", "sim/flightmodel2/engines/N1_percent[0]", globalProperty},
-    {"eng2_N1", "sim/flightmodel2/engines/N1_percent[1]", globalProperty},
-    {"eng3_N1", "sim/flightmodel2/engines/N1_percent[2]", globalProperty},
-    {"eng1_N2", "sim/flightmodel2/engines/N2_percent[0]", globalProperty},
-    {"eng2_N2", "sim/flightmodel2/engines/N2_percent[1]", globalProperty},
-    {"eng3_N2", "sim/flightmodel2/engines/N2_percent[2]", globalProperty},
-    {"ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]", globalProperty},
-    {"ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]", globalProperty},
-    {"ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]", globalProperty},
-    {"fuel_p_1", "sim/cockpit2/engine/indicators/fuel_pressure_psi[0]", globalProperty},
-    {"fuel_p_2", "sim/cockpit2/engine/indicators/fuel_pressure_psi[1]", globalProperty},
-    {"fuel_p_3", "sim/cockpit2/engine/indicators/fuel_pressure_psi[2]", globalProperty},
-    {"oil_p_1", "sim/cockpit2/engine/indicators/oil_pressure_psi[0]", globalProperty},
-    {"oil_p_2", "sim/cockpit2/engine/indicators/oil_pressure_psi[1]", globalProperty},
-    {"oil_p_3", "sim/cockpit2/engine/indicators/oil_pressure_psi[2]", globalProperty},
-    {"oil_t_1", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[0]", globalProperty},
-    {"oil_t_2", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[1]", globalProperty},
-    {"oil_t_3", "sim/cockpit2/engine/indicators/oil_temperature_deg_C[2]", globalProperty},
+    {"sim_egt_1", "sim/flightmodel2/engines/EGT_deg_cel", globalPropertyfae, 1},
+    {"sim_egt_2", "sim/flightmodel2/engines/EGT_deg_cel", globalPropertyfae, 2},
+    {"sim_egt_3", "sim/flightmodel2/engines/EGT_deg_cel", globalPropertyfae, 3},
+    {"eng1_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 1},
+    {"eng2_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 2},
+    {"eng3_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 3},
+    {"eng1_N2", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 1},
+    {"eng2_N2", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 2},
+    {"eng3_N2", "sim/flightmodel2/engines/N2_percent", globalPropertyfae, 3},
+    {"ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 1},
+    {"ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 2},
+    {"ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 3},
+    {"fuel_p_1", "sim/cockpit2/engine/indicators/fuel_pressure_psi", globalPropertyfae, 1},
+    {"fuel_p_2", "sim/cockpit2/engine/indicators/fuel_pressure_psi", globalPropertyfae, 2},
+    {"fuel_p_3", "sim/cockpit2/engine/indicators/fuel_pressure_psi", globalPropertyfae, 3},
+    {"oil_p_1", "sim/cockpit2/engine/indicators/oil_pressure_psi", globalPropertyfae, 1},
+    {"oil_p_2", "sim/cockpit2/engine/indicators/oil_pressure_psi", globalPropertyfae, 2},
+    {"oil_p_3", "sim/cockpit2/engine/indicators/oil_pressure_psi", globalPropertyfae, 3},
+    {"oil_t_1", "sim/cockpit2/engine/indicators/oil_temperature_deg_C", globalPropertyfae, 1},
+    {"oil_t_2", "sim/cockpit2/engine/indicators/oil_temperature_deg_C", globalPropertyfae, 2},
+    {"oil_t_3", "sim/cockpit2/engine/indicators/oil_temperature_deg_C", globalPropertyfae, 3},
 
     -- Project engine sources
     {"vibration_1", "tu154/custom/eng/vibration_1", globalPropertyf},
@@ -157,13 +163,22 @@ local MAX_CALIBRATED_N1 = 110
 local MAX_CALIBRATED_N2 = 110
 local MAX_CALIBRATED_ALT_M = 11000
 
+-- Reuse response factors for identical frame times and time constants.
+local approach_gain_dt = {}
+local approach_gain = {}
+
 local function approach(current, target, dt, tau)
     if tau <= 0 then
         return target
     end
 
     local safe_dt = math.max(0, dt)
-    local gain = 1 - math.exp(-safe_dt / tau)
+    local gain = approach_gain[tau]
+    if approach_gain_dt[tau] ~= safe_dt then
+        gain = 1 - math.exp(-safe_dt / tau)
+        approach_gain_dt[tau] = safe_dt
+        approach_gain[tau] = gain
+    end
     return current + (target - current) * gain
 end
 

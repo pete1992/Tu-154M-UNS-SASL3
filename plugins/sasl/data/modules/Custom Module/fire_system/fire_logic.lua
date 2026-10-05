@@ -15,9 +15,10 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "sim_engine_on_fire1", "sim/operation/failures/rel_engfir0", globalPropertyi },  -- left engine on fire
-    { "sim_engine_on_fire2", "sim/operation/failures/rel_engfir1", globalPropertyi },  -- mid engine on fire
-    { "sim_engine_on_fire3", "sim/operation/failures/rel_engfir2", globalPropertyi },  -- right engine on fire
+    { "sim_engine_on_fire1", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 1 }, -- physical fire, native engine 0
+    { "sim_engine_on_fire2", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 2 }, -- physical fire, native engine 1
+    { "sim_engine_on_fire3", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 3 }, -- physical fire, native engine 2
+    { "sim_apu_on_fire", "sim/operation/failures/rel_apu_fire", globalPropertyi }, -- native APU fire failure
 
     { "sim_engine_ext1", "sim/cockpit2/engine/actuators/fire_extinguisher_on[0]", globalProperty },  -- left engine fire extinguiher
     { "sim_engine_ext2", "sim/cockpit2/engine/actuators/fire_extinguisher_on[1]", globalProperty },  -- mid engine fire extinguiher
@@ -74,7 +75,7 @@ defineProps({
     { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf }, --
     { "fire_vlv_open_3", "tu154/custom/fuel/fire_vlv_open_3", globalPropertyf }, --
 
-    -- { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
@@ -88,13 +89,88 @@ local valve_4 = get(valve_open_4)
 
 local valves_open = 0 -- open valves counter
 
-set(sim_engine_ext1, 0)
-set(sim_engine_ext2, 0)
-set(sim_engine_ext3, 0)
+-- Tu owns bottle capacity, shared routing and divided-agent suppression chance.
+-- Each route/bottle retains the original 0.98 / valves_open allocation roll.
+-- A successful allocation requests one second of native suppression physics.
+local native_ext = { sim_engine_ext1, sim_engine_ext2, sim_engine_ext3 }
+local native_ext_owned = { false, false, false }
+local native_ext_remaining = { 0, 0, 0 }
+local was_master = false
+
+local function releaseNativeDischarges()
+    for index = 1, 3 do
+        if native_ext_owned[index] then
+            if get(native_ext[index]) == 1 then set(native_ext[index], 0) end
+            native_ext_owned[index] = false
+            native_ext_remaining[index] = 0
+        end
+    end
+end
+
+local function updateNativeDischarges(passed)
+    for index = 1, 3 do
+        if native_ext_owned[index] then
+            if get(native_ext[index]) ~= 1 then
+                -- Another native control released the switch; do not reassert it.
+                native_ext_owned[index] = false
+                native_ext_remaining[index] = 0
+            else
+                if passed > 0 then
+                    native_ext_remaining[index] = math.max(0, native_ext_remaining[index] - passed)
+                end
+                if native_ext_remaining[index] == 0 then
+                    set(native_ext[index], 0)
+                    native_ext_owned[index] = false
+                end
+            end
+        end
+    end
+end
+
+local function dischargeEngine(index)
+    -- The bottle is consumed even when its divided-agent allocation fails.
+    if not (math.random() < 0.98 / valves_open) then return end
+    -- Preserve switches already active through an external native control.
+    if get(native_ext[index]) == 0 then
+        set(native_ext[index], 1)
+        native_ext_owned[index] = true
+    end
+    if native_ext_owned[index] then native_ext_remaining[index] = 1 end
+end
+
+local function dischargeAPU()
+    -- XP12 exposes APU fire failure, but no APU extinguisher actuator.
+    -- Keep divided-bottle suppression here and never erase scheduled failures.
+    if get(sim_apu_on_fire) == 6 and math.random() < 0.98 / valves_open then
+        set(sim_apu_on_fire, 0)
+    end
+end
+
+function onModuleShutdown(isError)
+    releaseNativeDischarges()
+end
 
 function update()
 
-local MASTER = get(ismaster) ~= 1	
+local MASTER = get(ismaster) ~= 1
+
+if not MASTER then
+    -- Relinquish only a locally asserted pulse when shared-cockpit authority changes.
+    releaseNativeDischarges()
+    was_master = false
+    return
+end
+
+if not was_master then
+    valve_1 = get(valve_open_1)
+    valve_2 = get(valve_open_2)
+    valve_3 = get(valve_open_3)
+    valve_4 = get(valve_open_4)
+    was_master = true
+end
+
+-- A discharged bottle continues independently of subsequent system power loss.
+updateNativeDischarges(get(frame_time))
 	
 if MASTER then	
 
@@ -110,13 +186,15 @@ if MASTER then
 		if get(cold_apu) == 1 then valve_4 = 1 end
 		
 		-- set destination automatically
-		local fire_1 = get(sim_engine_on_fire1) == 6
-		local fire_2 = get(sim_engine_on_fire2) == 6
-		local fire_3 = get(sim_engine_on_fire3) == 6
+		local fire_1 = get(sim_engine_on_fire1) > 0
+		local fire_2 = get(sim_engine_on_fire2) > 0
+		local fire_3 = get(sim_engine_on_fire3) > 0
+		local fire_4 = get(sim_apu_on_fire) == 6
 		
 		if fire_1 then valve_1 = 1 end
 		if fire_2 then valve_2 = 1 end
 		if fire_3 then valve_3 = 1 end
+		if fire_4 then valve_4 = 1 end
 		
 		-- use neutral gas
 		if get(neutral_gas) == 1 then set(ng_used, 1) end
@@ -136,26 +214,17 @@ if MASTER then
 		if valve_1 == 1 then
 			if ext_1_ready and (get(fire_vlv_open_1) < 0.5 or fire_1_but)then -- automatically use ext 1 or by button
 				set(ext_used_1, 1) -- use extinguisher
-				set(sim_engine_ext1, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire1, 0) -- remove fire fail
-				end
+				dischargeEngine(1)
 			end
 			
 			if ext_2_ready and fire_2_but then -- use ext 2
 				set(ext_used_2, 1) -- use extinguisher
-				set(sim_engine_ext1, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire1, 0) -- remove fire fail
-				end
+				dischargeEngine(1)
 			end
 
 			if ext_3_ready and fire_3_but then -- use ext 3
 				set(ext_used_3, 1) -- use extinguisher
-				set(sim_engine_ext1, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire1, 0) -- remove fire fail
-				end
+				dischargeEngine(1)
 			end
 			
 		end
@@ -164,26 +233,17 @@ if MASTER then
 		if valve_2 == 1 then
 			if ext_1_ready and (get(fire_vlv_open_2) < 0.5 or fire_1_but)then -- automatically use ext 1 or by button
 				set(ext_used_1, 1) -- use extinguisher
-				set(sim_engine_ext2, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire2, 0) -- remove fire fail
-				end
+				dischargeEngine(2)
 			end
 			
 			if ext_2_ready and fire_2_but then -- use ext 2
 				set(ext_used_2, 1) -- use extinguisher
-				set(sim_engine_ext2, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire2, 0) -- remove fire fail
-				end
+				dischargeEngine(2)
 			end
 
 			if ext_3_ready and fire_3_but then -- use ext 3
 				set(ext_used_3, 1) -- use extinguisher
-				set(sim_engine_ext2, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire2, 0) -- remove fire fail
-				end
+				dischargeEngine(2)
 			end
 			
 		end		
@@ -192,34 +252,39 @@ if MASTER then
 		if valve_3 == 1 then
 			if ext_1_ready and (get(fire_vlv_open_3) < 0.5 or fire_1_but)then -- automatically use ext 1 or by button
 				set(ext_used_1, 1) -- use extinguisher
-				set(sim_engine_ext3, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire3, 0) -- remove fire fail
-				end
+				dischargeEngine(3)
 			end
 			
 			if ext_2_ready and fire_2_but then -- use ext 2
 				set(ext_used_2, 1) -- use extinguisher
-				set(sim_engine_ext3, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire3, 0) -- remove fire fail
-				end
+				dischargeEngine(3)
 			end
 
 			if ext_3_ready and fire_3_but then -- use ext 3
 				set(ext_used_3, 1) -- use extinguisher
-				set(sim_engine_ext3, 1)
-				if math.random() < 0.98 / valves_open then 
-					set(sim_engine_on_fire3, 0) -- remove fire fail
-				end
+				dischargeEngine(3)
 			end
 			
 		end	
 		
-		-- same way for APU
+        -- The APU has only manual bottle requests: cold_apu selects its route.
+        if valve_4 == 1 then
+            if ext_1_ready and fire_1_but then
+                set(ext_used_1, 1)
+                dischargeAPU()
+            end
+            if ext_2_ready and fire_2_but then
+                set(ext_used_2, 1)
+                dischargeAPU()
+            end
+            if ext_3_ready and fire_3_but then
+                set(ext_used_3, 1)
+                dischargeAPU()
+            end
+        end
 		
 		-- fire siren
-		if fire_1 or fire_2 or fire_3 or get(smoke_test) == 1 then
+		if fire_1 or fire_2 or fire_3 or fire_4 or get(smoke_test) == 1 then
 			set(fire_detected, 1)
 			set(fire_siren, get(fire_buzzer))
 		
@@ -237,8 +302,8 @@ if MASTER then
 		if fire_3 then set(engine_fire_state_3, 2)
 		else set(engine_fire_state_3, 0) end
 		
-		--[[if fire_4 then set(engine_fire_state_4, 2)
-		else set(engine_fire_state_4, 0) end--]]
+		if fire_4 then set(engine_fire_state_4, 2)
+		else set(engine_fire_state_4, 0) end
 		
 		set(fire_sys_cc, 0.8)
 	else

@@ -3,6 +3,7 @@ Changelog
 2026-10-04
 - Queue frame samples and replay unacknowledged work locally when required.
 - Keep timing fallbacks silent while retaining diagnostics and genuine error reports.
+- Use compact schema-aware worker packets with dense/delta frame transport.
 ]]
 
 -- One outstanding worker batch; all unacknowledged samples remain replayable.
@@ -115,7 +116,7 @@ return function(Core, Packet)
                 if not ok then return fallback("Electric mailbox read failed: " .. tostring(packet)) end
                 if packet ~= self.last_response and packet ~= "" and packet ~= Packet.empty() then
                     self.last_response = packet
-                    local decoded, response = pcall(Packet.unpack, packet)
+                    local decoded, response = pcall(Packet.unpack_response, packet, Core)
                     if not decoded then return fallback("Invalid electric response: " .. tostring(response)) end
                     if response.session == self.session and response.id == self.inflight.id then
                         local valid, reason = pcall(validate_response, response, self.inflight)
@@ -154,7 +155,7 @@ return function(Core, Packet)
                     first = self.pending[1].id, last = self.pending[#self.pending].id,
                     state = self.state, frames = self.pending,
                 }
-                local ok, packet = pcall(Packet.pack, job)
+                local ok, packet = pcall(Packet.pack_request, job, Core)
                 if not ok then
                     local outputs = fallback("Electric request could not be packed: " .. tostring(packet))
                     for key, value in pairs(outputs) do published[key] = value end

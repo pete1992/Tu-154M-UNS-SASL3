@@ -1,7 +1,13 @@
 -- fuel_engines.lua
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
@@ -24,9 +30,9 @@ defineProps({
     { "pump_tank1_4_on", "tu154/custom/switchers/fuel/pump_tank1_4", globalPropertyi },
 
     -- Mixture handles
-    { "eng_mix_1", "sim/cockpit2/engine/actuators/mixture_ratio[0]", globalProperty }, --
-    { "eng_mix_2", "sim/cockpit2/engine/actuators/mixture_ratio[1]", globalProperty }, --
-    { "eng_mix_3", "sim/cockpit2/engine/actuators/mixture_ratio[2]", globalProperty }, --
+    { "eng_mix_1", "sim/cockpit2/engine/actuators/mixture_ratio", globalPropertyfae, 1 }, --
+    { "eng_mix_2", "sim/cockpit2/engine/actuators/mixture_ratio", globalPropertyfae, 2 }, --
+    { "eng_mix_3", "sim/cockpit2/engine/actuators/mixture_ratio", globalPropertyfae, 3 }, --
 
     -- animation
     { "fuel_cutoff_1", "tu154/custom/controlls/fuel_cutoff_1", globalPropertyf }, --
@@ -48,14 +54,14 @@ defineProps({
     { "fire_vlv_open_3", "tu154/custom/fuel/fire_vlv_open_3", globalPropertyf }, --
 
     -- Engine fuel pump state
-    { "engine_1_fuel", "sim/operation/failures/rel_fuepmp0", globalPropertyf }, --
-    { "engine_2_fuel", "sim/operation/failures/rel_fuepmp1", globalPropertyf }, --
-    { "engine_3_fuel", "sim/operation/failures/rel_fuepmp2", globalPropertyf }, --
+    { "engine_1_fuel", "sim/operation/failures/rel_fuepmp0", globalPropertyi }, --
+    { "engine_2_fuel", "sim/operation/failures/rel_fuepmp1", globalPropertyi }, --
+    { "engine_3_fuel", "sim/operation/failures/rel_fuepmp2", globalPropertyi }, --
 
     -- Electric fuel pump state
-    { "engine_1_fuel2", "sim/operation/failures/rel_ele_fuepmp0", globalPropertyf }, --
-    { "engine_2_fuel2", "sim/operation/failures/rel_ele_fuepmp1", globalPropertyf }, --
-    { "engine_3_fuel2", "sim/operation/failures/rel_ele_fuepmp2", globalPropertyf }, --
+    { "engine_1_fuel2", "sim/operation/failures/rel_ele_fuepmp0", globalPropertyi }, --
+    { "engine_2_fuel2", "sim/operation/failures/rel_ele_fuepmp1", globalPropertyi }, --
+    { "engine_3_fuel2", "sim/operation/failures/rel_ele_fuepmp2", globalPropertyi }, --
 
     -- failures
     -- Engine fuel pump failures

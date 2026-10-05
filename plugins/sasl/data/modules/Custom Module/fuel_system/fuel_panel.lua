@@ -3,8 +3,14 @@
 
 -- gauges
 local function defineProps(defs)
-    for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+    for _, def in ipairs(defs) do
+        local prop
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
+        defineProperty(def[1], prop)
     end
 end
 
@@ -105,23 +111,23 @@ defineProps({
     -- sources --
 
     -- engines
-    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- engine 1 rpm
-    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- engine 2 rpm
-    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- engine 3 rpm
+    { "eng1_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 1 }, -- engine 1 rpm
+    { "eng2_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 2 }, -- engine 2 rpm
+    { "eng3_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 3 }, -- engine 3 rpm
 
-    { "ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]", globalProperty }, -- FF from sim kg/second
-    { "ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]", globalProperty }, -- FF from sim kg/second
-    { "ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec[2]", globalProperty }, -- FF from sim kg/second
+    { "ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 1 }, -- FF from sim kg/second
+    { "ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 2 }, -- FF from sim kg/second
+    { "ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 3 }, -- FF from sim kg/second
 
     -- fuel tanks
     -- { "total_w", "sim/flightmodel/weight/m_fuel_total", globalPropertyf }, -- fuel weight
 
-    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel weight
-    { "tank4_w", "sim/flightmodel/weight/m_fuel[1]", globalProperty }, -- fuel weight
-    { "tank2R_w", "sim/flightmodel/weight/m_fuel[2]", globalProperty }, -- fuel weight
-    { "tank2L_w", "sim/flightmodel/weight/m_fuel[3]", globalProperty }, -- fuel weight
-    { "tank3R_w", "sim/flightmodel/weight/m_fuel[4]", globalProperty }, -- fuel weight
-    { "tank3L_w", "sim/flightmodel/weight/m_fuel[5]", globalProperty }, -- fuel weight
+    { "tank1_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 }, -- fuel weight
+    { "tank4_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 2 }, -- fuel weight
+    { "tank2R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 3 }, -- fuel weight
+    { "tank2L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 4 }, -- fuel weight
+    { "tank3R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 5 }, -- fuel weight
+    { "tank3L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 6 }, -- fuel weight
 
     { "reserv_trans", "tu154/custom/fuel/reserv_trans", globalPropertyi },
 
@@ -152,7 +158,7 @@ defineProps({
     { "auto_tank_level_2", "tu154/custom/fuel/auto_tank_level_2", globalPropertyi }, --    2. -1 = L, 0 = none, +1 = R	0
     { "auto_tank_level_3", "tu154/custom/fuel/auto_tank_level_3", globalPropertyi }, --    3. -1 = L, 0 = none, +1 = R	0
 
-    { "tank1_w", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel weight
+    { "tank1_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 }, -- fuel weight
 
     { "fire_vlv_open_1", "tu154/custom/fuel/fire_vlv_open_1", globalPropertyf }, --
     { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf }, --

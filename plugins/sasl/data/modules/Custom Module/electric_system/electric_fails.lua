@@ -65,7 +65,8 @@ function update()
     local MASTER = get(ismaster) ~= 1
 
     if MASTER then
-        local FAIL = get(failures_enabled)
+        local failure_level = get(failures_enabled)
+        local FAIL = failure_level
         FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
         
         -- check failures
@@ -75,6 +76,7 @@ function update()
                 fail_counter = 0
                 check_time = math.random(15, 30)
                 -- random failures
+                if failure_level >= 2 then -- LOW retains causal damage only.
                 if get(bat_fail_1) ~= 1 then set(bat_fail_1, bool2int(math.random() < 0.00001 * FAIL * 0.3)) end
                 if get(bat_fail_2) ~= 1 then set(bat_fail_2, bool2int(math.random() < 0.00001 * FAIL * 0.3)) end
                 if get(bat_fail_3) ~= 1 then set(bat_fail_3, bool2int(math.random() < 0.00001 * FAIL * 0.3)) end
@@ -98,6 +100,7 @@ function update()
                 if get(sim_gen1_fail) ~= 1 then set(sim_gen1_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3)) end
                 if get(sim_gen2_fail) ~= 1 then set(sim_gen2_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3)) end
                 if get(sim_gen3_fail) ~= 1 then set(sim_gen3_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3)) end
+                end
             end
 
             -- Dependent VU failure logic (time overcurrent protection)

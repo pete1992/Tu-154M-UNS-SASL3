@@ -42,7 +42,8 @@ local MASTER = get(ismaster) ~= 1
 	
 if MASTER then	
 
-	local FAIL = get(failures_enabled)
+	local failure_level = get(failures_enabled)
+	local FAIL = failure_level
 	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 	-- check failures
 	if FAIL > 0 then
@@ -54,6 +55,7 @@ if MASTER then
 			check_time = math.random(15, 30)
 			
 			-- random failures
+			if failure_level >= 2 then -- LOW retains causal damage only.
 			if get(rel_adf1) ~= 6 then set(rel_adf1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
 			if get(rel_adf2) ~= 6 then set(rel_adf2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
 			if get(nav1_fail) ~= 1 then set(nav1_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
@@ -62,6 +64,7 @@ if MASTER then
 			if get(dme2_fail) ~= 1 then set(dme2_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			
 			if get(mrp_fail) ~= 1 then set(mrp_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
+			end
 
 		end
 		

@@ -15,6 +15,13 @@ createGlobalPropertyf("tu154/custom/anim/tiller_pos", 0)
 createGlobalPropertyi("tu154/custom/hydro/nosewheel_turn_power", 0)
 createGlobalPropertyi("tu154/custom/lights/white_light_tail", 0)
 
+local ELECTRIC_WORKER_MAILBOX_SIZE = 8192
+local ELECTRIC_WORKER_EMPTY = string.rep(" ", ELECTRIC_WORKER_MAILBOX_SIZE)
+
+createGlobalPropertys("tu154/custom/elec/worker_request", ELECTRIC_WORKER_EMPTY, false, true, false)
+
+createGlobalPropertys("tu154/custom/elec/worker_response", ELECTRIC_WORKER_EMPTY, false, true, false)
+
 -- KATET source selection, radio-approach interlock and distance indication.
 -- Keep these states separate from the repurposed legacy SP-50 DataRefs.
 local katetControls = {

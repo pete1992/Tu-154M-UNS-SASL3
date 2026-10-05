@@ -95,6 +95,10 @@ for y = 1, 5 do
     }
 end
 
+-- Reuse each current-frame band crossing for both rain layers.
+local wiper_hits_L = {}
+local wiper_hits_R = {}
+
 -- Last wiper angles for segment-crossing detection.
 local wiper_L_last = get(wiper_angle_left)
 local wiper_R_last = get(wiper_angle_right)
@@ -182,6 +186,12 @@ function update()
     local wiper_L = get(wiper_angle_left)
     local wiper_R = get(wiper_angle_right)
 
+    for y = 1, 5 do
+        local band = bands[y]
+        wiper_hits_L[y] = wiperHitsBand(wiper_L, wiper_L_last, band.low, band.high)
+        wiper_hits_R[y] = wiperHitsBand(wiper_R, wiper_R_last, band.low, band.high)
+    end
+
     for i = 1, 2 do
         local appear_speed
 
@@ -202,20 +212,13 @@ function update()
 
         -- Per-wiper segment masks.
         for y = 1, 5 do
-            local band = bands[y]
-
             wiper_mask_tbl_L[i][y] =
                 clamp01(
                     wiper_mask_tbl_L[i][y]
                     + passed * appear_speed
                 )
 
-            if wiperHitsBand(
-                wiper_L,
-                wiper_L_last,
-                band.low,
-                band.high
-            ) then
+            if wiper_hits_L[y] then
                 wiper_mask_tbl_L[i][y] = 0
             end
 
@@ -230,12 +233,7 @@ function update()
                     + passed * appear_speed
                 )
 
-            if wiperHitsBand(
-                wiper_R,
-                wiper_R_last,
-                band.low,
-                band.high
-            ) then
+            if wiper_hits_R[y] then
                 wiper_mask_tbl_R[i][y] = 0
             end
 

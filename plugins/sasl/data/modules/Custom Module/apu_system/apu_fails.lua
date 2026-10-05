@@ -114,10 +114,12 @@ function update()
     local random_probability = RANDOM_FAILURE_BASE * fail_factor
 
     -- Preserve the legacy randomly generated failures.
+    if failure_level >= 2 then -- LOW retains causal damage only.
     tryFailure(apu_start_fail, random_probability)
     tryFailure(apu_gen_fail, random_probability)
     tryFailure(apu_pta6_fail, random_probability)
     tryFailure(apu_fail, random_probability)
+    end
 
     -- Exhausted service life greatly increases the chance of a general failure.
     if get(apu_runtime) <= 0 then
