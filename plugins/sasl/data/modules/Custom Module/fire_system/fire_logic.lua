@@ -19,16 +19,11 @@ defineProps({
     { "sim_engine_on_fire2", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 2 }, -- physical fire, native engine 1
     { "sim_engine_on_fire3", "sim/flightmodel2/engines/is_on_fire", globalPropertyfae, 3 }, -- physical fire, native engine 2
     { "sim_apu_on_fire", "sim/operation/failures/rel_apu_fire", globalPropertyi }, -- native APU fire failure
-
     { "sim_engine_ext1", "sim/cockpit2/engine/actuators/fire_extinguisher_on[0]", globalProperty },  -- left engine fire extinguiher
     { "sim_engine_ext2", "sim/cockpit2/engine/actuators/fire_extinguisher_on[1]", globalProperty },  -- mid engine fire extinguiher
     { "sim_engine_ext3", "sim/cockpit2/engine/actuators/fire_extinguisher_on[2]", globalProperty },  -- right engine fire extinguiher
-
     -- controls
-    -- { "lamp_test", "tu154/custom/buttons/lamp_test_fire_panel", globalPropertyi }, --      	0
-    { "smoke_test", "tu154/custom/buttons/eng/smoke_test", globalPropertyi }, --
-    -- { "ext_test", "tu154/custom/buttons/eng/ext_test", globalPropertyi }, --
-
+    { "smoke_test", "tu154/custom/buttons/eng/smoke_test", globalPropertyi },
     { "fire_ext_1", "tu154/custom/buttons/eng/fire_ext_1", globalPropertyi }, --
     { "fire_ext_2", "tu154/custom/buttons/eng/fire_ext_2", globalPropertyi }, --
     { "fire_ext_3", "tu154/custom/buttons/eng/fire_ext_3", globalPropertyi }, --
@@ -36,50 +31,35 @@ defineProps({
     { "cold_eng_2", "tu154/custom/buttons/eng/cold_eng_2", globalPropertyi }, --
     { "cold_eng_3", "tu154/custom/buttons/eng/cold_eng_3", globalPropertyi }, --
     { "cold_apu", "tu154/custom/buttons/eng/cold_apu", globalPropertyi }, --
-    { "neutral_gas", "tu154/custom/buttons/eng/neutral_gas", globalPropertyi }, --
-
-    -- { "fire_sensor_sel", "tu154/custom/switchers/eng/fire_sensor_sel", globalPropertyi }, --
-    -- { "fire_place_sel", "tu154/custom/switchers/eng/fire_place_sel", globalPropertyi }, --
-
+    { "neutral_gas", "tu154/custom/buttons/eng/neutral_gas", globalPropertyi },
     { "fire_main_switch", "tu154/custom/switchers/eng/fire_main_switch", globalPropertyi }, --
     { "fire_buzzer", "tu154/custom/switchers/eng/fire_buzzer", globalPropertyi }, --
-
     -- power
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
-
-    { "fire_sys_cc", "tu154/custom/fire/fire_sys_cc", globalPropertyf }, --
-
+    {"fire_sys_cc", "tu154/custom/fire/fire_sys_cc", globalPropertyf },
     -- results
-    { "ext_used_1", "tu154/custom/fire/ext_used_1", globalPropertyi }, --
-    { "ext_used_2", "tu154/custom/fire/ext_used_2", globalPropertyi }, --
-    { "ext_used_3", "tu154/custom/fire/ext_used_3", globalPropertyi }, --
-
+    { "ext_used_1", "tu154/custom/fire/ext_used_1", globalPropertyi },
+    { "ext_used_2", "tu154/custom/fire/ext_used_2", globalPropertyi },
+    { "ext_used_3", "tu154/custom/fire/ext_used_3", globalPropertyi },
     { "ng_used", "tu154/custom/fire/ng_used", globalPropertyi }, --
-
-    { "valve_open_1", "tu154/custom/fire/valve_open_1", globalPropertyi }, --    1
-    { "valve_open_2", "tu154/custom/fire/valve_open_2", globalPropertyi }, --    2
-    { "valve_open_3", "tu154/custom/fire/valve_open_3", globalPropertyi }, --    3
-    { "valve_open_4", "tu154/custom/fire/valve_open_4", globalPropertyi }, --
-
-    { "engine_fire_state_1", "tu154/custom/fire/engine_fire_state_1", globalPropertyi }, --  . 0 - , 1 - , 2 -
-    { "engine_fire_state_2", "tu154/custom/fire/engine_fire_state_2", globalPropertyi }, --  . 0 - , 1 - , 2 -
-    { "engine_fire_state_3", "tu154/custom/fire/engine_fire_state_3", globalPropertyi }, --  . 0 - , 1 - , 2 -
-    { "engine_fire_state_4", "tu154/custom/fire/engine_fire_state_4", globalPropertyi }, --  . 0 - , 1 - , 2 -
-
-    { "fire_detected", "tu154/custom/fire/fire_detected", globalPropertyi }, --
-
-    { "fire_siren", "tu154/custom/fire/fire_siren", globalPropertyi }, --
-
+    { "valve_open_1", "tu154/custom/fire/valve_open_1", globalPropertyi },
+    { "valve_open_2", "tu154/custom/fire/valve_open_2", globalPropertyi },
+    { "valve_open_3", "tu154/custom/fire/valve_open_3", globalPropertyi },
+    { "valve_open_4", "tu154/custom/fire/valve_open_4", globalPropertyi },
+    { "engine_fire_state_1", "tu154/custom/fire/engine_fire_state_1", globalPropertyi },
+    { "engine_fire_state_2", "tu154/custom/fire/engine_fire_state_2", globalPropertyi },
+    { "engine_fire_state_3", "tu154/custom/fire/engine_fire_state_3", globalPropertyi },
+    { "engine_fire_state_4", "tu154/custom/fire/engine_fire_state_4", globalPropertyi }, 
+    { "fire_detected", "tu154/custom/fire/fire_detected", globalPropertyi },
+    { "fire_siren", "tu154/custom/fire/fire_siren", globalPropertyi },
     { "fire_vlv_open_1", "tu154/custom/fuel/fire_vlv_open_1", globalPropertyf }, --
     { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf }, --
     { "fire_vlv_open_3", "tu154/custom/fuel/fire_vlv_open_3", globalPropertyf }, --
-
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
-
+	-- flight time
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     -- Smart Copilot
-    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
+    { "ismaster", "scp/api/ismaster", globalPropertyf }, 
 })
 
 local valve_1 = get(valve_open_1)

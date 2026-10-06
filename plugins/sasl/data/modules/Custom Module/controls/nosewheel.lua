@@ -30,7 +30,7 @@ end
 -- Nosewheel steering limits.
 local MAX_TILLER_ANGLE = 63
 local MAX_RUDDER_ANGLE = 63
-local NWS_LOW_ANGLE = 11
+local NWS_LOW_ANGLE = 13
 
 local NOMINAL_HYD_PRESS = 210
 local MIN_DC_VOLTAGE = 13

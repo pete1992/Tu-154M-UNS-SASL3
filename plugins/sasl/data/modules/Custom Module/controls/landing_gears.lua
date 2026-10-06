@@ -51,10 +51,6 @@ defineProps({
     {"gears_ext_3GS", "tu154/custom/switchers/gears_ext_3GS", globalPropertyi},
     {"emerg_gear_ext", "tu154/custom/controll/emerg_gear_ext", globalPropertyi},
     {"gear_lever", "tu154/custom/controll/gear_lever", globalPropertyi},
-    -- X-Plane gear arrays
-    -- Keep generic indexed bindings: these are the known-working compatibility path.
-    -- Aircraft mapping: [0] nose, [1] right main, [2] left main.
-    -- The real Tu-154 ground retraction interlock is actuated by the right main strut.
     {"gear2_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty},
     {"gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty},
     {"gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty},
@@ -507,7 +503,6 @@ function update()
     pos1_last = pos1
     pos2_last = pos2
     pos3_last = pos3
-
     lock1_last = lock1
     lock2_last = lock2
     lock3_last = lock3

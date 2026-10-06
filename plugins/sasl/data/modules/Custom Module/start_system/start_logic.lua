@@ -29,8 +29,6 @@ local function defineProps(defs)
 end
 
 defineProps({
-    -- Starter-panel guard
-    -- { "starter_cap", "tu154/custom/switchers/eng/starter_cap", globalPropertyi },
     -- Starter-system power switch
     { "starter_switch", "tu154/custom/switchers/eng/starter_switch", globalPropertyi },
     -- Engine selector
@@ -47,7 +45,6 @@ defineProps({
     { "flight_start_2", "tu154/custom/buttons/eng/flight_start_2", globalPropertyi },
     -- In-flight start button, engine 3
     { "flight_start_3", "tu154/custom/buttons/eng/flight_start_3", globalPropertyi },
-
     -- Arrays
     -- Engine 1 igniter state
     { "sim_igniter1", "sim/cockpit2/engine/actuators/igniter_on[0]",
@@ -67,25 +64,6 @@ defineProps({
     -- Engine 3 ignition state
     { "sim_ignition3", "sim/cockpit2/engine/actuators/ignition_on[2]",
         globalProperty },
-    -- Starter duration, engine 1 mapping
-    -- { "sim_starter1", "sim/cockpit/engine/starter_duration[1]",
-        -- globalProperty },
-    -- Starter duration, engine 2 mapping
-    -- { "sim_starter2", "sim/cockpit/engine/starter_duration[0]",
-        -- globalProperty },
-    -- Starter duration, engine 3 mapping
-    -- { "sim_starter3", "sim/cockpit/engine/starter_duration[2]",
-        -- globalProperty },
-    -- Starter torque state, engine 1 mapping
-    -- { "sim_start1", "sim/flightmodel2/engines/starter_making_torque[1]",
-        -- globalProperty },
-    -- Starter torque state, engine 2 mapping
-    -- { "sim_start2", "sim/flightmodel2/engines/starter_making_torque[0]",
-        -- globalProperty },
-    -- Starter torque state, engine 3 mapping
-    -- { "sim_start3", "sim/flightmodel2/engines/starter_making_torque[2]",
-        -- globalProperty },
-
     -- Left 27 V bus voltage
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     -- Right 27 V bus voltage
@@ -94,7 +72,6 @@ defineProps({
     { "apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf },
     -- APU N1
     { "apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf },
-
     -- Arrays
     -- Engine 1 N2
     { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]",
@@ -114,7 +91,6 @@ defineProps({
     -- Engine 3 burning-fuel state
     { "eng_work3", "sim/flightmodel2/engines/engine_is_burning_fuel[2]",
         globalProperty },
-
     -- Engine 1 bleed-air valve position
     { "eng_airvalve_1", "tu154/custom/bleed/eng_airvalve_1", globalPropertyf },
     -- Engine 2 bleed-air valve position
@@ -134,13 +110,11 @@ defineProps({
     -- Fuel-flow mode selector
     { "fuel_flow_mode", "tu154/custom/switchers/fuel/fuel_flow_mode", globalPropertyi },
     -- Engine covers installed
-    { "engine_caps", "tu154/custom/anim/engine_caps", globalPropertyi },
+    {"engine_caps", "tu154/custom/anim/engine_caps", globalPropertyi },
     -- Frame duration
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     -- Simulator pause state
     { "sim_paused", "sim/time/paused", globalPropertyi },
-    -- Simulator running time
-    -- { "sim_run_time", "sim/time/total_running_time_sec", globalPropertyf },
     -- Starter-system air pressure
     { "starter_pressure", "tu154/custom/start/starter_pressure", globalPropertyf },
     -- APD operating state, engine 1
@@ -157,28 +131,10 @@ defineProps({
     { "fuel_in_2", "tu154/custom/start/fuel_in_2", globalPropertyi },
     -- Starter-system fuel command, engine 3
     { "fuel_in_3", "tu154/custom/start/fuel_in_3", globalPropertyi },
-    -- Starter torque ratio
-    -- { "starter_torq", "sim/aircraft/engine/acf_starter_torque_ratio", globalPropertyf },
-    -- Starter maximum RPM ratio
     { "starter_rpm", "sim/aircraft/engine/acf_starter_max_rpm_ratio", globalPropertyf },
-    -- Jet-engine spool-up time
-    -- { "jet_spoolup_time", "sim/aircraft/engine/acf_spooltime_jet", globalPropertyf },
-    -- SmartCopilot master state: 0 unavailable, 1 slave, 2 master
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
-    -- Legacy X-Plane APU starter switch
-    -- { "APU_switch", "sim/cockpit/engine/APU_switch", globalPropertyf },
-    -- Legacy X-Plane APU running state
-    -- { "APU_running", "sim/cockpit/engine/APU_running", globalPropertyf },
-    -- Legacy X-Plane APU N1
-    -- { "APU_N1", "sim/cockpit/engine/APU_N1", globalPropertyf },
-    -- Legacy X-Plane APU bleed-air actuator
-    -- { "apu_bleed", "sim/cockpit2/bleedair/actuators/apu_bleed", globalPropertyf },
     -- External ASU air pressure
     { "asu_press", "tu154/custom/asu/press", globalPropertyf },
-    -- Legacy simulator-version alias retained for compatibility
-    -- { "sim_vers", "sim/version/xplane_internal_version", globalPropertyi },
 })
 
 -- Simulator starter commands.

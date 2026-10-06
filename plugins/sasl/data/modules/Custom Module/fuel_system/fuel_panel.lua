@@ -1,147 +1,145 @@
 -- fuel_panel.lua
--- fuel system panel
+-- Fuel system panel (performance-optimierte Fassung).
+--
+-- Sounds, Startreset, Kappenlogik, Zeigerglättung, mechanischer Zähler und
+-- Lampentest unverändert. Formeln in gleicher Rechenreihenfolge.
 
--- gauges
+---------------------------------------------------------------------------
+-- Lokalisierte Globals
+---------------------------------------------------------------------------
+local get, set = get, set
+local max = math.max
+local playSample = sasl.al.playSample
+
+--	true  = Cache lamp and electric gauge outputs and write only on 
+--				value changes
+--	false = write cached lamp and electric gauge outputs every frame
+local USE_WRITE_CACHE = true
+
+---------------------------------------------------------------------------
+-- Properties: Handles in lokaler Tabelle P
+---------------------------------------------------------------------------
+local P = {}
+local env = (getfenv and getfenv(1)) or _ENV or _G
+
 local function defineProps(defs)
-    for _, def in ipairs(defs) do
+    for i = 1, #defs do
+        local d = defs[i]
         local prop
-        if def[4] ~= nil then
-            prop = def[3](def[2], def[4])
+        if d[4] ~= nil then
+            prop = d[3](d[2], d[4])
         else
-            prop = def[3](def[2])
+            prop = d[3](d[2])
         end
-        defineProperty(def[1], prop)
+        defineProperty(d[1], prop)
+        -- Von außen überschriebene Property bevorzugen
+        P[d[1]] = env[d[1]] or prop
     end
 end
 
 defineProps({
-    { "fuel_meter_summ", "tu154/custom/gauges/fuel/fuel_meter_summ", globalPropertyf }, --
-    { "fuel_meter_tank1", "tu154/custom/gauges/fuel/fuel_meter_tank1", globalPropertyf }, --     1
-    { "fuel_meter_tank2_left", "tu154/custom/gauges/fuel/fuel_meter_tank2_left", globalPropertyf }, --     2
-    { "fuel_meter_tank2_right", "tu154/custom/gauges/fuel/fuel_meter_tank2_right", globalPropertyf }, --     2
-    { "fuel_meter_tank3_left", "tu154/custom/gauges/fuel/fuel_meter_tank3_left", globalPropertyf }, --     3
-    { "fuel_meter_tank3_right", "tu154/custom/gauges/fuel/fuel_meter_tank3_right", globalPropertyf }, --     3
-    { "fuel_meter_tank4", "tu154/custom/gauges/fuel/fuel_meter_tank4", globalPropertyf }, --     4
-    { "fuel_meter_mech", "tu154/custom/gauges/fuel/fuel_meter_mech", globalPropertyf }, --
-    { "fuel_front_ind", "tu154/custom/gauges/misc/fuel_front_ind", globalPropertyf }, --
-
-    -- controls on gauges
-    { "fuel_meter_summ_zero", "tu154/custom/buttons/fuel/fuel_meter_summ_zero", globalPropertyf }, --   .
-    { "fuel_meter_summ_max", "tu154/custom/buttons/fuel/fuel_meter_summ_max", globalPropertyf }, --   .  P
-    { "fuel_meter_tank2_zero", "tu154/custom/buttons/fuel/fuel_meter_tank2_zero", globalPropertyf }, --   2.
-    { "fuel_meter_tank2_max", "tu154/custom/buttons/fuel/fuel_meter_tank2_max", globalPropertyf }, --   2.  P
-    { "fuel_meter_tank3_zero", "tu154/custom/buttons/fuel/fuel_meter_tank3_zero", globalPropertyf }, --   3.
-    { "fuel_meter_tank3_max", "tu154/custom/buttons/fuel/fuel_meter_tank3_max", globalPropertyf }, --   3.  P
-    { "fuel_meter_tank4_zero", "tu154/custom/buttons/fuel/fuel_meter_tank4_zero", globalPropertyf }, --   4.
-    { "fuel_meter_tank4_max", "tu154/custom/buttons/fuel/fuel_meter_tank4_max", globalPropertyf }, --   4.  P
-    { "fuel_front_zero", "tu154/custom/buttons/misc/fuel_front_zero", globalPropertyf }, --     .
-    { "fuel_front_max", "tu154/custom/buttons/misc/fuel_front_max", globalPropertyf }, --     .
-
-    -- controls
-    { "pump_tank2_left", "tu154/custom/switchers/fuel/pump_tank2_left", globalPropertyi }, --   2
-    { "pump_tank2_right", "tu154/custom/switchers/fuel/pump_tank2_right", globalPropertyi }, --   2
-    { "pump_tank3_left", "tu154/custom/switchers/fuel/pump_tank3_left", globalPropertyi }, --   3
-    { "pump_tank3_right", "tu154/custom/switchers/fuel/pump_tank3_right", globalPropertyi }, --   3
-    { "pump_tank4", "tu154/custom/switchers/fuel/pump_tank4", globalPropertyi }, --   4
-    { "pump_tank1_1", "tu154/custom/switchers/fuel/pump_tank1_1", globalPropertyi }, --   1
-    { "pump_tank1_2", "tu154/custom/switchers/fuel/pump_tank1_2", globalPropertyi }, --   1
-    { "pump_tank1_3", "tu154/custom/switchers/fuel/pump_tank1_3", globalPropertyi }, --   1
-    { "pump_tank1_4", "tu154/custom/switchers/fuel/pump_tank1_4", globalPropertyi }, --   1
-
-    { "fuel_trans", "tu154/custom/switchers/fuel/fuel_trans", globalPropertyi }, --
-    { "fuel_trans_cap", "tu154/custom/switchers/fuel/fuel_trans_cap", globalPropertyi }, --
-    { "fuel_porc", "tu154/custom/switchers/fuel/fuel_porc", globalPropertyi }, --
-    { "fuel_porc_cap", "tu154/custom/switchers/fuel/fuel_porc_cap", globalPropertyi }, --
-    { "fuel_level", "tu154/custom/switchers/fuel/fuel_level", globalPropertyi }, --
-    { "fuel_flow_mode", "tu154/custom/switchers/fuel/fuel_flow_mode", globalPropertyi }, --   .  -
-    { "fuel_flow_on", "tu154/custom/switchers/fuel/fuel_flow_on", globalPropertyi }, --
-    { "fuel_flow_on_cap", "tu154/custom/switchers/fuel/fuel_flow_on_cap", globalPropertyi }, --
-
-    { "fuel_meter_on", "tu154/custom/switchers/fuel/fuel_meter_on", globalPropertyi }, --
-    { "fuel_meter_mech_on", "tu154/custom/switchers/fuel/fuel_meter_mech_on", globalPropertyi }, --
-    { "fire_valve_1", "tu154/custom/switchers/fuel/fire_valve_1", globalPropertyi }, --
-    { "fire_valve_2", "tu154/custom/switchers/fuel/fire_valve_2", globalPropertyi }, --
-    { "fire_valve_3", "tu154/custom/switchers/fuel/fire_valve_3", globalPropertyi }, --
-    { "fire_valve_1_cap", "tu154/custom/switchers/fuel/fire_valve_1_cap", globalPropertyi }, --
-    { "fire_valve_2_cap", "tu154/custom/switchers/fuel/fire_valve_2_cap", globalPropertyi }, --
-    { "fire_valve_3_cap", "tu154/custom/switchers/fuel/fire_valve_3_cap", globalPropertyi }, --
-
-    { "reserv_pump_test", "tu154/custom/buttons/eng/reserv_pump_test", globalPropertyi }, --
-
-    -- lamps
-    -- { "fuel_2500", "tu154/custom/lights/small/fuel_2500", globalPropertyf }, --   2500
-    -- { "fuel_tank1_used", "tu154/custom/lights/small/fuel_tank1_used", globalPropertyf }, --    1
-    { "fuel_tank3_left_fail", "tu154/custom/lights/small/fuel_tank3_left_fail", globalPropertyf }, --    3
-    { "fuel_tank2_left_fail", "tu154/custom/lights/small/fuel_tank2_left_fail", globalPropertyf }, --    2
-    { "fuel_tank2_right_fail", "tu154/custom/lights/small/fuel_tank2_right_fail", globalPropertyf }, --    2
-    { "fuel_tank3_right_fail", "tu154/custom/lights/small/fuel_tank3_right_fail", globalPropertyf }, --    3
-
-    { "fuel_pump_left_5", "tu154/custom/lights/small/fuel_pump_left_5", globalPropertyf }, --   5
-    { "fuel_pump_left_6", "tu154/custom/lights/small/fuel_pump_left_6", globalPropertyf }, --   6
-    { "fuel_pump_left_7", "tu154/custom/lights/small/fuel_pump_left_7", globalPropertyf }, --   7
-    { "fuel_pump_left_8", "tu154/custom/lights/small/fuel_pump_left_8", globalPropertyf }, --   8
-    { "fuel_pump_left_9", "tu154/custom/lights/small/fuel_pump_left_9", globalPropertyf }, --   9
-
-    { "fuel_pump_right_5", "tu154/custom/lights/small/fuel_pump_right_5", globalPropertyf }, --   5
-    { "fuel_pump_right_6", "tu154/custom/lights/small/fuel_pump_right_6", globalPropertyf }, --   6
-    { "fuel_pump_right_7", "tu154/custom/lights/small/fuel_pump_right_7", globalPropertyf }, --   7
-    { "fuel_pump_right_8", "tu154/custom/lights/small/fuel_pump_right_8", globalPropertyf }, --   8
-    { "fuel_pump_right_9", "tu154/custom/lights/small/fuel_pump_right_9", globalPropertyf }, --   9
-
-    { "fuel_pump_10", "tu154/custom/lights/small/fuel_pump_10", globalPropertyf }, --   10
-    { "fuel_pump_11", "tu154/custom/lights/small/fuel_pump_11", globalPropertyf }, --   11
-    { "fuel_pump_1", "tu154/custom/lights/small/fuel_pump_1", globalPropertyf }, --   1
-    { "fuel_pump_2", "tu154/custom/lights/small/fuel_pump_2", globalPropertyf }, --   2
-    { "fuel_pump_3", "tu154/custom/lights/small/fuel_pump_3", globalPropertyf }, --   3
-    { "fuel_pump_4", "tu154/custom/lights/small/fuel_pump_4", globalPropertyf }, --   4
-
-    { "fuel_cut_off_1", "tu154/custom/lights/small/fuel_cut_off_1", globalPropertyf }, --
-    { "fuel_cut_off_2", "tu154/custom/lights/small/fuel_cut_off_2", globalPropertyf }, --
-    { "fuel_cut_off_3", "tu154/custom/lights/small/fuel_cut_off_3", globalPropertyf }, --
-    { "fuel_flow_from_2", "tu154/custom/lights/small/fuel_flow_from_2", globalPropertyf }, --
-    { "fuel_flow_from_3", "tu154/custom/lights/small/fuel_flow_from_3", globalPropertyf }, --
-    { "fuel_flow_from_4", "tu154/custom/lights/small/fuel_flow_from_4", globalPropertyf }, --
-
-    { "fuel_flow_auto_fail", "tu154/custom/lights/small/fuel_flow_auto_fail", globalPropertyf }, --
-    { "fuel_reserv_trans_left", "tu154/custom/lights/small/fuel_reserv_trans_left", globalPropertyf }, --     1
-    { "fuel_reserv_trans_right", "tu154/custom/lights/small/fuel_reserv_trans_right", globalPropertyf }, --     1
-    { "fuel_porc_reserv", "tu154/custom/lights/small/fuel_porc_reserv", globalPropertyf }, --
-    { "fuel_level_automat", "tu154/custom/lights/small/fuel_level_automat", globalPropertyf }, --
-
-    -- sources --
-
-    -- engines
-    { "eng1_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 1 }, -- engine 1 rpm
-    { "eng2_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 2 }, -- engine 2 rpm
-    { "eng3_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 3 }, -- engine 3 rpm
-
-    { "ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 1 }, -- FF from sim kg/second
-    { "ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 2 }, -- FF from sim kg/second
-    { "ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 3 }, -- FF from sim kg/second
-
-    -- fuel tanks
-    -- { "total_w", "sim/flightmodel/weight/m_fuel_total", globalPropertyf }, -- fuel weight
-
-    { "tank1_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 }, -- fuel weight
-    { "tank4_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 2 }, -- fuel weight
-    { "tank2R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 3 }, -- fuel weight
-    { "tank2L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 4 }, -- fuel weight
-    { "tank3R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 5 }, -- fuel weight
-    { "tank3L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 6 }, -- fuel weight
-
+    -- Gauges
+    { "fuel_meter_summ", "tu154/custom/gauges/fuel/fuel_meter_summ", globalPropertyf },
+    { "fuel_meter_tank1", "tu154/custom/gauges/fuel/fuel_meter_tank1", globalPropertyf },
+    { "fuel_meter_tank2_left", "tu154/custom/gauges/fuel/fuel_meter_tank2_left", globalPropertyf },
+    { "fuel_meter_tank2_right", "tu154/custom/gauges/fuel/fuel_meter_tank2_right", globalPropertyf },
+    { "fuel_meter_tank3_left", "tu154/custom/gauges/fuel/fuel_meter_tank3_left", globalPropertyf },
+    { "fuel_meter_tank3_right", "tu154/custom/gauges/fuel/fuel_meter_tank3_right", globalPropertyf },
+    { "fuel_meter_tank4", "tu154/custom/gauges/fuel/fuel_meter_tank4", globalPropertyf },
+    { "fuel_meter_mech", "tu154/custom/gauges/fuel/fuel_meter_mech", globalPropertyf },
+    { "fuel_front_ind", "tu154/custom/gauges/misc/fuel_front_ind", globalPropertyf },
+    -- Prüfknöpfe an den Anzeigen (0 / Maximum)
+    { "fuel_meter_summ_zero", "tu154/custom/buttons/fuel/fuel_meter_summ_zero", globalPropertyf },
+    { "fuel_meter_summ_max", "tu154/custom/buttons/fuel/fuel_meter_summ_max", globalPropertyf },
+    { "fuel_meter_tank2_zero", "tu154/custom/buttons/fuel/fuel_meter_tank2_zero", globalPropertyf },
+    { "fuel_meter_tank2_max", "tu154/custom/buttons/fuel/fuel_meter_tank2_max", globalPropertyf },
+    { "fuel_meter_tank3_zero", "tu154/custom/buttons/fuel/fuel_meter_tank3_zero", globalPropertyf },
+    { "fuel_meter_tank3_max", "tu154/custom/buttons/fuel/fuel_meter_tank3_max", globalPropertyf },
+    { "fuel_meter_tank4_zero", "tu154/custom/buttons/fuel/fuel_meter_tank4_zero", globalPropertyf },
+    { "fuel_meter_tank4_max", "tu154/custom/buttons/fuel/fuel_meter_tank4_max", globalPropertyf },
+    { "fuel_front_zero", "tu154/custom/buttons/misc/fuel_front_zero", globalPropertyf },
+    { "fuel_front_max", "tu154/custom/buttons/misc/fuel_front_max", globalPropertyf },
+    -- Controls
+    { "pump_tank2_left", "tu154/custom/switchers/fuel/pump_tank2_left", globalPropertyi },
+    { "pump_tank2_right", "tu154/custom/switchers/fuel/pump_tank2_right", globalPropertyi },
+    { "pump_tank3_left", "tu154/custom/switchers/fuel/pump_tank3_left", globalPropertyi },
+    { "pump_tank3_right", "tu154/custom/switchers/fuel/pump_tank3_right", globalPropertyi },
+    { "pump_tank4", "tu154/custom/switchers/fuel/pump_tank4", globalPropertyi },
+    { "pump_tank1_1", "tu154/custom/switchers/fuel/pump_tank1_1", globalPropertyi },
+    { "pump_tank1_2", "tu154/custom/switchers/fuel/pump_tank1_2", globalPropertyi },
+    { "pump_tank1_3", "tu154/custom/switchers/fuel/pump_tank1_3", globalPropertyi },
+    { "pump_tank1_4", "tu154/custom/switchers/fuel/pump_tank1_4", globalPropertyi },
+    { "fuel_trans", "tu154/custom/switchers/fuel/fuel_trans", globalPropertyi },
+    { "fuel_trans_cap", "tu154/custom/switchers/fuel/fuel_trans_cap", globalPropertyi },
+    { "fuel_porc", "tu154/custom/switchers/fuel/fuel_porc", globalPropertyi },
+    { "fuel_porc_cap", "tu154/custom/switchers/fuel/fuel_porc_cap", globalPropertyi },
+    { "fuel_level", "tu154/custom/switchers/fuel/fuel_level", globalPropertyi },
+    { "fuel_flow_mode", "tu154/custom/switchers/fuel/fuel_flow_mode", globalPropertyi },
+    { "fuel_flow_on", "tu154/custom/switchers/fuel/fuel_flow_on", globalPropertyi },
+    { "fuel_flow_on_cap", "tu154/custom/switchers/fuel/fuel_flow_on_cap", globalPropertyi },
+    { "fuel_meter_on", "tu154/custom/switchers/fuel/fuel_meter_on", globalPropertyi },
+    { "fuel_meter_mech_on", "tu154/custom/switchers/fuel/fuel_meter_mech_on", globalPropertyi },
+    { "fire_valve_1", "tu154/custom/switchers/fuel/fire_valve_1", globalPropertyi },
+    { "fire_valve_2", "tu154/custom/switchers/fuel/fire_valve_2", globalPropertyi },
+    { "fire_valve_3", "tu154/custom/switchers/fuel/fire_valve_3", globalPropertyi },
+    { "fire_valve_1_cap", "tu154/custom/switchers/fuel/fire_valve_1_cap", globalPropertyi },
+    { "fire_valve_2_cap", "tu154/custom/switchers/fuel/fire_valve_2_cap", globalPropertyi },
+    { "fire_valve_3_cap", "tu154/custom/switchers/fuel/fire_valve_3_cap", globalPropertyi },
+    { "reserv_pump_test", "tu154/custom/buttons/eng/reserv_pump_test", globalPropertyi },
+    -- Lamps
+    { "fuel_tank3_left_fail", "tu154/custom/lights/small/fuel_tank3_left_fail", globalPropertyf },
+    { "fuel_tank2_left_fail", "tu154/custom/lights/small/fuel_tank2_left_fail", globalPropertyf },
+    { "fuel_tank2_right_fail", "tu154/custom/lights/small/fuel_tank2_right_fail", globalPropertyf },
+    { "fuel_tank3_right_fail", "tu154/custom/lights/small/fuel_tank3_right_fail", globalPropertyf },
+    { "fuel_pump_left_5", "tu154/custom/lights/small/fuel_pump_left_5", globalPropertyf },
+    { "fuel_pump_left_6", "tu154/custom/lights/small/fuel_pump_left_6", globalPropertyf },
+    { "fuel_pump_left_7", "tu154/custom/lights/small/fuel_pump_left_7", globalPropertyf },
+    { "fuel_pump_left_8", "tu154/custom/lights/small/fuel_pump_left_8", globalPropertyf },
+    { "fuel_pump_left_9", "tu154/custom/lights/small/fuel_pump_left_9", globalPropertyf },
+    { "fuel_pump_right_5", "tu154/custom/lights/small/fuel_pump_right_5", globalPropertyf },
+    { "fuel_pump_right_6", "tu154/custom/lights/small/fuel_pump_right_6", globalPropertyf },
+    { "fuel_pump_right_7", "tu154/custom/lights/small/fuel_pump_right_7", globalPropertyf },
+    { "fuel_pump_right_8", "tu154/custom/lights/small/fuel_pump_right_8", globalPropertyf },
+    { "fuel_pump_right_9", "tu154/custom/lights/small/fuel_pump_right_9", globalPropertyf },
+    { "fuel_pump_10", "tu154/custom/lights/small/fuel_pump_10", globalPropertyf },
+    { "fuel_pump_11", "tu154/custom/lights/small/fuel_pump_11", globalPropertyf },
+    { "fuel_pump_1", "tu154/custom/lights/small/fuel_pump_1", globalPropertyf },
+    { "fuel_pump_2", "tu154/custom/lights/small/fuel_pump_2", globalPropertyf },
+    { "fuel_pump_3", "tu154/custom/lights/small/fuel_pump_3", globalPropertyf },
+    { "fuel_pump_4", "tu154/custom/lights/small/fuel_pump_4", globalPropertyf },
+    { "fuel_cut_off_1", "tu154/custom/lights/small/fuel_cut_off_1", globalPropertyf },
+    { "fuel_cut_off_2", "tu154/custom/lights/small/fuel_cut_off_2", globalPropertyf },
+    { "fuel_cut_off_3", "tu154/custom/lights/small/fuel_cut_off_3", globalPropertyf },
+    { "fuel_flow_from_2", "tu154/custom/lights/small/fuel_flow_from_2", globalPropertyf },
+    { "fuel_flow_from_3", "tu154/custom/lights/small/fuel_flow_from_3", globalPropertyf },
+    { "fuel_flow_from_4", "tu154/custom/lights/small/fuel_flow_from_4", globalPropertyf },
+    { "fuel_flow_auto_fail", "tu154/custom/lights/small/fuel_flow_auto_fail", globalPropertyf },
+    { "fuel_reserv_trans_left", "tu154/custom/lights/small/fuel_reserv_trans_left", globalPropertyf },
+    { "fuel_reserv_trans_right", "tu154/custom/lights/small/fuel_reserv_trans_right", globalPropertyf },
+    { "fuel_porc_reserv", "tu154/custom/lights/small/fuel_porc_reserv", globalPropertyf },
+    { "fuel_level_automat", "tu154/custom/lights/small/fuel_level_automat", globalPropertyf },
+    -- Engines (SASL-Elementindex 1-basiert)
+    { "eng1_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 1 },
+    { "eng2_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 2 },
+    { "eng3_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 3 },
+    { "ENGN_FF_1", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 1 },
+    { "ENGN_FF_2", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 2 },
+    { "ENGN_FF_3", "sim/cockpit2/engine/indicators/fuel_flow_kg_sec", globalPropertyfae, 3 },
+    -- Fuel tanks (m_fuel[0..5])
+    { "tank1_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 },
+    { "tank4_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 2 },
+    { "tank2R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 3 },
+    { "tank2L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 4 },
+    { "tank3R_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 5 },
+    { "tank3L_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 6 },
     { "reserv_trans", "tu154/custom/fuel/reserv_trans", globalPropertyi },
-
-    -- other sources
-    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
-    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
-    -- bus parameters
+    -- Power
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
     { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-    -- { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf },
     { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
-
-    -- lamps sources
-    { "test_lamps", "tu154/custom/buttons/lamp_test_hydro", globalPropertyi }, --
-
+    -- Lamp sources
+    { "test_lamps", "tu154/custom/buttons/lamp_test_hydro", globalPropertyi },
     { "pump_tank2_left_work", "tu154/custom/fuel/pump_tank2_left_work", globalPropertyi },
     { "pump_tank2_right_work", "tu154/custom/fuel/pump_tank2_right_work", globalPropertyi },
     { "pump_tank3_left_work", "tu154/custom/fuel/pump_tank3_left_work", globalPropertyi },
@@ -151,37 +149,19 @@ defineProps({
     { "pump_tank1_2_work", "tu154/custom/fuel/pump_tank1_2_work", globalPropertyi },
     { "pump_tank1_3_work", "tu154/custom/fuel/pump_tank1_3_work", globalPropertyi },
     { "pump_tank1_4_work", "tu154/custom/fuel/pump_tank1_4_work", globalPropertyi },
-
-    { "auto_tanks_turn", "tu154/custom/fuel/auto_tanks_turn", globalPropertyi }, --   . 0, 1 -  , 2, 3, 4	0
-    --defineProperty("auto_tank_level", globalPropertyi("tu154/custom/fuel/auto_tank_level")) --   . -2 - 2L, -3 - 3L, +3 - 3R, +2 - 2R	0
-
-    { "auto_tank_level_2", "tu154/custom/fuel/auto_tank_level_2", globalPropertyi }, --    2. -1 = L, 0 = none, +1 = R	0
-    { "auto_tank_level_3", "tu154/custom/fuel/auto_tank_level_3", globalPropertyi }, --    3. -1 = L, 0 = none, +1 = R	0
-
-    { "tank1_w", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 }, -- fuel weight
-
-    { "fire_vlv_open_1", "tu154/custom/fuel/fire_vlv_open_1", globalPropertyf }, --
-    { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf }, --
-    { "fire_vlv_open_3", "tu154/custom/fuel/fire_vlv_open_3", globalPropertyf }, --
-
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
-
-    -- Smart Copilot
-    { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
-
-    -- failures
-    -- { "fuel_auto_fail", "tu154/custom/failures/fuel_auto_fail", globalPropertyi },
+    -- Laut Lampenlogik: 0 = Automatik-Fehler, 1/2 = Tank 2, 2/3 = Tank 3, 4 = Tank 4
+    { "auto_tanks_turn", "tu154/custom/fuel/auto_tanks_turn", globalPropertyi },
+    -- -1 = L, 0 = none, +1 = R
+    { "auto_tank_level_2", "tu154/custom/fuel/auto_tank_level_2", globalPropertyi },
+    { "auto_tank_level_3", "tu154/custom/fuel/auto_tank_level_3", globalPropertyi },
+    { "fire_vlv_open_1", "tu154/custom/fuel/fire_vlv_open_1", globalPropertyf },
+    { "fire_vlv_open_2", "tu154/custom/fuel/fire_vlv_open_2", globalPropertyf },
+    { "fire_vlv_open_3", "tu154/custom/fuel/fire_vlv_open_3", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    -- SmartCopilot: 0 = plugin not found, 1 = slave, 2 = master
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
+    -- Failures
     { "fuel_level_fail", "tu154/custom/failures/fuel_level_fail", globalPropertyi },
-    -- { "fuel_porc_fail", "tu154/custom/failures/fuel_porc_fail", globalPropertyi },
-
-    -- { "fuel_pump_2l_fail", "tu154/custom/failures/fuel_pump_2l_fail", globalPropertyi }, -- number of failed pumps
-    -- { "fuel_pump_2r_fail", "tu154/custom/failures/fuel_pump_2r_fail", globalPropertyi },
-    -- { "fuel_pump_3l_fail", "tu154/custom/failures/fuel_pump_3l_fail", globalPropertyi },
-    -- { "fuel_pump_3r_fail", "tu154/custom/failures/fuel_pump_3r_fail", globalPropertyi },
-    --defineProperty("fuel_pump_1_fail", globalPropertyi("tu154/custom/failures/fuel_pump_1_fail"))
-    -- { "fuel_pump_4_fail", "tu154/custom/failures/fuel_pump_4_fail", globalPropertyi },
-
     { "fuel_meter_2l_fail", "tu154/custom/failures/fuel_meter_2l_fail", globalPropertyi },
     { "fuel_meter_2r_fail", "tu154/custom/failures/fuel_meter_2r_fail", globalPropertyi },
     { "fuel_meter_3l_fail", "tu154/custom/failures/fuel_meter_3l_fail", globalPropertyi },
@@ -189,490 +169,398 @@ defineProps({
     { "fuel_meter_1_fail", "tu154/custom/failures/fuel_meter_1_fail", globalPropertyi },
     { "fuel_meter_4_fail", "tu154/custom/failures/fuel_meter_4_fail", globalPropertyi },
     { "fuel_meter_summ_fail", "tu154/custom/failures/fuel_meter_summ", globalPropertyi },
-
     { "fuel_flowmeter_1_fail", "tu154/custom/failures/fuel_flowmeter_1_fail", globalPropertyi },
     { "fuel_flowmeter_2_fail", "tu154/custom/failures/fuel_flowmeter_2_fail", globalPropertyi },
     { "fuel_flowmeter_3_fail", "tu154/custom/failures/fuel_flowmeter_3_fail", globalPropertyi },
 })
 
+---------------------------------------------------------------------------
+-- Handle-Listen
+---------------------------------------------------------------------------
+local function handles(names)
+    local t = {}
+    for i = 1, #names do t[i] = P[names[i]] end
+    return t
+end
 
--- sounds
-local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
+-- Alle 31 Lampen (ohne Strom alle 0)
+local ALL_LAMPS = handles({
+    "fuel_tank3_left_fail", "fuel_tank2_left_fail",
+    "fuel_tank2_right_fail", "fuel_tank3_right_fail",
+    "fuel_pump_left_5", "fuel_pump_left_6", "fuel_pump_left_7",
+    "fuel_pump_left_8", "fuel_pump_left_9",
+    "fuel_pump_right_5", "fuel_pump_right_6", "fuel_pump_right_7",
+    "fuel_pump_right_8", "fuel_pump_right_9",
+    "fuel_pump_10", "fuel_pump_11",
+    "fuel_pump_1", "fuel_pump_2", "fuel_pump_3", "fuel_pump_4",
+    "fuel_cut_off_1", "fuel_cut_off_2", "fuel_cut_off_3",
+    "fuel_flow_from_2", "fuel_flow_from_3", "fuel_flow_from_4",
+    "fuel_flow_auto_fail",
+    "fuel_reserv_trans_left", "fuel_reserv_trans_right",
+    "fuel_porc_reserv", "fuel_level_automat",
+})
+
+-- Schalter für den Klick-Sound. Index 1 muss fuel_porc sein (Kappenlogik).
+-- fuel_level, fuel_meter_on, fuel_meter_mech_on werden separat übergeben.
+local SW = handles({
+    "fuel_porc",
+    "pump_tank2_left", "pump_tank2_right", "pump_tank3_left",
+    "pump_tank3_right", "pump_tank4",
+    "pump_tank1_1", "pump_tank1_2", "pump_tank1_3", "pump_tank1_4",
+    "fuel_trans", "fuel_flow_mode", "fuel_flow_on",
+    "fire_valve_1", "fire_valve_2", "fire_valve_3",
+})
+
+-- Kappen. Index 2 muss fuel_porc_cap sein.
+local CAPS = handles({
+    "fuel_trans_cap", "fuel_porc_cap", "fuel_flow_on_cap",
+    "fire_valve_1_cap", "fire_valve_2_cap", "fire_valve_3_cap",
+})
+
+-- Beim Kaltstart auf 0 gesetzte Schalter
+local RESET_SW = handles({
+    "pump_tank2_left", "pump_tank2_right", "pump_tank3_left",
+    "pump_tank3_right", "pump_tank4",
+    "pump_tank1_1", "pump_tank1_2", "pump_tank1_3", "pump_tank1_4",
+    "fuel_level", "fuel_flow_mode", "fuel_flow_on",
+    "fuel_meter_on", "fuel_meter_mech_on",
+    "fire_valve_1", "fire_valve_2", "fire_valve_3",
+})
+
+---------------------------------------------------------------------------
+-- Sounds und Zustand
+---------------------------------------------------------------------------
 local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
 local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+-- plastic_switch.wav wurde im Original geladen, aber nie abgespielt
 
-local passed = get(frame_time)
-
-local function lamps()
-	
-	local test_btn = get(test_lamps) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
-	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
-	
-	local pump_2L = get(pump_tank2_left_work)
-	local pump_2R = get(pump_tank2_right_work)
-	local pump_3L = get(pump_tank3_left_work)
-	local pump_3R = get(pump_tank3_right_work)
-	local pump4 = get(pump_tank4_work)
-	local pump_1_1 = get(pump_tank1_1_work)
-	local pump_1_2 = get(pump_tank1_2_work)
-	local pump_1_3 = get(pump_tank1_3_work)
-	local pump_1_4 = get(pump_tank1_4_work)
-
-	local tank_level_2 = get(auto_tank_level_2)
-	local tank_level_3 = get(auto_tank_level_3)
-	
-	local fuel_tank3_left_brt = 0
-	if tank_level_3 == -1 then fuel_tank3_left_brt = 1 end
-	fuel_tank3_left_brt = math.max(fuel_tank3_left_brt * lamps_brt, test_btn)
-	set(fuel_tank3_left_fail, fuel_tank3_left_brt)
-	
-	local fuel_tank2_left_brt = 0
-	if tank_level_2 == -1 then fuel_tank2_left_brt = 1 end
-	fuel_tank2_left_brt = math.max(fuel_tank2_left_brt * lamps_brt, test_btn)
-	set(fuel_tank2_left_fail, fuel_tank2_left_brt)
-	
-	local fuel_tank3_right_brt = 0
-	if tank_level_3 == 1 then fuel_tank3_right_brt = 1 end
-	fuel_tank3_right_brt = math.max(fuel_tank3_right_brt * lamps_brt, test_btn)
-	set(fuel_tank3_right_fail, fuel_tank3_right_brt)
-	
-	local fuel_tank2_right_brt = 0
-	if tank_level_2 == 1 then fuel_tank2_right_brt = 1 end
-	fuel_tank2_right_brt = math.max(fuel_tank2_right_brt * lamps_brt, test_btn)
-	set(fuel_tank2_right_fail, fuel_tank2_right_brt)	
-	
-	local fuel_pump_left_5_brt = math.max(bool2int(pump_2L > 0) * lamps_brt, test_btn)
-	set(fuel_pump_left_5, fuel_pump_left_5_brt)	
-	
-	local fuel_pump_left_6_brt = math.max(bool2int(pump_2L > 1) * lamps_brt, test_btn)
-	set(fuel_pump_left_6, fuel_pump_left_6_brt)	
-	
-	local fuel_pump_left_7_brt = math.max(bool2int(pump_3L > 2) * lamps_brt, test_btn)
-	set(fuel_pump_left_7, fuel_pump_left_7_brt)	
-	
-	local fuel_pump_left_8_brt = math.max(bool2int(pump_3L > 0) * lamps_brt, test_btn) 
-	set(fuel_pump_left_8, fuel_pump_left_8_brt)	
-	
-	local fuel_pump_left_9_brt = math.max(bool2int(pump_3L > 1) * lamps_brt, test_btn)
-	set(fuel_pump_left_9, fuel_pump_left_9_brt)	
-	
-	local fuel_pump_right_5_brt = math.max(bool2int(pump_2R > 1) * lamps_brt, test_btn) 
-	set(fuel_pump_right_5, fuel_pump_right_5_brt)	
-	
-	local fuel_pump_right_6_brt = math.max(bool2int(pump_2R > 0) * lamps_brt, test_btn) 
-	set(fuel_pump_right_6, fuel_pump_right_6_brt)	
-	
-	local fuel_pump_right_7_brt = math.max(bool2int(pump_3R > 0) * lamps_brt, test_btn) 
-	set(fuel_pump_right_7, fuel_pump_right_7_brt)	
-	
-	local fuel_pump_right_8_brt = math.max(bool2int(pump_3R > 2) * lamps_brt, test_btn)
-	set(fuel_pump_right_8, fuel_pump_right_8_brt)	
-	
-	local fuel_pump_right_9_brt = math.max(bool2int(pump_3R > 1) * lamps_brt, test_btn) 
-	set(fuel_pump_right_9, fuel_pump_right_9_brt)	
-	
-	local fuel_pump_10_brt = math.max(bool2int(pump4 > 0) * lamps_brt, test_btn)
-	set(fuel_pump_10, fuel_pump_10_brt)	
-	
-	local fuel_pump_11_brt = math.max(bool2int(pump4 > 1) * lamps_brt, test_btn)
-	set(fuel_pump_11, fuel_pump_11_brt)	
-	
-	local fuel_pump_1_brt = math.max(pump_1_1 * lamps_brt, test_btn)
-	set(fuel_pump_1, fuel_pump_1_brt)	
-	
-	local fuel_pump_2_brt = math.max(pump_1_2 * lamps_brt, test_btn) 
-	set(fuel_pump_2, fuel_pump_2_brt)	
-	
-	local fuel_pump_3_brt = math.max(pump_1_3 * lamps_brt, test_btn) 
-	set(fuel_pump_3, fuel_pump_3_brt)	
-	
-	local fuel_pump_4_brt = math.max(pump_1_4 * lamps_brt, test_btn)
-	set(fuel_pump_4, fuel_pump_4_brt)
-	
-	local fuel_cut_off_1_brt = 0
-	if get(fire_vlv_open_1) > 0.7 then fuel_cut_off_1_brt = 1 end
-	fuel_cut_off_1_brt = math.max(fuel_cut_off_1_brt * lamps_brt, test_btn)
-	set(fuel_cut_off_1, fuel_cut_off_1_brt)
-	
-	local fuel_cut_off_2_brt = 0
-	if get(fire_vlv_open_2) > 0.7 then fuel_cut_off_2_brt = 1 end
-	fuel_cut_off_2_brt = math.max(fuel_cut_off_2_brt * lamps_brt, test_btn)
-	set(fuel_cut_off_2, fuel_cut_off_2_brt)
-	
-	local fuel_cut_off_3_brt = 0
-	if get(fire_vlv_open_3) > 0.7 then fuel_cut_off_3_brt = 1 end
-	fuel_cut_off_3_brt = math.max(fuel_cut_off_3_brt * lamps_brt, test_btn) 
-	set(fuel_cut_off_3, fuel_cut_off_3_brt)	
-	
-	local fuel_flow_from_2_brt = 0
-	local tank_turn = get(auto_tanks_turn)
-	if tank_turn == 1 or tank_turn == 2 then fuel_flow_from_2_brt = 1 end
-	fuel_flow_from_2_brt = math.max(fuel_flow_from_2_brt * lamps_brt, test_btn) 
-	set(fuel_flow_from_2, fuel_flow_from_2_brt)
-
-	local fuel_flow_from_3_brt = 0
-	if tank_turn == 2 or tank_turn == 3 then fuel_flow_from_3_brt = 1 end
-	fuel_flow_from_3_brt = math.max(fuel_flow_from_3_brt * lamps_brt, test_btn)
-	set(fuel_flow_from_3, fuel_flow_from_3_brt)
-	
-	local fuel_flow_from_4_brt = 0
-	if tank_turn == 4 then fuel_flow_from_4_brt = 1 end
-	fuel_flow_from_4_brt = math.max(fuel_flow_from_4_brt * lamps_brt, test_btn)
-	set(fuel_flow_from_4, fuel_flow_from_4_brt)
-
-	local fuel_flow_auto_fail_brt = 0
-	if tank_turn == 0 then fuel_flow_auto_fail_brt = 1 end
-	fuel_flow_auto_fail_brt = math.max(fuel_flow_auto_fail_brt * lamps_brt, test_btn)
-	set(fuel_flow_auto_fail, fuel_flow_auto_fail_brt)
-	
-	local fuel_reserv_trans_left_brt = math.max(get(reserv_trans) * lamps_brt, test_btn) 
-	set(fuel_reserv_trans_left, fuel_reserv_trans_left_brt)
-	
-	local fuel_reserv_trans_right_brt = math.max(get(reserv_trans) * lamps_brt, test_btn)
-	set(fuel_reserv_trans_right, fuel_reserv_trans_right_brt)
-	
-	local fuel_porc_reserv_brt = math.max(get(reserv_pump_test) * lamps_brt, test_btn) 
-	set(fuel_porc_reserv, fuel_porc_reserv_brt)
-	
-	--local fuel_level_automat_brt = math.max(get(fuel_level) * get(fuel_flow_mode) * get(fuel_flow_on) * lamps_brt, test_btn)
-	local fuel_level_automat_brt = math.max(get(fuel_level) * (1-get(fuel_level_fail)) * lamps_brt, test_btn)
-	set(fuel_level_automat, fuel_level_automat_brt)
-	
-end
-
--- reset swittchers for cold & dark
+local passed = get(P.frame_time)
 local notLoaded = true
-
-local function reset_switchers()
-	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
-		set(pump_tank2_left, 0)
-		set(pump_tank2_right, 0)
-		set(pump_tank3_left, 0)
-		set(pump_tank3_right, 0)
-		set(pump_tank4, 0)
-		set(pump_tank1_1, 0)
-		set(pump_tank1_2, 0)
-		set(pump_tank1_3, 0)
-		set(pump_tank1_4, 0)
-		set(fuel_level, 0)
-		set(fuel_flow_mode, 0)
-		set(fuel_flow_on, 0)
-		set(fuel_meter_on, 0)
-		set(fuel_meter_mech_on, 0)
-		set(fire_valve_1, 0)
-		set(fire_valve_2, 0)
-		set(fire_valve_3, 0)
-	end
-	
-	notLoaded = false
-end
-
--- make switchers sound -- 
-
-local pump_tank2_left_last = get(pump_tank2_left)
-local pump_tank2_right_last = get(pump_tank2_right)
-local pump_tank3_left_last = get(pump_tank3_left)
-local pump_tank3_right_last = get(pump_tank3_right)
-local pump_tank4_last = get(pump_tank4)
-local pump_tank1_1_last = get(pump_tank1_1)
-local pump_tank1_2_last = get(pump_tank1_2)
-local pump_tank1_3_last = get(pump_tank1_3)
-local pump_tank1_4_last = get(pump_tank1_4)
-
-local fuel_trans_last = get(fuel_trans)
-local fuel_porc_last = get(fuel_porc)
-local fuel_level_last = get(fuel_level)
-local fuel_flow_mode_last = get(fuel_flow_mode)
-local fuel_flow_on_last = get(fuel_flow_on)
-
-local fuel_meter_on_last = get(fuel_meter_on)
-local fuel_meter_mech_on_last = get(fuel_meter_mech_on)
-local fire_valve_1_last = get(fire_valve_1)
-local fire_valve_2_last = get(fire_valve_2)
-local fire_valve_3_last = get(fire_valve_3)
-
-local function check_switchers()
-
-	local pump_tank2_left_sw = get(pump_tank2_left)
-	local pump_tank2_right_sw = get(pump_tank2_right)
-	local pump_tank3_left_sw = get(pump_tank3_left)
-	local pump_tank3_right_sw = get(pump_tank3_right)
-	local pump_tank4_sw = get(pump_tank4)
-	local pump_tank1_1_sw = get(pump_tank1_1)
-	local pump_tank1_2_sw = get(pump_tank1_2)
-	local pump_tank1_3_sw = get(pump_tank1_3)
-	local pump_tank1_4_sw = get(pump_tank1_4)
-	
-	local fuel_trans_sw = get(fuel_trans)
-	local fuel_porc_sw = get(fuel_porc)
-	local fuel_level_sw = get(fuel_level)
-	local fuel_flow_mode_sw = get(fuel_flow_mode)
-	local fuel_flow_on_sw = get(fuel_flow_on)
-	
-	local fuel_meter_on_sw = get(fuel_meter_on)
-	local fuel_meter_mech_on_sw = get(fuel_meter_mech_on)
-	local fire_valve_1_sw = get(fire_valve_1)
-	local fire_valve_2_sw = get(fire_valve_2)
-	local fire_valve_3_sw = get(fire_valve_3)
-	
-	-- compare switchers state
-	local sw_change = pump_tank2_left_sw + pump_tank2_right_sw + pump_tank3_left_sw + pump_tank3_right_sw + pump_tank4_sw
-	sw_change = sw_change + pump_tank1_1_sw + pump_tank1_2_sw + pump_tank1_3_sw + pump_tank1_4_sw
-	sw_change = sw_change + fuel_trans_sw + fuel_porc_sw + fuel_level_sw + fuel_flow_mode_sw + fuel_flow_on_sw
-	sw_change = sw_change + fuel_meter_on_sw + fuel_meter_mech_on_sw + fire_valve_1_sw + fire_valve_2_sw + fire_valve_3_sw
-	
-	sw_change = sw_change - pump_tank2_left_last - pump_tank2_right_last - pump_tank3_left_last - pump_tank3_right_last - pump_tank4_last
-	sw_change = sw_change - pump_tank1_1_last - pump_tank1_2_last - pump_tank1_3_last - pump_tank1_4_last
-	sw_change = sw_change - fuel_trans_last - fuel_porc_last - fuel_level_last - fuel_flow_mode_last - fuel_flow_on_last
-	sw_change = sw_change - fuel_meter_on_last - fuel_meter_mech_on_last - fire_valve_1_last - fire_valve_2_last - fire_valve_3_last
-	
-	if sw_change ~= 0 then sasl.al.playSample(switcher_sound, false) end -- play sound
-
-	pump_tank2_left_last = pump_tank2_left_sw
-	pump_tank2_right_last = pump_tank2_right_sw
-	pump_tank3_left_last = pump_tank3_left_sw
-	pump_tank3_right_last = pump_tank3_right_sw
-	pump_tank4_last = pump_tank4_sw
-	pump_tank1_1_last = pump_tank1_1_sw
-	pump_tank1_2_last = pump_tank1_2_sw
-	pump_tank1_3_last = pump_tank1_3_sw
-	pump_tank1_4_last = pump_tank1_4_sw
-	
-	fuel_trans_last = fuel_trans_sw
-	fuel_porc_last = fuel_porc_sw
-	fuel_level_last = fuel_level_sw
-	fuel_flow_mode_last = fuel_flow_mode_sw
-	fuel_flow_on_last = fuel_flow_on_sw
-	
-	fuel_meter_on_last = fuel_meter_on_sw
-	fuel_meter_mech_on_last = fuel_meter_mech_on_sw
-	fire_valve_1_last = fire_valve_1_sw
-	fire_valve_2_last = fire_valve_2_sw
-	fire_valve_3_last = fire_valve_3_sw
-	
-end
-
--- make caps sound --
-
-local fuel_trans_cap_last = get(fuel_trans_cap)
-local fuel_porc_cap_last = get(fuel_porc_cap)
-local fuel_flow_on_cap_last = get(fuel_flow_on_cap)
-local fire_valve_1_cap_last = get(fire_valve_1_cap)
-local fire_valve_2_cap_last = get(fire_valve_2_cap)
-local fire_valve_3_cap_last = get(fire_valve_3_cap)
-
-local function caps_check()
-	local fuel_trans_cap_sw = get(fuel_trans_cap)
-	local fuel_porc_cap_sw = get(fuel_porc_cap)
-	local fuel_flow_on_cap_sw = get(fuel_flow_on_cap)
-	local fire_valve_1_cap_sw = get(fire_valve_1_cap)
-	local fire_valve_2_cap_sw = get(fire_valve_2_cap)
-	local fire_valve_3_cap_sw = get(fire_valve_3_cap)
-
-	local cap_change = fuel_trans_cap_sw + fuel_porc_cap_sw + fuel_flow_on_cap_sw + fire_valve_1_cap_sw + fire_valve_2_cap_sw + fire_valve_3_cap_sw
-	
-	cap_change = cap_change - fuel_trans_cap_last - fuel_porc_cap_last - fuel_flow_on_cap_last - fire_valve_1_cap_last - fire_valve_2_cap_last - fire_valve_3_cap_last
-	
-	if cap_change ~= 0 then sasl.al.playSample(cap_sound, false) end -- play sound
-	
-	fuel_trans_cap_last = fuel_trans_cap_sw
-	fuel_porc_cap_last = fuel_porc_cap_sw
-	fuel_flow_on_cap_last = fuel_flow_on_cap_sw
-	fire_valve_1_cap_last = fire_valve_1_cap_sw
-	fire_valve_2_cap_last = fire_valve_2_cap_sw
-	fire_valve_3_cap_last = fire_valve_3_cap_sw
-	
-	-- fix position of switcher under caps
-	if fuel_porc_cap_sw == 0 then set(fuel_porc, 0) end
-	
-end
-
--- mechanic fuel meters
- 
-local mech_counter = 0
- 
-local function mech_fuel_meter()
-	
-	local power = get(fuel_meter_mech_on) == 1 and (get(bus27_volt_left) > 13 or get(bus27_volt_right) > 13) -- need to check it out
-	
-	local fuel_summ_calc = get(fuel_meter_mech)
-	
-	mech_counter = mech_counter + passed
-	
-	if fuel_summ_calc > 0 and power and mech_counter > 10 then 
-		fuel_summ_calc = fuel_summ_calc - (get(ENGN_FF_1) * (1 - get(fuel_flowmeter_1_fail)) + get(ENGN_FF_2) * (1 - get(fuel_flowmeter_2_fail)) + get(ENGN_FF_3) * (1 - get(fuel_flowmeter_3_fail))) * mech_counter
-		mech_counter = 0
-	end
-	
-	set(fuel_meter_mech, fuel_summ_calc)
-
-end
-
--- fuel meters --
-local summ_act = 0
-local tank1_act = 0
-local tank2L_act = 0
-local tank2R_act = 0
-local tank3L_act = 0
-local tank3R_act = 0
-local tank4_act = 0
-
-local summ_front_act = 0
-
-local function electric_meters()
-	local power = get(fuel_meter_on) == 1 and (get(bus27_volt_left) > 13 or get(bus27_volt_right) > 13) and (get(bus115_1_volt) > 110 or get(bus115_3_volt) > 110)
-	
-	local tank1_need = get(fuel_meter_tank1)
-	local tank2L_need = get(fuel_meter_tank2_left)
-	local tank2R_need = get(fuel_meter_tank2_right)
-	local tank3L_need = get(fuel_meter_tank3_left)
-	local tank3R_need = get(fuel_meter_tank3_right)
-	local tank4_need = get(fuel_meter_tank4)
-	local summ_front_need = get(fuel_front_ind)
-	local summ_need = get(fuel_meter_summ)
-	
-	if power then 
-		tank1_need = get(tank1_w)
-		tank2L_need = get(tank2L_w)
-		tank2R_need = get(tank2R_w)
-		tank3L_need = get(tank3L_w)
-		tank3R_need = get(tank3R_w)
-		tank4_need = get(tank4_w)
-		-- set test buttons
-
-		if get(fuel_meter_tank2_zero) == 1 then
-			tank2L_need = 0
-			tank2R_need = 0
-		elseif get(fuel_meter_tank2_max) == 1 then
-			tank2L_need = 11400
-			tank2R_need = 11400
-		end
-		
-		if get(fuel_meter_tank3_zero) == 1 then
-			tank3L_need = 0
-			tank3R_need = 0
-		elseif get(fuel_meter_tank3_max) == 1 then
-			tank3L_need = 6400
-			tank3R_need = 6400
-		end
-		
-		if get(fuel_meter_tank4_zero) == 1 then
-			tank4_need = 0
-		elseif get(fuel_meter_tank4_max) == 1 then
-			tank4_need = 8000
-		end
-		
-		-- summ depends on other meters
-		summ_need = tank2L_act + tank2R_act + tank3L_act + tank3R_act + tank4_act + tank1_act
-		summ_front_need = summ_need
-		
-		if get(fuel_front_zero) == 1 then
-			summ_front_need = 0
-		elseif get(fuel_front_max) == 1 then
-			summ_front_need = 47000
-		end
-		
-		if get(fuel_meter_summ_zero) == 1 then
-			summ_need = 0
-			tank1_need = 0
-		elseif get(fuel_meter_summ_max) == 1 then
-			summ_need = 47000
-			tank1_need = 4700
-		end
-		
-	end
-
-	-- set smooth movenents
-	
-	if get(fuel_meter_summ_fail) == 0 then
-		if summ_act < summ_need - 1000 then summ_act = summ_act + passed * 10000 * 1.5
-		elseif summ_act > summ_need + 1000 then summ_act = summ_act - passed * 10000 * 1.5
-		else summ_act = summ_act + (summ_need - summ_act) * passed * 10
-		end
-	end
-	
-	if get(fuel_meter_1_fail) == 0 then
-		if tank1_act < tank1_need - 100 then tank1_act = tank1_act + passed * 1000 * 1.5
-		elseif tank1_act > tank1_need + 100 then tank1_act = tank1_act - passed * 1000 * 1.5
-		else tank1_act = tank1_act + (tank1_need - tank1_act) * passed * 10
-		end
-	end
-	
-	if get(fuel_meter_2l_fail) == 0 then
-		if tank2L_act < tank2L_need - 100 then tank2L_act = tank2L_act + passed * 2000 * 1.8
-		elseif tank2L_act > tank2L_need + 100 then tank2L_act = tank2L_act - passed * 2000 * 1.8
-		else tank2L_act = tank2L_act + (tank2L_need - tank2L_act) * passed * 15
-		end
-	end
-	
-	if get(fuel_meter_2r_fail) == 0 then
-		if tank2R_act < tank2R_need - 100 then tank2R_act = tank2R_act + passed * 2000 * 1.8
-		elseif tank2R_act > tank2R_need + 100 then tank2R_act = tank2R_act - passed * 2000 * 1.8
-		else tank2R_act = tank2R_act + (tank2R_need - tank2R_act) * passed * 15
-		end
-	end
-	
-	if get(fuel_meter_3l_fail) == 0 then	
-		if tank3L_act < tank3L_need - 100 then tank3L_act = tank3L_act + passed * 1000 * 2
-		elseif tank3L_act > tank3L_need + 100 then tank3L_act = tank3L_act - passed * 1000 * 2
-		else tank3L_act = tank3L_act + (tank3L_need - tank3L_act) * passed * 15
-		end
-	end
-	
-	if get(fuel_meter_3r_fail) == 0 then
-		if tank3R_act < tank3R_need - 100 then tank3R_act = tank3R_act + passed * 1000 * 2
-		elseif tank3R_act > tank3R_need + 100 then tank3R_act = tank3R_act - passed * 1000 * 2
-		else tank3R_act = tank3R_act + (tank3R_need - tank3R_act) * passed * 15
-		end
-	end
-	
-	if get(fuel_meter_4_fail) == 0 then
-		if tank4_act < tank4_need - 100 then tank4_act = tank4_act + passed * 1000 * 2.5
-		elseif tank4_act > tank4_need + 100 then tank4_act = tank4_act - passed * 1000 * 2.5
-		else tank4_act = tank4_act + (tank4_need - tank4_act) * passed * 10
-		end
-	end
-	
-	if get(fuel_meter_summ_fail) == 0 then
-		if summ_front_act < summ_front_need - 1000 then summ_front_act = summ_front_act + passed * 10000 * 1.5
-		elseif summ_front_act > summ_front_need + 1000 then summ_front_act = summ_front_act - passed * 10000 * 1.5
-		else summ_front_act = summ_front_act + (summ_front_need - summ_front_act) * passed * 10
-		end
-	end
-	
-	-- set results
-	set(fuel_meter_summ, summ_act)
-	set(fuel_meter_tank1, tank1_act)
-	set(fuel_meter_tank2_left, tank2L_act)
-	set(fuel_meter_tank2_right, tank2R_act)
-	set(fuel_meter_tank3_left, tank3L_act)
-	set(fuel_meter_tank3_right, tank3R_act)
-	set(fuel_meter_tank4, tank4_act)
-	
-	set(fuel_front_ind, summ_front_act)
-
-end
-
 local sim_start_timer = 0
 
-function update()
-	
-	passed = get(frame_time)
-	
-	-- reset switchers
-	sim_start_timer = sim_start_timer + passed
-	if sim_start_timer > 0.3 then 
-		if notLoaded then reset_switchers() end
-	
-		check_switchers()
-		caps_check()
-	end
-local MASTER = get(ismaster) ~= 1	
-	
-if MASTER then	
-	mech_fuel_meter()
+---------------------------------------------------------------------------
+-- Schreib-Cache (Reset bei SmartCopilot-Rollenwechsel)
+---------------------------------------------------------------------------
+local cache = {}
+local was_master = nil
+
+local put = set
+if USE_WRITE_CACHE then
+    put = function(h, v)
+        if cache[h] ~= v then
+            cache[h] = v
+            set(h, v)
+        end
+    end
 end
-	electric_meters()
-	lamps()
-	
+
+---------------------------------------------------------------------------
+-- Startreset (einmalig)
+---------------------------------------------------------------------------
+local function reset_switchers()
+    if isColdAndDarkStart() and get(P.eng1_N1) < 5
+        and get(P.eng2_N1) < 5 and get(P.eng3_N1) < 5 then
+        for i = 1, #RESET_SW do set(RESET_SW[i], 0) end
+    end
+    notLoaded = false
+end
+
+---------------------------------------------------------------------------
+-- Bediengeräusche (Summen-Logik wie im Original)
+---------------------------------------------------------------------------
+local sw_last = {}
+for i = 1, #SW do sw_last[i] = get(SW[i]) end
+local level_last = get(P.fuel_level)
+local meter_last = get(P.fuel_meter_on)
+local mech_last = get(P.fuel_meter_mech_on)
+
+-- Liefert den aktuellen Wert von fuel_porc für die Kappenlogik
+local function check_switchers(level_sw, meter_sw, mech_sw)
+    local change = level_sw + meter_sw + mech_sw
+        - level_last - meter_last - mech_last
+    local porc_sw = 0
+    for i = 1, #SW do
+        local v = get(SW[i])
+        change = change + v - sw_last[i]
+        sw_last[i] = v
+        if i == 1 then porc_sw = v end
+    end
+    level_last, meter_last, mech_last = level_sw, meter_sw, mech_sw
+
+    if change ~= 0 then playSample(switcher_sound, false) end
+    return porc_sw
+end
+
+local cap_last = {}
+for i = 1, #CAPS do cap_last[i] = get(CAPS[i]) end
+
+local function caps_check(porc_sw)
+    local change = 0
+    for i = 1, #CAPS do
+        local v = get(CAPS[i])
+        change = change + v - cap_last[i]
+        cap_last[i] = v
+    end
+    if change ~= 0 then playSample(cap_sound, false) end
+
+    -- Geschlossene Kappe hält fuel_porc auf 0 (nur schreiben, wenn nötig)
+    if cap_last[2] == 0 and porc_sw ~= 0 then set(P.fuel_porc, 0) end
+end
+
+---------------------------------------------------------------------------
+-- Mechanischer Zähler (nur Master)
+---------------------------------------------------------------------------
+local mech_counter = 0
+
+local function mech_fuel_meter(bus_l, bus_r, mech_sw)
+    local cur = get(P.fuel_meter_mech)
+    local calc = cur
+
+    mech_counter = mech_counter + passed
+
+    if calc > 0 and mech_counter > 10 and mech_sw == 1
+        and (bus_l > 13 or bus_r > 13) then
+        calc = calc - (get(P.ENGN_FF_1) * (1 - get(P.fuel_flowmeter_1_fail))
+            + get(P.ENGN_FF_2) * (1 - get(P.fuel_flowmeter_2_fail))
+            + get(P.ENGN_FF_3) * (1 - get(P.fuel_flowmeter_3_fail)))
+            * mech_counter
+        mech_counter = 0
+    end
+
+    -- Zurückschreiben nur bei Änderung (Altwert im selben Frame gelesen)
+    if calc ~= cur then set(P.fuel_meter_mech, calc) end
+end
+
+---------------------------------------------------------------------------
+-- Elektrische Kraftstoffmesser
+---------------------------------------------------------------------------
+local summ_act, summ_front_act = 0, 0
+local tank1_act, tank4_act = 0, 0
+local tank2L_act, tank2R_act = 0, 0
+local tank3L_act, tank3R_act = 0, 0
+
+-- Zeigerglättung, gleiche Rechenreihenfolge wie im Original
+local function smooth(act, need, band, r1, r2, k)
+    if act < need - band then
+        return act + passed * r1 * r2
+    elseif act > need + band then
+        return act - passed * r1 * r2
+    end
+    return act + (need - act) * passed * k
+end
+
+local function electric_meters(bus_l, bus_r, meter_sw)
+    local power = meter_sw == 1 and (bus_l > 13 or bus_r > 13)
+        and (get(P.bus115_1_volt) > 110 or get(P.bus115_3_volt) > 110)
+
+    local summ_need, front_need, t1, t2L, t2R, t3L, t3R, t4
+
+    if power then
+        if get(P.fuel_meter_tank2_zero) == 1 then
+            t2L, t2R = 0, 0
+        elseif get(P.fuel_meter_tank2_max) == 1 then
+            t2L, t2R = 11400, 11400
+        else
+            t2L, t2R = get(P.tank2L_w), get(P.tank2R_w)
+        end
+
+        if get(P.fuel_meter_tank3_zero) == 1 then
+            t3L, t3R = 0, 0
+        elseif get(P.fuel_meter_tank3_max) == 1 then
+            t3L, t3R = 6400, 6400
+        else
+            t3L, t3R = get(P.tank3L_w), get(P.tank3R_w)
+        end
+
+        if get(P.fuel_meter_tank4_zero) == 1 then
+            t4 = 0
+        elseif get(P.fuel_meter_tank4_max) == 1 then
+            t4 = 8000
+        else
+            t4 = get(P.tank4_w)
+        end
+
+        -- Summe aus den Einzelzeigern des letzten Frames
+        summ_need = tank2L_act + tank2R_act + tank3L_act + tank3R_act
+            + tank4_act + tank1_act
+        front_need = summ_need
+
+        if get(P.fuel_front_zero) == 1 then
+            front_need = 0
+        elseif get(P.fuel_front_max) == 1 then
+            front_need = 47000
+        end
+
+        if get(P.fuel_meter_summ_zero) == 1 then
+            summ_need, t1 = 0, 0
+        elseif get(P.fuel_meter_summ_max) == 1 then
+            summ_need, t1 = 47000, 4700
+        else
+            t1 = get(P.tank1_w)
+        end
+    else
+        -- Ohne Strom: Sollwert = angezeigter Wert, Zeiger bleiben stehen
+        summ_need = get(P.fuel_meter_summ)
+        front_need = get(P.fuel_front_ind)
+        t1 = get(P.fuel_meter_tank1)
+        t2L = get(P.fuel_meter_tank2_left)
+        t2R = get(P.fuel_meter_tank2_right)
+        t3L = get(P.fuel_meter_tank3_left)
+        t3R = get(P.fuel_meter_tank3_right)
+        t4 = get(P.fuel_meter_tank4)
+    end
+
+    -- Ein ausgefallener Messer friert seinen Zeiger ein
+    if get(P.fuel_meter_summ_fail) == 0 then
+        summ_act = smooth(summ_act, summ_need, 1000, 10000, 1.5, 10)
+        summ_front_act = smooth(summ_front_act, front_need,
+            1000, 10000, 1.5, 10)
+    end
+    if get(P.fuel_meter_1_fail) == 0 then
+        tank1_act = smooth(tank1_act, t1, 100, 1000, 1.5, 10)
+    end
+    if get(P.fuel_meter_2l_fail) == 0 then
+        tank2L_act = smooth(tank2L_act, t2L, 100, 2000, 1.8, 15)
+    end
+    if get(P.fuel_meter_2r_fail) == 0 then
+        tank2R_act = smooth(tank2R_act, t2R, 100, 2000, 1.8, 15)
+    end
+    if get(P.fuel_meter_3l_fail) == 0 then
+        tank3L_act = smooth(tank3L_act, t3L, 100, 1000, 2, 15)
+    end
+    if get(P.fuel_meter_3r_fail) == 0 then
+        tank3R_act = smooth(tank3R_act, t3R, 100, 1000, 2, 15)
+    end
+    if get(P.fuel_meter_4_fail) == 0 then
+        tank4_act = smooth(tank4_act, t4, 100, 1000, 2.5, 10)
+    end
+
+    put(P.fuel_meter_summ, summ_act)
+    put(P.fuel_meter_tank1, tank1_act)
+    put(P.fuel_meter_tank2_left, tank2L_act)
+    put(P.fuel_meter_tank2_right, tank2R_act)
+    put(P.fuel_meter_tank3_left, tank3L_act)
+    put(P.fuel_meter_tank3_right, tank3R_act)
+    put(P.fuel_meter_tank4, tank4_act)
+    put(P.fuel_front_ind, summ_front_act)
+end
+
+---------------------------------------------------------------------------
+-- Lampen
+---------------------------------------------------------------------------
+local L_lb, L_tb = 0, 0
+
+-- Boolesche Quelle: max(bool2int(on) * lamps_brt, test_btn)
+local function lp(on)
+    return max((on and 1 or 0) * L_lb, L_tb)
+end
+
+-- Numerische Quelle: max(x * lamps_brt, test_btn)
+local function lv(x)
+    return max(x * L_lb, L_tb)
+end
+
+local function lamps(bus_l, bus_r, level_sw)
+    local lb = max((max(bus_l, bus_r) - 10) / 18.5, 0)
+
+    -- Ohne Strom: alle Formeln ergeben 0 (auch Lampentest)
+    if lb == 0 then
+        for i = 1, #ALL_LAMPS do put(ALL_LAMPS[i], 0) end
+        return
+    end
+
+    L_lb = lb
+    L_tb = get(P.test_lamps) * max((bus_r - 10) / 18.5, 0)
+
+    local p2L = get(P.pump_tank2_left_work)
+    local p2R = get(P.pump_tank2_right_work)
+    local p3L = get(P.pump_tank3_left_work)
+    local p3R = get(P.pump_tank3_right_work)
+    local p4 = get(P.pump_tank4_work)
+    local lvl2 = get(P.auto_tank_level_2)
+    local lvl3 = get(P.auto_tank_level_3)
+
+    put(P.fuel_tank3_left_fail, lp(lvl3 == -1))
+    put(P.fuel_tank2_left_fail, lp(lvl2 == -1))
+    put(P.fuel_tank3_right_fail, lp(lvl3 == 1))
+    put(P.fuel_tank2_right_fail, lp(lvl2 == 1))
+
+    put(P.fuel_pump_left_5, lp(p2L > 0))
+    put(P.fuel_pump_left_6, lp(p2L > 1))
+    put(P.fuel_pump_left_7, lp(p3L > 2))
+    put(P.fuel_pump_left_8, lp(p3L > 0))
+    put(P.fuel_pump_left_9, lp(p3L > 1))
+
+    put(P.fuel_pump_right_5, lp(p2R > 1))
+    put(P.fuel_pump_right_6, lp(p2R > 0))
+    put(P.fuel_pump_right_7, lp(p3R > 0))
+    put(P.fuel_pump_right_8, lp(p3R > 2))
+    put(P.fuel_pump_right_9, lp(p3R > 1))
+
+    put(P.fuel_pump_10, lp(p4 > 0))
+    put(P.fuel_pump_11, lp(p4 > 1))
+
+    put(P.fuel_pump_1, lv(get(P.pump_tank1_1_work)))
+    put(P.fuel_pump_2, lv(get(P.pump_tank1_2_work)))
+    put(P.fuel_pump_3, lv(get(P.pump_tank1_3_work)))
+    put(P.fuel_pump_4, lv(get(P.pump_tank1_4_work)))
+
+    put(P.fuel_cut_off_1, lp(get(P.fire_vlv_open_1) > 0.7))
+    put(P.fuel_cut_off_2, lp(get(P.fire_vlv_open_2) > 0.7))
+    put(P.fuel_cut_off_3, lp(get(P.fire_vlv_open_3) > 0.7))
+
+    local turn = get(P.auto_tanks_turn)
+    put(P.fuel_flow_from_2, lp(turn == 1 or turn == 2))
+    put(P.fuel_flow_from_3, lp(turn == 2 or turn == 3))
+    put(P.fuel_flow_from_4, lp(turn == 4))
+    put(P.fuel_flow_auto_fail, lp(turn == 0))
+
+    local rt = lv(get(P.reserv_trans))
+    put(P.fuel_reserv_trans_left, rt)
+    put(P.fuel_reserv_trans_right, rt)
+
+    put(P.fuel_porc_reserv, lv(get(P.reserv_pump_test)))
+
+    -- Schalter 0 ergibt 0, Ausfall-DataRef dann nicht lesen
+    local automat = 0
+    if level_sw ~= 0 then
+        automat = level_sw * (1 - get(P.fuel_level_fail))
+    end
+    put(P.fuel_level_automat, lv(automat))
+end
+
+---------------------------------------------------------------------------
+-- Update
+---------------------------------------------------------------------------
+function update()
+    passed = get(P.frame_time)
+
+    sim_start_timer = sim_start_timer + passed
+    local started = sim_start_timer > 0.3
+    if started and notLoaded then reset_switchers() end
+
+    -- Gemeinsame Schalterwerte nach einem möglichen Reset lesen
+    local level_sw = get(P.fuel_level)
+    local meter_sw = get(P.fuel_meter_on)
+    local mech_sw = get(P.fuel_meter_mech_on)
+
+    if started then
+        local porc_sw = check_switchers(level_sw, meter_sw, mech_sw)
+        caps_check(porc_sw)
+    end
+
+    local MASTER = get(P.ismaster) ~= 1
+    if MASTER ~= was_master then
+        cache = {}
+        was_master = MASTER
+    end
+
+    local bus_l = get(P.bus27_volt_left)
+    local bus_r = get(P.bus27_volt_right)
+
+    if MASTER then
+        mech_fuel_meter(bus_l, bus_r, mech_sw)
+    end
+    electric_meters(bus_l, bus_r, meter_sw)
+    lamps(bus_l, bus_r, level_sw)
 end

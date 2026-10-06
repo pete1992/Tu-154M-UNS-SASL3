@@ -36,39 +36,20 @@ end
 
 defineProps({
     { "xp_version", "sim/version/xplane_internal_version", globalPropertyi },
-
     -- GPU state and controls
-    { "gpu_present", "tu154/custom/anim/gpu_present", globalPropertyi },
+    { "gpu_present", "tu154/custom/anim/gpu_present", globalPropertyi},
     { "gpu_work_anim", "tu154/custom/anim/gpu_work", globalPropertyf },
-    -- { "gpu_volt", "tu154/custom/elec/gpu_volt", globalPropertyf }, -- Electrical binding moved to the worker model.
-    -- { "gpu_amp", "tu154/custom/elec/gpu_amp", globalPropertyf }, -- Electrical binding moved to the worker model.
-    -- { "gpu_overload", "tu154/custom/elec/gpu_overload", globalPropertyi }, -- Electrical binding moved to the worker model.
-    -- { "gpu_on", "tu154/custom/switchers/eng/gpu_on", globalPropertyi }, -- Electrical binding moved to the worker model.
-    -- { "gpu_work_bus", "tu154/custom/elec/gpu_work", globalPropertyi }, -- Electrical binding moved to the worker model.
-
-    -- 27 V control-power buses
-    -- { "DC_27_volt1", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, -- Electrical binding moved to the worker model.
-    -- { "DC_27_volt2", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, -- Electrical binding moved to the worker model.
-
-    -- Simulation state
-    -- { "GS", "sim/flightmodel/position/groundspeed", globalPropertyf }, -- Electrical binding moved to the worker model.
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
-
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf},
     -- View state
     { "external_view", "sim/graphics/view/view_is_external", globalPropertyi },
-
     -- Aircraft position
     { "local_x", "sim/flightmodel/position/local_x", globalPropertyf },
     { "local_y", "sim/flightmodel/position/local_y", globalPropertyf },
     { "local_z", "sim/flightmodel/position/local_z", globalPropertyf },
-
     -- Camera position
     { "view_x", "sim/graphics/view/view_x", globalPropertyf },
     { "view_y", "sim/graphics/view/view_y", globalPropertyf },
     { "view_z", "sim/graphics/view/view_z", globalPropertyf },
-
-    -- SmartCopilot
-    -- { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Electrical binding moved to the worker model.
 })
 
 local XP11 = get(xp_version) < 120000

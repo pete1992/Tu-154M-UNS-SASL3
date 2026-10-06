@@ -1,4 +1,3 @@
--- createGlobalPropertyi("tu154/custom/switchers/ovhd/stabil_ga_reserve", 1  )
 createGlobalPropertyf("scp/api/ismaster", 0 )
 createGlobalPropertyf("scp/api/hascontrol_1", 0 )
 createGlobalPropertyf("tu154/custom/eng/apu_fuel_last", 0)
@@ -9,7 +8,6 @@ createGlobalPropertyf("tu154/custom/gps/rxp_course", 0)
 createGlobalPropertyf("tu154/custom/gps/rxp_deviation", 0)
 createGlobalPropertyi("tu154/custom/gps/rxp_flag", 0)
 createGlobalPropertyf("tu154/custom/xap/An24_gauges/mrp_cc", 0)
--- createGlobalPropertyi("tu154/custom/tcas/vvi_left_new",0)
 createGlobalPropertyi("tu154/custom/failures/apu_pta6_fail", 0) -- PTA-6A tachometer converter failure
 createGlobalPropertyf("tu154/custom/anim/tiller_pos", 0)
 createGlobalPropertyi("tu154/custom/hydro/nosewheel_turn_power", 0)
