@@ -47,16 +47,13 @@ local check_time = math.random(15, 30)  -- seconds between checks
 -----------------------------------------------------------------------
 function update()
     local passed = get(frame_time) or 0
-    local MASTER = (get(ismaster) == 1)
+    local MASTER = (get(ismaster) ~= 1)
 
     if not MASTER then return end
 
     local failure_level = get(failures_enabled) or 0
-    local FAIL = failure_level
-    -- same shaping as original
-    FAIL = FAIL * 0.05 * (4 ^ (FAIL * 0.5))
 
-    if FAIL > 0 then
+    if failure_level > 0 then
         fail_counter = fail_counter + passed
         if fail_counter > check_time then
             fail_counter = 0
@@ -64,6 +61,9 @@ function update()
 
             -- base probability used below mirrors original scaling
             if failure_level >= 2 then -- LOW retains causal damage only.
+                local FAIL = failure_level
+                -- same shaping as original
+                FAIL = FAIL * 0.05 * (4 ^ (FAIL * 0.5))
             local p = 0.00001 * FAIL * 0.3
 
             -- AT channels

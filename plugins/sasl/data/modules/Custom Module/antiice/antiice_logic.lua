@@ -88,7 +88,7 @@ defineProps({
     { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf },
     { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf },
     { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf },
-    {"termo", "sim/weather/temperature_ambient_c", globalPropertyf },
+    {"termo", "sim/weather/aircraft/temperature_ambient_deg_c", globalPropertyf },
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     { "sim_paused", "sim/time/paused", globalPropertyi },
     { "IAS", "sim/flightmodel/position/indicated_airspeed", globalPropertyf },
@@ -381,7 +381,7 @@ function update()
 
     -- Wing and stabilizer duct temperatures 
     -- Schreiben nur bei Änderung: der Altwert wurde im selben Frame gelesen.
-    local indicated_airspeed = get(P.IAS)l
+    local indicated_airspeed = get(P.IAS)
     local wing_old = get(P.wing_heat_t)
     local wing_tube = wing_old
         + (out_term - wing_old) * passed * 0.1

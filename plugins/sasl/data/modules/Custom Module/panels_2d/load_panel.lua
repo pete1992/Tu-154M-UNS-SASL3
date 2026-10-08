@@ -73,19 +73,42 @@ defineProps({
     -- { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
     { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty },
     { "payload", "sim/flightmodel/weight/m_fixed", globalPropertyf },
-    { "CG_load", "sim/flightmodel/misc/cgz_ref_to_default", globalPropertyf },
-    { "fuel_q_1", "sim/flightmodel/weight/m_fuel[0]", globalProperty },
-    { "fuel_q_4", "sim/flightmodel/weight/m_fuel[1]", globalProperty },
-    { "fuel_q_2R", "sim/flightmodel/weight/m_fuel[2]", globalProperty },
-    { "fuel_q_2L", "sim/flightmodel/weight/m_fuel[3]", globalProperty },
-    { "fuel_q_3R", "sim/flightmodel/weight/m_fuel[4]", globalProperty },
-    { "fuel_q_3L", "sim/flightmodel/weight/m_fuel[5]", globalProperty },
+    { "CG_load", "sim/flightmodel2/misc/zfw_cg_offset_z", globalPropertyf }, -- Read-only ZFW CG, m
+    { "CG_total", "sim/flightmodel2/misc/cg_offset_z", globalPropertyf }, -- Writable CG including fuel, m
+    { "native_empty_mass", "sim/aircraft/weight/acf_m_empty", globalPropertyf },
+    { "fuel_q_1", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 },
+    { "fuel_q_4", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 2 },
+    { "fuel_q_2R", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 3 },
+    { "fuel_q_2L", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 4 },
+    { "fuel_q_3R", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 5 },
+    { "fuel_q_3L", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 6 },
+    { "fuel_q_7", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 7 },
+    { "fuel_q_8", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 8 },
+    { "fuel_q_9", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 9 },
     { "paylod_set", "tu154/custom/payload/paylod_set", globalPropertyf },
     { "cg_set", "tu154/custom/payload/cg_set", globalPropertyf },
     { "load_fuel_btn", "tu154/custom/payload/load_fuel_btn", globalPropertyi },
     { "load_fast_btn", "tu154/custom/payload/load_fast_btn", globalPropertyi },
     { "load_slow_btn", "tu154/custom/payload/load_slow_btn", globalPropertyi },
 })
+
+-- Preserve ZFW loading targets while the writable native CG includes fuel.
+-- Use fresh masses: m_total can lag after a payload or fuel write in this callback.
+local native_fuel_tanks = {
+    fuel_q_1, fuel_q_4, fuel_q_2R, fuel_q_2L, fuel_q_3R, fuel_q_3L,
+    fuel_q_7, fuel_q_8, fuel_q_9,
+}
+
+local function setZfwCg(target)
+    local zfw_mass = get(native_empty_mass) + get(payload)
+    local total_mass = zfw_mass
+    for _, tank in ipairs(native_fuel_tanks) do
+        total_mass = total_mass + get(tank)
+    end
+    if zfw_mass <= 0 or total_mass <= 0 then return end
+    local total_target = get(CG_total) + (target - get(CG_load)) * zfw_mass / total_mass
+    set(CG_total, total_target)
+end
 
 include("fuel_tables.lua")
 
@@ -220,9 +243,9 @@ end
 
 -- initial weights setup
 	--set(payload, 0)
-	set(CG_load, 0.077616)
-	--set(CG_load, (26 - 25) * 5.28 / 100 - 0.3)
-	if get(gear1_deflect) > 0 then set(CG_load, (26 - 25) * 5.28 / 100) end
+	setZfwCg(0.077616)
+	--setZfwCg((26 - 25) * 5.28 / 100 - 0.3)
+	if get(gear1_deflect) > 0 then setZfwCg((26 - 25) * 5.28 / 100) end
 	set(fuel_q_1, 3300)
 	set(fuel_q_4, 0)
 	set(fuel_q_2L, 1500)
@@ -454,9 +477,9 @@ function update()
 	if get(load_fast_btn) == 1 then
 		set(payload, STATE.zero_fuel_weight - 54865)
 		if get(gear1_deflect) > 0 then 
-			set(CG_load, (STATE.zfw_cg - 25) * 5.28 / 100) 
+			setZfwCg((STATE.zfw_cg - 25) * 5.28 / 100)
 		else
-			set(CG_load, (STATE.zfw_cg - 25) * 5.28 / 100 - 0.2)
+			setZfwCg((STATE.zfw_cg - 25) * 5.28 / 100 - 0.2)
 		end
 		set(fuel_q_1, get(tank_1_pr))
 		set(fuel_q_4, get(tank_4_pr))

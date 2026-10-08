@@ -52,7 +52,7 @@ defineProps({
     -- Aircraft elevation above mean sea level
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },
     -- Sea-level barometric pressure
-    { "baro_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf },
+    { "baro_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
     -- Outside air temperature
     { "outside_air_temp", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf },
     -- Engine 1 ABSU throttle movement command
@@ -88,6 +88,8 @@ defineProps({
     { "ismaster", "scp/api/ismaster", globalPropertyf },
 	-- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 set(override, 1) 
 set(sim_rud_1, 0.25)
@@ -326,7 +328,7 @@ function update()
 	local joy_rud_MAX_3 = 1
 	local joy_rud_MIN_3 = 0.175
 	local alt = get(msl_alt) * 3.28083 
-	local alt_baro = alt * 0.3048 + (29.92 - get(baro_press)) * 1000 * 0.3048 
+	local alt_baro = alt * 0.3048 + (29.92 - (get(baro_press) * PA_TO_INHG)) * 1000 * 0.3048
 	local height_coef = line(alt_baro, 0, 1, 11000, 0.975) 
 	local stall_1 = get(comsta0) == 6
 	if stall_1 then 

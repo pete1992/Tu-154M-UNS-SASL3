@@ -54,11 +54,9 @@ local MASTER = get(ismaster) ~= 1
 if MASTER then	
 
 	local failure_level = get(failures_enabled)
-	local FAIL = failure_level
-	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 	
 	-- check failures
-	if FAIL > 0 then
+	if failure_level > 0 then
 		
 		fail_counter = fail_counter + passed
 		
@@ -68,6 +66,8 @@ if MASTER then
 			
 			-- random failures
 			if failure_level >= 2 then -- LOW retains causal damage only.
+				local FAIL = failure_level
+				FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 			if get(fuel_porc_fail) ~= 1 then set(fuel_porc_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(fuel_auto_fail) ~= 1 then set(fuel_auto_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(fuel_level_fail) ~= 1 then set(fuel_level_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end

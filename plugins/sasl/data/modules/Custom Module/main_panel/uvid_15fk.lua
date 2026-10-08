@@ -14,7 +14,7 @@ defineProps({
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
     {"uvid_fail", "tu154/custom/failures/uvid15_fail", globalPropertyi},
     {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
-    {"msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
+    {"msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf}, -- QNH in Pa; converted to inHg at reads.
     {"uvid_needle_left", "tu154/custom/gauges/alt/uvid_needle_left", globalPropertyf},
     {"uvid_feet_counter", "tu154/custom/gauges/alt/uvid_feet_counter", globalPropertyf},
     {"uvid_hundreads_counter", "tu154/custom/gauges/alt/uvid_hundreads_counter", globalPropertyf},
@@ -29,6 +29,8 @@ defineProps({
     {"sim_barometer_setting", "sim/cockpit/misc/barometer_setting", globalPropertyf},
     {"vd15_lamp", "tu154/custom/lights/small/vd15_lamp", globalPropertyf},
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 -- Sounds.
 local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
@@ -74,7 +76,7 @@ function update()
 
         uvid_alt =
             left_MSL
-            + (press_inHg - get(msl_press)) * 1000
+            + (press_inHg - (get(msl_press) * PA_TO_INHG)) * 1000
     end
 
     -- Smooth needle and drum movement.

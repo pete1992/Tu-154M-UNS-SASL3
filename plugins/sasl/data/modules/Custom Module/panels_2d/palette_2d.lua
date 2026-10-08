@@ -31,13 +31,18 @@ defineProps({
     { "show_palette", "tu154/custom/panels/show_palette", globalPropertyi }, --
 
     { "payload", "sim/flightmodel/weight/m_fixed", globalPropertyf },  -- payload weight, kg
-    { "CG_load", "sim/flightmodel/misc/cgz_ref_to_default", globalPropertyf }, -- Center of Gravity reference to default, m
-    { "fuel_q_1", "sim/flightmodel/weight/m_fuel[0]", globalProperty }, -- fuel quantity for tank 1
-    { "fuel_q_4", "sim/flightmodel/weight/m_fuel[1]", globalProperty }, -- fuel quantity for tank 4
-    { "fuel_q_2R", "sim/flightmodel/weight/m_fuel[2]", globalProperty }, -- fuel quantity for tank 2R
-    { "fuel_q_2L", "sim/flightmodel/weight/m_fuel[3]", globalProperty }, -- fuel quantity for tank 2L
-    { "fuel_q_3R", "sim/flightmodel/weight/m_fuel[4]", globalProperty }, -- fuel quantity for tank 3R
-    { "fuel_q_3L", "sim/flightmodel/weight/m_fuel[5]", globalProperty }, -- fuel quantity for tank 3L
+    { "CG_load", "sim/flightmodel2/misc/zfw_cg_offset_z", globalPropertyf }, -- Read-only ZFW CG, m
+    { "CG_total", "sim/flightmodel2/misc/cg_offset_z", globalPropertyf }, -- Writable CG including fuel, m
+    { "native_empty_mass", "sim/aircraft/weight/acf_m_empty", globalPropertyf },
+    { "fuel_q_1", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 1 }, -- fuel quantity for tank 1
+    { "fuel_q_4", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 2 }, -- fuel quantity for tank 4
+    { "fuel_q_2R", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 3 }, -- fuel quantity for tank 2R
+    { "fuel_q_2L", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 4 }, -- fuel quantity for tank 2L
+    { "fuel_q_3R", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 5 }, -- fuel quantity for tank 3R
+    { "fuel_q_3L", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 6 }, -- fuel quantity for tank 3L
+    { "fuel_q_7", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 7 },
+    { "fuel_q_8", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 8 },
+    { "fuel_q_9", "sim/flightmodel/weight/m_fuel", globalPropertyfae, 9 },
 
     { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty },
 
@@ -57,6 +62,24 @@ defineProps({
     { "vr_28", "tu154/custom/speeds/vr_28", globalPropertyi }, --
     { "v2_28", "tu154/custom/speeds/v2_28", globalPropertyi }, --
 })
+
+-- Preserve ZFW loading targets while the writable native CG includes fuel.
+-- Use fresh masses: m_total can lag after a payload or fuel write in this callback.
+local native_fuel_tanks = {
+    fuel_q_1, fuel_q_4, fuel_q_2R, fuel_q_2L, fuel_q_3R, fuel_q_3L,
+    fuel_q_7, fuel_q_8, fuel_q_9,
+}
+
+local function setZfwCg(target)
+    local zfw_mass = get(native_empty_mass) + get(payload)
+    local total_mass = zfw_mass
+    for _, tank in ipairs(native_fuel_tanks) do
+        total_mass = total_mass + get(tank)
+    end
+    if zfw_mass <= 0 or total_mass <= 0 then return end
+    local total_target = get(CG_total) + (target - get(CG_load)) * zfw_mass / total_mass
+    set(CG_total, total_target)
+end
 
 local function calc_CG(weight, index) -- try to unify calculations of CG by diagramm
 	
@@ -287,11 +310,11 @@ function update()
 	
 	-- shift CG for flight
 	if not gear_press and not CG_shifted then
-		set(CG_load, get(CG_load) - 0.2)
+		setZfwCg(get(CG_load) - 0.2)
 		CG_shifted = true
 		CG_return = false
 	elseif gear_press and not CG_return then
-		set(CG_load, get(CG_load) + 0.2)
+		setZfwCg(get(CG_load) + 0.2)
 		CG_shifted = false
 		CG_return = true
 	end

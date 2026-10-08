@@ -38,6 +38,15 @@ defineProps({
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
     {"fire_sys_cc", "tu154/custom/fire/fire_sys_cc", globalPropertyf },
+    -- Fire damage survives suppression until explicit ground maintenance.
+    { "engine_fire_damage_1", "tu154/custom/fire/engine_fire_damage_1", globalPropertyi },
+    { "engine_fire_damage_2", "tu154/custom/fire/engine_fire_damage_2", globalPropertyi },
+    { "engine_fire_damage_3", "tu154/custom/fire/engine_fire_damage_3", globalPropertyi },
+    { "apu_fire_damage", "tu154/custom/fire/apu_fire_damage", globalPropertyi },
+    { "native_engine_fail_1", "sim/operation/failures/rel_engfai0", globalPropertyi },
+    { "native_engine_fail_2", "sim/operation/failures/rel_engfai1", globalPropertyi },
+    { "native_engine_fail_3", "sim/operation/failures/rel_engfai2", globalPropertyi },
+    { "native_apu_fail", "sim/operation/failures/rel_apu", globalPropertyi },
     -- results
     { "ext_used_1", "tu154/custom/fire/ext_used_1", globalPropertyi },
     { "ext_used_2", "tu154/custom/fire/ext_used_2", globalPropertyi },
@@ -76,6 +85,26 @@ local native_ext = { sim_engine_ext1, sim_engine_ext2, sim_engine_ext3 }
 local native_ext_owned = { false, false, false }
 local native_ext_remaining = { 0, 0, 0 }
 local was_master = false
+local native_engine_fire = { sim_engine_on_fire1, sim_engine_on_fire2, sim_engine_on_fire3 }
+local native_engine_fail = { native_engine_fail_1, native_engine_fail_2, native_engine_fail_3 }
+local engine_fire_damage = { engine_fire_damage_1, engine_fire_damage_2, engine_fire_damage_3 }
+
+local function latchFireDamage(damage, native_failure)
+    if get(damage) ~= 1 then set(damage, 1) end
+    if get(native_failure) ~= 6 then set(native_failure, 6) end
+end
+
+local function maintainFireDamage()
+    -- Electrical controls and failure level cannot repair a burned unit.
+    for index = 1, 3 do
+        if get(engine_fire_damage[index]) == 1 and get(native_engine_fail[index]) ~= 6 then
+            set(native_engine_fail[index], 6)
+        end
+    end
+    if get(apu_fire_damage) == 1 and get(native_apu_fail) ~= 6 then
+        set(native_apu_fail, 6)
+    end
+end
 
 local function releaseNativeDischarges()
     for index = 1, 3 do
@@ -110,6 +139,10 @@ end
 local function dischargeEngine(index)
     -- The bottle is consumed even when its divided-agent allocation fails.
     if not (math.random() < 0.98 / valves_open) then return end
+    -- A cold discharge must not damage an otherwise healthy engine.
+    if get(native_engine_fire[index]) > 0 then
+        latchFireDamage(engine_fire_damage[index], native_engine_fail[index])
+    end
     -- Preserve switches already active through an external native control.
     if get(native_ext[index]) == 0 then
         set(native_ext[index], 1)
@@ -122,6 +155,7 @@ local function dischargeAPU()
     -- XP12 exposes APU fire failure, but no APU extinguisher actuator.
     -- Keep divided-bottle suppression here and never erase scheduled failures.
     if get(sim_apu_on_fire) == 6 and math.random() < 0.98 / valves_open then
+        latchFireDamage(apu_fire_damage, native_apu_fail)
         set(sim_apu_on_fire, 0)
     end
 end
@@ -148,6 +182,8 @@ if not was_master then
     valve_4 = get(valve_open_4)
     was_master = true
 end
+
+maintainFireDamage()
 
 -- A discharged bottle continues independently of subsequent system power loss.
 updateNativeDischarges(get(frame_time))
@@ -247,9 +283,10 @@ if MASTER then
 			
 		end	
 		
-        -- The APU has only manual bottle requests: cold_apu selects its route.
+        -- A detected APU fire or its own button requests the first bottle.
+        -- The shared bottle buttons remain available for manual suppression.
         if valve_4 == 1 then
-            if ext_1_ready and fire_1_but then
+            if ext_1_ready and (fire_4 or get(cold_apu) == 1 or fire_1_but) then
                 set(ext_used_1, 1)
                 dischargeAPU()
             end

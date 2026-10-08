@@ -36,7 +36,7 @@ defineProps({
     {"asu_press", "tu154/custom/asu/press", globalPropertyf},
     {"apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf},
     {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
-    {"msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
+    {"msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf}, -- QNH in Pa; converted to inHg at reads.
     -- Switches / controls
     {"psvp_left_on", "tu154/custom/switchers/airbleed/psvp_left_on", globalPropertyi},
     {"psvp_right_on", "tu154/custom/switchers/airbleed/psvp_right_on", globalPropertyi},
@@ -76,6 +76,8 @@ defineProps({
     -- Time
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 -----------------------------------------------------------------------
 -- Helpers
@@ -205,7 +207,7 @@ function update()
 		local apu_n1_v = get(apu_n1)
 		local asu_p = get(asu_press)
 		local alt_msl = get(msl_alt)
-		local qnh_inHg = get(msl_press)
+		local qnh_inHg = (get(msl_press) * PA_TO_INHG)
 
 		local start_sys = get(start_sys_work) == 1
 		local gear_defl_v = get(gear_defl)

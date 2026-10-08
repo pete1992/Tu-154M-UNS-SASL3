@@ -39,6 +39,8 @@ defineProps({
     { "work_mode", "tu154/custom/lights/apu/work_mode", globalPropertyf }, -- APU on-speed indication
     { "start_apu", "tu154/custom/lights/apu/start_apu", globalPropertyf }, -- Start APU indication
     -- Internal APU state
+    { "apu_fire_damage", "tu154/custom/fire/apu_fire_damage", globalPropertyi }, -- Retained fire damage
+    { "native_apu_fire", "sim/operation/failures/rel_apu_fire", globalPropertyi }, -- Active native APU fire
     { "apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf }, -- APU RPM
     { "apu_oil_t", "tu154/custom/eng/apu_oil_t", globalPropertyf }, -- APU oil temperature
     { "apu_oil_q", "tu154/custom/eng/apu_oil_q", globalPropertyf }, -- APU oil quantity
@@ -127,8 +129,9 @@ local function default_APU()
 
     if get(xp_version) >= 120000 then
         local has_power = get(bus27_volt_left) > 10 or get(bus27_volt_right) > 10
-        local custom_running = get(apu_burning_fuel) == 1
-        local wants_apu = get(apu_start_seq) == 1 or custom_running
+        local fire_shutdown = get(apu_fire_damage) == 1 or get(native_apu_fire) == 6
+        local custom_running = get(apu_burning_fuel) == 1 and not fire_shutdown
+        local wants_apu = (get(apu_start_seq) == 1 or custom_running) and not fire_shutdown
 
         if has_power and wants_apu then
             local native_ready = get(APU_running) == 1 and get(APU_N1_percent) >= 50
@@ -349,7 +352,9 @@ local function lamps()
     set(fuel_press, math.max(fuel_press_brt * lamps_brt, test_btn))
 
     -- Keep the ready indication latched while the bleed door is between endpoints.
-    if bleed_doors_closed and apu_doors_open then
+    if get(apu_fire_damage) == 1 or get(native_apu_fire) == 6 then
+        start_ready_brt = 0
+    elseif bleed_doors_closed and apu_doors_open then
         start_ready_brt = 1
     elseif bleed_doors_open or not apu_doors_open then
         start_ready_brt = 0

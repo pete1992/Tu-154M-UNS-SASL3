@@ -13,7 +13,7 @@ end
 
 defineProps({
     {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
-    {"msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
+    {"msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf}, -- QNH in Pa; converted to inHg at reads.
     {"static_fail", "sim/operation/failures/rel_static", globalPropertyi},
     {"external_view", "sim/graphics/view/view_is_external", globalPropertyi},
     {"alt_mtr", "tu154/custom/gauges/alt/vbe_alt_left", globalPropertyf},
@@ -33,6 +33,8 @@ defineProps({
     {"fail", "sim/operation/failures/rel_ss_alt", globalPropertyi},
     {"ismaster", "scp/api/ismaster", globalPropertyf},
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 -- Local texture resources.
 local scale_img = sasl.gl.loadImage("vbe_scale.png", 0, 4, 424, 424)
@@ -317,7 +319,7 @@ function update()
     if power then
         altitude_ft =
             vbe_MSL
-            + (press_inHg - get(msl_press)) * 1000
+            + (press_inHg - (get(msl_press) * PA_TO_INHG)) * 1000
     end
 
     altitude_mtr =

@@ -55,7 +55,7 @@ defineProps({
     {"spd_brk_mid_R", "sim/flightmodel/controls/wing2r_spo2def", globalPropertyf},
     {"roll_spoil_L", "sim/flightmodel/controls/wing2l_spo1def", globalPropertyf},
     {"roll_spoil_R", "sim/flightmodel/controls/wing2r_spo1def", globalPropertyf},
-    {"msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
+    {"msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf}, -- QNH in Pa; converted to inHg at reads.
     {"rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf},
     {"vvi", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf},
     {"aoa_ind", "tu154/custom/gauges/misc/aoa_ind", globalPropertyf},
@@ -90,14 +90,16 @@ defineProps({
     {"nav_gs_flag", "tu154/custom/radio/nav1_gs_flag", globalPropertyi},
     {"nav_cs", "tu154/custom/radio/nav1_cs", globalPropertyf},
     {"nav_gs", "tu154/custom/radio/nav1_gs", globalPropertyf},
-    {"wind_direction_degt", "sim/weather/wind_direction_degt", globalPropertyf},
-    {"wind_speed_kt", "sim/weather/wind_speed_kt", globalPropertyf},
+    {"wind_direction_degt", "sim/weather/aircraft/wind_now_direction_degt", globalPropertyf},
+    {"wind_speed_kt", "sim/weather/aircraft/wind_now_speed_msc", globalPropertyf},
     {"msrp_27_L_cc", "tu154/custom/msrp/msrp_27_L_cc", globalPropertyf},
     {"msrp_27_R_cc", "tu154/custom/msrp/msrp_27_R_cc", globalPropertyf},
     {"msrp_power", "tu154/custom/msrp/msrp_power", globalPropertyi},
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
     {"ismaster", "scp/api/ismaster", globalPropertyf},
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 local black_box_dir = moduleDirectory .. "/../../../../black_box"
 local filename = black_box_dir .. "/default_file.bbox"
@@ -502,7 +504,7 @@ local function writeFile()
 
     local baro_alt =
         get(msl_alt)
-        + (29.92 - get(msl_press)) * 1000 * 0.3048
+        + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000 * 0.3048
 
     baro_alt = truncate1(baro_alt)
 

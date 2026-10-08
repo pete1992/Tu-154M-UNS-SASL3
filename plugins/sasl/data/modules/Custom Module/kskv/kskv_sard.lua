@@ -47,7 +47,7 @@ defineProps({
     { "sard_valve_fail", "tu154/custom/failures/sard_valve_fail", globalPropertyi },
     -- Aircraft state
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },
-    { "msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf },
+    { "msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
     -- Pressurization outputs
     -- { "dump_to_altitude_on", "sim/cockpit2/pressurization/actuators/dump_to_altitude_on", globalPropertyi },
     { "cabin_altitude_ft", "sim/cockpit2/pressurization/actuators/cabin_altitude_ft", globalPropertyf },
@@ -61,6 +61,8 @@ defineProps({
     { "ismaster", "scp/api/ismaster", globalPropertyf },
     -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 -- set(acf_has_press_controls, 1)
 
@@ -89,7 +91,7 @@ function update()
     local power_L = bus27_left > 13
     local power_R = bus27_right > 13
     -- Calculate barometric aircraft altitude and current cabin altitude in meters.
-    local acf_alt = get(msl_alt) + (29.92 - get(msl_press)) * 1000 * 0.3048
+    local acf_alt = get(msl_alt) + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000 * 0.3048
     local current_alt = get(cabin_alt_now_ft) * 0.3048
     local airflow = get(air_usage_L) + get(air_usage_R)
     local current_diff = get(pressure_diff_psi) * 0.0778

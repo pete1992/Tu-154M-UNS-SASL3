@@ -19,7 +19,7 @@ defineProps({
     {"l_brake_add", "sim/flightmodel/controls/l_brake_add", globalPropertyf},
     {"r_brake_add", "sim/flightmodel/controls/r_brake_add", globalPropertyf},
     {"parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf},
-    {"parkbrake_2", "sim/cockpit2/controls/parking_brake_ratio", globalPropertyf},
+    {"parkbrake_2", "sim/cockpit2/controls/wheel_brake_ratio", globalPropertyf},
     -- Aircraft controls, animation and internal brake demand.
     {"gear_blocks", "tu154/custom/anim/gear_blocks", globalPropertyf},
     {"brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf},

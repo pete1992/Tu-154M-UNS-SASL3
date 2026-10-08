@@ -121,7 +121,8 @@ local datarefs = {
     {"simDR_payload_cabin","tu154/custom/payload/cabin_num"},
     {"simDR_srd_buzzer","tu154/custom/switchers/eng/srd_buzzer"},
     {"simDR_srd_buzzer_cap","tu154/custom/switchers/eng/srd_buzzer_cap"},
-    {"simDR_cg","sim/flightmodel/misc/cgz_ref_to_default"},
+    -- Unused alias; smooth loading uses simDR_cg_pos_met below.
+    -- {"simDR_cg","sim/flightmodel2/misc/zfw_cg_offset_z"},
     {"simDR_tank1","tu154/custom/payload/tank_1"},
     {"simDR_tank2_l","tu154/custom/payload/tank_2L"},
     {"simDR_tank2_r","tu154/custom/payload/tank_2R"},
@@ -156,7 +157,9 @@ local datarefs = {
     {"simDR_ias_y_right","tu154/custom/gauges/speed/ias_yellow_right"},
     -- Smooth-loading CG references
     {"simDR_cg_pos_act","tu154/custom/misc/cg_pos_actual"},
-    {"simDR_cg_pos_met","sim/flightmodel/misc/cgz_ref_to_default"},
+    {"simDR_cg_pos_met","sim/flightmodel2/misc/zfw_cg_offset_z"},
+    {"simDR_cg_pos_total","sim/flightmodel2/misc/cg_offset_z"},
+    {"simDR_native_empty_mass","sim/aircraft/weight/acf_m_empty"},
     {"simDR_cg_pos_to","tu154/custom/t154_efb/cax_to"},
     -- Pitot-heater and precipitation inputs
     {"simDR_ppd1","tu154/custom/switchers/ovhd/pitot_heat_1"},
@@ -292,6 +295,18 @@ local VVI_TEST_RATE = 0.5
 
 
 
+-- Preserve the ZFW nudge while writing the fuel-inclusive native CG.
+-- Read the current payload and all nine tanks instead of cached aggregate masses.
+local function setZfwCg(target)
+    local zfw_mass = simDR_native_empty_mass + simDR_payload
+    local total_mass = zfw_mass
+    for tank = 0, 8 do
+        total_mass = total_mass + simDR_fuel_tanks[tank]
+    end
+    if zfw_mass <= 0 or total_mass <= 0 then return end
+    simDR_cg_pos_total = simDR_cg_pos_total + (target - simDR_cg_pos_met) * zfw_mass / total_mass
+end
+
 -- Run the complete ground-service state machine. All work is inhibited in flight.
 -- The slow-load button captures a new set of targets; subsequent physics frames
 -- advance payload, fuel, and CG until their individual completion conditions are met.
@@ -408,9 +423,9 @@ function refueling()
             -- the smooth-loading sequence remains active.
             if start_loading > 0 then
                 if simDR_cg_pos_act > simDR_cg_pos_to then
-                   simDR_cg_pos_met = simDR_cg_pos_met - 0.0001
+                   setZfwCg(simDR_cg_pos_met - 0.0001)
                 elseif simDR_cg_pos_act < (simDR_cg_pos_to-0.005) then
-                   simDR_cg_pos_met = simDR_cg_pos_met + 0.0001
+                   setZfwCg(simDR_cg_pos_met + 0.0001)
                 end
             end
             

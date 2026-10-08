@@ -38,15 +38,21 @@ defineProps({
     -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
 
-local timeToFail_FL = (5 + math.random(5)) * 60 -- 20 minutes + random time up to 20 min
-local timeToFail_FR = (5 + math.random(5)) * 60
-local timeToFail_WL = (5 + math.random(5)) * 60
-local timeToFail_WR = (5 + math.random(5)) * 60
+local timeToFail_FL = math.random(40, 50) * 60 -- Continuous full-power exposure: 40..50 minutes.
+local timeToFail_FR = math.random(40, 50) * 60
+local timeToFail_WL = math.random(40, 50) * 60
+local timeToFail_WR = math.random(40, 50) * 60
 
 local timer_FL = 0 -- timer to fail
 local timer_FR = 0 -- timer to fail
 local timer_WL = 0 -- timer to fail
 local timer_WR = 0 -- timer to fail
+
+-- A cleared failure flag means maintenance replaced that lamp.
+local failed_FL = false
+local failed_FR = false
+local failed_WL = false
+local failed_WR = false
 
 local time_table = {{ -5000, -2},    -- bugs workaround
 				  { 0, -2 },   -- 
@@ -72,6 +78,12 @@ if MASTER then
 		
 		fail_counter = fail_counter + passed
 		
+		-- Reset exposure only for an observed lamp repair.
+		if failed_FL and get(lan_lamp_fail_FL) ~= 1 then timer_FL = 0 end
+		if failed_FR and get(lan_lamp_fail_FR) ~= 1 then timer_FR = 0 end
+		if failed_WL and get(lan_lamp_fail_WL) ~= 1 then timer_WL = 0 end
+		if failed_WR and get(lan_lamp_fail_WR) ~= 1 then timer_WR = 0 end
+
 		-- calculate timers
 		timer_FL = timer_FL + interpolate(time_table, get(sim_lan_FL)) * passed
 		timer_FR = timer_FR + interpolate(time_table, get(sim_lan_FR)) * passed
@@ -112,6 +124,10 @@ if MASTER then
 	else
 		-- no failures enabled
 		fail_counter = 0
+		timer_FL = 0
+		timer_FR = 0
+		timer_WL = 0
+		timer_WR = 0
 		
 		set(lan_lamp_fail_FL, 0)
 		set(lan_lamp_fail_FR, 0)
@@ -123,6 +139,11 @@ if MASTER then
 	
 	end
 	
+	failed_FL = get(lan_lamp_fail_FL) == 1
+	failed_FR = get(lan_lamp_fail_FR) == 1
+	failed_WL = get(lan_lamp_fail_WL) == 1
+	failed_WR = get(lan_lamp_fail_WR) == 1
+
 end
 
 end

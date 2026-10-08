@@ -52,7 +52,7 @@ defineProps({
     { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf },
     { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf },
     { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf },
-    {"wave_amplitude", "sim/weather/wave_amplitude", globalPropertyf},
+    {"wave_amplitude", "sim/weather/aircraft/wave_amplitude", globalPropertyf},
     -- Electrical
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf },

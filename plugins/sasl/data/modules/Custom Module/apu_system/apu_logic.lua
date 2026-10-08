@@ -49,7 +49,7 @@ defineProps({
     -- X-Plane environment datarefs
     { "outside_air_temp", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf }, -- Outside air temperature
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf }, -- Aircraft elevation above mean sea level
-    { "baro_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf }, -- Sea-level barometric pressure in inHg
+    { "baro_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
     -- Aircraft state reset
     -- { "reset_state", "tu154/custom/reset_state", globalPropertyi }, -- No reset-state consumer in this component.
     -- SmartCopilot
@@ -64,13 +64,16 @@ defineProps({
     { "apu_fail_fuel_left", "tu154/custom/failures/apu_fail_fuel_left", globalPropertyi }, -- Residual fuel failure during start
     { "apu_fail", "tu154/custom/failures/apu_fail", globalPropertyi }, -- Runtime-related APU failure
     { "apu_press_fail", "tu154/custom/failures/apu_press_fail", globalPropertyi }, -- APU bleed air failure
-    -- Native active failure enums block starter/fuel permission without custom latches.
+    -- Active failures and retained fire damage block starter/fuel permission.
+    { "apu_fire_damage", "tu154/custom/fire/apu_fire_damage", globalPropertyi },
     { "native_apu_fail", "sim/operation/failures/rel_apu", globalPropertyi },
     { "native_apu_fire", "sim/operation/failures/rel_apu_fire", globalPropertyi },
     { "native_pressure_fail", "sim/operation/failures/rel_APU_press", globalPropertyi },
     -- Global failure control
     { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 set(apu_runtime, math.random(280,320) * 3600)
 
@@ -180,7 +183,7 @@ if MASTER then
 	apu_fail_OIL_T = 1 - get(apu_fail_oilt)
 	local failures_active = get(failures_enabled) > 0
 	starter_work = 1 - get(apu_start_fail)
-	local native_failed = get(native_apu_fail) == 6 or get(native_apu_fire) == 6
+	local native_failed = get(native_apu_fail) == 6 or get(native_apu_fire) == 6 or get(apu_fire_damage) == 1
 	if native_failed then
 		apu_burning_fuel = 0
 		apu_starter = 0
@@ -211,7 +214,7 @@ if MASTER then
 	elseif apu_doors_pos < 0 then apu_doors_pos = 0 end
 	
 	-- air bleed doors
-	if bus_R > 13 and RPM > 92 and get(apu_press_fail) == 0 and get(native_pressure_fail) ~= 6 then
+	if bus_R > 13 and RPM > 92 and not native_failed and get(apu_press_fail) == 0 and get(native_pressure_fail) ~= 6 then
 		bleed_doors_pos = bleed_doors_pos + get(apu_air_bleed) * passed * 0.2
 	elseif bus_R > 13 then
 		bleed_doors_pos = bleed_doors_pos - passed * 0.2
@@ -257,8 +260,11 @@ if MASTER then
 		starter_worked = false
 	end
 	
+	-- Do not re-light above the existing pressure-altitude ceiling.
+	-- Repeated inhibited ignition must not create residual-fuel damage.
+	local real_alt = get(msl_alt) + (29.92 - (get(baro_press) * PA_TO_INHG)) * 304.800919279572547
 	-- calculate fuel intro
-	if RPM > 21 and apd_work_time < 32 and fuel_press > 0.8 and apu_starter == 1 then
+	if RPM > 21 and apd_work_time < 32 and fuel_press > 0.8 and apu_starter == 1 and real_alt <= 4500 and not native_failed then
 		if failures_active and fuel_last > 0.1 and apu_burning_fuel == 0 then -- fuel last failure
 			local rand = failureRoll(100 - fuel_last * 80)
 			if rand < 20 then
@@ -327,7 +333,6 @@ if MASTER then
 	end
 
 	-- check altitude
-	local real_alt = get(msl_alt) + (29.92 - get(baro_press)) * 304.800919279572547
 	if real_alt > 4500 and apu_burning_fuel == 1 then 
 		apu_burning_fuel = 0 
 		fuel_last = fuel_last + 0.5

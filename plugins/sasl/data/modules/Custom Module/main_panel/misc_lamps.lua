@@ -46,7 +46,7 @@ defineProps({
     {"ias_L", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf},
     {"ias_R", "sim/cockpit2/gauges/indicators/airspeed_kts_copilot", globalPropertyf},
     {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
-    {"msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
+    {"msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf}, -- QNH in Pa; converted to inHg at reads.
     {"mach_sim", "sim/flightmodel/misc/machno", globalPropertyf},
     {"rel_pitot", "sim/operation/failures/rel_pitot", globalPropertyi},
     {"speaker_speed", "tu154/custom/alarm/speaker_speed", globalPropertyi},
@@ -61,6 +61,8 @@ defineProps({
     {"nav2_fail", "tu154/custom/failures/nav2_fail", globalPropertyi},
     {"to_ready", "tu154/custom/checklist/to_ready", globalPropertyi},
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 
@@ -187,7 +189,7 @@ function update()
     local alt_std_mtr =
         (
             get(msl_alt) * 3.28083
-            + (29.92 - get(msl_press)) * 1000
+            + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000
         )
         / 3.28083
 

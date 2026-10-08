@@ -11,7 +11,8 @@ Changelog
 - Avoided running the landing-light aerodynamic noise loop below its audible 150 kt threshold.
 - Cached repeatedly used frame values such as power, ground speed, gear compression, light extension, and volume controls.
 - Consolidated mutable sound state and sample handles into tables to keep Lua 5.1 upvalue counts low.
-- Preserved alarm priorities, warning timing, sound gains/pitches, taxi-noise threshold, failure probabilities, SmartCopilot ownership logic, and existing unused interfaces.
+- Fire warnings obey the common horn mute and complete one audible cycle after suppression.
+- Preserved other alarm timing, sound gains/pitches, taxi-noise threshold, failure probabilities, SmartCopilot ownership logic, and existing unused interfaces.
 ]]
 
 -- Main cockpit/cabin sound logic.
@@ -46,6 +47,8 @@ defineProps({
     { "speaker_speed", "tu154/custom/alarm/speaker_speed", globalPropertyi },
     -- { "speaker_absu", "tu154/custom/alarm/speaker_absu", globalPropertyi },
     { "fire_siren", "tu154/custom/fire/fire_siren", globalPropertyi },
+    { "fire_buzzer", "tu154/custom/switchers/eng/fire_buzzer", globalPropertyi },
+    { "fire_main_switch", "tu154/custom/switchers/eng/fire_main_switch", globalPropertyi },
     -- Warning controls
     { "srd_buzzer", "tu154/custom/switchers/eng/srd_buzzer", globalPropertyi },
     { "fuel_buzzer", "tu154/custom/switchers/eng/fuel_buzzer", globalPropertyi },
@@ -121,6 +124,7 @@ local STATE = {
     stu_last = get(stu_mode),
     invert_counter = 0,
     short_siren_timer = 0,
+    fire_siren_playing = false,
     short_speaker_timer = 0,
     long_speaker_timer = 0, -- Preserved legacy state.
     srd_buzzer_last = 0,
@@ -220,10 +224,16 @@ function update()
     -- Main siren
     --------------------------------------------------------------------------
     local main_alarm_ok = get(main_alarm_fail) == 0
-    local continuous_siren = (
-        get(main_gear_flaps) == 1
-        or get(fire_siren) == 1
-    ) and power
+    local fire_horn = (get(fire_siren) == 1
+        or (STATE.fire_siren_playing and sasl.al.isSamplePlaying(SAMPLES.long_siren)))
+        and get(fire_buzzer) == 1
+        and get(fire_main_switch) == 1
+        and srd_buzzer_now == 1
+        and power
+        and external == 0
+        and main_alarm_ok
+        and passed ~= 0
+    local continuous_siren = get(main_gear_flaps) == 1 and power
         and srd_buzzer_now == 1
         and external == 0
         and main_alarm_ok
@@ -234,7 +244,22 @@ function update()
         and external == 0
         and main_alarm_ok
 
-    if continuous_siren then
+    if not fire_horn and STATE.fire_siren_playing then
+        sasl.al.stopSample(SAMPLES.long_siren)
+        STATE.fire_siren_playing = false
+    end
+
+    if fire_horn then
+        STATE.short_siren_timer = 0
+        if not STATE.fire_siren_playing then
+            -- Replace a gear/pressure loop with a fire cycle that can finish naturally.
+            sasl.al.stopSample(SAMPLES.long_siren)
+            STATE.fire_siren_playing = true
+        end
+        if not sasl.al.isSamplePlaying(SAMPLES.long_siren) then
+            playPanelSample(SAMPLES.long_siren, false)
+        end
+    elseif continuous_siren then
         STATE.short_siren_timer = 0
 
         if not sasl.al.isSamplePlaying(SAMPLES.long_siren) then

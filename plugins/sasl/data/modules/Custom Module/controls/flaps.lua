@@ -25,7 +25,7 @@ defineProps({
     { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf }, -- slats position. this one works too
     { "stab_ratio", "sim/cockpit2/controls/elevator_trim", globalPropertyf }, -- sim pitch trimmer
     -- controls
-    { "sim_flap_ratio", "sim/cockpit2/controls/flap_ratio", globalPropertyf }, -- sim flaps ratio control. use for axis and commands
+    { "sim_flap_ratio", "sim/cockpit2/controls/flap_handle_request_ratio", globalPropertyf }, -- sim flaps ratio control. use for axis and commands
 
     { "flaps_lever", "tu154/custom/controll/flaps_lever", globalPropertyf }, -- sim flaps ratio control. use for axis and commands
     { "flaps_sel", "tu154/custom/switchers/flaps_sel", globalPropertyi }, --    . -1 - , 0 - , +1 -

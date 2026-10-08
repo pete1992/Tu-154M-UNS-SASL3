@@ -1,4 +1,19 @@
 ----------------------------------------------------------
+SASL 3.23.3
+----------------------------------------------------------
+
+-- Updated LuaJIT
+-- Fixed some cases of incorrect VRAM resources handling (most notably 'createTexture' function leaking resource on reloads)
+-- Fixed cases of failed Lua JIT machine code allocations due to memory address space constraints (should fix the cases when enabled JIT results in bad performance)
+
+----------------------------------------------------------
+SASL 3.23.2
+----------------------------------------------------------
+
+-- Revert minimal messageWindow size to 100x100
+-- Improved performance of main flighloop (Commercial version)
+
+----------------------------------------------------------
 SASL 3.23.1
 ----------------------------------------------------------
 

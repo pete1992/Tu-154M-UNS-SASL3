@@ -17,7 +17,7 @@ defineProps({
     -- Simulator air data
     { "mach_sim", "sim/flightmodel/misc/machno", globalPropertyf },
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf }, -- Meters MSL
-    { "msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf }, -- Sea-level pressure in inHg
+    { "msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
     -- { "airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf }, -- Unused: TAS uses true_airspeed directly.
     { "true_airspeed", "sim/flightmodel/position/true_airspeed", globalPropertyf }, -- Meters per second
 
@@ -51,6 +51,8 @@ defineProps({
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master
     -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Unused: output authority uses ismaster only.
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 --[[
 
@@ -111,7 +113,7 @@ function update()
 	if test then mach = 0.8 end -- svs control check
 
 	-- altitude
-	local alt_QNE = get(msl_alt) * 3.28083 + (29.92 - get(msl_press)) * 1000  -- calculate altitude in feet above standart pressure
+	local alt_QNE = get(msl_alt) * 3.28083 + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000  -- calculate altitude in feet above standart pressure
 	local static_fail = (get(static_fail_L) == 6 and get(static_fail_R) == 6)
 	
 	if power and not static_fail then altitude = alt_QNE * 0.3048 end

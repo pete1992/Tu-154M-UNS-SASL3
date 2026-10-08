@@ -43,6 +43,11 @@ defineProps({
     { "eng_fail_2", "sim/operation/failures/rel_engfai1", globalPropertyi },
     { "eng_fail_3", "sim/operation/failures/rel_engfai2", globalPropertyi },
 
+    -- Retained damage is independent of random failure generation.
+    { "engine_fire_damage_1", "tu154/custom/fire/engine_fire_damage_1", globalPropertyi },
+    { "engine_fire_damage_2", "tu154/custom/fire/engine_fire_damage_2", globalPropertyi },
+    { "engine_fire_damage_3", "tu154/custom/fire/engine_fire_damage_3", globalPropertyi },
+
     -- Engine fires
     { "eng_fire_1", "sim/operation/failures/rel_engfir0", globalPropertyi },
     { "eng_fire_2", "sim/operation/failures/rel_engfir1", globalPropertyi },
@@ -113,8 +118,8 @@ defineProps({
 
     { "alpha", "sim/flightmodel2/misc/AoA_angle_degrees", globalPropertyf },  -- angle of attack
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },  -- phisical altitude MSL. meters
-    { "baro_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf }, -- physical calibration altitude
-    { "msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf },  -- pressire at sea level in.Hg
+    { "baro_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
+    { "msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
     { "pressure", "tu154/custom/gauges/alt/vbe_press_left", globalPropertyf },  -- pressure in hPa
 
     -- time
@@ -126,6 +131,8 @@ defineProps({
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 -- put oil before every flight
 set(engn_oil_qty_1, math.random() + 26)
@@ -232,7 +239,7 @@ if get(ismaster) ~= 1 then
 	-- check failures
 	if FAIL > 0 then
 		local altitude = safeClamp(get(msl_alt) * 3.28083 * 0.3048
-			+ (29.92 - get(baro_press)) * 1000 * 0.3048, 0, 11000, 0)
+			+ (29.92 - (get(baro_press) * PA_TO_INHG)) * 1000 * 0.3048, 0, 11000, 0)
 		local rpm1 = physicalRPM(get(eng_rpm1), altitude)
 		local rpm2 = physicalRPM(get(eng_rpm2), altitude)
 		local rpm3 = physicalRPM(get(eng_rpm3), altitude)
@@ -256,7 +263,7 @@ if get(ismaster) ~= 1 then
 			else AOA_coef = 1 end
 			
 			local msl = get(msl_alt) * 3.28083 -- real alt MSL in feet
-			local altitude_ft = msl + (get(pressure) * 0.0295300586467 - get(msl_press)) * 1000  -- calculate barometric altitude in feet
+			local altitude_ft = msl + (get(pressure) * 0.0295300586467 - (get(msl_press) * PA_TO_INHG)) * 1000  -- calculate barometric altitude in feet
 			local alt_mtr = altitude_ft * 0.3048
 			local ALT_coef = math.max(0, alt_mtr - 8000) / 10000
 			
@@ -469,9 +476,9 @@ if get(ismaster) ~= 1 then
 		set(fuel_flowmeter_2_fail, 0)
 		set(fuel_flowmeter_3_fail, 0)
 		
-		set(eng_fail_1, 0)
-		set(eng_fail_2, 0)
-		set(eng_fail_3, 0)
+		if get(engine_fire_damage_1) ~= 1 then set(eng_fail_1, 0) end
+		if get(engine_fire_damage_2) ~= 1 then set(eng_fail_2, 0) end
+		if get(engine_fire_damage_3) ~= 1 then set(eng_fail_3, 0) end
 		
 		set(eng_fire_1, 0)
 		set(eng_fire_2, 0)

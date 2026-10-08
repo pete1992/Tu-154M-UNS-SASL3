@@ -27,6 +27,12 @@ defineProps({
     -- { "reset_state", "tu154/custom/reset_state", globalPropertyi }, --
 
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    -- Maintenance requires the same stationary ground condition as the panel.
+    { "GS", "sim/flightmodel/position/groundspeed", globalPropertyf },
+    { "deflection_mtr_1", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 1 },
+    { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 2 },
+    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 3 },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 
     -- { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi }, --
 })
@@ -60,6 +66,12 @@ hydro_tbl[3] = {"Hydro Sys #3", globalPropertyf("tu154/custom/hydro/gs_qty_3")} 
 
 local customFails = {}
 local simFails = {}
+
+customFails["APU fire damage"] = globalPropertyi("tu154/custom/fire/apu_fire_damage")
+customFails["Engine #1 fire damage"] = globalPropertyi("tu154/custom/fire/engine_fire_damage_1")
+customFails["Engine #2 fire damage"] = globalPropertyi("tu154/custom/fire/engine_fire_damage_2")
+customFails["Engine #3 fire damage"] = globalPropertyi("tu154/custom/fire/engine_fire_damage_3")
+simFails["APU failure"] = globalPropertyi("sim/operation/failures/rel_apu")
 
 -- failures
 customFails["ABSU Pitot heat"] = globalPropertyi("tu154/custom/antiice/ppd_3_heat_fail")
@@ -346,6 +358,12 @@ local function readAll()
 end
 
 local function fixAll()
+    -- Reject stale panel clicks in flight and writes from a slave.
+    if get(ismaster) == 1 or math.abs(get(GS)) > 1
+        or get(deflection_mtr_1) < 0.001 or get(deflection_mtr_2) < 0.001
+        or get(deflection_mtr_3) < 0.001 then
+        return true
+    end
 	
 	for k,v in pairs(customFails) do -- scan custom failures
 		set(v, 0)

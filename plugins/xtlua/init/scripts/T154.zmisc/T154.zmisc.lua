@@ -67,7 +67,7 @@ simDR_window_r = find_dataref("tu154/custom/anim/cockpit_window_right")
 simDR_pax_door_1 = find_dataref("tu154/custom/anim/pax_door_1") 
 simDR_pax_door_2 = find_dataref("tu154/custom/anim/pax_door_2") 
 simDR_pax_door_3 = find_dataref("tu154/custom/anim/pax_door_3") 
--- simDR_qnh = find_dataref("sim/weather/barometer_sealevel_inhg") -- Unused in this script and not referenced by other xTlua scripts.
+-- simDR_qnh = find_dataref("sim/weather/aircraft/qnh_pas") -- Unused in this script and not referenced by other xTlua scripts.
 -- simDR_elevation = find_dataref("sim/flightmodel/position/elevation") -- Unused in this script and not referenced by other xTlua scripts.
 simDR_radioalt = find_dataref("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot") 
 -- simDR_ratio_eng_idle = find_dataref("sim/cockpit2/engine/actuators/idle_speed_ratio") -- Unused in this script and not referenced by other xTlua scripts.
@@ -93,7 +93,7 @@ simDR_rpm_high_3 = find_dataref("tu154/custom/gauges/engine/rpm_high_3")
 simDR_rpm_thr = find_dataref("sim/cockpit2/engine/actuators/throttle_ratio")
 simDR_rpm_thr_all = find_dataref("sim/cockpit2/engine/actuators/throttle_ratio_all")
 -- simDR_alt  = find_dataref("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot") -- Unused in this script and not referenced by other xTlua scripts.
-simDR_flaps  = find_dataref("sim/cockpit2/controls/flap_ratio")
+simDR_flaps  = find_dataref("sim/cockpit2/controls/flap_handle_request_ratio")
 -- simDR_flaps_deploy  = find_dataref("sim/cockpit2/controls/flap_handle_deploy_ratio") -- Unused in this script and not referenced by other xTlua scripts.
 simDR_crew_vo  = find_dataref("tu154/custom/sounds/enable_crew_vo")
 simDR_payl_crew = find_dataref("tu154/custom/payload/crew_num")
@@ -108,7 +108,9 @@ simDR_rv_dh_left = find_dataref("tu154/custom/gauges/alt/radioalt_dh_left")
 simDR_rv_needle_left = find_dataref("tu154/custom/gauges/alt/radioalt_needle_left")
 flaps_lev = find_dataref("tu154/custom/controll/flaps_lever")
 -- simDR_nvu_but_lit = find_dataref("tu154/custom/lights/button/absu_nvu") -- Unused in this script and not referenced by other xTlua scripts.
-simDR_qfe = find_dataref("sim/weather/barometer_current_inhg")
+simDR_qfe = find_dataref("sim/weather/aircraft/barometer_current_pas")
+-- Native pressure is in Pa; preserve the existing inHg calibrations.
+local QFE_PA_TO_INHG = 1 / 3386.389
 simDR_altitude = find_dataref("sim/flightmodel/position/y_agl")
 simDR_altitude_qne = find_dataref("sim/cockpit2/gauges/indicators/altitude_ft_stby")
 
@@ -159,9 +161,9 @@ bkk_2 = find_dataref("tu154/custom/lights/roll_left_high")
 bkk_3 = find_dataref("tu154/custom/lights/roll_right_high")
 dh_lit = find_dataref("tu154/custom/lights/decision_height") 
 
-simDR_cabin_press_alt_act =  find_dataref("sim/cockpit/pressure/cabin_altitude_actual_m_msl")  
-simDR_cabin_press_alt_set =  find_dataref("sim/cockpit/pressure/cabin_altitude_set_m_msl")  
-simDR_cabin_press_alt_vvi_actual =  find_dataref("sim/cockpit/pressure/cabin_vvi_actual_m_msec") 
+simDR_cabin_press_alt_act =  find_dataref("sim/cockpit/pressure/cabin_altitude_actual_ft")
+simDR_cabin_press_alt_set =  find_dataref("sim/cockpit/pressure/cabin_altitude_set_ft")
+simDR_cabin_press_alt_vvi_actual =  find_dataref("sim/cockpit/pressure/cabin_vvi_actual_fpm")
 -- simDR_air_valve_L =  find_dataref("tu154/custom/switchers/airbleed/air_valve_left") -- Unused in this script and not referenced by other xTlua scripts.
 -- simDR_air_valve_R =  find_dataref("tu154/custom/switchers/airbleed/air_valve_right") -- Unused in this script and not referenced by other xTlua scripts.
 -- simDR_air_valve_B =  find_dataref("tu154/custom/switchers/airbleed/air_valve_both") -- Unused in this script and not referenced by other xTlua scripts.
@@ -672,7 +674,7 @@ end
     
    
 
-qfe_mmhg = simDR_qfe * 25.4 
+qfe_mmhg = simDR_qfe * QFE_PA_TO_INHG * 25.4
 cabin_press_mm = 760 - ((cab_alt_loc* 1000) / 12)  
     
     
@@ -1510,7 +1512,7 @@ else
     oat_delta = simDR_oat - 15
 end
 
-baro_delta = (29.92 - simDR_qfe)
+baro_delta = (29.92 - simDR_qfe * QFE_PA_TO_INHG)
 rpm_delta = (oat_delta / 6) + (baro_delta  / 1.12)
     
 if rpm_delta < 2.358 then

@@ -46,11 +46,9 @@ local MASTER = get(ismaster) ~= 1
 if MASTER then	
 
 	local failure_level = get(failures_enabled)
-	local FAIL = failure_level
-	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 	
 	-- check failures
-	if FAIL > 0 then
+	if failure_level > 0 then
 		
 		fail_counter = fail_counter + passed
 		
@@ -60,6 +58,8 @@ if MASTER then
 			
 			-- random failures
 			if failure_level >= 2 then -- LOW retains causal damage only.
+				local FAIL = failure_level
+				FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 			if get(airbleed_1) ~= 1 then set(airbleed_1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(airbleed_2) ~= 1 then set(airbleed_2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
 			if get(airbleed_3) ~= 1 then set(airbleed_3, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end

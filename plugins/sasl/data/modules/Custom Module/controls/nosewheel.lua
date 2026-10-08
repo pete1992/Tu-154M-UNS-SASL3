@@ -5,7 +5,7 @@ Changelog
 - Added nose-strut-compression-dependent steering rate and ground detection.
 - Added groundspeed influence on steering response.
 - Added automatic steering centering as the nose strut unloads.
-- Added X-Plane runway-condition influence using sim/weather/runway_friction.
+- Added X-Plane runway-condition influence using sim/weather/region/runway_friction.
 - Preserved BetterPushback steering handoff: the script does not overwrite
   the steering command while pushback is connected and the aircraft
   nosewheel steering system is unpowered.
@@ -94,7 +94,7 @@ defineProps({
     --   10-12 icy
     --   13-15 snowy/icy
     {"runway_friction",
-        "sim/weather/runway_friction",
+        "sim/weather/region/runway_friction",
         globalPropertyf},
     -- X-Plane nosewheel steering limits.
     {"weel_angle1",

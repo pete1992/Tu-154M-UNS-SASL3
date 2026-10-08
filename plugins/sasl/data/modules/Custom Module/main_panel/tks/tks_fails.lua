@@ -81,12 +81,8 @@ function update()
 
 	if MASTER then
 		local failure_level = get(failures_enabled)
-		local FAIL = failure_level
 
-		-- Preserve original scaling exactly
-		FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
-
-		if FAIL > 0 then
+		if failure_level > 0 then
 			fail_counter = fail_counter + passed
 
 			if fail_counter > check_time then
@@ -95,6 +91,9 @@ function update()
 
 				-- Preserve original probability and per-device scaling exactly
 				if failure_level >= 2 then -- LOW retains causal damage only.
+					local FAIL = failure_level
+					-- Preserve original scaling exactly
+					FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
 				local p = 0.0001 * FAIL * 0.3
 
 				maybe_set_failure(gyro_fail_1, 6, p)

@@ -16218,7 +16218,7 @@ ATTR_manip_push down 1.000000 0.000000 tu154/custom/switchers/console/emerg_elev
 TRIS 20085 6
 ANIM_end
 ANIM_begin
-ATTR_manip_drag_axis hand 0.000000 0.200000 0.000000 1.000000 0.000000 sim/cockpit2/controls/flap_ratio 
+ATTR_manip_drag_axis hand 0.000000 0.200000 0.000000 1.000000 0.000000 sim/cockpit2/controls/flap_handle_request_ratio
 TRIS 20091 6
 ANIM_end
 ANIM_begin

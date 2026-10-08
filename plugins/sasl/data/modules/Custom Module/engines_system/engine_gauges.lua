@@ -115,7 +115,7 @@ defineProps({
     -- Environment
     {"thermo", "sim/cockpit2/temperature/outside_air_temp_degc", globalPropertyf},
     {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
-    {"baro_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf},
+    {"baro_press", "sim/weather/aircraft/qnh_pas", globalPropertyf}, -- QNH in Pa; converted to inHg at reads.
 
     -- Failures
     {"fuel_flowmeter_1_fail", "tu154/custom/failures/fuel_flowmeter_1_fail", globalPropertyi},
@@ -128,6 +128,8 @@ defineProps({
     -- Time
     {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 -- Electrical thresholds
 local MIN_27V = 13
@@ -184,7 +186,7 @@ end
 
 local function pressureAltitudeMeters()
     local geometric_ft = get(msl_alt) * 3.28083
-    local pressure_alt_m = geometric_ft * 0.3048 + (29.92 - get(baro_press)) * 1000 * 0.3048
+    local pressure_alt_m = geometric_ft * 0.3048 + (29.92 - (get(baro_press) * PA_TO_INHG)) * 1000 * 0.3048
     return safeClamp(pressure_alt_m, 0, MAX_CALIBRATED_ALT_M, 0)
 end
 

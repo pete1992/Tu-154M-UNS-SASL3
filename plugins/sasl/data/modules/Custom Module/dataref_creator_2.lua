@@ -170,6 +170,11 @@ createGlobalPropertyf("tu154/custom/trimmers/int_roll_trim", 0																) 
 createGlobalPropertyf("tu154/custom/trimmers/int_yaw_trim", 0																) --    
 createGlobalPropertyf("tu154/custom/controls/control_force_pos", 0) --   . 0 - , 1 - 
 createGlobalPropertyf("tu154/custom/controls/control_force_pos_rud", 0																	) --   . 0 - , 1 - 
+-- Fire damage is reset only by explicit ground maintenance.
+createGlobalPropertyi("tu154/custom/fire/engine_fire_damage_1", 0)
+createGlobalPropertyi("tu154/custom/fire/engine_fire_damage_2", 0)
+createGlobalPropertyi("tu154/custom/fire/engine_fire_damage_3", 0)
+createGlobalPropertyi("tu154/custom/fire/apu_fire_damage", 0)
 createGlobalPropertyi("tu154/custom/fire/ext_used_1", 0																) --  
 createGlobalPropertyi("tu154/custom/fire/ext_used_2", 0																) --  
 createGlobalPropertyi("tu154/custom/fire/ext_used_3", 0																) --  

@@ -25,7 +25,7 @@ defineProps({
 
     -- Altitude and sea-level pressure
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf }, -- Meters MSL
-    { "msl_press", "sim/weather/barometer_sealevel_inhg", globalPropertyf }, -- inHg
+    { "msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
 
     -- Static failures and timing
     { "static_fail_L", "sim/operation/failures/rel_static", globalPropertyi },
@@ -63,6 +63,8 @@ defineProps({
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master
     -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Unused: output authority uses ismaster only.
 })
+
+local PA_TO_INHG = 1 / 3386.389
 
 local alt_kus_tbl = {{ -50000000, 0.5},    -- bugs workaround
 				  { 0, 1 },    -- on standard pressure zero level
@@ -133,7 +135,7 @@ function update()
 local MASTER = get(ismaster) ~= 1
 	
 	local passed = get(frame_time)
-	local alt_QNE = get(msl_alt) * 3.28083 + (29.92 - get(msl_press)) * 1000  -- calculate altitude in feet above standart pressure
+	local alt_QNE = get(msl_alt) * 3.28083 + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000  -- calculate altitude in feet above standart pressure
 	local alt_tas_coef = interpolate(alt_kus_tbl, alt_QNE)
 	
 	local airspeed_L = get(ias_L) * 1.852
@@ -248,15 +250,15 @@ local MASTER = get(ismaster) ~= 1
 	
 	-- Captain's altimeter VM15
 	local cpt_VM15_press = get(vd15_pressure_left) * 0.0393701
-	local cpt_VM15_alt = left_MSL * 0.3048 + (cpt_VM15_press - get(msl_press)) * 1000 * 0.3048  -- calculate barometric altitude in meters
+	local cpt_VM15_alt = left_MSL * 0.3048 + (cpt_VM15_press - (get(msl_press) * PA_TO_INHG)) * 1000 * 0.3048  -- calculate barometric altitude in meters
 	
 	-- Co-Pilot's altimeter VM15
 	local copt_VM15_press = get(vd15_pressure_right) * 0.0393701
-	local copt_VM15_alt = right_MSL * 0.3048 + (copt_VM15_press - get(msl_press)) * 1000 * 0.3048  -- calculate barometric altitude in meters
+	local copt_VM15_alt = right_MSL * 0.3048 + (copt_VM15_press - (get(msl_press) * PA_TO_INHG)) * 1000 * 0.3048  -- calculate barometric altitude in meters
 	
 	-- Engineer's altimeter VM15
 	local eng_VM15_press = get(vd15_pressure_eng) * 0.0393701
-	local eng_VM15_alt = right_MSL * 0.3048 + (eng_VM15_press - get(msl_press)) * 1000 * 0.3048  -- calculate barometric altitude in meters
+	local eng_VM15_alt = right_MSL * 0.3048 + (eng_VM15_press - (get(msl_press) * PA_TO_INHG)) * 1000 * 0.3048  -- calculate barometric altitude in meters
 	
 	-- cabin altitude
 	local cab_alt = get(actual_cabin_alt) * 0.3048 * 0.001 -- kilometers
