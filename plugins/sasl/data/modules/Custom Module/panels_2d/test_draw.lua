@@ -1,17 +1,17 @@
 -- test_draw.lua
+-- Development component for testing frame and line drawing.
+
 -- test drawing to texture
-size = {1024, 1024}
+size = { 1024, 1024 }
 
 defineProperty("image")
 
 function draw()
-	
-	sasl.gl.setRenderTarget(get(image))
+    sasl.gl.setRenderTarget(get(image))
 
-	sasl.gl.drawTexture(get(image), 0, 0, size[1], size[2])
+    sasl.gl.drawTexture(get(image), 0, 0, size[1], size[2])
 
-	sasl.gl.drawRectangle(0, 0, size[1], size[2], { 1, 1, 1, 1 })
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], { 1, 1, 1, 1 })
 
-	sasl.gl.restoreRenderTarget()
-
+    sasl.gl.restoreRenderTarget()
 end

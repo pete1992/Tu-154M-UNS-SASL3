@@ -1,10 +1,8 @@
 -- hydro_system.lua
--- this is hydraulic system main
+-- Registers hydraulic simulation, cockpit indications and failures.
 
 components = {
-	hydro_panel {},
-	hydro_logic {},
-	hydro_fails {},
-
+    hydro_panel {},
+    hydro_logic {},
+    hydro_fails {},
 }
-

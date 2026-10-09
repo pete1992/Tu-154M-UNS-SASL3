@@ -1,5 +1,5 @@
 -- rmi.lua
--- RMI gauge logic for compass card and radio bearing needles.
+-- Drive the RMI compass card and selected radio-bearing needles.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -8,23 +8,23 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"course_bgmk", "tu154/custom/tks/course_bgmk_2", globalPropertyf},
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"adf_bear_1", "tu154/custom/radio/adf_bear_1", globalPropertyf},
-    {"adf_bear_2", "tu154/custom/radio/adf_bear_2", globalPropertyf},
-    {"vor_bear_1", "tu154/custom/radio/vor_bear_1", globalPropertyf},
-    {"vor_bear_2", "tu154/custom/radio/vor_bear_2", globalPropertyf},
-    {"ark15_L_ON", "tu154/custom/radio/ark15_L_cc", globalPropertyf},
-    {"ark15_R_ON", "tu154/custom/radio/ark15_R_cc", globalPropertyf},
-    {"nav_L_ON", "tu154/custom/radio/nav1_pow_cc", globalPropertyf},
-    {"nav_R_ON", "tu154/custom/radio/nav2_pow_cc", globalPropertyf},
-    {"bus36_volt", "tu154/custom/elec/bus36_volt_right", globalPropertyf},
-    {"radiocomp_scale", "tu154/custom/gauges/compas/radiocomp_scale_left", globalPropertyf},
-    {"bearing_1", "tu154/custom/gauges/compas/bearing_1_left", globalPropertyf},
-    {"bearing_2", "tu154/custom/gauges/compas/bearing_2_left", globalPropertyf},
-    {"source_1_switch", "tu154/custom/gauges/compas/source_1_switch_left", globalPropertyi},
-    {"source_2_switch", "tu154/custom/gauges/compas/source_2_switch_left", globalPropertyi},
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
+    { "course_bgmk", "tu154/custom/tks/course_bgmk_2", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "adf_bear_1", "tu154/custom/radio/adf_bear_1", globalPropertyf },
+    { "adf_bear_2", "tu154/custom/radio/adf_bear_2", globalPropertyf },
+    { "vor_bear_1", "tu154/custom/radio/vor_bear_1", globalPropertyf },
+    { "vor_bear_2", "tu154/custom/radio/vor_bear_2", globalPropertyf },
+    { "ark15_L_ON", "tu154/custom/radio/ark15_L_cc", globalPropertyf },
+    { "ark15_R_ON", "tu154/custom/radio/ark15_R_cc", globalPropertyf },
+    { "nav_L_ON", "tu154/custom/radio/nav1_pow_cc", globalPropertyf },
+    { "nav_R_ON", "tu154/custom/radio/nav2_pow_cc", globalPropertyf },
+    { "bus36_volt", "tu154/custom/elec/bus36_volt_right", globalPropertyf },
+    { "radiocomp_scale", "tu154/custom/gauges/compas/radiocomp_scale_left", globalPropertyf },
+    { "bearing_1", "tu154/custom/gauges/compas/bearing_1_left", globalPropertyf },
+    { "bearing_2", "tu154/custom/gauges/compas/bearing_2_left", globalPropertyf },
+    { "source_1_switch", "tu154/custom/gauges/compas/source_1_switch_left", globalPropertyi },
+    { "source_2_switch", "tu154/custom/gauges/compas/source_2_switch_left", globalPropertyi },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 local main_scale_act = math.random(-180, 180)

@@ -1,5 +1,6 @@
 -- antiice_panel.lua
--- Anti-ice panel: switches, diagnostic lamps and temperature indications.
+-- Updates anti-ice controls, diagnostic lamps and temperature indications.
+
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         local prop
@@ -46,26 +47,16 @@ defineProps({
     { "stab_heat_t", "tu154/custom/antiice/stab_heat_t", globalPropertyf },
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
-    -- { "ice_inlet_heat_1", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[0]", globalProperty },
-    -- { "ice_inlet_heat_2", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[1]", globalProperty },
-    -- { "ice_inlet_heat_3", "sim/cockpit2/ice/ice_inlet_heat_on_per_engine[2]", globalProperty },
     { "eng_heat_open_1", "tu154/custom/antiice/eng_heat_open_1", globalPropertyi },
     { "eng_heat_open_2", "tu154/custom/antiice/eng_heat_open_2", globalPropertyi },
     { "eng_heat_open_3", "tu154/custom/antiice/eng_heat_open_3", globalPropertyi },
-    -- { "ice_surfce_heat_on", "sim/cockpit2/ice/ice_surfce_heat_on", globalPropertyi },
     { "ice_detected", "tu154/custom/antiice/ice_detected", globalPropertyi },
     { "ice_detect_ok", "tu154/custom/antiice/ice_detect_ok", globalPropertyi },
     -- failures
     { "ppd_3_heat_fail", "tu154/custom/antiice/ppd_3_heat_fail", globalPropertyi },
-    -- { "rel_ice_window_heat", "sim/operation/failures/rel_ice_window_heat", globalPropertyi },
-    -- { "rel_ice_inlet_heat1", "sim/operation/failures/rel_ice_inlet_heat", globalPropertyi },
-    -- { "rel_ice_inlet_heat2", "sim/operation/failures/rel_ice_inlet_heat2", globalPropertyi },
-    -- { "rel_ice_inlet_heat3", "sim/operation/failures/rel_ice_inlet_heat3", globalPropertyi },
     { "rel_ice_pitot_heat1", "sim/operation/failures/rel_ice_pitot_heat1", globalPropertyi },
     { "rel_ice_pitot_heat2", "sim/operation/failures/rel_ice_pitot_heat2", globalPropertyi },
     { "rel_ice_pitot_heat_stby", "sim/operation/failures/rel_ice_pitot_heat_stby", globalPropertyi },
-    -- { "rel_ice_surf_heat", "sim/operation/failures/rel_ice_surf_heat", globalPropertyi },
-    -- { "rel_ice_surf_heat2", "sim/operation/failures/rel_ice_surf_heat2", globalPropertyi },
     { "wing_heating", "tu154/custom/antiice/wing_heating", globalPropertyi },
     { "slat_heating", "tu154/custom/antiice/slat_heating", globalPropertyi },
     -- engines
@@ -76,8 +67,8 @@ defineProps({
 })
 
 -- sounds
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 
 local passed = get(frame_time)
 
@@ -85,42 +76,38 @@ local passed = get(frame_time)
 local notLoaded = true
 
 local function reset_switchers()
-	if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
-		set(soi21_on, 0)
-		set(antiice_slats, 0)
-		set(antiice_eng_1, 0)
-		set(antiice_eng_2, 0)
-		set(antiice_eng_3, 0)
-		set(antiice_wing, 0)
-		
-		set(window_heat_1, 0)
-		set(window_heat_2, 0)
-		set(window_heat_3, 0)
-		
-		set(pitot_heat_1, 0)
-		set(pitot_heat_2, 0)
-		set(pitot_heat_3, 0)
-		
-	end
-	
-	notLoaded = false
-	
+    if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
+        set(soi21_on, 0)
+        set(antiice_slats, 0)
+        set(antiice_eng_1, 0)
+        set(antiice_eng_2, 0)
+        set(antiice_eng_3, 0)
+        set(antiice_wing, 0)
+
+        set(window_heat_1, 0)
+        set(window_heat_2, 0)
+        set(window_heat_3, 0)
+
+        set(pitot_heat_1, 0)
+        set(pitot_heat_2, 0)
+        set(pitot_heat_3, 0)
+    end
+
+    notLoaded = false
 end
 
 local stab_temp_act = 0 --get(stab_heat_t)
 local wing_tem_act = 0
 
 local function gauges()
+    local stab_t = get(stab_heat_t)
+    local wing_t = get(wing_heat_t)
 
-	local stab_t = get(stab_heat_t)
-	local wing_t = get(wing_heat_t)
-	
-	stab_temp_act = stab_temp_act + (stab_t - stab_temp_act) * passed * 5
-	wing_tem_act = wing_tem_act + (wing_t - wing_tem_act) * passed * 5
-	
-	set(stab_temp, stab_temp_act)
-	set(wing_temp, wing_tem_act)
+    stab_temp_act = stab_temp_act + (stab_t - stab_temp_act) * passed * 5
+    wing_tem_act = wing_tem_act + (wing_t - wing_tem_act) * passed * 5
 
+    set(stab_temp, stab_temp_act)
+    set(wing_temp, wing_tem_act)
 end
 
 local soi21_on_last = get(soi21_on)
@@ -141,116 +128,150 @@ local pitot_heat_3_last = get(pitot_heat_3)
 local soi21_test_last = get(soi21_test)
 
 local function check_controls()
+    local soi21_on_sw = get(soi21_on)
+    local antiice_slats_sw = get(antiice_slats)
+    local antiice_eng_1_sw = get(antiice_eng_1)
+    local antiice_eng_2_sw = get(antiice_eng_2)
+    local antiice_eng_3_sw = get(antiice_eng_3)
+    local antiice_wing_sw = get(antiice_wing)
 
-	local soi21_on_sw = get(soi21_on)
-	local antiice_slats_sw = get(antiice_slats)
-	local antiice_eng_1_sw = get(antiice_eng_1)
-	local antiice_eng_2_sw = get(antiice_eng_2)
-	local antiice_eng_3_sw = get(antiice_eng_3)
-	local antiice_wing_sw = get(antiice_wing)
+    local window_heat_1_sw = get(window_heat_1)
+    local window_heat_2_sw = get(window_heat_2)
+    local window_heat_3_sw = get(window_heat_3)
 
-	local window_heat_1_sw = get(window_heat_1)
-	local window_heat_2_sw = get(window_heat_2)
-	local window_heat_3_sw = get(window_heat_3)
+    local pitot_heat_1_sw = get(pitot_heat_1)
+    local pitot_heat_2_sw = get(pitot_heat_2)
+    local pitot_heat_3_sw = get(pitot_heat_3)
 
-	local pitot_heat_1_sw = get(pitot_heat_1)
-	local pitot_heat_2_sw = get(pitot_heat_2)
-	local pitot_heat_3_sw = get(pitot_heat_3)
+    local changes = soi21_on_sw
+        + antiice_slats_sw
+        + antiice_eng_1_sw
+        + antiice_eng_2_sw
+        + antiice_eng_3_sw
+        + antiice_wing_sw
+    changes = changes
+        + window_heat_1_sw
+        + window_heat_2_sw
+        + window_heat_3_sw
+        + pitot_heat_1_sw
+        + pitot_heat_2_sw
+        + pitot_heat_3_sw
 
-	local changes = soi21_on_sw + antiice_slats_sw + antiice_eng_1_sw + antiice_eng_2_sw + antiice_eng_3_sw + antiice_wing_sw
-	changes = changes + window_heat_1_sw + window_heat_2_sw + window_heat_3_sw + pitot_heat_1_sw + pitot_heat_2_sw + pitot_heat_3_sw
-	
-	changes = changes - soi21_on_last - antiice_slats_last - antiice_eng_1_last - antiice_eng_2_last - antiice_eng_3_last - antiice_wing_last
-	changes = changes - window_heat_1_last - window_heat_2_last - window_heat_3_last - pitot_heat_1_last - pitot_heat_2_last - pitot_heat_3_last
-	
-	if 0 ~= changes then sasl.al.playSample(switcher_sound, false) end
-	
-	local soi21_test_sw = get(soi21_test)
-	
-	if soi21_test_sw ~= soi21_test_last then sasl.al.playSample(button_sound, false) end
-	
-	soi21_on_last = soi21_on_sw
-	antiice_slats_last = antiice_slats_sw
-	antiice_eng_1_last = antiice_eng_1_sw
-	antiice_eng_2_last = antiice_eng_2_sw
-	antiice_eng_3_last = antiice_eng_3_sw
-	antiice_wing_last = antiice_wing_sw
+    changes = changes
+        - soi21_on_last
+        - antiice_slats_last
+        - antiice_eng_1_last
+        - antiice_eng_2_last
+        - antiice_eng_3_last
+        - antiice_wing_last
+    changes = changes
+        - window_heat_1_last
+        - window_heat_2_last
+        - window_heat_3_last
+        - pitot_heat_1_last
+        - pitot_heat_2_last
+        - pitot_heat_3_last
 
-	window_heat_1_last = window_heat_1_sw
-	window_heat_2_last = window_heat_2_sw
-	window_heat_3_last = window_heat_3_sw
+    if 0 ~= changes then
+        sasl.al.playSample(switcher_sound, false)
+    end
 
-	pitot_heat_1_last = pitot_heat_1_sw
-	pitot_heat_2_last = pitot_heat_2_sw
-	pitot_heat_3_last = pitot_heat_3_sw
-	
-	soi21_test_last = soi21_test_sw
+    local soi21_test_sw = get(soi21_test)
 
+    if soi21_test_sw ~= soi21_test_last then
+        sasl.al.playSample(button_sound, false)
+    end
+
+    soi21_on_last = soi21_on_sw
+    antiice_slats_last = antiice_slats_sw
+    antiice_eng_1_last = antiice_eng_1_sw
+    antiice_eng_2_last = antiice_eng_2_sw
+    antiice_eng_3_last = antiice_eng_3_sw
+    antiice_wing_last = antiice_wing_sw
+
+    window_heat_1_last = window_heat_1_sw
+    window_heat_2_last = window_heat_2_sw
+    window_heat_3_last = window_heat_3_sw
+
+    pitot_heat_1_last = pitot_heat_1_sw
+    pitot_heat_2_last = pitot_heat_2_sw
+    pitot_heat_3_last = pitot_heat_3_sw
+
+    soi21_test_last = soi21_test_sw
 end
 
 -- TEST checks the selected probe circuit; it does not enable normal heating.
 -- A live opposite bus must not make an unpowered probe report healthy.
 local function probe_test_brightness(switch, bus, failed)
     local voltage = get(bus)
-    if get(switch) ~= -1 or voltage <= 13 or failed then return 0 end
+    if get(switch) ~= -1 or voltage <= 13 or failed then
+        return 0
+    end
     return math.max((voltage - 10) / 18.5, 0)
 end
 
 local function lamps()
+    local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
 
-	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
-	
-	local heat_ok_1_brt = probe_test_brightness(pitot_heat_1, bus27_volt_left, get(rel_ice_pitot_heat1) == 6)
-	set(heat_ok_1, heat_ok_1_brt)
-	
-	local heat_ok_2_brt = probe_test_brightness(pitot_heat_2, bus27_volt_right, get(rel_ice_pitot_heat2) == 6)
-	set(heat_ok_2, heat_ok_2_brt)
-	
-	local heat_ok_3_brt = probe_test_brightness(pitot_heat_3, bus27_volt_right,
-		get(ppd_3_heat_fail) ~= 0 or get(rel_ice_pitot_heat_stby) == 6)
-	set(heat_ok_3, heat_ok_3_brt)
-	
-	local soi_work_brt = get(ice_detect_ok) * lamps_brt
-	set(soi_work, soi_work_brt)
-	
-	local soi_ice_detected_brt = get(ice_detected) * lamps_brt
-	set(soi_ice_detected, soi_ice_detected_brt)
-	
-	local antiice_slats_brt = get(slat_heating) * lamps_brt
-	set(antiice_slats_lamp, antiice_slats_brt)
-	
-	local antiice_eng_1_brt = 0 
-	if get(eng_heat_open_1) == 1 then antiice_eng_1_brt = lamps_brt end
-	set(antiice_eng_1_lamp, antiice_eng_1_brt)
-	
-	local antiice_eng_2_brt = 0 
-	if get(eng_heat_open_2) == 1 then antiice_eng_2_brt = lamps_brt end
-	set(antiice_eng_2_lamp, antiice_eng_2_brt)
-	
-	local antiice_eng_3_brt = 0
-	if get(eng_heat_open_3) == 1 then antiice_eng_3_brt = lamps_brt end
-	set(antiice_eng_3_lamp, antiice_eng_3_brt)
-	
-	local antiice_wings_brt = get(wing_heating) * lamps_brt
-	set(antiice_wings_lamp, antiice_wings_brt)
-	
+    local heat_ok_1_brt = probe_test_brightness(pitot_heat_1, bus27_volt_left, get(rel_ice_pitot_heat1) == 6)
+    set(heat_ok_1, heat_ok_1_brt)
+
+    local heat_ok_2_brt = probe_test_brightness(pitot_heat_2, bus27_volt_right, get(rel_ice_pitot_heat2) == 6)
+    set(heat_ok_2, heat_ok_2_brt)
+
+    local heat_ok_3_brt = probe_test_brightness(
+        pitot_heat_3,
+        bus27_volt_right,
+        get(ppd_3_heat_fail) ~= 0 or get(rel_ice_pitot_heat_stby) == 6
+    )
+    set(heat_ok_3, heat_ok_3_brt)
+
+    local soi_work_brt = get(ice_detect_ok) * lamps_brt
+    set(soi_work, soi_work_brt)
+
+    local soi_ice_detected_brt = get(ice_detected) * lamps_brt
+    set(soi_ice_detected, soi_ice_detected_brt)
+
+    local antiice_slats_brt = get(slat_heating) * lamps_brt
+    set(antiice_slats_lamp, antiice_slats_brt)
+
+    local antiice_eng_1_brt = 0
+    if get(eng_heat_open_1) == 1 then
+        antiice_eng_1_brt = lamps_brt
+    end
+    set(antiice_eng_1_lamp, antiice_eng_1_brt)
+
+    local antiice_eng_2_brt = 0
+    if get(eng_heat_open_2) == 1 then
+        antiice_eng_2_brt = lamps_brt
+    end
+    set(antiice_eng_2_lamp, antiice_eng_2_brt)
+
+    local antiice_eng_3_brt = 0
+    if get(eng_heat_open_3) == 1 then
+        antiice_eng_3_brt = lamps_brt
+    end
+    set(antiice_eng_3_lamp, antiice_eng_3_brt)
+
+    local antiice_wings_brt = get(wing_heating) * lamps_brt
+    set(antiice_wings_lamp, antiice_wings_brt)
 end
 
 local sim_start_timer = 0
 
 function update()
+    passed = get(frame_time)
 
-	passed = get(frame_time)
-	
-		-- reset switchers
-	sim_start_timer = sim_start_timer + passed
-	if sim_start_timer > 0.3 then 
-		if notLoaded then reset_switchers() end
-		
-		check_controls()
-	end
+    -- reset switchers
+    sim_start_timer = sim_start_timer + passed
+    if sim_start_timer > 0.3 then
+        if notLoaded then
+            reset_switchers()
+        end
 
-	gauges()
-	lamps()
+        check_controls()
+    end
 
+    gauges()
+    lamps()
 end

@@ -1,7 +1,6 @@
 -- pkp.lua
--- this is main AHZ logic
+-- Calculate the PKP attitude display, director bars and validity flags.
 
--- this is aux ahz logic
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))
@@ -23,7 +22,6 @@ defineProps({
     { "absu_pnp_mode", "tu154/custom/absu/absu_pnp_mode_1", globalPropertyi }, --   . 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
 
     -- Unused: NAV follows the existing ABSU GPS1 bridge, not legacy NVU coordinates.
-    -- { "nvu_res_z", "tu154/custom/nvu/nvu_res_z", globalPropertyf },
     { "GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf },
     { "GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf },
     { "GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi },
@@ -34,74 +32,71 @@ defineProps({
     { "gps_nm_per_dot", "sim/cockpit/radios/gps_hdef_nm_per_dot", globalPropertyf },
 
     -- ABSU
-    { "absu_roll_ind", "tu154/custom/absu/absu_roll_ind", globalPropertyf }, --
-    { "absu_pitch_ind", "tu154/custom/absu/absu_pitch_ind", globalPropertyf }, --
+    { "absu_roll_ind", "tu154/custom/absu/absu_roll_ind", globalPropertyf },
+    { "absu_pitch_ind", "tu154/custom/absu/absu_pitch_ind", globalPropertyf },
 
-    { "absu_roll_flag", "tu154/custom/absu/absu_roll_flag", globalPropertyi }, --
-    { "absu_pitch_flag", "tu154/custom/absu/absu_pitch_flag", globalPropertyi }, --
+    { "absu_roll_flag", "tu154/custom/absu/absu_roll_flag", globalPropertyi },
+    { "absu_pitch_flag", "tu154/custom/absu/absu_pitch_flag", globalPropertyi },
 
-    { "absu_at_dif", "tu154/custom/absu_at_dif_left", globalPropertyf }, --
+    { "absu_at_dif", "tu154/custom/absu_at_dif_left", globalPropertyf },
 
     { "N1", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
     { "N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
     { "N3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
 
     -- controls
-    { "pitch_corr_hdl", "tu154/custom/gauges/ahz/pitch_corr_L", globalPropertyf }, --     +
-    { "pkp_on", "tu154/custom/switchers/ovhd/pkp_left_on", globalPropertyi }, --
+    { "pitch_corr_hdl", "tu154/custom/gauges/ahz/pitch_corr_L", globalPropertyf },
+    { "pkp_on", "tu154/custom/switchers/ovhd/pkp_left_on", globalPropertyi },
 
-    { "pkp_fail", "tu154/custom/bkk/pkp_fail_left", globalPropertyi }, --    -
+    { "pkp_fail", "tu154/custom/bkk/pkp_fail_left", globalPropertyi },
 
-    { "arrest_btn", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
+    { "arrest_btn", "tu154/custom/buttons/console/absu_arrest", globalPropertyi },
 
     -- power
     { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
-    --defineProperty("bus27_volt_right", globalPropertyf("tu154/custom/elec/bus27_volt_right"))
 
     { "bus36_volt", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
 
-    { "power_cc", "tu154/custom/bkk/pkp_left_power_cc", globalPropertyf }, --
+    { "power_cc", "tu154/custom/bkk/pkp_left_power_cc", globalPropertyf },
 
     { "fail", "sim/operation/failures/rel_ss_ahz", globalPropertyi },
 
-    { "absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi }, --
+    { "absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi },
 
     -- results
-    { "res_pitch", "tu154/custom/gauges/ahz/pitch_L", globalPropertyf }, --    +
-    { "pitch_int", "tu154/custom/gyro/ahz_pitch_int_L", globalPropertyf }, --    +
+    { "res_pitch", "tu154/custom/gauges/ahz/pitch_L", globalPropertyf },
+    { "pitch_int", "tu154/custom/gyro/ahz_pitch_int_L", globalPropertyf },
 
-    { "res_roll", "tu154/custom/gauges/ahz/roll_L", globalPropertyf }, --    +
-    { "res_roll_bkk", "tu154/custom/bkk/pkp_roll_left", globalPropertyf }, --    +
+    { "res_roll", "tu154/custom/gauges/ahz/roll_L", globalPropertyf },
+    { "res_roll_bkk", "tu154/custom/bkk/pkp_roll_left", globalPropertyf },
 
-    { "course_plank", "tu154/custom/gauges/ahz/course_plank_L", globalPropertyf }, --     +
-    { "gs_plank", "tu154/custom/gauges/ahz/gs_plank_L", globalPropertyf }, --     +
+    { "course_plank", "tu154/custom/gauges/ahz/course_plank_L", globalPropertyf },
+    { "gs_plank", "tu154/custom/gauges/ahz/gs_plank_L", globalPropertyf },
 
-    { "dir_roll", "tu154/custom/gauges/ahz/dir_roll_L", globalPropertyf }, --     +
-    { "dir_pitch", "tu154/custom/gauges/ahz/dir_pitch_L", globalPropertyf }, --      +
+    { "dir_roll", "tu154/custom/gauges/ahz/dir_roll_L", globalPropertyf },
+    { "dir_pitch", "tu154/custom/gauges/ahz/dir_pitch_L", globalPropertyf },
 
-    { "speed_plank", "tu154/custom/gauges/ahz/speed_plank_L", globalPropertyf }, --     +
+    { "speed_plank", "tu154/custom/gauges/ahz/speed_plank_L", globalPropertyf },
 
-    { "dir_roll_flag", "tu154/custom/gauges/ahz/dir_roll_flag_L", globalPropertyf }, --
-    { "dir_pitch_flag", "tu154/custom/gauges/ahz/dir_pitch_flag_L", globalPropertyf }, --
+    { "dir_roll_flag", "tu154/custom/gauges/ahz/dir_roll_flag_L", globalPropertyf },
+    { "dir_pitch_flag", "tu154/custom/gauges/ahz/dir_pitch_flag_L", globalPropertyf },
 
-    { "ahz_flag", "tu154/custom/gauges/ahz/ahz_flag_L", globalPropertyf }, --
+    { "ahz_flag", "tu154/custom/gauges/ahz/ahz_flag_L", globalPropertyf },
 
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
 
-
 local initial_roll_err = 0 --math.random(-20, 20) * real_num -- initial error, ehich will be decreased to 0 after connecting power
-local roll_corr = 0  -- correction for errors and arrest
-local roll_show = 0  -- result roll
+local roll_corr = 0 -- correction for errors and arrest
+local roll_show = 0 -- result roll
 local roll_off = 0 --math.random(-2, 2) * real_num -- determine the direction for AG fall
 local initial_pitch_err = 0 --math.random(-30, 30) * real_num -- initial error, ehich will be decreased to 0 after connecting power
-local pitch_corr = 0  -- correction for errors and arrest
-local pitch_show = 0  -- result pitch
+local pitch_corr = 0 -- correction for errors and arrest
+local pitch_show = 0 -- result pitch
 local pitch_absu = 0 -- result pitch for ABSU use
 local pitch_off = 0 --math.random(-2, 2) * real_num -- determine the direction for AG fall
-local arrest = 0  -- variable for arresting process
+local arrest = 0 -- variable for arresting process
 local arrest_push = false -- validate if arrest button is pushed
 local pitch_rot = 0
 local ahz_fail = true
@@ -125,231 +120,299 @@ local function finite(value)
 end
 
 function update()
-	local passed = get(frame_time)
-	
-	local power = get(bus36_volt) > 30 and get(pkp_on) == 1 and get(bus27_volt) > 13 and get(fail) < 6
-	
-	time_counter = time_counter + passed	
+    local passed = get(frame_time)
 
-	-- set initial AHZ position
-	if isColdAndDarkStart() and time_counter > 0.3 and time_counter < 0.4 and notLoaded and get(N1) < 10 and get(N2) < 10 and get(N3) < 10 then
-		initial_roll_err = math.random(-30, 30)
-		roll_off = math.random(-1, 1)
-		initial_pitch_err = math.random(-30, 30)
-		pitch_off = math.random(-1, 1)
-		
-		notLoaded = false
-	elseif time_counter > 0.3 and time_counter < 0.4 and notLoaded then 
-		roll_off = math.random(-1, 1)
-		pitch_off = math.random(-1, 1)	
-		initial_roll_err = 0
-		initial_pitch_err = 0
-		pitch_corr = 0
-		roll_corr = 0
-		power_roll = 0
-		power_pitch = 0
-		notLoaded = false	
-	end
-	
-	-- calculate roll and pitch for power off
-	if not power then
-		power_roll = get(roll_sim)
-		power_pitch = get(pitch_sim)
-	end -- if no power, then horizon will remain its position
-	
-	-- calculate power ON and OFF initial roll and pitch
-	if not power then
-		if math.abs(initial_roll_err) < 30 then initial_roll_err = initial_roll_err + passed * roll_off * 0.1 end
-		if math.abs(initial_pitch_err) < 30 then initial_pitch_err = initial_pitch_err + passed * pitch_off * 0.1 end
-	else
-		if initial_roll_err > 0.1 then initial_roll_err = initial_roll_err - passed * 0.3
-		elseif initial_roll_err < -0.1 then initial_roll_err = initial_roll_err + passed * 0.3
-		else initial_roll_err = 0 end
-		if initial_pitch_err > 0.1 then initial_pitch_err = initial_pitch_err - passed * 0.3
-		elseif initial_pitch_err < -0.1 then initial_pitch_err = initial_pitch_err + passed * 0.3
-		else initial_pitch_err = 0 end
-		
-		-- reset all errors and correction after some time
-		if power_roll > 0.05 then power_roll = power_roll - passed * 0.1
-		elseif power_roll < -0.05 then power_roll = power_roll + passed * 0.1 
-		else power_roll = 0 end
-		
-		if power_pitch > 0.05 then power_pitch = power_pitch - passed * 0.1
-		elseif power_pitch < -0.05 then power_pitch = power_pitch + passed * 0.1 
-		else power_pitch = 0 end
-		
-		if roll_corr > 0.01 then roll_corr = roll_corr - 0.1 * passed
-		elseif roll_corr < -0.01 then roll_corr = roll_corr + 0.1 * passed 
-		else roll_corr = 0 end
-		
-		if pitch_corr > 0.01 then pitch_corr = pitch_corr - 0.1 * passed
-		elseif pitch_corr < -0.01 then pitch_corr = pitch_corr + 0.1 * passed 
-		else pitch_corr = 0 end
-		
-	end
-	
-	-- arresting mechanism
-	local arrest = get(arrest_btn) > 0
-	if arrest and power then
-		-- set new correction
-		
-		if math.abs(initial_roll_err) < 0.1 then
-			if roll_show > 0.1 then roll_corr = roll_corr + 6 * passed
-			elseif roll_show < -0.1 then roll_corr = roll_corr - 6 * passed end
-		end
-		if math.abs(initial_pitch_err) < 0.1 then
-			if pitch_absu > 0.1 then pitch_corr = pitch_corr + 6 * passed
-			elseif pitch_absu < -0.1 then pitch_corr = pitch_corr - 6 * passed end
-		end
-		
-		-- reset errors
-		if power_roll > 0.1 then power_roll = power_roll - passed
-		elseif power_roll < -0.1 then power_roll = power_roll + passed end
-		if power_pitch > 0.1 then power_pitch = power_pitch - passed
-		elseif power_pitch < -0.1 then power_pitch = power_pitch + passed end
+    local power = get(bus36_volt) > 30 and get(pkp_on) == 1 and get(bus27_volt) > 13 and get(fail) < 6
 
-		if initial_roll_err > 0.1 then initial_roll_err = initial_roll_err - passed * 6
-		elseif initial_roll_err < -0.1 then initial_roll_err = initial_roll_err + passed * 6 end
-		if initial_pitch_err > 0.1 then initial_pitch_err = initial_pitch_err - passed * 6
-		elseif initial_pitch_err < -0.1 then initial_pitch_err = initial_pitch_err + passed * 6 end
-		
-	end	
-	
-	-- main formula for curent position
-	roll_show = get(roll_sim) - power_roll + initial_roll_err - roll_corr
-	pitch_show = get(pitch_sim) - power_pitch + initial_pitch_err - pitch_corr - get(pitch_corr_hdl) * 20
-	pitch_absu = get(pitch_sim) - power_pitch + initial_pitch_err - pitch_corr
-	
-	-- final result is a summ of power position, initial error of gauge, collective error of gauge and correction of this error
-	
-	if pitch_show > 90 then pitch_show = 90
-	elseif pitch_show < -90 then pitch_show = -90 end
-	
-	if pitch_absu > 90 then pitch_absu = 90
-	elseif pitch_absu < -90 then pitch_absu = -90 end
-	
-	-- slow down indication
-	local roll_delta = roll_show - roll_show_2
-	if roll_delta > 180 then roll_delta = roll_delta - 360
-	elseif roll_delta < -180 then roll_delta = roll_delta + 360 end
-	
-	roll_show_2 = roll_show_2 + (roll_delta) * passed * 5
-	pitch_show_2 = pitch_show_2 + (pitch_show - pitch_show_2) * passed * 5
-	
-	-- flag logic
-	local flag = bool2int(not power or arrest or math.abs(initial_roll_err) + math.abs(initial_pitch_err) + math.abs(power_roll) + math.abs(power_pitch) > 5 or get(pkp_fail) == 1)
-	
-	-- ABSU planks and flags
-	local roll_diff = get(absu_roll_ind) / 25
-	
-	if roll_diff > 1 then roll_diff = 1
-	elseif roll_diff < -1 then roll_diff = -1 end
-	
-	absu_v_act = absu_v_act + (roll_diff - absu_v_act) * passed * 5
-	
-	local pitch_diff = get(absu_pitch_ind) / 10
-	
-	if pitch_diff > 1 then pitch_diff = 1
-	elseif pitch_diff < -1 then pitch_diff = -1 end
-	
-	absu_h_act = absu_h_act + (pitch_diff - absu_h_act) * passed * 5	
-	
-	local flag_roll = bool2int(get(absu_roll_flag) == 1 or not power)
-	local flag_pitch = bool2int(get(absu_pitch_flag) == 1 or not power)
-	
-	local mode = get(absu_pnp_mode) -- 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 = 
-	
-	local course_pl = get(nav_cs_1)
-	local glidesl_pl = -get(nav_gs_1)	
-	
-	if mode == 2 and power then -- AZ-1 mode
+    time_counter = time_counter + passed
 
-		-- set course and glideslope planks
-		course_pl = get(nav_cs_1)
-		glidesl_pl = 0
-	
-	elseif mode == 3 and power then -- AZ-2 mode
+    -- set initial AHZ position
+    if
+        isColdAndDarkStart()
+        and time_counter > 0.3
+        and time_counter < 0.4
+        and notLoaded
+        and get(N1) < 10
+        and get(N2) < 10
+        and get(N3) < 10
+    then
+        initial_roll_err = math.random(-30, 30)
+        roll_off = math.random(-1, 1)
+        initial_pitch_err = math.random(-30, 30)
+        pitch_off = math.random(-1, 1)
 
-		-- set course and glideslope planks
-		course_pl = get(nav_cs_2)
-		glidesl_pl = 0
+        notLoaded = false
+    elseif time_counter > 0.3 and time_counter < 0.4 and notLoaded then
+        roll_off = math.random(-1, 1)
+        pitch_off = math.random(-1, 1)
+        initial_roll_err = 0
+        initial_pitch_err = 0
+        pitch_corr = 0
+        roll_corr = 0
+        power_roll = 0
+        power_pitch = 0
+        notLoaded = false
+    end
 
-	elseif mode == 4 and power then -- APP
+    -- calculate roll and pitch for power off
+    if not power then
+        power_roll = get(roll_sim)
+        power_pitch = get(pitch_sim)
+    end -- if no power, then horizon will remain its position
 
-		-- set course and glideslope planks
-		course_pl = get(nav_cs_1)
-		glidesl_pl = -get(nav_gs_1)
+    -- calculate power ON and OFF initial roll and pitch
+    if not power then
+        if math.abs(initial_roll_err) < 30 then
+            initial_roll_err = initial_roll_err + passed * roll_off * 0.1
+        end
+        if math.abs(initial_pitch_err) < 30 then
+            initial_pitch_err = initial_pitch_err + passed * pitch_off * 0.1
+        end
+    else
+        if initial_roll_err > 0.1 then
+            initial_roll_err = initial_roll_err - passed * 0.3
+        elseif initial_roll_err < -0.1 then
+            initial_roll_err = initial_roll_err + passed * 0.3
+        else
+            initial_roll_err = 0
+        end
+        if initial_pitch_err > 0.1 then
+            initial_pitch_err = initial_pitch_err - passed * 0.3
+        elseif initial_pitch_err < -0.1 then
+            initial_pitch_err = initial_pitch_err + passed * 0.3
+        else
+            initial_pitch_err = 0
+        end
 
-		if get(absu_use_second_nav) == 1 then
-			course_pl = get(nav_cs_2)
-			glidesl_pl = -get(nav_gs_2)
-		end
-		
-	elseif power and mode == 1 then -- NAV: same GPS1 guidance and validity as ABSU.
-		local fromto = get(gps_fromto)
-		local scale = get(gps_nm_per_dot)
-		local deviation = get(GNS430_dev)
-		local valid = get(gps_power) > 0 and (fromto == 1 or fromto == 2)
-			and get(GNS430_flag) == 0
-			and finite(get(GNS430_dtk)) and finite(deviation)
-			and finite(get(gps_course)) and finite(get(gps_dev))
-			and finite(scale) and scale > 0
-		-- ABSU cross-track Z is -CDI * NM/dot * 1.852 km. Preserve the PKP
-		-- -Z * 0.1 indication scale/sign, but center an unavailable GPS signal.
-		course_pl = valid and deviation * scale * 1.852 * 0.1 or 0
-		glidesl_pl = 0
-	
-	elseif power then
-		
-		course_pl = 0
-		glidesl_pl = 0
-		
-	else
-		
-		course_pl = 0
-		glidesl_pl = 0
-		
-	end	
-	
-	if course_pl > 1.2 then course_pl = 1.2
-	elseif course_pl < -1.2 then course_pl = -1.2 end
-	
-	v_plank_act = v_plank_act + (course_pl - v_plank_act) * passed * 5
-	h_plank_act = h_plank_act + (glidesl_pl - h_plank_act) * passed * 5
-	
-	-- speed indicator
-	
-	local spd_dif = get(absu_at_dif) / 20
-	
-	if spd_dif > 1 then spd_dif = 1
-	elseif spd_dif < -1 then spd_dif = -1 end
-	
-local MASTER = get(ismaster) ~= 1	
-	
-if MASTER then	
-	
-	-- set results
-	
-	set(res_pitch, pitch_show_2)
-	set(pitch_int, pitch_absu)
-	set(res_roll, roll_show_2)
-	
-	set(res_roll_bkk, roll_show)
-	set(ahz_flag, flag)
-	
-	set(dir_roll, absu_v_act)
-	set(dir_pitch, absu_h_act)
-	
-	set(speed_plank, spd_dif)
-	
-	set(course_plank, v_plank_act)
-	set(gs_plank, h_plank_act)
-	
-	set(dir_roll_flag, flag_roll)
-	set(dir_pitch_flag, flag_pitch)
-	
-	set(power_cc, bool2int(power))
+        -- reset all errors and correction after some time
+        if power_roll > 0.05 then
+            power_roll = power_roll - passed * 0.1
+        elseif power_roll < -0.05 then
+            power_roll = power_roll + passed * 0.1
+        else
+            power_roll = 0
+        end
 
-end
-	
+        if power_pitch > 0.05 then
+            power_pitch = power_pitch - passed * 0.1
+        elseif power_pitch < -0.05 then
+            power_pitch = power_pitch + passed * 0.1
+        else
+            power_pitch = 0
+        end
+
+        if roll_corr > 0.01 then
+            roll_corr = roll_corr - 0.1 * passed
+        elseif roll_corr < -0.01 then
+            roll_corr = roll_corr + 0.1 * passed
+        else
+            roll_corr = 0
+        end
+
+        if pitch_corr > 0.01 then
+            pitch_corr = pitch_corr - 0.1 * passed
+        elseif pitch_corr < -0.01 then
+            pitch_corr = pitch_corr + 0.1 * passed
+        else
+            pitch_corr = 0
+        end
+    end
+
+    -- arresting mechanism
+    local arrest = get(arrest_btn) > 0
+    if arrest and power then
+        -- set new correction
+
+        if math.abs(initial_roll_err) < 0.1 then
+            if roll_show > 0.1 then
+                roll_corr = roll_corr + 6 * passed
+            elseif roll_show < -0.1 then
+                roll_corr = roll_corr - 6 * passed
+            end
+        end
+        if math.abs(initial_pitch_err) < 0.1 then
+            if pitch_absu > 0.1 then
+                pitch_corr = pitch_corr + 6 * passed
+            elseif pitch_absu < -0.1 then
+                pitch_corr = pitch_corr - 6 * passed
+            end
+        end
+
+        -- reset errors
+        if power_roll > 0.1 then
+            power_roll = power_roll - passed
+        elseif power_roll < -0.1 then
+            power_roll = power_roll + passed
+        end
+        if power_pitch > 0.1 then
+            power_pitch = power_pitch - passed
+        elseif power_pitch < -0.1 then
+            power_pitch = power_pitch + passed
+        end
+
+        if initial_roll_err > 0.1 then
+            initial_roll_err = initial_roll_err - passed * 6
+        elseif initial_roll_err < -0.1 then
+            initial_roll_err = initial_roll_err + passed * 6
+        end
+        if initial_pitch_err > 0.1 then
+            initial_pitch_err = initial_pitch_err - passed * 6
+        elseif initial_pitch_err < -0.1 then
+            initial_pitch_err = initial_pitch_err + passed * 6
+        end
+    end
+
+    -- main formula for curent position
+    roll_show = get(roll_sim) - power_roll + initial_roll_err - roll_corr
+    pitch_show = get(pitch_sim) - power_pitch + initial_pitch_err - pitch_corr - get(pitch_corr_hdl) * 20
+    pitch_absu = get(pitch_sim) - power_pitch + initial_pitch_err - pitch_corr
+
+    -- final result is a summ of power position, initial error of gauge, collective error of gauge and correction of this error
+
+    if pitch_show > 90 then
+        pitch_show = 90
+    elseif pitch_show < -90 then
+        pitch_show = -90
+    end
+
+    if pitch_absu > 90 then
+        pitch_absu = 90
+    elseif pitch_absu < -90 then
+        pitch_absu = -90
+    end
+
+    -- slow down indication
+    local roll_delta = roll_show - roll_show_2
+    if roll_delta > 180 then
+        roll_delta = roll_delta - 360
+    elseif roll_delta < -180 then
+        roll_delta = roll_delta + 360
+    end
+
+    roll_show_2 = roll_show_2 + roll_delta * passed * 5
+    pitch_show_2 = pitch_show_2 + (pitch_show - pitch_show_2) * passed * 5
+
+    -- flag logic
+    local flag = bool2int(
+        not power
+            or arrest
+            or math.abs(initial_roll_err) + math.abs(initial_pitch_err) + math.abs(power_roll) + math.abs(power_pitch) > 5
+            or get(pkp_fail) == 1
+    )
+
+    -- ABSU planks and flags
+    local roll_diff = get(absu_roll_ind) / 25
+
+    if roll_diff > 1 then
+        roll_diff = 1
+    elseif roll_diff < -1 then
+        roll_diff = -1
+    end
+
+    absu_v_act = absu_v_act + (roll_diff - absu_v_act) * passed * 5
+
+    local pitch_diff = get(absu_pitch_ind) / 10
+
+    if pitch_diff > 1 then
+        pitch_diff = 1
+    elseif pitch_diff < -1 then
+        pitch_diff = -1
+    end
+
+    absu_h_act = absu_h_act + (pitch_diff - absu_h_act) * passed * 5
+
+    local flag_roll = bool2int(get(absu_roll_flag) == 1 or not power)
+    local flag_pitch = bool2int(get(absu_pitch_flag) == 1 or not power)
+
+    local mode = get(absu_pnp_mode) -- 0 = off, 1 = , 2 = VOR1, 3 = VOR2, 4 =
+
+    local course_pl = get(nav_cs_1)
+    local glidesl_pl = -get(nav_gs_1)
+
+    if mode == 2 and power then -- AZ-1 mode
+        -- set course and glideslope planks
+        course_pl = get(nav_cs_1)
+        glidesl_pl = 0
+    elseif mode == 3 and power then -- AZ-2 mode
+        -- set course and glideslope planks
+        course_pl = get(nav_cs_2)
+        glidesl_pl = 0
+    elseif mode == 4 and power then -- APP
+        -- set course and glideslope planks
+        course_pl = get(nav_cs_1)
+        glidesl_pl = -get(nav_gs_1)
+
+        if get(absu_use_second_nav) == 1 then
+            course_pl = get(nav_cs_2)
+            glidesl_pl = -get(nav_gs_2)
+        end
+    elseif power and mode == 1 then -- NAV: same GPS1 guidance and validity as ABSU.
+        local fromto = get(gps_fromto)
+        local scale = get(gps_nm_per_dot)
+        local deviation = get(GNS430_dev)
+        local valid = get(gps_power) > 0
+            and (fromto == 1 or fromto == 2)
+            and get(GNS430_flag) == 0
+            and finite(get(GNS430_dtk))
+            and finite(deviation)
+            and finite(get(gps_course))
+            and finite(get(gps_dev))
+            and finite(scale)
+            and scale > 0
+        -- ABSU cross-track Z is -CDI * NM/dot * 1.852 km. Preserve the PKP
+        -- -Z * 0.1 indication scale/sign, but center an unavailable GPS signal.
+        course_pl = valid and deviation * scale * 1.852 * 0.1 or 0
+        glidesl_pl = 0
+    elseif power then
+        course_pl = 0
+        glidesl_pl = 0
+    else
+        course_pl = 0
+        glidesl_pl = 0
+    end
+
+    if course_pl > 1.2 then
+        course_pl = 1.2
+    elseif course_pl < -1.2 then
+        course_pl = -1.2
+    end
+
+    v_plank_act = v_plank_act + (course_pl - v_plank_act) * passed * 5
+    h_plank_act = h_plank_act + (glidesl_pl - h_plank_act) * passed * 5
+
+    -- speed indicator
+
+    local spd_dif = get(absu_at_dif) / 20
+
+    if spd_dif > 1 then
+        spd_dif = 1
+    elseif spd_dif < -1 then
+        spd_dif = -1
+    end
+
+    local MASTER = get(ismaster) ~= 1
+
+    if MASTER then
+        -- set results
+
+        set(res_pitch, pitch_show_2)
+        set(pitch_int, pitch_absu)
+        set(res_roll, roll_show_2)
+
+        set(res_roll_bkk, roll_show)
+        set(ahz_flag, flag)
+
+        set(dir_roll, absu_v_act)
+        set(dir_pitch, absu_h_act)
+
+        set(speed_plank, spd_dif)
+
+        set(course_plank, v_plank_act)
+        set(gs_plank, h_plank_act)
+
+        set(dir_roll_flag, flag_roll)
+        set(dir_pitch_flag, flag_pitch)
+
+        set(power_cc, bool2int(power))
+    end
 end

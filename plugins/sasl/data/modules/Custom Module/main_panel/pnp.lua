@@ -1,5 +1,5 @@
 -- pnp.lua
--- PNP navigation indicator logic.
+-- Drive PNP heading, selected course, navigation bars and failure flags.
 
 defineProperty("gauge_num", 0)
 
@@ -11,67 +11,61 @@ end
 
 defineProps({
     -- Unused: KATET prepares approach guidance, not this side's HSI display.
-    -- {"katet_mode", "tu154/custom/katet/mode", globalPropertyi},
-    -- {"katet_nav_mode", "tu154/custom/katet/nav_mode", globalPropertyi},
-    {"absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi},
-    {"course_ga", "tu154/custom/tks/course_ga_1", globalPropertyf},
-    {"course_bgmk", "tu154/custom/tks/course_bgmk_1", globalPropertyf},
-    {"diss_slip_angle", "tu154/custom/nvu/diss_slip_angle", globalPropertyf},
-    {"nav_cs_1", "tu154/custom/radio/nav1_cs", globalPropertyf},
-    {"nav_gs_1", "tu154/custom/radio/nav1_gs", globalPropertyf},
-    {"nav_cs_flag_1", "tu154/custom/radio/nav1_cs_flag", globalPropertyi},
-    {"nav_gs_flag_1", "tu154/custom/radio/nav1_gs_flag", globalPropertyi},
-    {"nav_cs_2", "tu154/custom/radio/nav2_cs", globalPropertyf},
-    {"nav_gs_2", "tu154/custom/radio/nav2_gs", globalPropertyf},
-    {"nav_cs_flag_2", "tu154/custom/radio/nav2_cs_flag", globalPropertyi},
-    {"nav_gs_flag_2", "tu154/custom/radio/nav2_gs_flag", globalPropertyi},
-    {"obs", "tu154/custom/gauges/compas/pkp_obs_set_L", globalPropertyf},
-    {"obs_side", "tu154/custom/gauges/compas/pkp_obs_set_R", globalPropertyf},
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"gyro_fail", "tu154/custom/tks/fail_left", globalPropertyi},
-    {"absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi},
+    { "absu_zpu_sel", "tu154/custom/switchers/console/absu_zpu_sel", globalPropertyi },
+    { "course_ga", "tu154/custom/tks/course_ga_1", globalPropertyf },
+    { "course_bgmk", "tu154/custom/tks/course_bgmk_1", globalPropertyf },
+    { "diss_slip_angle", "tu154/custom/nvu/diss_slip_angle", globalPropertyf },
+    { "nav_cs_1", "tu154/custom/radio/nav1_cs", globalPropertyf },
+    { "nav_gs_1", "tu154/custom/radio/nav1_gs", globalPropertyf },
+    { "nav_cs_flag_1", "tu154/custom/radio/nav1_cs_flag", globalPropertyi },
+    { "nav_gs_flag_1", "tu154/custom/radio/nav1_gs_flag", globalPropertyi },
+    { "nav_cs_2", "tu154/custom/radio/nav2_cs", globalPropertyf },
+    { "nav_gs_2", "tu154/custom/radio/nav2_gs", globalPropertyf },
+    { "nav_cs_flag_2", "tu154/custom/radio/nav2_cs_flag", globalPropertyi },
+    { "nav_gs_flag_2", "tu154/custom/radio/nav2_gs_flag", globalPropertyi },
+    { "obs", "tu154/custom/gauges/compas/pkp_obs_set_L", globalPropertyf },
+    { "obs_side", "tu154/custom/gauges/compas/pkp_obs_set_R", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "gyro_fail", "tu154/custom/tks/fail_left", globalPropertyi },
+    { "absu_use_second_nav", "tu154/custom/absu_use_second_nav", globalPropertyi },
     -- Unused: the NVU/NAV display position now selects GPS, not the legacy NVU computer.
-    -- {"nvu_res_course", "tu154/custom/nvu/nvu_res_course", globalPropertyf},
-    -- {"nvu_res_z", "tu154/custom/nvu/nvu_res_z", globalPropertyf},
     -- Unused here: the installed faceplate no longer determines navigation data.
-    -- {"show_gns", "tu154/custom/anim/show_gns", globalPropertyi},
-    {"show_RXP", "tu154/custom/anim/RXP", globalPropertyi},
-    {"GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf},
-    {"GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf},
-    {"GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi},
-    {"gps_power", "sim/cockpit2/radios/actuators/gps_power", globalPropertyi},
-    {"gps_fromto", "sim/cockpit/radios/gps_fromto", globalPropertyi},
+    { "show_RXP", "tu154/custom/anim/RXP", globalPropertyi },
+    { "GNS430_dtk", "tu154/custom/SC/GNS430_dtk", globalPropertyf },
+    { "GNS430_dev", "tu154/custom/SC/GNS430_dev", globalPropertyf },
+    { "GNS430_flag", "tu154/custom/SC/GNS430_flag", globalPropertyi },
+    { "gps_power", "sim/cockpit2/radios/actuators/gps_power", globalPropertyi },
+    { "gps_fromto", "sim/cockpit/radios/gps_fromto", globalPropertyi },
     -- The central GPS source component owns all optional plugin bindings.
-    {"RXP_available", "tu154/custom/gps/rxp_available", globalPropertyi},
-    {"RXP_course", "tu154/custom/gps/rxp_course", globalPropertyf},
-    {"RXP_dev", "tu154/custom/gps/rxp_deviation", globalPropertyf},
-    {"RXP_flag", "tu154/custom/gps/rxp_flag", globalPropertyi},
-    {"pnp_mode", "tu154/custom/switchers/ovhd/curs_pnp_mode_1", globalPropertyi},
-    {"pkp_obs_knob", "tu154/custom/gauges/compas/pkp_obs_knob_L", globalPropertyf},
-    {"absu_pnp_mode", "tu154/custom/absu/absu_pnp_mode_1", globalPropertyi},
-    {"absu_pnp_mode_2", "tu154/custom/absu/absu_pnp_mode_2", globalPropertyi},
-    -- {"nav_select", "tu154/custom/switchers/nav_select", globalPropertyi}, -- Unused: no legacy NVU override of GPS indication.
-    {"bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"bus36_volt", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf},
-    {"fail_ga", "sim/operation/failures/rel_ss_dgy", globalPropertyf},
-    {"tks_on", "tu154/custom/switchers/ovhd/tks_on_1", globalPropertyi},
-    {"pkp_gyro_course", "tu154/custom/gauges/compas/pkp_gyro_course_L", globalPropertyf},
-    {"pkp_obs", "tu154/custom/gauges/compas/pkp_obs_L", globalPropertyf},
-    {"pkp_helper_course", "tu154/custom/gauges/compas/pkp_helper_course_L", globalPropertyf},
-    {"pkp_slip_angle", "tu154/custom/gauges/compas/pkp_slip_angle_L", globalPropertyf},
-    {"pkp_course_plank", "tu154/custom/gauges/compas/pkp_course_plank_L", globalPropertyf},
-    {"pkp_gs_plank", "tu154/custom/gauges/compas/pkp_gs_plank_L", globalPropertyf},
-    {"pkp_gs_flag", "tu154/custom/gauges/compas/pkp_gs_flag_L", globalPropertyi},
-    {"pkp_course_flag", "tu154/custom/gauges/compas/pkp_course_flag_L", globalPropertyi},
-    {"pkp_main_flag", "tu154/custom/gauges/compas/pkp_main_flag_L", globalPropertyi},
-    {"pkp_obs_flag", "tu154/custom/gauges/compas/pkp_obs_flag_L", globalPropertyi},
-    {"pkp_obs_one", "tu154/custom/gauges/compas/pkp_obs_one_L", globalPropertyf},
-    {"pkp_obs_ten", "tu154/custom/gauges/compas/pkp_obs_ten_L", globalPropertyf},
-    {"pkp_obs_hundr", "tu154/custom/gauges/compas/pkp_obs_hundr_L", globalPropertyf},
-    {"pnp_sp_lamp", "tu154/custom/lights/small/pnp_sp_left", globalPropertyf},
-    {"pnp_vor_lamp", "tu154/custom/lights/small/pnp_vor_left", globalPropertyf},
-    {"pnp_nv_lamp", "tu154/custom/lights/small/pnp_nv_left", globalPropertyf},
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
+    { "RXP_available", "tu154/custom/gps/rxp_available", globalPropertyi },
+    { "RXP_course", "tu154/custom/gps/rxp_course", globalPropertyf },
+    { "RXP_dev", "tu154/custom/gps/rxp_deviation", globalPropertyf },
+    { "RXP_flag", "tu154/custom/gps/rxp_flag", globalPropertyi },
+    { "pnp_mode", "tu154/custom/switchers/ovhd/curs_pnp_mode_1", globalPropertyi },
+    { "pkp_obs_knob", "tu154/custom/gauges/compas/pkp_obs_knob_L", globalPropertyf },
+    { "absu_pnp_mode", "tu154/custom/absu/absu_pnp_mode_1", globalPropertyi },
+    { "absu_pnp_mode_2", "tu154/custom/absu/absu_pnp_mode_2", globalPropertyi },
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus36_volt", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf },
+    { "fail_ga", "sim/operation/failures/rel_ss_dgy", globalPropertyf },
+    { "tks_on", "tu154/custom/switchers/ovhd/tks_on_1", globalPropertyi },
+    { "pkp_gyro_course", "tu154/custom/gauges/compas/pkp_gyro_course_L", globalPropertyf },
+    { "pkp_obs", "tu154/custom/gauges/compas/pkp_obs_L", globalPropertyf },
+    { "pkp_helper_course", "tu154/custom/gauges/compas/pkp_helper_course_L", globalPropertyf },
+    { "pkp_slip_angle", "tu154/custom/gauges/compas/pkp_slip_angle_L", globalPropertyf },
+    { "pkp_course_plank", "tu154/custom/gauges/compas/pkp_course_plank_L", globalPropertyf },
+    { "pkp_gs_plank", "tu154/custom/gauges/compas/pkp_gs_plank_L", globalPropertyf },
+    { "pkp_gs_flag", "tu154/custom/gauges/compas/pkp_gs_flag_L", globalPropertyi },
+    { "pkp_course_flag", "tu154/custom/gauges/compas/pkp_course_flag_L", globalPropertyi },
+    { "pkp_main_flag", "tu154/custom/gauges/compas/pkp_main_flag_L", globalPropertyi },
+    { "pkp_obs_flag", "tu154/custom/gauges/compas/pkp_obs_flag_L", globalPropertyi },
+    { "pkp_obs_one", "tu154/custom/gauges/compas/pkp_obs_one_L", globalPropertyf },
+    { "pkp_obs_ten", "tu154/custom/gauges/compas/pkp_obs_ten_L", globalPropertyf },
+    { "pkp_obs_hundr", "tu154/custom/gauges/compas/pkp_obs_hundr_L", globalPropertyf },
+    { "pnp_sp_lamp", "tu154/custom/lights/small/pnp_sp_left", globalPropertyf },
+    { "pnp_vor_lamp", "tu154/custom/lights/small/pnp_vor_left", globalPropertyf },
+    { "pnp_nv_lamp", "tu154/custom/lights/small/pnp_nv_left", globalPropertyf },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 local main_scale_act = math.random(-180, 180)
@@ -95,11 +89,7 @@ function update()
     local MASTER = get(ismaster) ~= 1
     local passed = get(frame_time)
 
-    local power =
-        get(bus27_volt) > 13
-        and get(bus36_volt) > 30
-        and get(tks_on) == 1
-        and get(fail_ga) < 6
+    local power = get(bus27_volt) > 13 and get(bus36_volt) > 30 and get(tks_on) == 1 and get(fail_ga) < 6
 
     local mode = get(absu_pnp_mode)
     local mode_2 = get(absu_pnp_mode_2)
@@ -134,9 +124,7 @@ function update()
         -- Slip angle.
         local slip = get(diss_slip_angle)
 
-        slip_ang_act =
-            slip_ang_act
-            + (slip - slip_ang_act) * passed * 10
+        slip_ang_act = slip_ang_act + (slip - slip_ang_act) * passed * 10
 
         if slip_ang_act > 30 then
             slip_ang_act = 30
@@ -191,17 +179,16 @@ function update()
         obs_course = get(obs)
         set(pkp_obs_flag, 0)
 
-        if ((get(gauge_num) == 0 and get(absu_zpu_sel) == 1)
-            or (get(gauge_num) == 1 and get(absu_zpu_sel) == 0))
-            and mode_2 > 1 then
-
+        if
+            ((get(gauge_num) == 0 and get(absu_zpu_sel) == 1) or (get(gauge_num) == 1 and get(absu_zpu_sel) == 0))
+            and mode_2 > 1
+        then
             obs_course = get(obs_side)
             set(pkp_obs_flag, 1)
         end
 
         course_flag = get(nav_cs_flag_1)
         gs_flag = 1
-
     elseif mode == 3 and power then
         -- AZ-2 mode.
         course_pl = get(nav_cs_2)
@@ -216,17 +203,16 @@ function update()
         obs_course = get(obs)
         set(pkp_obs_flag, 0)
 
-        if ((get(gauge_num) == 0 and get(absu_zpu_sel) == 1)
-            or (get(gauge_num) == 1 and get(absu_zpu_sel) == 0))
-            and mode_2 > 1 then
-
+        if
+            ((get(gauge_num) == 0 and get(absu_zpu_sel) == 1) or (get(gauge_num) == 1 and get(absu_zpu_sel) == 0))
+            and mode_2 > 1
+        then
             obs_course = get(obs_side)
             set(pkp_obs_flag, 1)
         end
 
         course_flag = get(nav_cs_flag_2)
         gs_flag = 1
-
     elseif mode == 4 and power then
         -- APP mode.
         course_pl = get(nav_cs_1)
@@ -246,27 +232,29 @@ function update()
         obs_course = get(obs)
         set(pkp_obs_flag, 0)
 
-        if ((get(gauge_num) == 0 and get(absu_zpu_sel) == 1)
-            or (get(gauge_num) == 1 and get(absu_zpu_sel) == 0))
-            and mode_2 > 1 then
-
+        if
+            ((get(gauge_num) == 0 and get(absu_zpu_sel) == 1) or (get(gauge_num) == 1 and get(absu_zpu_sel) == 0))
+            and mode_2 > 1
+        then
             obs_course = get(obs_side)
             set(pkp_obs_flag, 1)
         end
 
         course_flag = math.min(get(nav_cs_flag_1), get(nav_cs_flag_2))
         gs_flag = math.min(get(nav_gs_flag_1), get(nav_gs_flag_2))
-
     elseif power and mode == 1 then
         -- Both HSI NVU/NAV positions mean GPS. VOR1/VOR2 are modes 2/3 above.
         -- Native GNS430 is the fallback whenever the optional RXP source is absent.
         local dtk = get(GNS430_dtk)
         local deviation = get(GNS430_dev)
         local fromto = get(gps_fromto)
-        local valid = get(gps_power) > 0 and get(GNS430_flag) == 0
+        local valid = get(gps_power) > 0
+            and get(GNS430_flag) == 0
             and (fromto == 1 or fromto == 2)
-            and dtk == dtk and math.abs(dtk) < math.huge
-            and deviation == deviation and math.abs(deviation) < math.huge
+            and dtk == dtk
+            and math.abs(dtk) < math.huge
+            and deviation == deviation
+            and math.abs(deviation) < math.huge
         obs_course = valid and dtk or get(obs)
         course_pl = valid and deviation * 0.1852 * 2.1 or 0
         glidesl_pl = 0
@@ -280,15 +268,16 @@ function update()
             deviation = get(RXP_dev)
             fromto = get(RXP_flag)
             valid = (fromto == 1 or fromto == 2)
-                and dtk == dtk and math.abs(dtk) < math.huge
-                and deviation == deviation and math.abs(deviation) < math.huge
+                and dtk == dtk
+                and math.abs(dtk) < math.huge
+                and deviation == deviation
+                and math.abs(deviation) < math.huge
             obs_course = valid and dtk or get(obs)
             course_pl = valid and deviation * 1.852 * 0.5 or 0
             course_flag = valid and 0 or 1
         end
 
         set(pkp_obs_flag, 1)
-
     elseif power then
         obs_course = get(obs)
         course_pl = 0
@@ -298,7 +287,6 @@ function update()
         course_flag = 1
 
         set(pkp_obs_flag, 1)
-
     else
         course_pl = 0
         glidesl_pl = 0
@@ -310,13 +298,9 @@ function update()
     end
 
     -- Smooth course and glideslope planks.
-    v_plank_act =
-        v_plank_act
-        + (course_pl - v_plank_act) * passed * 5
+    v_plank_act = v_plank_act + (course_pl - v_plank_act) * passed * 5
 
-    h_plank_act =
-        h_plank_act
-        + (glidesl_pl - h_plank_act) * passed * 5
+    h_plank_act = h_plank_act + (glidesl_pl - h_plank_act) * passed * 5
 
     if v_plank_act > 1.1 then
         v_plank_act = 1.1
@@ -401,13 +385,9 @@ function update()
 
     -- OBS number drums.
     local obs_1 = obs_now % 10
-    local obs_10 =
-        math.floor((obs_now % 100) * 0.1)
-        + math.max(obs_1 - 9, 0)
+    local obs_10 = math.floor((obs_now % 100) * 0.1) + math.max(obs_1 - 9, 0)
 
-    local obs_100 =
-        math.floor((obs_now % 1000) * 0.01)
-        + math.max(obs_10 - 9, 0)
+    local obs_100 = math.floor((obs_now % 1000) * 0.01) + math.max(obs_10 - 9, 0)
 
     set(pkp_obs_hundr, obs_100)
     set(pkp_obs_ten, obs_10)

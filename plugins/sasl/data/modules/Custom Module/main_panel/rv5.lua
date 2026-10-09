@@ -1,5 +1,5 @@
 -- rv5.lua
--- RV-5 radio altimeter logic.
+-- Calculate RV-5 radio-altimeter indication, startup testing and decision-height signals.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -16,7 +16,6 @@ end
 defineProps({
     -- Timing and radio altitude
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
-    -- { "external_view", "sim/graphics/view/view_is_external", globalPropertyi }, -- Unused: no view-dependent logic.
     { "altitude", "sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot", globalPropertyf },
 
     -- Controls and failure state; the right-side instance overrides these defaults.
@@ -39,15 +38,15 @@ defineProps({
 })
 
 local alt2angle = {
-{-100000, 0},
-{0, 0},
-{20, 30},
-{50, 80},
-{100, 160},
-{700, 314},
-{700, 314},
-{800, 340},
-{8000000, 340}
+    { -100000, 0 },
+    { 0, 0 },
+    { 20, 30 },
+    { 50, 80 },
+    { 100, 160 },
+    { 700, 314 },
+    { 700, 314 },
+    { 800, 340 },
+    { 8000000, 340 },
 }
 
 local alt_angle = 0
@@ -56,68 +55,76 @@ local start_timer = 0
 local alt = 0
 
 function update()
-	
-	local passed = get(frame_time)
-	
-	local power = get(bus27_volt) > 13 and get(bus115_volt) > 110 and get(rv_on) == 1 and get(rv_fail) == 0
-	local test = power and get(test_btn) == 1
-	
-	if power then
-		start_timer = start_timer + passed
-		
-		if start_timer < 20 then 
-			alt_angle = 340
-			alt = 800
-			if test then 
-				alt = 15 
-				alt_angle = interpolate(alt2angle, alt)
-			end
-		elseif start_timer <= 30 then 
-			alt_angle = 340 - (start_timer - 20) * 34
-			alt = get(altitude) * 0.3048
-			if alt_angle < interpolate(alt2angle, alt) then alt_angle = interpolate(alt2angle, alt) end
-			if test then 
-				alt = 15 
-				alt_angle = interpolate(alt2angle, alt)
-			end
-		else 
-			alt = get(altitude) * 0.3048
-			if alt > 800 then alt = 800
-			elseif alt < 0 then alt = 0 end
-			
-			if test then alt = 15 end
-			
-			alt_angle = interpolate(alt2angle, alt)
-			
-			if start_timer > 50 then start_timer = 50 end
-		end
-		
-		set(rv_, 1)
-	else
-		start_timer = start_timer - passed
-		if start_timer < 20 then start_timer = 0 end
-		--if start_timer < 0 then start_timer = 0 end
-		set(rv_, 0)
-	end
-	
-	alt_angle_act = alt_angle_act + (alt_angle - alt_angle_act) * passed * 4
-	
-	-- flag logic
-	local flag_show = bool2int(not power or (start_timer <= 30 and not test))
-	
-	set(rv_flag, flag_show)
-	
-	-- lamp logic
-	local lamp_lit = bool2int(alt_angle < get(dh_set) - 1 and power)
-	
-	local lamp_coef = math.max((get(bus27_volt) - 10) / 18.5, 0)
-	
-	set(rv_lamp, lamp_lit * lamp_coef)
-	set(rv5_dh_signal, lamp_lit)
-	
-	-- set results
-	set(rv_angle, alt_angle_act)
-	set(rv5_alt, alt)
+    local passed = get(frame_time)
 
+    local power = get(bus27_volt) > 13 and get(bus115_volt) > 110 and get(rv_on) == 1 and get(rv_fail) == 0
+    local test = power and get(test_btn) == 1
+
+    if power then
+        start_timer = start_timer + passed
+
+        if start_timer < 20 then
+            alt_angle = 340
+            alt = 800
+            if test then
+                alt = 15
+                alt_angle = interpolate(alt2angle, alt)
+            end
+        elseif start_timer <= 30 then
+            alt_angle = 340 - (start_timer - 20) * 34
+            alt = get(altitude) * 0.3048
+            if alt_angle < interpolate(alt2angle, alt) then
+                alt_angle = interpolate(alt2angle, alt)
+            end
+            if test then
+                alt = 15
+                alt_angle = interpolate(alt2angle, alt)
+            end
+        else
+            alt = get(altitude) * 0.3048
+            if alt > 800 then
+                alt = 800
+            elseif alt < 0 then
+                alt = 0
+            end
+
+            if test then
+                alt = 15
+            end
+
+            alt_angle = interpolate(alt2angle, alt)
+
+            if start_timer > 50 then
+                start_timer = 50
+            end
+        end
+
+        set(rv_, 1)
+    else
+        start_timer = start_timer - passed
+        if start_timer < 20 then
+            start_timer = 0
+        end
+        --if start_timer < 0 then start_timer = 0 end
+        set(rv_, 0)
+    end
+
+    alt_angle_act = alt_angle_act + (alt_angle - alt_angle_act) * passed * 4
+
+    -- flag logic
+    local flag_show = bool2int(not power or (start_timer <= 30 and not test))
+
+    set(rv_flag, flag_show)
+
+    -- lamp logic
+    local lamp_lit = bool2int(alt_angle < get(dh_set) - 1 and power)
+
+    local lamp_coef = math.max((get(bus27_volt) - 10) / 18.5, 0)
+
+    set(rv_lamp, lamp_lit * lamp_coef)
+    set(rv5_dh_signal, lamp_lit)
+
+    -- set results
+    set(rv_angle, alt_angle_act)
+    set(rv5_alt, alt)
 end
-

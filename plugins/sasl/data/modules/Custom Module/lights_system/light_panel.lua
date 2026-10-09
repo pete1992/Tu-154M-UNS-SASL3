@@ -1,20 +1,7 @@
 -- light_panel.lua
---[[
-Changelog
-- Grouped all property bindings through a local defineProps() helper while preserving all existing property names, Dataref paths, constructors, and their original order.
-- Added X-Plane version detection so all panel sounds use the correct sasl.al.playSample() argument for X-Plane 11 and X-Plane 12.
-- Replaced Russian comments with English comments.
-- Replaced sum-based control-change detection with direct state comparisons to prevent opposite changes from cancelling each other.
-- Prevented the automatic cold-and-dark reset from producing artificial switch sounds.
-- Added landing-light extension and mode switches to the cold-and-dark reset.
-- Prevented the landing-light safety cap from producing a delayed second switch sound when it forces the protected switch off.
-- Made frame time a local per-frame value instead of creating a component-global temporary.
-- Stopped updating the startup timer after initialization has completed.
-- Preserved all existing sound assignments, reset timing, engine-N1 reset condition, and panel behavior unless explicitly listed above.
-]]
+-- Handles lighting-panel switches, safety caps, startup reset and sounds.
 
 -- Panel logic for the lighting system.
-
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -52,15 +39,12 @@ defineProps({
     { "landing_light_off", "tu154/custom/lights/landing_light_off", globalPropertyi },
     { "landing_light_off_cap", "tu154/custom/lights/landing_light_off_cap", globalPropertyi },
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
-    
+
     -- ======== Arrays ======== --
-    
-    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", 
-		globalProperty },
-    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", 
-		globalProperty },
-    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", 
-		globalProperty },
+
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty },
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty },
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty },
 })
 
 -- Previous control states used for sound detection.
@@ -93,11 +77,11 @@ local lights_off_last = get(landing_light_off)
 local lights_cap_last = get(landing_light_off_cap)
 
 -- Sound samples.
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local rotary_sound = sasl.al.loadSample('Custom Sounds/rot_click_big.wav')
-local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
-local nosmoke_sound = sasl.al.loadSample('Custom Sounds/nosmoke.wav')
-local seatbelt_sound = sasl.al.loadSample('Custom Sounds/seatbelt.wav')
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local rotary_sound = sasl.al.loadSample("Custom Sounds/rot_click_big.wav")
+local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
+local nosmoke_sound = sasl.al.loadSample("Custom Sounds/nosmoke.wav")
+local seatbelt_sound = sasl.al.loadSample("Custom Sounds/seatbelt.wav")
 
 local function playPanelSample(sample)
     sasl.al.playSample(sample, false)
@@ -188,8 +172,7 @@ function update()
     end
 
     -- Rotary control sounds.
-    local rotary_changed =
-        mid_left_panel ~= mid_left_panel_last
+    local rotary_changed = mid_left_panel ~= mid_left_panel_last
         or left_panel ~= left_panel_last
         or right_panel ~= right_panel_last
         or mid_right_panel ~= mid_right_panel_last
@@ -200,8 +183,7 @@ function update()
     end
 
     -- Switch sounds. Direct comparisons prevent opposite changes from cancelling out.
-    local switcher_changed =
-        cabinl_flood ~= cabinl_flood_last
+    local switcher_changed = cabinl_flood ~= cabinl_flood_last
         or azs_panel_flood ~= azs_panel_flood_last
         or cargo_1 ~= cargo_1_last
         or cargo_2 ~= cargo_2_last
@@ -231,13 +213,13 @@ function update()
         playPanelSample(cap_sound)
     end
 
-	if sign_nosmoke_sw ~= sign_nosmoke_last then
-  	 playPanelSample(nosmoke_sound)
-	end
-		
-	if sign_belts_sw ~= sign_belts_last then
-   	playPanelSample(seatbelt_sound)
-	end
+    if sign_nosmoke_sw ~= sign_nosmoke_last then
+        playPanelSample(nosmoke_sound)
+    end
+
+    if sign_belts_sw ~= sign_belts_last then
+        playPanelSample(seatbelt_sound)
+    end
 
     -- Save current states for the next frame.
     mid_left_panel_last = mid_left_panel

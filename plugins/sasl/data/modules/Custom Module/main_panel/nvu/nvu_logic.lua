@@ -1,5 +1,6 @@
 -- nvu_logic.lua
--- Compatibility outputs still required outside the retired NVU system.
+-- Publish GPS availability for consumers of the retired NVU interface.
+
 -- FMS panels enter the flight plan; ABSU flies it through the existing GPS bridge.
 -- No coordinate calculation, NVU-set selection or extra source routing belongs here.
 

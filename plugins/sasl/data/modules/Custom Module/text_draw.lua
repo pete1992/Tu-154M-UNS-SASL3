@@ -1,11 +1,12 @@
--- Generic text drawing component for scalable and legacy bitmap fonts.
---
+-- text_draw.lua
+-- Draws scalable or bitmap text with a default font sized for the aircraft panels.
+
 -- The 2D panels were authored for a 24 px outline font.  Using the fixed-size
 -- 40 px basic_font bitmap here makes every payload value and ground-service
 -- status overflow its field under SASL 3.
 
 defineProperty("text", "")
-defineProperty("color", {0, 0, 0, 1})
+defineProperty("color", { 0, 0, 0, 1 })
 defineProperty("monospace", false)
 defineProperty("font_size", 24)
 defineProperty("font", nil)
@@ -39,14 +40,7 @@ function draw()
     end
 
     if drawAsBitmap then
-        sasl.gl.drawBitmapText(
-            drawFont,
-            0,
-            0,
-            tostring(get(text) or ""),
-            TEXT_ALIGN_LEFT,
-            {c[1], c[2], c[3], c[4]}
-        )
+        sasl.gl.drawBitmapText(drawFont, 0, 0, tostring(get(text) or ""), TEXT_ALIGN_LEFT, { c[1], c[2], c[3], c[4] })
         return
     end
 
@@ -63,6 +57,6 @@ function draw()
         false,
         isEnabled(get(italic)),
         TEXT_ALIGN_LEFT,
-        {c[1], c[2], c[3], c[4]}
+        { c[1], c[2], c[3], c[4] }
     )
 end

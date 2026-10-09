@@ -1,6 +1,6 @@
 -- nvu_panel.lua
--- Remaining cockpit services from the former NVU panel.
--- Keep the BDK needle, shared switch sounds, switch initialization and lamp test.
+-- Maintain the BDK needle, shared switch sounds, startup settings and lamp test.
+
 -- Retired NVU counters, entry buttons and coordinate/correction indications are gone.
 
 local function defineProps(defs)
@@ -38,7 +38,7 @@ defineProps({
     { "change_ch_o", "tu154/custom/lights/change_ch_o", globalPropertyf },
 })
 
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
 local switch_state = 0
 local sound_trigger = 0
 local start_timer = 0

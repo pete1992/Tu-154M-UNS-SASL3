@@ -1,11 +1,11 @@
 -- tape_lit.lua
--- Generic illuminated scrollable texture tape component.
+-- Draws an illuminated texture tape using normalized scroll and window coordinates.
 
 -- Texture supplied by the parent component.
 defineProperty("image")
 
 -- Visible texture area in normalized texture coordinates.
-defineProperty("window", {1.0, 1.0})
+defineProperty("window", { 1.0, 1.0 })
 
 -- Horizontal source offset in normalized texture coordinates.
 defineProperty("scrollX", 0)
@@ -41,6 +41,6 @@ function draw()
         sourceY,
         sourceWidth,
         sourceHeight,
-        {1, 1, 1, 1}
+        { 1, 1, 1, 1 }
     )
 end

@@ -1,11 +1,10 @@
 -- sounds.lua
--- this is the main sounds script
+-- Registers cabin, engine, crew, and cockpit-control sound components.
 
 components = {
 
-	cabin_sounds {},
-	engines_sound {},
-	crew_voices {},
-	cockpit_control_sounds {},
-	
+    cabin_sounds {},
+    engines_sound {},
+    crew_voices {},
+    cockpit_control_sounds {},
 }

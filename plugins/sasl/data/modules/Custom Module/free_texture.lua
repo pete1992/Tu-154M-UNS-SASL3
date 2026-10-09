@@ -1,5 +1,5 @@
 -- free_texture.lua
--- Generic texture drawing component.
+-- Draws a texture at the position and dimensions supplied by its parent.
 
 defineProperty("image")
 defineProperty("position_x", 0)
@@ -14,11 +14,5 @@ function draw()
         return
     end
 
-    sasl.gl.drawTexture(
-        texture,
-        get(position_x),
-        get(position_y),
-        get(width),
-        get(height)
-    )
+    sasl.gl.drawTexture(texture, get(position_x), get(position_y), get(width), get(height))
 end

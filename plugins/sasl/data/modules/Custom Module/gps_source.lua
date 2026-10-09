@@ -1,5 +1,8 @@
--- Automatic local GPS-provider selection. A partial/missing RXP installation
--- uses the native GNS430; external RXP DataRefs must never be created by us.
+-- gps_source.lua
+-- Detects the optional RXP provider and publishes the local GPS selection and navigation bridge.
+
+-- A missing or partial RXP installation selects the native GNS430.
+-- External RXP DataRefs remain owned by the provider.
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         local prop
@@ -30,8 +33,7 @@ local rxp_datarefs = {
 }
 
 local function finite(value)
-    return type(value) == "number" and value == value
-        and value > -math.huge and value < math.huge
+    return type(value) == "number" and value == value and value > -math.huge and value < math.huge
 end
 
 local function update_source()
@@ -53,8 +55,7 @@ local function update_source()
         local raw_flag = sasl.getDataRef(refs[3])
         -- No valid fix is not the same as no plugin. Retain RXP selection,
         -- but keep invalid/non-finite navigation values out of the indicators.
-        if finite(raw_course) and finite(raw_deviation)
-            and (raw_flag == 1 or raw_flag == 2) then
+        if finite(raw_course) and finite(raw_deviation) and (raw_flag == 1 or raw_flag == 2) then
             course, deviation, flag = raw_course, raw_deviation, raw_flag
         end
     end
@@ -65,9 +66,13 @@ local function update_source()
 
     -- One owner for installation selection: neither a saved preference nor
     -- the Ground panel may force an unavailable plugin (or the removed KLN).
-    if get(show_gns) ~= 1 then set(show_gns, 1) end
+    if get(show_gns) ~= 1 then
+        set(show_gns, 1)
+    end
     local selected_rxp = bool2int(available)
-    if get(show_RXP) ~= selected_rxp then set(show_RXP, selected_rxp) end
+    if get(show_RXP) ~= selected_rxp then
+        set(show_RXP, selected_rxp)
+    end
 end
 
 -- Components are constructed before their first update, so initialize the

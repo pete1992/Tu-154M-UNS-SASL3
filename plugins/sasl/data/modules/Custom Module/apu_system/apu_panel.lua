@@ -1,12 +1,5 @@
 -- apu_panel.lua
---[[
-Changelog
-- Uses the project-wide defineProps() helper instead of defining a local copy.
-- Added a dedicated PTA-6A tachometer-converter failure input.
-- Connected the PTA-6A FAIL annunciator to the real failure state and lamp test.
-- Preserved all existing APU gauge curves, warning thresholds, smoothing factors, lamp latching, control sounds, and simulator bridge behavior.
-- Preserved the existing APU starter, generator, oil-temperature, EGT, residual-fuel, general, and bleed-air failure bindings.
-]]
+-- Updates APU instruments, annunciators and the native simulator APU interface.
 
 -- APU panel logic.
 
@@ -46,7 +39,6 @@ defineProps({
     { "apu_oil_q", "tu154/custom/eng/apu_oil_q", globalPropertyf }, -- APU oil quantity
     { "apu_oil_p", "tu154/custom/eng/apu_oil_p", globalPropertyf }, -- APU oil pressure
     { "apu_egt", "tu154/custom/eng/apu_egt", globalPropertyf }, -- APU exhaust gas temperature
-    -- { "apu_air_press", "tu154/custom/eng/apu_air_press", globalPropertyf }, -- Air pressure available for engine start
     { "apu_air_doors", "tu154/custom/eng/apu_air_doors", globalPropertyf }, -- Bleed-air door position
     { "apu_fuel_p", "tu154/custom/eng/apu_fuel_p", globalPropertyf }, -- APU fuel pressure
     -- Electrical state
@@ -67,7 +59,6 @@ defineProps({
     { "APU_starter_switch", "sim/cockpit2/electrical/APU_starter_switch", globalPropertyi }, -- APU starter switch state
     { "APU_N1_percent", "sim/cockpit2/electrical/APU_N1_percent", globalPropertyf }, -- Default simulator APU N1
     { "APU_running", "sim/cockpit2/electrical/APU_running", globalPropertyi }, -- Default simulator APU running state
---    { "acf_has_APU_switch", "sim/aircraft/overflow/acf_has_APU_switch", globalPropertyi }, 
     { "rel_APU_press", "sim/operation/failures/rel_APU_press", globalPropertyi },
     { "bleed_air_mode", "sim/cockpit2/pressurization/actuators/bleed_air_mode", globalPropertyi }, -- 0 off, 1 left, 2 both, 3 right, 4 APU, 5 auto
     -- XP12 pneumatic bridge; native starters require the corresponding duct.
@@ -88,8 +79,8 @@ defineProps({
 })
 
 -- Sounds
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 local passed = get(frame_time)
 
 local native_start_valves = nil
@@ -118,7 +109,6 @@ local function updateNativeAPUPressure()
     return current
 end
 
-
 -- Keeps the default X-Plane APU active as a bridge for simulator systems.
 local function default_APU()
     if get(ismaster) == 1 then
@@ -142,8 +132,11 @@ local function default_APU()
 
         -- Generator switching belongs to generators_logic.lua.
         local native_pressure = updateNativeAPUPressure()
-        local bleed_ready = custom_running and get(apu_n1) > 92
-            and get(apu_air_doors) > 0.05 and get(apu_press_fail) == 0 and native_pressure ~= 6
+        local bleed_ready = custom_running
+            and get(apu_n1) > 92
+            and get(apu_air_doors) > 0.05
+            and get(apu_press_fail) == 0
+            and native_pressure ~= 6
         set(native_apu_bleed, bleed_ready and 1 or 0)
         set(native_gpu_bleed, get(asu_press) > 0 and 1 or 0)
 
@@ -152,8 +145,11 @@ local function default_APU()
         if get(start_sys_work) == 1 then
             if not native_start_valves then
                 native_start_valves = {
-                    get(native_isol_left), get(native_isol_right),
-                    get(native_pack_left), get(native_pack_center), get(native_pack_right)
+                    get(native_isol_left),
+                    get(native_isol_right),
+                    get(native_pack_left),
+                    get(native_pack_center),
+                    get(native_pack_right),
                 }
             end
             set(native_isol_left, 1)
@@ -264,13 +260,11 @@ local function check_controls()
     local test_lamps_but = get(test_lamps)
 
     -- Compare each control directly so simultaneous opposite changes cannot cancel out.
-    local switch_changed =
-        apu_main_sw ~= apu_main_last
+    local switch_changed = apu_main_sw ~= apu_main_last
         or apu_start_mod_sw ~= apu_start_mod_last
         or apu_air_sw ~= apu_air_last
 
-    local button_changed =
-        apu_start_but ~= apu_start_last
+    local button_changed = apu_start_but ~= apu_start_last
         or apu_stop_but ~= apu_stop_last
         or test_lamps_but ~= test_lamps_last
 
@@ -370,7 +364,9 @@ end
 
 function update()
     passed = get(frame_time)
-    if passed ~= passed or passed < 0 or passed == math.huge then passed = 0 end
+    if passed ~= passed or passed < 0 or passed == math.huge then
+        passed = 0
+    end
     default_APU()
     check_controls()
     lamps()

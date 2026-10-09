@@ -1,10 +1,5 @@
 -- rsbn_logic.lua
--- RSBN logic: selects the nearest beacon on the tuned channel and
--- provides slant range and azimuth to the gauges
-
--------------------------------------------------
--- properties
--------------------------------------------------
+-- Select the nearest RSBN beacon on the tuned channel and calculate range and azimuth.
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -14,18 +9,16 @@ end
 
 defineProps({
     -- Controls
-    -- { "rsbn_control_strobe",   "tu154/custom/buttons/ovhd/rsbn_control_strobe", globalPropertyi },
-    { "rsbn_control_azimuth",  "tu154/custom/buttons/ovhd/rsbn_control_azimuth", globalPropertyi },
+    { "rsbn_control_azimuth", "tu154/custom/buttons/ovhd/rsbn_control_azimuth", globalPropertyi },
     { "rsbn_control_distance", "tu154/custom/buttons/ovhd/rsbn_control_distance", globalPropertyi },
 
     { "rsbn_ch_ten", "tu154/custom/buttons/ovhd/rsbn_ch_ten", globalPropertyi },
     { "rsbn_ch_one", "tu154/custom/buttons/ovhd/rsbn_ch_one", globalPropertyi },
 
-    { "rsbn_on",    "tu154/custom/switchers/ovhd/rsbn_on", globalPropertyi },
-    -- { "rsbn_recon", "tu154/custom/switchers/ovhd/rsbn_recon", globalPropertyi },
+    { "rsbn_on", "tu154/custom/switchers/ovhd/rsbn_on", globalPropertyi },
 
     -- Aircraft position
-    { "latitude",  "sim/flightmodel/position/latitude", globalPropertyd },
+    { "latitude", "sim/flightmodel/position/latitude", globalPropertyd },
     { "longitude", "sim/flightmodel/position/longitude", globalPropertyd },
     { "elevation", "sim/flightmodel/position/elevation", globalPropertyd },
 
@@ -33,8 +26,8 @@ defineProps({
 
     -- Power
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
-    { "bus115_1_volt",   "tu154/custom/elec/bus115_1_volt", globalPropertyf },
-    { "rsbn_cc",         "tu154/custom/radio/rsbn_cc", globalPropertyf },
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "rsbn_cc", "tu154/custom/radio/rsbn_cc", globalPropertyf },
 
     -- Failures
     { "rsbn_fail", "tu154/custom/failures/rsbn_fail", globalPropertyi },
@@ -42,7 +35,7 @@ defineProps({
     -- Results
     { "distance", "tu154/custom/rsbn/distance", globalPropertyf },
     { "distance_valid", "tu154/custom/rsbn/distance_valid", globalPropertyi },
-    { "azimuth",  "tu154/custom/rsbn/azimuth", globalPropertyf },
+    { "azimuth", "tu154/custom/rsbn/azimuth", globalPropertyf },
 })
 
 include("nav_funcs.lua")
@@ -51,10 +44,10 @@ include("nav_funcs.lua")
 -- state
 -------------------------------------------------
 
-local nav_table = {}          -- all beacons from rsbn.dat
-local work_table = {}         -- beacons matching the selected channel
+local nav_table = {} -- all beacons from rsbn.dat
+local work_table = {} -- beacons matching the selected channel
 local channel_set = 0
-local chan_last = -1          -- -1 forces a first rebuild, also for channel 0
+local chan_last = -1 -- -1 forces a first rebuild, also for channel 0
 local table_read_timer = 0
 
 -------------------------------------------------
@@ -119,17 +112,17 @@ function read_nav_dat()
             -- no separator at all: comment or blank line, silently ignored
         else
             local channel = tonumber(f[1])
-            local lat     = tonumber(f[5])
-            local lon     = tonumber(f[6])
-            local elev    = tonumber(f[7])
+            local lat = tonumber(f[5])
+            local lon = tonumber(f[6])
+            local elev = tonumber(f[7])
 
             if channel and lat and lon and elev then
                 parsed[#parsed + 1] = {
                     chan = channel,
                     name = f[2],
                     icao = f[3],
-                    lat  = lat,
-                    lon  = lon,
+                    lat = lat,
+                    lon = lon,
                     elev = elev,
                 }
             else
@@ -142,11 +135,10 @@ function read_nav_dat()
 
     nav_table = parsed
     work_table = {}
-    chan_last = -1  -- force a rebuild against the new database
+    chan_last = -1 -- force a rebuild against the new database
 
     if skipped > 0 then
-        print("RSBN: rsbn.dat read, " .. #nav_table ..
-              " beacons, " .. skipped .. " malformed lines skipped")
+        print("RSBN: rsbn.dat read, " .. #nav_table .. " beacons, " .. skipped .. " malformed lines skipped")
     else
         print("RSBN: rsbn.dat read OK, " .. #nav_table .. " beacons")
     end
@@ -240,10 +232,7 @@ function update()
     local plane_lon = get(longitude)
     local plane_elev = get(elevation)
 
-    local power = get(rsbn_on) == 1
-        and get(bus27_volt_left) > 13
-        and get(bus115_1_volt) > 110
-        and get(rsbn_fail) == 0
+    local power = get(rsbn_on) == 1 and get(bus27_volt_left) > 13 and get(bus115_1_volt) > 110 and get(rsbn_fail) == 0
 
     set(rsbn_cc, bool2int(power))
 
@@ -253,11 +242,9 @@ function update()
 
     -- Refresh the nearest beacon about once per second
     if table_read_timer == 0 and #work_table > 0 and power then
-        beacon_dist, beacon_lat, beacon_lon, beacon_elevation, beacon_name =
-            get_nearest()
+        beacon_dist, beacon_lat, beacon_lon, beacon_elevation, beacon_name = get_nearest()
     elseif #work_table == 0 or not power then
-        beacon_dist, beacon_lat, beacon_lon, beacon_elevation, beacon_name =
-            0, 0, 0, 0, "none"
+        beacon_dist, beacon_lat, beacon_lon, beacon_elevation, beacon_name = 0, 0, 0, 0, "none"
     end
 
     local res_distance = 0
@@ -265,8 +252,7 @@ function update()
     if beacon_name ~= "none" then
         -- Great circle range and true bearing to the beacon
         beacon_dist = calc_range(beacon_lat, beacon_lon, plane_lat, plane_lon)
-        beacon_azimuth = calc_true_course(beacon_lat, beacon_lon,
-                                          plane_lat, plane_lon, beacon_dist)
+        beacon_azimuth = calc_true_course(beacon_lat, beacon_lon, plane_lat, plane_lon, beacon_dist)
 
         -- Slant range, corrected for the altitude difference
         local ground = beacon_dist * NM_TO_M
@@ -274,8 +260,8 @@ function update()
         res_distance = math.sqrt(ground * ground + vertical * vertical)
 
         -- Radio horizon: drop the indication if the beacon is out of reach
-        local dist_limit = 4120 * (math.sqrt(math.max(plane_elev, 0))
-                         + math.sqrt(math.max(beacon_elevation, 0))) + 20000
+        local dist_limit = 4120 * (math.sqrt(math.max(plane_elev, 0)) + math.sqrt(math.max(beacon_elevation, 0)))
+            + 20000
 
         if ground < math.abs(vertical) or res_distance > dist_limit then
             res_distance = 0

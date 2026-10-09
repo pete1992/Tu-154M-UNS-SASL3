@@ -1,5 +1,5 @@
 -- uap14.lua
--- AOA and G-force indicator logic.
+-- Calculate the UAP-14 angle-of-attack and G-force indications.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -8,39 +8,39 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"ias", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf},
-    {"mach", "sim/flightmodel/misc/machno", globalPropertyf},
-    {"gforce", "sim/flightmodel2/misc/gforce_normal", globalPropertyf},
-    {"alpha", "sim/flightmodel2/misc/AoA_angle_degrees", globalPropertyf},
-    {"alpha_fail", "sim/operation/failures/rel_AOA", globalPropertyi},
-    {"flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf},
-    {"slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf},
-    {"rel_pitot", "sim/operation/failures/rel_pitot", globalPropertyi},
-    {"lamp_test", "tu154/custom/buttons/lamp_test_front", globalPropertyi},
-    {"auasp_on", "tu154/custom/switchers/ovhd/auasp_on", globalPropertyi},
-    {"auasp_contr", "tu154/custom/switchers/ovhd/auasp_contr", globalPropertyi},
-    {"gforce_reset", "tu154/custom/buttons/misc/gforce_reset", globalPropertyi},
-    {"day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf},
-    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
-    {"bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf},
-    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"auasp_pow27_cc", "tu154/custom/elec/auasp_pow27_cc", globalPropertyf},
-    {"auasp_pow115_cc", "tu154/custom/elec/auasp_pow115_cc", globalPropertyf},
-    {"uap_fail", "sim/operation/failures/rel_AOA", globalPropertyi},
-    {"warn_fail", "sim/operation/failures/rel_stall_warn", globalPropertyi},
-    {"aoa_ind", "tu154/custom/gauges/misc/aoa_ind", globalPropertyf},
-    {"aoa_sector", "tu154/custom/gauges/misc/aoa_sector", globalPropertyf},
-    {"gforce_ind", "tu154/custom/gauges/misc/gforce_ind", globalPropertyf},
-    {"gforce_max", "tu154/custom/gauges/misc/gforce_max", globalPropertyf},
-    {"gforce_min", "tu154/custom/gauges/misc/gforce_min", globalPropertyf},
-    {"auasp_lamp", "tu154/custom/lights/auasp_lamp", globalPropertyf},
-    {"alpha_high", "tu154/custom/lights/alpha_high", globalPropertyf},
-    {"g_force_high", "tu154/custom/lights/g_force_high", globalPropertyf},
-    {"alpha_critical", "tu154/custom/auasp/alpha_critical", globalPropertyi},
-    {"gforce_critical", "tu154/custom/auasp/gforce_critical", globalPropertyi},
-    {"speaker_auasp", "tu154/custom/alarm/speaker_auasp", globalPropertyi},
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "ias", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf },
+    { "mach", "sim/flightmodel/misc/machno", globalPropertyf },
+    { "gforce", "sim/flightmodel2/misc/gforce_normal", globalPropertyf },
+    { "alpha", "sim/flightmodel2/misc/AoA_angle_degrees", globalPropertyf },
+    { "alpha_fail", "sim/operation/failures/rel_AOA", globalPropertyi },
+    { "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf },
+    { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf },
+    { "rel_pitot", "sim/operation/failures/rel_pitot", globalPropertyi },
+    { "lamp_test", "tu154/custom/buttons/lamp_test_front", globalPropertyi },
+    { "auasp_on", "tu154/custom/switchers/ovhd/auasp_on", globalPropertyi },
+    { "auasp_contr", "tu154/custom/switchers/ovhd/auasp_contr", globalPropertyi },
+    { "gforce_reset", "tu154/custom/buttons/misc/gforce_reset", globalPropertyi },
+    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf },
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "auasp_pow27_cc", "tu154/custom/elec/auasp_pow27_cc", globalPropertyf },
+    { "auasp_pow115_cc", "tu154/custom/elec/auasp_pow115_cc", globalPropertyf },
+    { "uap_fail", "sim/operation/failures/rel_AOA", globalPropertyi },
+    { "warn_fail", "sim/operation/failures/rel_stall_warn", globalPropertyi },
+    { "aoa_ind", "tu154/custom/gauges/misc/aoa_ind", globalPropertyf },
+    { "aoa_sector", "tu154/custom/gauges/misc/aoa_sector", globalPropertyf },
+    { "gforce_ind", "tu154/custom/gauges/misc/gforce_ind", globalPropertyf },
+    { "gforce_max", "tu154/custom/gauges/misc/gforce_max", globalPropertyf },
+    { "gforce_min", "tu154/custom/gauges/misc/gforce_min", globalPropertyf },
+    { "auasp_lamp", "tu154/custom/lights/auasp_lamp", globalPropertyf },
+    { "alpha_high", "tu154/custom/lights/alpha_high", globalPropertyf },
+    { "g_force_high", "tu154/custom/lights/g_force_high", globalPropertyf },
+    { "alpha_critical", "tu154/custom/auasp/alpha_critical", globalPropertyi },
+    { "gforce_critical", "tu154/custom/auasp/gforce_critical", globalPropertyi },
+    { "speaker_auasp", "tu154/custom/alarm/speaker_auasp", globalPropertyi },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 local sector_ang = 12
@@ -57,12 +57,8 @@ local gf_min = 0
 function update()
     local MASTER = get(ismaster) ~= 1
 
-    local power = bool2int(
-        get(bus27_volt_right) > 13
-        and get(bus115_3_volt) > 110
-        and get(auasp_on) == 1
-        and get(uap_fail) < 6
-    )
+    local power =
+        bool2int(get(bus27_volt_right) > 13 and get(bus115_3_volt) > 110 and get(auasp_on) == 1 and get(uap_fail) < 6)
 
     local passed = get(frame_time)
     local mode_sw = get(auasp_contr)
@@ -182,10 +178,7 @@ function update()
     -- Lamp brightness.
     local test_btn = get(lamp_test) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
     local day_night = 1 - get(day_night_set) * 0.25
-    local lamps_brt = math.max(
-        (math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5,
-        0
-    ) * day_night
+    local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0) * day_night
 
     set(alpha_high, math.max(aoa_crit * lamps_brt, test_btn))
     set(g_force_high, math.max(gf_crit * lamps_brt, test_btn))

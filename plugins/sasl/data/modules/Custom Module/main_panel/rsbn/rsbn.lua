@@ -1,10 +1,9 @@
 -- rsbn.lua
--- this is main RSBN script
+-- Assemble RSBN beacon navigation and panel components.
 
 components = {
 
-	rsbn_panel {},
-	
-	rsbn_logic {},
+    rsbn_panel {},
 
+    rsbn_logic {},
 }

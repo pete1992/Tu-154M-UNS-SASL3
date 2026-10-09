@@ -1,30 +1,11 @@
 -- trimmers.lua
--- Trimmer logic.
---[[
-Changelog
-- Preserved the existing pitch, roll, yaw, emergency-trim, AFCS-trim, SmartCopilot,
-  trim-limit, command, sound, and electrical-load behavior unless noted below.
-- Added the two elevator-trim channel cutoff switches from the engineer panel:
-  hydro_trimm_rud_1 and hydro_trimm_rud_2.
-- With both elevator-trim channels enabled, normal pitch-trim speed is unchanged.
-- With one elevator-trim channel enabled, normal/manual and ABSU pitch trim run at
-  half of the normal two-channel speed when the corresponding 36 V supply is available.
-- With both elevator-trim channels disabled, all elevator trim motion is inhibited,
-  including emergency trim and pitch-trim takeoff/center commands.
-- Emergency trim remains a separate control path and retains its existing calibrated
-  speed whenever at least one elevator-trim channel is enabled.
-- Pitch-trim 36 V current indications now follow the enabled trim channels.
-- Kept the existing 1.25 pitch-trim speed asymmetry below neutral.
-- Kept all Dataref bindings in one defineProps() block.
-]]
-
+-- Controls pitch, roll and yaw trim, trim commands and electrical loads.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         defineProperty(def[1], def[3](def[2]))
     end
 end
-
 
 defineProps({
     -- Trim controls
@@ -42,7 +23,6 @@ defineProps({
     { "int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf },
     { "int_roll_trim", "tu154/custom/trimmers/int_roll_trim", globalPropertyf },
     { "int_yaw_trim", "tu154/custom/trimmers/int_yaw_trim", globalPropertyf },
-    -- { "absu_roll_mode", "tu154/custom/gauges/console/absu_roll_mode", globalPropertyi },
     { "absu_pitch_mode", "tu154/custom/gauges/console/absu_pitch_mode", globalPropertyi },
 
     -- Electrical power and current loads
@@ -131,10 +111,7 @@ local function normalPitchTrimAvailable()
     local channel_1_available = trimChannel1Enabled() and has36Left()
     local channel_2_available = trimChannel2Enabled() and has36Right()
 
-    return has27Left()
-        and has27Right()
-        and (channel_1_available or channel_2_available)
-        and get(rel_trim_elv) ~= 6
+    return has27Left() and has27Right() and (channel_1_available or channel_2_available) and get(rel_trim_elv) ~= 6
 end
 
 local function rollTrimAvailable()
@@ -156,8 +133,7 @@ function update()
 
     local trim_channel_1 = bool2int(get(hydro_trimm_rud_1) == 1)
     local trim_channel_2 = bool2int(get(hydro_trimm_rud_2) == 1)
-    local pitch_trim_channel_available =
-        bool2int(trim_channel_1 + trim_channel_2 > 0)
+    local pitch_trim_channel_available = bool2int(trim_channel_1 + trim_channel_2 > 0)
 
     local elev_failed = get(rel_trim_elv) == 6
     local roll_failed = get(rel_trim_ail) == 6
@@ -186,28 +162,15 @@ function update()
     -- original factor of 4. One available channel gives factor 2.
     local normal_power_factor = power_27_L
         * power_27_R
-        * (
-            power_36_L * trim_channel_1
-            + power_36_R * trim_channel_2
-        )
+        * (power_36_L * trim_channel_1 + power_36_R * trim_channel_2)
         * 2
 
     if not elev_failed then
         pitch_trim_pos = pitch_trim_pos
-            + elev_tr_sw
-            * passed
-            * normal_power_factor
-            * 0.015
-            * direction_factor
-            * TRIM_SPEED_SCALE
+            + elev_tr_sw * passed * normal_power_factor * 0.015 * direction_factor * TRIM_SPEED_SCALE
 
         pitch_trim_pos = pitch_trim_pos
-            + absu_tr_pt
-            * passed
-            * normal_power_factor
-            * 0.005
-            * direction_factor
-            * TRIM_SPEED_SCALE
+            + absu_tr_pt * passed * normal_power_factor * 0.005 * direction_factor * TRIM_SPEED_SCALE
     end
 
     -- Emergency trim retains its existing calibrated electrical path and speed,
@@ -215,13 +178,13 @@ function update()
     if not emergency_failed then
         pitch_trim_pos = pitch_trim_pos
             + emerg_tr_sw
-            * passed
-            * power_27_L
-            * power_36_L
-            * pitch_trim_channel_available
-            * 0.03
-            * direction_factor
-            * TRIM_SPEED_SCALE
+                * passed
+                * power_27_L
+                * power_36_L
+                * pitch_trim_channel_available
+                * 0.03
+                * direction_factor
+                * TRIM_SPEED_SCALE
     end
 
     pitch_trim_pos = clamp(pitch_trim_pos, -PITCH_LIMIT, PITCH_LIMIT)
@@ -249,12 +212,7 @@ function update()
     local roll_trim_pos = get(int_roll_trim)
 
     if not roll_failed then
-        roll_trim_pos = roll_trim_pos
-            + get(ail_trimm_sw)
-            * passed
-            * power_27_L
-            * 0.02
-            * TRIM_SPEED_SCALE
+        roll_trim_pos = roll_trim_pos + get(ail_trimm_sw) * passed * power_27_L * 0.02 * TRIM_SPEED_SCALE
     end
 
     roll_trim_pos = clamp(roll_trim_pos, -ROLL_LIMIT, ROLL_LIMIT)
@@ -276,12 +234,7 @@ function update()
     local yaw_trim_pos = get(int_yaw_trim)
 
     if not yaw_failed then
-        yaw_trim_pos = yaw_trim_pos
-            + get(rudd_trimm_sw)
-            * passed
-            * power_27_R
-            * 0.02
-            * TRIM_SPEED_SCALE
+        yaw_trim_pos = yaw_trim_pos + get(rudd_trimm_sw) * passed * power_27_R * 0.02 * TRIM_SPEED_SCALE
     end
 
     yaw_trim_pos = clamp(yaw_trim_pos, -YAW_LIMIT, YAW_LIMIT)

@@ -1,5 +1,5 @@
 -- rectangle_ctr_fuel.lua
--- Generic fuel rectangle drawing component.
+-- Draws a configurable fill rectangle for fuel and payload displays.
 
 defineProperty("R", 0.5)
 defineProperty("G", 0.5)
@@ -12,16 +12,10 @@ defineProperty("width", 100)
 defineProperty("height", 100)
 
 function draw()
-    sasl.gl.drawRectangle(
-        get(position_x),
-        get(position_y),
-        get(width),
-        get(height),
-        {
-            get(R),
-            get(G),
-            get(B),
-            get(A)
-        }
-    )
+    sasl.gl.drawRectangle(get(position_x), get(position_y), get(width), get(height), {
+        get(R),
+        get(G),
+        get(B),
+        get(A),
+    })
 end

@@ -1,17 +1,5 @@
 -- start_panel.lua
---[[
-Changelog
-- Grouped the original SASL property bindings through defineProps() while preserving names, Dataref paths and order.
-- Moved all property comments above their entries and replaced Russian comments with English comments.
-- Corrected apd_working_1, apd_working_2 and apd_working_3 from globalPropertyf to globalPropertyi to match their creator definitions.
-- Added local X-Plane 11 / X-Plane 12-compatible panel-sound playback.
-- Replaced sum-based switch and button sound detection with direct state comparison so opposite simultaneous changes cannot cancel each other.
-- Replaced individual *_last locals with compact persistent state tables.
-- Added SmartCopilot ownership for cap-forced switch writes, lamps and starter-pressure output; panel sounds remain local.
-- Clamped panel lamp brightness to the valid 0..1 range using the project-wide clamp() helper.
-- Reduced repeated bus-voltage reads.
-- Preserved the starter-cap behavior, starter-mode exception, 36 V power condition and starter-pressure gauge response.
-]]
+-- Updates engine-start controls, interlocks, annunciators and the pressure gauge.
 
 -- Start-up panel logic.
 local function defineProps(defs)
@@ -70,7 +58,6 @@ defineProps({
     -- SmartCopilot master state: 0 unavailable, 1 slave, 2 master
     { "ismaster", "scp/api/ismaster", globalPropertyf },
     -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 -- Panel sounds
@@ -150,11 +137,7 @@ local function lamps()
     local bus_left = get(bus27_volt_left)
     local bus_right = get(bus27_volt_right)
 
-    local lamps_brt = clamp(
-        (math.max(bus_left, bus_right) - 10) / 18.5,
-        0,
-        1
-    )
+    local lamps_brt = clamp((math.max(bus_left, bus_right) - 10) / 18.5, 0, 1)
 
     set(apd_work_1, get(apd_working_1) * lamps_brt)
     set(apd_work_2, get(apd_working_2) * lamps_brt)
@@ -174,9 +157,7 @@ local function updateStarterPressure(dt, MASTER)
     end
 
     -- Preserve the original gauge response.
-    start_press_act =
-        start_press_act
-        + (start_press - start_press_act) * dt * 2
+    start_press_act = start_press_act + (start_press - start_press_act) * dt * 2
 
     if MASTER then
         set(starter_press, start_press_act)

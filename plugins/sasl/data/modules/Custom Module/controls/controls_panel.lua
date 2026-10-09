@@ -1,16 +1,5 @@
 -- controls_panel.lua
---[[
-Changelog
-- Consolidated all active DataRef bindings in the shared defineProps() table.
-- Removed the redundant local defineProps() implementation and use the project-wide helper.
-- Preserved generic globalProperty() bindings for indexed X-Plane array DataRefs.
-- Updated the nosewheel steering selector documentation to the correct 11° / 63° ranges.
-- Preserved the user-corrected right main gear green-lamp logic.
-- Improved blink timing so long frames do not permanently shift or lose blink phases.
-- Clamped gauge smoothing to prevent overshoot after long frames or pauses.
-- Removed stale legacy review comments and dead commented-out code.
-- Kept all aircraft-system thresholds and normal operating behaviour unchanged.
-]]
+-- Updates flight-control switches, interlocks, gauges and warning lamps.
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -134,7 +123,6 @@ defineProps({
     { "spd_brk_mid_L", "sim/flightmodel/controls/wing2l_spo2def", globalPropertyf },
     { "spd_brk_mid_R", "sim/flightmodel/controls/wing2r_spo2def", globalPropertyf },
     { "indicated_airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf },
-    -- { "machno", "sim/flightmodel/misc/machno", globalPropertyf },
     { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },
     { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },
     { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },
@@ -164,8 +152,8 @@ defineProps({
 })
 
 -- Sounds
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
 
 local BLINK_PERIOD = 0.5
 local LAMP_V_MIN = 10
@@ -232,17 +220,17 @@ local function gearLamps(brt, test_btn, test_eng, gear_F, gear_L, gear_R)
     -- Correct right-main-gear source; the legacy file referenced the left gear here.
     local green_R = bool2int(gear_R >= 0.99)
 
-    set(gears_red_left,        lampBrt(red_L,   brt, test_btn))
-    set(gears_red_front,       lampBrt(red_F,   brt, test_btn))
-    set(gears_red_right,       lampBrt(red_R,   brt, test_btn))
-    set(gears_green_left,      lampBrt(green_L, brt, test_btn))
-    set(gears_green_front,     lampBrt(green_F, brt, test_btn))
-    set(gears_green_right,     lampBrt(green_R, brt, test_btn))
+    set(gears_red_left, lampBrt(red_L, brt, test_btn))
+    set(gears_red_front, lampBrt(red_F, brt, test_btn))
+    set(gears_red_right, lampBrt(red_R, brt, test_btn))
+    set(gears_green_left, lampBrt(green_L, brt, test_btn))
+    set(gears_green_front, lampBrt(green_F, brt, test_btn))
+    set(gears_green_right, lampBrt(green_R, brt, test_btn))
 
-    set(gears_red_left_eng,    lampBrt(red_L,   brt, test_eng))
-    set(gears_red_front_eng,   lampBrt(red_F,   brt, test_eng))
-    set(gears_red_right_eng,   lampBrt(red_R,   brt, test_eng))
-    set(gears_green_left_eng,  lampBrt(green_L, brt, test_eng))
+    set(gears_red_left_eng, lampBrt(red_L, brt, test_eng))
+    set(gears_red_front_eng, lampBrt(red_F, brt, test_eng))
+    set(gears_red_right_eng, lampBrt(red_R, brt, test_eng))
+    set(gears_green_left_eng, lampBrt(green_L, brt, test_eng))
     set(gears_green_front_eng, lampBrt(green_F, brt, test_eng))
     set(gears_green_right_eng, lampBrt(green_R, brt, test_eng))
 end
@@ -280,10 +268,10 @@ local function lamps()
     flap_R_pos_last = flap_pos_now_R
 
     -- Spoiler lamps
-    set(spoilers_mid_left,   lampBrt(min(1, get(spd_brk_mid_L)), lamps_brt, test_btn))
-    set(spoilers_mid_right,  lampBrt(min(1, get(spd_brk_mid_R)), lamps_brt, test_btn))
-    set(spoilers_inn_left,   lampBrt(min(1, get(spd_brk_inn_L)), lamps_brt, test_btn))
-    set(spoilers_inn_right,  lampBrt(min(1, get(spd_brk_inn_R)), lamps_brt, test_btn))
+    set(spoilers_mid_left, lampBrt(min(1, get(spd_brk_mid_L)), lamps_brt, test_btn))
+    set(spoilers_mid_right, lampBrt(min(1, get(spd_brk_mid_R)), lamps_brt, test_btn))
+    set(spoilers_inn_left, lampBrt(min(1, get(spd_brk_inn_L)), lamps_brt, test_btn))
+    set(spoilers_inn_right, lampBrt(min(1, get(spd_brk_inn_R)), lamps_brt, test_btn))
 
     -- Flap / slat asymmetry
     set(flaps_unsync, lampBrt(bool2int(abs(flap_pos_now_L - flap_pos_now_R) >= 3), lamps_brt, test_btn))
@@ -324,16 +312,16 @@ local function lamps()
         forcer_rud_lit = false
     end
 
-    set(to_rudder,   lampBrt(bool2int(forcer_rud_lit), lamps_brt, test_btn))
-    set(to_elevator, lampBrt(bool2int(forcer_lit),     lamps_brt, test_btn))
+    set(to_rudder, lampBrt(bool2int(forcer_rud_lit), lamps_brt, test_btn))
+    set(to_elevator, lampBrt(bool2int(forcer_lit), lamps_brt, test_btn))
 
     -- Trim in neutral
-    set(trimm_zero_course, lampBrt(bool2int(abs(get(int_yaw_trim))   < 0.002), lamps_brt, test_btn))
-    set(trimm_zero_roll,   lampBrt(bool2int(abs(get(int_roll_trim))  < 0.002), lamps_brt, test_btn))
-    set(trimm_zero_pitch,  lampBrt(bool2int(abs(get(int_pitch_trim)) < 0.004), lamps_brt, test_btn))
+    set(trimm_zero_course, lampBrt(bool2int(abs(get(int_yaw_trim)) < 0.002), lamps_brt, test_btn))
+    set(trimm_zero_roll, lampBrt(bool2int(abs(get(int_roll_trim)) < 0.002), lamps_brt, test_btn))
+    set(trimm_zero_pitch, lampBrt(bool2int(abs(get(int_pitch_trim)) < 0.004), lamps_brt, test_btn))
 
     -- Gear position lamps
-    
+
     local gear_F_pos = get(gear1_deploy)
     local gear_L_pos = get(gear2_deploy)
     local gear_R_pos = get(gear3_deploy)
@@ -344,8 +332,7 @@ local function lamps()
 
     -- Any gear unlocked, IAS below 325 km/h, RA below 250 m,
     -- throttles below ~90 % total and gear lever not down
-    local gear_not_ext =
-        (gear_F_pos < 0.99 or gear_L_pos < 0.99 or gear_R_pos < 0.99)
+    local gear_not_ext = (gear_F_pos < 0.99 or gear_L_pos < 0.99 or gear_R_pos < 0.99)
         and get(indicated_airspeed) * 1.852 < 325
         and min(get(rv5_alt_L), get(rv5_alt_R)) < 250
         and (thr1 + thr2 + thr3) < 2
@@ -363,13 +350,14 @@ local function lamps()
 
     -- Configuration alarm
     local sound_alarm = gear_not_ext
-        or ((flap_pos_now_L < 14 or flap_pos_now_R < 14 or slats_now < 0.5)
+        or (
+            (flap_pos_now_L < 14 or flap_pos_now_R < 14 or slats_now < 0.5)
             and max(thr1, thr2, thr3) > 0.7
-            and max(get(deflection_mtr_2), get(deflection_mtr_3)) > 0.05)
+            and max(get(deflection_mtr_2), get(deflection_mtr_3)) > 0.05
+        )
 
     set(main_gear_flaps, bool2int(sound_alarm))
 end
-
 
 -- Gauges ---------------------------------------------------------------------
 
@@ -394,11 +382,7 @@ local function gauges()
         -- X-Plane convention:
         --   negative = trailing edge up
         --   positive = trailing edge down
-        local elevator_deg = clamp(
-            get(elevator_L),
-            -ELEVATOR_UP_LIMIT_DEG,
-            ELEVATOR_DOWN_LIMIT_DEG
-        )
+        local elevator_deg = clamp(get(elevator_L), -ELEVATOR_UP_LIMIT_DEG, ELEVATOR_DOWN_LIMIT_DEG)
 
         -- Gauge convention is opposite to the X-Plane surface sign.
         elev_ind = -elevator_deg
@@ -410,17 +394,13 @@ local function gauges()
     -- Smooth gauge movement without altering the indicated values.
     local rate = min(passed * 10, 1)
 
-    stab_ind_act =
-        stab_ind_act + (stabil_ind - stab_ind_act) * rate
+    stab_ind_act = stab_ind_act + (stabil_ind - stab_ind_act) * rate
 
-    elev_ind_act =
-        elev_ind_act + (elev_ind - elev_ind_act) * rate
+    elev_ind_act = elev_ind_act + (elev_ind - elev_ind_act) * rate
 
-    flap_ind_L_act =
-        flap_ind_L_act + (flap_ind_L - flap_ind_L_act) * rate
+    flap_ind_L_act = flap_ind_L_act + (flap_ind_L - flap_ind_L_act) * rate
 
-    flap_ind_R_act =
-        flap_ind_R_act + (flap_ind_R - flap_ind_R_act) * rate
+    flap_ind_R_act = flap_ind_R_act + (flap_ind_R - flap_ind_R_act) * rate
 
     set(stab_ind, stab_ind_act)
     set(elevator_ind, elev_ind_act)
@@ -434,13 +414,13 @@ end
 -- resets: switch that is forced to 0 while the cap is closed
 local caps = {
     { prop = stab_man_cap },
-    { prop = contr_force_cap,      resets = contr_force_set },
-    { prop = nosewheel_turn_cap,   resets = nosewheel_turn_sel },
+    { prop = contr_force_cap, resets = contr_force_set },
+    { prop = nosewheel_turn_cap, resets = nosewheel_turn_sel },
     { prop = slat_man_cap },
-    { prop = gears_retr_lock_cap,  resets = gears_retr_lock },
-    { prop = gears_ext_3GS_cap,    resets = gears_ext_3GS },
+    { prop = gears_retr_lock_cap, resets = gears_retr_lock },
+    { prop = gears_ext_3GS_cap, resets = gears_ext_3GS },
     { prop = busters_cap },
-    { prop = flaps_sel_cap,        resets = flaps_sel },
+    { prop = flaps_sel_cap, resets = flaps_sel },
     { prop = emerg_elev_trimm_cap },
 }
 
@@ -490,9 +470,10 @@ local function caps_check()
     local is_slave = get(ismaster) == 1
 
     -- Boosters cap springs open as long as any booster is off
-    if get(busters_cap) == 0
-        and get(buster_on_1) * get(buster_on_2) * get(buster_on_3) == 0 then
-        if not is_slave then set(busters_cap, 1) end
+    if get(busters_cap) == 0 and get(buster_on_1) * get(buster_on_2) * get(buster_on_3) == 0 then
+        if not is_slave then
+            set(busters_cap, 1)
+        end
     end
 
     if anyChanged(caps) then
@@ -530,7 +511,9 @@ function update()
     end
 
     if started then
-        if notLoaded then reset_switchers() end
+        if notLoaded then
+            reset_switchers()
+        end
         switchers_check()
         caps_check()
     end

@@ -1,6 +1,7 @@
--------------------------------------------------------------------------------
+-- popupCloseButton.lua
+-- Draws a popup close control with pointer-hover feedback.
+
 -- Popup close button
--------------------------------------------------------------------------------
 
 defineProperty("panel")
 defineProperty("closeButtonFocused", false)
@@ -20,16 +21,13 @@ end
 
 components = {
     rectangle {
-        color = { 0.2, 0.2, 0.2, 1.0 }
+        color = { 0.2, 0.2, 0.2, 1.0 },
     },
     mouseFocusedZone {
         mouseHovered = closeButtonFocused,
         onMouseDown = function()
             set(get(panel).visible, false)
             return true
-        end
-    }
+        end,
+    },
 }
-
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------

@@ -1,12 +1,6 @@
 -- absu_commands.lua
+-- Connect simulator and custom commands to ABSU cockpit controls.
 
--- absu_commands.lua
--- Refactored: DataRefs moved to bulk defineProps format.
--- All comments in English per project rules.
-
------------------------------------------------------------------------
--- Bulk DataRef definitions
------------------------------------------------------------------------
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))
@@ -14,62 +8,67 @@ local function defineProps(defs)
 end
 
 defineProps({
-{"absu_zk", "tu154/custom/buttons/console/absu_zk", globalPropertyi},
--- {"absu_reset", "tu154/custom/buttons/console/absu_reset", globalPropertyi}, -- Unused here; no child or shared consumer.
-{"absu_nvu", "tu154/custom/buttons/console/absu_nvu", globalPropertyi},
-{"absu_app", "tu154/custom/buttons/console/absu_app", globalPropertyi},
-{"absu_gs", "tu154/custom/buttons/console/absu_gs", globalPropertyi},
-{"absu_stab_m", "tu154/custom/buttons/console/absu_stab_m",                globalPropertyi},
-{"absu_stab_v", "tu154/custom/buttons/console/absu_stab_v",                globalPropertyi},
-{"absu_stab_h", "tu154/custom/buttons/console/absu_stab_h",                globalPropertyi},
-{"absu_stab", "tu154/custom/buttons/console/absu_stab",                  globalPropertyi},
-{"absu_stab_speed", "tu154/custom/buttons/console/absu_stab_speed",            globalPropertyi},
-{"absu_speed_change", "tu154/custom/switchers/console/absu_speed_change", globalPropertyi},
-{"absu_turn_handle", "tu154/custom/switchers/console/absu_turn_handle",         globalPropertyi},
-{"absu_pitch_wheel_dir", "tu154/custom/switchers/console/absu_pitch_wheel_dir",     globalPropertyi},
-{"pkp_course_L", "tu154/custom/gauges/compas/pkp_helper_course_L",          globalPropertyf},
-{"pkp_course_R", "tu154/custom/gauges/compas/pkp_helper_course_R",          globalPropertyf},
+    { "absu_zk", "tu154/custom/buttons/console/absu_zk", globalPropertyi },
+    { "absu_nvu", "tu154/custom/buttons/console/absu_nvu", globalPropertyi },
+    { "absu_app", "tu154/custom/buttons/console/absu_app", globalPropertyi },
+    { "absu_gs", "tu154/custom/buttons/console/absu_gs", globalPropertyi },
+    { "absu_stab_m", "tu154/custom/buttons/console/absu_stab_m", globalPropertyi },
+    { "absu_stab_v", "tu154/custom/buttons/console/absu_stab_v", globalPropertyi },
+    { "absu_stab_h", "tu154/custom/buttons/console/absu_stab_h", globalPropertyi },
+    { "absu_stab", "tu154/custom/buttons/console/absu_stab", globalPropertyi },
+    { "absu_stab_speed", "tu154/custom/buttons/console/absu_stab_speed", globalPropertyi },
+    { "absu_speed_change", "tu154/custom/switchers/console/absu_speed_change", globalPropertyi },
+    { "absu_turn_handle", "tu154/custom/switchers/console/absu_turn_handle", globalPropertyi },
+    { "absu_pitch_wheel_dir", "tu154/custom/switchers/console/absu_pitch_wheel_dir", globalPropertyi },
+    { "pkp_course_L", "tu154/custom/gauges/compas/pkp_helper_course_L", globalPropertyf },
+    { "pkp_course_R", "tu154/custom/gauges/compas/pkp_helper_course_R", globalPropertyf },
 })
 
 -----------------------------------------------------------------------
 -- Helpers
 -----------------------------------------------------------------------
 local function clamp(x, lo, hi)
-    if x < lo then return lo end
-    if x > hi then return hi end
+    if x < lo then
+        return lo
+    end
+    if x > hi then
+        return hi
+    end
     return x
 end
 
 local function wrap360(v)
     -- Keep heading in [0, 360)
     v = v % 360
-    if v < 0 then v = v + 360 end
+    if v < 0 then
+        v = v + 360
+    end
     return v
 end
 
 -----------------------------------------------------------------------
 -- Commands
 -----------------------------------------------------------------------
-local AP_stab          = sasl.findCommand("sim/autopilot/fdir_on")
-local AP_AT            = sasl.findCommand("sim/autopilot/autothrottle_toggle")
+local AP_stab = sasl.findCommand("sim/autopilot/fdir_on")
+local AP_AT = sasl.findCommand("sim/autopilot/autothrottle_toggle")
 local AP_AT_CUSTOM = sasl.createCommand("tu154/absu/autothrottle_toggle", "Tu-154M: Autothrottle toggle (C button)")
-local AP_ZK            = sasl.findCommand("sim/autopilot/heading")
-local AP_wing_level    = sasl.findCommand("sim/autopilot/wing_leveler")
-local AP_turn_left     = sasl.findCommand("sim/autopilot/override_left")
-local AP_turn_right    = sasl.findCommand("sim/autopilot/override_right")
-local AP_NVU           = sasl.findCommand("sim/autopilot/NAV")
-local AP_stab_V        = sasl.findCommand("sim/autopilot/airspeed_sync")
-local AP_stab_M        = sasl.findCommand("sim/autopilot/level_change")
-local AP_stab_H        = sasl.findCommand("sim/autopilot/altitude_hold")
-local AP_GS            = sasl.findCommand("sim/autopilot/glide_slope")
-local AP_APP           = sasl.findCommand("sim/autopilot/approach")
-local AP_down          = sasl.findCommand("sim/autopilot/nose_down")
-local AP_up            = sasl.findCommand("sim/autopilot/nose_up")
-local AP_spd_up        = sasl.findCommand("sim/autopilot/airspeed_up")
-local AP_spd_down      = sasl.findCommand("sim/autopilot/airspeed_down")
-local PNP_head_left_L  = sasl.findCommand("sim/autopilot/heading_down")
+local AP_ZK = sasl.findCommand("sim/autopilot/heading")
+local AP_wing_level = sasl.findCommand("sim/autopilot/wing_leveler")
+local AP_turn_left = sasl.findCommand("sim/autopilot/override_left")
+local AP_turn_right = sasl.findCommand("sim/autopilot/override_right")
+local AP_NVU = sasl.findCommand("sim/autopilot/NAV")
+local AP_stab_V = sasl.findCommand("sim/autopilot/airspeed_sync")
+local AP_stab_M = sasl.findCommand("sim/autopilot/level_change")
+local AP_stab_H = sasl.findCommand("sim/autopilot/altitude_hold")
+local AP_GS = sasl.findCommand("sim/autopilot/glide_slope")
+local AP_APP = sasl.findCommand("sim/autopilot/approach")
+local AP_down = sasl.findCommand("sim/autopilot/nose_down")
+local AP_up = sasl.findCommand("sim/autopilot/nose_up")
+local AP_spd_up = sasl.findCommand("sim/autopilot/airspeed_up")
+local AP_spd_down = sasl.findCommand("sim/autopilot/airspeed_down")
+local PNP_head_left_L = sasl.findCommand("sim/autopilot/heading_down")
 local PNP_head_right_L = sasl.findCommand("sim/autopilot/heading_up")
-local PNP_head_left_R  = sasl.findCommand("sim/autopilot/heading_copilot_down")
+local PNP_head_left_R = sasl.findCommand("sim/autopilot/heading_copilot_down")
 local PNP_head_right_R = sasl.findCommand("sim/autopilot/heading_copilot_up")
 
 -----------------------------------------------------------------------
@@ -77,7 +76,11 @@ local PNP_head_right_R = sasl.findCommand("sim/autopilot/heading_copilot_up")
 -----------------------------------------------------------------------
 -- Momentary: press (phase==1) sets 1, release sets 0
 local function AP_stab_hnd(phase)
-    if phase == 1 then set(absu_stab, 1) else set(absu_stab, 0) end
+    if phase == 1 then
+        set(absu_stab, 1)
+    else
+        set(absu_stab, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_stab, 0, AP_stab_hnd)
@@ -102,19 +105,27 @@ sasl.registerCommandHandler(AP_AT_CUSTOM, 1, AP_AT_hnd)
 function update()
     if at_release_updates > 0 then
         at_release_updates = at_release_updates - 1
-        if at_release_updates == 0 then set(absu_stab_speed, 0) end
+        if at_release_updates == 0 then
+            set(absu_stab_speed, 0)
+        end
     end
 end
 
 local function AP_ZK_hnd(phase)
-    if phase == 1 then set(absu_zk, 1) else set(absu_zk, 0) end
+    if phase == 1 then
+        set(absu_zk, 1)
+    else
+        set(absu_zk, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_ZK, 0, AP_ZK_hnd)
 
 -- Wing leveler: zero the turn handle on press
 local function AP_wing_level_hnd(phase)
-    if phase == 1 then set(absu_turn_handle, 0) end
+    if phase == 1 then
+        set(absu_turn_handle, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_wing_level, 0, AP_wing_level_hnd)
@@ -139,64 +150,104 @@ end
 sasl.registerCommandHandler(AP_turn_right, 0, AP_turn_right_hnd)
 
 local function AP_NVU_hnd(phase)
-    if phase == 1 then set(absu_nvu, 1) else set(absu_nvu, 0) end
+    if phase == 1 then
+        set(absu_nvu, 1)
+    else
+        set(absu_nvu, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_NVU, 0, AP_NVU_hnd)
 
 local function AP_stab_V_hnd(phase)
-    if phase == 1 then set(absu_stab_v, 1) else set(absu_stab_v, 0) end
+    if phase == 1 then
+        set(absu_stab_v, 1)
+    else
+        set(absu_stab_v, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_stab_V, 0, AP_stab_V_hnd)
 
 local function AP_stab_M_hnd(phase)
-    if phase == 1 then set(absu_stab_m, 1) else set(absu_stab_m, 0) end
+    if phase == 1 then
+        set(absu_stab_m, 1)
+    else
+        set(absu_stab_m, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_stab_M, 0, AP_stab_M_hnd)
 
--- NOTE: this handler was duplicated in the original file; keep only one.
+-- Altitude-hold command.
 local function AP_stab_H_hnd(phase)
-    if phase == 1 then set(absu_stab_h, 1) else set(absu_stab_h, 0) end
+    if phase == 1 then
+        set(absu_stab_h, 1)
+    else
+        set(absu_stab_h, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_stab_H, 0, AP_stab_H_hnd)
 
 local function AP_GS_hnd(phase)
-    if phase == 1 then set(absu_gs, 1) else set(absu_gs, 0) end
+    if phase == 1 then
+        set(absu_gs, 1)
+    else
+        set(absu_gs, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_GS, 0, AP_GS_hnd)
 
 local function AP_APP_hnd(phase)
-    if phase == 1 then set(absu_app, 1) else set(absu_app, 0) end
+    if phase == 1 then
+        set(absu_app, 1)
+    else
+        set(absu_app, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_APP, 0, AP_APP_hnd)
 
 -- Pitch wheel direction: -1, 0, +1 based on press
 local function AP_down_hnd(phase)
-    if phase == 1 then set(absu_pitch_wheel_dir, -1) else set(absu_pitch_wheel_dir, 0) end
+    if phase == 1 then
+        set(absu_pitch_wheel_dir, -1)
+    else
+        set(absu_pitch_wheel_dir, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_down, 0, AP_down_hnd)
 
 local function AP_up_hnd(phase)
-    if phase == 1 then set(absu_pitch_wheel_dir, 1) else set(absu_pitch_wheel_dir, 0) end
+    if phase == 1 then
+        set(absu_pitch_wheel_dir, 1)
+    else
+        set(absu_pitch_wheel_dir, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_up, 0, AP_up_hnd)
 
 -- Speed change: -1, 0, +1 based on press
 local function AP_spd_up_hnd(phase)
-    if phase == 1 then set(absu_speed_change, 1) else set(absu_speed_change, 0) end
+    if phase == 1 then
+        set(absu_speed_change, 1)
+    else
+        set(absu_speed_change, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_spd_up, 0, AP_spd_up_hnd)
 
 local function AP_spd_down_hnd(phase)
-    if phase == 1 then set(absu_speed_change, -1) else set(absu_speed_change, 0) end
+    if phase == 1 then
+        set(absu_speed_change, -1)
+    else
+        set(absu_speed_change, 0)
+    end
     return 0
 end
 sasl.registerCommandHandler(AP_spd_down, 0, AP_spd_down_hnd)

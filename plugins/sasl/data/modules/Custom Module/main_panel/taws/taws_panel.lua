@@ -1,7 +1,6 @@
 -- taws_panel.lua
--- this TAWS panel logic
+-- Update TAWS panel controls, annunciators and warning lamps.
 
--- panel controls
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         local prop
@@ -15,55 +14,55 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "but_view", "tu154/custom/buttons/srpbz/but_view", globalPropertyi }, --
-    { "but_empty", "tu154/custom/buttons/srpbz/but_empty", globalPropertyi }, --  -
-    { "but_down", "tu154/custom/buttons/srpbz/but_down", globalPropertyi }, --
-    { "but_up", "tu154/custom/buttons/srpbz/but_up", globalPropertyi }, --
-    { "brightness", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
+    { "but_view", "tu154/custom/buttons/srpbz/but_view", globalPropertyi },
+    { "but_empty", "tu154/custom/buttons/srpbz/but_empty", globalPropertyi },
+    { "but_down", "tu154/custom/buttons/srpbz/but_down", globalPropertyi },
+    { "but_up", "tu154/custom/buttons/srpbz/but_up", globalPropertyi },
+    { "brightness", "tu154/custom/rotary/srpbz/brightness", globalPropertyf },
 
     -- overhead controls
-    { "egpws_alarm_1", "tu154/custom/switchers/ovhd/egpws_alarm_1", globalPropertyi }, --
-    { "egpws_alarm_2", "tu154/custom/switchers/ovhd/egpws_alarm_2", globalPropertyi }, --
-    { "egpws_alarm_1_cap", "tu154/custom/switchers/ovhd/egpws_alarm_1_cap", globalPropertyi }, --
-    { "egpws_alarm_2_cap", "tu154/custom/switchers/ovhd/egpws_alarm_2_cap", globalPropertyi }, --
-    { "egpws_relief", "tu154/custom/switchers/ovhd/egpws_relief", globalPropertyi }, --
+    { "egpws_alarm_1", "tu154/custom/switchers/ovhd/egpws_alarm_1", globalPropertyi },
+    { "egpws_alarm_2", "tu154/custom/switchers/ovhd/egpws_alarm_2", globalPropertyi },
+    { "egpws_alarm_1_cap", "tu154/custom/switchers/ovhd/egpws_alarm_1_cap", globalPropertyi },
+    { "egpws_alarm_2_cap", "tu154/custom/switchers/ovhd/egpws_alarm_2_cap", globalPropertyi },
+    { "egpws_relief", "tu154/custom/switchers/ovhd/egpws_relief", globalPropertyi },
     { "egpws_mode", "tu154/custom/switchers/ovhd/egpws_mode", globalPropertyi }, -- QNH - QFE
 
-    { "egpws_control", "tu154/custom/buttons/ovhd/egpws_control", globalPropertyi }, --
-    { "egpws_contr_gs", "tu154/custom/buttons/ovhd/egpws_contr_gs", globalPropertyi }, --
+    { "egpws_control", "tu154/custom/buttons/ovhd/egpws_control", globalPropertyi },
+    { "egpws_contr_gs", "tu154/custom/buttons/ovhd/egpws_contr_gs", globalPropertyi },
 
     -- lamps
-    { "pull_up_lamp", "tu154/custom/lights/pull_up", globalPropertyf }, --
-    { "check_alt_left_lamp", "tu154/custom/lights/check_alt_left", globalPropertyf }, --
-    { "check_alt_right_lamp", "tu154/custom/lights/check_alt_right", globalPropertyf }, --
-    { "warning_terrain_lamp", "tu154/custom/lights/warning_terrain", globalPropertyf }, --
-    { "gs_low_lamp", "tu154/custom/lights/gs_low", globalPropertyf }, --
-    { "srpbz_fail_lamp", "tu154/custom/lights/srpbz_fail", globalPropertyf }, --
+    { "pull_up_lamp", "tu154/custom/lights/pull_up", globalPropertyf },
+    { "check_alt_left_lamp", "tu154/custom/lights/check_alt_left", globalPropertyf },
+    { "check_alt_right_lamp", "tu154/custom/lights/check_alt_right", globalPropertyf },
+    { "warning_terrain_lamp", "tu154/custom/lights/warning_terrain", globalPropertyf },
+    { "gs_low_lamp", "tu154/custom/lights/gs_low", globalPropertyf },
+    { "srpbz_fail_lamp", "tu154/custom/lights/srpbz_fail", globalPropertyf },
 
     -- other sources
-    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
-    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
-    { "test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi }, --
-    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, --   - . 0 - , 1 - .    .
+    { "test_lamps", "tu154/custom/buttons/lamp_test_front", globalPropertyi },
+    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf },
 
-    { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi }, --
+    { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi },
     -- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain,
-    -- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
+    -- 7 - Altitude callout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
 
-    { "taws_alt_left", "tu154/custom/taws/taws_alt_left", globalPropertyi }, --
-    { "taws_alt_right", "tu154/custom/taws/taws_alt_right", globalPropertyi }, --
+    { "taws_alt_left", "tu154/custom/taws/taws_alt_left", globalPropertyi },
+    { "taws_alt_right", "tu154/custom/taws/taws_alt_right", globalPropertyi },
 
-    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -  , 5 - , 6 - , 10 -
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, -- TAWS display mode; see taws_logic.lua.
 
     -- time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
 })
 
 -- sounds
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
-local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
+local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
 
 local passed = get(frame_time)
 
@@ -76,28 +75,32 @@ local egpws_control_last = get(egpws_control)
 local egpws_contr_gs_last = get(egpws_contr_gs)
 
 local function buttons_check()
+    local but_view_sw = get(but_view)
+    local but_empty_sw = get(but_empty)
+    local but_down_sw = get(but_down)
+    local but_up_sw = get(but_up)
+    local egpws_control_sw = get(egpws_control)
+    local egpws_contr_gs_sw = get(egpws_contr_gs)
 
-	local but_view_sw = get(but_view)
-	local but_empty_sw = get(but_empty)
-	local but_down_sw = get(but_down)
-	local but_up_sw = get(but_up)
-	local egpws_control_sw = get(egpws_control)
-	local egpws_contr_gs_sw = get(egpws_contr_gs)	
+    local change = but_view_sw + but_empty_sw + but_down_sw + but_up_sw + egpws_control_sw + egpws_contr_gs_sw
+    change = change
+        - but_view_last
+        - but_empty_last
+        - but_down_last
+        - but_up_last
+        - egpws_control_last
+        - egpws_contr_gs_last
 
-	local change = but_view_sw + but_empty_sw + but_down_sw + but_up_sw + egpws_control_sw + egpws_contr_gs_sw
-	change = change - but_view_last - but_empty_last - but_down_last - but_up_last - egpws_control_last - egpws_contr_gs_last
-	
-	if change ~= 0 then
-		sasl.al.playSample(button_sound, false)
-	end
-	
-	but_view_last = but_view_sw
-	but_empty_last = but_empty_sw
-	but_down_last = but_down_sw
-	but_up_last = but_up_sw
-	egpws_control_last = egpws_control_sw
-	egpws_contr_gs_last = egpws_contr_gs_sw
-	
+    if change ~= 0 then
+        sasl.al.playSample(button_sound, false)
+    end
+
+    but_view_last = but_view_sw
+    but_empty_last = but_empty_sw
+    but_down_last = but_down_sw
+    but_up_last = but_up_sw
+    egpws_control_last = egpws_control_sw
+    egpws_contr_gs_last = egpws_contr_gs_sw
 end
 
 local egpws_alarm_1_last = get(egpws_alarm_1)
@@ -109,35 +112,33 @@ local egpws_alarm_1_cap_last = get(egpws_alarm_1_cap)
 local egpws_alarm_2_cap_last = get(egpws_alarm_2_cap)
 
 local function switchers_check()
+    local egpws_alarm_1_sw = get(egpws_alarm_1)
+    local egpws_alarm_2_sw = get(egpws_alarm_2)
+    local egpws_relief_sw = get(egpws_relief)
+    local egpws_mode_sw = get(egpws_mode)
 
-	local egpws_alarm_1_sw = get(egpws_alarm_1)
-	local egpws_alarm_2_sw = get(egpws_alarm_2)
-	local egpws_relief_sw = get(egpws_relief)
-	local egpws_mode_sw = get(egpws_mode)
-	
-	local changes = egpws_alarm_1_sw + egpws_alarm_2_sw + egpws_relief_sw + egpws_mode_sw
-	changes = changes - egpws_alarm_1_last - egpws_alarm_2_last - egpws_relief_last - egpws_mode_last
-	
-	if changes ~= 0 then
-		sasl.al.playSample (switcher_sound, false)
-	end
-	
-	-- caps
-	local egpws_alarm_1_cap_sw = get(egpws_alarm_1_cap)
-	local egpws_alarm_2_cap_sw = get(egpws_alarm_2_cap)
-	
-	if egpws_alarm_1_cap_sw + egpws_alarm_2_cap_sw - egpws_alarm_1_cap_last - egpws_alarm_2_cap_last ~= 0 then
-		sasl.al.playSample(cap_sound, false)
-	end
-	
-	egpws_alarm_1_last = egpws_alarm_1_sw
-	egpws_alarm_2_last = egpws_alarm_2_sw
-	egpws_relief_last = egpws_relief_sw
-	egpws_mode_last = egpws_mode_sw
-	
-	egpws_alarm_1_cap_last = egpws_alarm_1_cap_sw
-	egpws_alarm_2_cap_last = egpws_alarm_2_cap_sw
+    local changes = egpws_alarm_1_sw + egpws_alarm_2_sw + egpws_relief_sw + egpws_mode_sw
+    changes = changes - egpws_alarm_1_last - egpws_alarm_2_last - egpws_relief_last - egpws_mode_last
 
+    if changes ~= 0 then
+        sasl.al.playSample(switcher_sound, false)
+    end
+
+    -- caps
+    local egpws_alarm_1_cap_sw = get(egpws_alarm_1_cap)
+    local egpws_alarm_2_cap_sw = get(egpws_alarm_2_cap)
+
+    if egpws_alarm_1_cap_sw + egpws_alarm_2_cap_sw - egpws_alarm_1_cap_last - egpws_alarm_2_cap_last ~= 0 then
+        sasl.al.playSample(cap_sound, false)
+    end
+
+    egpws_alarm_1_last = egpws_alarm_1_sw
+    egpws_alarm_2_last = egpws_alarm_2_sw
+    egpws_relief_last = egpws_relief_sw
+    egpws_mode_last = egpws_mode_sw
+
+    egpws_alarm_1_cap_last = egpws_alarm_1_cap_sw
+    egpws_alarm_2_cap_last = egpws_alarm_2_cap_sw
 end
 
 local pull_up_lit = 0
@@ -159,103 +160,113 @@ local fail_lit = 0
 local fail_counter = 0
 
 local function lamps()
+    local test_btn = get(test_lamps) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
+    local day_night = 1 - get(day_night_set) * 0.25
+    local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0) * day_night
 
-	local test_btn = get(test_lamps) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
-	local day_night = 1 - get(day_night_set) * 0.25
-	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0) * day_night
-	
-	local taws_msg = get(taws_message)
-	local alarm = get(egpws_alarm_1)
-	
-	-- pull up
-	local pull_up = taws_msg == 1
-	
-	pull_up_counter = pull_up_counter + passed
-	
-	if pull_up and pull_up_counter > 0.5 then 
-		pull_up_lit = 1 - pull_up_lit
-		pull_up_counter = 0
-	elseif not pull_up then pull_up_lit = 0 end
-	
-	local pull_up_lamp_brt = math.max(pull_up_lit * lamps_brt * alarm, test_btn)
-	set(pull_up_lamp, pull_up_lamp_brt)
-	
-	-- check alt left
-	local check_alt_left = get(taws_alt_left) == 1
-	
-	check_alt_left_counter = check_alt_left_counter + passed
-	
-	if check_alt_left and check_alt_left_counter > 0.5 then 
-		check_alt_left_lit = 1 - check_alt_left_lit
-		check_alt_left_counter = 0
-	elseif not check_alt_left then check_alt_left_lit = 0 end
-	
-	local check_alt_left_lamp_brt = math.max(check_alt_left_lit * lamps_brt * alarm, test_btn)
-	set(check_alt_left_lamp, check_alt_left_lamp_brt)
-	
-	-- check alt right
-	local check_alt_right = get(taws_alt_right) == 1
-	
-	check_alt_right_counter = check_alt_right_counter + passed
-	
-	if check_alt_right and check_alt_right_counter > 0.5 then 
-		check_alt_right_lit = 1 - check_alt_right_lit
-		check_alt_right_counter = 0
-	elseif not check_alt_right then check_alt_right_lit = 0 end
-	
-	local check_alt_right_lamp_brt = math.max(check_alt_right_lit * lamps_brt * alarm, test_btn)
-	set(check_alt_right_lamp, check_alt_right_lamp_brt)
-	
-	-- terrain
-	local terrain = taws_msg == 4 or taws_msg == 5 or taws_msg == 6
-	
-	terrain_counter = terrain_counter + passed
-	
-	if terrain and terrain_counter > 0.5 then 
-		terrain_lit = 1 - terrain_lit
-		terrain_counter = 0
-	elseif not terrain then terrain_lit = 0 end
-	
-	local warning_terrain_lamp_brt = math.max(terrain_lit * lamps_brt * alarm, test_btn)
-	set(warning_terrain_lamp, warning_terrain_lamp_brt)
-	
-	-- glideslope
-	local gs = taws_msg == 13
-	
-	gs_counter = gs_counter + passed
-	
-	if gs and gs_counter > 0.5 then 
-		gs_lit = 1 - gs_lit
-		gs_counter = 0
-	elseif not gs then gs_lit = 0 end
-	
-	local gs_low_lamp_brt = math.max(gs_lit * lamps_brt * alarm, test_btn)
-	set(gs_low_lamp, gs_low_lamp_brt)
-	
-	-- failure
-	local fail = get(mode_set) == 5 or get(mode_set) == 10 -- test or fail
-	
-	fail_counter = fail_counter + passed
-	
-	if fail and fail_counter > 0.5 then 
-		fail_lit = 1 - fail_lit
-		fail_counter = 0
-	elseif not fail then fail_lit = 0 end
-	
-	local srpbz_fail_lamp_brt = math.max(fail_lit * lamps_brt, test_btn) -- fake
-	set(srpbz_fail_lamp, srpbz_fail_lamp_brt)
-	
+    local taws_msg = get(taws_message)
+    local alarm = get(egpws_alarm_1)
+
+    -- pull up
+    local pull_up = taws_msg == 1
+
+    pull_up_counter = pull_up_counter + passed
+
+    if pull_up and pull_up_counter > 0.5 then
+        pull_up_lit = 1 - pull_up_lit
+        pull_up_counter = 0
+    elseif not pull_up then
+        pull_up_lit = 0
+    end
+
+    local pull_up_lamp_brt = math.max(pull_up_lit * lamps_brt * alarm, test_btn)
+    set(pull_up_lamp, pull_up_lamp_brt)
+
+    -- check alt left
+    local check_alt_left = get(taws_alt_left) == 1
+
+    check_alt_left_counter = check_alt_left_counter + passed
+
+    if check_alt_left and check_alt_left_counter > 0.5 then
+        check_alt_left_lit = 1 - check_alt_left_lit
+        check_alt_left_counter = 0
+    elseif not check_alt_left then
+        check_alt_left_lit = 0
+    end
+
+    local check_alt_left_lamp_brt = math.max(check_alt_left_lit * lamps_brt * alarm, test_btn)
+    set(check_alt_left_lamp, check_alt_left_lamp_brt)
+
+    -- check alt right
+    local check_alt_right = get(taws_alt_right) == 1
+
+    check_alt_right_counter = check_alt_right_counter + passed
+
+    if check_alt_right and check_alt_right_counter > 0.5 then
+        check_alt_right_lit = 1 - check_alt_right_lit
+        check_alt_right_counter = 0
+    elseif not check_alt_right then
+        check_alt_right_lit = 0
+    end
+
+    local check_alt_right_lamp_brt = math.max(check_alt_right_lit * lamps_brt * alarm, test_btn)
+    set(check_alt_right_lamp, check_alt_right_lamp_brt)
+
+    -- terrain
+    local terrain = taws_msg == 4 or taws_msg == 5 or taws_msg == 6
+
+    terrain_counter = terrain_counter + passed
+
+    if terrain and terrain_counter > 0.5 then
+        terrain_lit = 1 - terrain_lit
+        terrain_counter = 0
+    elseif not terrain then
+        terrain_lit = 0
+    end
+
+    local warning_terrain_lamp_brt = math.max(terrain_lit * lamps_brt * alarm, test_btn)
+    set(warning_terrain_lamp, warning_terrain_lamp_brt)
+
+    -- glideslope
+    local gs = taws_msg == 13
+
+    gs_counter = gs_counter + passed
+
+    if gs and gs_counter > 0.5 then
+        gs_lit = 1 - gs_lit
+        gs_counter = 0
+    elseif not gs then
+        gs_lit = 0
+    end
+
+    local gs_low_lamp_brt = math.max(gs_lit * lamps_brt * alarm, test_btn)
+    set(gs_low_lamp, gs_low_lamp_brt)
+
+    -- failure
+    local fail = get(mode_set) == 5 or get(mode_set) == 10 -- test or fail
+
+    fail_counter = fail_counter + passed
+
+    if fail and fail_counter > 0.5 then
+        fail_lit = 1 - fail_lit
+        fail_counter = 0
+    elseif not fail then
+        fail_lit = 0
+    end
+
+    local srpbz_fail_lamp_brt = math.max(fail_lit * lamps_brt, test_btn) -- fake
+    set(srpbz_fail_lamp, srpbz_fail_lamp_brt)
 end
 
 function update()
-	
-	passed = get(frame_time)
-	
-	buttons_check()
-	switchers_check()
-	
-	lamps()
-	
-	if get(brightness) < 0.1 then set(brightness, 0.1) end
+    passed = get(frame_time)
 
+    buttons_check()
+    switchers_check()
+
+    lamps()
+
+    if get(brightness) < 0.1 then
+        set(brightness, 0.1)
+    end
 end

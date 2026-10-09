@@ -1,7 +1,7 @@
 -- failures_2d.lua
--- failures and runtime palette
+-- Displays aircraft failures and maintenance counters and provides ground repair controls.
 
-size = {512, 700}
+size = { 512, 700 }
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -18,51 +18,47 @@ end
 defineProperty("bg_img", sasl.gl.loadImage("repair_tex.png"))
 
 defineProps({
-    { "save_state", "tu154/custom/save_state", globalPropertyi }, --
+    { "save_state", "tu154/custom/save_state", globalPropertyi },
 
     -- images
 
-    { "show_fail_panel", "tu154/custom/panels/show_fail_panel", globalPropertyi }, --
+    { "show_fail_panel", "tu154/custom/panels/show_fail_panel", globalPropertyi },
 
-    -- { "reset_state", "tu154/custom/reset_state", globalPropertyi }, --
-
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- Frame time in seconds.
     -- Maintenance requires the same stationary ground condition as the panel.
     { "GS", "sim/flightmodel/position/groundspeed", globalPropertyf },
     { "deflection_mtr_1", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 1 },
     { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 2 },
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 3 },
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-
-    -- { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi }, --
 })
 
 local runtime_tbl = {}
 
 -- runtime
-runtime_tbl[1] = {"APU", globalPropertyf("tu154/custom/failures/apu_runtime")} --  
+runtime_tbl[1] = { "APU", globalPropertyf("tu154/custom/failures/apu_runtime") }
 
-runtime_tbl[2] = {"Eng #1", globalPropertyf("tu154/custom/failures/engine_runtime_1")}
-runtime_tbl[3] = {"Eng #2", globalPropertyf("tu154/custom/failures/engine_runtime_2")}
-runtime_tbl[4] = {"Eng #3", globalPropertyf("tu154/custom/failures/engine_runtime_3")}
+runtime_tbl[2] = { "Eng #1", globalPropertyf("tu154/custom/failures/engine_runtime_1") }
+runtime_tbl[3] = { "Eng #2", globalPropertyf("tu154/custom/failures/engine_runtime_2") }
+runtime_tbl[4] = { "Eng #3", globalPropertyf("tu154/custom/failures/engine_runtime_3") }
 
 local brakes_tbl = {}
 
-brakes_tbl[1] = {"Brake L", globalPropertyf("tu154/custom/failures/brake_runtime_left")} --   
-brakes_tbl[2] = {"Brake R", globalPropertyf("tu154/custom/failures/brake_runtime_right")} --   
+brakes_tbl[1] = { "Brake L", globalPropertyf("tu154/custom/failures/brake_runtime_left") }
+brakes_tbl[2] = { "Brake R", globalPropertyf("tu154/custom/failures/brake_runtime_right") }
 
 -- liquids
 
 local liqd_tbl = {}
 
-liqd_tbl[1] = {"Engine #1 Oil", globalPropertyf("tu154/custom/failures/engn_oil_qty_1")} --    
-liqd_tbl[2] = {"Engine #2 Oil", globalPropertyf("tu154/custom/failures/engn_oil_qty_2")} --    
-liqd_tbl[3] = {"Engine #3 Oil", globalPropertyf("tu154/custom/failures/engn_oil_qty_3")} --    
+liqd_tbl[1] = { "Engine #1 Oil", globalPropertyf("tu154/custom/failures/engn_oil_qty_1") }
+liqd_tbl[2] = { "Engine #2 Oil", globalPropertyf("tu154/custom/failures/engn_oil_qty_2") }
+liqd_tbl[3] = { "Engine #3 Oil", globalPropertyf("tu154/custom/failures/engn_oil_qty_3") }
 
 local hydro_tbl = {}
-hydro_tbl[1] = {"Hydro Sys #1", globalPropertyf("tu154/custom/hydro/gs_qty_1")} --    
-hydro_tbl[2] = {"Hydro Sys #2", globalPropertyf("tu154/custom/hydro/gs_qty_2")} --    
-hydro_tbl[3] = {"Hydro Sys #3", globalPropertyf("tu154/custom/hydro/gs_qty_3")} --    
+hydro_tbl[1] = { "Hydro Sys #1", globalPropertyf("tu154/custom/hydro/gs_qty_1") }
+hydro_tbl[2] = { "Hydro Sys #2", globalPropertyf("tu154/custom/hydro/gs_qty_2") }
+hydro_tbl[3] = { "Hydro Sys #3", globalPropertyf("tu154/custom/hydro/gs_qty_3") }
 
 local customFails = {}
 local simFails = {}
@@ -92,39 +88,39 @@ customFails["Left window heat"] = globalPropertyi("tu154/custom/failures/window_
 customFails["Center window heat"] = globalPropertyi("tu154/custom/failures/window_heat_fail_2")
 customFails["Right window heat"] = globalPropertyi("tu154/custom/failures/window_heat_fail_3")
 
-customFails["APU burnt"] = globalPropertyi("tu154/custom/failures/apu_fail_fuel_left") --  
-customFails["APU starter"] = globalPropertyi("tu154/custom/failures/apu_start_fail") --  
-customFails["APU"] = globalPropertyi("tu154/custom/failures/apu_fail") --   
-customFails["APU air pressure"] = globalPropertyi("tu154/custom/failures/apu_press_fail") --     
+customFails["APU burnt"] = globalPropertyi("tu154/custom/failures/apu_fail_fuel_left")
+customFails["APU starter"] = globalPropertyi("tu154/custom/failures/apu_start_fail")
+customFails["APU"] = globalPropertyi("tu154/custom/failures/apu_fail")
+customFails["APU air pressure"] = globalPropertyi("tu154/custom/failures/apu_press_fail")
 
-simFails["!!!Left brakes"] = globalPropertyi("sim/operation/failures/rel_lbrakes") --  
-simFails["!!!Right brakes"] = globalPropertyi("sim/operation/failures/rel_rbrakes") --  
+simFails["!!!Left brakes"] = globalPropertyi("sim/operation/failures/rel_lbrakes")
+simFails["!!!Right brakes"] = globalPropertyi("sim/operation/failures/rel_rbrakes")
 
-customFails["!!!Aileron left"] = globalPropertyi("tu154/custom/failures/ail_fail_left") -- 
-customFails["!!!Aileron right"] = globalPropertyi("tu154/custom/failures/ail_fail_right") -- 
+customFails["!!!Aileron left"] = globalPropertyi("tu154/custom/failures/ail_fail_left")
+customFails["!!!Aileron right"] = globalPropertyi("tu154/custom/failures/ail_fail_right")
 
-customFails["Left inner spoiler "] = globalPropertyi("tu154/custom/failures/fail_spoil_inn_left") -- 
-customFails["Right inner spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_inn_right") -- 
-customFails["!!!Left middle spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_mid_left") -- 
-customFails["!!!Right middle spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_mid_right") -- 
-customFails["Left outter spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_out_left") -- 
-customFails["Right outter spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_out_right") -- 
+customFails["Left inner spoiler "] = globalPropertyi("tu154/custom/failures/fail_spoil_inn_left")
+customFails["Right inner spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_inn_right")
+customFails["!!!Left middle spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_mid_left")
+customFails["!!!Right middle spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_mid_right")
+customFails["Left outter spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_out_left")
+customFails["Right outter spoiler"] = globalPropertyi("tu154/custom/failures/fail_spoil_out_right")
 
-customFails["!!!Rudder"] = globalPropertyi("tu154/custom/failures/rudder_fail") -- 
-customFails["!!!Left elevator"] = globalPropertyi("tu154/custom/failures/elev_fail_left") -- 
-customFails["!!!Right elevator"] = globalPropertyi("tu154/custom/failures/elev_fail_right") -- 
+customFails["!!!Rudder"] = globalPropertyi("tu154/custom/failures/rudder_fail")
+customFails["!!!Left elevator"] = globalPropertyi("tu154/custom/failures/elev_fail_left")
+customFails["!!!Right elevator"] = globalPropertyi("tu154/custom/failures/elev_fail_right")
 
-simFails["!!!Rudder trimm"] = globalPropertyi("sim/operation/failures/rel_trim_rud") -- 
-simFails["!!!Aileron trimm"] = globalPropertyi("sim/operation/failures/rel_trim_ail") -- 
-simFails["!!!Elevator trimm"] = globalPropertyi("sim/operation/failures/rel_trim_elv") -- 
-customFails["!!!Emerg elev trimm"] = globalPropertyi("tu154/custom/failures/trim_emerg_elv_fail") --
+simFails["!!!Rudder trimm"] = globalPropertyi("sim/operation/failures/rel_trim_rud")
+simFails["!!!Aileron trimm"] = globalPropertyi("sim/operation/failures/rel_trim_ail")
+simFails["!!!Elevator trimm"] = globalPropertyi("sim/operation/failures/rel_trim_elv")
+customFails["!!!Emerg elev trimm"] = globalPropertyi("tu154/custom/failures/trim_emerg_elv_fail")
 
-customFails["!!!Left flaps"] = globalPropertyi("tu154/custom/failures/flap_fail_left") -- 
-customFails["!!!Right flpas"] = globalPropertyi("tu154/custom/failures/flap_fail_right") -- 
+customFails["!!!Left flaps"] = globalPropertyi("tu154/custom/failures/flap_fail_left")
+customFails["!!!Right flpas"] = globalPropertyi("tu154/custom/failures/flap_fail_right")
 
-customFails["!!!Stab mechanics"] = globalPropertyi("tu154/custom/failures/stab_eng_fail") -- 
-customFails["!!!Stab automatic"] = globalPropertyi("tu154/custom/failures/stab_automatic_fail") -- 
-customFails["!!!Slats"] = globalPropertyi("tu154/custom/failures/slats_fail") -- 
+customFails["!!!Stab mechanics"] = globalPropertyi("tu154/custom/failures/stab_eng_fail")
+customFails["!!!Stab automatic"] = globalPropertyi("tu154/custom/failures/stab_automatic_fail")
+customFails["!!!Slats"] = globalPropertyi("tu154/custom/failures/slats_fail")
 
 simFails["Front gear retract"] = globalPropertyi("sim/operation/failures/rel_lagear1") -- fail of retract gear
 simFails["Left gear retract"] = globalPropertyi("sim/operation/failures/rel_lagear2") -- fail of retract gear
@@ -224,26 +220,26 @@ customFails["!!!Engine hydraulic pump 3"] = globalPropertyi("tu154/custom/failur
 customFails["!!!Electric hydraulic pump #2"] = globalPropertyi("tu154/custom/failures/hydro_elec_fail_2")
 customFails["!!!Electric hydraulic pump #3"] = globalPropertyi("tu154/custom/failures/hydro_elec_fail_3")
 
-customFails["Left turbo cooler"] = globalPropertyi("tu154/custom/failures/tth_left_fail") --  
-customFails["Right turbo cooler"] = globalPropertyi("tu154/custom/failures/tth_right_fail") --  
+customFails["Left turbo cooler"] = globalPropertyi("tu154/custom/failures/tth_left_fail")
+customFails["Right turbo cooler"] = globalPropertyi("tu154/custom/failures/tth_right_fail")
 
-customFails["Engine #1 airbleed"] = globalPropertyi("tu154/custom/failures/airbleed_1") --     
-customFails["Engine #2 airbleed"] = globalPropertyi("tu154/custom/failures/airbleed_2") --     
-customFails["Engine #3 airbleed"] = globalPropertyi("tu154/custom/failures/airbleed_3") --     
+customFails["Engine #1 airbleed"] = globalPropertyi("tu154/custom/failures/airbleed_1")
+customFails["Engine #2 airbleed"] = globalPropertyi("tu154/custom/failures/airbleed_2")
+customFails["Engine #3 airbleed"] = globalPropertyi("tu154/custom/failures/airbleed_3")
 
-customFails["Left PSVP"] = globalPropertyi("tu154/custom/failures/psvp_fail_left") --  
-customFails["Right PSVP"] = globalPropertyi("tu154/custom/failures/psvp_fail_right") --  
-customFails["Air pressure valve"] = globalPropertyi("tu154/custom/failures/sard_valve_fail") --   
+customFails["Left PSVP"] = globalPropertyi("tu154/custom/failures/psvp_fail_left")
+customFails["Right PSVP"] = globalPropertyi("tu154/custom/failures/psvp_fail_right")
+customFails["Air pressure valve"] = globalPropertyi("tu154/custom/failures/sard_valve_fail")
 
-customFails["Front-Left landing light"] = globalPropertyi("tu154/custom/failures/lan_lamp_fail_FL") --    
-customFails["Front-Right landing light"] = globalPropertyi("tu154/custom/failures/lan_lamp_fail_FR") --    
-customFails["Wing-Left landing light"] = globalPropertyi("tu154/custom/failures/lan_lamp_fail_WL") --    
-customFails["Wing-Right landing light"] = globalPropertyi("tu154/custom/failures/lan_lamp_fail_WR") --    
-simFails["Nav lights"] = globalPropertyi("sim/operation/failures/rel_lites_nav") --   
-simFails["Beacon lights"] = globalPropertyi("sim/operation/failures/rel_lites_beac") --   
+customFails["Front-Left landing light"] = globalPropertyi("tu154/custom/failures/lan_lamp_fail_FL")
+customFails["Front-Right landing light"] = globalPropertyi("tu154/custom/failures/lan_lamp_fail_FR")
+customFails["Wing-Left landing light"] = globalPropertyi("tu154/custom/failures/lan_lamp_fail_WL")
+customFails["Wing-Right landing light"] = globalPropertyi("tu154/custom/failures/lan_lamp_fail_WR")
+simFails["Nav lights"] = globalPropertyi("sim/operation/failures/rel_lites_nav")
+simFails["Beacon lights"] = globalPropertyi("sim/operation/failures/rel_lites_beac")
 
-customFails["Main alarm"] = globalPropertyi("tu154/custom/failures/main_alarm_fail") --  
-customFails["Speaker alarm"] = globalPropertyi("tu154/custom/failures/speaker_alarm_fail") --  
+customFails["Main alarm"] = globalPropertyi("tu154/custom/failures/main_alarm_fail")
+customFails["Speaker alarm"] = globalPropertyi("tu154/custom/failures/speaker_alarm_fail")
 
 customFails["ABSU RA56 roll"] = globalPropertyi("tu154/custom/failures/absu_ra56_roll_fail") --  ra56
 customFails["ABSU RA56 pitch"] = globalPropertyi("tu154/custom/failures/absu_ra56_pitch_fail") --  ra56
@@ -252,18 +248,18 @@ customFails["ABSU RA56 yaw"] = globalPropertyi("tu154/custom/failures/absu_ra56_
 customFails["ABSU AT1"] = globalPropertyi("tu154/custom/failures/absu_at1_fail") --  AT
 customFails["ABSU AT2"] = globalPropertyi("tu154/custom/failures/absu_at2_fail") --  AT
 
-customFails["ABSU Roll damper"] = globalPropertyi("tu154/custom/failures/absu_damp_roll_fail") --   
-customFails["ABSU Pitch damper"] = globalPropertyi("tu154/custom/failures/absu_damp_pitch_fail") --   
-customFails["ABSU Yaw damper"] = globalPropertyi("tu154/custom/failures/absu_damp_yaw_fail") --   
-customFails["ABSU Roll control"] = globalPropertyi("tu154/custom/failures/absu_contr_roll_fail") --   
-customFails["ABSU Pitch control"] = globalPropertyi("tu154/custom/failures/absu_contr_pitch_fail") --   
-customFails["ABSU TOGA Calc"] = globalPropertyi("tu154/custom/failures/absu_calc_toga_fail") --   
-customFails["ABSU Roll Calc"] = globalPropertyi("tu154/custom/failures/absu_calc_roll_fail") --   
-customFails["ABSU Pitch Calc"] = globalPropertyi("tu154/custom/failures/absu_calc_pitch_fail") --   
+customFails["ABSU Roll damper"] = globalPropertyi("tu154/custom/failures/absu_damp_roll_fail")
+customFails["ABSU Pitch damper"] = globalPropertyi("tu154/custom/failures/absu_damp_pitch_fail")
+customFails["ABSU Yaw damper"] = globalPropertyi("tu154/custom/failures/absu_damp_yaw_fail")
+customFails["ABSU Roll control"] = globalPropertyi("tu154/custom/failures/absu_contr_roll_fail")
+customFails["ABSU Pitch control"] = globalPropertyi("tu154/custom/failures/absu_contr_pitch_fail")
+customFails["ABSU TOGA Calc"] = globalPropertyi("tu154/custom/failures/absu_calc_toga_fail")
+customFails["ABSU Roll Calc"] = globalPropertyi("tu154/custom/failures/absu_calc_roll_fail")
+customFails["ABSU Pitch Calc"] = globalPropertyi("tu154/custom/failures/absu_calc_pitch_fail")
 
-customFails["Doppler system"] = globalPropertyi("tu154/custom/failures/diss_fail") --
-customFails["Navigational system"] = globalPropertyi("tu154/custom/failures/nvu_fail") --
-customFails["Weather radar"] = globalPropertyi("tu154/custom/failures/radar_fail") --
+customFails["Doppler system"] = globalPropertyi("tu154/custom/failures/diss_fail")
+customFails["Navigational system"] = globalPropertyi("tu154/custom/failures/nvu_fail")
+customFails["Weather radar"] = globalPropertyi("tu154/custom/failures/radar_fail")
 
 simFails["ADF #1"] = globalPropertyi("sim/operation/failures/rel_adf1")
 simFails["ADF #2"] = globalPropertyi("sim/operation/failures/rel_adf2")
@@ -295,26 +291,20 @@ customFails["BKK system"] = globalPropertyi("tu154/custom/failures/bkk_fail")
 
 customFails["!!!Left pitot block"] = globalPropertyi("tu154/custom/failures/pitot1") -- Pitot 1 - Blockage
 customFails["!!!Right pitot block"] = globalPropertyi("tu154/custom/failures/pitot2") -- Pitot 2 - Blockage
-customFails["!!!Left static"] = globalPropertyi("tu154/custom/failures/static1")  -- static fail
-customFails["!!!Right static"] = globalPropertyi("tu154/custom/failures/static2")  -- static fail
-simFails["!!!SVS system"] = globalPropertyi("sim/operation/failures/rel_adc_comp")  -- static fail
+customFails["!!!Left static"] = globalPropertyi("tu154/custom/failures/static1") -- static fail
+customFails["!!!Right static"] = globalPropertyi("tu154/custom/failures/static2") -- static fail
+simFails["!!!SVS system"] = globalPropertyi("sim/operation/failures/rel_adc_comp") -- static fail
 
-customFails["Controll gyro"] = globalPropertyi("tu154/custom/failures/mgv_fail") --  
+customFails["Controll gyro"] = globalPropertyi("tu154/custom/failures/mgv_fail")
 simFails["Captain's art horizon"] = globalPropertyi("sim/operation/failures/rel_ss_ahz")
 simFails["CoPilot's art horizon"] = globalPropertyi("sim/operation/failures/rel_cop_ahz")
-customFails["Radioaltimeter #1"] = globalPropertyi("tu154/custom/failures/rv1_fail")  -- fail
-customFails["Radioaltimeter #2"] = globalPropertyi("tu154/custom/failures/rv2_fail")  -- fail
+customFails["Radioaltimeter #1"] = globalPropertyi("tu154/custom/failures/rv1_fail") -- fail
+customFails["Radioaltimeter #2"] = globalPropertyi("tu154/custom/failures/rv2_fail") -- fail
 customFails["AOA"] = globalPropertyi("tu154/custom/failures/AOA") -- fail
 simFails["AOA alarm"] = globalPropertyi("sim/operation/failures/rel_stall_warn") -- fail
 customFails["Feet altimeter"] = globalPropertyi("tu154/custom/failures/uvid15_fail") -- fail
 simFails["Left VVI"] = globalPropertyi("sim/operation/failures/rel_ss_vvi") -- fail
 simFails["Right VVI"] = globalPropertyi("sim/operation/failures/rel_cop_vvi") -- fail
-
---[[
-defineProperty("system_qty_1", globalPropertyf("tu154/custom/hydro/gs_qty_1")) --    
-defineProperty("system_qty_2", globalPropertyf("tu154/custom/hydro/gs_qty_2")) --    
-defineProperty("system_qty_3", globalPropertyf("tu154/custom/hydro/gs_qty_3")) --    
---]]
 
 local runTimeDrawTbl = {}
 local brakesShowTbl = {}
@@ -322,243 +312,252 @@ local liqd_show_tbl = {}
 local failDrawTbl = {}
 
 local function readAll()
-	
-	-- fill the runtime table to show
-	for k,v in ipairs(runtime_tbl) do
-		runTimeDrawTbl[k] = {v[1], string.format("%.01f", tostring(get(v[2])/3600))}
-	end
+    -- fill the runtime table to show
+    for k, v in ipairs(runtime_tbl) do
+        runTimeDrawTbl[k] = { v[1], string.format("%.01f", tostring(get(v[2]) / 3600)) }
+    end
 
-	-- fill the brakes table to show
-	for k,v in ipairs(brakes_tbl) do
-		brakesShowTbl[k] = {v[1], string.format("%.03f", tostring(get(v[2])))}
-	end
+    -- fill the brakes table to show
+    for k, v in ipairs(brakes_tbl) do
+        brakesShowTbl[k] = { v[1], string.format("%.03f", tostring(get(v[2]))) }
+    end
 
-	-- fill the liquids table to show
-	for k,v in ipairs(liqd_tbl) do
-		liqd_show_tbl[k] = {v[1], string.format("%.01f", tostring(get(v[2])))}
-	end
-		
-	-- fill table of failures
-	failDrawTbl = {} -- flush table first
-		
-	for k,v in pairs(customFails) do -- scan custom failures
-		if get(v) > 0 then
-			table.insert(failDrawTbl, k)
-		end
-	end
-		
-	for k,v in pairs(simFails) do -- scan sim failures
-		if get(v) == 6 then
-			table.insert(failDrawTbl, k)
-		end
-	end
+    -- fill the liquids table to show
+    for k, v in ipairs(liqd_tbl) do
+        liqd_show_tbl[k] = { v[1], string.format("%.01f", tostring(get(v[2]))) }
+    end
 
-	-- sort table
-	table.sort(failDrawTbl)
+    -- fill table of failures
+    failDrawTbl = {} -- flush table first
+
+    for k, v in pairs(customFails) do -- scan custom failures
+        if get(v) > 0 then
+            table.insert(failDrawTbl, k)
+        end
+    end
+
+    for k, v in pairs(simFails) do -- scan sim failures
+        if get(v) == 6 then
+            table.insert(failDrawTbl, k)
+        end
+    end
+
+    -- sort table
+    table.sort(failDrawTbl)
 end
 
 local function fixAll()
     -- Reject stale panel clicks in flight and writes from a slave.
-    if get(ismaster) == 1 or math.abs(get(GS)) > 1
-        or get(deflection_mtr_1) < 0.001 or get(deflection_mtr_2) < 0.001
-        or get(deflection_mtr_3) < 0.001 then
+    if
+        get(ismaster) == 1
+        or math.abs(get(GS)) > 1
+        or get(deflection_mtr_1) < 0.001
+        or get(deflection_mtr_2) < 0.001
+        or get(deflection_mtr_3) < 0.001
+    then
         return true
     end
-	
-	for k,v in pairs(customFails) do -- scan custom failures
-		set(v, 0)
-	end
-		
-	for k,v in pairs(simFails) do -- scan sim failures
-		set(v, 0)
-	end
-	
-	set(hydro_tbl[1][2], 58)
-	set(hydro_tbl[2][2], 58)
-	set(hydro_tbl[3][2], 45)
-	
-	set(save_state, 1)
 
-	return true
-	
+    for k, v in pairs(customFails) do -- scan custom failures
+        set(v, 0)
+    end
+
+    for k, v in pairs(simFails) do -- scan sim failures
+        set(v, 0)
+    end
+
+    set(hydro_tbl[1][2], 58)
+    set(hydro_tbl[2][2], 58)
+    set(hydro_tbl[3][2], 45)
+
+    set(save_state, 1)
+
+    return true
 end
 
 local lag_time = 0
 
 function update()
-	
-	local passed = get(frame_time)
-	
-	lag_time = lag_time - passed
-	
-	if lag_time < 0 then
-		readAll()
-		
-		lag_time = 1
-	end
-	updateAll(components)
+    local passed = get(frame_time)
+
+    lag_time = lag_time - passed
+
+    if lag_time < 0 then
+        readAll()
+
+        lag_time = 1
+    end
+    updateAll(components)
 end
 
 components = {
 
-	-- background
-	textureLit {
-		position = {0, 0, size[1], size[2]},
-		image = get(bg_img),
-	},
-	
-	text_draw {
-		position = {20, 600, 50, 50},
-		text = "------------------- TIME BEFORE REPAIR ------------------",
-	},
-	
-	fail_runtime {
-		position = {20, 580, 50, 50},
-		drawTable = function() return runTimeDrawTbl end,
-		value = "h",
-	},
-	
-	-- ENGINE REPAIR button
-	rectangle {
-		position = {290, 550, 170, 30},
-		color = {0, 0, 0, 1},
-	},
+    -- background
+    textureLit {
+        position = { 0, 0, size[1], size[2] },
+        image = get(bg_img),
+    },
 
-	rectangle {
-		position = {290+1, 550+1, 170-2, 30-2},
-		color = {0.9, 0.9, 0.9, 1},
-	},
-	
-	text_draw {
-		position = {300, 550+10, 50, 50},
-		text = "ENGINE REPAIR",
-	},
-	
-	interactive {
-		position = {290, 550, 170, 30},
-      
-		onMouseDown = function()
-			set(runtime_tbl[1][2], math.random(280,320) * 3600)
-			
-			set(runtime_tbl[2][2], math.random(280,320) * 3600)
-			set(runtime_tbl[3][2], math.random(280,320) * 3600)
-			set(runtime_tbl[4][2], math.random(280,320) * 3600)
-			set(save_state, 1)
-			return true
-		end
-	}, 
-	
-	text_draw {
-		position = {20, 510, 50, 50},
-		text = "--------------------- BRAKES STATUS ---------------------",
-	},
-	
-	fail_runtime {
-		position = {20, 480, 50, 50},
-		drawTable = function() return brakesShowTbl end,
-		value = "thick",
-	},
+    text_draw {
+        position = { 20, 600, 50, 50 },
+        text = "------------------- TIME BEFORE REPAIR ------------------",
+    },
 
-	-- REPLACE BRAKES button
-	rectangle {
-		position = {290, 465, 170, 30},
-		color = {0, 0, 0, 1},
-	},
+    fail_runtime {
+        position = { 20, 580, 50, 50 },
+        drawTable = function()
+            return runTimeDrawTbl
+        end,
+        value = "h",
+    },
 
-	rectangle {
-		position = {290+1, 465+1, 170-2, 30-2},
-		color = {0.9, 0.9, 0.9, 1},
-	},
-	
-	text_draw {
-		position = {300, 465+10, 50, 50},
-		text = "REPLACE BRAKES",
-	},
-	
-	interactive {
-		position = {290, 465, 170, 30},
-      
-		onMouseDown = function()
-			set(brakes_tbl[1][2], 1)
-			set(brakes_tbl[2][2], 1)
-			set(save_state, 1)
-			return true
-		end
-	},	
-	
-	text_draw {
-		position = {20, 440, 50, 50},
-		text = "------------------ ENGINE OIL QUANTITY ------------------",
-	},
-	
-	fail_runtime {
-		position = {20, 410, 50, 50},
-		drawTable = function() return liqd_show_tbl end,
-		value = "L",
-	},	
-	
-	-- REFIL ENGN OIL button
-	rectangle {
-		position = {290, 390, 170, 30},
-		color = {0, 0, 0, 1},
-	},
+    -- ENGINE REPAIR button
+    rectangle {
+        position = { 290, 550, 170, 30 },
+        color = { 0, 0, 0, 1 },
+    },
 
-	rectangle {
-		position = {290+1, 390+1, 170-2, 30-2},
-		color = {0.9, 0.9, 0.9, 1},
-	},
-	
-	text_draw {
-		position = {300, 390+10, 50, 50},
-		text = "REFILL ENGN OIL",
-	},
-	
-	interactive {
-		position = {290, 390, 170, 30},
-      
-		onMouseDown = function()
-			set(liqd_tbl[1][2], math.random() + 26)
-			set(liqd_tbl[2][2], math.random() + 26)
-			set(liqd_tbl[3][2], math.random() + 26)
-			set(save_state, 1)
-			return true
-		end
-	},
+    rectangle {
+        position = { 290 + 1, 550 + 1, 170 - 2, 30 - 2 },
+        color = { 0.9, 0.9, 0.9, 1 },
+    },
 
-	text_draw {
-		position = {20, 350, 50, 50},
-		text = "------------------------- FAILURES ------------------------",
-	},
+    text_draw {
+        position = { 300, 550 + 10, 50, 50 },
+        text = "ENGINE REPAIR",
+    },
 
-	failures_draw {
-		position = {20, 320, 50, 50},
-		drawTable = function() return failDrawTbl end,
-		maxDraw = 32,
-	},
-	
-	-- fix all button
-	rectangle {
-		position = {210, 25, 85, 40},
-		color = {0, 0, 0, 1},
-	},
+    interactive {
+        position = { 290, 550, 170, 30 },
 
-	rectangle {
-		position = {210+1, 25+1, 85-2, 40-2},
-		color = {0.9, 0.9, 0.9, 1},
-	},
-	
-	text_draw {
-		position = {220, 40, 50, 50},
-		text = "FIX ALL",
-	},
-	
-	interactive {
-		position = {210, 25, 85, 40},
-   		onMouseDown = fixAll,
-	}, 
-	
-	--[[
-	
+        onMouseDown = function()
+            set(runtime_tbl[1][2], math.random(280, 320) * 3600)
+
+            set(runtime_tbl[2][2], math.random(280, 320) * 3600)
+            set(runtime_tbl[3][2], math.random(280, 320) * 3600)
+            set(runtime_tbl[4][2], math.random(280, 320) * 3600)
+            set(save_state, 1)
+            return true
+        end,
+    },
+
+    text_draw {
+        position = { 20, 510, 50, 50 },
+        text = "--------------------- BRAKES STATUS ---------------------",
+    },
+
+    fail_runtime {
+        position = { 20, 480, 50, 50 },
+        drawTable = function()
+            return brakesShowTbl
+        end,
+        value = "thick",
+    },
+
+    -- REPLACE BRAKES button
+    rectangle {
+        position = { 290, 465, 170, 30 },
+        color = { 0, 0, 0, 1 },
+    },
+
+    rectangle {
+        position = { 290 + 1, 465 + 1, 170 - 2, 30 - 2 },
+        color = { 0.9, 0.9, 0.9, 1 },
+    },
+
+    text_draw {
+        position = { 300, 465 + 10, 50, 50 },
+        text = "REPLACE BRAKES",
+    },
+
+    interactive {
+        position = { 290, 465, 170, 30 },
+
+        onMouseDown = function()
+            set(brakes_tbl[1][2], 1)
+            set(brakes_tbl[2][2], 1)
+            set(save_state, 1)
+            return true
+        end,
+    },
+
+    text_draw {
+        position = { 20, 440, 50, 50 },
+        text = "------------------ ENGINE OIL QUANTITY ------------------",
+    },
+
+    fail_runtime {
+        position = { 20, 410, 50, 50 },
+        drawTable = function()
+            return liqd_show_tbl
+        end,
+        value = "L",
+    },
+
+    -- REFIL ENGN OIL button
+    rectangle {
+        position = { 290, 390, 170, 30 },
+        color = { 0, 0, 0, 1 },
+    },
+
+    rectangle {
+        position = { 290 + 1, 390 + 1, 170 - 2, 30 - 2 },
+        color = { 0.9, 0.9, 0.9, 1 },
+    },
+
+    text_draw {
+        position = { 300, 390 + 10, 50, 50 },
+        text = "REFILL ENGN OIL",
+    },
+
+    interactive {
+        position = { 290, 390, 170, 30 },
+
+        onMouseDown = function()
+            set(liqd_tbl[1][2], math.random() + 26)
+            set(liqd_tbl[2][2], math.random() + 26)
+            set(liqd_tbl[3][2], math.random() + 26)
+            set(save_state, 1)
+            return true
+        end,
+    },
+
+    text_draw {
+        position = { 20, 350, 50, 50 },
+        text = "------------------------- FAILURES ------------------------",
+    },
+
+    failures_draw {
+        position = { 20, 320, 50, 50 },
+        drawTable = function()
+            return failDrawTbl
+        end,
+        maxDraw = 32,
+    },
+
+    -- fix all button
+    rectangle {
+        position = { 210, 25, 85, 40 },
+        color = { 0, 0, 0, 1 },
+    },
+
+    rectangle {
+        position = { 210 + 1, 25 + 1, 85 - 2, 40 - 2 },
+        color = { 0.9, 0.9, 0.9, 1 },
+    },
+
+    text_draw {
+        position = { 220, 40, 50, 50 },
+        text = "FIX ALL",
+    },
+
+    interactive {
+        position = { 210, 25, 85, 40 },
+        onMouseDown = fixAll,
+    },
+
+    --[[
+
 	-- REFIL HYDRO button
 	rectangle {
 		position = {290, 420, 170, 30},
@@ -569,39 +568,36 @@ components = {
 		position = {290+1, 420+1, 170-2, 30-2},
 		color = {1, 1, 1, 1},
 	},
-	
+
 	text_draw {
 		position = {300, 430, 50, 50},
 		text = "REFIL HYDRO",
 	},
-	
+
 	interactive {
 		position = {290, 420, 170, 30},
-      
+
 		onMouseHold = function()
 			set(liqd_tbl[1][2], 58)
 			set(liqd_tbl[2][2], 58)
 			set(liqd_tbl[3][2], 45)
 		end
-	}, 
-	
+	},
+
 	--]]
-	
-	--------------------------------
 
-	-- close button
-	interactive {
-		position = {size[1] - 30, size[2] - 30, 30, 30 },
-      
-		onMouseDown = function() 
-			set(show_fail_panel, 0)
-			
-			return true
-		end,
-	}, 	
+    -- close button
+    interactive {
+        position = { size[1] - 30, size[2] - 30, 30, 30 },
 
+        onMouseDown = function()
+            set(show_fail_panel, 0)
+
+            return true
+        end,
+    },
 }
 
 function draw()
-	drawAll(components)
+    drawAll(components)
 end

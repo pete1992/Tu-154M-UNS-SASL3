@@ -1,18 +1,5 @@
 -- cockpit_lights.lua
---[[
-Changelog
-- Grouped all 145 Dataref bindings through defineProps() while preserving property names, paths, constructors, and original binding order.
-- Replaced Russian comments with English comments.
-- Preserved all legacy sim/weapons light parameter bindings and their original initialization values.
-- Clamped 27 V and 115 V lighting coefficients to the valid 0..1 range.
-- Added APU generator (generator 4) as a valid cabin-light power source.
-- Corrected 27 V cockpit-light current calculation to avoid voltage being applied twice.
-- Applied the non-HDR gate consistently to the default X-Plane cockpit flood light.
-- Made the toilet occupied lamp deterministic during the waiting phase.
-- Removed the unused current_115 local.
-- Cached bus voltages and lighting controls once per frame to reduce repeated Dataref reads.
-- Preserved cabin night-threshold behavior, brightness curves, light scaling, electrical-load weights, sign behavior, and the unused left spotlight interface.
-]]
+-- Controls cockpit and cabin lighting, signs and their electrical loads.
 
 -- Cockpit and cabin lighting logic.
 
@@ -156,7 +143,6 @@ defineProps({
     { "ovhd_back_panel_flood", "tu154/custom/lights/ovhd_back_panel_flood", globalPropertyf },
     { "eng_panel_flood", "tu154/custom/lights/eng_panel_flood", globalPropertyf },
     { "azs_panel_flood", "tu154/custom/lights/azs_panel_flood", globalPropertyf },
-    -- { "left_spotlight_flood", "tu154/custom/lights/left_spotlight_flood", globalPropertyf },
     -- Lighting controls
     { "cabinl_flood_set", "tu154/custom/lights/cabinl_flood_set", globalPropertyi },
     { "mid_left_panel_int_set", "tu154/custom/lights/mid_left_panel_int_set", globalPropertyf },
@@ -379,9 +365,7 @@ function update()
     -- Cabin lighting. Preserve the original night threshold and engine-generator
     -- requirement, while also accepting the APU generator and GPU.
     local engine_generators = get(gen1_work_bus) + get(gen2_work_bus) + get(gen3_work_bus)
-    local cabin_powered = engine_generators > 1
-        or get(gen4_work_bus) == 1
-        or get(gpu_work_bus) == 1
+    local cabin_powered = engine_generators > 1 or get(gen4_work_bus) == 1 or get(gpu_work_bus) == 1
 
     if cabin_powered and get(percent_lights_on) > 0.15 then
         set(l9_3, light_coef_115)
@@ -419,7 +403,9 @@ function update()
     -- 27 V lighting load.
     -- Use raw control demand here; brightness already contains light_coef_27.
     -- Each bus receives its share once according to its own voltage.
-    local current_27 = left_flood_set + right_flood_set + front_flood_set
+    local current_27 = left_flood_set
+        + right_flood_set
+        + front_flood_set
         + pedestal_flood_set * 0.7
         + ovhd_front_flood_set * 0.7
         + ovhd_back_flood_set * 0.7

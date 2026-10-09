@@ -1,16 +1,5 @@
 -- light_commands.lua
---[[
-Changelog
-- Grouped all property bindings through a local defineProps() helper while preserving all existing property names, Dataref paths, constructors, and their original order.
-- Replaced Russian comments with English comments.
-- Preserved all existing X-Plane command names and command-handler entry points.
-- Kept the generic hold-command and toggle-command helpers available.
-- Reused the already defined property references when registering generic light commands instead of creating duplicate property handles.
-- Made the landing-light extension toggle evaluate both left and right extension switches so an asymmetric state is handled predictably.
-- Made the landing-light ON command use the higher of the two current mode positions before stepping both sides upward together.
-- Made the landing-light OFF command use the lower of the two current mode positions before stepping both sides downward together.
-- Kept landing-light mode limits unchanged at -1 (taxi), 0 (off), and +1 (landing).
-]]
+-- Connects simulator lighting commands to the aircraft lighting controls.
 
 -- X-Plane command handling for the lighting system.
 
@@ -24,10 +13,7 @@ end
 defineProps({
     { "nav_lights_set", "tu154/custom/lights/nav_lights_set", globalPropertyi },
     { "strobe_set", "tu154/custom/lights/strobe_set", globalPropertyi },
-    -- { "wing_light_left_set", "tu154/custom/lights/wing_light_left_set", globalPropertyi },
-    -- { "wing_light_right_set", "tu154/custom/lights/wing_light_right_set", globalPropertyi },
     { "tail_light_set", "tu154/custom/lights/tail_light_set", globalPropertyi },
-    -- { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyi },
     { "landing_ext_set_L", "tu154/custom/lights/landing_ext_set_L", globalPropertyi },
     { "landing_ext_set_R", "tu154/custom/lights/landing_ext_set_R", globalPropertyi },
     { "landing_mode_set_L", "tu154/custom/lights/landing_mode_set_L", globalPropertyi },

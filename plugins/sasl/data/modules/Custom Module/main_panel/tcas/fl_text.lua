@@ -1,14 +1,12 @@
 -- fl_text.lua
--- this is TCAS main screen
-size = {170, 45}
+-- Draw a TCAS flight-level text field with the basic bitmap font.
+
+size = { 170, 45 }
 
 defineProperty("text")
 
-local font = sasl.gl.loadBitmapFont('basic_font.fnt')
+local font = sasl.gl.loadBitmapFont("basic_font.fnt")
 
 function draw()
-
-	sasl.gl.drawBitmapText(font, 0, 0, get(text), TEXT_ALIGN_LEFT, {1, 0.8, 0.7, 1})
-
+    sasl.gl.drawBitmapText(font, 0, 0, get(text), TEXT_ALIGN_LEFT, { 1, 0.8, 0.7, 1 })
 end
-

@@ -1,7 +1,7 @@
 -- msrp_clock.lua
--- MSRP clock panel.
+-- Display the MSRP flight-recorder clock on the panel texture.
 
-size = {195, 84}
+size = { 195, 84 }
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -10,12 +10,11 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"sim_time", "sim/time/zulu_time_sec", globalPropertyf},
-    {"msrp_power", "tu154/custom/msrp/msrp_power", globalPropertyi},
+    { "sim_time", "sim/time/zulu_time_sec", globalPropertyf },
+    { "msrp_power", "tu154/custom/msrp/msrp_power", globalPropertyi },
 })
 
-local digitsImage =
-    sasl.gl.loadImage("green_digit_strip.png", 12, 0, 40, 784)
+local digitsImage = sasl.gl.loadImage("green_digit_strip.png", 12, 0, 40, 784)
 
 local show_time = 0
 local power = get(msrp_power) == 1
@@ -31,7 +30,7 @@ end
 
 components = {
     digitstapeLit {
-        position = {13, 5, 170, 70},
+        position = { 13, 5, 170, 70 },
         image = digitsImage,
         digits = 4,
         showLeadingZeros = true,

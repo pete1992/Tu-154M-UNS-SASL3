@@ -1,10 +1,10 @@
 -- nvu.lua
--- Retired NVU compatibility module. Modern source selection belongs to ABSU.
--- Update GPS availability and the remaining panel/sound/BDK functions only.
+-- Assemble the remaining NVU compatibility outputs and cockpit services.
+
+-- Navigation source selection belongs to ABSU; this host keeps only compatibility services.
 
 components = {
 
-	nvu_logic {},
-	nvu_panel {},
+    nvu_logic {},
+    nvu_panel {},
 }
-

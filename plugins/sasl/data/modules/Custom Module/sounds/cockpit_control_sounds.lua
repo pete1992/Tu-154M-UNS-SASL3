@@ -1,4 +1,6 @@
--- Mechanical clicks for cockpit controls missing from the existing panel sounds.
+-- cockpit_control_sounds.lua
+-- Plays mechanical sounds when monitored cockpit controls change.
+
 -- Observe inputs only; control ownership, interlocks and system logic stay with
 -- their existing components. Existing TCAS/WX power and button proxies stay there.
 
@@ -129,8 +131,12 @@ end
 
 local function controlValue(control)
     local value = get(control[1])
-    if not finite(value) then return nil end
-    if control[3] then return math.floor(value / control[3] + 0.5) end
+    if not finite(value) then
+        return nil
+    end
+    if control[3] then
+        return math.floor(value / control[3] + 0.5)
+    end
     return value
 end
 

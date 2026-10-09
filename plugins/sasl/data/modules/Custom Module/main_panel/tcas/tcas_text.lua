@@ -1,14 +1,12 @@
 -- tcas_text.lua
--- this is TCAS main screen
-size = {170, 45}
+-- Draw a TCAS control-panel text field with the segmented bitmap font.
+
+size = { 170, 45 }
 
 defineProperty("text")
 
-local font = sasl.gl.loadBitmapFont('segmental.fnt')
+local font = sasl.gl.loadBitmapFont("segmental.fnt")
 
 function draw()
-
-	sasl.gl.drawBitmapText(font, 0, 0, get(text), TEXT_ALIGN_LEFT, {1, 0.8, 0.7, 1})
-
+    sasl.gl.drawBitmapText(font, 0, 0, get(text), TEXT_ALIGN_LEFT, { 1, 0.8, 0.7, 1 })
 end
-

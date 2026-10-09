@@ -1,6 +1,7 @@
 -- taws_msg.lua
--- this is voice and text messages logic
-size = {1000, 770}
+-- Display TAWS warning messages in the selected language.
+
+size = { 1000, 770 }
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -15,321 +16,301 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi }, --
+    { "taws_message", "tu154/custom/taws/taws_message", globalPropertyi },
     -- 0 - none, 1 - Pull UP, 2 - alt callout, 3 - Pull Up, 4 - Terrain, 5 - Terrain Ahead, 6 - Too low, Terrain,
-    -- 7 - Alt collout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
+    -- 7 - Altitude callout, 8 - Too low, Gear, 9 - Too low, Flaps, 10 - Check altitude, 11 - Sink Rate, 12 - Don't sink, 13 - Glideslope
     { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi }, --    . 1 = RUS
-    { "taws_english", "tu154/custom/taws/taws_english", globalPropertyi }, --  . 0 - , 1 - 	0
-    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
+    { "taws_english", "tu154/custom/taws/taws_english", globalPropertyi }, -- Display language: 0 = Russian, 1 = English.
+    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf },
 
-    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, -- TAWS display mode; see taws_logic.lua.
 })
 
-local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
+local text_font = sasl.gl.loadBitmapFont("taws_scr.fnt")
 
 local msg = 0
 local eng = false
 local brightness = 0.8
 
 function update()
+    eng = get(taws_english) == 1
 
-	eng = get(taws_english) == 1
-	
-	msg = get(taws_message)
-	
-	brightness = get(brt_handle)
-	if get(mode_set) == 0 then brightness = 0 end
-	
-	set(taws_english, 1 - get(hide_eng_objects))
-	
+    msg = get(taws_message)
+
+    brightness = get(brt_handle)
+    if get(mode_set) == 0 then
+        brightness = 0
+    end
+
+    set(taws_english, 1 - get(hide_eng_objects))
 end
 
 components = {
 
-	-- text background
-	rectangle {
-		position = {100, 690, 800, 80},
-		color = {0.1, 0.1, 0.1, 1},
-		visible = function()
-			return msg ~= 0 and msg ~= 2 and msg ~= 7
-		end,
-	},	
+    -- text background
+    rectangle {
+        position = { 100, 690, 800, 80 },
+        color = { 0.1, 0.1, 0.1, 1 },
+        visible = function()
+            return msg ~= 0 and msg ~= 2 and msg ~= 7
+        end,
+    },
 
-	-- russian text --
-	-- 
-	text_draw {
-		position = {250, 710, 185, 160},
-		text = function()
-			return " "
-		end,
-		font = text_font,
-		color = {1, 0.3 ,0.3 ,1},
-		visible = function()
-			return not eng and (msg == 1 or msg == 3)
-		end,
-	},
+    -- russian text --
 
-	-- 
-	text_draw {
-		position = {350, 710, 185, 160},
-		text = function()
-			return ""
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 4
-		end,
-	},
+    text_draw {
+        position = { 250, 710, 185, 160 },
+        text = function()
+            return " "
+        end,
+        font = text_font,
+        color = { 1, 0.3, 0.3, 1 },
+        visible = function()
+            return not eng and (msg == 1 or msg == 3)
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {160, 710, 185, 160},
-		text = function()
-			return " "
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 5
-		end,
-	},
-	
-	-- 
-	text_draw {
-		position = {210, 710, 185, 160},
-		text = function()
-			return " "
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 6
-		end,
-	},	
-	
-	-- 
-	text_draw {
-		position = {210, 710, 185, 160},
-		text = function()
-			return " "
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 8
-		end,
-	},
+    text_draw {
+        position = { 350, 710, 185, 160 },
+        text = function()
+            return ""
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 4
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {140, 710, 185, 160},
-		text = function()
-			return " "
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 9
-		end,
-	},
+    text_draw {
+        position = { 160, 710, 185, 160 },
+        text = function()
+            return " "
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 5
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {140, 710, 185, 160},
-		text = function()
-			return " "
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 10
-		end,
-	},	
-	
-	-- 
-	text_draw {
-		position = {140, 710, 185, 160},
-		text = function()
-			return " "
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 11
-		end,
-	},		
+    text_draw {
+        position = { 210, 710, 185, 160 },
+        text = function()
+            return " "
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 6
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {210, 710, 185, 160},
-		text = function()
-			return " "
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 12
-		end,
-	},	
-	
-	-- 
-	text_draw {
-		position = {300, 710, 185, 160},
-		text = function()
-			return ""
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return not eng and msg == 13
-		end,
-	},		
+    text_draw {
+        position = { 210, 710, 185, 160 },
+        text = function()
+            return " "
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 8
+        end,
+    },
 
-	-- english text --
-	-- 
-	text_draw {
-		position = {340, 710, 185, 160},
-		text = function()
-			return "PULL UP"
-		end,
-		font = text_font,
-		color = {1, 0.3 ,0.3 ,1},
-		visible = function()
-			return eng and (msg == 1 or msg == 3)
-		end,
-	},
+    text_draw {
+        position = { 140, 710, 185, 160 },
+        text = function()
+            return " "
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 9
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {320, 710, 185, 160},
-		text = function()
-			return "TERRAIN"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 4
-		end,
-	},
+    text_draw {
+        position = { 140, 710, 185, 160 },
+        text = function()
+            return " "
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 10
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {200, 710, 185, 160},
-		text = function()
-			return "TERRAIN AHEAD"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 5
-		end,
-	},
-	
-	-- 
-	text_draw {
-		position = {150, 710, 185, 160},
-		text = function()
-			return "TOO LOW TERRAIN"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 6
-		end,
-	},
+    text_draw {
+        position = { 140, 710, 185, 160 },
+        text = function()
+            return " "
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 11
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {200, 710, 185, 160},
-		text = function()
-			return "TOO LOW GEAR"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 8
-		end,
-	},
+    text_draw {
+        position = { 210, 710, 185, 160 },
+        text = function()
+            return " "
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 12
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {190, 710, 185, 160},
-		text = function()
-			return "TOO LOW FLAPS"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 9
-		end,
-	},
+    text_draw {
+        position = { 300, 710, 185, 160 },
+        text = function()
+            return ""
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return not eng and msg == 13
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {180, 710, 185, 160},
-		text = function()
-			return "CHECK ALTITUDE"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 10
-		end,
-	},
+    -- english text --
 
-	-- 
-	text_draw {
-		position = {300, 710, 185, 160},
-		text = function()
-			return "SINK RATE"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 11
-		end,
-	},
+    text_draw {
+        position = { 340, 710, 185, 160 },
+        text = function()
+            return "PULL UP"
+        end,
+        font = text_font,
+        color = { 1, 0.3, 0.3, 1 },
+        visible = function()
+            return eng and (msg == 1 or msg == 3)
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {280, 710, 185, 160},
-		text = function()
-			return "DON'T SINK"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 12
-		end,
-	},
+    text_draw {
+        position = { 320, 710, 185, 160 },
+        text = function()
+            return "TERRAIN"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 4
+        end,
+    },
 
-	-- 
-	text_draw {
-		position = {250, 710, 185, 160},
-		text = function()
-			return "GLIDESLOPE"
-		end,
-		font = text_font,
-		color = {1, 1 ,0.3 ,1},
-		visible = function()
-			return eng and msg == 13
-		end,
-	},
+    text_draw {
+        position = { 200, 710, 185, 160 },
+        text = function()
+            return "TERRAIN AHEAD"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 5
+        end,
+    },
 
-	-- brightness controll
-	rectangle_ctr {
-		R = 0,
-		G = 0,
-		B = 0,
-		A = function()
-			return 1 - brightness
-		end, -- controll via alpha
-		position_x = 0,
-		position_y = 0,
-		width = size[1],
-		height = size[2],
-	},
+    text_draw {
+        position = { 150, 710, 185, 160 },
+        text = function()
+            return "TOO LOW TERRAIN"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 6
+        end,
+    },
 
+    text_draw {
+        position = { 200, 710, 185, 160 },
+        text = function()
+            return "TOO LOW GEAR"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 8
+        end,
+    },
+
+    text_draw {
+        position = { 190, 710, 185, 160 },
+        text = function()
+            return "TOO LOW FLAPS"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 9
+        end,
+    },
+
+    text_draw {
+        position = { 180, 710, 185, 160 },
+        text = function()
+            return "CHECK ALTITUDE"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 10
+        end,
+    },
+
+    text_draw {
+        position = { 300, 710, 185, 160 },
+        text = function()
+            return "SINK RATE"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 11
+        end,
+    },
+
+    text_draw {
+        position = { 280, 710, 185, 160 },
+        text = function()
+            return "DON'T SINK"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 12
+        end,
+    },
+
+    text_draw {
+        position = { 250, 710, 185, 160 },
+        text = function()
+            return "GLIDESLOPE"
+        end,
+        font = text_font,
+        color = { 1, 1, 0.3, 1 },
+        visible = function()
+            return eng and msg == 13
+        end,
+    },
+
+    -- Brightness control
+    rectangle_ctr {
+        R = 0,
+        G = 0,
+        B = 0,
+        A = function()
+            return 1 - brightness
+        end, -- Control brightness through alpha
+        position_x = 0,
+        position_y = 0,
+        width = size[1],
+        height = size[2],
+    },
 }
-

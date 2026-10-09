@@ -1,4 +1,6 @@
--- One-shot flight configuration for X-Plane's "Start with engines running" option.
+-- aircraft_init.lua
+-- Applies the selected cold-and-dark or engines-running cockpit control preset.
+
 -- Only cockpit controls belong here. Native engines, autopilot engagement,
 -- failures, payload/fuel quantities and hydraulic state remain system-owned.
 local function defineProps(defs)
@@ -503,6 +505,8 @@ function update()
     end
 
     -- Do not poll the preference again or hold switches in a forced state.
-    print("[Aircraft initialization] " ..
-        (hot_start and "Engines-running controls applied" or "Cold-and-dark controls applied"))
+    print(
+        "[Aircraft initialization] "
+            .. (hot_start and "Engines-running controls applied" or "Cold-and-dark controls applied")
+    )
 end

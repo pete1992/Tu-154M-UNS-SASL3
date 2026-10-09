@@ -1,8 +1,8 @@
 -- text_draw2.lua
--- Generic text drawing component supporting regular and bitmap fonts.
+-- Draws text using an explicitly selected scalable or bitmap font mode.
 
 defineProperty("text", "")
-defineProperty("color", {0, 0, 0, 1})
+defineProperty("color", { 0, 0, 0, 1 })
 defineProperty("bitmap", false)
 defineProperty("font")
 defineProperty("font_size", 24)
@@ -27,14 +27,7 @@ function draw()
     end
 
     if isEnabled(get(bitmap)) then
-        sasl.gl.drawBitmapText(
-            font_handle,
-            0,
-            0,
-            text_value,
-            TEXT_ALIGN_LEFT,
-            {c[1], c[2], c[3], c[4]}
-        )
+        sasl.gl.drawBitmapText(font_handle, 0, 0, text_value, TEXT_ALIGN_LEFT, { c[1], c[2], c[3], c[4] })
     else
         sasl.gl.drawText(
             font_handle,
@@ -45,7 +38,7 @@ function draw()
             false,
             false,
             TEXT_ALIGN_LEFT,
-            {c[1], c[2], c[3], c[4]}
+            { c[1], c[2], c[3], c[4] }
         )
     end
 end

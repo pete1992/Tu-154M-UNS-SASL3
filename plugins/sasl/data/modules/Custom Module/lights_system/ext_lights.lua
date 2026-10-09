@@ -1,42 +1,5 @@
 -- ext_lights.lua
--- External lighting system logic
-
---[[
-	Changelog
-
-	>>	Grouped all property bindings through a local defineProps() 
-			helper while preserving every existing property name, 
-			Dataref path, constructor, and binding order.
-	>>	Replaced Russian comments with English comments.
-	>>	Cached frequently used Dataref values once per frame to 
-			reduce repeated property reads.
-	>>	Clamped 27 V bus coefficients to the valid 0..1 range so 
-			overvoltage cannot increase light output or landing-light 
-			deployment speed above the intended maximum.
-	>>	Preserved the existing landing-light grouping: the left 
-			extension/mode control drives the wing landing-light pair, while 
-			the right extension/mode control drives the front landing-light 
-			pair.
-	>>	Coupled landing-light brightness to the actual deployment 
-			position instead of switching to full brightness immediately 
-			when deployment starts.
-	>>	Changed nosewheel taxi-light visibility so it is enabled only when 
-			the nose gear is more than 90 percent deployed.
-	>>	Applied the nosewheel taxi-light gear interlock before electrical 
-			current calculations so hidden taxi lights no longer consume 
-			simulated current.
-	>>	Corrected flight-signal current calculations so each electrical 
-			bus is scaled only by its own voltage coefficient instead of 
-			applying the voltage factor twice.
-	>>	Preserved landing-light failure handling, landing-light master 
-			cutoff behavior, output scaling, animation speed, beacon/nav 
-			timing, and the Virtual Airlines landing-light workaround unless 
-			explicitly listed above.
-	>>	Preserved currently unused properties, counters, and legacy 
-			commented logic for project compatibility and future use.
-	>>	Added the dedicated white tail flash output and synchronized 
-			the tail and wing flashes with the native X-Plane strobe pulse.
---]]
+-- Controls external lights, landing-light deployment and native strobe synchronization.
 
 -- local defineProps Function
 local function defineProps(defs)
@@ -70,15 +33,12 @@ defineProps({
     { "sim_NW_L", "sim/cockpit2/switches/landing_lights_switch[9]", globalProperty },
     { "sim_NW_R", "sim/cockpit2/switches/landing_lights_switch[8]", globalProperty },
     { "sim_spot", "sim/cockpit2/switches/spot_light_on", globalPropertyf },
-  --  { "sim_anticollision_light", "sim/cockpit2/switches/anticollision_light_switch[0]", globalProperty },
     -- Legacy custom anti-collision output binding remains intentionally disabled:
-    -- defineProperty("anticoll_light", globalPropertyi("tu154/custom/lights/anticoll_light"))
     { "sim_logo", "sim/cockpit2/switches/generic_lights_switch[0]", globalProperty },
     { "sim_wings_L", "sim/cockpit2/switches/generic_lights_switch[1]", globalProperty },
     { "sim_wings_R", "sim/cockpit2/switches/generic_lights_switch[2]", globalProperty },
     { "sim_cargo_1", "sim/cockpit2/switches/generic_lights_switch[3]", globalProperty },
     { "sim_cargo_2", "sim/cockpit2/switches/generic_lights_switch[4]", globalProperty },
-    -- { "sim_lan_brt", "sim/flightmodel2/lights/landing_lights_brightness_ratio[1]", globalProperty },
     { "sim_landing", "sim/cockpit/electrical/landing_lights_on", globalPropertyi },
     -- Animation and custom light outputs.
     { "light_open_left", "tu154/custom/anim/light_open_left", globalPropertyf },
@@ -88,7 +48,6 @@ defineProps({
     { "white_light_tail", "tu154/custom/lights/white_light_tail", globalPropertyi },
     { "beacon_light_B", "tu154/custom/lights/beacon_light_B", globalPropertyi },
     { "beacon_light_T", "tu154/custom/lights/beacon_light_T", globalPropertyi },
-    -- { "gear_defl", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
     { "deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", globalProperty },
     { "lamp_deploy_FL", "sim/aircraft/parts/acf_gear_deploy[3]", globalProperty },
     { "lamp_deploy_FR", "sim/aircraft/parts/acf_gear_deploy[4]", globalProperty },
@@ -96,12 +55,10 @@ defineProps({
     { "lamp_deploy_WR", "sim/aircraft/parts/acf_gear_deploy[6]", globalProperty },
     -- Controls.
     { "nav_lights_set", "tu154/custom/lights/nav_lights_set", globalPropertyf },
-    {"strobe_set", "tu154/custom/lights/strobe_set", globalPropertyf},
+    { "strobe_set", "tu154/custom/lights/strobe_set", globalPropertyf },
     { "wing_light_left_set", "tu154/custom/lights/wing_light_left_set", globalPropertyf },
     { "wing_light_right_set", "tu154/custom/lights/wing_light_right_set", globalPropertyf },
     { "tail_light_set", "tu154/custom/lights/tail_light_set", globalPropertyf },
-    -- { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf },
-    -- { "wing_light", "tu154/custom/switchers/eng/wing_light", globalPropertyf },
     { "cargo_1", "tu154/custom/lights/cargo_light_1_set", globalPropertyf },
     { "cargo_2", "tu154/custom/lights/cargo_light_2_set", globalPropertyf },
     { "landing_ext_set_L", "tu154/custom/lights/landing_ext_set_L", globalPropertyf },
@@ -110,10 +67,8 @@ defineProps({
     { "landing_mode_set_R", "tu154/custom/lights/landing_mode_set_R", globalPropertyf },
     { "light_signal_set", "tu154/custom/lights/light_signal_set", globalPropertyf },
     { "landing_light_off", "tu154/custom/lights/landing_light_off", globalPropertyi },
-    -- { "landing_light_off_cap", "tu154/custom/lights/landing_light_off_cap", globalPropertyi },
     -- Time.
-    -- { "sim_run_time", "sim/time/total_running_time_sec", globalPropertyf },
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     -- Failures.
     { "lan_lamp_fail_FL", "tu154/custom/failures/lan_lamp_fail_FL", globalPropertyi },
     { "lan_lamp_fail_FR", "tu154/custom/failures/lan_lamp_fail_FR", globalPropertyi },
@@ -255,15 +210,13 @@ function update()
     local cargo_1_lit = get(cargo_1) * coef_27_L
     local cargo_2_lit = get(cargo_2) * coef_27_R
 
-    local current_L =
-        (lan_light_WL + lan_light_FL) * 40
+    local current_L = (lan_light_WL + lan_light_FL) * 40
         + taxi_lit_L * 16
         + light_signal * coef_27_L * 16
         + wing_L_lit * 2
         + cargo_1_lit * 2
 
-    local current_R =
-        (lan_light_WR + lan_light_FR) * 40
+    local current_R = (lan_light_WR + lan_light_FR) * 40
         + taxi_lit_R * 16
         + light_signal * coef_27_R * 16
         + nav_lit * 8

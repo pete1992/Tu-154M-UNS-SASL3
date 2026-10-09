@@ -1,17 +1,5 @@
 -- kskv_sard.lua
---
--- Changelog:
--- 	- Grouped all property bindings through a local defineProps() helper without changing names, paths, constructors, or order.
--- 	- Replaced Russian comments with English comments and cleaned up formatting.
--- 	- Fixed fast and window decompression so they are applied as altitude changes instead of absolute cabin altitudes.
--- 	- Prevented decompression overshoot by limiting interpolation steps to the 0..1 range.
--- 	- Limited the fast decompression coefficient to its intended 100..500 range.
--- 	- Made the pressure-regulator state deterministic on every frame.
--- 	- Prevented simultaneous decompression sources from stacking; the strongest active decompression rate is used.
--- 	- Restored Smart Copilot master-only writes for authoritative pressurization outputs.
---		- Reduced repeated property reads inside update().
--- 	- Clamped SARD panel brightness to the valid 0..1 range.
--- 	- Preserved existing pressure tables, thresholds, conversion factors, and currently unused bindings/state variables.
+-- Controls cabin pressure regulation, decompression and SARD panel illumination.
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -32,9 +20,7 @@ defineProps({
     { "start_sys_work", "tu154/custom/start/start_sys_work", globalPropertyf },
     -- Controls
     { "sard_cabin_press_set", "tu154/custom/switchers/sard/sard_cabin_press_set", globalPropertyf },
-    -- { "sard_abs_press_set", "tu154/custom/switchers/sard/sard_abs_press_set", globalPropertyf },
     { "sard_diff_set", "tu154/custom/switchers/sard/sard_diff_set", globalPropertyf },
-    -- { "sard_spd_set", "tu154/custom/switchers/sard/sard_spd_set", globalPropertyf },
     { "emerg_decompress", "tu154/custom/switchers/airbleed/emerg_decompress", globalPropertyi },
     { "sard_disable", "tu154/custom/switchers/eng/sard_disable", globalPropertyi },
     -- Windows and doors
@@ -49,17 +35,14 @@ defineProps({
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },
     { "msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
     -- Pressurization outputs
-    -- { "dump_to_altitude_on", "sim/cockpit2/pressurization/actuators/dump_to_altitude_on", globalPropertyi },
     { "cabin_altitude_ft", "sim/cockpit2/pressurization/actuators/cabin_altitude_ft", globalPropertyf },
     { "cabin_vvi_fpm", "sim/cockpit2/pressurization/actuators/cabin_vvi_fpm", globalPropertyf },
     { "dump_all_on", "sim/cockpit2/pressurization/actuators/dump_all_on", globalPropertyi },
     -- Current pressurization state
     { "cabin_alt_now_ft", "sim/cockpit2/pressurization/indicators/cabin_altitude_ft", globalPropertyf },
     { "pressure_diff_psi", "sim/cockpit2/pressurization/indicators/pressure_diffential_psi", globalPropertyf },
- --   { "acf_has_press_controls", "sim/aircraft/view/acf_has_press_controls", globalPropertyf },
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 local PA_TO_INHG = 1 / 3386.389
@@ -119,10 +102,7 @@ function update()
     local start_sys = get(start_sys_work) == 1
     local emergency_dump = get(emerg_decompress) == 1
     local valve_available = get(sard_valve_fail) == 0 and get(sard_disable) == 0
-    local fast_dump_active = (emergency_dump or press_reg == 1)
-        and valve_available
-        and power_R
-        and not start_sys
+    local fast_dump_active = (emergency_dump or press_reg == 1) and valve_available and power_R and not start_sys
 
     -- Limit the original altitude-dependent fast decompression coefficient
     -- to its intended range and convert it into a stable interpolation step.

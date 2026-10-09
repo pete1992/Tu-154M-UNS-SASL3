@@ -1,5 +1,5 @@
 -- svs.lua
--- SVS air data system logic.
+-- Publish SVS altitude, airspeed, Mach and electrical-load outputs.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -18,7 +18,6 @@ defineProps({
     { "mach_sim", "sim/flightmodel/misc/machno", globalPropertyf },
     { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf }, -- Meters MSL
     { "msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
-    -- { "airspeed", "sim/flightmodel/position/indicated_airspeed", globalPropertyf }, -- Unused: TAS uses true_airspeed directly.
     { "true_airspeed", "sim/flightmodel/position/true_airspeed", globalPropertyf }, -- Meters per second
 
     -- Controls
@@ -45,11 +44,9 @@ defineProps({
     { "svs27_cc", "tu154/custom/svs/power_27cc", globalPropertyf },
     { "svs36_cc", "tu154/custom/svs/power_36cc", globalPropertyf },
     { "svs115_cc", "tu154/custom/svs/power_115cc", globalPropertyf },
-    -- { "sensors_caps", "tu154/custom/anim/sensors_caps", globalPropertyi }, -- Unused: the old caps check is commented out.
 
     -- SmartCopilot authority
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- 0 = absent, 1 = slave, 2 = master
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Unused: output authority uses ismaster only.
 })
 
 local PA_TO_INHG = 1 / 3386.389
@@ -65,8 +62,8 @@ local alt_kus_tbl = {{ -50000000, 0.5},    -- bugs workaround
 				  {  10000, 1.1549 },
 				  {  12000, 1.1901 },
 				  {  14000, 1.2223 },
-				  {  16000, 1.2558 },  
-          		  {  18000, 1.2924 },   
+				  {  16000, 1.2558 },
+                  {  18000, 1.2924 },
           		  {  20000, 1.3341 },
 				  {  22000, 1.3708 },
 				  {  24000, 1.4154 },
@@ -80,7 +77,7 @@ local alt_kus_tbl = {{ -50000000, 0.5},    -- bugs workaround
 				  {  40000, 1.8762 },
 				  {  42000, 1.9653 },
           		  {  10000000, 10 }}   -- linear above
-				  
+
 --]]
 
 local mach = 0
@@ -88,57 +85,70 @@ local tas = 0
 local altitude = 0
 
 function update()
-	
-	-- power
-	local power = get(svs_on) == 1 and get(bus27_volt) > 13 and get(bus36_volt) > 30 and get(bus115_volt) > 110 and get(svs_fail) == 0
-	
-	local test = power and get(svs_contr) == 1
-	
-	local heat = power and get(svs_heat) == 1
-	
-	--local blocked = get(sensors_caps) == 1
-	
-	-- current consumption
-	local cc_27 = bool2int(power) * 10 + bool2int(test) * 4 + bool2int(heat) * 17
-	local cc_other = bool2int(power)
-	
-	set(svs27_cc, cc_27)
-	set(svs36_cc, cc_other * 1.5)
-	set(svs115_cc, cc_other * 3.5)
-	
-	-- mach number
-	local pitot_fail = (get(rel_pitot) == 6 and get(rel_pitot2) == 6)
-	if not pitot_fail and power then mach = get(mach_sim) end
-	
-	if test then mach = 0.8 end -- svs control check
+    -- power
+    local power = get(svs_on) == 1
+        and get(bus27_volt) > 13
+        and get(bus36_volt) > 30
+        and get(bus115_volt) > 110
+        and get(svs_fail) == 0
 
-	-- altitude
-	local alt_QNE = get(msl_alt) * 3.28083 + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000  -- calculate altitude in feet above standart pressure
-	local static_fail = (get(static_fail_L) == 6 and get(static_fail_R) == 6)
-	
-	if power and not static_fail then altitude = alt_QNE * 0.3048 end
-	
-	if test then altitude = 12000 end
-	
-	-- TAS
-	-- local alt_tas_coef = interpolate(alt_kus_tbl, alt_QNE)	
-	
-	if power and not pitot_fail then tas = get(true_airspeed) * 3.6 end --get(airspeed) * alt_tas_coef * 1.852 end
-	
-	if tas < 180 then tas = 0 end
-		
-	if test then tas = 900 end
+    local test = power and get(svs_contr) == 1
 
-local MASTER = get(ismaster) ~= 1	
-	
-if MASTER then	
-	
-	-- results
-	set(mach_svs, mach)
-	set(alt_svs, altitude)	
-	set(tas_svs, tas)
+    local heat = power and get(svs_heat) == 1
 
+    --local blocked = get(sensors_caps) == 1
+
+    -- current consumption
+    local cc_27 = bool2int(power) * 10 + bool2int(test) * 4 + bool2int(heat) * 17
+    local cc_other = bool2int(power)
+
+    set(svs27_cc, cc_27)
+    set(svs36_cc, cc_other * 1.5)
+    set(svs115_cc, cc_other * 3.5)
+
+    -- mach number
+    local pitot_fail = (get(rel_pitot) == 6 and get(rel_pitot2) == 6)
+    if not pitot_fail and power then
+        mach = get(mach_sim)
+    end
+
+    if test then
+        mach = 0.8
+    end -- svs control check
+
+    -- altitude
+    local alt_QNE = get(msl_alt) * 3.28083 + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000 -- calculate altitude in feet above standard pressure
+    local static_fail = (get(static_fail_L) == 6 and get(static_fail_R) == 6)
+
+    if power and not static_fail then
+        altitude = alt_QNE * 0.3048
+    end
+
+    if test then
+        altitude = 12000
+    end
+
+    -- TAS
+    -- local alt_tas_coef = interpolate(alt_kus_tbl, alt_QNE)
+
+    if power and not pitot_fail then
+        tas = get(true_airspeed) * 3.6
+    end --get(airspeed) * alt_tas_coef * 1.852 end
+
+    if tas < 180 then
+        tas = 0
+    end
+
+    if test then
+        tas = 900
+    end
+
+    local MASTER = get(ismaster) ~= 1
+
+    if MASTER then
+        -- results
+        set(mach_svs, mach)
+        set(alt_svs, altitude)
+        set(tas_svs, tas)
+    end
 end
-
-end
-

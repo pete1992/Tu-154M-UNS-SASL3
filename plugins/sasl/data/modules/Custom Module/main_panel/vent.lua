@@ -1,33 +1,33 @@
 -- vent.lua
+-- Animate cockpit ventilators and control their sound playback.
+
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         defineProperty(def[1], def[3](def[2]))
     end
 end
 
--- Cockpit ventilator animation and sound calculations
-
 defineProps({
     -- Ventilator animation
-    {"vent_1", "tu154/custom/anim/cockpit_vent_1", globalPropertyf},
-    {"vent_2", "tu154/custom/anim/cockpit_vent_2", globalPropertyf},
-    {"vent_3", "tu154/custom/anim/cockpit_vent_3", globalPropertyf},
+    { "vent_1", "tu154/custom/anim/cockpit_vent_1", globalPropertyf },
+    { "vent_2", "tu154/custom/anim/cockpit_vent_2", globalPropertyf },
+    { "vent_3", "tu154/custom/anim/cockpit_vent_3", globalPropertyf },
 
     -- Overhead controls
-    {"vent_1_sw", "tu154/custom/switchers/ovhd/vent_1", globalPropertyi},
-    {"vent_2_sw", "tu154/custom/switchers/ovhd/vent_2", globalPropertyi},
-    {"vent_3_sw", "tu154/custom/switchers/ovhd/vent_3", globalPropertyi},
+    { "vent_1_sw", "tu154/custom/switchers/ovhd/vent_1", globalPropertyi },
+    { "vent_2_sw", "tu154/custom/switchers/ovhd/vent_2", globalPropertyi },
+    { "vent_3_sw", "tu154/custom/switchers/ovhd/vent_3", globalPropertyi },
 
     -- Electrical
-    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
     -- Timing and view
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"view_is_external", "sim/graphics/view/view_is_external", globalPropertyi},
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "view_is_external", "sim/graphics/view/view_is_external", globalPropertyi },
 
     -- X-Plane sound settings
-    {"fan_volume_ratio", "sim/operation/sound/fan_volume_ratio", globalPropertyf},
+    { "fan_volume_ratio", "sim/operation/sound/fan_volume_ratio", globalPropertyf },
 })
 
 local FAN_ACCELERATION = 500

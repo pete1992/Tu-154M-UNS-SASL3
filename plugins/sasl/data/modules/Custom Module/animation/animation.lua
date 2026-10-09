@@ -1,6 +1,5 @@
 -- animation.lua
--- Animation Datarefs declaration here
--- SASL
+-- Registers external animations and windshield precipitation masks.
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -10,11 +9,10 @@ end
 
 defineProps({
     -- SmartCopilot
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
-    -- {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 components = {
-	ext_anim {},
-	rain_mask {},
+    ext_anim {},
+    rain_mask {},
 }

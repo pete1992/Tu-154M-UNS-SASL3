@@ -1,5 +1,5 @@
 -- uvid_15fk.lua
--- UVID-15FK altimeter logic
+-- Calculate the UVID-15FK altitude indication and pressure-setting corrections.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -8,26 +8,26 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"static_fail_L", "sim/operation/failures/rel_static", globalPropertyi},
-    {"bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf},
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"uvid_fail", "tu154/custom/failures/uvid15_fail", globalPropertyi},
-    {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
-    {"msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf}, -- QNH in Pa; converted to inHg at reads.
-    {"uvid_needle_left", "tu154/custom/gauges/alt/uvid_needle_left", globalPropertyf},
-    {"uvid_feet_counter", "tu154/custom/gauges/alt/uvid_feet_counter", globalPropertyf},
-    {"uvid_hundreads_counter", "tu154/custom/gauges/alt/uvid_hundreads_counter", globalPropertyf},
-    {"uvid_thousands_counter", "tu154/custom/gauges/alt/uvid_thousands_counter", globalPropertyf},
-    {"uvid_tens_thousands_counter", "tu154/custom/gauges/alt/uvid_tens_thousands_counter", globalPropertyf},
-    {"uvid_pressure_knob", "tu154/custom/gauges/alt/uvid_pressure_knob", globalPropertyf},
-    {"uvid_pressure_one", "tu154/custom/gauges/alt/uvid_pressure_one", globalPropertyf},
-    {"uvid_pressure_ten", "tu154/custom/gauges/alt/uvid_pressure_ten", globalPropertyf},
-    {"uvid_pressure_hund", "tu154/custom/gauges/alt/uvid_pressure_hund", globalPropertyf},
-    {"uvid_pressure_thous", "tu154/custom/gauges/alt/uvid_pressure_thous", globalPropertyf},
-    {"uvid_on", "tu154/custom/switchers/ovhd/uvid_on", globalPropertyi},
-    {"sim_barometer_setting", "sim/cockpit/misc/barometer_setting", globalPropertyf},
-    {"vd15_lamp", "tu154/custom/lights/small/vd15_lamp", globalPropertyf},
+    { "static_fail_L", "sim/operation/failures/rel_static", globalPropertyi },
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "uvid_fail", "tu154/custom/failures/uvid15_fail", globalPropertyi },
+    { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },
+    { "msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
+    { "uvid_needle_left", "tu154/custom/gauges/alt/uvid_needle_left", globalPropertyf },
+    { "uvid_feet_counter", "tu154/custom/gauges/alt/uvid_feet_counter", globalPropertyf },
+    { "uvid_hundreads_counter", "tu154/custom/gauges/alt/uvid_hundreads_counter", globalPropertyf },
+    { "uvid_thousands_counter", "tu154/custom/gauges/alt/uvid_thousands_counter", globalPropertyf },
+    { "uvid_tens_thousands_counter", "tu154/custom/gauges/alt/uvid_tens_thousands_counter", globalPropertyf },
+    { "uvid_pressure_knob", "tu154/custom/gauges/alt/uvid_pressure_knob", globalPropertyf },
+    { "uvid_pressure_one", "tu154/custom/gauges/alt/uvid_pressure_one", globalPropertyf },
+    { "uvid_pressure_ten", "tu154/custom/gauges/alt/uvid_pressure_ten", globalPropertyf },
+    { "uvid_pressure_hund", "tu154/custom/gauges/alt/uvid_pressure_hund", globalPropertyf },
+    { "uvid_pressure_thous", "tu154/custom/gauges/alt/uvid_pressure_thous", globalPropertyf },
+    { "uvid_on", "tu154/custom/switchers/ovhd/uvid_on", globalPropertyi },
+    { "sim_barometer_setting", "sim/cockpit/misc/barometer_setting", globalPropertyf },
+    { "vd15_lamp", "tu154/custom/lights/small/vd15_lamp", globalPropertyf },
 })
 
 local PA_TO_INHG = 1 / 3386.389
@@ -40,7 +40,6 @@ local uvid_alt = 0
 local uvid_alt_act = 0
 
 local switcher_last = get(uvid_on) == 1
-
 
 function update()
     local passed = get(frame_time)
@@ -69,67 +68,39 @@ function update()
     switcher_last = sw_on
 
     -- Calculate indicated altitude.
-    if power27
-        and power115
-        and sw_on
-        and get(uvid_fail) == 0 then
-
-        uvid_alt =
-            left_MSL
-            + (press_inHg - (get(msl_press) * PA_TO_INHG)) * 1000
+    if power27 and power115 and sw_on and get(uvid_fail) == 0 then
+        uvid_alt = left_MSL + (press_inHg - (get(msl_press) * PA_TO_INHG)) * 1000
     end
 
     -- Smooth needle and drum movement.
-    uvid_alt_act =
-        uvid_alt_act
-        + (uvid_alt - uvid_alt_act) * passed * 5
+    uvid_alt_act = uvid_alt_act + (uvid_alt - uvid_alt_act) * passed * 5
 
     -- Feet drum.
     local alt_dr_1 = uvid_alt_act % 100
 
     -- Hundreds drum.
-    local alt_dr_100 =
-        math.floor((uvid_alt_act % 1000) * 0.01)
-        + math.max((alt_dr_1 - 50) / 50, 0)
+    local alt_dr_100 = math.floor((uvid_alt_act % 1000) * 0.01) + math.max((alt_dr_1 - 50) / 50, 0)
 
     -- Thousands drum.
-    local alt_dr_1000 =
-        math.floor((uvid_alt_act % 10000) * 0.001)
-        + math.max(alt_dr_100 - 9, 0)
+    local alt_dr_1000 = math.floor((uvid_alt_act % 10000) * 0.001) + math.max(alt_dr_100 - 9, 0)
 
     -- Tens-of-thousands drum.
-    local alt_dr_10th =
-        math.floor((uvid_alt_act % 100000) * 0.0001)
-        + math.max(alt_dr_1000 - 9, 0)
+    local alt_dr_10th = math.floor((uvid_alt_act % 100000) * 0.0001) + math.max(alt_dr_1000 - 9, 0)
 
     -- Pressure ones drum.
     local press_1 = press_set % 10
 
     -- Pressure tens drum.
-    local press_10 =
-        math.floor((press_set % 100) * 0.1)
-        + math.max(press_1 - 9, 0)
+    local press_10 = math.floor((press_set % 100) * 0.1) + math.max(press_1 - 9, 0)
 
     -- Pressure hundreds drum.
-    local press_100 =
-        math.floor((press_set % 1000) * 0.01)
-        + math.max(press_10 - 9, 0)
+    local press_100 = math.floor((press_set % 1000) * 0.01) + math.max(press_10 - 9, 0)
 
     -- Pressure thousands drum.
-    local press_1000 =
-        math.floor((press_set % 10000) * 0.001)
-        + math.max(press_100 - 9, 0)
+    local press_1000 = math.floor((press_set % 10000) * 0.001) + math.max(press_100 - 9, 0)
 
     -- Warning lamp.
-    local lamp_shine =
-        power27
-        and sw_on
-        and (
-            not power115
-            or uvid_alt > 50000
-            or press_set < 788
-            or press_set > 1074
-        )
+    local lamp_shine = power27 and sw_on and (not power115 or uvid_alt > 50000 or press_set < 788 or press_set > 1074)
 
     set(vd15_lamp, bool2int(lamp_shine))
 

@@ -1,9 +1,10 @@
 -- lever.lua
+-- Controls one or more property values with a draggable vertical lever.
 
-size = {30, 120}
+size = { 30, 120 }
 
 -- Controlled values.
-defineProperty("value", {0})
+defineProperty("value", { 0 })
 
 -- Lever range.
 defineProperty("minimum", 0)
@@ -26,7 +27,6 @@ local dragging = false
 
 local cursor_img = sasl.gl.loadImage("interactive.png")
 
-
 local function setLeverValue(y)
     if Range == 0 then
         return
@@ -44,7 +44,6 @@ local function setLeverValue(y)
         set(v[i], val)
     end
 end
-
 
 components = {
 
@@ -76,7 +75,7 @@ components = {
 
     -- Interactive lever area.
     interactive {
-        position = {5, 0, 20, 100},
+        position = { 5, 0, 20, 100 },
 
         cursor = {
             x = 0,
@@ -120,7 +119,6 @@ components = {
         end,
     },
 }
-
 
 function draw()
     drawAll(components)

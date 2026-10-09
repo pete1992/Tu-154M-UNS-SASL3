@@ -1,5 +1,6 @@
 -- antiice_fails.lua
--- Anti-ice failures: keep native failure enums separate from custom boolean failures.
+-- Simulates anti-ice failures and probe-heater damage.
+
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))
@@ -48,8 +49,12 @@ local stab_counter = 0
 -- Only energized probes on the ground can accumulate heat-soak exposure.
 -- Flight, OFF, TEST, loss of power or an open heater circuit reset exposure.
 local function probe_heat_counter(counter, switch, bus, failed, on_ground, passed)
-    if not on_ground or get(switch) ~= 1 or get(bus) <= 13 or failed then return 0 end
-    if passed ~= passed or passed < 0 or passed == math.huge then return counter end
+    if not on_ground or get(switch) ~= 1 or get(bus) <= 13 or failed then
+        return 0
+    end
+    if passed ~= passed or passed < 0 or passed == math.huge then
+        return counter
+    end
     return counter + passed
 end
 
@@ -62,77 +67,123 @@ local function random_probe_failure(property, failed_value, probability)
 end
 
 function update()
-	local passed = get(frame_time)
-if get(ismaster) ~= 1 then	
-	local failure_level = get(failures_enabled)
-	local FAIL = failure_level
-	FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
-	if FAIL > 0 then
-		local on_ground = get(deflection_mtr_2) + get(deflection_mtr_3) >= 0.02
-		ppd1_counter = probe_heat_counter(ppd1_counter, pitot_heat_1, bus27_volt_left,
-			get(rel_ice_pitot_heat1) == 6, on_ground, passed)
-		ppd2_counter = probe_heat_counter(ppd2_counter, pitot_heat_2, bus27_volt_right,
-			get(rel_ice_pitot_heat2) == 6, on_ground, passed)
-		ppd3_counter = probe_heat_counter(ppd3_counter, pitot_heat_3, bus27_volt_right,
-			get(ppd_3_heat_fail) ~= 0 or get(rel_ice_pitot_heat_stby) == 6, on_ground, passed)
-		fail_counter = fail_counter + passed
-		if fail_counter > check_time then
-			fail_counter = 0
-			check_time = math.random(15, 30)
-			-- random failures
-			if failure_level >= 2 then -- LOW retains causal damage only.
-			if get(rel_ice_inlet_heat1) ~= 1 then set(rel_ice_inlet_heat1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(rel_ice_inlet_heat2) ~= 1 then set(rel_ice_inlet_heat2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(rel_ice_inlet_heat3) ~= 1 then set(rel_ice_inlet_heat3, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			random_probe_failure(rel_ice_pitot_heat1, 6, 0.00001 * FAIL * 0.3)
-			random_probe_failure(rel_ice_pitot_heat2, 6, 0.00001 * FAIL * 0.3)
-			random_probe_failure(ppd_3_heat_fail, 1, 0.00001 * FAIL * 0.3)
-			if get(rel_ice_surf_heat) ~= 1 then set(rel_ice_surf_heat, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(rel_ice_surf_heat2) ~= 1 then set(rel_ice_surf_heat2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(rio_fail) ~= 1 then set(rio_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(window_heat_fail_1) ~= 1 then set(window_heat_fail_1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(window_heat_fail_2) ~= 1 then set(window_heat_fail_2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(window_heat_fail_3) ~= 1 then set(window_heat_fail_3, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			end
-			-- dependent random
-			if ppd1_counter > 1200 then random_probe_failure(rel_ice_pitot_heat1, 6, 0.1 * FAIL * 0.3) end
-			if ppd2_counter > 1200 then random_probe_failure(rel_ice_pitot_heat2, 6, 0.1 * FAIL * 0.3) end
-			if ppd3_counter > 1200 then random_probe_failure(ppd_3_heat_fail, 1, 0.1 * FAIL * 0.3) end
-			if failure_level >= 2 then -- LOW retains causal damage only.
-			if wing_counter > 90 and get(rel_ice_surf_heat) ~= 6 then set(rel_ice_surf_heat, bool2int(math.random() < 0.3 * FAIL * 0.3) * 6) end
-			if stab_counter > 90 and get(rel_ice_surf_heat2) ~= 6 then set(rel_ice_surf_heat2, bool2int(math.random() < 0.3 * FAIL * 0.3) * 6) end
-			end
-		end
-		-- dependent failures --
-		-- check ground
-		if get(deflection_mtr_2) + get(deflection_mtr_3) < 0.02 then
-			wing_counter = wing_counter + passed
-			stab_counter = stab_counter + passed
-		else
-			wing_counter = 0
-			stab_counter = 0			
-		end
-	else
-		fail_counter = 0
-		-- no failures enabled
-		set(ppd_3_heat_fail, 0)
-		set(rel_ice_inlet_heat1, 0)
-		set(rel_ice_inlet_heat2, 0)
-		set(rel_ice_inlet_heat3, 0)
-		set(rel_ice_pitot_heat1, 0)
-		set(rel_ice_pitot_heat2, 0)
-		set(rel_ice_surf_heat, 0)
-		set(rel_ice_surf_heat2, 0)
-		set(rio_fail, 0)
-		set(window_heat_fail_1, 0)
-		set(window_heat_fail_2, 0)
-		set(window_heat_fail_3, 0)
-		-- reset variables
-		ppd1_counter = 0
-		ppd2_counter = 0
-		ppd3_counter = 0
-		wing_counter = 0
-		stab_counter = 0
-		end
-	end
+    local passed = get(frame_time)
+    if get(ismaster) ~= 1 then
+        local failure_level = get(failures_enabled)
+        local FAIL = failure_level
+        FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
+        if FAIL > 0 then
+            local on_ground = get(deflection_mtr_2) + get(deflection_mtr_3) >= 0.02
+            ppd1_counter = probe_heat_counter(
+                ppd1_counter,
+                pitot_heat_1,
+                bus27_volt_left,
+                get(rel_ice_pitot_heat1) == 6,
+                on_ground,
+                passed
+            )
+            ppd2_counter = probe_heat_counter(
+                ppd2_counter,
+                pitot_heat_2,
+                bus27_volt_right,
+                get(rel_ice_pitot_heat2) == 6,
+                on_ground,
+                passed
+            )
+            ppd3_counter = probe_heat_counter(
+                ppd3_counter,
+                pitot_heat_3,
+                bus27_volt_right,
+                get(ppd_3_heat_fail) ~= 0 or get(rel_ice_pitot_heat_stby) == 6,
+                on_ground,
+                passed
+            )
+            fail_counter = fail_counter + passed
+            if fail_counter > check_time then
+                fail_counter = 0
+                check_time = math.random(15, 30)
+                -- random failures
+                if failure_level >= 2 then -- LOW retains causal damage only.
+                    if get(rel_ice_inlet_heat1) ~= 1 then
+                        set(rel_ice_inlet_heat1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
+                    end
+                    if get(rel_ice_inlet_heat2) ~= 1 then
+                        set(rel_ice_inlet_heat2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
+                    end
+                    if get(rel_ice_inlet_heat3) ~= 1 then
+                        set(rel_ice_inlet_heat3, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
+                    end
+                    random_probe_failure(rel_ice_pitot_heat1, 6, 0.00001 * FAIL * 0.3)
+                    random_probe_failure(rel_ice_pitot_heat2, 6, 0.00001 * FAIL * 0.3)
+                    random_probe_failure(ppd_3_heat_fail, 1, 0.00001 * FAIL * 0.3)
+                    if get(rel_ice_surf_heat) ~= 1 then
+                        set(rel_ice_surf_heat, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
+                    end
+                    if get(rel_ice_surf_heat2) ~= 1 then
+                        set(rel_ice_surf_heat2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
+                    end
+                    if get(rio_fail) ~= 1 then
+                        set(rio_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+                    if get(window_heat_fail_1) ~= 1 then
+                        set(window_heat_fail_1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+                    if get(window_heat_fail_2) ~= 1 then
+                        set(window_heat_fail_2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+                    if get(window_heat_fail_3) ~= 1 then
+                        set(window_heat_fail_3, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+                end
+                -- dependent random
+                if ppd1_counter > 1200 then
+                    random_probe_failure(rel_ice_pitot_heat1, 6, 0.1 * FAIL * 0.3)
+                end
+                if ppd2_counter > 1200 then
+                    random_probe_failure(rel_ice_pitot_heat2, 6, 0.1 * FAIL * 0.3)
+                end
+                if ppd3_counter > 1200 then
+                    random_probe_failure(ppd_3_heat_fail, 1, 0.1 * FAIL * 0.3)
+                end
+                if failure_level >= 2 then -- LOW retains causal damage only.
+                    if wing_counter > 90 and get(rel_ice_surf_heat) ~= 6 then
+                        set(rel_ice_surf_heat, bool2int(math.random() < 0.3 * FAIL * 0.3) * 6)
+                    end
+                    if stab_counter > 90 and get(rel_ice_surf_heat2) ~= 6 then
+                        set(rel_ice_surf_heat2, bool2int(math.random() < 0.3 * FAIL * 0.3) * 6)
+                    end
+                end
+            end
+            -- dependent failures --
+            -- check ground
+            if get(deflection_mtr_2) + get(deflection_mtr_3) < 0.02 then
+                wing_counter = wing_counter + passed
+                stab_counter = stab_counter + passed
+            else
+                wing_counter = 0
+                stab_counter = 0
+            end
+        else
+            fail_counter = 0
+            -- no failures enabled
+            set(ppd_3_heat_fail, 0)
+            set(rel_ice_inlet_heat1, 0)
+            set(rel_ice_inlet_heat2, 0)
+            set(rel_ice_inlet_heat3, 0)
+            set(rel_ice_pitot_heat1, 0)
+            set(rel_ice_pitot_heat2, 0)
+            set(rel_ice_surf_heat, 0)
+            set(rel_ice_surf_heat2, 0)
+            set(rio_fail, 0)
+            set(window_heat_fail_1, 0)
+            set(window_heat_fail_2, 0)
+            set(window_heat_fail_3, 0)
+            -- reset variables
+            ppd1_counter = 0
+            ppd2_counter = 0
+            ppd3_counter = 0
+            wing_counter = 0
+            stab_counter = 0
+        end
+    end
 end

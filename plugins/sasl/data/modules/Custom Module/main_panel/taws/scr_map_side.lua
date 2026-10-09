@@ -1,7 +1,7 @@
 -- scr_map_side.lua
--- this is side view map
---include("corr_tbl.lua")
-size = {1000, 770}
+-- Probe terrain ahead and display the TAWS vertical terrain profile.
+
+size = { 1000, 770 }
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -16,25 +16,25 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, -- TAWS display mode; see taws_logic.lua.
 
-    { "distance_set", "tu154/custom/taws/distance_set", globalPropertyi }, --    , . 0 = 10, 1 = 20, 2 = 40, 3 = 80, 4 = 160, 5 = 320, 6 = 640
+    { "distance_set", "tu154/custom/taws/distance_set", globalPropertyi }, -- Range index: 0 = 10, 1 = 20, 2 = 40, 3 = 80, 4 = 160, 5 = 320, 6 = 640 km.
 
-    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
+    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf },
 
     -- map parameters
-    { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- longtitude. positive from W to E
-    { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- altitude. positive UP
-    { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- latitude. positive from N to S
+    { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- Local X position, positive eastward
+    { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- Local Y position, positive upward
+    { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- Local Z position, positive southward
 
     { "speed", "sim/flightmodel/position/groundspeed", globalPropertyf },
     { "course", "sim/flightmodel/position/psi", globalPropertyf }, -- angle between -Z axis and airplane's nose
     { "course_fly", "sim/flightmodel/position/hpath", globalPropertyf }, -- course, where aircraft actually flies
     { "elevation", "sim/flightmodel/position/elevation", globalPropertyf },
 
-    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },  -- deploy of front gear
-    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },  -- deploy of right gear
-    { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },  -- deploy of left gear
+    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty }, -- deploy of front gear
+    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty }, -- deploy of right gear
+    { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty }, -- deploy of left gear
 
     -- time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
@@ -49,33 +49,33 @@ local rows = 60
 local low_qlty = false
 
 if low_qlty then
-	rows = 30
+    rows = 30
 end
 
 -- colors of heights: 1 - black, 2 - dark green, 3 - light green, 4 - yellow, 5 - orange, 6 - red, 7 - blue, 8 - magenta
 --local colorTable = {[1]={0.1,0.1,0.1}, [2]={0,0.5,0}, [3]={0,1,0}, [4]={1,1,0}, [5]={1,0.5,0}, [6]={1,0,0}, [7]={0,0,1}, [8] = {1,0,1}}
 
--- declare and fill drawed table of heights coded in color
+-- Initialize the displayed terrain-height table.
 local heightTable = {}
 
 for i = 1, rows, 1 do
-	heightTable[i] = -5000
+    heightTable[i] = -5000
 end
 
--- declare and fill temporal table of heights
+-- Initialize the pending terrain-height table.
 local tempHeightTable = {}
 
 for i = 1, rows, 1 do
-	tempHeightTable[i] = -5000
+    tempHeightTable[i] = -5000
 end
 
-local time_counter = 0 -- use frames to fill table row by row
-		
+local time_counter = 0 -- Elapsed time since the last terrain scan.
+
 local dir = math.rad(get(course))
-local dir_x = math.sin(dir); -- direct vector
-local dir_z = -math.cos(dir);
-local right_x = -dir_z; -- vector to the right
-local right_z = dir_x;
+local dir_x = math.sin(dir) -- direct vector
+local dir_z = -math.cos(dir)
+local right_x = -dir_z -- vector to the right
+local right_z = dir_x
 local height = 20000 -- dimensions of scanned area in meters
 local plane_x = get(pos_x)
 local plane_y = get(pos_y)
@@ -83,7 +83,7 @@ local plane_z = get(pos_z)
 
 local LG = false
 
-local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
+local text_font = sasl.gl.loadBitmapFont("taws_scr.fnt")
 
 local range_text = " 20"
 
@@ -105,155 +105,181 @@ local function finiteNumber(value)
 end
 
 local function localAltitude(x, y, z)
-    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then
+        return nil
+    end
     local lat, lon, alt = sasl.localToWorld(x, y, z)
-    if finiteNumber(alt) then return alt end
+    if finiteNumber(alt) then
+        return alt
+    end
     return nil
 end
 
 local function terrainAltitude(x, y, z)
-    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then
+        return nil
+    end
     local result, hitX, hitY, hitZ, nx, ny, nz, vx, vy, vz, wet = sasl.probeTerrain(x, y, z)
-    if result ~= PROBE_HIT_TERRAIN then return nil end
+    if result ~= PROBE_HIT_TERRAIN then
+        return nil
+    end
     return localAltitude(hitX, hitY, hitZ), wet
 end
 
 function update()
-	
-	local passed = get(frame_time)
-	
-	screen_work = get(mode_set) == 2
-	
-	if not screen_work then 
-		brightness = 0 
-		time_counter = 0	
-		for i = 1, rows, 1 do
-			heightTable[i] = -5000
-		end	
-	else brightness = get(brt_handle)
-	end
-	
-	local dist = get(distance_set)
+    local passed = get(frame_time)
 
-	range_text = "20"
-	
-	if dist == 0 then distance = 10 range_text = "10"
-	elseif dist == 1 then distance = 20 range_text = "20"
-	elseif dist == 2 then distance = 40 range_text = "40"
-	elseif dist == 3 then distance = 80 range_text = "80"
-	elseif dist == 4 then distance = 160 range_text = "160"
-	elseif dist == 5 then distance = 320 range_text = "320"
-	elseif dist == 6 then distance = 640 range_text = "640"
-	end
-	
-		--[[
+    screen_work = get(mode_set) == 2
+
+    if not screen_work then
+        brightness = 0
+        time_counter = 0
+        for i = 1, rows, 1 do
+            heightTable[i] = -5000
+        end
+    else
+        brightness = get(brt_handle)
+    end
+
+    local dist = get(distance_set)
+
+    range_text = "20"
+
+    if dist == 0 then
+        distance = 10
+        range_text = "10"
+    elseif dist == 1 then
+        distance = 20
+        range_text = "20"
+    elseif dist == 2 then
+        distance = 40
+        range_text = "40"
+    elseif dist == 3 then
+        distance = 80
+        range_text = "80"
+    elseif dist == 4 then
+        distance = 160
+        range_text = "160"
+    elseif dist == 5 then
+        distance = 320
+        range_text = "320"
+    elseif dist == 6 then
+        distance = 640
+        range_text = "640"
+    end
+
+    --[[
 		-- copy temp table to draw table and reset temp one
 		for i = 1, rows, 1 do
 			heightTable[i] = tempHeightTable[i]
 			tempHeightTable[i] = -660 + i * 1320 / 80
-		end		
+		end
 		--]]
-		
-	-- scan terrain and fill height table
-	if screen_work and time_counter > 1 then
-		
-		dir = math.rad(get(course))
-		GS = get(speed)
-		
-		if GS > 11 then dir = math.rad(get(course_fly)) end
-		
-		if GS < 1 then GS = 0 end
-		
-		dir_x = math.sin(dir); -- direct vector
-		dir_z = -math.cos(dir);
-		plane_x = get(pos_x)
-		plane_y = get(pos_y)
-		plane_z = get(pos_z)
-		LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear3_deploy) > 0.99
-		
-		local acf_alt = localAltitude(plane_x, plane_y, plane_z)
-		
-		height = distance * 1000
-		
-		for row = 1, rows, 1 do
-			local p_x = plane_x + dir_x * height * row/rows
-			local p_z = plane_z + dir_z * height * row/rows
-			local alt = terrainAltitude(p_x, plane_y, p_z)
-			-- Missing terrain stays blank until valid scenery data returns.
-			heightTable[row] = -5000
-			if alt and acf_alt then heightTable[row] = alt - acf_alt end
-		end	
-		
-		local elev_now = get(elevation)
-		vvi = (elev_now - elev_last)
-		elev_last = elev_now
-		
-		time_counter = 0
-	end
-	time_counter = time_counter + passed
-	
+
+    -- scan terrain and fill height table
+    if screen_work and time_counter > 1 then
+        dir = math.rad(get(course))
+        GS = get(speed)
+
+        if GS > 11 then
+            dir = math.rad(get(course_fly))
+        end
+
+        if GS < 1 then
+            GS = 0
+        end
+
+        dir_x = math.sin(dir) -- direct vector
+        dir_z = -math.cos(dir)
+        plane_x = get(pos_x)
+        plane_y = get(pos_y)
+        plane_z = get(pos_z)
+        LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear3_deploy) > 0.99
+
+        local acf_alt = localAltitude(plane_x, plane_y, plane_z)
+
+        height = distance * 1000
+
+        for row = 1, rows, 1 do
+            local p_x = plane_x + dir_x * height * row / rows
+            local p_z = plane_z + dir_z * height * row / rows
+            local alt = terrainAltitude(p_x, plane_y, p_z)
+            -- Missing terrain stays blank until valid scenery data returns.
+            heightTable[row] = -5000
+            if alt and acf_alt then
+                heightTable[row] = alt - acf_alt
+            end
+        end
+
+        local elev_now = get(elevation)
+        vvi = (elev_now - elev_last)
+        elev_last = elev_now
+
+        time_counter = 0
+    end
+    time_counter = time_counter + passed
 end
 
 components = {
 
-	-- brightness controll
-	rectangle_ctr {
-		R = 0.1,
-		G = 0.1,
-		B = 0.1,
-		A = 1,
-		position_x = 0,
-		position_y = 0,
-		width = size[1],
-		height = size[2],
-		visible = function()
-			return screen_work
-		end,
-	},
+    -- Brightness control
+    rectangle_ctr {
+        R = 0.1,
+        G = 0.1,
+        B = 0.1,
+        A = 1,
+        position_x = 0,
+        position_y = 0,
+        width = size[1],
+        height = size[2],
+        visible = function()
+            return screen_work
+        end,
+    },
 
-	side_draw {
-		position = {197, 167, 800, 600},
-		columns = rows,
-		image_table = function()
-			return heightTable
-		end,
-		visible = function()
-			return screen_work
-		end,
-		range = function()
-			return distance
-		end,
-		v_spd = function()
-			return vvi
-		end,
-		g_spd = function()
-			return GS
-		end,
-	},
-	
-	-- scale for side view
-	textureLit {
-		position = {0, 0, size[1], size[2]},
-		image = get(scale_side_img),
-		visible = function()
-			return screen_work
-		end,
-	},
+    side_draw {
+        position = { 197, 167, 800, 600 },
+        columns = rows,
+        image_table = function()
+            return heightTable
+        end,
+        visible = function()
+            return screen_work
+        end,
+        range = function()
+            return distance
+        end,
+        v_spd = function()
+            return vvi
+        end,
+        g_spd = function()
+            return GS
+        end,
+    },
 
-	-- distance text
-	text_draw {
-		position = {800, 100, 160, 160},
-		text = function()
-			return range_text
-		end,
-		font = text_font,
-		color = {1,1,1,1},
-		visible = function()
-			return screen_work
-		end,
-	},
+    -- scale for side view
+    textureLit {
+        position = { 0, 0, size[1], size[2] },
+        image = get(scale_side_img),
+        visible = function()
+            return screen_work
+        end,
+    },
 
-	--[[
+    -- distance text
+    text_draw {
+        position = { 800, 100, 160, 160 },
+        text = function()
+            return range_text
+        end,
+        font = text_font,
+        color = { 1, 1, 1, 1 },
+        visible = function()
+            return screen_work
+        end,
+    },
+
+    --[[
 	-- brightness controll
 	rectangle_ctr {
 		R = 0,
@@ -272,4 +298,3 @@ components = {
 	},
 	--]]
 }
-

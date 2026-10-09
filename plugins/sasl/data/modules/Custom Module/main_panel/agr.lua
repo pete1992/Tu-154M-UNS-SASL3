@@ -1,5 +1,5 @@
 -- agr.lua
--- Auxiliary attitude horizon logic.
+-- Calculate the auxiliary attitude indicator and its failure flag.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -8,22 +8,22 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"pitch_sim", "sim/flightmodel/position/theta", globalPropertyf},
-    {"roll_sim", "sim/flightmodel/position/phi", globalPropertyf},
-    {"N1", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty},
-    {"N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty},
-    {"N3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty},
-    {"pitch_corr_hdl", "tu154/custom/gauges/ahz/pitch_corr_C", globalPropertyf},
-    {"agr_on", "tu154/custom/switchers/ovhd/agr_on", globalPropertyi},
-    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf},
-    {"agr_fail", "tu154/custom/failures/agr_fail", globalPropertyi},
-    {"res_pitch", "tu154/custom/gauges/ahz/pitch_C", globalPropertyf},
-    {"res_roll", "tu154/custom/gauges/ahz/roll_C", globalPropertyf},
-    {"agr_cc", "tu154/custom/ahz/agr_cc", globalPropertyf},
-    {"ahz_flag", "tu154/custom/gauges/ahz/ahz_flag_C", globalPropertyf},
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "pitch_sim", "sim/flightmodel/position/theta", globalPropertyf },
+    { "roll_sim", "sim/flightmodel/position/phi", globalPropertyf },
+    { "N1", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
+    { "N2", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
+    { "N3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
+    { "pitch_corr_hdl", "tu154/custom/gauges/ahz/pitch_corr_C", globalPropertyf },
+    { "agr_on", "tu154/custom/switchers/ovhd/agr_on", globalPropertyi },
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf },
+    { "agr_fail", "tu154/custom/failures/agr_fail", globalPropertyi },
+    { "res_pitch", "tu154/custom/gauges/ahz/pitch_C", globalPropertyf },
+    { "res_roll", "tu154/custom/gauges/ahz/roll_C", globalPropertyf },
+    { "agr_cc", "tu154/custom/ahz/agr_cc", globalPropertyf },
+    { "ahz_flag", "tu154/custom/gauges/ahz/ahz_flag_C", globalPropertyf },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 local initial_roll_err = 0
@@ -45,12 +45,10 @@ local notLoaded = true
 local roll_show_2 = roll_show
 local pitch_show_2 = pitch_show
 
-
 function update()
     local passed = get(frame_time)
 
-    local power =
-        get(bus27_volt_left) > 13
+    local power = get(bus27_volt_left) > 13
         and get(bus36_volt_pts250_1) > 30
         and get(agr_on) == 1
         and get(agr_fail) == 0
@@ -81,13 +79,11 @@ function update()
     -- Calculate powered and unpowered initial roll and pitch errors.
     if not power then
         if math.abs(initial_roll_err) < 30 then
-            initial_roll_err =
-                initial_roll_err + passed * roll_off * 0.1
+            initial_roll_err = initial_roll_err + passed * roll_off * 0.1
         end
 
         if math.abs(initial_pitch_err) < 30 then
-            initial_pitch_err =
-                initial_pitch_err + passed * pitch_off * 0.1
+            initial_pitch_err = initial_pitch_err + passed * pitch_off * 0.1
         end
     else
         if initial_roll_err > 0.1 then
@@ -141,18 +137,9 @@ function update()
     end
 
     -- Calculate current indicated attitude.
-    roll_show =
-        get(roll_sim)
-        - power_roll
-        + initial_roll_err
-        - roll_corr
+    roll_show = get(roll_sim) - power_roll + initial_roll_err - roll_corr
 
-    pitch_show =
-        get(pitch_sim)
-        - power_pitch
-        + initial_pitch_err
-        - pitch_corr
-        - get(pitch_corr_hdl) * 20
+    pitch_show = get(pitch_sim) - power_pitch + initial_pitch_err - pitch_corr - get(pitch_corr_hdl) * 20
 
     if pitch_show > 90 then
         pitch_show = 90
@@ -169,22 +156,19 @@ function update()
         roll_delta = roll_delta + 360
     end
 
-    roll_show_2 =
-        roll_show_2 + roll_delta * passed * 8
+    roll_show_2 = roll_show_2 + roll_delta * passed * 8
 
-    pitch_show_2 =
-        pitch_show_2
-        + (pitch_show - pitch_show_2) * passed * 8
+    pitch_show_2 = pitch_show_2 + (pitch_show - pitch_show_2) * passed * 8
 
     -- Show the flag while unpowered or while the gyro is still aligning.
-    local flag =
-        bool2int(
-            not power
+    local flag = bool2int(
+        not power
             or math.abs(initial_roll_err)
-                + math.abs(initial_pitch_err)
-                + math.abs(power_roll)
-                + math.abs(power_pitch) > 5
-        )
+                    + math.abs(initial_pitch_err)
+                    + math.abs(power_roll)
+                    + math.abs(power_pitch)
+                > 5
+    )
 
     local MASTER = get(ismaster) ~= 1
 

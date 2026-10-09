@@ -1,35 +1,39 @@
 -- antiice_logic.lua
--- Anti-ice system logic (performance-optimierte Fassung).
+-- Controls windshield, probe, inlet, wing and slat heating and their electrical loads.
 
 -- Three windshield circuits drive native XP12 thermal sources; PPD switches
 -- protect pilot, copilot and standby probe groups. Existing inlet/wing logic
 -- and electrical loads are retained. Native ice is observed, never reset.
---
--- Formeln, Auswertungsreihenfolge und Anzahl der math.random()-Aufrufe sind
--- unverändert. sim/...-DataRefs werden weiterhin jedes Frame geschrieben.
+
+-- Native simulator outputs are written every frame.
 
 ---------------------------------------------------------------------------
--- Lokalisierte Globals
+-- Local references for frequently used functions.
 ---------------------------------------------------------------------------
 local get, set = get, set
 local HUGE = math.huge
 local abs, max, random = math.abs, math.max, math.random
 
--- Projektweites clamp verwenden, falls vorhanden
-local clamp = clamp or function(v, lo, hi)
-    if v < lo then return lo end
-    if v > hi then return hi end
-    return v
-end
+-- Use the shared clamp helper when available.
+local clamp = clamp
+    or function(v, lo, hi)
+        if v < lo then
+            return lo
+        end
+        if v > hi then
+            return hi
+        end
+        return v
+    end
 
 local DEFROST_SLOW = 1 / 0.015
 
--- true  = eigene tu154/custom-Ausgaben nur bei Wertänderung schreiben
--- false = jedes Frame schreiben (exakt altes Schreibverhalten)
+-- true = write custom outputs only when their values change.
+-- false = write outputs every frame.
 local USE_WRITE_CACHE = true
 
 ---------------------------------------------------------------------------
--- Properties: Handles in lokaler Tabelle P (60-Upvalue-Limit beachten)
+-- Keep property handles in P to respect the Lua 5.1 upvalue limit.
 ---------------------------------------------------------------------------
 local P = {}
 local env = (getfenv and getfenv(1)) or _ENV or _G
@@ -40,7 +44,7 @@ local function defineProps(defs)
         local name = d[1]
         local handle = d[3](d[2])
         defineProperty(name, handle)
-        -- Von außen überschriebene Property bevorzugen
+        -- Prefer a property already supplied by the component environment.
         P[name] = env[name] or handle
     end
 end
@@ -48,11 +52,15 @@ end
 -- SASL array-element access is one-based; callers use X-Plane's zero-based
 -- index.
 local function intElement(index)
-    return function(path) return globalPropertyiae(path, index + 1) end
+    return function(path)
+        return globalPropertyiae(path, index + 1)
+    end
 end
 
 local function floatElement(index)
-    return function(path) return globalPropertyfae(path, index + 1) end
+    return function(path)
+        return globalPropertyfae(path, index + 1)
+    end
 end
 
 local function defrostTime(path)
@@ -88,8 +96,8 @@ defineProps({
     { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf },
     { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf },
     { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf },
-    {"termo", "sim/weather/aircraft/temperature_ambient_deg_c", globalPropertyf },
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "termo", "sim/weather/aircraft/temperature_ambient_deg_c", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     { "sim_paused", "sim/time/paused", globalPropertyi },
     { "IAS", "sim/flightmodel/position/indicated_airspeed", globalPropertyf },
     { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
@@ -141,8 +149,8 @@ defineProps({
     { "TAT_heat_copilot", "sim/cockpit2/ice/ice_TAT_heat_on_copilot", globalPropertyi },
     { "TAT_heat_standby", "sim/cockpit2/ice/ice_TAT_heat_on_stby", globalPropertyi },
     { "wings_heat_on", "sim/cockpit2/ice/ice_surfce_heat_on", globalPropertyi },
-    {"frm_ice", "sim/flightmodel/failures/frm_ice", globalPropertyf },
-    {"frm_ice2", "sim/flightmodel/failures/frm_ice2", globalPropertyf },
+    { "frm_ice", "sim/flightmodel/failures/frm_ice", globalPropertyf },
+    { "frm_ice2", "sim/flightmodel/failures/frm_ice2", globalPropertyf },
     { "wing_heating", "tu154/custom/antiice/wing_heating", globalPropertyi },
     { "slat_heating", "tu154/custom/antiice/slat_heating", globalPropertyi },
     { "ai_27_L_cc", "tu154/custom/antiice/ai_27_L_cc", globalPropertyf },
@@ -161,7 +169,7 @@ defineProps({
 })
 
 ---------------------------------------------------------------------------
--- Zustand
+-- Persistent simulation state.
 ---------------------------------------------------------------------------
 local ice_speed = 0
 local ice_timer = 20
@@ -170,7 +178,7 @@ local ice_on_wings_L, ice_on_wings_R = 0, 0
 local ice_on_slats_L, ice_on_slats_R = 0, 0
 
 ---------------------------------------------------------------------------
--- Schreib-Cache für eigene tu154/custom-Ausgaben
+-- Cache the last values written to custom outputs.
 ---------------------------------------------------------------------------
 local cache = {}
 local was_master = nil
@@ -189,19 +197,22 @@ end
 -- Helpers
 ---------------------------------------------------------------------------
 -- Original weak/strong rates and each pane's electrical circuit, fed to
--- XP12's de-ice system. sw = bereits gelesener Schalterwert.
+-- XP12's de-ice system. sw is the switch value read by the caller.
 local function heatingRate(sw, dc, ac, failure, native_failure)
-    if not dc or not ac or get(failure) ~= 0
-        or get(native_failure) == 6 then
+    if not dc or not ac or get(failure) ~= 0 or get(native_failure) == 6 then
         return 0
     end
-    if sw == 1 then return 0.02 end
-    if sw == -1 then return 0.015 end
+    if sw == 1 then
+        return 0.02
+    end
+    if sw == -1 then
+        return 0.015
+    end
     return 0
 end
 
--- Liefert inlet_heat, eng_heat_open. Schalter 0 ergibt im Original immer 0,
--- daher wird der Ausfall-DataRef dann nicht gelesen.
+-- Return inlet heat and valve state; an OFF switch returns zero.
+-- Read the failure input only when heating is requested.
 local function inletHeat(sw, power, rpm, h_fail)
     if sw ~= 0 and power and get(h_fail) ~= 6 then
         return rpm and sw or 0, sw
@@ -215,15 +226,14 @@ end
 function update()
     local MASTER = get(P.ismaster) ~= 1
 
-    -- Nach SmartCopilot-Rollenwechsel alle Ausgaben einmal neu schreiben
+    -- Republish cached outputs after a SmartCopilot authority change.
     if MASTER ~= was_master then
         cache = {}
         was_master = MASTER
     end
 
     local passed = get(P.frame_time)
-    if passed ~= passed or passed < 0 or passed == HUGE
-        or get(P.sim_paused) ~= 0 then
+    if passed ~= passed or passed < 0 or passed == HUGE or get(P.sim_paused) ~= 0 then
         passed = 0
     end
 
@@ -235,17 +245,14 @@ function update()
 
     local out_term = get(P.termo)
 
-    -- Scheibenheizung: Schalter je einmal lesen
+    -- Read each windshield-heating switch once per frame.
     local wsw1 = get(P.window_heat_1)
     local wsw2 = get(P.window_heat_2)
     local wsw3 = get(P.window_heat_3)
 
-    local spd1 = heatingRate(wsw1, power27_L, power115_1,
-        P.window_heat_fail_1, P.native_window_fail_left)
-    local spd2 = heatingRate(wsw2, power27_R, power115_3,
-        P.window_heat_fail_2, P.native_window_fail_center)
-    local spd3 = heatingRate(wsw3, power27_R, power115_3,
-        P.window_heat_fail_3, P.native_window_fail_right)
+    local spd1 = heatingRate(wsw1, power27_L, power115_1, P.window_heat_fail_1, P.native_window_fail_left)
+    local spd2 = heatingRate(wsw2, power27_R, power115_3, P.window_heat_fail_2, P.native_window_fail_center)
+    local spd3 = heatingRate(wsw3, power27_R, power115_3, P.window_heat_fail_3, P.native_window_fail_right)
 
     -- Own the local simulator's switches on both SmartCopilot peers.
     set(P.native_heat_left, spd1 > 0 and 1 or 0)
@@ -306,14 +313,17 @@ function update()
     end
 
     -- PPD circuits: -1 momentary test, 0 OFF, 1 HEAT.
-    -- Stromprüfung zuerst (reine UND-Verknüpfung, Ergebnis identisch).
-    local pitot_sw_1 = (power27_L and get(P.pitot_heat_1) == 1
-        and get(P.rel_ice_pitot_heat1) ~= 6) and 1 or 0
-    local pitot_sw_2 = (power27_R and get(P.pitot_heat_2) == 1
-        and get(P.rel_ice_pitot_heat2) ~= 6) and 1 or 0
-    local pitot_sw_3 = (power27_R and get(P.pitot_heat_3) == 1
+    -- Check electrical power before the probe-heating controls.
+    local pitot_sw_1 = (power27_L and get(P.pitot_heat_1) == 1 and get(P.rel_ice_pitot_heat1) ~= 6) and 1 or 0
+    local pitot_sw_2 = (power27_R and get(P.pitot_heat_2) == 1 and get(P.rel_ice_pitot_heat2) ~= 6) and 1 or 0
+    local pitot_sw_3 = (
+        power27_R
+        and get(P.pitot_heat_3) == 1
         and get(P.ppd_3_heat_fail) == 0
-        and get(P.rel_ice_pitot_heat3) ~= 6) and 1 or 0
+        and get(P.rel_ice_pitot_heat3) ~= 6
+    )
+            and 1
+        or 0
 
     set(P.sim_pitot_heat_1, pitot_sw_1)
     set(P.sim_pitot_heat_2, pitot_sw_2)
@@ -338,18 +348,15 @@ function update()
     local rpm_2 = get(P.rpm_high_2) > 50
     local rpm_3 = get(P.rpm_high_3) > 50
 
-    local ih, eo = inletHeat(get(P.antiice_eng_1), power27_L, rpm_1,
-        P.rel_ice_inlet_heat1)
+    local ih, eo = inletHeat(get(P.antiice_eng_1), power27_L, rpm_1, P.rel_ice_inlet_heat1)
     set(P.inlet_heat_1, ih)
     put(P.eng_heat_open_1, eo)
 
-    ih, eo = inletHeat(get(P.antiice_eng_2), power27_R, rpm_2,
-        P.rel_ice_inlet_heat2)
+    ih, eo = inletHeat(get(P.antiice_eng_2), power27_R, rpm_2, P.rel_ice_inlet_heat2)
     set(P.inlet_heat_2, ih)
     put(P.eng_heat_open_2, eo)
 
-    ih, eo = inletHeat(get(P.antiice_eng_3), power27_R, rpm_3,
-        P.rel_ice_inlet_heat3)
+    ih, eo = inletHeat(get(P.antiice_eng_3), power27_R, rpm_3, P.rel_ice_inlet_heat3)
     set(P.inlet_heat_3, ih)
     put(P.eng_heat_open_3, eo)
 
@@ -361,63 +368,74 @@ function update()
 
     set(P.wings_heat_on, (wing_cond and 1 or 0) * antiice_wing_sw)
 
-    local wing_heat = ((wing_cond and get(P.rel_ice_surf_heat) < 6)
-        and 1 or 0) * antiice_wing_sw
+    local wing_heat = ((wing_cond and get(P.rel_ice_surf_heat) < 6) and 1 or 0) * antiice_wing_sw
 
-    -- Schalter 0 ergibt im Original immer 0, Bedingungen dann nicht lesen.
+    -- Read slat-heating prerequisites only when heating is requested.
     local slat_sw = get(P.antiice_slats)
     local slat_heat = 0
     if slat_sw ~= 0 then
-        slat_heat = ((power115_2
-            and antiice_power_available
-            and get(P.rel_ice_surf_heat2) < 6
-            and get(P.deflection_mtr_2) < 0.1
-            and get(P.deflection_mtr_3) < 0.1) and 1 or 0) * slat_sw
+        slat_heat = (
+            (
+                    power115_2
+                    and antiice_power_available
+                    and get(P.rel_ice_surf_heat2) < 6
+                    and get(P.deflection_mtr_2) < 0.1
+                    and get(P.deflection_mtr_3) < 0.1
+                )
+                and 1
+            or 0
+        ) * slat_sw
     end
 
     put(P.wing_heating, wing_heat)
     put(P.slat_heating, slat_heat)
     put(P.ai_115_2_cc, slat_heat * 70)
 
-    -- Wing and stabilizer duct temperatures 
-    -- Schreiben nur bei Änderung: der Altwert wurde im selben Frame gelesen.
+    -- Wing and stabilizer duct temperatures
+    -- Write only if the value read in this frame has changed.
     local indicated_airspeed = get(P.IAS)
     local wing_old = get(P.wing_heat_t)
-    local wing_tube = wing_old
-        + (out_term - wing_old) * passed * 0.1
-        * (1 + indicated_airspeed / 200)
-    wing_tube = wing_tube
-        + (wing_heat * 300 - wing_tube) * passed * 0.1
-    if wing_tube ~= wing_old then set(P.wing_heat_t, wing_tube) end
+    local wing_tube = wing_old + (out_term - wing_old) * passed * 0.1 * (1 + indicated_airspeed / 200)
+    wing_tube = wing_tube + (wing_heat * 300 - wing_tube) * passed * 0.1
+    if wing_tube ~= wing_old then
+        set(P.wing_heat_t, wing_tube)
+    end
 
     local stab_old = get(P.stab_heat_t)
-    local stab_tube = stab_old
-        + (out_term - stab_old) * passed * 0.1
-        * (1 + indicated_airspeed / 300)
-    stab_tube = stab_tube
-        + (wing_heat * 300 - stab_tube) * passed * 0.1
-    if stab_tube ~= stab_old then set(P.stab_heat_t, stab_tube) end
+    local stab_tube = stab_old + (out_term - stab_old) * passed * 0.1 * (1 + indicated_airspeed / 300)
+    stab_tube = stab_tube + (wing_heat * 300 - stab_tube) * passed * 0.1
+    if stab_tube ~= stab_old then
+        set(P.stab_heat_t, stab_tube)
+    end
 
     -- Original stochastic ice model: 4 random() calls in original order.
     local positive_wing_tube = max(0, wing_tube)
 
-    ice_on_wings_L = ice_on_wings_L
-        + (ice_speed * random() * 2 - positive_wing_tube * 0.0005) * passed
-    ice_on_slats_L = ice_on_slats_L
-        + (ice_speed * random() * 2 - slat_heat * 0.02) * passed
+    ice_on_wings_L = ice_on_wings_L + (ice_speed * random() * 2 - positive_wing_tube * 0.0005) * passed
+    ice_on_slats_L = ice_on_slats_L + (ice_speed * random() * 2 - slat_heat * 0.02) * passed
 
-    if ice_on_wings_L < 0 then ice_on_wings_L = 0 end
-    if ice_on_slats_L < 0 then ice_on_slats_L = 0 end
+    if ice_on_wings_L < 0 then
+        ice_on_wings_L = 0
+    end
+    if ice_on_slats_L < 0 then
+        ice_on_slats_L = 0
+    end
 
-    ice_on_wings_R = ice_on_wings_R
-        + (ice_speed * random() * 2 - positive_wing_tube * 0.0005) * passed
-    ice_on_slats_R = ice_on_slats_R
-        + (ice_speed * random() * 2 - slat_heat * 0.02) * passed
+    ice_on_wings_R = ice_on_wings_R + (ice_speed * random() * 2 - positive_wing_tube * 0.0005) * passed
+    ice_on_slats_R = ice_on_slats_R + (ice_speed * random() * 2 - slat_heat * 0.02) * passed
 
-    if ice_on_wings_R < 0 then ice_on_wings_R = 0 end
-    if ice_on_slats_R < 0 then ice_on_slats_R = 0 end
-    if ice_on_slats_L > 0.2 then ice_on_slats_L = 0.2 end
-    if ice_on_slats_R > 0.2 then ice_on_slats_R = 0.2 end
+    if ice_on_wings_R < 0 then
+        ice_on_wings_R = 0
+    end
+    if ice_on_slats_R < 0 then
+        ice_on_slats_R = 0
+    end
+    if ice_on_slats_L > 0.2 then
+        ice_on_slats_L = 0.2
+    end
+    if ice_on_slats_R > 0.2 then
+        ice_on_slats_R = 0.2
+    end
 
     if MASTER then
         set(P.frm_ice, ice_on_wings_L * 0.8 + ice_on_slats_L * 0.2)

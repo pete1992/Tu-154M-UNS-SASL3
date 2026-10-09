@@ -1,2 +1,4 @@
 -- radar.lua
-size = {457, 146.5}
+-- Declare the panel size for the radar placeholder component.
+
+size = { 457, 146.5 }

@@ -1,23 +1,20 @@
 -- fuel_panel.lua
--- Fuel system panel (performance-optimierte Fassung).
---
--- Sounds, Startreset, Kappenlogik, Zeigerglättung, mechanischer Zähler und
--- Lampentest unverändert. Formeln in gleicher Rechenreihenfolge.
+-- Updates fuel controls, quantity indications, consumption counter and lamps.
 
 ---------------------------------------------------------------------------
--- Lokalisierte Globals
+-- Local references for frequently used functions.
 ---------------------------------------------------------------------------
 local get, set = get, set
 local max = math.max
 local playSample = sasl.al.playSample
 
---	true  = Cache lamp and electric gauge outputs and write only on 
+--	true  = Cache lamp and electric gauge outputs and write only on
 --				value changes
 --	false = write cached lamp and electric gauge outputs every frame
 local USE_WRITE_CACHE = true
 
 ---------------------------------------------------------------------------
--- Properties: Handles in lokaler Tabelle P
+-- Store property handles in P.
 ---------------------------------------------------------------------------
 local P = {}
 local env = (getfenv and getfenv(1)) or _ENV or _G
@@ -32,7 +29,7 @@ local function defineProps(defs)
             prop = d[3](d[2])
         end
         defineProperty(d[1], prop)
-        -- Von außen überschriebene Property bevorzugen
+        -- Prefer a property already supplied by the component environment.
         P[d[1]] = env[d[1]] or prop
     end
 end
@@ -48,7 +45,7 @@ defineProps({
     { "fuel_meter_tank4", "tu154/custom/gauges/fuel/fuel_meter_tank4", globalPropertyf },
     { "fuel_meter_mech", "tu154/custom/gauges/fuel/fuel_meter_mech", globalPropertyf },
     { "fuel_front_ind", "tu154/custom/gauges/misc/fuel_front_ind", globalPropertyf },
-    -- Prüfknöpfe an den Anzeigen (0 / Maximum)
+    -- Gauge test buttons: zero and maximum.
     { "fuel_meter_summ_zero", "tu154/custom/buttons/fuel/fuel_meter_summ_zero", globalPropertyf },
     { "fuel_meter_summ_max", "tu154/custom/buttons/fuel/fuel_meter_summ_max", globalPropertyf },
     { "fuel_meter_tank2_zero", "tu154/custom/buttons/fuel/fuel_meter_tank2_zero", globalPropertyf },
@@ -118,7 +115,7 @@ defineProps({
     { "fuel_reserv_trans_right", "tu154/custom/lights/small/fuel_reserv_trans_right", globalPropertyf },
     { "fuel_porc_reserv", "tu154/custom/lights/small/fuel_porc_reserv", globalPropertyf },
     { "fuel_level_automat", "tu154/custom/lights/small/fuel_level_automat", globalPropertyf },
-    -- Engines (SASL-Elementindex 1-basiert)
+    -- Engine inputs use one-based SASL array indices.
     { "eng1_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 1 },
     { "eng2_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 2 },
     { "eng3_N1", "sim/flightmodel2/engines/N1_percent", globalPropertyfae, 3 },
@@ -149,7 +146,7 @@ defineProps({
     { "pump_tank1_2_work", "tu154/custom/fuel/pump_tank1_2_work", globalPropertyi },
     { "pump_tank1_3_work", "tu154/custom/fuel/pump_tank1_3_work", globalPropertyi },
     { "pump_tank1_4_work", "tu154/custom/fuel/pump_tank1_4_work", globalPropertyi },
-    -- Laut Lampenlogik: 0 = Automatik-Fehler, 1/2 = Tank 2, 2/3 = Tank 3, 4 = Tank 4
+    -- Feed selection: 0 = automatic fault; 1/2 = tank 2; 2/3 = tank 3; 4 = tank 4.
     { "auto_tanks_turn", "tu154/custom/fuel/auto_tanks_turn", globalPropertyi },
     -- -1 = L, 0 = none, +1 = R
     { "auto_tank_level_2", "tu154/custom/fuel/auto_tank_level_2", globalPropertyi },
@@ -175,71 +172,116 @@ defineProps({
 })
 
 ---------------------------------------------------------------------------
--- Handle-Listen
+-- Property-handle groups.
 ---------------------------------------------------------------------------
 local function handles(names)
     local t = {}
-    for i = 1, #names do t[i] = P[names[i]] end
+    for i = 1, #names do
+        t[i] = P[names[i]]
+    end
     return t
 end
 
--- Alle 31 Lampen (ohne Strom alle 0)
+-- All 31 lamp outputs are zero without electrical power.
 local ALL_LAMPS = handles({
-    "fuel_tank3_left_fail", "fuel_tank2_left_fail",
-    "fuel_tank2_right_fail", "fuel_tank3_right_fail",
-    "fuel_pump_left_5", "fuel_pump_left_6", "fuel_pump_left_7",
-    "fuel_pump_left_8", "fuel_pump_left_9",
-    "fuel_pump_right_5", "fuel_pump_right_6", "fuel_pump_right_7",
-    "fuel_pump_right_8", "fuel_pump_right_9",
-    "fuel_pump_10", "fuel_pump_11",
-    "fuel_pump_1", "fuel_pump_2", "fuel_pump_3", "fuel_pump_4",
-    "fuel_cut_off_1", "fuel_cut_off_2", "fuel_cut_off_3",
-    "fuel_flow_from_2", "fuel_flow_from_3", "fuel_flow_from_4",
+    "fuel_tank3_left_fail",
+    "fuel_tank2_left_fail",
+    "fuel_tank2_right_fail",
+    "fuel_tank3_right_fail",
+    "fuel_pump_left_5",
+    "fuel_pump_left_6",
+    "fuel_pump_left_7",
+    "fuel_pump_left_8",
+    "fuel_pump_left_9",
+    "fuel_pump_right_5",
+    "fuel_pump_right_6",
+    "fuel_pump_right_7",
+    "fuel_pump_right_8",
+    "fuel_pump_right_9",
+    "fuel_pump_10",
+    "fuel_pump_11",
+    "fuel_pump_1",
+    "fuel_pump_2",
+    "fuel_pump_3",
+    "fuel_pump_4",
+    "fuel_cut_off_1",
+    "fuel_cut_off_2",
+    "fuel_cut_off_3",
+    "fuel_flow_from_2",
+    "fuel_flow_from_3",
+    "fuel_flow_from_4",
     "fuel_flow_auto_fail",
-    "fuel_reserv_trans_left", "fuel_reserv_trans_right",
-    "fuel_porc_reserv", "fuel_level_automat",
+    "fuel_reserv_trans_left",
+    "fuel_reserv_trans_right",
+    "fuel_porc_reserv",
+    "fuel_level_automat",
 })
 
--- Schalter für den Klick-Sound. Index 1 muss fuel_porc sein (Kappenlogik).
--- fuel_level, fuel_meter_on, fuel_meter_mech_on werden separat übergeben.
+-- Sound-control index 1 must be fuel_porc for the safety-cap logic.
+-- fuel_level, fuel_meter_on and fuel_meter_mech_on are passed separately.
 local SW = handles({
     "fuel_porc",
-    "pump_tank2_left", "pump_tank2_right", "pump_tank3_left",
-    "pump_tank3_right", "pump_tank4",
-    "pump_tank1_1", "pump_tank1_2", "pump_tank1_3", "pump_tank1_4",
-    "fuel_trans", "fuel_flow_mode", "fuel_flow_on",
-    "fire_valve_1", "fire_valve_2", "fire_valve_3",
+    "pump_tank2_left",
+    "pump_tank2_right",
+    "pump_tank3_left",
+    "pump_tank3_right",
+    "pump_tank4",
+    "pump_tank1_1",
+    "pump_tank1_2",
+    "pump_tank1_3",
+    "pump_tank1_4",
+    "fuel_trans",
+    "fuel_flow_mode",
+    "fuel_flow_on",
+    "fire_valve_1",
+    "fire_valve_2",
+    "fire_valve_3",
 })
 
--- Kappen. Index 2 muss fuel_porc_cap sein.
+-- Safety-cap index 2 must be fuel_porc_cap.
 local CAPS = handles({
-    "fuel_trans_cap", "fuel_porc_cap", "fuel_flow_on_cap",
-    "fire_valve_1_cap", "fire_valve_2_cap", "fire_valve_3_cap",
+    "fuel_trans_cap",
+    "fuel_porc_cap",
+    "fuel_flow_on_cap",
+    "fire_valve_1_cap",
+    "fire_valve_2_cap",
+    "fire_valve_3_cap",
 })
 
--- Beim Kaltstart auf 0 gesetzte Schalter
+-- Switches reset to zero for a cold-and-dark start.
 local RESET_SW = handles({
-    "pump_tank2_left", "pump_tank2_right", "pump_tank3_left",
-    "pump_tank3_right", "pump_tank4",
-    "pump_tank1_1", "pump_tank1_2", "pump_tank1_3", "pump_tank1_4",
-    "fuel_level", "fuel_flow_mode", "fuel_flow_on",
-    "fuel_meter_on", "fuel_meter_mech_on",
-    "fire_valve_1", "fire_valve_2", "fire_valve_3",
+    "pump_tank2_left",
+    "pump_tank2_right",
+    "pump_tank3_left",
+    "pump_tank3_right",
+    "pump_tank4",
+    "pump_tank1_1",
+    "pump_tank1_2",
+    "pump_tank1_3",
+    "pump_tank1_4",
+    "fuel_level",
+    "fuel_flow_mode",
+    "fuel_flow_on",
+    "fuel_meter_on",
+    "fuel_meter_mech_on",
+    "fire_valve_1",
+    "fire_valve_2",
+    "fire_valve_3",
 })
 
 ---------------------------------------------------------------------------
--- Sounds und Zustand
+-- Sound samples and persistent state.
 ---------------------------------------------------------------------------
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
--- plastic_switch.wav wurde im Original geladen, aber nie abgespielt
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
+-- The rotary sound is loaded but is not played by this component.
 
 local passed = get(P.frame_time)
 local notLoaded = true
 local sim_start_timer = 0
 
 ---------------------------------------------------------------------------
--- Schreib-Cache (Reset bei SmartCopilot-Rollenwechsel)
+-- Clear the output cache when SmartCopilot authority changes.
 ---------------------------------------------------------------------------
 local cache = {}
 local was_master = nil
@@ -255,44 +297,52 @@ if USE_WRITE_CACHE then
 end
 
 ---------------------------------------------------------------------------
--- Startreset (einmalig)
+-- One-time startup reset.
 ---------------------------------------------------------------------------
 local function reset_switchers()
-    if isColdAndDarkStart() and get(P.eng1_N1) < 5
-        and get(P.eng2_N1) < 5 and get(P.eng3_N1) < 5 then
-        for i = 1, #RESET_SW do set(RESET_SW[i], 0) end
+    if isColdAndDarkStart() and get(P.eng1_N1) < 5 and get(P.eng2_N1) < 5 and get(P.eng3_N1) < 5 then
+        for i = 1, #RESET_SW do
+            set(RESET_SW[i], 0)
+        end
     end
     notLoaded = false
 end
 
 ---------------------------------------------------------------------------
--- Bediengeräusche (Summen-Logik wie im Original)
+-- Detect control sounds from the sum of switch changes.
 ---------------------------------------------------------------------------
 local sw_last = {}
-for i = 1, #SW do sw_last[i] = get(SW[i]) end
+for i = 1, #SW do
+    sw_last[i] = get(SW[i])
+end
 local level_last = get(P.fuel_level)
 local meter_last = get(P.fuel_meter_on)
 local mech_last = get(P.fuel_meter_mech_on)
 
--- Liefert den aktuellen Wert von fuel_porc für die Kappenlogik
+-- Return fuel_porc for the safety-cap logic.
 local function check_switchers(level_sw, meter_sw, mech_sw)
-    local change = level_sw + meter_sw + mech_sw
-        - level_last - meter_last - mech_last
+    local change = level_sw + meter_sw + mech_sw - level_last - meter_last - mech_last
     local porc_sw = 0
     for i = 1, #SW do
         local v = get(SW[i])
         change = change + v - sw_last[i]
         sw_last[i] = v
-        if i == 1 then porc_sw = v end
+        if i == 1 then
+            porc_sw = v
+        end
     end
     level_last, meter_last, mech_last = level_sw, meter_sw, mech_sw
 
-    if change ~= 0 then playSample(switcher_sound, false) end
+    if change ~= 0 then
+        playSample(switcher_sound, false)
+    end
     return porc_sw
 end
 
 local cap_last = {}
-for i = 1, #CAPS do cap_last[i] = get(CAPS[i]) end
+for i = 1, #CAPS do
+    cap_last[i] = get(CAPS[i])
+end
 
 local function caps_check(porc_sw)
     local change = 0
@@ -301,14 +351,18 @@ local function caps_check(porc_sw)
         change = change + v - cap_last[i]
         cap_last[i] = v
     end
-    if change ~= 0 then playSample(cap_sound, false) end
+    if change ~= 0 then
+        playSample(cap_sound, false)
+    end
 
-    -- Geschlossene Kappe hält fuel_porc auf 0 (nur schreiben, wenn nötig)
-    if cap_last[2] == 0 and porc_sw ~= 0 then set(P.fuel_porc, 0) end
+    -- A closed safety cap holds fuel_porc at zero.
+    if cap_last[2] == 0 and porc_sw ~= 0 then
+        set(P.fuel_porc, 0)
+    end
 end
 
 ---------------------------------------------------------------------------
--- Mechanischer Zähler (nur Master)
+-- Mechanical fuel counter; updated only by the master.
 ---------------------------------------------------------------------------
 local mech_counter = 0
 
@@ -318,28 +372,32 @@ local function mech_fuel_meter(bus_l, bus_r, mech_sw)
 
     mech_counter = mech_counter + passed
 
-    if calc > 0 and mech_counter > 10 and mech_sw == 1
-        and (bus_l > 13 or bus_r > 13) then
-        calc = calc - (get(P.ENGN_FF_1) * (1 - get(P.fuel_flowmeter_1_fail))
-            + get(P.ENGN_FF_2) * (1 - get(P.fuel_flowmeter_2_fail))
-            + get(P.ENGN_FF_3) * (1 - get(P.fuel_flowmeter_3_fail)))
-            * mech_counter
+    if calc > 0 and mech_counter > 10 and mech_sw == 1 and (bus_l > 13 or bus_r > 13) then
+        calc = calc
+            - (
+                    get(P.ENGN_FF_1) * (1 - get(P.fuel_flowmeter_1_fail))
+                    + get(P.ENGN_FF_2) * (1 - get(P.fuel_flowmeter_2_fail))
+                    + get(P.ENGN_FF_3) * (1 - get(P.fuel_flowmeter_3_fail))
+                )
+                * mech_counter
         mech_counter = 0
     end
 
-    -- Zurückschreiben nur bei Änderung (Altwert im selben Frame gelesen)
-    if calc ~= cur then set(P.fuel_meter_mech, calc) end
+    -- Write only when the value read in this frame has changed.
+    if calc ~= cur then
+        set(P.fuel_meter_mech, calc)
+    end
 end
 
 ---------------------------------------------------------------------------
--- Elektrische Kraftstoffmesser
+-- Electric fuel-quantity gauges.
 ---------------------------------------------------------------------------
 local summ_act, summ_front_act = 0, 0
 local tank1_act, tank4_act = 0, 0
 local tank2L_act, tank2R_act = 0, 0
 local tank3L_act, tank3R_act = 0, 0
 
--- Zeigerglättung, gleiche Rechenreihenfolge wie im Original
+-- Rate-limited gauge movement with proportional settling near the target.
 local function smooth(act, need, band, r1, r2, k)
     if act < need - band then
         return act + passed * r1 * r2
@@ -350,7 +408,8 @@ local function smooth(act, need, band, r1, r2, k)
 end
 
 local function electric_meters(bus_l, bus_r, meter_sw)
-    local power = meter_sw == 1 and (bus_l > 13 or bus_r > 13)
+    local power = meter_sw == 1
+        and (bus_l > 13 or bus_r > 13)
         and (get(P.bus115_1_volt) > 110 or get(P.bus115_3_volt) > 110)
 
     local summ_need, front_need, t1, t2L, t2R, t3L, t3R, t4
@@ -380,9 +439,8 @@ local function electric_meters(bus_l, bus_r, meter_sw)
             t4 = get(P.tank4_w)
         end
 
-        -- Summe aus den Einzelzeigern des letzten Frames
-        summ_need = tank2L_act + tank2R_act + tank3L_act + tank3R_act
-            + tank4_act + tank1_act
+        -- Sum the individual tank indications from the previous frame.
+        summ_need = tank2L_act + tank2R_act + tank3L_act + tank3R_act + tank4_act + tank1_act
         front_need = summ_need
 
         if get(P.fuel_front_zero) == 1 then
@@ -399,7 +457,7 @@ local function electric_meters(bus_l, bus_r, meter_sw)
             t1 = get(P.tank1_w)
         end
     else
-        -- Ohne Strom: Sollwert = angezeigter Wert, Zeiger bleiben stehen
+        -- Without electrical power, hold each gauge at its indicated value.
         summ_need = get(P.fuel_meter_summ)
         front_need = get(P.fuel_front_ind)
         t1 = get(P.fuel_meter_tank1)
@@ -410,11 +468,10 @@ local function electric_meters(bus_l, bus_r, meter_sw)
         t4 = get(P.fuel_meter_tank4)
     end
 
-    -- Ein ausgefallener Messer friert seinen Zeiger ein
+    -- A failed fuel meter holds its needle position.
     if get(P.fuel_meter_summ_fail) == 0 then
         summ_act = smooth(summ_act, summ_need, 1000, 10000, 1.5, 10)
-        summ_front_act = smooth(summ_front_act, front_need,
-            1000, 10000, 1.5, 10)
+        summ_front_act = smooth(summ_front_act, front_need, 1000, 10000, 1.5, 10)
     end
     if get(P.fuel_meter_1_fail) == 0 then
         tank1_act = smooth(tank1_act, t1, 100, 1000, 1.5, 10)
@@ -446,16 +503,16 @@ local function electric_meters(bus_l, bus_r, meter_sw)
 end
 
 ---------------------------------------------------------------------------
--- Lampen
+-- Lamp indications.
 ---------------------------------------------------------------------------
 local L_lb, L_tb = 0, 0
 
--- Boolesche Quelle: max(bool2int(on) * lamps_brt, test_btn)
+-- Boolean lamp input: max(bool2int(on) * lamps_brt, test_btn).
 local function lp(on)
     return max((on and 1 or 0) * L_lb, L_tb)
 end
 
--- Numerische Quelle: max(x * lamps_brt, test_btn)
+-- Numeric lamp input: max(x * lamps_brt, test_btn).
 local function lv(x)
     return max(x * L_lb, L_tb)
 end
@@ -463,9 +520,11 @@ end
 local function lamps(bus_l, bus_r, level_sw)
     local lb = max((max(bus_l, bus_r) - 10) / 18.5, 0)
 
-    -- Ohne Strom: alle Formeln ergeben 0 (auch Lampentest)
+    -- Clear every lamp, including the lamp test, without electrical power.
     if lb == 0 then
-        for i = 1, #ALL_LAMPS do put(ALL_LAMPS[i], 0) end
+        for i = 1, #ALL_LAMPS do
+            put(ALL_LAMPS[i], 0)
+        end
         return
     end
 
@@ -521,7 +580,7 @@ local function lamps(bus_l, bus_r, level_sw)
 
     put(P.fuel_porc_reserv, lv(get(P.reserv_pump_test)))
 
-    -- Schalter 0 ergibt 0, Ausfall-DataRef dann nicht lesen
+    -- Read the level-control failure only when its switch is on.
     local automat = 0
     if level_sw ~= 0 then
         automat = level_sw * (1 - get(P.fuel_level_fail))
@@ -537,7 +596,9 @@ function update()
 
     sim_start_timer = sim_start_timer + passed
     local started = sim_start_timer > 0.3
-    if started and notLoaded then reset_switchers() end
+    if started and notLoaded then
+        reset_switchers()
+    end
 
     -- Gemeinsame Schalterwerte nach einem möglichen Reset lesen
     local level_sw = get(P.fuel_level)

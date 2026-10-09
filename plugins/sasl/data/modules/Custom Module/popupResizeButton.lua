@@ -1,6 +1,7 @@
--------------------------------------------------------------------------------
+-- popupResizeButton.lua
+-- Draws a popup resize affordance with pointer-hover feedback.
+
 -- Popup resize button
--------------------------------------------------------------------------------
 
 defineProperty("resizeButtonFocused", false)
 
@@ -18,9 +19,6 @@ end
 
 components = {
     mouseFocusedZone {
-        mouseHovered = resizeButtonFocused
-    }
+        mouseHovered = resizeButtonFocused,
+    },
 }
-
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------

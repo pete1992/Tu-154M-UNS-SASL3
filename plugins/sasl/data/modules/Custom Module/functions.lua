@@ -1,5 +1,5 @@
 -- functions.lua
--- global functions
+-- Shared interpolation, numeric conversion, rotary-digit, and table helpers.
 
 local floor = math.floor
 local interpHint = setmetatable({}, { __mode = "k" })
@@ -7,11 +7,19 @@ local interpHint = setmetatable({}, { __mode = "k" })
 -- fastInterpolate
 function fastInterpolate(tbl, x)
     local n = #tbl
-    if n < 2 then return 0 end
-    if x ~= x then return tbl[1][2] end
-    if x >= tbl[n][1] then return tbl[n][2] end
+    if n < 2 then
+        return 0
+    end
+    if x ~= x then
+        return tbl[1][2]
+    end
+    if x >= tbl[n][1] then
+        return tbl[n][2]
+    end
     local i = interpHint[tbl] or 1
-    if i > n - 1 then i = 1 end
+    if i > n - 1 then
+        i = 1
+    end
     if x < tbl[i][1] or x >= tbl[i + 1][1] then
         if i + 2 <= n and x >= tbl[i + 1][1] and x < tbl[i + 2][1] then
             i = i + 1
@@ -33,15 +41,23 @@ function fastInterpolate(tbl, x)
     end
     local x1, y1 = tbl[i][1], tbl[i][2]
     local x2, y2 = tbl[i + 1][1], tbl[i + 1][2]
-    if x2 == x1 then return y1 end
+    if x2 == x1 then
+        return y1
+    end
     return y1 + (y2 - y1) * (x - x1) / (x2 - x1)
 end
 
 -- clamp
 function clamp(x, lo, hi)
-    if x ~= x then return lo end
-    if x < lo then return lo end
-    if x > hi then return hi end
+    if x ~= x then
+        return lo
+    end
+    if x < lo then
+        return lo
+    end
+    if x > hi then
+        return hi
+    end
     return x
 end
 
@@ -67,9 +83,7 @@ function interpolate(tbl, value)
             if d == 0 then
                 return lastReference
             end
-            return lastReference
-                + (value - lastActual) / d
-                * (v[2] - lastReference)
+            return lastReference + (value - lastActual) / d * (v[2] - lastReference)
         end
         lastActual = v[1]
         lastReference = v[2]
@@ -103,15 +117,17 @@ function isILS(freq)
     if freq < 10810 or freq > 11195 then
         return false
     end
-    return math.floor(
-        math.floor(freq + 0.5) / 10
-    ) % 2 == 1
+    return math.floor(math.floor(freq + 0.5) / 10) % 2 == 1
 end
 
 -- sign
 function sign(x)
-    if x > 0 then return 1 end
-    if x < 0 then return -1 end
+    if x > 0 then
+        return 1
+    end
+    if x < 0 then
+        return -1
+    end
     return 0
 end
 
@@ -124,10 +140,7 @@ local function rotaryFill(digitTable, procNum, digitsNum, INT, wrapDigits)
     local mag = math.abs(procNum)
     local ip = math.floor(mag)
     -- Fractional part limited to 0.01 steps.
-    local frac =
-        INT
-        and 0
-        or math.floor((mag - ip) * 100) / 100
+    local frac = INT and 0 or math.floor((mag - ip) * 100) / 100
     for i = 1, digitsNum do
         local p = 10 ^ (i - 1)
         local d = math.floor(ip / p)
@@ -147,9 +160,15 @@ end
 
 -- rotaryDigits
 function rotaryDigits(procNum, digitsNum, signed, negSHift, INT)
-    if signed == nil then signed = false end
-    if negSHift == nil then negSHift = -1 end
-    if INT == nil then INT = false end
+    if signed == nil then
+        signed = false
+    end
+    if negSHift == nil then
+        negSHift = -1
+    end
+    if INT == nil then
+        INT = false
+    end
     local digitTable = {}
     if signed then
         if procNum < 0 then
@@ -158,21 +177,21 @@ function rotaryDigits(procNum, digitsNum, signed, negSHift, INT)
             digitTable[digitsNum + 1] = 0
         end
     end
-    rotaryFill(
-        digitTable,
-        math.abs(procNum),
-        digitsNum,
-        INT,
-        true
-    )
+    rotaryFill(digitTable, math.abs(procNum), digitsNum, INT, true)
     return digitTable
 end
 
 -- rotaryDigits2
 function rotaryDigits2(procNum, digitsNum, signed, negSHift, INT)
-    if signed == nil then signed = false end
-    if negSHift == nil then negSHift = -1 end
-    if INT == nil then INT = false end
+    if signed == nil then
+        signed = false
+    end
+    if negSHift == nil then
+        negSHift = -1
+    end
+    if INT == nil then
+        INT = false
+    end
     local digitTable = {}
     if signed then
         if procNum < 0 then
@@ -182,25 +201,27 @@ function rotaryDigits2(procNum, digitsNum, signed, negSHift, INT)
         end
         procNum = math.abs(procNum)
     end
-    rotaryFill(
-        digitTable,
-        procNum,
-        digitsNum,
-        INT,
-        false
-    )
+    rotaryFill(digitTable, procNum, digitsNum, INT, false)
     return digitTable
 end
 
 -- limit
 function limit(value, vmin, vmax)
-    if not vmin then vmin = 0 end
-    if not vmax then vmax = 1 end
+    if not vmin then
+        vmin = 0
+    end
+    if not vmax then
+        vmax = 1
+    end
     if value ~= value then
         return vmin
     end
-    if value < vmin then return vmin end
-    if value > vmax then return vmax end
+    if value < vmin then
+        return vmin
+    end
+    if value > vmax then
+        return vmax
+    end
     return value
 end
 
@@ -211,11 +232,7 @@ function mapLim(value, x1, x2, y1, y2)
     if limMin > limMax then
         limMin, limMax = limMax, limMin
     end
-    return limit(
-        map(value, x1, x2, y1, y2),
-        limMin,
-        limMax
-    )
+    return limit(map(value, x1, x2, y1, y2), limMin, limMax)
 end
 
 -- tabMax
@@ -331,7 +348,7 @@ function tabPrintRow(tab)
     return true
 end
 
--- around 
+-- around
 function around(value, minVal, maxVal, round)
     if not round then
         round = maxVal - minVal
@@ -342,8 +359,7 @@ function around(value, minVal, maxVal, round)
     if value >= minVal and value <= maxVal then
         return value
     end
-    local wrapped =
-        minVal + (value - minVal) % round
+    local wrapped = minVal + (value - minVal) % round
     if value > maxVal and wrapped == minVal then
         wrapped = minVal + round
     end

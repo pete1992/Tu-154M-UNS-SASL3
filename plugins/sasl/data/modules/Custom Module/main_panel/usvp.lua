@@ -1,5 +1,6 @@
 -- usvp.lua
--- USVP true-airspeed and groundspeed indicator.
+-- Calculate the USVP true-airspeed and groundspeed indications.
+
 -- Inactive migration reference; main_panel no longer loads this component.
 -- Active owner: xTlua init/scripts/T154.usvp/T154.usvp.lua.
 
@@ -29,16 +30,17 @@ defineProps({
 local speed_act = 0
 
 function update()
-	local passed = get(frame_time)
-	
-	local flag = get(speed_mid_flag)
-	
-	local spd = get(tas_svs)
-	
-	if flag == 1 then spd = get(diss_groundspeed) end
-	
-	speed_act = speed_act + (spd - speed_act) * passed * 5
-	
-	set(speed_mid_needle, speed_act / 1000 * 360)
+    local passed = get(frame_time)
 
+    local flag = get(speed_mid_flag)
+
+    local spd = get(tas_svs)
+
+    if flag == 1 then
+        spd = get(diss_groundspeed)
+    end
+
+    speed_act = speed_act + (spd - speed_act) * passed * 5
+
+    set(speed_mid_needle, speed_act / 1000 * 360)
 end

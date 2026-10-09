@@ -1,7 +1,7 @@
 -- so72_panel.lua
--- SO-72 transponder panel and logic.
+-- Operate and draw the SO-72 transponder controls and annunciators.
 
-size = {440, 167}
+size = { 440, 167 }
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -10,20 +10,20 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"xpdr_code", "sim/cockpit/radios/transponder_code", globalPropertyi},
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"transponder_mode", "tu154/custom/switchers/ovhd/transponder_mode", globalPropertyi},
-    {"transponder_control", "tu154/custom/buttons/ovhd/transponder_control", globalPropertyi},
-    {"transponder_sign", "tu154/custom/buttons/ovhd/transponder_sign", globalPropertyi},
-    {"transponder_but_1", "tu154/custom/buttons/ovhd/transponder_but_1", globalPropertyi},
-    {"transponder_but_2", "tu154/custom/buttons/ovhd/transponder_but_2", globalPropertyi},
-    {"transponder_but_3", "tu154/custom/buttons/ovhd/transponder_but_3", globalPropertyi},
-    {"transponder_but_4", "tu154/custom/buttons/ovhd/transponder_but_4", globalPropertyi},
-    {"transponder_emerg", "tu154/custom/buttons/ovhd/transponder_emerg", globalPropertyi},
-    {"transponder_red", "tu154/custom/lights/small/transponder_red", globalPropertyf},
-    {"transponder_green", "tu154/custom/lights/small/transponder_green", globalPropertyf},
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
+    { "xpdr_code", "sim/cockpit/radios/transponder_code", globalPropertyi },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "transponder_mode", "tu154/custom/switchers/ovhd/transponder_mode", globalPropertyi },
+    { "transponder_control", "tu154/custom/buttons/ovhd/transponder_control", globalPropertyi },
+    { "transponder_sign", "tu154/custom/buttons/ovhd/transponder_sign", globalPropertyi },
+    { "transponder_but_1", "tu154/custom/buttons/ovhd/transponder_but_1", globalPropertyi },
+    { "transponder_but_2", "tu154/custom/buttons/ovhd/transponder_but_2", globalPropertyi },
+    { "transponder_but_3", "tu154/custom/buttons/ovhd/transponder_but_3", globalPropertyi },
+    { "transponder_but_4", "tu154/custom/buttons/ovhd/transponder_but_4", globalPropertyi },
+    { "transponder_emerg", "tu154/custom/buttons/ovhd/transponder_emerg", globalPropertyi },
+    { "transponder_red", "tu154/custom/lights/small/transponder_red", globalPropertyf },
+    { "transponder_green", "tu154/custom/lights/small/transponder_green", globalPropertyf },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 local ident_cmd = sasl.findCommand("sim/transponder/transponder_ident")
@@ -74,34 +74,17 @@ local function isPressed(current, previous)
     return current == 1 and previous ~= 1
 end
 
-local function buttonsChanged(
-    control,
-    sign,
-    but_1,
-    but_2,
-    but_3,
-    but_4,
-    emerg
-)
-    return
-        control ~= button_last.control or
-        sign ~= button_last.sign or
-        but_1 ~= button_last.but_1 or
-        but_2 ~= button_last.but_2 or
-        but_3 ~= button_last.but_3 or
-        but_4 ~= button_last.but_4 or
-        emerg ~= button_last.emerg
+local function buttonsChanged(control, sign, but_1, but_2, but_3, but_4, emerg)
+    return control ~= button_last.control
+        or sign ~= button_last.sign
+        or but_1 ~= button_last.but_1
+        or but_2 ~= button_last.but_2
+        or but_3 ~= button_last.but_3
+        or but_4 ~= button_last.but_4
+        or emerg ~= button_last.emerg
 end
 
-local function updateButtonStates(
-    control,
-    sign,
-    but_1,
-    but_2,
-    but_3,
-    but_4,
-    emerg
-)
+local function updateButtonStates(control, sign, but_1, but_2, but_3, but_4, emerg)
     button_last.control = control
     button_last.sign = sign
     button_last.but_1 = but_1
@@ -118,11 +101,9 @@ local function updateLamps(passed)
         if self_test_cnt < 30 then
             set(transponder_red, 1)
             set(transponder_green, 0)
-
         elseif self_test_cnt < 55 then
             set(transponder_red, 0)
             set(transponder_green, 1)
-
         else
             self_test = false
             self_test_cnt = 0
@@ -130,7 +111,6 @@ local function updateLamps(passed)
             set(transponder_red, 0)
             set(transponder_green, 0)
         end
-
     else
         self_test_cnt = 0
 
@@ -163,15 +143,7 @@ function update()
     mode_last = mode
 
     -- Button sound
-    if buttonsChanged(
-        control,
-        sign,
-        but_1,
-        but_2,
-        but_3,
-        but_4,
-        emerg
-    ) then
+    if buttonsChanged(control, sign, but_1, but_2, but_3, but_4, emerg) then
         sasl.al.playSample(button_sound, false)
     end
 
@@ -257,15 +229,7 @@ function update()
 
     code_show = string.format("%04d", math.floor(code))
 
-    updateButtonStates(
-        control,
-        sign,
-        but_1,
-        but_2,
-        but_3,
-        but_4,
-        emerg
-    )
+    updateButtonStates(control, sign, but_1, but_2, but_3, but_4, emerg)
 end
 
 function draw()
@@ -278,13 +242,6 @@ function draw()
     sasl.gl.setTranslateTransform(TEXT_X, TEXT_Y)
     sasl.gl.setScaleTransform(FONT_SCALE, FONT_SCALE)
 
-    sasl.gl.drawBitmapText(
-        text_font,
-        0,
-        0,
-        code_show,
-        TEXT_ALIGN_LEFT,
-        {1, 0.3, 0.2, 1}
-    )
+    sasl.gl.drawBitmapText(text_font, 0, 0, code_show, TEXT_ALIGN_LEFT, { 1, 0.3, 0.2, 1 })
     sasl.gl.restoreGraphicsContext()
 end

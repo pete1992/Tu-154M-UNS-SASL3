@@ -1,33 +1,8 @@
 -- flight_controls.lua
---[[
-Flight Controls Logic - Changelog
+-- Models primary flight controls, spoilers, force loaders and ABSU command mixing.
 
-- Consolidated all 97 active SASL property bindings into a local defineProps() initializer.
-- Preserved every active property name, Dataref path, constructor and binding order.
-- Replaced Russian comments with English comments and cleaned up section formatting.
-- Fixed booster state handling so a booster is disabled immediately when its 27 V supply is unavailable.
-- Added manual primary-control fallback: with both 27 V control buses unavailable, ailerons,
-  elevators and rudder remain controllable up to 30% command authority while hydraulic pressure exists.
-- Clamped hydraulic authority to the valid 0..1 range.
-- Reused one combined booster/hydraulic response factor for roll, pitch and yaw actuators.
-- Limited frame integration steps to 1.0 to prevent actuator overshoot at low frame rates.
-- Fixed force-loader electrical load logic so pitch and rudder movement cannot overwrite each other.
-- Explicitly clears force-loader current draw when the required electrical supply is unavailable.
-- Reduced repeated Dataref reads inside update() without changing existing aerodynamic curves or limits.
-- Preserved SmartCopilot master/slave behavior, override handling, ABSU mixing, trim logic,
-  spoiler deployment thresholds, Mach curves, reverse influence and all original physical constants.
-- Added frame-rate-independent pilot input filtering for pitch, roll and yaw to suppress noisy-axis/yoke jitter.
-- Added a small remapped center deadzone so minor hardware noise does not move the cockpit yoke or control surfaces.
-- Added gentle aileron-to-rudder coupling for users without pedals; manual yaw input, yaw trim and ABSU yaw remain additive.
-- Removed the nonphysical Mach-dependent attenuation of manual pitch authority; X-Plane remains responsible for aerodynamic Mach/compressibility effects on the elevator.
-- Replaced pitch force-loader geometry clipping/overforce logic with the documented static SUU-154 longitudinal controllability law through the RA-56 pitch channels.
-- Added the documented Ksh0 = 0.111 deg/mm, Kx = 1 - (140 - X_MET)/120, Kx <= 0.4 relationship and the +/-10 degree RA-56 differential limit.
-- Kept the force-loader mechanism as a force/system-state device instead of using it as an artificial elevator travel limiter.
-- Preserved the existing ABSU additive pitch-command path for separate validation.
-- Added artificial pitch-force simulation using the existing force-loader state.
-- Added a 20 deg/s elevator slew-rate limiter while preserving the -25/+20 degree physical stops.
-- Added a dedicated high-Mach manual-pitch stiffness schedule that is neutral through M0.86 and progressively increases above it.
-]]
+-- The master publishes control-surface outputs; ABSU commands remain additive.
+-- Manual fallback with both DC control buses lost retains 30 percent command authority when hydraulics are available.
 
 -- Flight controls logic.
 
@@ -46,16 +21,12 @@ defineProps({
     { "overr", "sim/operation/override/override_control_surfaces", globalPropertyf }, -- X-Plane control-surface override.
     -- Control switches, trims and force-loader state
     { "speedbrake_ratio", "sim/cockpit2/controls/speedbrake_ratio", globalPropertyf }, -- Simulator speedbrake lever ratio.
-    -- { "elev_trimm_sw", "tu154/custom/controll/elev_trimm_switcher", globalPropertyi }, -- Elevator trim switch: -1 nose down, 0 neutral, +1 nose up.
-    -- { "ail_trimm_sw", "tu154/custom/controll/ail_trimm_sw", globalPropertyi }, -- Aileron trim switch.
-    -- { "rudd_trimm_sw", "tu154/custom/controll/rudd_trimm_sw", globalPropertyi }, -- Rudder trim switch.
     { "int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf }, -- Internal elevator trim position.
     { "int_roll_trim", "tu154/custom/trimmers/int_roll_trim", globalPropertyf }, -- Internal aileron trim position.
     { "int_yaw_trim", "tu154/custom/trimmers/int_yaw_trim", globalPropertyf }, -- Internal rudder trim position.
     { "buster_on_1", "tu154/custom/switchers/console/buster_on_1", globalPropertyi }, -- Booster channel 1 switch.
     { "buster_on_2", "tu154/custom/switchers/console/buster_on_2", globalPropertyi }, -- Booster channel 2 switch.
     { "buster_on_3", "tu154/custom/switchers/console/buster_on_3", globalPropertyi }, -- Booster channel 3 switch.
-    -- { "busters_cap", "tu154/custom/switchers/console/busters_cap", globalPropertyi }, -- Booster switch guard position.
     { "control_force_pos", "tu154/custom/controls/control_force_pos", globalPropertyf }, -- Elevator force-loader position: 0 disconnected, 1 engaged.
     { "control_force_pos_rud", "tu154/custom/controls/control_force_pos_rud", globalPropertyf }, -- Rudder force-loader position: 0 disconnected, 1 engaged.
     { "contr_force_set", "tu154/custom/controll/contr_force_set", globalPropertyi }, -- Force-loader selector: -1 flight, 0 automatic, +1 takeoff/landing.
@@ -63,9 +34,6 @@ defineProps({
     { "hydro_ra56_elev_1", "tu154/custom/switchers/eng/hydro_ra56_elev_1", globalPropertyi }, -- RA-56 pitch hydraulic channel 1.
     { "hydro_ra56_elev_2", "tu154/custom/switchers/eng/hydro_ra56_elev_2", globalPropertyi }, -- RA-56 pitch hydraulic channel 2.
     { "hydro_ra56_elev_3", "tu154/custom/switchers/eng/hydro_ra56_elev_3", globalPropertyi }, -- RA-56 pitch hydraulic channel 3.
-    -- { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty },
-    -- { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty },
-    -- { "gear1_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty }, -- Front gear vertical tire deflection.
     { "gear2_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty }, -- Left main gear vertical tire deflection.
     { "gear3_deflect", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty }, -- Right main gear vertical tire deflection.
     -- Wing control surfaces
@@ -81,14 +49,10 @@ defineProps({
     { "roll_spoil_R", "sim/flightmodel/controls/wing2r_spo1def", globalPropertyf }, -- Right roll-spoiler deflection in degrees.
     { "flap_inn_L", "sim/flightmodel/controls/wing1l_fla1def", globalPropertyf }, -- Left inner flap position.
     { "flap_inn_R", "sim/flightmodel/controls/wing1r_fla1def", globalPropertyf }, -- Right inner flap position.
-    -- { "flap_mid_L", "sim/flightmodel/controls/wing2l_fla2def", globalPropertyf }, -- Left middle flap position.
-    -- { "flap_mid_R", "sim/flightmodel/controls/wing2r_fla2def", globalPropertyf }, -- Right middle flap position.
-    -- { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf }, -- Slat deployment ratio.
     -- Tail control surfaces
     { "elevator_L", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf }, -- Left elevator deflection in degrees; positive is trailing-edge down.
     { "elevator_R", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf }, -- Right elevator deflection in degrees; positive is trailing-edge down.
     { "rudder", "sim/flightmodel/controls/vstab2_rud1def", globalPropertyf }, -- Rudder deflection in degrees; positive is trailing-edge left.
-    -- { "stab_ratio", "sim/cockpit2/controls/elevator_trim", globalPropertyf }, -- Simulator pitch trim position.
     -- Hydraulic pressure
     { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, -- Hydraulic system 1 pressure.
     { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, -- Hydraulic system 2 pressure.
@@ -105,21 +69,12 @@ defineProps({
     -- Electrical power
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, -- Left 27 V bus voltage.
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, -- Right 27 V bus voltage.
-    -- { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, -- 115 V bus 1 voltage.
-    -- { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf }, -- 115 V bus 3 voltage.
-    -- { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf }, -- Left 36 V bus voltage.
-    -- { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, -- Right 36 V bus voltage.
-    -- { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, -- PTS-250 bus 1 voltage.
-    -- { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, -- PTS-250 bus 2 voltage.
     -- Spoiler deployment sources
     { "deflection_mtr_2", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[1]", globalProperty },
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
     { "anim_rud1", "tu154/custom/controlls/throttle_1", globalPropertyf }, -- Engine 1 throttle animation.
     { "anim_rud2", "tu154/custom/controlls/throttle_2", globalPropertyf }, -- Engine 2 throttle animation.
     { "anim_rud3", "tu154/custom/controlls/throttle_3", globalPropertyf }, -- Engine 3 throttle animation.
-    -- { "anim_rud1_ENG", "tu154/custom/controlls/throttle_1_ENG", globalPropertyf }, -- Flight engineer engine 1 throttle animation.
-    -- { "anim_rud2_ENG", "tu154/custom/controlls/throttle_2_ENG", globalPropertyf }, -- Flight engineer engine 2 throttle animation.
-    -- { "anim_rud3_ENG", "tu154/custom/controlls/throttle_3_ENG", globalPropertyf }, -- Flight engineer engine 3 throttle animation.
     { "revers_L", "tu154/custom/controlls/revers_L", globalPropertyf }, -- Left reverser lever position.
     { "revers_R", "tu154/custom/controlls/revers_R", globalPropertyf }, -- Right reverser lever position.
     { "ias_L", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf }, -- Pilot indicated airspeed in knots.
@@ -127,9 +82,6 @@ defineProps({
     -- Electrical loads
     { "ctr_27_L_cc", "tu154/custom/control/ctr_27_L_cc", globalPropertyf }, -- Flight-control load on the left 27 V bus.
     { "ctr_27_R_cc", "tu154/custom/control/ctr_27_R_cc", globalPropertyf }, -- Flight-control load on the right 27 V bus.
-    -- { "ctr_115_1_cc", "tu154/custom/control/ctr_115_1_cc", globalPropertyf }, -- Flight-control load on 115 V bus 1.
-    -- { "ctr_115_2_cc", "tu154/custom/control/ctr_115_2_cc", globalPropertyf }, -- Flight-control load on 115 V bus 2.
-    -- { "ctr_115_3_cc", "tu154/custom/control/ctr_115_3_cc", globalPropertyf }, -- Flight-control load on 115 V bus 3.
     -- ABSU commands and flight data
     { "absu_contr_pitch", "tu154/custom/absu/contr_pitch", globalPropertyf }, -- ABSU RA-56 pitch actuator command.
     { "absu_contr_roll", "tu154/custom/absu/contr_roll", globalPropertyf }, -- ABSU RA-56 roll actuator command.
@@ -138,7 +90,6 @@ defineProps({
     { "machno", "sim/flightmodel/misc/machno", globalPropertyf }, -- Mach number.
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- SmartCopilot: 0 unavailable, 1 slave, 2 master.
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- SmartCopilot control state: 0 unavailable, 1 no control, 2 has control.
     -- Failures
     { "ail_fail_left", "tu154/custom/failures/ail_fail_left", globalPropertyi }, -- Left aileron failure flag.
     { "ail_fail_right", "tu154/custom/failures/ail_fail_right", globalPropertyi }, -- Right aileron failure flag.
@@ -155,16 +106,10 @@ defineProps({
 })
 
 -- Legacy direct joystick sources kept for reference.
--- defineProperty("joy_pitch", globalPropertyf("sim/cockpit2/controls/yoke_pitch_ratio"))
--- defineProperty("joy_roll", globalPropertyf("sim/cockpit2/controls/yoke_roll_ratio"))
--- defineProperty("joy_yaw", globalPropertyf("sim/cockpit2/controls/yoke_heading_ratio"))
 
 -- Legacy slat source kept for reference.
--- defineProperty("slats", globalPropertyf("sim/flightmodel/controls/slatrat"))
 
 -- Legacy stabilizer/elevator position sources kept for reference.
--- defineProperty("stap_pos_real", globalProperty("sim/flightmodel2/wing/elevator2_deg[0]"))
--- defineProperty("elev_pos_real", globalProperty("sim/flightmodel2/wing/elevator1_deg[0]"))
 
 set(overr, 1) -- Take control of the simulator control surfaces.
 
@@ -217,8 +162,7 @@ local function filterPilotInput(state_key, raw_value, dt)
 
     -- Exponential low-pass filter with time-based response.
     local alpha = 1 - math.exp(-dt / INPUT_FILTER_TAU)
-    local filtered = INPUT_STATE[state_key]
-        + (target - INPUT_STATE[state_key]) * alpha
+    local filtered = INPUT_STATE[state_key] + (target - INPUT_STATE[state_key]) * alpha
     INPUT_STATE[state_key] = filtered
     return filtered
 end
@@ -238,7 +182,7 @@ local ELEVATOR_DOWN_LIMIT_DEG = 20
 local SUU_KSH0_DEG_PER_MM = 0.111
 local SUU_X_BAL0_MM = 140
 local SUU_TARGET_MM_PER_G = 120
-local SUU_KX_MAX = 0.365 -- 0.4 
+local SUU_KX_MAX = 0.365 -- 0.4
 local SUU_RA56_LIMIT_DEG = 10
 
 -- Artificial pitch-feel model for conventional non-force-feedback hardware.
@@ -253,13 +197,7 @@ local FLIGHT_FULL_COLUMN_FORCE_KGF = 35.0
 -- move, but never reduces its physical -25 / +20 degree travel authority.
 local ELEVATOR_RATE_DEG_PER_SEC = 20.0
 
---[[
-aerodynamische Wirksamkeit
-+ reale Verluste
-+ System-/Geometrieeffekte
-+ gewünschte Tu-154-Steuercharakteristik
-= effektive Elevator-Autorität
---]]
+-- Effective elevator authority combines aerodynamic, geometric and control-force effects.
 local PITCH_HIGH_MACH_TBL = {
     { 0.00, 1.00 },
     { 0.50, 0.95 },
@@ -314,22 +252,13 @@ local function pitchColumnFromForce(pilot_ratio, force_loader_pos)
         return 0
     end
 
-    local full_column_force_kgf =
-        TAKEOFF_FULL_COLUMN_FORCE_KGF
-        + (FLIGHT_FULL_COLUMN_FORCE_KGF - TAKEOFF_FULL_COLUMN_FORCE_KGF)
-        * force_loader_pos
+    local full_column_force_kgf = TAKEOFF_FULL_COLUMN_FORCE_KGF
+        + (FLIGHT_FULL_COLUMN_FORCE_KGF - TAKEOFF_FULL_COLUMN_FORCE_KGF) * force_loader_pos
 
     local effective_force_kgf = pilot_force_kgf - CONTROL_FRICTION_KGF
-    local effective_full_force_kgf = math.max(
-        full_column_force_kgf - CONTROL_FRICTION_KGF,
-        1.0
-    )
+    local effective_full_force_kgf = math.max(full_column_force_kgf - CONTROL_FRICTION_KGF, 1.0)
 
-    local column = clamp(
-        effective_force_kgf / effective_full_force_kgf,
-        0,
-        1
-    )
+    local column = clamp(effective_force_kgf / effective_full_force_kgf, 0, 1)
 
     return column * sign
 end
@@ -345,17 +274,13 @@ local function applyHighMachPitchStiffness(column, mach)
     local abs_column = math.abs(column)
     local sign = column < 0 and -1 or 1
 
--- Apply the full high-Mach reduction during normal MET travel.
--- Near maximum MET deflection, progressively restore the reduced elevator
--- authority to preserve the available control range at high pilot force.
+    -- Apply the full high-Mach reduction during normal MET travel.
+    -- Near maximum MET deflection, progressively restore the reduced elevator
+    -- authority to preserve the available control range at high pilot force.
     local restored_gain = gain
     if abs_column > HIGH_MACH_FULL_AUTHORITY_START then
-        local overforce = clamp(
-            (abs_column - HIGH_MACH_FULL_AUTHORITY_START)
-            / (1 - HIGH_MACH_FULL_AUTHORITY_START),
-            0,
-            1
-        )
+        local overforce =
+            clamp((abs_column - HIGH_MACH_FULL_AUTHORITY_START) / (1 - HIGH_MACH_FULL_AUTHORITY_START), 0, 1)
         restored_gain = gain + (1 - gain) * overforce
     end
 
@@ -373,11 +298,7 @@ local function pitchRatioToElevatorDeg(ratio)
 end
 
 local function elevatorDegToPitchRatio(elevator_deg)
-    elevator_deg = clamp(
-        elevator_deg,
-        -ELEVATOR_UP_LIMIT_DEG,
-        ELEVATOR_DOWN_LIMIT_DEG
-    )
+    elevator_deg = clamp(elevator_deg, -ELEVATOR_UP_LIMIT_DEG, ELEVATOR_DOWN_LIMIT_DEG)
 
     if elevator_deg <= 0 then
         return -elevator_deg / ELEVATOR_UP_LIMIT_DEG
@@ -393,8 +314,7 @@ local function getSuuKx(trim_ratio)
     local balanced_elevator_deg = pitchRatioToElevatorDeg(trim_ratio)
     local x_met_mm = balanced_elevator_deg / SUU_KSH0_DEG_PER_MM
 
-    local k_x = 1
-        - (SUU_X_BAL0_MM - x_met_mm) / SUU_TARGET_MM_PER_G
+    local k_x = 1 - (SUU_X_BAL0_MM - x_met_mm) / SUU_TARGET_MM_PER_G
 
     -- The source explicitly caps the positive side at Kx = 0.4.
     if k_x > SUU_KX_MAX then
@@ -438,11 +358,7 @@ function update()
     -- Small coordinated-turn assistance for users without rudder pedals.
     -- Positive roll adds the corresponding yaw input before the existing
     -- rudder sign conversion, while any real yaw input remains fully additive.
-    local coupled_yaw = clamp(
-        pilot_yaw + pilot_roll * AILERON_RUDDER_COUPLING,
-        -1,
-        1
-    )
+    local coupled_yaw = clamp(pilot_yaw + pilot_roll * AILERON_RUDDER_COUPLING, -1, 1)
 
     -- Retained for compatibility with the original logic and future use.
     local ias = get(indicated_airspeed) * 1.852
@@ -467,11 +383,7 @@ function update()
 
     -- Powered boosters provide normal authority. If both 27 V buses are lost,
     -- the mechanical fallback keeps the primary controls available at 30%.
-    local boosted_response = math.max(
-        HS1 * buster_1_ON,
-        HS2 * buster_2_ON,
-        HS3 * buster_3_ON
-    )
+    local boosted_response = math.max(HS1 * buster_1_ON, HS2 * buster_2_ON, HS3 * buster_3_ON)
     local manual_control = not power_27_L and not power_27_R and hydraulic_authority > 0.01
     local primary_command_limit = manual_control and 0.3 or 1
     local primary_response = manual_control and hydraulic_authority or boosted_response
@@ -593,9 +505,7 @@ function update()
 
         if power_27_L and power_27_R then
             -- Elevator force-loader position.
-            local elevator_flight_mode =
-                (forcing_sw == 0 and flap_left < 7 and flap_right < 7)
-                or forcing_sw == -1
+            local elevator_flight_mode = (forcing_sw == 0 and flap_left < 7 and flap_right < 7) or forcing_sw == -1
 
             if elevator_flight_mode then
                 force_pos = force_pos + passed * 0.04
@@ -610,13 +520,13 @@ function update()
             end
 
             -- Rudder force-loader position.
-            local rudder_flight_mode =
-                (forcing_sw == 0
-                    and flap_left < 7
-                    and flap_right < 7
-                    and not gear_left_ground
-                    and not gear_right_ground)
-                or forcing_sw == -1
+            local rudder_flight_mode = (
+                forcing_sw == 0
+                and flap_left < 7
+                and flap_right < 7
+                and not gear_left_ground
+                and not gear_right_ground
+            ) or forcing_sw == -1
 
             if rudder_flight_mode then
                 force_pos_rud = force_pos_rud + passed * 0.08
@@ -651,31 +561,23 @@ function update()
 
     -- Above M0.86, progressively stiffen only the manual pilot path. This does
     -- not change the physical elevator stops and does not attenuate RA-56/ABSU.
-    local high_mach_column_pitch = applyHighMachPitchStiffness(
-        force_column_pitch,
-        mach
-    )
+    local high_mach_column_pitch = applyHighMachPitchStiffness(force_column_pitch, mach)
 
     -- MET trim shifts the balanced/zero-force column position.
-    local cockpit_yoke_pitch = clamp(
-        high_mach_column_pitch + trim_ratio,
-        -1,
-        1
-    )
+    local cockpit_yoke_pitch = clamp(high_mach_column_pitch + trim_ratio, -1, 1)
 
     -- Direct mechanical booster path: column/MET position to elevator.
-    local mechanical_elevator_deg =
-        pitchRatioToElevatorDeg(cockpit_yoke_pitch)
+    local mechanical_elevator_deg = pitchRatioToElevatorDeg(cockpit_yoke_pitch)
 
     local suu_correction_deg = 0
     local k_x = getSuuKx(trim_ratio)
 
     -- The PPN-13 logic treats the RA-56 servos as unavailable when fewer than
     -- two hydraulic systems remain above the operating-pressure threshold.
-    local hydraulics_available =
-        bool2int(get(gs_press_1) >= 100)
-        + bool2int(get(gs_press_2) >= 100)
-        + bool2int(get(gs_press_3) >= 100) >= 2
+    local hydraulics_available = bool2int(get(gs_press_1) >= 100)
+            + bool2int(get(gs_press_2) >= 100)
+            + bool2int(get(gs_press_3) >= 100)
+        >= 2
 
     local ra56_pitch_on = ra56PitchAvailable(
         get(hydro_ra56_elev_1),
@@ -689,36 +591,23 @@ function update()
         -- Static SUU-154 term:
         --   delta_e = Ksh0 * dx - Ksh0 * Kx * dx
         --           = Ksh0 * (1 - Kx) * dx
-        --
+
         -- The virtual column already contains the force-loader and high-Mach
         -- behavior. SUU therefore acts on that physical column displacement,
         -- not directly on the raw hardware axis.
-        local direct_pilot_elevator_deg =
-            pitchRatioToElevatorDeg(high_mach_column_pitch)
+        local direct_pilot_elevator_deg = pitchRatioToElevatorDeg(high_mach_column_pitch)
 
-        suu_correction_deg = clamp(
-            -k_x * direct_pilot_elevator_deg,
-            -SUU_RA56_LIMIT_DEG,
-            SUU_RA56_LIMIT_DEG
-        )
+        suu_correction_deg = clamp(-k_x * direct_pilot_elevator_deg, -SUU_RA56_LIMIT_DEG, SUU_RA56_LIMIT_DEG)
     end
 
-    local suu_elevator_deg = clamp(
-        mechanical_elevator_deg + suu_correction_deg,
-        -ELEVATOR_UP_LIMIT_DEG,
-        ELEVATOR_DOWN_LIMIT_DEG
-    )
+    local suu_elevator_deg =
+        clamp(mechanical_elevator_deg + suu_correction_deg, -ELEVATOR_UP_LIMIT_DEG, ELEVATOR_DOWN_LIMIT_DEG)
 
-    local suu_pitch_ratio =
-        elevatorDegToPitchRatio(suu_elevator_deg)
+    local suu_pitch_ratio = elevatorDegToPitchRatio(suu_elevator_deg)
 
     -- Keep the existing ABSU command path additive for this validation step.
     -- The dynamic K_omegaZ * omegaZ term is not duplicated here.
-    local pitch_cmd = clamp(
-        suu_pitch_ratio + get(absu_contr_pitch),
-        -1,
-        1
-    )
+    local pitch_cmd = clamp(suu_pitch_ratio + get(absu_contr_pitch), -1, 1)
     local pitch_target = pitch_cmd * primary_command_limit
 
     -- Move the elevator toward the commanded position with a physical slew-rate
@@ -728,27 +617,17 @@ function update()
     local current_elevator_deg = pitchRatioToElevatorDeg(pitch_pos_act)
 
     if primary_response > 0 and passed > 0 then
-        local max_elevator_step =
-            ELEVATOR_RATE_DEG_PER_SEC * primary_response * passed
+        local max_elevator_step = ELEVATOR_RATE_DEG_PER_SEC * primary_response * passed
 
-        current_elevator_deg = current_elevator_deg + clamp(
-            target_elevator_deg - current_elevator_deg,
-            -max_elevator_step,
-            max_elevator_step
-        )
+        current_elevator_deg = current_elevator_deg
+            + clamp(target_elevator_deg - current_elevator_deg, -max_elevator_step, max_elevator_step)
 
-        current_elevator_deg = clamp(
-            current_elevator_deg,
-            -ELEVATOR_UP_LIMIT_DEG,
-            ELEVATOR_DOWN_LIMIT_DEG
-        )
+        current_elevator_deg = clamp(current_elevator_deg, -ELEVATOR_UP_LIMIT_DEG, ELEVATOR_DOWN_LIMIT_DEG)
 
         pitch_pos_act = elevatorDegToPitchRatio(current_elevator_deg)
     end
 
-    local pitch_surface_pos = manual_control
-        and clamp(pitch_pos_act, -0.3, 0.3)
-        or pitch_pos_act
+    local pitch_surface_pos = manual_control and clamp(pitch_pos_act, -0.3, 0.3) or pitch_pos_act
 
     local elev_left
     local elev_right
@@ -761,16 +640,8 @@ function update()
         elev_right = -pitch_surface_pos * ELEVATOR_DOWN_LIMIT_DEG
     end
 
-    elev_left = clamp(
-        elev_left,
-        -ELEVATOR_UP_LIMIT_DEG,
-        ELEVATOR_DOWN_LIMIT_DEG
-    )
-    elev_right = clamp(
-        elev_right,
-        -ELEVATOR_UP_LIMIT_DEG,
-        ELEVATOR_DOWN_LIMIT_DEG
-    )
+    elev_left = clamp(elev_left, -ELEVATOR_UP_LIMIT_DEG, ELEVATOR_DOWN_LIMIT_DEG)
+    elev_right = clamp(elev_right, -ELEVATOR_UP_LIMIT_DEG, ELEVATOR_DOWN_LIMIT_DEG)
 
     if MASTER then
         set(elevator_L, elev_left * (1 - elevator_fail_L))

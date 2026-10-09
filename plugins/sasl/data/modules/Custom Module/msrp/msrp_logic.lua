@@ -1,5 +1,5 @@
 -- msrp_logic.lua
--- MSRP flight data recorder logic.
+-- Records flight data and manages MSRP recording files.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -8,95 +8,95 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
-    {"msrp_recording", "tu154/custom/msrp/msrp_recording", globalPropertyi},
-    {"msrp_date_ten", "tu154/custom/switchers/eng/msrp_date_ten", globalPropertyi},
-    {"msrp_date_one", "tu154/custom/switchers/eng/msrp_date_one", globalPropertyi},
-    {"msrp_month_ten", "tu154/custom/switchers/eng/msrp_month_ten", globalPropertyi},
-    {"msrp_month_one", "tu154/custom/switchers/eng/msrp_month_one", globalPropertyi},
-    {"msrp_year_ten", "tu154/custom/switchers/eng/msrp_year_ten", globalPropertyi},
-    {"msrp_year_one", "tu154/custom/switchers/eng/msrp_year_one", globalPropertyi},
-    {"msrp_route_hun", "tu154/custom/switchers/eng/msrp_route_hun", globalPropertyi},
-    {"msrp_route_ten", "tu154/custom/switchers/eng/msrp_route_ten", globalPropertyi},
-    {"msrp_route_one", "tu154/custom/switchers/eng/msrp_route_one", globalPropertyi},
-    {"msrp_mlp_1", "tu154/custom/switchers/eng/msrp_mlp_1", globalPropertyi},
-    {"msrp_mlp_2", "tu154/custom/switchers/eng/msrp_mlp_2", globalPropertyi},
-    {"msrp_main_switch", "tu154/custom/switchers/eng/msrp_main_switch", globalPropertyi},
-    {"total_flight_time_sec", "sim/time/total_flight_time_sec", globalPropertyf},
-    {"zulu_time_hours", "sim/cockpit2/clock_timer/zulu_time_hours", globalPropertyi},
-    {"zulu_time_minutes", "sim/cockpit2/clock_timer/zulu_time_minutes", globalPropertyi},
-    {"zulu_time_seconds", "sim/cockpit2/clock_timer/zulu_time_seconds", globalPropertyi},
-    {"latitude", "sim/flightmodel/position/latitude", globalPropertyf},
-    {"longitude", "sim/flightmodel/position/longitude", globalPropertyf},
-    {"true_crs", "sim/flightmodel/position/true_psi", globalPropertyf},
-    {"msl_alt", "sim/flightmodel/position/elevation", globalPropertyf},
-    {"mgv_pitch", "tu154/custom/gyro/mgv_contr_pitch", globalPropertyf},
-    {"mgv_roll", "tu154/custom/gyro/mgv_contr_roll", globalPropertyf},
-    {"sideslip_degrees", "sim/cockpit2/gauges/indicators/sideslip_degrees", globalPropertyf},
-    {"yoke_pitch", "tu154/custom/controlls/yoke_pitch", globalPropertyf},
-    {"yoke_roll", "tu154/custom/controlls/yoke_roll", globalPropertyf},
-    {"pedals_turn", "tu154/custom/controlls/pedals", globalPropertyf},
-    {"int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf},
-    {"int_roll_trim", "tu154/custom/trimmers/int_roll_trim", globalPropertyf},
-    {"int_yaw_trim", "tu154/custom/trimmers/int_yaw_trim", globalPropertyf},
-    {"stab_ind", "tu154/custom/gauges/misc/stab_ind", globalPropertyf},
-    {"flap_left_ind", "tu154/custom/gauges/misc/flap_left_ind", globalPropertyf},
-    {"flap_right_ind", "tu154/custom/gauges/misc/flap_right_ind", globalPropertyf},
-    {"slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf},
-    {"ail_L", "sim/flightmodel/controls/wing3l_ail1def", globalPropertyf},
-    {"ail_R", "sim/flightmodel/controls/wing3r_ail1def", globalPropertyf},
-    {"elevator_L", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf},
-    {"elevator_R", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf},
-    {"rudder", "sim/flightmodel/controls/vstab2_rud1def", globalPropertyf},
-    {"spd_brk_inn_L", "sim/flightmodel/controls/wing1l_spo1def", globalPropertyf},
-    {"spd_brk_inn_R", "sim/flightmodel/controls/wing1r_spo1def", globalPropertyf},
-    {"spd_brk_mid_L", "sim/flightmodel/controls/wing2l_spo2def", globalPropertyf},
-    {"spd_brk_mid_R", "sim/flightmodel/controls/wing2r_spo2def", globalPropertyf},
-    {"roll_spoil_L", "sim/flightmodel/controls/wing2l_spo1def", globalPropertyf},
-    {"roll_spoil_R", "sim/flightmodel/controls/wing2r_spo1def", globalPropertyf},
-    {"msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf}, -- QNH in Pa; converted to inHg at reads.
-    {"rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf},
-    {"vvi", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf},
-    {"aoa_ind", "tu154/custom/gauges/misc/aoa_ind", globalPropertyf},
-    {"gforce_ind", "tu154/custom/gauges/misc/gforce_ind", globalPropertyf},
-    {"ias", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf},
-    {"mach_svs", "tu154/custom/svs/machno", globalPropertyf},
-    {"course_gpk", "tu154/custom/tks/course_gpk", globalPropertyf},
-    {"course_gmk", "tu154/custom/tks/course_gmk", globalPropertyf},
-    {"rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf},
-    {"rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf},
-    {"rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf},
-    {"ENGN_propmode_1", "sim/flightmodel/engine/ENGN_propmode[0]", globalProperty},
-    {"ENGN_propmode_2", "sim/flightmodel/engine/ENGN_propmode[1]", globalProperty},
-    {"ENGN_propmode_3", "sim/flightmodel/engine/ENGN_propmode[2]", globalProperty},
-    {"fuel_flow_1", "tu154/custom/gauges/eng/fuel_flow_1", globalPropertyf},
-    {"fuel_flow_2", "tu154/custom/gauges/eng/fuel_flow_2", globalPropertyf},
-    {"fuel_flow_3", "tu154/custom/gauges/eng/fuel_flow_3", globalPropertyf},
-    {"m_total", "sim/flightmodel/weight/m_total", globalPropertyf},
-    {"m_fuel", "sim/flightmodel/weight/m_fuel_total", globalPropertyf},
-    {"cg_pos_actual", "tu154/custom/misc/cg_pos_actual", globalPropertyf},
-    {"deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty},
-    {"roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi},
-    {"pitch_main_mode", "tu154/custom/absu/pitch_main_mode", globalPropertyi},
-    {"stu_mode", "tu154/custom/absu/stu_mode", globalPropertyi},
-    {"deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", globalProperty},
-    {"deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty},
-    {"deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty},
-    {"outer_marker", "sim/cockpit/misc/outer_marker_lit", globalPropertyi},
-    {"middle_marker", "sim/cockpit/misc/middle_marker_lit", globalPropertyi},
-    {"inner_marker", "sim/cockpit/misc/inner_marker_lit", globalPropertyi},
-    {"nav_cs_flag", "tu154/custom/radio/nav1_cs_flag", globalPropertyi},
-    {"nav_gs_flag", "tu154/custom/radio/nav1_gs_flag", globalPropertyi},
-    {"nav_cs", "tu154/custom/radio/nav1_cs", globalPropertyf},
-    {"nav_gs", "tu154/custom/radio/nav1_gs", globalPropertyf},
-    {"wind_direction_degt", "sim/weather/aircraft/wind_now_direction_degt", globalPropertyf},
-    {"wind_speed_kt", "sim/weather/aircraft/wind_now_speed_msc", globalPropertyf},
-    {"msrp_27_L_cc", "tu154/custom/msrp/msrp_27_L_cc", globalPropertyf},
-    {"msrp_27_R_cc", "tu154/custom/msrp/msrp_27_R_cc", globalPropertyf},
-    {"msrp_power", "tu154/custom/msrp/msrp_power", globalPropertyi},
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
+    { "msrp_recording", "tu154/custom/msrp/msrp_recording", globalPropertyi },
+    { "msrp_date_ten", "tu154/custom/switchers/eng/msrp_date_ten", globalPropertyi },
+    { "msrp_date_one", "tu154/custom/switchers/eng/msrp_date_one", globalPropertyi },
+    { "msrp_month_ten", "tu154/custom/switchers/eng/msrp_month_ten", globalPropertyi },
+    { "msrp_month_one", "tu154/custom/switchers/eng/msrp_month_one", globalPropertyi },
+    { "msrp_year_ten", "tu154/custom/switchers/eng/msrp_year_ten", globalPropertyi },
+    { "msrp_year_one", "tu154/custom/switchers/eng/msrp_year_one", globalPropertyi },
+    { "msrp_route_hun", "tu154/custom/switchers/eng/msrp_route_hun", globalPropertyi },
+    { "msrp_route_ten", "tu154/custom/switchers/eng/msrp_route_ten", globalPropertyi },
+    { "msrp_route_one", "tu154/custom/switchers/eng/msrp_route_one", globalPropertyi },
+    { "msrp_mlp_1", "tu154/custom/switchers/eng/msrp_mlp_1", globalPropertyi },
+    { "msrp_mlp_2", "tu154/custom/switchers/eng/msrp_mlp_2", globalPropertyi },
+    { "msrp_main_switch", "tu154/custom/switchers/eng/msrp_main_switch", globalPropertyi },
+    { "total_flight_time_sec", "sim/time/total_flight_time_sec", globalPropertyf },
+    { "zulu_time_hours", "sim/cockpit2/clock_timer/zulu_time_hours", globalPropertyi },
+    { "zulu_time_minutes", "sim/cockpit2/clock_timer/zulu_time_minutes", globalPropertyi },
+    { "zulu_time_seconds", "sim/cockpit2/clock_timer/zulu_time_seconds", globalPropertyi },
+    { "latitude", "sim/flightmodel/position/latitude", globalPropertyf },
+    { "longitude", "sim/flightmodel/position/longitude", globalPropertyf },
+    { "true_crs", "sim/flightmodel/position/true_psi", globalPropertyf },
+    { "msl_alt", "sim/flightmodel/position/elevation", globalPropertyf },
+    { "mgv_pitch", "tu154/custom/gyro/mgv_contr_pitch", globalPropertyf },
+    { "mgv_roll", "tu154/custom/gyro/mgv_contr_roll", globalPropertyf },
+    { "sideslip_degrees", "sim/cockpit2/gauges/indicators/sideslip_degrees", globalPropertyf },
+    { "yoke_pitch", "tu154/custom/controlls/yoke_pitch", globalPropertyf },
+    { "yoke_roll", "tu154/custom/controlls/yoke_roll", globalPropertyf },
+    { "pedals_turn", "tu154/custom/controlls/pedals", globalPropertyf },
+    { "int_pitch_trim", "tu154/custom/trimmers/int_pitch_trim", globalPropertyf },
+    { "int_roll_trim", "tu154/custom/trimmers/int_roll_trim", globalPropertyf },
+    { "int_yaw_trim", "tu154/custom/trimmers/int_yaw_trim", globalPropertyf },
+    { "stab_ind", "tu154/custom/gauges/misc/stab_ind", globalPropertyf },
+    { "flap_left_ind", "tu154/custom/gauges/misc/flap_left_ind", globalPropertyf },
+    { "flap_right_ind", "tu154/custom/gauges/misc/flap_right_ind", globalPropertyf },
+    { "slats", "sim/flightmodel2/controls/slat1_deploy_ratio", globalPropertyf },
+    { "ail_L", "sim/flightmodel/controls/wing3l_ail1def", globalPropertyf },
+    { "ail_R", "sim/flightmodel/controls/wing3r_ail1def", globalPropertyf },
+    { "elevator_L", "sim/flightmodel/controls/hstab1_elv1def", globalPropertyf },
+    { "elevator_R", "sim/flightmodel/controls/hstab2_elv1def", globalPropertyf },
+    { "rudder", "sim/flightmodel/controls/vstab2_rud1def", globalPropertyf },
+    { "spd_brk_inn_L", "sim/flightmodel/controls/wing1l_spo1def", globalPropertyf },
+    { "spd_brk_inn_R", "sim/flightmodel/controls/wing1r_spo1def", globalPropertyf },
+    { "spd_brk_mid_L", "sim/flightmodel/controls/wing2l_spo2def", globalPropertyf },
+    { "spd_brk_mid_R", "sim/flightmodel/controls/wing2r_spo2def", globalPropertyf },
+    { "roll_spoil_L", "sim/flightmodel/controls/wing2l_spo1def", globalPropertyf },
+    { "roll_spoil_R", "sim/flightmodel/controls/wing2r_spo1def", globalPropertyf },
+    { "msl_press", "sim/weather/aircraft/qnh_pas", globalPropertyf }, -- QNH in Pa; converted to inHg at reads.
+    { "rv5_alt", "tu154/custom/misc/rv5_alt_left", globalPropertyf },
+    { "vvi", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf },
+    { "aoa_ind", "tu154/custom/gauges/misc/aoa_ind", globalPropertyf },
+    { "gforce_ind", "tu154/custom/gauges/misc/gforce_ind", globalPropertyf },
+    { "ias", "sim/cockpit2/gauges/indicators/airspeed_kts_pilot", globalPropertyf },
+    { "mach_svs", "tu154/custom/svs/machno", globalPropertyf },
+    { "course_gpk", "tu154/custom/tks/course_gpk", globalPropertyf },
+    { "course_gmk", "tu154/custom/tks/course_gmk", globalPropertyf },
+    { "rpm_high_1", "tu154/custom/gauges/engine/rpm_high_1", globalPropertyf },
+    { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf },
+    { "rpm_high_3", "tu154/custom/gauges/engine/rpm_high_3", globalPropertyf },
+    { "ENGN_propmode_1", "sim/flightmodel/engine/ENGN_propmode[0]", globalProperty },
+    { "ENGN_propmode_2", "sim/flightmodel/engine/ENGN_propmode[1]", globalProperty },
+    { "ENGN_propmode_3", "sim/flightmodel/engine/ENGN_propmode[2]", globalProperty },
+    { "fuel_flow_1", "tu154/custom/gauges/eng/fuel_flow_1", globalPropertyf },
+    { "fuel_flow_2", "tu154/custom/gauges/eng/fuel_flow_2", globalPropertyf },
+    { "fuel_flow_3", "tu154/custom/gauges/eng/fuel_flow_3", globalPropertyf },
+    { "m_total", "sim/flightmodel/weight/m_total", globalPropertyf },
+    { "m_fuel", "sim/flightmodel/weight/m_fuel_total", globalPropertyf },
+    { "cg_pos_actual", "tu154/custom/misc/cg_pos_actual", globalPropertyf },
+    { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
+    { "roll_main_mode", "tu154/custom/absu/roll_main_mode", globalPropertyi },
+    { "pitch_main_mode", "tu154/custom/absu/pitch_main_mode", globalPropertyi },
+    { "stu_mode", "tu154/custom/absu/stu_mode", globalPropertyi },
+    { "deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", globalProperty },
+    { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty },
+    { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty },
+    { "outer_marker", "sim/cockpit/misc/outer_marker_lit", globalPropertyi },
+    { "middle_marker", "sim/cockpit/misc/middle_marker_lit", globalPropertyi },
+    { "inner_marker", "sim/cockpit/misc/inner_marker_lit", globalPropertyi },
+    { "nav_cs_flag", "tu154/custom/radio/nav1_cs_flag", globalPropertyi },
+    { "nav_gs_flag", "tu154/custom/radio/nav1_gs_flag", globalPropertyi },
+    { "nav_cs", "tu154/custom/radio/nav1_cs", globalPropertyf },
+    { "nav_gs", "tu154/custom/radio/nav1_gs", globalPropertyf },
+    { "wind_direction_degt", "sim/weather/aircraft/wind_now_direction_degt", globalPropertyf },
+    { "wind_speed_kt", "sim/weather/aircraft/wind_now_speed_msc", globalPropertyf },
+    { "msrp_27_L_cc", "tu154/custom/msrp/msrp_27_L_cc", globalPropertyf },
+    { "msrp_27_R_cc", "tu154/custom/msrp/msrp_27_R_cc", globalPropertyf },
+    { "msrp_power", "tu154/custom/msrp/msrp_power", globalPropertyi },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 local PA_TO_INHG = 1 / 3386.389
@@ -429,8 +429,7 @@ local function writeHeaderLine(file, prefix, values)
 end
 
 local function createFileName()
-    panel_numbers =
-        get(msrp_date_ten)
+    panel_numbers = get(msrp_date_ten)
         .. get(msrp_date_one)
         .. "_"
         .. get(msrp_month_ten)
@@ -466,11 +465,7 @@ local function ensureFile()
     local file = io.open(filename, "w")
 
     if not file then
-        print(
-            "MSRP: cannot create file "
-                .. filename
-                .. ". Check the black_box directory and its permissions."
-        )
+        print("MSRP: cannot create file " .. filename .. ". Check the black_box directory and its permissions.")
         return false
     end
 
@@ -494,26 +489,13 @@ local function writeFile()
         return false
     end
 
-    local zulu =
-        string.format(
-            "%02d:%02d:%02d",
-            get(zulu_time_hours),
-            get(zulu_time_minutes),
-            get(zulu_time_seconds)
-        )
+    local zulu = string.format("%02d:%02d:%02d", get(zulu_time_hours), get(zulu_time_minutes), get(zulu_time_seconds))
 
-    local baro_alt =
-        get(msl_alt)
-        + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000 * 0.3048
+    local baro_alt = get(msl_alt) + (29.92 - (get(msl_press) * PA_TO_INHG)) * 1000 * 0.3048
 
     baro_alt = truncate1(baro_alt)
 
-    local gear =
-        bool2int(
-            get(deploy_ratio_1) > 0.99
-            and get(deploy_ratio_2) > 0.99
-            and get(deploy_ratio_3) > 0.99
-        )
+    local gear = bool2int(get(deploy_ratio_1) > 0.99 and get(deploy_ratio_2) > 0.99 and get(deploy_ratio_3) > 0.99)
 
     local marker = 0
 
@@ -571,12 +553,9 @@ local function writeFile()
         get(nav_gs_flag),
         floor2(get(wind_direction_degt)),
         math.floor(get(wind_speed_kt) * 1.852 * 100) * 0.01,
-        floor2(get(rpm_high_1))
-            * (1 - 2 * bool2int(get(ENGN_propmode_1) == 3)),
-        floor2(get(rpm_high_2))
-            * (1 - 2 * bool2int(get(ENGN_propmode_2) == 3)),
-        floor2(get(rpm_high_3))
-            * (1 - 2 * bool2int(get(ENGN_propmode_3) == 3)),
+        floor2(get(rpm_high_1)) * (1 - 2 * bool2int(get(ENGN_propmode_1) == 3)),
+        floor2(get(rpm_high_2)) * (1 - 2 * bool2int(get(ENGN_propmode_2) == 3)),
+        floor2(get(rpm_high_3)) * (1 - 2 * bool2int(get(ENGN_propmode_3) == 3)),
         floor2(get(fuel_flow_1)),
         floor2(get(fuel_flow_2)),
         floor2(get(fuel_flow_3)),
@@ -613,27 +592,17 @@ function update()
     local airspeed = get(ias) * 1.852
     local power27_L = get(bus27_volt_left) > 13
     local power27_R = get(bus27_volt_right) > 13
-    local power =
-        (power27_L or power27_R)
-        and get(msrp_main_switch) == 1
+    local power = (power27_L or power27_R) and get(msrp_main_switch) == 1
 
     save_timer = save_timer + passed
 
     if save_timer >= 1 then
         save_timer = save_timer - 1
 
-        local should_record =
-            airspeed > 80
-            and (
-                get(msrp_mlp_1) == 1
-                or get(msrp_mlp_2) == 1
-            )
-            and power
+        local should_record = airspeed > 80 and (get(msrp_mlp_1) == 1 or get(msrp_mlp_2) == 1) and power
 
         if should_record then
-            local write_ok =
-                ensureFile()
-                and writeFile()
+            local write_ok = ensureFile() and writeFile()
 
             set(msrp_recording, bool2int(write_ok))
         else

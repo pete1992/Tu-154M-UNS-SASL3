@@ -1,5 +1,5 @@
 -- digitstape.lua
--- Generic rolling digit tape component.
+-- Draws a rolling digit tape with optional sign, decimal point, and overlay.
 
 defineProperty("image")
 defineProperty("overlayImage")
@@ -10,7 +10,7 @@ defineProperty("allowNonRound", false)
 defineProperty("valueEnabler", true)
 defineProperty("showLeadingZeros", false)
 defineProperty("showSign", false)
-defineProperty("position", {0, 0, 100, 100})
+defineProperty("position", { 0, 0, 100, 100 })
 
 function draw()
     local img = get(image)
@@ -71,7 +71,7 @@ function draw()
             sourceY,
             digitTileWidth,
             digitTileHeight,
-            {1, 1, 1, 1}
+            { 1, 1, 1, 1 }
         )
     end
 
@@ -106,7 +106,7 @@ function draw()
                 sourceY,
                 digitTileWidth,
                 digitTileHeight,
-                {1, 1, 1, 1}
+                { 1, 1, 1, 1 }
             )
 
             posX = posX - digitWidth
@@ -134,7 +134,7 @@ function draw()
                 sourceY,
                 digitTileWidth,
                 digitTileHeight,
-                {1, 1, 1, 1}
+                { 1, 1, 1, 1 }
             )
         end
     end
@@ -143,13 +143,7 @@ function draw()
         local w, h = sasl.gl.getTextureSize(overlayImg)
 
         if w and h and w > 0 and h > 0 then
-            sasl.gl.drawTexture(
-                overlayImg,
-                0,
-                0,
-                w,
-                h
-            )
+            sasl.gl.drawTexture(overlayImg, 0, 0, w, h)
         end
     end
 end

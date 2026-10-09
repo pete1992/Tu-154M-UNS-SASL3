@@ -1,8 +1,8 @@
 -- diss.lua
--- this is DISS main script
+-- Assemble the DISS Doppler navigation logic and panel components.
 
 components = {
 
-	diss_panel {},
-	diss_logic {},
+    diss_panel {},
+    diss_logic {},
 }

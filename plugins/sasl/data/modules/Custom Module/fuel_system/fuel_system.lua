@@ -1,10 +1,10 @@
 -- fuel_system.lua
--- this is fuel system main script
+-- Registers fuel controls, tank transfer, pumps, engine feeds and failures.
 
 components = {
-	fuel_panel {},
-	fuel_tanks {},
-	fuel_pumps {},
-	fuel_engines {},
-	fuel_fails {},
+    fuel_panel {},
+    fuel_tanks {},
+    fuel_pumps {},
+    fuel_engines {},
+    fuel_fails {},
 }

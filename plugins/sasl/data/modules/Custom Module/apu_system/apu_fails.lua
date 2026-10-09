@@ -1,17 +1,8 @@
 -- apu_fails.lua
---[[
-Changelog
-- Restored the legacy APU random-failure module for SASL 3 use.
-- Added the missing apu_runtime binding required by the runtime-failure check.
-- Converted all Dataref bindings to the project defineProps() format.
-- Uses the project-wide defineProps() helper instead of defining a local copy.
-- Preserved the original random failure set and added a dedicated PTA-6A tachometer-converter failure.
-- Preserved oil-temperature, hot-start/EGT, residual-fuel, and bleed-air failures as condition/manual failures handled elsewhere.
-- Preserved the original failure-rate scaling and 15-30 second random check interval.
-- Avoided unnecessary writes of zero to healthy failure flags during each random check.
-- Preserved SmartCopilot ownership: the slave instance never creates or clears failures.
-- Clears all APU failure flags when global failures are disabled.
-]]
+-- Simulates random APU failures and exhaustion of its remaining service life.
+
+-- Only the SmartCopilot master creates or clears failures.
+-- Random checks run every 15-30 seconds; condition-driven APU damage is handled separately.
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -115,10 +106,10 @@ function update()
 
     -- Preserve the legacy randomly generated failures.
     if failure_level >= 2 then -- LOW retains causal damage only.
-    tryFailure(apu_start_fail, random_probability)
-    tryFailure(apu_gen_fail, random_probability)
-    tryFailure(apu_pta6_fail, random_probability)
-    tryFailure(apu_fail, random_probability)
+        tryFailure(apu_start_fail, random_probability)
+        tryFailure(apu_gen_fail, random_probability)
+        tryFailure(apu_pta6_fail, random_probability)
+        tryFailure(apu_fail, random_probability)
     end
 
     -- Exhausted service life greatly increases the chance of a general failure.

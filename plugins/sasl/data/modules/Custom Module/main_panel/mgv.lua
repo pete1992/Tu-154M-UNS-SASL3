@@ -1,7 +1,6 @@
 -- mgv.lua
--- this is main AHZ logic
+-- Model the MGV attitude reference used by ABSU and BKK monitoring.
 
--- this is aux ahz logic
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))
@@ -9,8 +8,8 @@ local function defineProps(defs)
 end
 
 defineProps({
-	-- flight time
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, 
+    -- flight time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     { "pitch_sim", "sim/flightmodel/position/theta", globalPropertyf },
     { "roll_sim", "sim/flightmodel/position/phi", globalPropertyf },
     { "N1", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
@@ -18,28 +17,27 @@ defineProps({
     { "N3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
     -- controls
     { "mgv_contr", "tu154/custom/switchers/ovhd/mgv_contr", globalPropertyi },
-    { "arrest_btn", "tu154/custom/buttons/console/absu_arrest", globalPropertyi }, --
+    { "arrest_btn", "tu154/custom/buttons/console/absu_arrest", globalPropertyi },
     { "bus36_volt", "tu154/custom/elec/bus36_volt_left", globalPropertyf },
     { "mgv_ctr_power_cc", "tu154/custom/bkk/mgv_ctr_power_cc", globalPropertyf },
     -- results
-    { "res_pitch", "tu154/custom/gyro/mgv_contr_pitch", globalPropertyf }, --    +
-    { "res_roll", "tu154/custom/gyro/mgv_contr_roll", globalPropertyf},
-    { "ahz_flag", "tu154/custom/gyro/mgv_contr_flag", globalPropertyi},
-    { "mgv_fail", "tu154/custom/failures/mgv_fail", globalPropertyi }, --
+    { "res_pitch", "tu154/custom/gyro/mgv_contr_pitch", globalPropertyf },
+    { "res_roll", "tu154/custom/gyro/mgv_contr_roll", globalPropertyf },
+    { "ahz_flag", "tu154/custom/gyro/mgv_contr_flag", globalPropertyi },
+    { "mgv_fail", "tu154/custom/failures/mgv_fail", globalPropertyi },
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
 })
 
-
 local initial_roll_err = 0 --math.random(-20, 20) * real_num -- initial error, ehich will be decreased to 0 after connecting power
-local roll_corr = 0  -- correction for errors and arrest
-local roll_show = 0  -- result roll
+local roll_corr = 0 -- correction for errors and arrest
+local roll_show = 0 -- result roll
 local roll_off = 0 --math.random(-2, 2) * real_num -- determine the direction for AG fall
 local initial_pitch_err = 0 --math.random(-30, 30) * real_num -- initial error, ehich will be decreased to 0 after connecting power
-local pitch_corr = 0  -- correction for errors and arrest
-local pitch_show = 0  -- result roll
+local pitch_corr = 0 -- correction for errors and arrest
+local pitch_show = 0 -- result roll
 local pitch_off = 0 --math.random(-2, 2) * real_num -- determine the direction for AG fall
-local arrest = 0  -- variable for arresting process
+local arrest = 0 -- variable for arresting process
 local arrest_push = false -- validate if arrest button is pushed
 local pitch_rot = 0
 local ahz_fail = true
@@ -51,122 +49,184 @@ local time_counter = 0
 local notLoaded = true
 
 function update()
-	local passed = get(frame_time)
-	
-	local power = get(bus36_volt) > 30 and get(mgv_contr) == 1 and get(mgv_fail) == 0
-	
-	time_counter = time_counter + passed	
+    local passed = get(frame_time)
 
-	-- set initial AHZ position
-	if isColdAndDarkStart() and time_counter > 0.3 and time_counter < 0.4 and notLoaded and get(N1) < 10 and get(N2) < 10 and get(N3) < 10 then
-		initial_roll_err = math.random(-20, 20)
-		roll_off = math.random(-1, 1)
-		initial_pitch_err = math.random(-20, 20)
-		pitch_off = math.random(-1, 1)
-		
-		notLoaded = false
-	elseif time_counter > 0.3 and time_counter < 0.4 and notLoaded then 
-		roll_off = math.random(-1, 1)
-		pitch_off = math.random(-1, 1)	
-		initial_roll_err = 0
-		initial_pitch_err = 0
-		pitch_corr = 0
-		roll_corr = 0
-		power_roll = 0
-		power_pitch = 0
-		notLoaded = false	
-	end
-	
-	-- calculate roll and pitch for power off
-	if not power then
-		power_roll = get(roll_sim)
-		power_pitch = get(pitch_sim)
-	end -- if no power, then horizon will remain its position
-	
-	-- calculate power ON and OFF initial roll and pitch
-	if not power then
-		if math.abs(initial_roll_err) < 20 then initial_roll_err = initial_roll_err + passed * roll_off * 0.1 end
-		if math.abs(initial_pitch_err) < 20 then initial_pitch_err = initial_pitch_err + passed * pitch_off * 0.1 end
-	else
-		if initial_roll_err > 0.1 then initial_roll_err = initial_roll_err - passed * 0.3
-		elseif initial_roll_err < -0.1 then initial_roll_err = initial_roll_err + passed * 0.3
-		else initial_roll_err = 0 end
-		if initial_pitch_err > 0.1 then initial_pitch_err = initial_pitch_err - passed * 0.3
-		elseif initial_pitch_err < -0.1 then initial_pitch_err = initial_pitch_err + passed * 0.3
-		else initial_pitch_err = 0 end
-		
-		-- reset all errors and correction after some time
-		if power_roll > 0.05 then power_roll = power_roll - passed * 0.1
-		elseif power_roll < -0.05 then power_roll = power_roll + passed * 0.1 
-		else power_roll = 0 end
-		
-		if power_pitch > 0.05 then power_pitch = power_pitch - passed * 0.1
-		elseif power_pitch < -0.05 then power_pitch = power_pitch + passed * 0.1 
-		else power_pitch = 0 end
-		
-		if roll_corr > 0.01 then roll_corr = roll_corr - 0.1 * passed
-		elseif roll_corr < -0.01 then roll_corr = roll_corr + 0.1 * passed 
-		else roll_corr = 0 end
-		
-		if pitch_corr > 0.01 then pitch_corr = pitch_corr - 0.1 * passed
-		elseif pitch_corr < -0.01 then pitch_corr = pitch_corr + 0.1 * passed 
-		else pitch_corr = 0 end
-		
-	end
-	
-	-- arresting mechanism
-	if get(arrest_btn) > 0 and power then
-		-- set new correction
-		
-		if math.abs(initial_roll_err) < 0.1 then
-			if roll_show > 0.1 then roll_corr = roll_corr + 6 * passed
-			elseif roll_show < -0.1 then roll_corr = roll_corr - 6 * passed end
-		end
-		if math.abs(initial_pitch_err) < 0.1 then
-			if pitch_show > 0.1 then pitch_corr = pitch_corr + 6 * passed
-			elseif pitch_show < -0.1 then pitch_corr = pitch_corr - 6 * passed end
-		end
-		
-		-- reset errors
-		if power_roll > 0.1 then power_roll = power_roll - passed
-		elseif power_roll < -0.1 then power_roll = power_roll + passed end
-		if power_pitch > 0.1 then power_pitch = power_pitch - passed
-		elseif power_pitch < -0.1 then power_pitch = power_pitch + passed end
+    local power = get(bus36_volt) > 30 and get(mgv_contr) == 1 and get(mgv_fail) == 0
 
-		if initial_roll_err > 0.1 then initial_roll_err = initial_roll_err - passed * 6
-		elseif initial_roll_err < -0.1 then initial_roll_err = initial_roll_err + passed * 6 end
-		if initial_pitch_err > 0.1 then initial_pitch_err = initial_pitch_err - passed * 6
-		elseif initial_pitch_err < -0.1 then initial_pitch_err = initial_pitch_err + passed * 6 end
-		
-	end	
-	
-	-- main formula for curent position
-	roll_show = get(roll_sim) - power_roll + initial_roll_err - roll_corr
-	pitch_show = get(pitch_sim) - power_pitch + initial_pitch_err - pitch_corr
-	-- final result is a summ of power position, initial error of gauge, collective error of gauge and correction of this error
-	
-	if pitch_show > 90 then pitch_show = 90
-	elseif pitch_show < -90 then pitch_show = -90 end
-	
-	-- flag logic
-	local flag = bool2int(not power or get(arrest_btn) > 0 or math.abs(initial_roll_err) + math.abs(initial_pitch_err) + math.abs(power_roll) + math.abs(power_pitch) > 5 )
-	
-local MASTER = get(ismaster) ~= 1	
-	
-if MASTER then	
+    time_counter = time_counter + passed
 
-	-- set results
-	set(res_roll, roll_show)
-	set(res_pitch, pitch_show)
-	
-	set(ahz_flag, flag)
-	
-	set(mgv_ctr_power_cc, bool2int(power))
-	
-	--print(power, initial_roll_err, initial_pitch_err, power_roll, power_pitch, flag)
-end
+    -- set initial AHZ position
+    if
+        isColdAndDarkStart()
+        and time_counter > 0.3
+        and time_counter < 0.4
+        and notLoaded
+        and get(N1) < 10
+        and get(N2) < 10
+        and get(N3) < 10
+    then
+        initial_roll_err = math.random(-20, 20)
+        roll_off = math.random(-1, 1)
+        initial_pitch_err = math.random(-20, 20)
+        pitch_off = math.random(-1, 1)
 
---[[
+        notLoaded = false
+    elseif time_counter > 0.3 and time_counter < 0.4 and notLoaded then
+        roll_off = math.random(-1, 1)
+        pitch_off = math.random(-1, 1)
+        initial_roll_err = 0
+        initial_pitch_err = 0
+        pitch_corr = 0
+        roll_corr = 0
+        power_roll = 0
+        power_pitch = 0
+        notLoaded = false
+    end
+
+    -- calculate roll and pitch for power off
+    if not power then
+        power_roll = get(roll_sim)
+        power_pitch = get(pitch_sim)
+    end -- if no power, then horizon will remain its position
+
+    -- calculate power ON and OFF initial roll and pitch
+    if not power then
+        if math.abs(initial_roll_err) < 20 then
+            initial_roll_err = initial_roll_err + passed * roll_off * 0.1
+        end
+        if math.abs(initial_pitch_err) < 20 then
+            initial_pitch_err = initial_pitch_err + passed * pitch_off * 0.1
+        end
+    else
+        if initial_roll_err > 0.1 then
+            initial_roll_err = initial_roll_err - passed * 0.3
+        elseif initial_roll_err < -0.1 then
+            initial_roll_err = initial_roll_err + passed * 0.3
+        else
+            initial_roll_err = 0
+        end
+        if initial_pitch_err > 0.1 then
+            initial_pitch_err = initial_pitch_err - passed * 0.3
+        elseif initial_pitch_err < -0.1 then
+            initial_pitch_err = initial_pitch_err + passed * 0.3
+        else
+            initial_pitch_err = 0
+        end
+
+        -- reset all errors and correction after some time
+        if power_roll > 0.05 then
+            power_roll = power_roll - passed * 0.1
+        elseif power_roll < -0.05 then
+            power_roll = power_roll + passed * 0.1
+        else
+            power_roll = 0
+        end
+
+        if power_pitch > 0.05 then
+            power_pitch = power_pitch - passed * 0.1
+        elseif power_pitch < -0.05 then
+            power_pitch = power_pitch + passed * 0.1
+        else
+            power_pitch = 0
+        end
+
+        if roll_corr > 0.01 then
+            roll_corr = roll_corr - 0.1 * passed
+        elseif roll_corr < -0.01 then
+            roll_corr = roll_corr + 0.1 * passed
+        else
+            roll_corr = 0
+        end
+
+        if pitch_corr > 0.01 then
+            pitch_corr = pitch_corr - 0.1 * passed
+        elseif pitch_corr < -0.01 then
+            pitch_corr = pitch_corr + 0.1 * passed
+        else
+            pitch_corr = 0
+        end
+    end
+
+    -- arresting mechanism
+    if get(arrest_btn) > 0 and power then
+        -- set new correction
+
+        if math.abs(initial_roll_err) < 0.1 then
+            if roll_show > 0.1 then
+                roll_corr = roll_corr + 6 * passed
+            elseif roll_show < -0.1 then
+                roll_corr = roll_corr - 6 * passed
+            end
+        end
+        if math.abs(initial_pitch_err) < 0.1 then
+            if pitch_show > 0.1 then
+                pitch_corr = pitch_corr + 6 * passed
+            elseif pitch_show < -0.1 then
+                pitch_corr = pitch_corr - 6 * passed
+            end
+        end
+
+        -- reset errors
+        if power_roll > 0.1 then
+            power_roll = power_roll - passed
+        elseif power_roll < -0.1 then
+            power_roll = power_roll + passed
+        end
+        if power_pitch > 0.1 then
+            power_pitch = power_pitch - passed
+        elseif power_pitch < -0.1 then
+            power_pitch = power_pitch + passed
+        end
+
+        if initial_roll_err > 0.1 then
+            initial_roll_err = initial_roll_err - passed * 6
+        elseif initial_roll_err < -0.1 then
+            initial_roll_err = initial_roll_err + passed * 6
+        end
+        if initial_pitch_err > 0.1 then
+            initial_pitch_err = initial_pitch_err - passed * 6
+        elseif initial_pitch_err < -0.1 then
+            initial_pitch_err = initial_pitch_err + passed * 6
+        end
+    end
+
+    -- main formula for curent position
+    roll_show = get(roll_sim) - power_roll + initial_roll_err - roll_corr
+    pitch_show = get(pitch_sim) - power_pitch + initial_pitch_err - pitch_corr
+    -- final result is a summ of power position, initial error of gauge, collective error of gauge and correction of this error
+
+    if pitch_show > 90 then
+        pitch_show = 90
+    elseif pitch_show < -90 then
+        pitch_show = -90
+    end
+
+    -- flag logic
+    local flag = bool2int(
+        not power
+            or get(arrest_btn) > 0
+            or math.abs(initial_roll_err)
+                    + math.abs(initial_pitch_err)
+                    + math.abs(power_roll)
+                    + math.abs(power_pitch)
+                > 5
+    )
+
+    local MASTER = get(ismaster) ~= 1
+
+    if MASTER then
+        -- set results
+        set(res_roll, roll_show)
+        set(res_pitch, pitch_show)
+
+        set(ahz_flag, flag)
+
+        set(mgv_ctr_power_cc, bool2int(power))
+
+        --print(power, initial_roll_err, initial_pitch_err, power_roll, power_pitch, flag)
+    end
+
+    --[[
 if math.abs (a - b) > 7 then flag_ab = true else flag_ab = false end
 if math.abs (a - c) > 7 then flag_ac = true else flag_ac = false end
 if math.abs (b - c) > 7 then flag_bc = true else flag_bc = false end
@@ -175,5 +235,4 @@ fail_a = flag_ab and flag_ac
 fail_b = flag_ab and flag_bc
 fail_c = flag_ac and flag_bc
 --]]
-
 end

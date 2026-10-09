@@ -46277,7 +46277,7 @@ P acf/_bus_gen_is_on/6 0
 P acf/_bus_gen_is_on/7 0
 P acf/_bus_gen_is_on/count 8
 P acf/_buses_always_tied 0
-P acf/_bypass_ratio 2.000000000
+P acf/_bypass_ratio 3.000000000
 P acf/_callsign 154
 P acf/_camera_fov_zoom 60.000000000
 P acf/_camera_offset_phi 0.000000000
@@ -47314,6 +47314,8 @@ P acf/_esys_amperage/rel_startr6 0.000000000
 P acf/_esys_amperage/rel_startr7 0.000000000
 P acf/_esys_amperage/rel_stby_AOA 0.000000000
 P acf/_esys_amperage/rel_vac_pump_stby 0.000000000
+P acf/_esys_amperage/rel_wiper1 0.000000000
+P acf/_esys_amperage/rel_wiper2 0.000000000
 P acf/_esys_amperage/rel_wxr_radar 0.000000000
 P acf/_esys_amperage/rel_xpndr 0.000000000
 P acf/_esys_amperage/rel_yaw_damp 0.000000000
@@ -47454,6 +47456,8 @@ P acf/_esys_bus_bit_add/rel_startr6 0
 P acf/_esys_bus_bit_add/rel_startr7 0
 P acf/_esys_bus_bit_add/rel_stby_AOA 0
 P acf/_esys_bus_bit_add/rel_vac_pump_stby 0
+P acf/_esys_bus_bit_add/rel_wiper1 0
+P acf/_esys_bus_bit_add/rel_wiper2 0
 P acf/_esys_bus_bit_add/rel_wxr_radar 0
 P acf/_esys_bus_bit_add/rel_xpndr 0
 P acf/_esys_bus_bit_add/rel_yaw_damp 0
@@ -47487,7 +47491,7 @@ P acf/_feathered_pitch 0.000000000
 P acf/_ff_rat_idle_JET 0.152992919
 P acf/_ff_rat_idle_PRP 0.000000000
 P acf/_ff_rat_idle_turbo 0.000000000
-P acf/_file_writer_version 124410
+P acf/_file_writer_version 124414
 P acf/_fixed_max/0 0.000000000
 P acf/_fixed_max/1 0.000000000
 P acf/_fixed_max/2 0.000000000
@@ -47649,7 +47653,7 @@ P acf/_fuel_2/0 0.000000000
 P acf/_fuel_2/1 0.000000000
 P acf/_fuel_2/2 0.000000000
 P acf/_fuel_2/count 3
-P acf/_fuel_intro_time_jet 2.000000000
+P acf/_fuel_intro_time_jet 5.000000000
 P acf/_fuel_intro_time_prop 5.000000000
 P acf/_fuel_sel_cmnd_valid_pos_lft/0 0
 P acf/_fuel_sel_cmnd_valid_pos_lft/1 1
@@ -47886,9 +47890,9 @@ P acf/_idle_rat/0 0.300000012
 P acf/_idle_rat/1 0.550000012
 P acf/_idle_rat/count 2
 P acf/_incidence_with_flaps 0
-P acf/_inlet_compression_efficiency 0.950000000
-P acf/_inlet_max_KEAS 800.000000000
-P acf/_inlet_max_temp_C 800.000000000
+P acf/_inlet_compression_efficiency 0.949999988
+P acf/_inlet_max_KEAS 900.000000000
+P acf/_inlet_max_temp_C 900.000000000
 P acf/_integrated_approach_navigation 0
 P acf/_inverted_fuel_oil_EQ 1
 P acf/_inverter_for_elec_gyros 0
@@ -47958,7 +47962,7 @@ P acf/_max_CHT 500.000000000
 P acf/_max_EGT 590.000000000
 P acf/_max_ITT 646.000000000
 P acf/_max_MP_limit 29.920000076
-P acf/_max_atc_alt_ft 3.9E4
+P acf/_max_atc_alt_ft 4.1E4
 P acf/_max_bat_amp 60.000000000
 P acf/_max_bat_temp 60.000000000
 P acf/_max_gen_amp0 60.000000000
@@ -47980,7 +47984,7 @@ P acf/_max_gen_amp_per_gen/8 0.000000000
 P acf/_max_gen_amp_per_gen/9 0.000000000
 P acf/_max_gen_amp_per_gen/count 16
 P acf/_max_inverter 150.000000000
-P acf/_max_mach_eff 0.910000026
+P acf/_max_mach_eff 0.920000017
 P acf/_max_oilT 105.000000000
 P acf/_max_press_diff 9.245173454
 P acf/_max_stator 100.000000000
@@ -48399,9 +48403,9 @@ P acf/_starter_engages_igniter_arm 0
 P acf/_starter_engages_igniter_on 1
 P acf/_starter_engages_ignition 1
 P acf/_starter_is_air_driven 1
-P acf/_starter_max_rpm_rat 0.259999990
+P acf/_starter_max_rpm_rat 0.280999988
 P acf/_starter_requires_mode_sel 0
-P acf/_starter_torque_rat 0.280000001
+P acf/_starter_torque_rat 0.180000007
 P acf/_steerdeg_castor 0.000000000
 P acf/_ster_hi_speed_use 40.000000000
 P acf/_stickshaker 0
@@ -48569,7 +48573,7 @@ P acf/_tire_s2 0.630999982
 P acf/_tire_t1 0.254999995
 P acf/_tire_t2 0.296000004
 P acf/_tks_cap_liter 0.000000000
-P acf/_trans_loss_bearing 0.000000000
+P acf/_trans_loss_bearing 0.000500000
 P acf/_trans_loss_gearing 0.000000000
 P acf/_trim_elev_elec_EQ 1
 P acf/_truck_lat_sep 4.400000095
@@ -48592,7 +48596,7 @@ P acf/_vect_min_nace 0.000000000
 P acf/_vect_power_aft 1.000000000
 P acf/_vect_power_for 1.000000000
 P acf/_vect_rate 15.000000000
-P acf/_version 2.0.9
+P acf/_version 2.5.0
 P acf/_vnav_descend_auto_arm 0
 P acf/_vor_mode_has_dead_reckon 0
 P acf/_vvi_but_adjusts_pitch 0

@@ -1,24 +1,5 @@
 -- gpu_logic.lua
---[[
-Changelog
-2026-10-04
-- Move GPU electrical calculation to T154.electric/models/gpu.lua.
-- Retain SASL sound playback and remove bindings used only by the migrated calculation.
-
-Earlier changes
-- Grouped all 20 original Dataref bindings through defineProps() while preserving names, paths, constructors, and order.
-- Added X-Plane version detection and XP11/XP12-compatible sample playback.
-- Split GPU electrical-state ownership from local sound rendering: only SmartCopilot master/no-plugin updates electrical state, while all instances can render synchronized GPU sounds.
-- Preserved the existing 4-second GPU start, 10-second stop, 1-second bus connection delay, and 1-second movement-eject delay.
-- Preserved the existing 900 A GPU overload threshold.
-- Preserved the 27 V control-power requirement for GPU voltage output.
-- Cached GPU, bus, groundspeed, camera, and aircraft-position Datarefs per frame where practical.
-- Fixed the camera-speed time divisor from min(0.0001, dt) to max(0.0001, dt).
-- Preserved the currently unused Doppler coefficient calculation for future sound processing.
-- Fixed forced GPU ejection so all six inside/outside GPU samples are stopped.
-- Preserved loadSounds() and unloadSounds() legacy helpers.
-- Replaced Russian comments with English comments.
-]]
+-- Plays interior and exterior GPU sounds from the synchronized GPU state.
 
 -- Hobart 60 kVA GPU sounds; electrical calculation lives in T154.electric/models/gpu.lua.
 
@@ -37,9 +18,9 @@ end
 defineProps({
     { "xp_version", "sim/version/xplane_internal_version", globalPropertyi },
     -- GPU state and controls
-    { "gpu_present", "tu154/custom/anim/gpu_present", globalPropertyi},
+    { "gpu_present", "tu154/custom/anim/gpu_present", globalPropertyi },
     { "gpu_work_anim", "tu154/custom/anim/gpu_work", globalPropertyf },
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     -- View state
     { "external_view", "sim/graphics/view/view_is_external", globalPropertyi },
     -- Aircraft position
@@ -167,10 +148,7 @@ local function updateGpuSounds(dt)
 
     local window_open = 0 -- Reserved for future window sound attenuation.
 
-    local outside_gain =
-        1000
-        * (external + window_open * (1 - external))
-        * dist_coef
+    local outside_gain = 1000 * (external + window_open * (1 - external)) * dist_coef
 
     local inside_gain = 2000 * (1 - external)
 

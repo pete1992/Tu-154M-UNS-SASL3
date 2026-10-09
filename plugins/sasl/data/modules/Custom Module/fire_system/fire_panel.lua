@@ -1,22 +1,19 @@
 -- fire_panel.lua
--- Fire system panel (performance-optimierte Fassung).
---
--- Sounds, Startreset, Buzzer-Kappe, Blinktakte und Lampentest unverändert.
--- Lampenformeln in gleicher Multiplikationsreihenfolge wie im Original.
+-- Updates fire-panel sounds, warning lamps, blink timing and lamp tests.
 
 ---------------------------------------------------------------------------
--- Lokalisierte Globals
+-- Local references for frequently used functions.
 ---------------------------------------------------------------------------
 local get, set = get, set
 local max = math.max
 local playSample = sasl.al.playSample
 
--- true  = Lampen nur bei Wertänderung schreiben
--- false = jedes Frame schreiben
+-- true = write lamp outputs only when their values change.
+-- false = write outputs every frame.
 local USE_WRITE_CACHE = true
 
 ---------------------------------------------------------------------------
--- Properties: Handles in lokaler Tabelle P
+-- Store property handles in P.
 ---------------------------------------------------------------------------
 local P = {}
 local env = (getfenv and getfenv(1)) or _ENV or _G
@@ -27,7 +24,7 @@ local function defineProps(defs)
         local name = d[1]
         local handle = d[3](d[2])
         defineProperty(name, handle)
-        -- Von außen überschriebene Property bevorzugen
+        -- Prefer a property already supplied by the component environment.
         P[name] = env[name] or handle
     end
 end
@@ -89,7 +86,7 @@ defineProps({
     { "eng1_dangerous_vibro", "tu154/custom/lights/engines/eng1_dangerous_vibro", globalPropertyf },
     { "eng2_dangerous_vibro", "tu154/custom/lights/engines/eng2_dangerous_vibro", globalPropertyf },
     { "eng3_dangerous_vibro", "tu154/custom/lights/engines/eng3_dangerous_vibro", globalPropertyf },
-    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, -- Tag/Nacht-Helligkeit
+    { "day_night_set", "tu154/custom/lights/day_night_set", globalPropertyf }, -- Day/night brightness control.
     -- Power
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
@@ -107,7 +104,7 @@ defineProps({
     { "valve_open_2", "tu154/custom/fire/valve_open_2", globalPropertyi },
     { "valve_open_3", "tu154/custom/fire/valve_open_3", globalPropertyi },
     { "valve_open_4", "tu154/custom/fire/valve_open_4", globalPropertyi },
-    -- Laut Lampenlogik: >0 = Überhitzung, 2 = Feuer
+    -- Detector state: >0 = overheat; 2 = fire.
     { "engine_fire_state_1", "tu154/custom/fire/engine_fire_state_1", globalPropertyi },
     { "engine_fire_state_2", "tu154/custom/fire/engine_fire_state_2", globalPropertyi },
     { "engine_fire_state_3", "tu154/custom/fire/engine_fire_state_3", globalPropertyi },
@@ -120,55 +117,89 @@ defineProps({
 })
 
 ---------------------------------------------------------------------------
--- Lampenlisten
+-- Lamp output groups.
 ---------------------------------------------------------------------------
 local function handles(names)
     local t = {}
-    for i = 1, #names do t[i] = P[names[i]] end
+    for i = 1, #names do
+        t[i] = P[names[i]]
+    end
     return t
 end
 
--- Alle 33 Lampen (ohne Strom alle 0)
+-- All 33 lamp outputs are zero without electrical power.
 local ALL_LAMPS = handles({
-    "smoke_1", "smoke_2", "smoke_zone2_left", "smoke_zone2_right",
-    "smoke_zone3", "smoke_zone4", "smoke_zone5_left", "smoke_zone5_right",
+    "smoke_1",
+    "smoke_2",
+    "smoke_zone2_left",
+    "smoke_zone2_right",
+    "smoke_zone3",
+    "smoke_zone4",
+    "smoke_zone5_left",
+    "smoke_zone5_right",
     "smoke_zone6",
-    "fire_eng_1", "fire_eng_2", "fire_eng_3",
-    "overheat_eng_1", "overheat_eng_2", "overheat_eng_3",
-    "fuel_off_eng_1", "fuel_off_eng_2", "fuel_off_eng_3",
-    "throttle_1_fire", "throttle_2_fire", "throttle_3_fire",
-    "check_overheat", "fire_apu", "turn_on_spz",
-    "button_fire_eng_1", "button_fire_eng_2", "button_fire_eng_3",
-    "button_fire_apu", "button_fire_ng",
-    "button_fire_turn_1", "button_fire_turn_2", "button_fire_turn_3",
+    "fire_eng_1",
+    "fire_eng_2",
+    "fire_eng_3",
+    "overheat_eng_1",
+    "overheat_eng_2",
+    "overheat_eng_3",
+    "fuel_off_eng_1",
+    "fuel_off_eng_2",
+    "fuel_off_eng_3",
+    "throttle_1_fire",
+    "throttle_2_fire",
+    "throttle_3_fire",
+    "check_overheat",
+    "fire_apu",
+    "turn_on_spz",
+    "button_fire_eng_1",
+    "button_fire_eng_2",
+    "button_fire_eng_3",
+    "button_fire_apu",
+    "button_fire_ng",
+    "button_fire_turn_1",
+    "button_fire_turn_2",
+    "button_fire_turn_3",
     "fire_lamp",
 })
 
--- Lampen mit Faktor power_sw (bei SPZ aus = Lampentest-Wert)
+-- Lamps gated by power_sw show only the lamp test with SPZ switched off.
 local POWER_LAMPS = handles({
-    "fire_eng_1", "fire_eng_2", "fire_eng_3",
-    "overheat_eng_1", "overheat_eng_2", "overheat_eng_3",
-    "fuel_off_eng_1", "fuel_off_eng_2", "fuel_off_eng_3",
+    "fire_eng_1",
+    "fire_eng_2",
+    "fire_eng_3",
+    "overheat_eng_1",
+    "overheat_eng_2",
+    "overheat_eng_3",
+    "fuel_off_eng_1",
+    "fuel_off_eng_2",
+    "fuel_off_eng_3",
     "fire_apu",
-    "button_fire_eng_1", "button_fire_eng_2", "button_fire_eng_3",
-    "button_fire_apu", "button_fire_ng",
-    "button_fire_turn_1", "button_fire_turn_2", "button_fire_turn_3",
+    "button_fire_eng_1",
+    "button_fire_eng_2",
+    "button_fire_eng_3",
+    "button_fire_apu",
+    "button_fire_ng",
+    "button_fire_turn_1",
+    "button_fire_turn_2",
+    "button_fire_turn_3",
 })
 
 ---------------------------------------------------------------------------
--- Sounds und Zustand
+-- Sound samples and persistent state.
 ---------------------------------------------------------------------------
-local rotary_sound = sasl.al.loadSample('Custom Sounds/plastic_switch.wav')
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
-local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local rotary_sound = sasl.al.loadSample("Custom Sounds/plastic_switch.wav")
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
+local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 
 local passed = get(P.frame_time)
 local notLoaded = true
 local sim_start_timer = 0
 
 ---------------------------------------------------------------------------
--- Schreib-Cache für Lampen
+-- Cache the last values written to lamps.
 ---------------------------------------------------------------------------
 local put = set
 if USE_WRITE_CACHE then
@@ -182,18 +213,17 @@ if USE_WRITE_CACHE then
 end
 
 ---------------------------------------------------------------------------
--- Startreset (einmalig)
+-- One-time startup reset.
 ---------------------------------------------------------------------------
 local function reset_switchers()
-    if isColdAndDarkStart() and get(P.eng1_N1) < 5
-        and get(P.eng2_N1) < 5 and get(P.eng3_N1) < 5 then
+    if isColdAndDarkStart() and get(P.eng1_N1) < 5 and get(P.eng2_N1) < 5 and get(P.eng3_N1) < 5 then
         set(P.fire_main_switch, 0)
     end
     notLoaded = false
 end
 
 ---------------------------------------------------------------------------
--- Bediengeräusche (Summen-Logik wie im Original)
+-- Detect control sounds from the sum of switch changes.
 ---------------------------------------------------------------------------
 local lamp_test_last = get(P.lamp_test)
 local smoke_test_last = get(P.smoke_test)
@@ -212,8 +242,7 @@ local fire_main_switch_last = get(P.fire_main_switch)
 local fire_buzzer_last = get(P.fire_buzzer)
 local fire_buzzer_cap_last = get(P.fire_buzzer_cap)
 
-local function swichers_check(lamp_test_sw, smoke_test_sw, ext_test_sw,
-                              fire_main_switch_sw)
+local function swichers_check(lamp_test_sw, smoke_test_sw, ext_test_sw, fire_main_switch_sw)
     local fire_ext_1_sw = get(P.fire_ext_1)
     local fire_ext_2_sw = get(P.fire_ext_2)
     local fire_ext_3_sw = get(P.fire_ext_3)
@@ -227,29 +256,47 @@ local function swichers_check(lamp_test_sw, smoke_test_sw, ext_test_sw,
     local fire_buzzer_sw = get(P.fire_buzzer)
     local fire_buzzer_cap_sw = get(P.fire_buzzer_cap)
 
-    local changes_but = lamp_test_sw + smoke_test_sw + ext_test_sw
-        + fire_ext_1_sw + fire_ext_2_sw + fire_ext_3_sw
-        + cold_eng_1_sw + cold_eng_2_sw + cold_eng_3_sw
-        + cold_apu_sw + neutral_gas_sw
-        - lamp_test_last - smoke_test_last - ext_test_last
-        - fire_ext_1_last - fire_ext_2_last - fire_ext_3_last
-        - cold_eng_1_last - cold_eng_2_last - cold_eng_3_last
-        - cold_apu_last - neutral_gas_last
-    if changes_but ~= 0 then playSample(button_sound, false) end
+    local changes_but = lamp_test_sw
+        + smoke_test_sw
+        + ext_test_sw
+        + fire_ext_1_sw
+        + fire_ext_2_sw
+        + fire_ext_3_sw
+        + cold_eng_1_sw
+        + cold_eng_2_sw
+        + cold_eng_3_sw
+        + cold_apu_sw
+        + neutral_gas_sw
+        - lamp_test_last
+        - smoke_test_last
+        - ext_test_last
+        - fire_ext_1_last
+        - fire_ext_2_last
+        - fire_ext_3_last
+        - cold_eng_1_last
+        - cold_eng_2_last
+        - cold_eng_3_last
+        - cold_apu_last
+        - neutral_gas_last
+    if changes_but ~= 0 then
+        playSample(button_sound, false)
+    end
 
-    local changes_rot = fire_sensor_sel_sw + fire_place_sel_sw
-        - fire_sensor_sel_last - fire_place_sel_last
-    if changes_rot ~= 0 then playSample(rotary_sound, false) end
+    local changes_rot = fire_sensor_sel_sw + fire_place_sel_sw - fire_sensor_sel_last - fire_place_sel_last
+    if changes_rot ~= 0 then
+        playSample(rotary_sound, false)
+    end
 
-    local changes_sw = fire_main_switch_sw + fire_buzzer_sw
-        - fire_main_switch_last - fire_buzzer_last
-    if changes_sw ~= 0 then playSample(switcher_sound, false) end
+    local changes_sw = fire_main_switch_sw + fire_buzzer_sw - fire_main_switch_last - fire_buzzer_last
+    if changes_sw ~= 0 then
+        playSample(switcher_sound, false)
+    end
 
     if fire_buzzer_cap_sw ~= fire_buzzer_cap_last then
         playSample(cap_sound, false)
     end
 
-    -- Geschlossene Kappe erzwingt Buzzer an (nur schreiben, wenn nötig)
+    -- A closed safety cap enables the buzzer.
     if fire_buzzer_cap_sw == 0 and fire_buzzer_sw ~= 1 then
         set(P.fire_buzzer, 1)
     end
@@ -273,7 +320,7 @@ local function swichers_check(lamp_test_sw, smoke_test_sw, ext_test_sw,
 end
 
 ---------------------------------------------------------------------------
--- Blink-Logik (unabhängig vom Strom, läuft jedes Frame)
+-- Advance blink timing each frame, independently of electrical power.
 ---------------------------------------------------------------------------
 local sheck_smoke_lit = false
 local check_smoke_counter = 0
@@ -305,12 +352,11 @@ local function blink(fire_det)
 end
 
 ---------------------------------------------------------------------------
--- Lampen
+-- Lamp indications.
 ---------------------------------------------------------------------------
--- Faktoren pro Frame für pl()
+-- Per-frame brightness factors used by pl().
 local L_p, L_lb, L_dn, L_tb = 0, 0, 0, 0
 
--- Gleiche Multiplikationsreihenfolge wie im Original
 local function pl(x)
     return max(x * L_p * L_lb * L_dn, L_tb)
 end
@@ -321,9 +367,11 @@ local function lamps(lamp_test_sw, smoke_test_sw, ext_test_sw, main_sw)
 
     blink(get(P.fire_detected))
 
-    -- Ohne Strom: alle Formeln ergeben 0 (auch Lampentest)
+    -- Clear every lamp, including the lamp test, without electrical power.
     if lb == 0 then
-        for i = 1, #ALL_LAMPS do put(ALL_LAMPS[i], 0) end
+        for i = 1, #ALL_LAMPS do
+            put(ALL_LAMPS[i], 0)
+        end
         return
     end
 
@@ -334,7 +382,7 @@ local function lamps(lamp_test_sw, smoke_test_sw, ext_test_sw, main_sw)
 
     L_p, L_lb, L_dn, L_tb = main_sw, lb, dn, tb
 
-    -- Rauchmelder (Testanzeige)
+    -- Smoke-detector test indication.
     local smoke_v = pl(smoke_test_sw)
     put(P.smoke_1, smoke_v)
     put(P.smoke_2, smoke_v)
@@ -344,29 +392,27 @@ local function lamps(lamp_test_sw, smoke_test_sw, ext_test_sw, main_sw)
     put(P.smoke_zone4, smoke_v)
     put(P.smoke_zone5_right, smoke_v)
     put(P.smoke_zone6, smoke_v)
-    put(P.smoke_zone5_left,
-        max(smoke_test_sw * main_sw * main_sw * lb * dn, tb))
+    put(P.smoke_zone5_left, max(smoke_test_sw * main_sw * main_sw * lb * dn, tb))
 
     local f1 = get(P.engine_fire_state_1)
     local f2 = get(P.engine_fire_state_2)
     local f3 = get(P.engine_fire_state_3)
 
-    -- Schubhebel-Lampen (ohne SPZ-Schalter, ohne Tag/Nacht)
-    put(P.throttle_1_fire, max(((f1 > 0
-        or get(P.eng1_dangerous_vibro) > 0) and 1 or 0) * lb, tb))
-    put(P.throttle_2_fire, max(((f2 > 0
-        or get(P.eng2_dangerous_vibro) > 0) and 1 or 0) * lb, tb))
-    put(P.throttle_3_fire, max(((f3 > 0
-        or get(P.eng3_dangerous_vibro) > 0) and 1 or 0) * lb, tb))
+    -- Throttle warning lamps bypass the SPZ and day/night controls.
+    put(P.throttle_1_fire, max(((f1 > 0 or get(P.eng1_dangerous_vibro) > 0) and 1 or 0) * lb, tb))
+    put(P.throttle_2_fire, max(((f2 > 0 or get(P.eng2_dangerous_vibro) > 0) and 1 or 0) * lb, tb))
+    put(P.throttle_3_fire, max(((f3 > 0 or get(P.eng3_dangerous_vibro) > 0) and 1 or 0) * lb, tb))
 
-    -- Lampen ohne SPZ-Schalter-Faktor
+    -- Lamps independent of the SPZ switch.
     put(P.check_overheat, max((sheck_smoke_lit and 1 or 0) * lb * dn, tb))
     put(P.fire_lamp, max((fire_lit and 1 or 0) * lb * dn, tb_front))
     put(P.turn_on_spz, max((1 - main_sw) * lb * dn, tb))
 
-    -- SPZ aus: alle Lampen mit power_sw zeigen nur den Lampentest
+    -- With SPZ off, power_sw-gated lamps show only the lamp test.
     if main_sw == 0 then
-        for i = 1, #POWER_LAMPS do put(POWER_LAMPS[i], tb) end
+        for i = 1, #POWER_LAMPS do
+            put(POWER_LAMPS[i], tb)
+        end
         return
     end
 
@@ -403,9 +449,11 @@ function update()
 
     sim_start_timer = sim_start_timer + passed
     local started = sim_start_timer > 0.3
-    if started and notLoaded then reset_switchers() end
+    if started and notLoaded then
+        reset_switchers()
+    end
 
-    -- Gemeinsame Werte nach einem möglichen Reset lesen
+    -- Read shared inputs after the startup reset.
     local lamp_test_sw = get(P.lamp_test)
     local smoke_test_sw = get(P.smoke_test)
     local ext_test_sw = get(P.ext_test)

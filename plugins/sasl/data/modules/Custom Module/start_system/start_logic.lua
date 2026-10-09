@@ -1,25 +1,7 @@
 -- start_logic.lua
+-- Controls engine-start sequences, pneumatic demand, ignition and starter commands.
 
---[[
-Changelog
-- Balanced held starter commands and released them on abort, authority loss and component unload.
-- Used simulation frame time for APD timing so a paused simulator cannot time out a start.
-- Restored power, cover, dry-crank and button-release interlocks for ground and air starts.
-- Qualified XP12 completion by sustained combustion above the configured starter design RPM.
-- Preserved all original Dataref names and paths, including the legacy sim_vers alias and unused compatibility bindings.
-- Added the project-standard X-Plane 11 / X-Plane 12 array handling: XP11 keeps the original i/f accessor, XP12 uses globalProperty.
-- Added xp_version separately before defineProps() for compatibility decisions.
-- Moved asu_press into defineProps() while preserving its original global property name and float type.
-- Corrected apd_working_1..3 and start_sys_work from globalPropertyf to globalPropertyi to match their creator definitions.
-- Replaced the three duplicated engine-start sequences with one persistent three-engine state table and shared helpers.
-- Fixed start abort handling so timeout, engine-cover and ground-start power-loss aborts also clear the internal starting state.
-- Prevented an engine-cover abort from being followed by sasl.commandBegin() again in the same frame.
-- Preserved the fuel latch and ignition after a successful start.
-- Made all simulator/system side effects master-owned for SmartCopilot while keeping the internal state machine active on every instance.
-- Limited the APU N1 and starter-torque workarounds to X-Plane 11.
-- Replaced interpolate() with the project-wide fastInterpolate() helper for the static starter-air pressure table.
-- Reduced repeated Dataref reads and preserved all original start thresholds, pressure formulas and selector mappings.
-]]
+-- Starter-command ownership is tracked through sequence transitions and cleanup callbacks.
 
 -- Engine start logic.
 local function defineProps(defs)
@@ -47,23 +29,17 @@ defineProps({
     { "flight_start_3", "tu154/custom/buttons/eng/flight_start_3", globalPropertyi },
     -- Arrays
     -- Engine 1 igniter state
-    { "sim_igniter1", "sim/cockpit2/engine/actuators/igniter_on[0]",
-        globalProperty },
+    { "sim_igniter1", "sim/cockpit2/engine/actuators/igniter_on[0]", globalProperty },
     -- Engine 2 igniter state
-    { "sim_igniter2", "sim/cockpit2/engine/actuators/igniter_on[1]",
-        globalProperty },
+    { "sim_igniter2", "sim/cockpit2/engine/actuators/igniter_on[1]", globalProperty },
     -- Engine 3 igniter state
-    { "sim_igniter3", "sim/cockpit2/engine/actuators/igniter_on[2]",
-        globalProperty },
+    { "sim_igniter3", "sim/cockpit2/engine/actuators/igniter_on[2]", globalProperty },
     -- Engine 1 ignition state
-    { "sim_ignition1", "sim/cockpit2/engine/actuators/ignition_on[0]",
-        globalProperty },
+    { "sim_ignition1", "sim/cockpit2/engine/actuators/ignition_on[0]", globalProperty },
     -- Engine 2 ignition state
-    { "sim_ignition2", "sim/cockpit2/engine/actuators/ignition_on[1]",
-        globalProperty },
+    { "sim_ignition2", "sim/cockpit2/engine/actuators/ignition_on[1]", globalProperty },
     -- Engine 3 ignition state
-    { "sim_ignition3", "sim/cockpit2/engine/actuators/ignition_on[2]",
-        globalProperty },
+    { "sim_ignition3", "sim/cockpit2/engine/actuators/ignition_on[2]", globalProperty },
     -- Left 27 V bus voltage
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     -- Right 27 V bus voltage
@@ -74,23 +50,17 @@ defineProps({
     { "apu_n1", "tu154/custom/eng/apu_n1", globalPropertyf },
     -- Arrays
     -- Engine 1 N2
-    { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]",
-        globalProperty },
+    { "eng_rpm1", "sim/flightmodel/engine/ENGN_N2_[0]", globalProperty },
     -- Engine 2 N2
-    { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]",
-        globalProperty },
+    { "eng_rpm2", "sim/flightmodel/engine/ENGN_N2_[1]", globalProperty },
     -- Engine 3 N2
-    { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]",
-        globalProperty },
+    { "eng_rpm3", "sim/flightmodel/engine/ENGN_N2_[2]", globalProperty },
     -- Engine 1 burning-fuel state
-    { "eng_work1", "sim/flightmodel2/engines/engine_is_burning_fuel[0]",
-        globalProperty },
+    { "eng_work1", "sim/flightmodel2/engines/engine_is_burning_fuel[0]", globalProperty },
     -- Engine 2 burning-fuel state
-    { "eng_work2", "sim/flightmodel2/engines/engine_is_burning_fuel[1]",
-        globalProperty },
+    { "eng_work2", "sim/flightmodel2/engines/engine_is_burning_fuel[1]", globalProperty },
     -- Engine 3 burning-fuel state
-    { "eng_work3", "sim/flightmodel2/engines/engine_is_burning_fuel[2]",
-        globalProperty },
+    { "eng_work3", "sim/flightmodel2/engines/engine_is_burning_fuel[2]", globalProperty },
     -- Engine 1 bleed-air valve position
     { "eng_airvalve_1", "tu154/custom/bleed/eng_airvalve_1", globalPropertyf },
     -- Engine 2 bleed-air valve position
@@ -110,9 +80,9 @@ defineProps({
     -- Fuel-flow mode selector
     { "fuel_flow_mode", "tu154/custom/switchers/fuel/fuel_flow_mode", globalPropertyi },
     -- Engine covers installed
-    {"engine_caps", "tu154/custom/anim/engine_caps", globalPropertyi },
+    { "engine_caps", "tu154/custom/anim/engine_caps", globalPropertyi },
     -- Frame duration
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     -- Simulator pause state
     { "sim_paused", "sim/time/paused", globalPropertyi },
     -- Starter-system air pressure
@@ -318,13 +288,7 @@ local function clearAllStartStates(MASTER)
     end
 end
 
-local function beginSelectedGroundStart(
-    eng_select,
-    time_now,
-    power27L,
-    power27R,
-    MASTER
-)
+local function beginSelectedGroundStart(eng_select, time_now, power27L, power27R, MASTER)
     local engine = ENGINES[eng_select]
 
     if not engine then
@@ -349,16 +313,7 @@ local function beginSelectedGroundStart(
     engine.ground_starting = true
 end
 
-local function processGroundStart(
-    engine,
-    time_now,
-    start_mode,
-    stop_button,
-    power_sys,
-    power27L,
-    power27R,
-    MASTER
-)
+local function processGroundStart(engine, time_now, start_mode, stop_button, power_sys, power27L, power27R, MASTER)
     if not engine.ground_starting or engine.air_starting then
         return
     end
@@ -399,14 +354,7 @@ local function processGroundStart(
     setEngineIgnition(engine, bool2int(start_mode == 1 and rpm >= RPM_FOR_IGNITER), MASTER)
 end
 
-local function processAirStart(
-    engine,
-    time_now,
-    power27L,
-    power27R,
-    blocked,
-    MASTER
-)
+local function processAirStart(engine, time_now, power27L, power27R, blocked, MASTER)
     local rpm = engine.rpm_value
     local has_power = engineHasPower(engine, power27L, power27R)
     local flight_button = get(engine.flight_start) == 1
@@ -420,7 +368,8 @@ local function processAirStart(
         return
     end
 
-    if not engine.ground_starting
+    if
+        not engine.ground_starting
         and not engine.air_starting
         and flight_pressed
         and get(engine.burning) == 0
@@ -439,9 +388,7 @@ local function processAirStart(
 
     if startComplete(engine) then
         finishStart(engine, MASTER)
-    elseif elapsed < START_SEQ_TIME
-        and rpm > RPM_FOR_IGNITER
-    then
+    elseif elapsed < START_SEQ_TIME and rpm > RPM_FOR_IGNITER then
         if MASTER then
             set(engine.ignition, 1)
             set(engine.igniter, 1)
@@ -502,7 +449,9 @@ function update()
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
         engine.rpm_value = get(engine.rpm)
-        if get(engine.burning) == 1 then engine.has_run = true end
+        if get(engine.burning) == 1 then
+            engine.has_run = true
+        end
         if (engine.ground_starting or engine.air_starting) and get(engine.burning) == 1 then
             engine.burning_time = engine.burning_time + passed
         else
@@ -510,7 +459,7 @@ function update()
         end
     end
 
---[[ 
+    --[[
 A stale timestamp must not cut fuel during X-Plane's engines-running
 initialization. Timeout an actual APD sequence, or clean up an engine
 that has really been running and subsequently lost combustion. This
@@ -522,17 +471,17 @@ sasl.commandBegin() from reactivating the starter in the same frame.
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
         local rpm = engine.rpm_value
-        local timed_out =
-            (engine.ground_starting or engine.air_starting
-                or (engine.has_run and get(engine.burning) == 0))
+        local timed_out = (
+            engine.ground_starting
+            or engine.air_starting
+            or (engine.has_run and get(engine.burning) == 0)
+        )
             and time_now - engine.start_time > START_SEQ_TIME
             and rpm < RPM_APD_OFF
 
         if timed_out or (blocked and (rpm >= 5 or engine.ground_starting or engine.air_starting)) then
             abortStart(engine, MASTER)
-        elseif engine.ground_starting
-            and not engineHasPower(engine, power27L, power27R)
-        then
+        elseif engine.ground_starting and not engineHasPower(engine, power27L, power27R) then
             -- A ground start cannot continue without its 27 V supply.
             abortStart(engine, MASTER)
         end
@@ -543,18 +492,12 @@ sasl.commandBegin() from reactivating the starter in the same frame.
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
 
-        pressure_from_engines =
-            pressure_from_engines
-            + get(engine.burning)
-            * get(engine.airvalve)
-            * fastInterpolate(eng_start_press_t, engine.rpm_value)
+        pressure_from_engines = pressure_from_engines
+            + get(engine.burning) * get(engine.airvalve) * fastInterpolate(eng_start_press_t, engine.rpm_value)
     end
 
     local start_mode = get(starter_mode)
-    local power_sys =
-        get(starter_switch) == 1
-        and power27L
-        and power27R
+    local power_sys = get(starter_switch) == 1 and power27L and power27R
 
     local start_button = get(starter_start) == 1
     local start_pressed = start_button and not start_button_pressed
@@ -562,9 +505,7 @@ sasl.commandBegin() from reactivating the starter in the same frame.
     local eng_select = get(starter_eng_select)
 
     -- Changing the engine selector simulates pressing the stop control.
-    local stop_button =
-        get(starter_stop) == 1
-        or (eng_select ~= select_last and anyGroundStartActive())
+    local stop_button = get(starter_stop) == 1 or (eng_select ~= select_last and anyGroundStartActive())
 
     select_last = eng_select
 
@@ -575,9 +516,7 @@ sasl.commandBegin() from reactivating the starter in the same frame.
 
         local apu_air = get(apu_air_doors) * get(apu_n1) * 0.01
 
-        starter_press =
-            starter_press
-            + (apu_air + pressure_from_engines) * passed
+        starter_press = starter_press + (apu_air + pressure_from_engines) * passed
 
         local external_air = get(asu_press)
 
@@ -585,28 +524,19 @@ sasl.commandBegin() from reactivating the starter in the same frame.
             starter_press = external_air
         end
 
-        local fuel_system =
-            get(auto_tanks_turn) > 0
+        local fuel_system = get(auto_tanks_turn) > 0
             and get(fuel_flow_mode) == 1
-            and get(tank1_1)
-                + get(tank1_2)
-                + get(tank1_3)
-                + get(tank1_4) == 4
+            and get(tank1_1) + get(tank1_2) + get(tank1_3) + get(tank1_4) == 4
 
-        if not blocked
+        if
+            not blocked
             and not anyGroundStartActive()
             and start_pressed
             and not stop_button
             and starter_press > 3
             and fuel_system
         then
-            beginSelectedGroundStart(
-                eng_select,
-                time_now,
-                power27L,
-                power27R,
-                MASTER
-            )
+            beginSelectedGroundStart(eng_select, time_now, power27L, power27R, MASTER)
         end
     elseif MASTER then
         set(start_sys_work, 0)
@@ -616,25 +546,9 @@ sasl.commandBegin() from reactivating the starter in the same frame.
     for i = 1, #ENGINES do
         local engine = ENGINES[i]
 
-        processGroundStart(
-            engine,
-            time_now,
-            start_mode,
-            stop_button,
-            power_sys,
-            power27L,
-            power27R,
-            MASTER
-        )
+        processGroundStart(engine, time_now, start_mode, stop_button, power_sys, power27L, power27R, MASTER)
 
-        processAirStart(
-            engine,
-            time_now,
-            power27L,
-            power27R,
-            blocked,
-            MASTER
-        )
+        processAirStart(engine, time_now, power27L, power27R, blocked, MASTER)
     end
 
     -- Starter-command safety cleanup.
@@ -649,13 +563,9 @@ sasl.commandBegin() from reactivating the starter in the same frame.
     end
 
     -- Preserve the original starter-pressure decay.
-    starter_press =
-        starter_press
-        - (0.2 * passed) * (starter_press + 1)
+    starter_press = starter_press - (0.2 * passed) * (starter_press + 1)
 
-    starter_press =
-        starter_press
-        - bool2int(anyGroundStartActive()) * passed * 0.4
+    starter_press = starter_press - bool2int(anyGroundStartActive()) * passed * 0.4
 
     starter_press = clamp(starter_press, 0, 4.8)
 
@@ -665,13 +575,7 @@ sasl.commandBegin() from reactivating the starter in the same frame.
         for i = 1, #ENGINES do
             local engine = ENGINES[i]
 
-            set(
-                engine.apd,
-                bool2int(
-                    engine.ground_starting
-                    or engine.air_starting
-                )
-            )
+            set(engine.apd, bool2int(engine.ground_starting or engine.air_starting))
         end
     end
 end

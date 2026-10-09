@@ -1,4 +1,6 @@
 -- push_button.lua
+-- Draws a labeled button with hover feedback and a diagnostic click handler.
+
 defineProperty("click", nil)
 defineProperty("label", "")
 defineProperty("font", sasl.gl.loadFont("AVIA.ttf"))
@@ -9,7 +11,7 @@ defineProperty("frame_color", { 0, 0.3, 0.5, 1 })
 defineProperty("hover_color", { 0.6, 0.1, 0.1, 1 })
 
 state = {
-    hover = false
+    hover = false,
 }
 
 function onMouseDown(component, x, y, button, parentX, parentY)
@@ -19,9 +21,7 @@ function onMouseDown(component, x, y, button, parentX, parentY)
     return true
 end
 
-function update()
-
-end
+function update() end
 
 function onMouseMove(comp, x, y, button, parentX, parentY)
     state.hover = true

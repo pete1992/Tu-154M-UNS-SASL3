@@ -1,5 +1,5 @@
 -- radio_fails.lua
--- Radio fails
+-- Inject radio-system failures under SmartCopilot master ownership.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -29,61 +29,67 @@ defineProps({
 
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Have control. 0 = plugin not found, 1 = no control 2 = has control
 })
 
 local fail_counter = 0
 local check_time = math.random(15, 30)
 
 function update()
-	local passed = get(frame_time)
-	
-local MASTER = get(ismaster) ~= 1	
-	
-if MASTER then	
+    local passed = get(frame_time)
 
-	local failure_level = get(failures_enabled)
-	-- check failures
-	if failure_level > 0 then
-		
-		fail_counter = fail_counter + passed
-		
-		if fail_counter > check_time then
-			fail_counter = 0
-			check_time = math.random(15, 30)
-			
-			-- random failures
-			if failure_level >= 2 then -- LOW retains causal damage only.
-				local FAIL = failure_level
-				FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
-			if get(rel_adf1) ~= 6 then set(rel_adf1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(rel_adf2) ~= 6 then set(rel_adf2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6) end
-			if get(nav1_fail) ~= 1 then set(nav1_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(nav2_fail) ~= 1 then set(nav2_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(dme1_fail) ~= 1 then set(dme1_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			if get(dme2_fail) ~= 1 then set(dme2_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			
-			if get(mrp_fail) ~= 1 then set(mrp_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1) end
-			end
+    local MASTER = get(ismaster) ~= 1
 
-		end
-		
-		-- dependent failures
-		
-	else
-		-- no failures enabled
-		fail_counter = 0
-		
-		set(rel_adf1, 0)
-		set(rel_adf2, 0)
-		set(nav1_fail, 0)
-		set(nav2_fail, 0)
-		set(dme1_fail, 0)
-		set(dme2_fail, 0)
-		set(mrp_fail, 0)
+    if MASTER then
+        local failure_level = get(failures_enabled)
+        -- check failures
+        if failure_level > 0 then
+            fail_counter = fail_counter + passed
 
-	end
-	
-end
+            if fail_counter > check_time then
+                fail_counter = 0
+                check_time = math.random(15, 30)
 
+                -- random failures
+                if failure_level >= 2 then -- LOW retains causal damage only.
+                    local FAIL = failure_level
+                    FAIL = FAIL * 0.05 * 4 ^ (FAIL * 0.5)
+                    if get(rel_adf1) ~= 6 then
+                        set(rel_adf1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
+                    end
+                    if get(rel_adf2) ~= 6 then
+                        set(rel_adf2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
+                    end
+                    if get(nav1_fail) ~= 1 then
+                        set(nav1_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+                    if get(nav2_fail) ~= 1 then
+                        set(nav2_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+                    if get(dme1_fail) ~= 1 then
+                        set(dme1_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+                    if get(dme2_fail) ~= 1 then
+                        set(dme2_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+
+                    if get(mrp_fail) ~= 1 then
+                        set(mrp_fail, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 1)
+                    end
+                end
+            end
+
+        -- dependent failures
+        else
+            -- no failures enabled
+            fail_counter = 0
+
+            set(rel_adf1, 0)
+            set(rel_adf2, 0)
+            set(nav1_fail, 0)
+            set(nav2_fail, 0)
+            set(dme1_fail, 0)
+            set(dme2_fail, 0)
+            set(mrp_fail, 0)
+        end
+    end
 end

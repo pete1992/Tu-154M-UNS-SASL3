@@ -1,5 +1,6 @@
 -- crew_voices.lua
--- this is the crew voices logic
+-- Loads crew phrases and checklists and schedules queued voice playback.
+
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         local prop
@@ -13,14 +14,14 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- time of frame
-    { "hide_rus_objects", "tu154/custom/lang/hide_rus_objects", globalPropertyi }, --
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- Frame time in seconds.
+    { "hide_rus_objects", "tu154/custom/lang/hide_rus_objects", globalPropertyi },
 
     -- Smart Copilot
     { "ismaster", "scp/api/ismaster", globalPropertyf }, -- Master. 0 = plugin not found, 1 = slave 2 = master
 
     { "replay_mode", "sim/operation/prefs/replay_mode", globalPropertyi },
-    { "enable_crew_vo", "tu154/custom/sounds/enable_crew_vo", globalPropertyi }, --
+    { "enable_crew_vo", "tu154/custom/sounds/enable_crew_vo", globalPropertyi },
 })
 
 include("voice_tables.lua")
@@ -45,35 +46,30 @@ print(n10000, n1000, n100, n10, n1)
 local talk_timeout = 3
 
 function update()
-	
-	passed_time = get(frame_time)
-	
-	lang = get(hide_rus_objects) + 1 -- language
-	
-	-- read phrases
-	talk_timeout = talk_timeout - passed_time
-	
-	if talk_timeout <= 0 then
-		talk_timeout = read_phrase() -- read phrase and set new timeout
-	end
-	
-	-- here will be logic of adding phrases into the table
+    passed_time = get(frame_time)
 
-	if get(ismaster) == 0 and get(replay_mode) == 0 then	-- talk only in singleplayer mode and not in replay mode
-	
-		regular_talk() 
-		
-		checklist_1()
-		checklist_2()
-		checklist_3()
-		checklist_4()
-		checklist_5()
-		checklist_6()
-		checklist_7()
-		checklist_8()
-		checklist_9()
-	
-	end	
-	
+    lang = get(hide_rus_objects) + 1 -- language
+
+    -- read phrases
+    talk_timeout = talk_timeout - passed_time
+
+    if talk_timeout <= 0 then
+        talk_timeout = read_phrase() -- read phrase and set new timeout
+    end
+
+    -- Queue flight callouts and checklist phrases.
+
+    if get(ismaster) == 0 and get(replay_mode) == 0 then -- talk only in singleplayer mode and not in replay mode
+        regular_talk()
+
+        checklist_1()
+        checklist_2()
+        checklist_3()
+        checklist_4()
+        checklist_5()
+        checklist_6()
+        checklist_7()
+        checklist_8()
+        checklist_9()
+    end
 end
-

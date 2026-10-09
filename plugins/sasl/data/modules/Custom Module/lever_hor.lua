@@ -1,6 +1,7 @@
 -- lever_hor.lua
+-- Controls a property value with a draggable horizontal lever and release callback.
 
-size = {139, 29}
+size = { 139, 29 }
 
 -- Controlled value.
 defineProperty("value", 0)
@@ -23,7 +24,6 @@ local Travel = size[1] - 30
 
 local dragging = false
 
-
 local function setLeverValue(x)
     if Range == 0 or Travel <= 0 then
         return
@@ -39,7 +39,6 @@ local function setLeverValue(x)
 
     set(value, val)
 end
-
 
 components = {
 
@@ -71,7 +70,7 @@ components = {
 
     -- Interactive lever area.
     interactive {
-        position = {15, 0, Travel, 29},
+        position = { 15, 0, Travel, 29 },
 
         onMouseDown = function(comp, x, y, button)
             if button ~= MB_LEFT then
@@ -110,7 +109,6 @@ components = {
         end,
     },
 }
-
 
 function draw()
     drawAll(components)

@@ -1,7 +1,7 @@
 -- msrp.lua
--- this is the root of MSRP (black box) system
-components = {
-	msrp_panel{},
-	msrp_logic{},
-}
+-- Registers the MSRP flight recorder and its cockpit panel.
 
+components = {
+    msrp_panel {},
+    msrp_logic {},
+}

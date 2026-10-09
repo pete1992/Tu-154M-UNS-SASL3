@@ -1,5 +1,5 @@
 -- switch_lit.lua
--- Generic two-state illuminated switch component.
+-- Draws a two-state illuminated switch and supplies its cursor interaction zone.
 
 -- Image displayed when the switch is on.
 defineProperty("btnOn")
@@ -43,7 +43,7 @@ components = {
     -- Cursor area. Mouse callbacks are intentionally handled by the parent
     -- switch_lit instance so functional state properties remain read-only.
     interactive {
-        position = {0, 0, size[1], size[2]},
+        position = { 0, 0, size[1], size[2] },
         cursor = {
             x = 8,
             y = 26,

@@ -1,6 +1,7 @@
 -- start_system.lua
--- this is start system root
+-- Registers engine-start sequencing and cockpit indications.
+
 components = {
-	start_panel {},
-	start_logic {},
+    start_panel {},
+    start_logic {},
 }

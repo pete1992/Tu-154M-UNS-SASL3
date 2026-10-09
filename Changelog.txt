@@ -1,0 +1,240 @@
+XP12: Systemintegration, Fehlerlogik und Release-Aufbereitung überarbeiten
+
+Kumulative Beschreibung des Entwicklungsstands vom 25.09. bis 09.10.2026.
+Erfasst die in den letzten Pushes enthaltenen Arbeiten sowie die danach
+abgeschlossene SASL-, Grafik- und Panelbereinigung.
+
+Elektrik und Ausführung der Systemberechnungen
+
+- Berechnungen für Batterien, Generatoren, Verbraucher, GPU sowie die
+  36-/27-/115-V-Netze in geordnete xTlua-Rechenmodelle auslagern. SASL bleibt
+  für die Erfassung der Eingänge und Veröffentlichung der Ergebnisse in
+  die Flugzeug-DataRefs zuständig.
+- Einen lokalen Ersatzpfad für fehlende, verspätete oder deaktivierte
+  Worker vorsehen. Ausstehende Schritte werden vom zuletzt bestätigten
+  Zustand erneut verarbeitet; Bedienung, Ausfälle und Wechsel der
+  SmartCopilot-Zuständigkeit berücksichtigen den unmittelbaren lokalen Pfad.
+- Die Kommunikation auf Protokollversion 2 mit vollständigem Erstzustand
+  und nachfolgenden Delta-Frames umstellen. Die Mailbox von 128 auf 16 KiB
+  verkleinern und Antworten auf Sitzung, Auftrag, Reihenfolge,
+  Zustandsstruktur und gültige Zahlen prüfen.
+- Die dadurch ersetzten parallelen SASL-Elektrikmodelle entfernen.
+
+Instrumente, ABSU und Flugführung
+
+- Die 24-Stunden-Uhren nach xTlua verlagern. Außenthermometer und
+  USVP-Geschwindigkeitsanzeige über Timer auf dem Hauptthread betreiben,
+  vorhandene DataRefs abwarten und Pause sowie begrenzte Zeitschritte
+  bei der Instrumentdämpfung berücksichtigen.
+- DISS zum eindeutigen Schreiber seiner Messwerte einschließlich der
+  180-sekündigen Aufwärmphase machen. Konkurrierende Schreibzugriffe
+  entfernen; USVP bleibt für den zugehörigen Geschwindigkeitszeiger zuständig.
+- Transiente ABSU-/Flight-Director-Zustände bei einem neuen Flug zurücksetzen.
+  Nicht verwendete Führungsachsen parken und ungültig kennzeichnen.
+- Den Abschluss der Landung an vorherigen Flugzustand, Bodenkontakt,
+  Bodenhaltezeit und niedrige Geschwindigkeit koppeln. Aktives
+  Durchstarten verhindert einen vorzeitigen Abschluss.
+- Pitch- und Rollwarnungen des Flight Directors voneinander entkoppeln.
+  Eine manuelle Warnung einer Achse invalidiert nicht mehr zusätzlich die
+  andere Achse und blockiert dadurch keine neu gültige ILS-Führung.
+- Linke und rechte LD-/ILS-Warnflaggen und Dreiecklampen den jeweiligen
+  seitenspezifischen Modi und Profilen zuordnen.
+- Die ABSU-Rollenprüfung auf get(ismaster) ~= 1 korrigieren, damit die
+  Ausfall- und Rücksetzlogik auf dem Master und ohne SmartCopilot arbeitet.
+
+LOW-Ausfälle, Lampen und Triebwerke
+
+- Spontane SASL-Zufallsfehler in LOW unterdrücken. Verschleiß, Überhitzung,
+  Überlastung und unmittelbar betriebsbedingte Schäden bleiben wirksam.
+  Bereits vorhandene oder geplante Ausfälle werden nicht pauschal gelöscht.
+- Den nativen X-Plane-Zufallsfehlerscheduler während LOW deaktivieren und
+  die vorherige Einstellung beim Verlassen des Modus beziehungsweise beim
+  regulären Modulende wiederherstellen.
+- Die vier Landescheinwerfer auf individuelle Belastungsgrenzen von
+  40 bis 50 Minuten ununterbrochener voller Leistung abstimmen. Abkühlung
+  bei reduzierter oder ausgeschalteter Beleuchtung beibehalten und nach
+  einer Reparatur nur den Belastungszähler der betroffenen Lampe zurücksetzen.
+- Native Triebwerksdaten für Drehzahlen, EGT, physisches Feuer, Chipanzeige,
+  Öl- und Kraftstoffwerte über passende Quellen und Arrayelemente anbinden.
+  Tu-spezifische Kennlinien und getrennte Triebwerkskanäle erhalten.
+- Vibrationsbedingte native Triebwerksausfälle nur mit Masterberechtigung
+  setzen. Der SmartCopilot-Slave erzeugt dadurch keine eigenen Schäden aus
+  seiner lokalen Vibrationsberechnung.
+- Eigene kausale Kompressorstalls in LOW getrennt verwalten und bei
+  abgestelltem Triebwerk nur unter weiterhin eigener Fehlerzuordnung
+  nach dem vorgesehenen Prüfintervall zurücknehmen.
+- Überschreitungsbedingte Slat-Schäden unmittelbar im gemeinsamen
+  Fehlerzustand veröffentlichen, damit ein alter lokaler Zustand sie bei
+  einer späteren Prüfung nicht wieder überschreibt.
+
+APU, Pneumatik und Feuerlöschung
+
+- APU-Höhenfehlversuche gegen künstliche Restkraftstoffschäden absichern.
+  Oberhalb der bestehenden Grenze von 4.500 m Druckhöhe wird keine erneute
+  Kraftstoffzündung zugelassen. Nach ordnungsgemäßem Stoppen, Entleeren und
+  Abstieg bleibt ein zulässiger Wiederanlassversuch möglich. Echte
+  Restkraftstoff- und Heißstartschäden im Betriebsbereich bleiben erhalten.
+- Native APU-General-, Feuer- und Druckausfälle in Starter-, Kraftstoff-
+  und Bleed-Freigaben berücksichtigen. APU-/ASU-Druck an die nativen
+  Pneumatikleitungen übergeben und die benötigten Verbindungen und
+  Packzustände während des Triebwerkstarts steuern.
+- Tatsächliches physisches Triebwerksfeuer für die Erkennung verwenden und
+  erfolgreiche Löschmittelzuteilungen über einen einsekündigen nativen
+  Löschimpuls ausführen. Gemeinsame Flaschen und Ventilrouten beibehalten;
+  fremd gesetzte native Löschaktoren werden nicht übernommen oder gelöscht.
+- Die vorhandene APU-Taste cold_apu mit dem APU-Löschweg und der ersten
+  gemeinsamen Löschstufe verbinden. Erkanntes APU-Feuer fordert diese
+  erste Stufe auch automatisch an; Stufen 2 und 3 bleiben manuell.
+  Bereits verbrauchte Flaschen stehen nicht erneut zur Verfügung.
+- Bei erfolgreicher Löschmittelzuteilung an ein tatsächlich brennendes
+  Triebwerk beziehungsweise erfolgreicher APU-Löschung einen eigenständigen
+  Brandschaden speichern. Das betroffene Aggregat bleibt für die laufende
+  Sitzung ausgefallen, auch wenn die Brandanzeige nach dem Löschen erlischt.
+- Kalte Entladungen und erfolglose Löschmittelzuteilungen verursachen keine
+  zusätzlichen Schäden an gesunden Aggregaten. APU-/FIRE-Schalter,
+  Stromunterbrechung und FAILURES OFF heben Brandschäden nicht auf.
+- Reparatur über FIX ALL an bewusste Bodenwartung koppeln: Masterberechtigung,
+  höchstens 1 m/s Geschwindigkeit im Betrag und eingefederte drei Fahrwerke
+  prüfen, bevor Schäden oder native Fehler zurückgesetzt werden.
+- Die vier Brandschadenzustände für SmartCopilot synchronisieren. Keine
+  zusätzliche dauerhafte Speicherung dieser neuen Zustände über das
+  Neuladen des Flugzeugs hinweg einführen.
+
+Warnungen und Cockpitgeräusche
+
+- Den gemeinsamen Warnhornschalter srd_buzzer für Feuer-, Fahrwerks-/Klappen-
+  und Kabinendruckwarnungen berücksichtigen. Ausschalten beendet auch eine
+  bereits laufende Feuerwarnung unmittelbar.
+- Feuer bei freigegebenem Horn im selben Host-Frame akustisch melden.
+  Nach sofortiger erfolgreicher Löschung darf ein begonnener natürlicher
+  Warnzyklus auslaufen; anhaltendes Feuer wiederholt die Zyklen.
+  Ein bereits beendeter Brand wird beim Wiedereinschalten nicht erneut
+  als veraltete Warnung abgespielt.
+- Bediengeräusche für KATET, TCAS, Wetterradar, PPN-13, Notabschalter und
+  zusätzliche Schutzkappen ergänzen. Direkte Bedienzustände verwenden,
+  damit geglättete Animationen keine zusätzlichen Klicks erzeugen.
+  Initialisierung, Pause, Außenansicht, Tonfreigabe und Lautstärke beachten.
+
+TAWS/EGPWS und Darstellung
+
+- Den SRPBZ-Schalter und die jeweiligen Warnunterdrückungen in die
+  TAWS-/EGPWS-Aktivierung einbeziehen. Höhenansagen gegenüber den
+  allgemeinen Warnkategorien getrennt behandeln.
+- Vor der Sprachausgabe Stromversorgung, Betriebsmodus, Außenansicht,
+  Sprachwahl und Unterdrückungen erneut prüfen. Unzulässige laufende
+  Meldungen stoppen und verbrauchte Anforderungen auch bei Stummschaltung
+  verwerfen, damit sie später nicht unerwartet nachgesprochen werden.
+- Gleitpfadwarnungen an den ausgewählten NAV-Empfänger und ein gültiges
+  Anflugsignal koppeln. Bestätigungszeiten und Rücksetzungen der
+  Warnzustände bei einem neuen Flug ergänzen.
+- Ungenutzte SASL-3D-Callbacks und nicht benötigte Vorbereitung für Zeichnen
+  während update() deaktivieren. Bestehende Panel- und Popup-Darstellung
+  sowie Interaktivität erhalten.
+- Gleichfarbige benachbarte TAWS-Kartenzellen je Spalte zu Rechtecken
+  zusammenfassen. Eine einfarbige 80x60-Karte benötigt dadurch 80 statt
+  4.800 Lua-Zeichenaufrufe; ein Schachbrettmuster behält alle 4.800 Zellen.
+  Palette, Zellabdeckung und Detailauflösung bleiben erhalten.
+
+XP12-Beta-4-DataRefs, Kraftstoff und Schwerpunkt
+
+- Veraltete Bindungen für Klappenanforderung, Radbremsanforderung,
+  Außentemperatur, Luftdruck, Wind, Wellen und Bahnzustand auf die
+  entsprechenden XP12-DataRefs umstellen.
+- QNH und aktuellen Luftdruck aus den nativen Pascal-Quellen lesen und
+  für die bestehenden inHg-/mmHg-Kalibrierungen gezielt umrechnen.
+  Kabinenhöhe und Kabinensteigrate auf die ft-/fpm-Quellen umstellen.
+- Zugehörige xTlua-Skripte, SmartCopilot-Konfigurationen und den
+  Klappen-Manipulator im Cockpitobjekt an die neuen Pfade anpassen.
+- Native ZFW-Schwerpunktanzeige und schreibbaren Gesamtschwerpunkt trennen.
+  Gewünschte ZFW-Verschiebungen über die aktuellen Massenverhältnisse in
+  einen Gesamtschwerpunkt-Sollwert umrechnen. Dafür Leermasse, Nutzlast
+  und alle neun nativen Tanks berücksichtigen.
+- Initialbeladung, Schnellbeladung, schrittweise Beladung und vorhandene
+  Schwerpunktkalibrierungen erhalten; nicht mehr auf die neue
+  schreibgeschützte ZFW-DataRef schreiben.
+- Tankmengen, Kraftstofffluss, Mixture, Bleedventile und Fahrwerksfederwege
+  mit passenden Typen und expliziten Arrayelementen anbinden. Die sechs
+  nativen Pumpenausfälle als Integer-Enums behandeln.
+
+Weitere Optimierungen
+
+- Wahrscheinlichkeitsskalierung in sechs Ausfallmodulen erst bei einer
+  tatsächlich fälligen Zufallsprüfung berechnen. Zeitbasis, LOW-Verhalten,
+  Reihenfolge der Zufallsziehungen und Bedienreaktionen erhalten.
+- Im Kraftstoffpanel Handles und gemeinsam benötigte Eingänge wiederverwenden
+  und Lampen-/Zeigerwerte nur bei Änderung schreiben. Den Ausgabecache beim
+  SmartCopilot-Rollenwechsel zurücksetzen.
+- Wischerüberquerungen einmal je Seite und Frame berechnen, feste TCAS-Farben
+  außerhalb der Zeichenschleife halten sowie gemeinsame Winkelberechnungen
+  für Außengeräusche und den Druckschritt der Kraftstoffpumpen wiederverwenden.
+
+Cockpit, Regen und Flugzeugdefinition
+
+- Sechs zusätzliche feste Cockpitscheiben und die beiden animierten
+  Schiebefenster in die nativen Regen-/Reflektorobjekte integrieren.
+  Bestehende Fensterbewegungen erhalten; zusätzliche Scheiben verwenden
+  eigene UV-Bereiche ohne Frontscheiben-Wischzone.
+- Hydraulikinstrumenten-Glasgeometrie korrigieren und verbliebene
+  tu154b2-/tu154ce-Referenzen in betroffenen Glas-/Kabinenobjekten auf
+  die verwendeten tu154-Pfade umstellen.
+- Cockpittexturen einschließlich LIT- und Normalvarianten sowie Texturen
+  des Triebwerksbedienpanels aktualisieren.
+- Das empirische Stall-Zusatzmodell in sauberer Konfiguration bis Mach 0,83
+  erweitern. Oberhalb Mach 0,70 Mach-abhängige Ablöse-/Erholungsgrenzen,
+  zusätzliche Widerstands-/Momentanteile und Diagnosewerte berücksichtigen.
+  Die dokumentierten Kalibrierungsannahmen dieses Bereichs bleiben erhalten.
+- Aircraft-Parameter weiter abstimmen: Einlauf-Kompressionseffizienz auf
+  etwa 0,95 und niedrigen Bugrad-Lenkwinkel auf 13 Grad setzen. Im aktuellen
+  ACF-Stand außerdem Bypassverhältnis 3, Kraftstoffeinführungszeit 5 Sekunden,
+  geänderte Starterparameter und Einlassgrenzen sowie Versionsangabe 2.5.0
+  hinterlegen.
+- TDS-GTN-Popup-Geometrie anpassen und den automatischen Transpondermodus
+  in der aktuellen Konfiguration aktivieren.
+
+NVU-2D-Ausbau und SASL-Releasepflege
+
+- Das nicht mehr benötigte NVU-2D-Popup einschließlich Fenstereintrag,
+  Menübedienung, Sichtbarkeits-DataRef, xTlua-Rücksetzung und zugehörigem
+  Cockpit-Öffnungsmanipulator entfernen. Weiter verwendete 3D-/gemeinsame
+  NVU-Komponenten erhalten; Cockpitgeometrie unverändert lassen.
+- Alle 234 flugzeugspezifischen SASL-Lua-Skripte mit korrektem Dateinamen
+  und konkreter englischer Zweckbeschreibung beginnen lassen.
+- Einrückung, Tabellen, Bedingungen und Aufrufe vereinheitlichen;
+  beschädigte, leere und überholte Kommentare bereinigen. Relevante
+  Kalibrierungs-, Herkunfts- und Zuständigkeitshinweise erhalten.
+- 549 bereits auskommentierte DataRef-Deklarationen entfernen. Bei dieser
+  abschließenden formalen Bereinigung keine aktiven Funktionen verändern.
+
+Plugin- und Repository-Pflege
+
+- Die ausgelieferte SASL-Laufzeit schrittweise auf Version 3.23.3 aktualisieren
+  und mitgelieferte xTlua-Binärdateien erneuern.
+- Die mitgelieferten xTlua-Lua-Wrapper um Array-Sammelzugriffe, dynamische
+  Arraylängen, Tabellenzuweisungen und konsistente Command-Auflösung erweitern.
+- Eingecheckte Testverzeichnisse, Sicherungskopien und überholte
+  Skriptvarianten entfernen und passende Ignore-Regeln ergänzen.
+
+Validierung und verbleibende Prüfungen
+
+- Gezielte Lua-, Modell- und Regressionstests für LOW, Lampenlaufzeiten,
+  APU-Höhenverhalten, Löschmittelverteilung, Brandschäden, Warnhorn,
+  Bodenwartung, Slat-Schäden, Pneumatik und Kraftstoff ausführen.
+- Beta-4-Anpassungen durch unter anderem 612 Wetter-/Druckszenarien,
+  16 Schwerpunktfälle und 1.536 Ausfallszenarien prüfen. Die TAWS-
+  Zeichenbündelung in 25 Vorher-/Nachher-Szenarien vergleichen.
+- Für die reine SASL-Formatierungsrunde 234 erfolgreiche Lua-5.1-
+  Syntaxprüfungen, identischen Bytecode ohne Debug-Informationen für
+  alle 234 Dateien und unveränderte Werte aller 18.047 Stringliterale
+  nachweisen. Formatierungs- und Whitespace-Prüfungen sind sauber.
+- Einzelne native Triebwerksausfälle und einen gezielten Löschimpuls im
+  laufenden X-Plane am Boden beobachten. Die ursprünglich gemeldete
+  Triebwerkskaskade ließ sich weder beim Nutzer noch bei der Untersuchung
+  erneut auslösen. Ein Zusammenhang mit Bird Strike und dessen Auswertung
+  durch X-Plane wird vermutet, ist aber nicht als Ursache bestätigt.
+- Die beim abschließenden Scan gefundenen 21 fachlichen Auffälligkeiten
+  als Folgearbeiten dokumentieren und in der Formatierungsrunde bewusst
+  unverändert lassen. Dazu gehören unter anderem Ausfall-Enumvergleiche,
+  Stabilisatorverhalten, Tanktransferbilanz, TCAS-/TAWS-Berechnungen,
+  Navigationsrundung, Soundzuordnung und MSRP-Windumrechnung.
+- Offline-Tests und vereinzelte native Beobachtungen nicht als vollständige
+  Flug-, Audio-, Grafik- oder Performancefreigabe des Gesamtstands werten.

@@ -1,8 +1,7 @@
 -- fire_system.lua
--- this is root fire system script
+-- Registers fire-system logic and cockpit indications.
 
 components = {
-	fire_panel {},
-	fire_logic {},
-
+    fire_panel {},
+    fire_logic {},
 }

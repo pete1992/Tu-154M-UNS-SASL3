@@ -1,5 +1,5 @@
 -- water_panel.lua
--- Water panel on the flight engineer's upper panel
+-- Model service-water quantity, pressure and flight-engineer panel indications.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -9,53 +9,53 @@ end
 
 defineProps({
     -- X-Plane
-    {"deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", globalProperty},
-    {"deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty},
-    {"deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty},
-    {"groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf},
-    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty},
-    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty},
-    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty},
+    { "deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", globalProperty },
+    { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty },
+    { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty },
+    { "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf },
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty },
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty },
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty },
 
     -- Controls
-    {"wing_light", "tu154/custom/switchers/eng/wing_light", globalPropertyi},
-    {"gear_fan", "tu154/custom/switchers/eng/gear_fan", globalPropertyi},
-    {"galley_heat", "tu154/custom/switchers/eng/galley_heat", globalPropertyi},
-    {"lavatory_heat", "tu154/custom/switchers/eng/lavatory_heat", globalPropertyi},
-    {"water_meter", "tu154/custom/switchers/eng/water_meter", globalPropertyi},
-    {"water_compressor_1", "tu154/custom/switchers/eng/water_compressor_1", globalPropertyi},
-    {"water_compressor_2", "tu154/custom/switchers/eng/water_compressor_2", globalPropertyi},
-    {"tail_temp_signal", "tu154/custom/switchers/eng/tail_temp_signal", globalPropertyi},
-    {"tail_temp_heat", "tu154/custom/switchers/eng/tail_temp_heat", globalPropertyi},
+    { "wing_light", "tu154/custom/switchers/eng/wing_light", globalPropertyi },
+    { "gear_fan", "tu154/custom/switchers/eng/gear_fan", globalPropertyi },
+    { "galley_heat", "tu154/custom/switchers/eng/galley_heat", globalPropertyi },
+    { "lavatory_heat", "tu154/custom/switchers/eng/lavatory_heat", globalPropertyi },
+    { "water_meter", "tu154/custom/switchers/eng/water_meter", globalPropertyi },
+    { "water_compressor_1", "tu154/custom/switchers/eng/water_compressor_1", globalPropertyi },
+    { "water_compressor_2", "tu154/custom/switchers/eng/water_compressor_2", globalPropertyi },
+    { "tail_temp_signal", "tu154/custom/switchers/eng/tail_temp_signal", globalPropertyi },
+    { "tail_temp_heat", "tu154/custom/switchers/eng/tail_temp_heat", globalPropertyi },
 
     -- Pushbuttons
-    {"tail_temp_signal_control_1", "tu154/custom/buttons/eng/tail_temp_signal_control_1", globalPropertyi},
-    {"tail_temp_signal_control_2", "tu154/custom/buttons/eng/tail_temp_signal_control_2", globalPropertyi},
-    {"lamp_test_eng_up_1", "tu154/custom/buttons/lamp_test_eng_up_1", globalPropertyi},
-    {"lamp_test_eng_up_2", "tu154/custom/buttons/lamp_test_eng_up_2", globalPropertyi},
+    { "tail_temp_signal_control_1", "tu154/custom/buttons/eng/tail_temp_signal_control_1", globalPropertyi },
+    { "tail_temp_signal_control_2", "tu154/custom/buttons/eng/tail_temp_signal_control_2", globalPropertyi },
+    { "lamp_test_eng_up_1", "tu154/custom/buttons/lamp_test_eng_up_1", globalPropertyi },
+    { "lamp_test_eng_up_2", "tu154/custom/buttons/lamp_test_eng_up_2", globalPropertyi },
 
     -- Gauges and lights
-    {"water_pressure", "tu154/custom/gauges/eng/water_pressure", globalPropertyf},
-    {"water_level_1", "tu154/custom/lights/water_level_1", globalPropertyf},
-    {"water_level_12", "tu154/custom/lights/water_level_12", globalPropertyf},
-    {"water_level_14", "tu154/custom/lights/water_level_14", globalPropertyf},
-    {"water_level_0", "tu154/custom/lights/water_level_0", globalPropertyf},
-    {"tail_temp_high", "tu154/custom/lights/small/tail_temp_high", globalPropertyf},
-    {"lavatory_heat_lamp", "tu154/custom/lights/small/lavatory_heat", globalPropertyf},
-    {"galley_heat_lamp", "tu154/custom/lights/small/galley_heat", globalPropertyf},
+    { "water_pressure", "tu154/custom/gauges/eng/water_pressure", globalPropertyf },
+    { "water_level_1", "tu154/custom/lights/water_level_1", globalPropertyf },
+    { "water_level_12", "tu154/custom/lights/water_level_12", globalPropertyf },
+    { "water_level_14", "tu154/custom/lights/water_level_14", globalPropertyf },
+    { "water_level_0", "tu154/custom/lights/water_level_0", globalPropertyf },
+    { "tail_temp_high", "tu154/custom/lights/small/tail_temp_high", globalPropertyf },
+    { "lavatory_heat_lamp", "tu154/custom/lights/small/lavatory_heat", globalPropertyf },
+    { "galley_heat_lamp", "tu154/custom/lights/small/galley_heat", globalPropertyf },
 
     -- Electrical
-    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf},
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
     -- Timing
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
 
     -- Water system state
-    {"water_lvl", "tu154/custom/misc/water_level", globalPropertyf},
+    { "water_lvl", "tu154/custom/misc/water_level", globalPropertyf },
 
     -- SmartCopilot
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 local INITIALIZATION_DELAY = 0.3
@@ -134,9 +134,7 @@ local function can_write_shared_state()
 end
 
 local function engines_are_stopped()
-    return get(eng1_N1) < ENGINE_STOPPED_N1
-        and get(eng2_N1) < ENGINE_STOPPED_N1
-        and get(eng3_N1) < ENGINE_STOPPED_N1
+    return get(eng1_N1) < ENGINE_STOPPED_N1 and get(eng2_N1) < ENGINE_STOPPED_N1 and get(eng3_N1) < ENGINE_STOPPED_N1
 end
 
 local function initialize_water_level(dt)
@@ -214,18 +212,11 @@ local function update_lamps()
     local test_btn_2 = get(lamp_test_eng_up_2) * right_bus_brt
     local level_meter = get(water_meter) == 1
 
-    local level_full = math.max(
-        bool2int(water_level >= 0.9 and level_meter) * lamps_brt,
-        test_btn_1,
-        test_btn_2
-    )
+    local level_full = math.max(bool2int(water_level >= 0.9 and level_meter) * lamps_brt, test_btn_1, test_btn_2)
     set(water_level_1, level_full)
 
-    local level_half = math.max(
-        bool2int(water_level < 0.9 and water_level >= 0.5 and level_meter) * lamps_brt,
-        test_btn_1,
-        test_btn_2
-    )
+    local level_half =
+        math.max(bool2int(water_level < 0.9 and water_level >= 0.5 and level_meter) * lamps_brt, test_btn_1, test_btn_2)
     set(water_level_12, level_half)
 
     local level_quarter = math.max(
@@ -243,22 +234,13 @@ local function update_lamps()
     set(water_level_0, level_empty)
 
     local tail_test_pressed = get(tail_temp_signal_control_1) + get(tail_temp_signal_control_2) > 0
-    local tail_temp_high_brt = math.max(
-        bool2int(tail_test_pressed) * get(tail_temp_signal) * lamps_brt,
-        test_btn_1
-    )
+    local tail_temp_high_brt = math.max(bool2int(tail_test_pressed) * get(tail_temp_signal) * lamps_brt, test_btn_1)
     set(tail_temp_high, tail_temp_high_brt)
 
-    local lavatory_heat_brt = math.max(
-        bool2int(get(lavatory_heat) < 0) * lamps_brt,
-        test_btn_1
-    )
+    local lavatory_heat_brt = math.max(bool2int(get(lavatory_heat) < 0) * lamps_brt, test_btn_1)
     set(lavatory_heat_lamp, lavatory_heat_brt)
 
-    local galley_heat_brt = math.max(
-        bool2int(get(galley_heat) < 0) * lamps_brt,
-        test_btn_1
-    )
+    local galley_heat_brt = math.max(bool2int(get(galley_heat) < 0) * lamps_brt, test_btn_1)
     set(galley_heat_lamp, galley_heat_brt)
 end
 

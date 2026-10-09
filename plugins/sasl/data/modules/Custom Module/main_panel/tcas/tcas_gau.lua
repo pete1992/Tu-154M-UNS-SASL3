@@ -1,7 +1,7 @@
 -- tcas_gau.lua
--- TCAS/VSI gauge - SASL 3 port preserving SASL 2 behavior and layout.
+-- Display vertical speed, TCAS traffic and resolution-advisory guidance.
 
-size = {482, 530}
+size = { 482, 530 }
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -10,25 +10,20 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
-    {"bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf},
-    {"bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf},
-    {"var_on", "tu154/custom/switchers/ovhd/var_left", globalPropertyi},
-    {"tcas_on", "tu154/custom/switchers/ovhd/tcas_on", globalPropertyi},
-    {"vsi_brt", "tu154/custom/gauges/vsi/vsi_brt_left", globalPropertyf},
-    {"vvi", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf},
-  --  {"vvi_int2", "tu154/custom/gauges/vvi_left_new", globalPropertyf},
-    {"vvi_int", "tu154/custom/gauges/vvi_left", globalPropertyf},
-    {"mode_set", "tu154/custom/tcas/mode_set", globalPropertyi},
-    {"tcas_range_set", "tu154/custom/tcas/range_set", globalPropertyi},
-    {"level_mode", "tu154/custom/tcas/level_mode", globalPropertyi},
-    -- {"fl_mode", "tu154/custom/tcas/fl_mode", globalPropertyi},
-    -- {"flt_id", "tu154/custom/tcas/flt_id", globalPropertyi},
-    {"ra_scale_set", "tu154/custom/tcas/ra_scale_set", globalPropertyi},
-    {"vvi_fail", "sim/operation/failures/rel_ss_vvi", globalPropertyi},
-  --  {"vvi_show", "tu154/custom/tcas/vvi_left", globalPropertyf},
-    {"ismaster", "scp/api/ismaster", globalPropertyf},
-    -- {"hascontrol_1", "scp/api/hascontrol_1", globalPropertyf},
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
+    { "bus27_volt", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus115_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
+    { "var_on", "tu154/custom/switchers/ovhd/var_left", globalPropertyi },
+    { "tcas_on", "tu154/custom/switchers/ovhd/tcas_on", globalPropertyi },
+    { "vsi_brt", "tu154/custom/gauges/vsi/vsi_brt_left", globalPropertyf },
+    { "vvi", "sim/cockpit2/gauges/indicators/vvi_fpm_pilot", globalPropertyf },
+    { "vvi_int", "tu154/custom/gauges/vvi_left", globalPropertyf },
+    { "mode_set", "tu154/custom/tcas/mode_set", globalPropertyi },
+    { "tcas_range_set", "tu154/custom/tcas/range_set", globalPropertyi },
+    { "level_mode", "tu154/custom/tcas/level_mode", globalPropertyi },
+    { "ra_scale_set", "tu154/custom/tcas/ra_scale_set", globalPropertyi },
+    { "vvi_fail", "sim/operation/failures/rel_ss_vvi", globalPropertyi },
+    { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
 -- Main VSI textures
@@ -64,15 +59,15 @@ local tcas_scale_not_descend = sasl.gl.loadImage("tcas_scale_not_descend.png", 1
 local tcas_scale_not_descend_2 = sasl.gl.loadImage("tcas_scale_not_descend_2.png", 14, 6, 482, 482)
 
 local vvi_tbl = {
-    {-30, -170},
-    {-20, -145},
-    {-10, -110},
-    {-5, -60},
-    {0, 0},
-    {5, 60},
-    {10, 110},
-    {20, 145},
-    {30, 170},
+    { -30, -170 },
+    { -20, -145 },
+    { -10, -110 },
+    { -5, -60 },
+    { 0, 0 },
+    { 5, 60 },
+    { 10, 110 },
+    { 20, 145 },
+    { 30, 170 },
 }
 
 local vvi_ang_act = 0
@@ -88,10 +83,8 @@ local brightness = 0
 
 function update()
     local passed = get(frame_time)
- 
-   local power_27 =
-        get(bus27_volt) > 13
-        and get(vvi_fail) ~= 6
+
+    local power_27 = get(bus27_volt) > 13 and get(vvi_fail) ~= 6
 
     if get(var_on) == 1 then
         power_cntr = power_cntr + passed
@@ -103,30 +96,22 @@ function update()
         power_cntr = 10
     end
 
-    vvi_power =
-        power_27
-        and power_cntr > 3
-        
-        -- VSI brightness
-    brightness =
-        (get(vsi_brt) ^ 0.8)
-        * bool2int(vvi_power)
-        
-    tcas_power =
-        get(bus115_volt) > 110
-        and get(tcas_on) == 1
-        and vvi_power
+    vvi_power = power_27 and power_cntr > 3
 
+    -- VSI brightness
+    brightness = (get(vsi_brt) ^ 0.8) * bool2int(vvi_power)
 
--- testing required 
---    if get(ismaster) ~= 1 then
---        set(vvi_int, get(vvi_int2))
---    end
+    tcas_power = get(bus115_volt) > 110 and get(tcas_on) == 1 and vvi_power
+
+    -- testing required
+    --    if get(ismaster) ~= 1 then
+    --        set(vvi_int, get(vvi_int2))
+    --    end
 
     if get(ismaster) ~= 1 then
         set(vvi_int, get(vvi))
     end
-    
+
     -- Convert vertical speed from ft/min to m/s.
     -- this step is needed regardless of xtlua
     local vvi_ms = get(vvi_int) * 0.00508
@@ -136,20 +121,17 @@ function update()
     elseif vvi_ms <= -30 then
         vvi_ang_act = -170
     else
-        vvi_ang_act = interpolate(
-            vvi_tbl,
-            vvi_ms
-        )
+        vvi_ang_act = interpolate(vvi_tbl, vvi_ms)
     end
 
--- testing required 
---    set(vvi_show, vvi_ms)
+    -- testing required
+    --    set(vvi_show, vvi_ms)
 
     level = get(level_mode)
     ra_mode = get(ra_scale_set)
     range_show = get(tcas_range_set)
     mode_show = get(mode_set)
-    
+
     -- SASL 3 requires manual child update dispatch when update() is overridden.
     if components then
         updateAll(components)
@@ -158,7 +140,7 @@ end
 
 components = {
     textureLit {
-        position = {205, 165, 72, 72},
+        position = { 205, 165, 72, 72 },
         image = scale_15,
         visible = function()
             return mode_show > 2 and range_show == 3 and tcas_power
@@ -166,7 +148,7 @@ components = {
     },
 
     textureLit {
-        position = {191, 151, 102, 102},
+        position = { 191, 151, 102, 102 },
         image = scale_10,
         visible = function()
             return ((mode_show > 2 and range_show == 2) or mode_show == -1) and tcas_power
@@ -174,7 +156,7 @@ components = {
     },
 
     textureLit {
-        position = {144, 105, 194, 194},
+        position = { 144, 105, 194, 194 },
         image = scale_5,
         visible = function()
             return mode_show > 2 and range_show == 1 and tcas_power
@@ -182,7 +164,7 @@ components = {
     },
 
     textureLit {
-        position = {106, 182, 268, 174},
+        position = { 106, 182, 268, 174 },
         image = scale_3,
         visible = function()
             return mode_show > 2 and range_show == 0 and tcas_power
@@ -190,7 +172,7 @@ components = {
     },
 
     textureLit {
-        position = {213, 320, 53, 22},
+        position = { 213, 320, 53, 22 },
         image = mc_img,
         visible = function()
             return mode_show <= 2 and mode_show ~= -1
@@ -198,12 +180,12 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = scale_img,
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_climb,
         visible = function()
             return ra_mode == 1 and tcas_power
@@ -211,7 +193,7 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_climb_10,
         visible = function()
             return ra_mode == 2 and tcas_power
@@ -219,7 +201,7 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_descend,
         visible = function()
             return ra_mode == 3 and tcas_power
@@ -227,7 +209,7 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_descend_10,
         visible = function()
             return ra_mode == 4 and tcas_power
@@ -235,7 +217,7 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_maintain_lvl,
         visible = function()
             return ra_mode == 5 and tcas_power
@@ -243,7 +225,7 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_not_climb,
         visible = function()
             return ra_mode == 6 and tcas_power
@@ -251,7 +233,7 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_not_climb_2,
         visible = function()
             return ra_mode == 7 and tcas_power
@@ -259,7 +241,7 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_not_descend,
         visible = function()
             return ra_mode == 8 and tcas_power
@@ -267,7 +249,7 @@ components = {
     },
 
     textureLit {
-        position = {0, 38, 482, 482},
+        position = { 0, 38, 482, 482 },
         image = tcas_scale_not_descend_2,
         visible = function()
             return (ra_mode == 9 or mode_show == -1) and tcas_power
@@ -275,7 +257,7 @@ components = {
     },
 
     textureLit {
-        position = {350, 450, 112, 24},
+        position = { 350, 450, 112, 24 },
         image = range_15,
         visible = function()
             return mode_show > 2 and range_show == 3 and tcas_power
@@ -283,7 +265,7 @@ components = {
     },
 
     textureLit {
-        position = {350, 450, 112, 24},
+        position = { 350, 450, 112, 24 },
         image = range_10,
         visible = function()
             return mode_show > 2 and range_show == 2 and tcas_power
@@ -291,7 +273,7 @@ components = {
     },
 
     textureLit {
-        position = {350, 450, 112, 24},
+        position = { 350, 450, 112, 24 },
         image = range_5,
         visible = function()
             return mode_show > 2 and range_show == 1 and tcas_power
@@ -299,7 +281,7 @@ components = {
     },
 
     textureLit {
-        position = {350, 450, 112, 24},
+        position = { 350, 450, 112, 24 },
         image = range_3,
         visible = function()
             return mode_show > 2 and range_show == 0 and tcas_power
@@ -307,7 +289,7 @@ components = {
     },
 
     textureLit {
-        position = {40, 60, 110, 46},
+        position = { 40, 60, 110, 46 },
         image = stby_img,
         visible = function()
             return mode_show >= 0 and mode_show <= 2 and tcas_power
@@ -315,7 +297,7 @@ components = {
     },
 
     textureLit {
-        position = {50, 60, 83, 46},
+        position = { 50, 60, 83, 46 },
         image = ta_img,
         visible = function()
             return mode_show == 3 and tcas_power
@@ -323,7 +305,7 @@ components = {
     },
 
     textureLit {
-        position = {50, 60, 78, 22},
+        position = { 50, 60, 78, 22 },
         image = test_img,
         visible = function()
             return mode_show == -1 and tcas_power
@@ -331,7 +313,7 @@ components = {
     },
 
     textureLit {
-        position = {30, 455, 115, 22},
+        position = { 30, 455, 115, 22 },
         image = above_img,
         visible = function()
             return (level == 1 or mode_show == -1) and tcas_power
@@ -339,7 +321,7 @@ components = {
     },
 
     textureLit {
-        position = {30, 455, 115, 22},
+        position = { 30, 455, 115, 22 },
         image = below_img,
         visible = function()
             return level == -1 and tcas_power
@@ -347,14 +329,14 @@ components = {
     },
 
     fl_text {
-        position = {30, 420, 160, 40},
+        position = { 30, 420, 160, 40 },
         text = function()
             return fl_text_draw
         end,
     },
 
     needleLit {
-        position = {68, 97, 346, 346},
+        position = { 68, 97, 346, 346 },
         image = needle_img,
         angle = function()
             return vvi_ang_act

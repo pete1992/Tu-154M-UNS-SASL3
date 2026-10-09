@@ -1,23 +1,7 @@
 -- electric_panel.lua
---[[
-Changelog
-- Preserved the existing refactored Dataref layout and all 115 defineProps() entries.
-- Replaced the _G-based property assignment with SASL defineProperty() registration.
-- Corrected gpu_work_bus, inv115_fail, and buses_connected to globalPropertyi to match their integer Datarefs.
-- Preserved bus27_source_left and bus27_source_right as globalPropertyi.
-- Added XP11/XP12-compatible one-shot sound playback.
-- Fixed the lamp-test voltage calculation and clamped panel-lamp brightness to 0..1.
-- Fixed double voltage scaling of the emergency 115 V inverter lamp during lamp test.
-- Replaced sum-based switch/cap sound detection with direct per-control state comparison.
-- Consolidated gauge needle dynamics into one helper.
-- Reduced repeated Dataref reads in lamp and gauge logic.
-- Preserved selector mappings, switching delays, gauge scales, cold-and-dark reset, avionics power logic, generator warning voltage threshold, and PTS/VU lamp meanings.
-- Kept GEN_OVERLOAD_AMP and NEEDLE_ACCEL_LIMIT as reserved legacy tuning constants.
-]]
+-- Updates electrical instruments, annunciators, controls and avionics power.
 
 -- Electric panel logic for Tu-154M.
--- SASL 3 / X-Plane 12.
-
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -27,137 +11,136 @@ end
 
 defineProps({
     -- Panel controls
-    {"gpu_on", "tu154/custom/switchers/eng/gpu_on", globalPropertyi}, -- GPU switch
-    {"apu_gen_on", "tu154/custom/switchers/eng/apu_gen_on", globalPropertyi}, -- APU generator switch
-    {"bus115_volt_sel", "tu154/custom/switchers/eng/bus115_volt_sel", globalPropertyi}, -- 115V voltmeter source selector
-    {"bus115_volt_phase_sel", "tu154/custom/switchers/eng/bus115_volt_phase_sel", globalPropertyi}, -- 115V voltmeter phase selector
-    {"bus115_amp_sel", "tu154/custom/switchers/eng/bus115_amp_sel", globalPropertyi}, -- 115V ammeter source selector
-    {"bus115_amp_phase_sel", "tu154/custom/switchers/eng/bus115_amp_phase_sel", globalPropertyi}, -- 115V ammeter phase selector
-    {"gen_1_on", "tu154/custom/switchers/eng/gen_1_on", globalPropertyi}, -- Generator 1 switch
-    {"gen_2_on", "tu154/custom/switchers/eng/gen_2_on", globalPropertyi}, -- Generator 2 switch
-    {"gen_3_on", "tu154/custom/switchers/eng/gen_3_on", globalPropertyi}, -- Generator 3 switch
-    {"emerg_inv115", "tu154/custom/switchers/eng/emerg_inv115", globalPropertyi}, -- Emergency inverter 115V
-    {"emerg_inv115_cap", "tu154/custom/switchers/eng/emerg_inv115_cap", globalPropertyi}, -- Emergency inverter 115V cap
-    {"bus36_volt_sel", "tu154/custom/switchers/eng/bus36_volt_sel", globalPropertyi}, -- 36V voltmeter source selector
-    {"pts250_sel", "tu154/custom/switchers/eng/pts250_sel", globalPropertyi}, -- PTS250 selector
-    {"bus36_tr_left_to_right", "tu154/custom/switchers/eng/bus36_tr_left_to_right", globalPropertyi}, -- 36V TR left to right
-    {"bus36_tr_right_to_left", "tu154/custom/switchers/eng/bus36_tr_right_to_left", globalPropertyi}, -- 36V TR right to left
-    {"pts250_on", "tu154/custom/switchers/eng/pts250_on", globalPropertyi}, -- PTS250 switch
-    {"pts250_mode", "tu154/custom/switchers/eng/pts250_mode", globalPropertyi}, -- PTS250 mode
-    {"pts250_on_cap", "tu154/custom/switchers/eng/pts250_on_cap", globalPropertyi}, -- PTS250 switch cap
-    {"pts250_mode_cap", "tu154/custom/switchers/eng/pts250_mode_cap", globalPropertyi}, -- PTS250 mode cap
-    {"bus27_volt_sel", "tu154/custom/switchers/eng/bus27_volt_sel", globalPropertyi}, -- 27V voltmeter selector
-    {"bus27_amp1_sel", "tu154/custom/switchers/eng/bus27_amp1_sel", globalPropertyi}, -- 27V ammeter 1 selector
-    {"bus27_amp2_sel", "tu154/custom/switchers/eng/bus27_amp2_sel", globalPropertyi}, -- 27V ammeter 2 selector
-    {"bus27_connect", "tu154/custom/switchers/eng/bus27_connect", globalPropertyi}, -- 27V bus connection
-    {"bus27_connect_cap", "tu154/custom/switchers/eng/bus27_connect_cap", globalPropertyi}, -- 27V bus connection cap
-    {"bus27_vu1", "tu154/custom/switchers/eng/bus27_vu1", globalPropertyi}, -- 27V VU1 switch
-    {"bus27_vu2", "tu154/custom/switchers/eng/bus27_vu2", globalPropertyi}, -- 27V VU2 switch
-    {"bat1_on", "tu154/custom/switchers/eng/bat1_on", globalPropertyi}, -- Battery 1 switch
-    {"bat2_on", "tu154/custom/switchers/eng/bat2_on", globalPropertyi}, -- Battery 2 switch
-    {"bat3_on", "tu154/custom/switchers/eng/bat3_on", globalPropertyi}, -- Battery 3 switch
-    {"bat4_on", "tu154/custom/switchers/eng/bat4_on", globalPropertyi}, -- Battery 4 switch
+    { "gpu_on", "tu154/custom/switchers/eng/gpu_on", globalPropertyi }, -- GPU switch
+    { "apu_gen_on", "tu154/custom/switchers/eng/apu_gen_on", globalPropertyi }, -- APU generator switch
+    { "bus115_volt_sel", "tu154/custom/switchers/eng/bus115_volt_sel", globalPropertyi }, -- 115V voltmeter source selector
+    { "bus115_volt_phase_sel", "tu154/custom/switchers/eng/bus115_volt_phase_sel", globalPropertyi }, -- 115V voltmeter phase selector
+    { "bus115_amp_sel", "tu154/custom/switchers/eng/bus115_amp_sel", globalPropertyi }, -- 115V ammeter source selector
+    { "bus115_amp_phase_sel", "tu154/custom/switchers/eng/bus115_amp_phase_sel", globalPropertyi }, -- 115V ammeter phase selector
+    { "gen_1_on", "tu154/custom/switchers/eng/gen_1_on", globalPropertyi }, -- Generator 1 switch
+    { "gen_2_on", "tu154/custom/switchers/eng/gen_2_on", globalPropertyi }, -- Generator 2 switch
+    { "gen_3_on", "tu154/custom/switchers/eng/gen_3_on", globalPropertyi }, -- Generator 3 switch
+    { "emerg_inv115", "tu154/custom/switchers/eng/emerg_inv115", globalPropertyi }, -- Emergency inverter 115V
+    { "emerg_inv115_cap", "tu154/custom/switchers/eng/emerg_inv115_cap", globalPropertyi }, -- Emergency inverter 115V cap
+    { "bus36_volt_sel", "tu154/custom/switchers/eng/bus36_volt_sel", globalPropertyi }, -- 36V voltmeter source selector
+    { "pts250_sel", "tu154/custom/switchers/eng/pts250_sel", globalPropertyi }, -- PTS250 selector
+    { "bus36_tr_left_to_right", "tu154/custom/switchers/eng/bus36_tr_left_to_right", globalPropertyi }, -- 36V TR left to right
+    { "bus36_tr_right_to_left", "tu154/custom/switchers/eng/bus36_tr_right_to_left", globalPropertyi }, -- 36V TR right to left
+    { "pts250_on", "tu154/custom/switchers/eng/pts250_on", globalPropertyi }, -- PTS250 switch
+    { "pts250_mode", "tu154/custom/switchers/eng/pts250_mode", globalPropertyi }, -- PTS250 mode
+    { "pts250_on_cap", "tu154/custom/switchers/eng/pts250_on_cap", globalPropertyi }, -- PTS250 switch cap
+    { "pts250_mode_cap", "tu154/custom/switchers/eng/pts250_mode_cap", globalPropertyi }, -- PTS250 mode cap
+    { "bus27_volt_sel", "tu154/custom/switchers/eng/bus27_volt_sel", globalPropertyi }, -- 27V voltmeter selector
+    { "bus27_amp1_sel", "tu154/custom/switchers/eng/bus27_amp1_sel", globalPropertyi }, -- 27V ammeter 1 selector
+    { "bus27_amp2_sel", "tu154/custom/switchers/eng/bus27_amp2_sel", globalPropertyi }, -- 27V ammeter 2 selector
+    { "bus27_connect", "tu154/custom/switchers/eng/bus27_connect", globalPropertyi }, -- 27V bus connection
+    { "bus27_connect_cap", "tu154/custom/switchers/eng/bus27_connect_cap", globalPropertyi }, -- 27V bus connection cap
+    { "bus27_vu1", "tu154/custom/switchers/eng/bus27_vu1", globalPropertyi }, -- 27V VU1 switch
+    { "bus27_vu2", "tu154/custom/switchers/eng/bus27_vu2", globalPropertyi }, -- 27V VU2 switch
+    { "bat1_on", "tu154/custom/switchers/eng/bat1_on", globalPropertyi }, -- Battery 1 switch
+    { "bat2_on", "tu154/custom/switchers/eng/bat2_on", globalPropertyi }, -- Battery 2 switch
+    { "bat3_on", "tu154/custom/switchers/eng/bat3_on", globalPropertyi }, -- Battery 3 switch
+    { "bat4_on", "tu154/custom/switchers/eng/bat4_on", globalPropertyi }, -- Battery 4 switch
 
     -- Gauges
-    {"bus115_freq", "tu154/custom/gauges/eng/bus115_freq", globalPropertyf}, -- 115V frequency gauge
-    {"bus115_volt", "tu154/custom/gauges/eng/bus115_volt", globalPropertyf}, -- 115V voltmeter
-    {"bus115_amp", "tu154/custom/gauges/eng/bus115_amp", globalPropertyf}, -- 115V ammeter
-    {"bus36_volt", "tu154/custom/gauges/eng/bus36_volt", globalPropertyf}, -- 36V voltmeter
-    {"bus27_volt", "tu154/custom/gauges/eng/bus27_volt", globalPropertyf}, -- 27V voltmeter
-    {"bus27_amp1", "tu154/custom/gauges/eng/bus27_amp1", globalPropertyf}, -- 27V ammeter 1
-    {"bus27_amp2", "tu154/custom/gauges/eng/bus27_amp2", globalPropertyf}, -- 27V ammeter 2
+    { "bus115_freq", "tu154/custom/gauges/eng/bus115_freq", globalPropertyf }, -- 115V frequency gauge
+    { "bus115_volt", "tu154/custom/gauges/eng/bus115_volt", globalPropertyf }, -- 115V voltmeter
+    { "bus115_amp", "tu154/custom/gauges/eng/bus115_amp", globalPropertyf }, -- 115V ammeter
+    { "bus36_volt", "tu154/custom/gauges/eng/bus36_volt", globalPropertyf }, -- 36V voltmeter
+    { "bus27_volt", "tu154/custom/gauges/eng/bus27_volt", globalPropertyf }, -- 27V voltmeter
+    { "bus27_amp1", "tu154/custom/gauges/eng/bus27_amp1", globalPropertyf }, -- 27V ammeter 1
+    { "bus27_amp2", "tu154/custom/gauges/eng/bus27_amp2", globalPropertyf }, -- 27V ammeter 2
 
     -- Timing and sources
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf}, -- Simulation frame time
-    -- {"sim_run_time", "sim/time/total_running_time_sec", globalPropertyf}, -- Total simulation run time
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- Simulation frame time
 
     -- Battery and generator sources
-    {"bat_volt_1", "tu154/custom/elec/bat_volt_1", globalPropertyf}, -- Battery 1 voltage
-    {"bat_volt_2", "tu154/custom/elec/bat_volt_2", globalPropertyf}, -- Battery 2 voltage
-    {"bat_volt_3", "tu154/custom/elec/bat_volt_3", globalPropertyf}, -- Battery 3 voltage
-    {"bat_volt_4", "tu154/custom/elec/bat_volt_4", globalPropertyf}, -- Battery 4 voltage
-    {"bat_amp_1", "tu154/custom/elec/bat_amp_1", globalPropertyf}, -- Battery 1 current
-    {"bat_amp_2", "tu154/custom/elec/bat_amp_2", globalPropertyf}, -- Battery 2 current
-    {"bat_amp_3", "tu154/custom/elec/bat_amp_3", globalPropertyf}, -- Battery 3 current
-    {"bat_amp_4", "tu154/custom/elec/bat_amp_4", globalPropertyf}, -- Battery 4 current
-    {"bat_amp_cc_1", "tu154/custom/elec/bat_cc_1", globalPropertyf}, -- Battery 1 charge current
-    {"bat_amp_cc_2", "tu154/custom/elec/bat_cc_2", globalPropertyf}, -- Battery 2 charge current
-    {"bat_amp_cc_3", "tu154/custom/elec/bat_cc_3", globalPropertyf}, -- Battery 3 charge current
-    {"bat_amp_cc_4", "tu154/custom/elec/bat_cc_4", globalPropertyf}, -- Battery 4 charge current
-    {"vu1_amp", "tu154/custom/elec/vu1_amp", globalPropertyf}, -- VU1 current
-    {"vu2_amp", "tu154/custom/elec/vu2_amp", globalPropertyf}, -- VU2 current
-    {"vu_res_amp", "tu154/custom/elec/vu_res_amp", globalPropertyf}, -- VU reserve current
-    {"bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf}, -- 27V bus left voltage
-    {"bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf}, -- 27V bus right voltage
+    { "bat_volt_1", "tu154/custom/elec/bat_volt_1", globalPropertyf }, -- Battery 1 voltage
+    { "bat_volt_2", "tu154/custom/elec/bat_volt_2", globalPropertyf }, -- Battery 2 voltage
+    { "bat_volt_3", "tu154/custom/elec/bat_volt_3", globalPropertyf }, -- Battery 3 voltage
+    { "bat_volt_4", "tu154/custom/elec/bat_volt_4", globalPropertyf }, -- Battery 4 voltage
+    { "bat_amp_1", "tu154/custom/elec/bat_amp_1", globalPropertyf }, -- Battery 1 current
+    { "bat_amp_2", "tu154/custom/elec/bat_amp_2", globalPropertyf }, -- Battery 2 current
+    { "bat_amp_3", "tu154/custom/elec/bat_amp_3", globalPropertyf }, -- Battery 3 current
+    { "bat_amp_4", "tu154/custom/elec/bat_amp_4", globalPropertyf }, -- Battery 4 current
+    { "bat_amp_cc_1", "tu154/custom/elec/bat_cc_1", globalPropertyf }, -- Battery 1 charge current
+    { "bat_amp_cc_2", "tu154/custom/elec/bat_cc_2", globalPropertyf }, -- Battery 2 charge current
+    { "bat_amp_cc_3", "tu154/custom/elec/bat_cc_3", globalPropertyf }, -- Battery 3 charge current
+    { "bat_amp_cc_4", "tu154/custom/elec/bat_cc_4", globalPropertyf }, -- Battery 4 charge current
+    { "vu1_amp", "tu154/custom/elec/vu1_amp", globalPropertyf }, -- VU1 current
+    { "vu2_amp", "tu154/custom/elec/vu2_amp", globalPropertyf }, -- VU2 current
+    { "vu_res_amp", "tu154/custom/elec/vu_res_amp", globalPropertyf }, -- VU reserve current
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, -- 27V bus left voltage
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, -- 27V bus right voltage
 
     -- Bus 36V
-    {"bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf}, -- 36V bus left voltage
-    {"bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf}, -- 36V bus right voltage
-    {"bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf}, -- 36V PTS250 #1 voltage
-    {"bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf}, -- 36V PTS250 #2 voltage
+    { "bus36_volt_left", "tu154/custom/elec/bus36_volt_left", globalPropertyf }, -- 36V bus left voltage
+    { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, -- 36V bus right voltage
+    { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, -- 36V PTS250 #1 voltage
+    { "bus36_volt_pts250_2", "tu154/custom/elec/bus36_volt_pts250_2", globalPropertyf }, -- 36V PTS250 #2 voltage
 
     -- Bus 115/200V and generator currents
-    {"gen1_volt", "tu154/custom/elec/gen1_volt", globalPropertyf}, -- Generator 1 voltage
-    {"gen2_volt", "tu154/custom/elec/gen2_volt", globalPropertyf}, -- Generator 2 voltage
-    {"gen3_volt", "tu154/custom/elec/gen3_volt", globalPropertyf}, -- Generator 3 voltage
-    {"gen4_volt", "tu154/custom/elec/gen4_volt", globalPropertyf}, -- Generator 4 voltage
-    {"gpu_volt", "tu154/custom/elec/gpu_volt", globalPropertyf}, -- GPU voltage
-    {"bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf}, -- 115V bus phase 1
-    {"bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf}, -- 115V bus phase 2
-    {"bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf}, -- 115V bus phase 3
-    {"bus115_em_1_volt", "tu154/custom/elec/bus115_em_1_volt", globalPropertyf}, -- Emergency 115V bus 1
-    {"bus115_em_2_volt", "tu154/custom/elec/bus115_em_2_volt", globalPropertyf}, -- Emergency 115V bus 2
-    {"gen1_amp", "tu154/custom/elec/gen1_amp", globalPropertyf}, -- Generator 1 current
-    {"gen2_amp", "tu154/custom/elec/gen2_amp", globalPropertyf}, -- Generator 2 current
-    {"gen3_amp", "tu154/custom/elec/gen3_amp", globalPropertyf}, -- Generator 3 current
-    {"gen4_amp", "tu154/custom/elec/gen4_amp", globalPropertyf}, -- Generator 4 current
-    {"gpu_amp", "tu154/custom/elec/gpu_amp", globalPropertyf}, -- GPU current
+    { "gen1_volt", "tu154/custom/elec/gen1_volt", globalPropertyf }, -- Generator 1 voltage
+    { "gen2_volt", "tu154/custom/elec/gen2_volt", globalPropertyf }, -- Generator 2 voltage
+    { "gen3_volt", "tu154/custom/elec/gen3_volt", globalPropertyf }, -- Generator 3 voltage
+    { "gen4_volt", "tu154/custom/elec/gen4_volt", globalPropertyf }, -- Generator 4 voltage
+    { "gpu_volt", "tu154/custom/elec/gpu_volt", globalPropertyf }, -- GPU voltage
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf }, -- 115V bus phase 1
+    { "bus115_2_volt", "tu154/custom/elec/bus115_2_volt", globalPropertyf }, -- 115V bus phase 2
+    { "bus115_3_volt", "tu154/custom/elec/bus115_3_volt", globalPropertyf }, -- 115V bus phase 3
+    { "bus115_em_1_volt", "tu154/custom/elec/bus115_em_1_volt", globalPropertyf }, -- Emergency 115V bus 1
+    { "bus115_em_2_volt", "tu154/custom/elec/bus115_em_2_volt", globalPropertyf }, -- Emergency 115V bus 2
+    { "gen1_amp", "tu154/custom/elec/gen1_amp", globalPropertyf }, -- Generator 1 current
+    { "gen2_amp", "tu154/custom/elec/gen2_amp", globalPropertyf }, -- Generator 2 current
+    { "gen3_amp", "tu154/custom/elec/gen3_amp", globalPropertyf }, -- Generator 3 current
+    { "gen4_amp", "tu154/custom/elec/gen4_amp", globalPropertyf }, -- Generator 4 current
+    { "gpu_amp", "tu154/custom/elec/gpu_amp", globalPropertyf }, -- GPU current
 
     -- Lamps
-    {"lamp_apu_gen_on", "tu154/custom/lights/small/apu_gen_on", globalPropertyf}, -- GPU/RAP connected lamp
-    {"bus_npk_1", "tu154/custom/lights/small/bus_npk_1", globalPropertyf}, -- NPK bus 1 lamp
-    {"bus_npk_2", "tu154/custom/lights/small/bus_npk_2", globalPropertyf}, -- NPK bus 2 lamp
-    {"emerg_inv_115", "tu154/custom/lights/small/emerg_inv_115", globalPropertyf}, -- Emergency inverter 115V lamp
-    {"gen_fail_1", "tu154/custom/lights/small/gen_fail_1", globalPropertyf}, -- Generator 1 fail lamp
-    {"gen_fail_2", "tu154/custom/lights/small/gen_fail_2", globalPropertyf}, -- Generator 2 fail lamp
-    {"gen_fail_3", "tu154/custom/lights/small/gen_fail_3", globalPropertyf}, -- Generator 3 fail lamp
-    {"bus_connected", "tu154/custom/lights/small/bus_connected", globalPropertyf}, -- Buses connected lamp
-    {"left_bus_use_bat", "tu154/custom/lights/small/left_bus_use_bat", globalPropertyf}, -- Left bus on battery lamp
-    {"right_bus_use_bat", "tu154/custom/lights/small/right_bus_use_bat", globalPropertyf}, -- Right bus on battery lamp
-    {"turn_off_bat_1", "tu154/custom/lights/small/turn_off_bat_1", globalPropertyf}, -- Turn off battery 1 lamp
-    {"turn_off_bat_2", "tu154/custom/lights/small/turn_off_bat_2", globalPropertyf}, -- Turn off battery 2 lamp
-    {"turn_off_bat_3", "tu154/custom/lights/small/turn_off_bat_3", globalPropertyf}, -- Turn off battery 3 lamp
-    {"turn_off_bat_4", "tu154/custom/lights/small/turn_off_bat_4", globalPropertyf}, -- Turn off battery 4 lamp
-    {"vu_on_1", "tu154/custom/lights/small/vu_on_1", globalPropertyf}, -- VU1 on lamp
-    {"vu_on_2", "tu154/custom/lights/small/vu_on_2", globalPropertyf}, -- VU2 on lamp
-    {"left_bus_on_tr2", "tu154/custom/lights/small/left_bus_on_tr2", globalPropertyf}, -- Left bus on TR2 lamp
-    {"right_bus_on_tr1", "tu154/custom/lights/small/right_bus_on_tr1", globalPropertyf}, -- Right bus on TR1 lamp
-    {"pts250_n1", "tu154/custom/lights/small/pts250_n1", globalPropertyf}, -- PTS250 N1 lamp
-    {"pts250_n2", "tu154/custom/lights/small/pts250_n2", globalPropertyf}, -- PTS250 N2 lamp
+    { "lamp_apu_gen_on", "tu154/custom/lights/small/apu_gen_on", globalPropertyf }, -- GPU/RAP connected lamp
+    { "bus_npk_1", "tu154/custom/lights/small/bus_npk_1", globalPropertyf }, -- NPK bus 1 lamp
+    { "bus_npk_2", "tu154/custom/lights/small/bus_npk_2", globalPropertyf }, -- NPK bus 2 lamp
+    { "emerg_inv_115", "tu154/custom/lights/small/emerg_inv_115", globalPropertyf }, -- Emergency inverter 115V lamp
+    { "gen_fail_1", "tu154/custom/lights/small/gen_fail_1", globalPropertyf }, -- Generator 1 fail lamp
+    { "gen_fail_2", "tu154/custom/lights/small/gen_fail_2", globalPropertyf }, -- Generator 2 fail lamp
+    { "gen_fail_3", "tu154/custom/lights/small/gen_fail_3", globalPropertyf }, -- Generator 3 fail lamp
+    { "bus_connected", "tu154/custom/lights/small/bus_connected", globalPropertyf }, -- Buses connected lamp
+    { "left_bus_use_bat", "tu154/custom/lights/small/left_bus_use_bat", globalPropertyf }, -- Left bus on battery lamp
+    { "right_bus_use_bat", "tu154/custom/lights/small/right_bus_use_bat", globalPropertyf }, -- Right bus on battery lamp
+    { "turn_off_bat_1", "tu154/custom/lights/small/turn_off_bat_1", globalPropertyf }, -- Turn off battery 1 lamp
+    { "turn_off_bat_2", "tu154/custom/lights/small/turn_off_bat_2", globalPropertyf }, -- Turn off battery 2 lamp
+    { "turn_off_bat_3", "tu154/custom/lights/small/turn_off_bat_3", globalPropertyf }, -- Turn off battery 3 lamp
+    { "turn_off_bat_4", "tu154/custom/lights/small/turn_off_bat_4", globalPropertyf }, -- Turn off battery 4 lamp
+    { "vu_on_1", "tu154/custom/lights/small/vu_on_1", globalPropertyf }, -- VU1 on lamp
+    { "vu_on_2", "tu154/custom/lights/small/vu_on_2", globalPropertyf }, -- VU2 on lamp
+    { "left_bus_on_tr2", "tu154/custom/lights/small/left_bus_on_tr2", globalPropertyf }, -- Left bus on TR2 lamp
+    { "right_bus_on_tr1", "tu154/custom/lights/small/right_bus_on_tr1", globalPropertyf }, -- Right bus on TR1 lamp
+    { "pts250_n1", "tu154/custom/lights/small/pts250_n1", globalPropertyf }, -- PTS250 N1 lamp
+    { "pts250_n2", "tu154/custom/lights/small/pts250_n2", globalPropertyf }, -- PTS250 N2 lamp
 
     -- Lamp sources and states
-    {"test_lamps", "tu154/custom/buttons/lamp_test_apu", globalPropertyi}, -- Lamp test button
-    {"gpu_work_bus", "tu154/custom/elec/gpu_work", globalPropertyi}, -- GPU working status
-    {"inv115_fail", "tu154/custom/failures/inv115_fail", globalPropertyi}, -- Inverter 115V fail status
-    {"buses_connected", "tu154/custom/elec/bus_connected", globalPropertyi}, -- Buses connected status
-    {"bus27_source_left", "tu154/custom/elec/bus27_source_left", globalPropertyi}, -- 27V left bus source
-    {"bus27_source_right", "tu154/custom/elec/bus27_source_right", globalPropertyi}, -- 27V right bus source
-    {"vu_res_to_L", "tu154/custom/elec/vu_res_to_L", globalPropertyi}, -- Reserve VU to left bus
-    {"vu_res_to_R", "tu154/custom/elec/vu_res_to_R", globalPropertyi}, -- Reserve VU to right bus
-    {"bus36_src_L", "tu154/custom/elec/bus36_src_L", globalPropertyi}, -- 36V source left
-    {"bus36_src_R", "tu154/custom/elec/bus36_src_R", globalPropertyi}, -- 36V source right
-    {"bus36_pts1_work", "tu154/custom/elec/bus36_pts1_work", globalPropertyi}, -- PTS250 1 work lamp
-    {"bus36_pts2_work", "tu154/custom/elec/bus36_pts2_work", globalPropertyi}, -- PTS250 2 work lamp
-    {"bat_therm_1", "tu154/custom/elec/bat_therm_1", globalPropertyf}, -- Battery 1 temperature
-    {"bat_therm_2", "tu154/custom/elec/bat_therm_2", globalPropertyf}, -- Battery 2 temperature
-    {"bat_therm_3", "tu154/custom/elec/bat_therm_3", globalPropertyf}, -- Battery 3 temperature
-    {"bat_therm_4", "tu154/custom/elec/bat_therm_4", globalPropertyf}, -- Battery 4 temperature
+    { "test_lamps", "tu154/custom/buttons/lamp_test_apu", globalPropertyi }, -- Lamp test button
+    { "gpu_work_bus", "tu154/custom/elec/gpu_work", globalPropertyi }, -- GPU working status
+    { "inv115_fail", "tu154/custom/failures/inv115_fail", globalPropertyi }, -- Inverter 115V fail status
+    { "buses_connected", "tu154/custom/elec/bus_connected", globalPropertyi }, -- Buses connected status
+    { "bus27_source_left", "tu154/custom/elec/bus27_source_left", globalPropertyi }, -- 27V left bus source
+    { "bus27_source_right", "tu154/custom/elec/bus27_source_right", globalPropertyi }, -- 27V right bus source
+    { "vu_res_to_L", "tu154/custom/elec/vu_res_to_L", globalPropertyi }, -- Reserve VU to left bus
+    { "vu_res_to_R", "tu154/custom/elec/vu_res_to_R", globalPropertyi }, -- Reserve VU to right bus
+    { "bus36_src_L", "tu154/custom/elec/bus36_src_L", globalPropertyi }, -- 36V source left
+    { "bus36_src_R", "tu154/custom/elec/bus36_src_R", globalPropertyi }, -- 36V source right
+    { "bus36_pts1_work", "tu154/custom/elec/bus36_pts1_work", globalPropertyi }, -- PTS250 1 work lamp
+    { "bus36_pts2_work", "tu154/custom/elec/bus36_pts2_work", globalPropertyi }, -- PTS250 2 work lamp
+    { "bat_therm_1", "tu154/custom/elec/bat_therm_1", globalPropertyf }, -- Battery 1 temperature
+    { "bat_therm_2", "tu154/custom/elec/bat_therm_2", globalPropertyf }, -- Battery 2 temperature
+    { "bat_therm_3", "tu154/custom/elec/bat_therm_3", globalPropertyf }, -- Battery 3 temperature
+    { "bat_therm_4", "tu154/custom/elec/bat_therm_4", globalPropertyf }, -- Battery 4 temperature
 
     -- Engines
-    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- Engine 1 N1
-    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]",globalProperty }, -- Engine 2 N1
-    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- Engine 3 N1
-    {"sim_avionics", "sim/cockpit2/switches/avionics_power_on", globalPropertyi}, -- Sim avionics switch
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty }, -- Engine 1 N1
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty }, -- Engine 2 N1
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty }, -- Engine 3 N1
+    { "sim_avionics", "sim/cockpit2/switches/avionics_power_on", globalPropertyi }, -- Sim avionics switch
 })
 
 local function clampValue(value, min_value, max_value)
@@ -209,7 +192,6 @@ local NEEDLE_FRICTION = 200
 local NEEDLE_SPEED_LIMIT = 20
 local NEEDLE_ACCEL_LIMIT = 5 -- Reserved legacy tuning constant.
 
-
 local function updateNeedle(state, target, dt)
     if dt <= 0 then
         state.velocity = 0
@@ -220,17 +202,9 @@ local function updateNeedle(state, target, dt)
     state.velocity = state.velocity + acceleration * dt
 
     state.velocity = state.velocity
-        - sign(state.velocity)
-        * math.min(
-            NEEDLE_FRICTION * dt,
-            math.abs(state.velocity) * 0.5
-        )
+        - sign(state.velocity) * math.min(NEEDLE_FRICTION * dt, math.abs(state.velocity) * 0.5)
 
-    state.velocity = clampValue(
-        state.velocity,
-        -NEEDLE_SPEED_LIMIT,
-        NEEDLE_SPEED_LIMIT
-    )
+    state.velocity = clampValue(state.velocity, -NEEDLE_SPEED_LIMIT, NEEDLE_SPEED_LIMIT)
 
     state.actual = state.actual + state.velocity * dt
 
@@ -376,8 +350,7 @@ local function updateVoltmeter115(dt)
 
     state.timer = state.timer + dt
 
-    if selector ~= state.selector_last
-        or phase_selector ~= state.phase_last then
+    if selector ~= state.selector_last or phase_selector ~= state.phase_last then
         state.timer = 0
         freq_state.timer = 0
         playPanelSample(SAMPLES.rotary)
@@ -389,10 +362,7 @@ local function updateVoltmeter115(dt)
     local target = -120
 
     if state.timer >= 0.05 then
-        target = interpolate(
-            VOLT115_TABLE,
-            selectedPropertyValue(VOLT115_SOURCES, selector)
-        )
+        target = interpolate(VOLT115_TABLE, selectedPropertyValue(VOLT115_SOURCES, selector))
     end
 
     set(bus115_volt, updateNeedle(state, target, dt))
@@ -411,8 +381,7 @@ local function updateAmmeter115(dt)
     local selector = get(bus115_amp_sel)
     local phase_selector = get(bus115_amp_phase_sel)
 
-    if selector ~= state.selector_last
-        or phase_selector ~= state.phase_last then
+    if selector ~= state.selector_last or phase_selector ~= state.phase_last then
         state.timer = 0
         playPanelSample(SAMPLES.rotary)
     end
@@ -424,10 +393,7 @@ local function updateAmmeter115(dt)
     local target = -120
 
     if state.timer >= 0.05 then
-        target = interpolate(
-            AMP115_TABLE,
-            selectedPropertyValue(AMP115_SOURCES, selector)
-        )
+        target = interpolate(AMP115_TABLE, selectedPropertyValue(AMP115_SOURCES, selector))
     end
 
     set(bus115_amp, updateNeedle(state, target, dt))
@@ -545,26 +511,17 @@ local function updateBus27Gauges(dt)
 
     local volt_target = -120
     if volt_state.timer >= 0.05 then
-        volt_target = interpolate(
-            VOLT27_TABLE,
-            get27VoltSelectorValue(volt_selector)
-        )
+        volt_target = interpolate(VOLT27_TABLE, get27VoltSelectorValue(volt_selector))
     end
 
     local amp1_target = -99
     if amp1_state.timer >= 0.05 then
-        amp1_target = interpolate(
-            AMP27_TABLE,
-            get27AmpSelectorValue(amp1_selector, false)
-        )
+        amp1_target = interpolate(AMP27_TABLE, get27AmpSelectorValue(amp1_selector, false))
     end
 
     local amp2_target = -99
     if amp2_state.timer >= 0.05 then
-        amp2_target = interpolate(
-            AMP27_TABLE,
-            get27AmpSelectorValue(amp2_selector, true)
-        )
+        amp2_target = interpolate(AMP27_TABLE, get27AmpSelectorValue(amp2_selector, true))
     end
 
     set(bus27_volt, updateNeedle(volt_state, volt_target, dt))
@@ -642,10 +599,7 @@ end
 local not_loaded = true
 
 local function resetSwitchers()
-    if isColdAndDarkStart() and get(eng1_N1) < 5
-        and get(eng2_N1) < 5
-        and get(eng3_N1) < 5 then
-
+    if isColdAndDarkStart() and get(eng1_N1) < 5 and get(eng2_N1) < 5 and get(eng3_N1) < 5 then
         set(gen_1_on, 0)
         set(gen_2_on, 0)
         set(gen_3_on, 0)
@@ -666,11 +620,7 @@ local function updateLamps()
     local bus27_left = get(bus27_volt_left)
     local bus27_right = get(bus27_volt_right)
 
-    local lamp_power = clampValue(
-        (math.max(bus27_left, bus27_right) - 10) / 18.5,
-        0,
-        1
-    )
+    local lamp_power = clampValue((math.max(bus27_left, bus27_right) - 10) / 18.5, 0, 1)
 
     local test_brightness = get(test_lamps) * lamp_power
 
@@ -689,109 +639,50 @@ local function updateLamps()
     local left_source = get(bus27_source_left)
     local right_source = get(bus27_source_right)
 
-    local gpu_lamp_brt = math.max(
-        get(gpu_work_bus) * lamp_power,
-        test_brightness
-    )
+    local gpu_lamp_brt = math.max(get(gpu_work_bus) * lamp_power, test_brightness)
 
     local npk_condition = 0
     if bus115_1 < GEN_MIN_VOLT and bus115_3 < GEN_MIN_VOLT then
         npk_condition = 1
     end
-    local npk_brt = math.max(
-        npk_condition * lamp_power,
-        test_brightness
-    )
+    local npk_brt = math.max(npk_condition * lamp_power, test_brightness)
 
-    local emerg115_brt = math.max(
-        get(emerg_inv115)
-            * (1 - get(inv115_fail))
-            * lamp_power,
-        test_brightness
-    )
+    local emerg115_brt = math.max(get(emerg_inv115) * (1 - get(inv115_fail)) * lamp_power, test_brightness)
 
-    local gen_1_brt = math.max(
-        (gen1_voltage < GEN_MIN_VOLT and 1 or 0) * lamp_power,
-        test_brightness
-    )
-    local gen_2_brt = math.max(
-        (gen2_voltage < GEN_MIN_VOLT and 1 or 0) * lamp_power,
-        test_brightness
-    )
-    local gen_3_brt = math.max(
-        (gen3_voltage < GEN_MIN_VOLT and 1 or 0) * lamp_power,
-        test_brightness
-    )
+    local gen_1_brt = math.max((gen1_voltage < GEN_MIN_VOLT and 1 or 0) * lamp_power, test_brightness)
+    local gen_2_brt = math.max((gen2_voltage < GEN_MIN_VOLT and 1 or 0) * lamp_power, test_brightness)
+    local gen_3_brt = math.max((gen3_voltage < GEN_MIN_VOLT and 1 or 0) * lamp_power, test_brightness)
 
-    local bus_con_brt = math.max(
-        get(buses_connected) * lamp_power,
-        test_brightness
-    )
+    local bus_con_brt = math.max(get(buses_connected) * lamp_power, test_brightness)
 
     local left_bat_condition = 0
     if left_source > 2 then
         left_bat_condition = math.max(bat1_switch, bat3_switch)
     end
-    local left_bat_brt = math.max(
-        left_bat_condition * lamp_power,
-        test_brightness
-    )
+    local left_bat_brt = math.max(left_bat_condition * lamp_power, test_brightness)
 
     local right_bat_condition = 0
     if right_source > 2 then
         right_bat_condition = math.max(bat2_switch, bat4_switch)
     end
-    local right_bat_brt = math.max(
-        right_bat_condition * lamp_power,
-        test_brightness
-    )
+    local right_bat_brt = math.max(right_bat_condition * lamp_power, test_brightness)
 
-    local bat_1_brt = math.max(
-        (get(bat_therm_1) > 100 and 1 or 0) * lamp_power,
-        test_brightness
-    )
-    local bat_2_brt = math.max(
-        (get(bat_therm_2) > 100 and 1 or 0) * lamp_power,
-        test_brightness
-    )
-    local bat_3_brt = math.max(
-        (get(bat_therm_3) > 100 and 1 or 0) * lamp_power,
-        test_brightness
-    )
-    local bat_4_brt = math.max(
-        (get(bat_therm_4) > 100 and 1 or 0) * lamp_power,
-        test_brightness
-    )
+    local bat_1_brt = math.max((get(bat_therm_1) > 100 and 1 or 0) * lamp_power, test_brightness)
+    local bat_2_brt = math.max((get(bat_therm_2) > 100 and 1 or 0) * lamp_power, test_brightness)
+    local bat_3_brt = math.max((get(bat_therm_3) > 100 and 1 or 0) * lamp_power, test_brightness)
+    local bat_4_brt = math.max((get(bat_therm_4) > 100 and 1 or 0) * lamp_power, test_brightness)
 
-    local left_vu_brt = math.max(
-        get(vu_res_to_L) * lamp_power,
-        test_brightness
-    )
-    local right_vu_brt = math.max(
-        get(vu_res_to_R) * lamp_power,
-        test_brightness
-    )
+    local left_vu_brt = math.max(get(vu_res_to_L) * lamp_power, test_brightness)
+    local right_vu_brt = math.max(get(vu_res_to_R) * lamp_power, test_brightness)
 
-    local left_tr2_brt = math.max(
-        get(bus36_src_L) * lamp_power,
-        test_brightness
-    )
-    local right_tr1_brt = math.max(
-        get(bus36_src_R) * lamp_power,
-        test_brightness
-    )
+    local left_tr2_brt = math.max(get(bus36_src_L) * lamp_power, test_brightness)
+    local right_tr1_brt = math.max(get(bus36_src_R) * lamp_power, test_brightness)
 
     -- PTS250 N1 means "PTS250 #1 not working".
-    local pts_1_brt = math.max(
-        (1 - get(bus36_pts1_work)) * lamp_power,
-        test_brightness
-    )
+    local pts_1_brt = math.max((1 - get(bus36_pts1_work)) * lamp_power, test_brightness)
 
     -- PTS250 N2 means "PTS250 #2 on bus".
-    local pts_2_brt = math.max(
-        get(bus36_pts2_work) * lamp_power,
-        test_brightness
-    )
+    local pts_2_brt = math.max(get(bus36_pts2_work) * lamp_power, test_brightness)
 
     set(lamp_apu_gen_on, gpu_lamp_brt)
     set(bus_npk_1, npk_brt)
@@ -842,8 +733,7 @@ function update()
     updateBus27Gauges(dt)
     updateLamps()
 
-    if get(bus27_volt_left) > 13
-        or get(bus27_volt_right) > 13 then
+    if get(bus27_volt_left) > 13 or get(bus27_volt_right) > 13 then
         set(sim_avionics, 1)
     else
         set(sim_avionics, 0)

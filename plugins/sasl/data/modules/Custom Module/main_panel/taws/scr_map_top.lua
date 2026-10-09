@@ -1,8 +1,7 @@
 -- scr_map_top.lua
--- this is map screen
---include("corr_tbl.lua")
+-- Probe and display the TAWS terrain map in plan view.
 
-size = {1000, 770}
+size = { 1000, 770 }
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -19,26 +18,25 @@ end
 defineProperty("scale_top_img", sasl.gl.loadImage("taws_scale_1.png", 0, 0, 1000, 770))
 
 defineProps({
-    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, --   . 0 - , 1 -  , 2 -  , 3 - , 4 -
+    { "mode_set", "tu154/custom/taws/mode_set", globalPropertyi }, -- TAWS display mode; see taws_logic.lua.
 
-    { "distance_set", "tu154/custom/taws/distance_set", globalPropertyi }, --    , . 0 = 10, 1 = 20, 2 = 40, 3 = 80, 4 = 160, 5 = 320, 6 = 640
+    { "distance_set", "tu154/custom/taws/distance_set", globalPropertyi }, -- Range index: 0 = 10, 1 = 20, 2 = 40, 3 = 80, 4 = 160, 5 = 320, 6 = 640 km.
 
-    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf }, --
+    { "brt_handle", "tu154/custom/rotary/srpbz/brightness", globalPropertyf },
 
     -- load images
 
     -- map parameters
-    { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- longtitude. positive from W to E
-    { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- altitude. positive UP
-    { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- latitude. positive from N to S
+    { "pos_x", "sim/flightmodel/position/local_x", globalPropertyf }, -- Local X position, positive eastward
+    { "pos_y", "sim/flightmodel/position/local_y", globalPropertyf }, -- Local Y position, positive upward
+    { "pos_z", "sim/flightmodel/position/local_z", globalPropertyf }, -- Local Z position, positive southward
 
     { "speed", "sim/flightmodel/position/groundspeed", globalPropertyf },
     { "course", "sim/flightmodel/position/psi", globalPropertyf }, -- angle between -Z axis and airplane's nose
     { "course_fly", "sim/flightmodel/position/hpath", globalPropertyf }, -- course, where aircraft actually flies
 
-    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty },  -- deploy of front gear
-    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty },  -- deploy of right gear
-    -- { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy[2]", globalProperty },  -- deploy of left gear
+    { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty }, -- deploy of front gear
+    { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty }, -- deploy of right gear
 })
 
 local rows = 60
@@ -47,34 +45,44 @@ local cols = 80
 local low_qlty = false
 
 if low_qlty then
-	rows = 30
-	cols = 40
+    rows = 30
+    cols = 40
 end
 
 -- colors of heights: 1 - black, 2 - dark green, 3 - green, 4 - yellow, 5 - orange, 6 - red, 7 - blue, 8 - magenta
 --local colorTable = {[1]={0.1, 0.1, 0.1}, [2]={0.2, 0.5, 0.2}, [3]={0.3, 1, 0.3}, [4]={1, 1, 0.3}, [5]={1, 0.6, 0.2}, [6]={1,0.3,0.3}, [7]={0.1,0.1,1}, [8] = {1,0.1,1}}
 
 -- colors of heights: 1 - black, 2 - dark green, 3 - green, 4 - yellow, 5 - dark yellow, 6 - orange, 7 - red, 8 - blue, 9 - magenta
-local colorTable = {[1]={0.1, 0.1, 0.1}, [2]={0.2, 0.5, 0.2}, [3]={0.3, 1, 0.3}, [4]={1, 1, 0.3}, [5]={1, 0.8, 0.2}, [6]={1, 0.6, 0.2}, [7]={1,0.3,0.3}, [8]={0.1,0.1,1}, [9] = {1,0.1,1}}
+local colorTable = {
+    [1] = { 0.1, 0.1, 0.1 },
+    [2] = { 0.2, 0.5, 0.2 },
+    [3] = { 0.3, 1, 0.3 },
+    [4] = { 1, 1, 0.3 },
+    [5] = { 1, 0.8, 0.2 },
+    [6] = { 1, 0.6, 0.2 },
+    [7] = { 1, 0.3, 0.3 },
+    [8] = { 0.1, 0.1, 1 },
+    [9] = { 1, 0.1, 1 },
+}
 
--- declare and fill drawed table of heights coded in color
+-- Initialize the displayed terrain-color table
 local heightTable = {}
 
 for i = 1, cols, 1 do
-	table.insert(heightTable, {})
-	for j = 1, rows, 1 do
-		table.insert(heightTable[i], 1)
-	end
+    table.insert(heightTable, {})
+    for j = 1, rows, 1 do
+        table.insert(heightTable[i], 1)
+    end
 end
 
--- declare and fill temporal table of heights
+-- Initialize the pending terrain-color table
 local tempHeightTable = {}
 
 for i = 1, cols, 1 do
-	table.insert(tempHeightTable, {})
-	for j = 1, rows, 1 do
-		table.insert(tempHeightTable[i], 1)
-	end
+    table.insert(tempHeightTable, {})
+    for j = 1, rows, 1 do
+        table.insert(tempHeightTable[i], 1)
+    end
 end
 
 -- Terrain coordinates exist only after a successful SASL probe. Reject non-finite
@@ -84,51 +92,67 @@ local function finiteNumber(value)
 end
 
 local function localAltitude(x, y, z)
-    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then
+        return nil
+    end
     local lat, lon, alt = sasl.localToWorld(x, y, z)
-    if finiteNumber(alt) then return alt end
+    if finiteNumber(alt) then
+        return alt
+    end
     return nil
 end
 
 local function terrainAltitude(x, y, z)
-    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then return nil end
+    if not (finiteNumber(x) and finiteNumber(y) and finiteNumber(z)) then
+        return nil
+    end
     local result, hitX, hitY, hitZ, nx, ny, nz, vx, vy, vz, wet = sasl.probeTerrain(x, y, z)
-    if result ~= PROBE_HIT_TERRAIN then return nil end
+    if result ~= PROBE_HIT_TERRAIN then
+        return nil
+    end
     return localAltitude(hitX, hitY, hitZ), wet
 end
 
 function giveColor(acf_alt, terr_alt, wet, gears)
-	local colorID = 8
-	
-	-- check alt
-	if not finiteNumber(acf_alt) or not finiteNumber(terr_alt) then return 8 end -- unavailable terrain
-	local alt = (terr_alt - acf_alt) -- meters
-	
-	--if wet then return 8 end
-	
-	if alt >= 600 then colorID = 7 -- red
-	elseif alt >= 300 then colorID = 6 -- orange
-	elseif alt >= 0 then colorID = 5 -- dark yellow
-	elseif alt >= -150 then colorID = 4 -- yellow
-	elseif alt >=- 300 then colorID = 3 -- green
-	elseif alt >=- 600 then colorID = 2 -- dark green
-	elseif alt < -600 then colorID = 1 -- black
-	end
-	
-	return colorID
+    local colorID = 8
 
+    -- check alt
+    if not finiteNumber(acf_alt) or not finiteNumber(terr_alt) then
+        return 8
+    end -- unavailable terrain
+    local alt = (terr_alt - acf_alt) -- meters
+
+    --if wet then return 8 end
+
+    if alt >= 600 then
+        colorID = 7 -- red
+    elseif alt >= 300 then
+        colorID = 6 -- orange
+    elseif alt >= 0 then
+        colorID = 5 -- dark yellow
+    elseif alt >= -150 then
+        colorID = 4 -- yellow
+    elseif alt >= -300 then
+        colorID = 3 -- green
+    elseif alt >= -600 then
+        colorID = 2 -- dark green
+    elseif alt < -600 then
+        colorID = 1 -- black
+    end
+
+    return colorID
 end
 
 --[[
 function giveColor(acf_alt, terr_alt, wet, gears)
 	local colorID = 8
-	
+
 	-- check alt
 	if not terr_alt then return 8 end -- error reading terrain
 	local alt = (terr_alt - acf_alt) * 3.2808399 -- transform to feet
-	
+
 	--if wet then return 7 end
-	
+
 	if alt >= 2000 then colorID = 6 -- red
 	elseif alt >= 1000 and alt < 2000 then colorID = 5 -- orange
 	elseif ((alt >= -250 and gears) or (alt >= -500 and not gears)) and alt < 1000 then colorID = 4 -- yellow
@@ -136,19 +160,19 @@ function giveColor(acf_alt, terr_alt, wet, gears)
 	elseif alt >=-2000 and alt < -1000 then colorID = 2 -- dark green
 	elseif alt < -2000 then colorID = 1 -- black
 	end
-	
+
 	return colorID
 
 end
 --]]
 
-local frame_counter = 1 -- use frames to fill table row by row
-		
+local frame_counter = 1 -- Elapsed display-update time in seconds.
+
 local dir = math.rad(get(course))
-local dir_x = math.sin(dir); -- direct vector
-local dir_z = -math.cos(dir);
-local right_x = -dir_z; -- vector to the right
-local right_z = dir_x;
+local dir_x = math.sin(dir) -- direct vector
+local dir_z = -math.cos(dir)
+local right_x = -dir_z -- vector to the right
+local right_z = dir_x
 local height, width = 20000, 25000 -- dimensions of scanned area in meters
 local plane_x = get(pos_x)
 local plane_y = get(pos_y)
@@ -156,7 +180,7 @@ local plane_z = get(pos_z)
 
 local LG = false
 
-local text_font = sasl.gl.loadBitmapFont('taws_scr.fnt')
+local text_font = sasl.gl.loadBitmapFont("taws_scr.fnt")
 
 local range_text = " 20"
 
@@ -165,152 +189,163 @@ local brightness = 0.8
 local screen_work = get(mode_set) == 1
 
 function update()
-	
-	screen_work = get(mode_set) == 1
-	
-	if not screen_work then 
-		brightness = 0 
-		frame_counter = 1
-	else brightness = get(brt_handle)
-	end
-	
-	local dist = get(distance_set)
+    screen_work = get(mode_set) == 1
 
-	local distance = 20
-	range_text = " 20"
-	
-	if dist == 0 then distance = 10 range_text = " 10"
-	elseif dist == 2 then distance = 40 range_text = " 40"
-	elseif dist == 3 then distance = 80 range_text = " 80"
-	elseif dist == 4 then distance = 160 range_text = "160"
-	elseif dist == 5 then distance = 320 range_text = "320"
-	elseif dist == 6 then distance = 640 range_text = "640"
-	end
-	
-	-- moving map calculations
-	if frame_counter > rows/2 then frame_counter = 1 end
-	if frame_counter == 1 and screen_work then
-		dir = math.rad(get(course))
-		
-		if get(speed) > 11 then dir = math.rad(get(course_fly)) end
-		
-		dir_x = math.sin(dir); -- direct vector
-		dir_z = -math.cos(dir);
-		right_x = -dir_z; -- vector to the right
-		right_z = dir_x;
-		plane_x = get(pos_x)
-		plane_y = get(pos_y)
-		plane_z = get(pos_z)
-		LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear2_deploy) > 0.99
-		
-		height = distance * 1000
-		width = distance * 1250
-		
-		-- copy temp table to draw table and reset temp one
-		for i = 1, cols, 1 do
-			for j = 1, rows, 1 do
-				heightTable[i][j] = tempHeightTable[i][j]
-				tempHeightTable[i][j] = 1
-			end
-		end		
-		
-	end	
-	
-	-- scan terrain and fill temp table
-	if screen_work then
-		
-		local acf_alt = localAltitude(plane_x, plane_y, plane_z)
-		for row = frame_counter * 2 - 1, frame_counter * 2, 1 do
-			for col = 1, cols, 1 do
-				local p_x = plane_x + dir_x * height * row/rows - right_x * width / 2 + right_x * width * col/cols;
-				local p_z = plane_z + dir_z * height * row/rows - right_z * width / 2 + right_z * width * col/cols;
-				local alt, isWet = terrainAltitude(p_x, plane_y, p_z)
-				
-				tempHeightTable[col][row] = giveColor(acf_alt, alt, isWet, LG)
-				
-				--if row == 1 and col == 50 then print(probe_dist, correct, locationY + correct, locationY) end
-				--if row == 80 and col == 1 then print(probe_dist, correct, locationY + correct, locationY) end
-			end	
-		end
-	else
-		-- reset tables
-		for i = 1, cols, 1 do
-			for j = 1, rows, 1 do
-				heightTable[i][j] = 1
-				tempHeightTable[i][j] = 1
-			end
-		end	
-		frame_counter = 0
-		
-	end
-	
-	frame_counter = frame_counter + 1	
-	
+    if not screen_work then
+        brightness = 0
+        frame_counter = 1
+    else
+        brightness = get(brt_handle)
+    end
+
+    local dist = get(distance_set)
+
+    local distance = 20
+    range_text = " 20"
+
+    if dist == 0 then
+        distance = 10
+        range_text = " 10"
+    elseif dist == 2 then
+        distance = 40
+        range_text = " 40"
+    elseif dist == 3 then
+        distance = 80
+        range_text = " 80"
+    elseif dist == 4 then
+        distance = 160
+        range_text = "160"
+    elseif dist == 5 then
+        distance = 320
+        range_text = "320"
+    elseif dist == 6 then
+        distance = 640
+        range_text = "640"
+    end
+
+    -- moving map calculations
+    if frame_counter > rows / 2 then
+        frame_counter = 1
+    end
+    if frame_counter == 1 and screen_work then
+        dir = math.rad(get(course))
+
+        if get(speed) > 11 then
+            dir = math.rad(get(course_fly))
+        end
+
+        dir_x = math.sin(dir) -- direct vector
+        dir_z = -math.cos(dir)
+        right_x = -dir_z -- vector to the right
+        right_z = dir_x
+        plane_x = get(pos_x)
+        plane_y = get(pos_y)
+        plane_z = get(pos_z)
+        LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear2_deploy) > 0.99
+
+        height = distance * 1000
+        width = distance * 1250
+
+        -- copy temp table to draw table and reset temp one
+        for i = 1, cols, 1 do
+            for j = 1, rows, 1 do
+                heightTable[i][j] = tempHeightTable[i][j]
+                tempHeightTable[i][j] = 1
+            end
+        end
+    end
+
+    -- scan terrain and fill temp table
+    if screen_work then
+        local acf_alt = localAltitude(plane_x, plane_y, plane_z)
+        for row = frame_counter * 2 - 1, frame_counter * 2, 1 do
+            for col = 1, cols, 1 do
+                local p_x = plane_x + dir_x * height * row / rows - right_x * width / 2 + right_x * width * col / cols
+                local p_z = plane_z + dir_z * height * row / rows - right_z * width / 2 + right_z * width * col / cols
+                local alt, isWet = terrainAltitude(p_x, plane_y, p_z)
+
+                tempHeightTable[col][row] = giveColor(acf_alt, alt, isWet, LG)
+
+                --if row == 1 and col == 50 then print(probe_dist, correct, locationY + correct, locationY) end
+                --if row == 80 and col == 1 then print(probe_dist, correct, locationY + correct, locationY) end
+            end
+        end
+    else
+        -- reset tables
+        for i = 1, cols, 1 do
+            for j = 1, rows, 1 do
+                heightTable[i][j] = 1
+                tempHeightTable[i][j] = 1
+            end
+        end
+        frame_counter = 0
+    end
+
+    frame_counter = frame_counter + 1
 end
 
 components = {
-	
-	draw_map {
-		position = {0, 0, size[1], size[2]},
-		size_x = cols,
-		size_y = rows,
-		
-		image_table = function()
-			return heightTable
-		end,
-		
-		colors = function()
-			return colorTable
-		end,
-		
-		visible = function()
-			return screen_work
-		end,
-		
-	},
-	
-	-- scale for top view
-	texture {
-		position = {0, 0, size[1], size[2]},
-		image = get(scale_top_img),
-		visible = function()
-			return screen_work
-		end,
-	},
 
-	rectangle {
-		position = {0, 600, 120, 120},
-		color = {0.1,0.1,0.1,1},
-		visible = function()
-			return screen_work
-		end,
-	},
-	
-	-- distance text
-	text_draw {
-		position = {0, 660, 160, 160},
-		text = function()
-			return range_text
-		end,
-		font = text_font,
-		color = {1,1,1,1},
-		visible = function()
-			return screen_work
-		end,
-	},
-	
-	-- distance text
-	text_draw {
-		position = {20, 610, 160, 160},
-		text = "",
-		font = text_font,
-		color = {1,1,1,1},
-		visible = function()
-			return screen_work
-		end,
-	},	
-	
-	--[[
+    draw_map {
+        position = { 0, 0, size[1], size[2] },
+        size_x = cols,
+        size_y = rows,
+
+        image_table = function()
+            return heightTable
+        end,
+
+        colors = function()
+            return colorTable
+        end,
+
+        visible = function()
+            return screen_work
+        end,
+    },
+
+    -- scale for top view
+    texture {
+        position = { 0, 0, size[1], size[2] },
+        image = get(scale_top_img),
+        visible = function()
+            return screen_work
+        end,
+    },
+
+    rectangle {
+        position = { 0, 600, 120, 120 },
+        color = { 0.1, 0.1, 0.1, 1 },
+        visible = function()
+            return screen_work
+        end,
+    },
+
+    -- distance text
+    text_draw {
+        position = { 0, 660, 160, 160 },
+        text = function()
+            return range_text
+        end,
+        font = text_font,
+        color = { 1, 1, 1, 1 },
+        visible = function()
+            return screen_work
+        end,
+    },
+
+    -- distance text
+    text_draw {
+        position = { 20, 610, 160, 160 },
+        text = "",
+        font = text_font,
+        color = { 1, 1, 1, 1 },
+        visible = function()
+            return screen_work
+        end,
+    },
+
+    --[[
 	-- brightness controll
 	rectangle_ctr {
 		R = 0,
@@ -328,5 +363,4 @@ components = {
 		end,
 	},
 	--]]
-	
 }

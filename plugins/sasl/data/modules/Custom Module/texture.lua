@@ -1,5 +1,5 @@
 -- texture.lua
--- Generic texture drawing component.
+-- Draws a texture across the component area.
 
 -- Texture supplied by the parent component.
 defineProperty("image")
@@ -11,11 +11,5 @@ function draw()
         return
     end
 
-    sasl.gl.drawTexture(
-        texture,
-        0,
-        0,
-        size[1],
-        size[2]
-    )
+    sasl.gl.drawTexture(texture, 0, 0, size[1], size[2])
 end

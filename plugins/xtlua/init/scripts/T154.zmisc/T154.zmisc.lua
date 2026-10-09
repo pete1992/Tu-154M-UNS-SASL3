@@ -121,7 +121,6 @@ tcas2000_mode = find_dataref("tu154/custom/tcas2000/mode")
 weather_sys = find_dataref("tu154/custom/kontur/weather_sys")
 weather_mode = find_dataref("tu154/custom/kontur/weather_mode")
 srpbz = find_dataref("tu154/custom/kontur/srpbz")
-nvu_panel = find_dataref("tu154/custom/panels/show_nvu_panel")
 simDRcrs_np1			= find_dataref("tu154/custom/switchers/ovhd/curs_np_on_1")
 simDRcrs_np2				= find_dataref("tu154/custom/switchers/ovhd/curs_np_on_2")
 simDRvor_bear_1				= find_dataref("tu154/custom/radio/vor_bear_1")
@@ -1447,7 +1446,6 @@ end
     
      
     
-nvu_panel = 0
 
 if simDR_cockpit_lights > 0.3 then
     simDR_cockpit_lights = 0.3

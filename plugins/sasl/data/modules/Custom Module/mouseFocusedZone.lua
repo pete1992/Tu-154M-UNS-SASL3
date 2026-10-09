@@ -1,6 +1,7 @@
--------------------------------------------------------------------------------
+-- mouseFocusedZone.lua
+-- Tracks pointer entry and exit for a child interaction zone.
+
 -- Mouse focused zone
--------------------------------------------------------------------------------
 
 defineProperty("mouseHovered", false)
 
@@ -16,13 +17,10 @@ components = {
         onMouseLeave = function()
             set(mouseHovered, false)
             return true
-        end
-    }
+        end,
+    },
 }
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
-
 function draw()
-	drawAll(components)
+    drawAll(components)
 end

@@ -1,5 +1,7 @@
--- Shared systems time step. Use simulator timing even while parked; aircraft
--- pitch moment is not a clock and must not freeze engine/APU startup logic.
+-- time_logic.lua
+-- Publishes a paused-aware, bounded simulator time step for aircraft systems.
+
+-- Simulator timing also advances while parked, allowing engine and APU startup.
 local function defineProps(defs)
     for _, d in ipairs(defs) do
         defineProperty(d[1], d[3](d[2]))

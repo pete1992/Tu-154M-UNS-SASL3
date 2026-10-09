@@ -1,12 +1,7 @@
 -- electric_worker.lua
+-- Exchanges ordered electrical-model inputs and outputs with the worker controller.
 
---[[
-Changelog
-2026-10-04
-- Capture frame inputs, publish worker results and expose fallback diagnostics.
-- Use explicit one-based offsets and full buffer lengths for SASL string transfers.
-- Use compact protocol v2 with a 16 KiB mailbox instead of the former 128 KiB buffer.
-]]
+-- SASL string transfers use one-based offsets and the complete protocol buffer.
 
 -- Main-thread electrical adapter. The numerical model runs in xTlua whenever
 -- its mailbox is available; a bounded synchronous fallback retains full state.
@@ -19,8 +14,11 @@ local properties = {}
 local function defineProps(defs)
     for _, def in ipairs(defs) do
         local prop
-        if def[4] ~= nil then prop = def[3](def[2], def[4])
-        else prop = def[3](def[2]) end
+        if def[4] ~= nil then
+            prop = def[3](def[2], def[4])
+        else
+            prop = def[3](def[2])
+        end
         assert(prop, "Missing electrical DataRef: " .. def[2])
         defineProperty(def[1], prop)
         properties[def[5]] = prop
@@ -36,8 +34,11 @@ for index, item in ipairs(Core.bindings) do
         accessor = item.kind == "integer" and globalPropertyi or globalPropertyf
     end
     definitions[#definitions + 1] = {
-        "electric_input_" .. index, item.path, accessor,
-        item.index ~= nil and item.index + 1 or nil, item.key,
+        "electric_input_" .. index,
+        item.path,
+        accessor,
+        item.index ~= nil and item.index + 1 or nil,
+        item.key,
     }
 end
 defineProps(definitions)
@@ -68,10 +69,11 @@ function transport.ready()
     local response, response_kind = sasl.findDataRef(Packet.RESPONSE_PATH, TYPE_STRING, true)
     request_ref = request_kind == TYPE_STRING and request or nil
     response_ref = response_kind == TYPE_STRING and response or nil
-    if not request_ref or not response_ref then return false end
+    if not request_ref or not response_ref then
+        return false
+    end
     -- Native accessors return empty while xTlua is still starting or disabled.
-    return sasl.getDataRefSize(request_ref) == Packet.CAPACITY
-        and sasl.getDataRefSize(response_ref) == Packet.CAPACITY
+    return sasl.getDataRefSize(request_ref) == Packet.CAPACITY and sasl.getDataRefSize(response_ref) == Packet.CAPACITY
 end
 function transport.read()
     -- SASL string positions are one-based; pass the complete fixed buffer.
@@ -86,7 +88,9 @@ local controller = Controller.new({
     random = math.random,
     session = tostring(os.time()) .. "-" .. tostring(os.clock()) .. "-" .. tostring({}),
     transport = transport,
-    report = function(message) logError("electric_worker.lua: " .. message) end,
+    report = function(message)
+        logError("electric_worker.lua: " .. message)
+    end,
 })
 
 function update()
@@ -96,7 +100,9 @@ function update()
     -- failure logic and the panel are dispatched by electric_system.lua.
     for _, item in ipairs(Core.bindings) do
         local value = outputs[item.key]
-        if value ~= nil then set(properties[item.key], value) end
+        if value ~= nil then
+            set(properties[item.key], value)
+        end
     end
     set(mode, controller.mode) -- 0 local, 1 waiting, 2 worker results accepted
     set(lag, #controller.pending)

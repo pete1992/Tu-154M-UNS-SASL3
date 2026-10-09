@@ -1,5 +1,5 @@
 -- free_texture_lit.lua
--- Generic illuminated texture drawing component.
+-- Draws an illuminated texture at the position and dimensions supplied by its parent.
 
 defineProperty("image")
 defineProperty("position_x", 0)
@@ -14,12 +14,5 @@ function draw()
         return
     end
 
-    sasl.gl.drawTexture(
-        texture,
-        get(position_x),
-        get(position_y),
-        get(width),
-        get(height),
-        {1, 1, 1, 1}
-    )
+    sasl.gl.drawTexture(texture, get(position_x), get(position_y), get(width), get(height), { 1, 1, 1, 1 })
 end

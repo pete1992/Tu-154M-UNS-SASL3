@@ -1,11 +1,11 @@
 -- rotated_tapeLit.lua
--- scrollable rotatable tape
+-- Draws a rotated, scrollable illuminated texture for the UPhone display.
 
 -- tape image
 defineProperty("image")
 
 -- size of visible area
-defineProperty("window", { 1.0, 1.0 } )
+defineProperty("window", { 1.0, 1.0 })
 
 -- amount to scroll horizontal
 defineProperty("scrollX", 0)
@@ -23,8 +23,17 @@ function draw()
     local sz = get(window)
     local imageId = get(image)
     local textureWidth, textureHeight = sasl.gl.getTextureSize(imageId)
-    sasl.gl.drawRotatedTexturePart(imageId, get(angle), 0, 0, 100, 100,
-        get(scrollX) * textureWidth, get(scrollY) * textureHeight,
-        sz[1] * textureWidth, sz[2] * textureHeight, WHITE)
+    sasl.gl.drawRotatedTexturePart(
+        imageId,
+        get(angle),
+        0,
+        0,
+        100,
+        100,
+        get(scrollX) * textureWidth,
+        get(scrollY) * textureHeight,
+        sz[1] * textureWidth,
+        sz[2] * textureHeight,
+        WHITE
+    )
 end
-

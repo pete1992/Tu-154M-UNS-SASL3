@@ -1,5 +1,6 @@
 -- arm406.lua
--- ARM-406 / PDU-406: manual-only, simulated emergency locator transmitter.
+-- Operate the manual ARM-406 emergency locator transmitter and PDU-406 self-test.
+
 -- The B2 T154.arm406 self-test supplied the ten-second test concept. Emergency
 -- operation is implemented here with the existing M panel properties and SASL
 -- audio; it does not depend on B2 DataRefs, xTlua, FMOD, PA3 or another plugin.
@@ -90,8 +91,11 @@ end
 local function registerButton(name, description, property)
     local command = sasl.createCommand("tu154/arm406/" .. name, description)
     sasl.registerCommandHandler(command, 0, function(phase)
-        if phase == 0 then set(property, 1)
-        elseif phase == 2 then set(property, 0) end
+        if phase == 0 then
+            set(property, 1)
+        elseif phase == 2 then
+            set(property, 0)
+        end
         return 0
     end)
 end
@@ -101,7 +105,9 @@ registerButton("test", "ARM-406: start self-test (no distress transmission)", te
 registerButton("sound_off", "ARM-406: silence the PDU monitor only", mute_button)
 
 local function stopSample(sample)
-    if sample and sasl.al.isSamplePlaying(sample) then sasl.al.stopSample(sample) end
+    if sample and sasl.al.isSamplePlaying(sample) then
+        sasl.al.stopSample(sample)
+    end
 end
 
 function update()
@@ -143,14 +149,18 @@ function update()
             test_elapsed = -1
             set(test_passed, 0)
         end
-        if not unit_ok then qualified_press, hold_elapsed = false, 0 end
+        if not unit_ok then
+            qualified_press, hold_elapsed = false, 0
+        end
 
         -- Require a fresh press made while the remote panel is powered. Holding
         -- the button through OFF/ON or power restoration cannot trigger distress.
         if manual_edge and remote_power and unit_ok and not is_paused then
             qualified_press, hold_elapsed = true, 0
         end
-        if not manual then qualified_press, hold_elapsed = false, 0 end
+        if not manual then
+            qualified_press, hold_elapsed = false, 0
+        end
         if qualified_press and not latched then
             hold_elapsed = hold_elapsed + dt
             if hold_elapsed >= MANUAL_HOLD_SECONDS then
@@ -171,7 +181,9 @@ function update()
                 set(test_passed, flag(unit_ok and battery_ok))
             end
         end
-        if mute_edge and (latched or test_elapsed >= 0) and not is_paused then silent = true end
+        if mute_edge and (latched or test_elapsed >= 0) and not is_paused then
+            silent = true
+        end
     end
 
     local testing = test_elapsed >= 0
@@ -181,9 +193,13 @@ function update()
     local pulse = transmit_elapsed % 1 < 0.5
     -- The ten-second self-test exercises indicators and the local monitor ONLY.
     local test_fault = testing and test_elapsed >= 2 and test_elapsed < 4
-    local test_emergency = testing and ((test_elapsed >= 0.4 and test_elapsed < 2)
-        or (test_elapsed >= 3 and test_elapsed < 4.6)
-        or (test_elapsed >= 5.6 and test_elapsed < 6.6) or test_elapsed >= 7.2)
+    local test_emergency = testing
+        and (
+            (test_elapsed >= 0.4 and test_elapsed < 2)
+            or (test_elapsed >= 3 and test_elapsed < 4.6)
+            or (test_elapsed >= 5.6 and test_elapsed < 6.6)
+            or test_elapsed >= 7.2
+        )
     local test_tone = testing and test_elapsed >= 3.2 and test_elapsed < 6
     local monitor = (transmitting or test_tone) and not silent
 
@@ -199,17 +215,23 @@ function update()
     set(fault_lit, flag(panel_power and (fault or test_fault)))
     set(test_lit, panel_power and (testing and (test_elapsed % 1 < 0.5 and 1 or 0.15) or 1) or 0)
     set(mute_lit, panel_power and (silent and 1 or 0.15) or 0)
-    if transmitting then transmit_elapsed = (transmit_elapsed + dt) % BURST_PERIOD end
+    if transmitting then
+        transmit_elapsed = (transmit_elapsed + dt) % BURST_PERIOD
+    end
 
     if monitor_sample then
         if monitor and audible then
             sasl.al.setSampleGain(monitor_sample, gain)
-            if not sasl.al.isSamplePlaying(monitor_sample) then sasl.al.playSample(monitor_sample, true) end
+            if not sasl.al.isSamplePlaying(monitor_sample) then
+                sasl.al.playSample(monitor_sample, true)
+            end
         else
             stopSample(monitor_sample)
         end
     end
-    if not audible then stopSample(button_sample) end
+    if not audible then
+        stopSample(button_sample)
+    end
     last_manual, last_test, last_mute = manual, test, mute
 end
 
@@ -217,9 +239,22 @@ function onModuleShutdown()
     stopSample(monitor_sample)
     stopSample(button_sample)
     -- Do not leave apparent transmission or a held local activation after unload.
-    for _, property in ipairs({manual_button, mode, emergency_latched, test_active,
-        test_passed, muted, tx_1215, tx_406, aural_active, arm_lit, emergency_lit,
-        fault_lit, test_lit, mute_lit}) do
+    for _, property in ipairs({
+        manual_button,
+        mode,
+        emergency_latched,
+        test_active,
+        test_passed,
+        muted,
+        tx_1215,
+        tx_406,
+        aural_active,
+        arm_lit,
+        emergency_lit,
+        fault_lit,
+        test_lit,
+        mute_lit,
+    }) do
         set(property, 0)
     end
 end

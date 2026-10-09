@@ -1,12 +1,12 @@
 -- controls.lua
--- this is flight controls main script
+-- Registers flight controls, trim, high-lift devices, steering and landing gear.
 
 components = {
-	controls_panel {},
-	flight_controls{},
-	trimmers {},
-	flaps {},
-	nosewheel {},
-	landing_gears {},
-	control_fails {},
+    controls_panel {},
+    flight_controls {},
+    trimmers {},
+    flaps {},
+    nosewheel {},
+    landing_gears {},
+    control_fails {},
 }

@@ -1,5 +1,5 @@
 -- overhead.lua
--- Overhead control sounds, cold-and-dark cap initialization, and cap interlocks
+-- Handles overhead-control sounds, startup cap positions and cap interlocks.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -9,76 +9,76 @@ end
 
 defineProps({
     -- X-Plane
-    {"eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty},
-    {"eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty},
-    {"eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty},
+    { "eng1_N1", "sim/flightmodel/engine/ENGN_N1_[0]", globalProperty },
+    { "eng2_N1", "sim/flightmodel/engine/ENGN_N1_[1]", globalProperty },
+    { "eng3_N1", "sim/flightmodel/engine/ENGN_N1_[2]", globalProperty },
     -- Timing
-    {"frame_time", "tu154/custom/time/frame_time", globalPropertyf},
+    { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     -- Overhead switches
-    {"var_left", "tu154/custom/switchers/ovhd/var_left", globalPropertyi},
-    {"var_right", "tu154/custom/switchers/ovhd/var_right", globalPropertyi},
-    {"auasp_on", "tu154/custom/switchers/ovhd/auasp_on", globalPropertyi},
-    {"auasp_contr", "tu154/custom/switchers/ovhd/auasp_contr", globalPropertyi},
-    {"eup_on", "tu154/custom/switchers/ovhd/eup_on", globalPropertyi},
-    {"agr_on", "tu154/custom/switchers/ovhd/agr_on", globalPropertyi},
-    {"bkk_contr", "tu154/custom/switchers/ovhd/bkk_contr", globalPropertyi},
-    {"bkk_on", "tu154/custom/switchers/ovhd/bkk_on", globalPropertyi},
-    {"sau_stu_on", "tu154/custom/switchers/ovhd/sau_stu_on", globalPropertyi},
-    {"pkp_left_on", "tu154/custom/switchers/ovhd/pkp_left_on", globalPropertyi},
-    {"pkp_right_on", "tu154/custom/switchers/ovhd/pkp_right_on", globalPropertyi},
-    {"mgv_contr", "tu154/custom/switchers/ovhd/mgv_contr", globalPropertyi},
-    {"tks_on_1", "tu154/custom/switchers/ovhd/tks_on_1", globalPropertyi},
-    {"tks_on_2", "tu154/custom/switchers/ovhd/tks_on_2", globalPropertyi},
-    {"tks_heat", "tu154/custom/switchers/ovhd/tks_heat", globalPropertyi},
-    {"tks_corr_1", "tu154/custom/switchers/ovhd/tks_corr_1", globalPropertyi},
-    {"tks_corr_2", "tu154/custom/switchers/ovhd/tks_corr_2", globalPropertyi},
-    {"curs_pnp_mode_1", "tu154/custom/switchers/ovhd/curs_pnp_mode_1", globalPropertyi},
-    {"curs_pnp_mode_2", "tu154/custom/switchers/ovhd/curs_pnp_mode_2", globalPropertyi},
-    {"svs_on", "tu154/custom/switchers/ovhd/svs_on", globalPropertyi},
-    {"svs_heat", "tu154/custom/switchers/ovhd/svs_heat", globalPropertyi},
-    {"kln_on", "tu154/custom/switchers/ovhd/kln_on", globalPropertyi},
-    {"tcas_on", "tu154/custom/switchers/ovhd/tcas_on", globalPropertyi},
-    {"emerg_light_on", "tu154/custom/switchers/ovhd/emerg_light_on", globalPropertyi},
-    {"curs_np_on_1", "tu154/custom/switchers/ovhd/curs_np_on_1", globalPropertyi},
-    {"curs_np_on_2", "tu154/custom/switchers/ovhd/curs_np_on_2", globalPropertyi},
-    {"tra_67_on", "tu154/custom/switchers/ovhd/tra_67_on", globalPropertyi},
-    {"rsbn_on", "tu154/custom/switchers/ovhd/rsbn_on", globalPropertyi},
-    {"rsbn_recon", "tu154/custom/switchers/ovhd/rsbn_recon", globalPropertyi},
-    {"rv5_1_on", "tu154/custom/switchers/ovhd/rv5_1_on", globalPropertyi},
-    {"rv5_2_on", "tu154/custom/switchers/ovhd/rv5_2_on", globalPropertyi},
-    {"vhf_1_on", "tu154/custom/switchers/ovhd/vhf_1_on", globalPropertyi},
-    {"vhf_2_on", "tu154/custom/switchers/ovhd/vhf_2_on", globalPropertyi},
-    {"stabil_ga_main", "tu154/custom/switchers/ovhd/stabil_ga_main", globalPropertyi},
-    {"stabil_ga_reserv", "tu154/custom/switchers/ovhd/stabil_ga_reserv", globalPropertyi},
-    {"micron_1_on", "tu154/custom/switchers/ovhd/micron_1_on", globalPropertyi},
-    {"micron_2_on", "tu154/custom/switchers/ovhd/micron_2_on", globalPropertyi},
-    {"spu_on", "tu154/custom/switchers/ovhd/spu_on", globalPropertyi},
-    {"sgs_on", "tu154/custom/switchers/ovhd/sgs_on", globalPropertyi},
-    {"sd75_1_on", "tu154/custom/switchers/ovhd/sd75_1_on", globalPropertyi},
-    {"sd75_2_on", "tu154/custom/switchers/ovhd/sd75_2_on", globalPropertyi},
-    {"uvid_on", "tu154/custom/switchers/ovhd/uvid_on", globalPropertyi},
-    {"vbe_1_on", "tu154/custom/switchers/ovhd/vbe_1_on", globalPropertyi},
-    {"vbe_2_on", "tu154/custom/switchers/ovhd/vbe_2_on", globalPropertyi},
-    {"mars_on", "tu154/custom/switchers/ovhd/mars_on", globalPropertyi},
-    {"vent_1", "tu154/custom/switchers/ovhd/vent_1", globalPropertyi},
-    {"vent_2", "tu154/custom/switchers/ovhd/vent_2", globalPropertyi},
-    {"vent_3", "tu154/custom/switchers/ovhd/vent_3", globalPropertyi},
-    {"arm406", "tu154/custom/switchers/ovhd/arm406", globalPropertyi},
-    {"ushdb_mode_1", "tu154/custom/switchers/ovhd/ushdb_mode_1", globalPropertyi},
-    {"ushdb_mode_2", "tu154/custom/switchers/ovhd/ushdb_mode_2", globalPropertyi},
+    { "var_left", "tu154/custom/switchers/ovhd/var_left", globalPropertyi },
+    { "var_right", "tu154/custom/switchers/ovhd/var_right", globalPropertyi },
+    { "auasp_on", "tu154/custom/switchers/ovhd/auasp_on", globalPropertyi },
+    { "auasp_contr", "tu154/custom/switchers/ovhd/auasp_contr", globalPropertyi },
+    { "eup_on", "tu154/custom/switchers/ovhd/eup_on", globalPropertyi },
+    { "agr_on", "tu154/custom/switchers/ovhd/agr_on", globalPropertyi },
+    { "bkk_contr", "tu154/custom/switchers/ovhd/bkk_contr", globalPropertyi },
+    { "bkk_on", "tu154/custom/switchers/ovhd/bkk_on", globalPropertyi },
+    { "sau_stu_on", "tu154/custom/switchers/ovhd/sau_stu_on", globalPropertyi },
+    { "pkp_left_on", "tu154/custom/switchers/ovhd/pkp_left_on", globalPropertyi },
+    { "pkp_right_on", "tu154/custom/switchers/ovhd/pkp_right_on", globalPropertyi },
+    { "mgv_contr", "tu154/custom/switchers/ovhd/mgv_contr", globalPropertyi },
+    { "tks_on_1", "tu154/custom/switchers/ovhd/tks_on_1", globalPropertyi },
+    { "tks_on_2", "tu154/custom/switchers/ovhd/tks_on_2", globalPropertyi },
+    { "tks_heat", "tu154/custom/switchers/ovhd/tks_heat", globalPropertyi },
+    { "tks_corr_1", "tu154/custom/switchers/ovhd/tks_corr_1", globalPropertyi },
+    { "tks_corr_2", "tu154/custom/switchers/ovhd/tks_corr_2", globalPropertyi },
+    { "curs_pnp_mode_1", "tu154/custom/switchers/ovhd/curs_pnp_mode_1", globalPropertyi },
+    { "curs_pnp_mode_2", "tu154/custom/switchers/ovhd/curs_pnp_mode_2", globalPropertyi },
+    { "svs_on", "tu154/custom/switchers/ovhd/svs_on", globalPropertyi },
+    { "svs_heat", "tu154/custom/switchers/ovhd/svs_heat", globalPropertyi },
+    { "kln_on", "tu154/custom/switchers/ovhd/kln_on", globalPropertyi },
+    { "tcas_on", "tu154/custom/switchers/ovhd/tcas_on", globalPropertyi },
+    { "emerg_light_on", "tu154/custom/switchers/ovhd/emerg_light_on", globalPropertyi },
+    { "curs_np_on_1", "tu154/custom/switchers/ovhd/curs_np_on_1", globalPropertyi },
+    { "curs_np_on_2", "tu154/custom/switchers/ovhd/curs_np_on_2", globalPropertyi },
+    { "tra_67_on", "tu154/custom/switchers/ovhd/tra_67_on", globalPropertyi },
+    { "rsbn_on", "tu154/custom/switchers/ovhd/rsbn_on", globalPropertyi },
+    { "rsbn_recon", "tu154/custom/switchers/ovhd/rsbn_recon", globalPropertyi },
+    { "rv5_1_on", "tu154/custom/switchers/ovhd/rv5_1_on", globalPropertyi },
+    { "rv5_2_on", "tu154/custom/switchers/ovhd/rv5_2_on", globalPropertyi },
+    { "vhf_1_on", "tu154/custom/switchers/ovhd/vhf_1_on", globalPropertyi },
+    { "vhf_2_on", "tu154/custom/switchers/ovhd/vhf_2_on", globalPropertyi },
+    { "stabil_ga_main", "tu154/custom/switchers/ovhd/stabil_ga_main", globalPropertyi },
+    { "stabil_ga_reserv", "tu154/custom/switchers/ovhd/stabil_ga_reserv", globalPropertyi },
+    { "micron_1_on", "tu154/custom/switchers/ovhd/micron_1_on", globalPropertyi },
+    { "micron_2_on", "tu154/custom/switchers/ovhd/micron_2_on", globalPropertyi },
+    { "spu_on", "tu154/custom/switchers/ovhd/spu_on", globalPropertyi },
+    { "sgs_on", "tu154/custom/switchers/ovhd/sgs_on", globalPropertyi },
+    { "sd75_1_on", "tu154/custom/switchers/ovhd/sd75_1_on", globalPropertyi },
+    { "sd75_2_on", "tu154/custom/switchers/ovhd/sd75_2_on", globalPropertyi },
+    { "uvid_on", "tu154/custom/switchers/ovhd/uvid_on", globalPropertyi },
+    { "vbe_1_on", "tu154/custom/switchers/ovhd/vbe_1_on", globalPropertyi },
+    { "vbe_2_on", "tu154/custom/switchers/ovhd/vbe_2_on", globalPropertyi },
+    { "mars_on", "tu154/custom/switchers/ovhd/mars_on", globalPropertyi },
+    { "vent_1", "tu154/custom/switchers/ovhd/vent_1", globalPropertyi },
+    { "vent_2", "tu154/custom/switchers/ovhd/vent_2", globalPropertyi },
+    { "vent_3", "tu154/custom/switchers/ovhd/vent_3", globalPropertyi },
+    { "arm406", "tu154/custom/switchers/ovhd/arm406", globalPropertyi },
+    { "ushdb_mode_1", "tu154/custom/switchers/ovhd/ushdb_mode_1", globalPropertyi },
+    { "ushdb_mode_2", "tu154/custom/switchers/ovhd/ushdb_mode_2", globalPropertyi },
 
     -- Overhead pushbuttons
-    {"tks_signal_off", "tu154/custom/buttons/ovhd/tks_signal_off", globalPropertyi},
-    {"svs_contr", "tu154/custom/buttons/ovhd/svs_contr", globalPropertyi},
+    { "tks_signal_off", "tu154/custom/buttons/ovhd/tks_signal_off", globalPropertyi },
+    { "svs_contr", "tu154/custom/buttons/ovhd/svs_contr", globalPropertyi },
 
     -- Protective caps
-    {"bkk_contr_cap", "tu154/custom/switchers/ovhd/bkk_contr_cap", globalPropertyi},
-    {"bkk_on_cap", "tu154/custom/switchers/ovhd/bkk_on_cap", globalPropertyi},
-    {"sau_stu_cap", "tu154/custom/switchers/ovhd/sau_stu_cap", globalPropertyi},
-    {"pkp_left_cap", "tu154/custom/switchers/ovhd/pkp_left_cap", globalPropertyi},
-    {"pkp_right_cap", "tu154/custom/switchers/ovhd/pkp_right_cap", globalPropertyi},
-    {"mgv_contr_cap", "tu154/custom/switchers/ovhd/mgv_contr_cap", globalPropertyi},
-    {"emerg_light_cap", "tu154/custom/switchers/ovhd/emerg_light_cap", globalPropertyi},
+    { "bkk_contr_cap", "tu154/custom/switchers/ovhd/bkk_contr_cap", globalPropertyi },
+    { "bkk_on_cap", "tu154/custom/switchers/ovhd/bkk_on_cap", globalPropertyi },
+    { "sau_stu_cap", "tu154/custom/switchers/ovhd/sau_stu_cap", globalPropertyi },
+    { "pkp_left_cap", "tu154/custom/switchers/ovhd/pkp_left_cap", globalPropertyi },
+    { "pkp_right_cap", "tu154/custom/switchers/ovhd/pkp_right_cap", globalPropertyi },
+    { "mgv_contr_cap", "tu154/custom/switchers/ovhd/mgv_contr_cap", globalPropertyi },
+    { "emerg_light_cap", "tu154/custom/switchers/ovhd/emerg_light_cap", globalPropertyi },
 })
 
 local COLD_DARK_CHECK_DELAY = 0.3
@@ -152,13 +152,13 @@ local button_properties = {
 -- A closed cap mechanically forces the protected switch to the listed value.
 -- The emergency-light cap is intentionally not opened during cold-and-dark setup.
 local guarded_switches = {
-    {cap = bkk_contr_cap, switch = bkk_contr, forced_value = 0, open_on_cold_dark = true},
-    {cap = bkk_on_cap, switch = bkk_on, forced_value = 1, open_on_cold_dark = true},
-    {cap = sau_stu_cap, switch = sau_stu_on, forced_value = 1, open_on_cold_dark = true},
-    {cap = pkp_left_cap, switch = pkp_left_on, forced_value = 1, open_on_cold_dark = true},
-    {cap = pkp_right_cap, switch = pkp_right_on, forced_value = 1, open_on_cold_dark = true},
-    {cap = mgv_contr_cap, switch = mgv_contr, forced_value = 1, open_on_cold_dark = true},
-    {cap = emerg_light_cap, switch = emerg_light_on, forced_value = 0, open_on_cold_dark = false},
+    { cap = bkk_contr_cap, switch = bkk_contr, forced_value = 0, open_on_cold_dark = true },
+    { cap = bkk_on_cap, switch = bkk_on, forced_value = 1, open_on_cold_dark = true },
+    { cap = sau_stu_cap, switch = sau_stu_on, forced_value = 1, open_on_cold_dark = true },
+    { cap = pkp_left_cap, switch = pkp_left_on, forced_value = 1, open_on_cold_dark = true },
+    { cap = pkp_right_cap, switch = pkp_right_on, forced_value = 1, open_on_cold_dark = true },
+    { cap = mgv_contr_cap, switch = mgv_contr, forced_value = 1, open_on_cold_dark = true },
+    { cap = emerg_light_cap, switch = emerg_light_on, forced_value = 0, open_on_cold_dark = false },
 }
 
 local cap_properties = {}
@@ -212,7 +212,9 @@ local function initialize_cold_dark_caps()
     local engine_2_n1 = get(eng2_N1)
     local engine_3_n1 = get(eng3_N1)
 
-    if isColdAndDarkStart() and engine_1_n1 < ENGINE_STOPPED_N1
+    if
+        isColdAndDarkStart()
+        and engine_1_n1 < ENGINE_STOPPED_N1
         and engine_2_n1 < ENGINE_STOPPED_N1
         and engine_3_n1 < ENGINE_STOPPED_N1
     then

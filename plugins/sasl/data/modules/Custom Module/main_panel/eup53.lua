@@ -1,5 +1,5 @@
 -- eup53.lua
--- Turn-and-slip indicator.
+-- Calculate the EUP-53 turn-and-slip indicator.
 
 local function defineProps(defs)
     for _, def in ipairs(defs) do
@@ -30,35 +30,44 @@ defineProps({
 
     -- SmartCopilot authority: 0 = absent, 1 = slave, 2 = master
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf }, -- Unused in this leaf component.
 })
 
 local slip_act = 0
 local turn_act = 0
 
 function update()
+    local MASTER = get(ismaster) ~= 1
 
-local MASTER = get(ismaster) ~= 1
+    local passed = get(frame_time)
+    -- slip ind
+    slip_act = slip_act + (get(slip) - slip_act) * passed * 0.8
 
-	local passed = get(frame_time)
-	-- slip ind
-	slip_act = slip_act + (get(slip) - slip_act) * passed * 0.8
-	
-	if slip_act > 7 then slip_act = 7
-	elseif slip_act < -7 then slip_act = -7 end
-	
-if MASTER then set(slip_rate_ind, slip_act) end
-	
-	-- turn rate
-	local power = get(bus27_volt) > 13 and get(eup_on) == 1 and get(eup_fail) < 6
-	local turn_need = 0
-	if power then turn_need = get(turn) * 1.5 end
-	
-	turn_act = turn_act + (turn_need - turn_act) * passed * 2
-	
-	if turn_act > 50 then turn_act = 50
-	elseif turn_act < -50 then turn_act = -50 end
-	
-if MASTER then set(turn_rate_ind, turn_act) end
-	
+    if slip_act > 7 then
+        slip_act = 7
+    elseif slip_act < -7 then
+        slip_act = -7
+    end
+
+    if MASTER then
+        set(slip_rate_ind, slip_act)
+    end
+
+    -- turn rate
+    local power = get(bus27_volt) > 13 and get(eup_on) == 1 and get(eup_fail) < 6
+    local turn_need = 0
+    if power then
+        turn_need = get(turn) * 1.5
+    end
+
+    turn_act = turn_act + (turn_need - turn_act) * passed * 2
+
+    if turn_act > 50 then
+        turn_act = 50
+    elseif turn_act < -50 then
+        turn_act = -50
+    end
+
+    if MASTER then
+        set(turn_rate_ind, turn_act)
+    end
 end

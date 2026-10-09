@@ -1,4 +1,6 @@
--- interactive.lua
+-- clickable.lua
+-- Dispatches SASL cursor input to callbacks supplied by the parent component.
+
 -- Auxiliary mouse input helper component.
 -- Use only when standard component mouse callbacks are insufficient.
 
@@ -47,12 +49,7 @@ function update()
     local dragValue = sasl.getCSDragValue()
 
     if dragValue and dragValue > 0 and mouseDrag then
-        mouseDrag(
-            x,
-            y,
-            sasl.getCSDragDirection(),
-            dragValue
-        )
+        mouseDrag(x, y, sasl.getCSDragDirection(), dragValue)
     end
 
     local wheel = sasl.getCSWheelClicks()

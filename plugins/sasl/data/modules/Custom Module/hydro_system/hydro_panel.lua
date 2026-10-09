@@ -1,5 +1,5 @@
 -- hydro_panel.lua
--- this is hydraulic panel
+-- Updates hydraulic controls, pressure and quantity gauges, and warning lamps.
 
 -- gauges
 local function defineProps(defs)
@@ -15,30 +15,30 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "pressure_ind_1", "tu154/custom/gauges/hydro/pressure_ind_1", globalPropertyf }, --    1
-    { "pressure_ind_2", "tu154/custom/gauges/hydro/pressure_ind_2", globalPropertyf }, --    2
-    { "pressure_ind_3", "tu154/custom/gauges/hydro/pressure_ind_3", globalPropertyf }, --    3
-    { "pressure_ind_emerg", "tu154/custom/gauges/hydro/pressure_ind_emerg", globalPropertyf }, --
+    { "pressure_ind_1", "tu154/custom/gauges/hydro/pressure_ind_1", globalPropertyf },
+    { "pressure_ind_2", "tu154/custom/gauges/hydro/pressure_ind_2", globalPropertyf },
+    { "pressure_ind_3", "tu154/custom/gauges/hydro/pressure_ind_3", globalPropertyf },
+    { "pressure_ind_emerg", "tu154/custom/gauges/hydro/pressure_ind_emerg", globalPropertyf },
 
-    { "qty_12", "tu154/custom/gauges/hydro/qty_12", globalPropertyf }, --
-    { "qty_3", "tu154/custom/gauges/hydro/qty_3", globalPropertyf }, --
+    { "qty_12", "tu154/custom/gauges/hydro/qty_12", globalPropertyf },
+    { "qty_3", "tu154/custom/gauges/hydro/qty_3", globalPropertyf },
 
-    { "gear_brake_press_L", "tu154/custom/gauges/console/gear_brake_press_L", globalPropertyf }, --
-    { "gear_brake_press_R", "tu154/custom/gauges/console/gear_brake_press_R", globalPropertyf }, --
+    { "gear_brake_press_L", "tu154/custom/gauges/console/gear_brake_press_L", globalPropertyf },
+    { "gear_brake_press_R", "tu154/custom/gauges/console/gear_brake_press_R", globalPropertyf },
 
     -- controls
-    { "lamp_test_hydro", "tu154/custom/buttons/lamp_test_hydro", globalPropertyi }, --
-    { "lamp_test_front", "tu154/custom/buttons/lamp_test_front", globalPropertyi }, --
+    { "lamp_test_hydro", "tu154/custom/buttons/lamp_test_hydro", globalPropertyi },
+    { "lamp_test_front", "tu154/custom/buttons/lamp_test_front", globalPropertyi },
 
-    { "qty_test_12", "tu154/custom/buttons/hydro/qty_test_12", globalPropertyi }, --
-    { "qty_test_3", "tu154/custom/buttons/hydro/qty_test_3", globalPropertyi }, --
+    { "qty_test_12", "tu154/custom/buttons/hydro/qty_test_12", globalPropertyi },
+    { "qty_test_3", "tu154/custom/buttons/hydro/qty_test_3", globalPropertyi },
 
-    { "accum_fill", "tu154/custom/buttons/hydro/accum_fill", globalPropertyi }, --
+    { "accum_fill", "tu154/custom/buttons/hydro/accum_fill", globalPropertyi },
 
-    { "connect2to1", "tu154/custom/switchers/hydro/connect2to1", globalPropertyi }, --  2   1
-    { "connect2to1_cap", "tu154/custom/switchers/hydro/connect2to1_cap", globalPropertyi }, --  2   1
-    { "pump_2", "tu154/custom/switchers/hydro/pump_2", globalPropertyi }, --  2   1
-    { "pump_3", "tu154/custom/switchers/hydro/pump_3", globalPropertyi }, --  2   1
+    { "connect2to1", "tu154/custom/switchers/hydro/connect2to1", globalPropertyi },
+    { "connect2to1_cap", "tu154/custom/switchers/hydro/connect2to1_cap", globalPropertyi },
+    { "pump_2", "tu154/custom/switchers/hydro/pump_2", globalPropertyi },
+    { "pump_3", "tu154/custom/switchers/hydro/pump_3", globalPropertyi },
 
     -- time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
@@ -55,36 +55,26 @@ defineProps({
     { "front_hydr_fail_4", "tu154/custom/lights/small/front_hydr_fail_4", globalPropertyf }, --    .
 
     -- sources
-    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf }, --   27
-    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf }, --   27
+    { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
+    { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
-    { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf }, --   36
-    { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf }, --   36  1
+    { "bus36_volt_right", "tu154/custom/elec/bus36_volt_right", globalPropertyf },
+    { "bus36_volt_pts250_1", "tu154/custom/elec/bus36_volt_pts250_1", globalPropertyf },
 
-    { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf }, --   1
-    { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf }, --   2
-    { "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf }, --   3
-    { "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf }, --   4
+    { "gs_press_1", "tu154/custom/hydro/gs_press_1", globalPropertyf },
+    { "gs_press_2", "tu154/custom/hydro/gs_press_2", globalPropertyf },
+    { "gs_press_3", "tu154/custom/hydro/gs_press_3", globalPropertyf },
+    { "gs_press_4", "tu154/custom/hydro/gs_press_4", globalPropertyf },
 
-    { "gs_qty_12_show", "tu154/custom/hydro/gs_qty_12_show", globalPropertyf }, --
-    { "gs_qty_3_show", "tu154/custom/hydro/gs_qty_3_show", globalPropertyf }, --
+    { "gs_qty_12_show", "tu154/custom/hydro/gs_qty_12_show", globalPropertyf },
+    { "gs_qty_3_show", "tu154/custom/hydro/gs_qty_3_show", globalPropertyf },
 
-    --defineProperty("l_brake_add", globalPropertyf("sim/flightmodel/controls/l_brake_add")) -- Left Brake
-    --defineProperty("r_brake_add", globalPropertyf("sim/flightmodel/controls/r_brake_add")) -- Right Brake
-
-    { "l_brake_add", "tu154/custom/brakes/int_brakes_L", globalPropertyf }, --
-    { "r_brake_add", "tu154/custom/brakes/int_brakes_R", globalPropertyf }, --
-
-    --defineProperty("l_brake_add", globalPropertyf("tu154/custom/SC/brakes/int_brakes_L"))
-    --defineProperty("r_brake_add", globalPropertyf("tu154/custom/SC/brakes/int_brakes_R"))
-
-    --defineProperty("l_brake_add", globalPropertyf("tu154/custom/controlls/brake_L")) --
-    --defineProperty("r_brake_add", globalPropertyf("tu154/custom/controlls/brake_R")) --
+    { "l_brake_add", "tu154/custom/brakes/int_brakes_L", globalPropertyf },
+    { "r_brake_add", "tu154/custom/brakes/int_brakes_R", globalPropertyf },
 
     { "parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf }, -- Parking Brake
-    --defineProperty("parkbrake", globalPropertyf("tu154/custom/SC/controls/parkbrake"))
 
-    { "brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf }, --
+    { "brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf },
 
     -- failures
     { "rel_lbrakes", "sim/operation/failures/rel_lbrakes", globalPropertyi }, -- Left Brakes
@@ -92,9 +82,9 @@ defineProps({
 })
 
 -- sounds
-local switcher_sound = sasl.al.loadSample('Custom Sounds/metal_switch.wav')
-local cap_sound = sasl.al.loadSample('Custom Sounds/cap.wav')
-local button_sound = sasl.al.loadSample('Custom Sounds/plastic_btn.wav')
+local switcher_sound = sasl.al.loadSample("Custom Sounds/metal_switch.wav")
+local cap_sound = sasl.al.loadSample("Custom Sounds/cap.wav")
+local button_sound = sasl.al.loadSample("Custom Sounds/plastic_btn.wav")
 
 local passed = 0
 
@@ -104,60 +94,74 @@ local press_3 = get(gs_press_3)
 local press_4 = get(gs_press_4)
 
 local function lamps_eng()
-	local test_btn = get(lamp_test_hydro) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
-	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
-	
-	press_1 = get(gs_press_1)
-	press_2 = get(gs_press_2)
-	press_3 = get(gs_press_3)
-	press_4 = get(gs_press_4)
-	
-	local eng_hydr_fail_1_brt = 0
-	if press_1 < 100 then eng_hydr_fail_1_brt = 1 end
-	eng_hydr_fail_1_brt = math.max(eng_hydr_fail_1_brt * lamps_brt, test_btn) 
-	set(eng_hydr_fail_1, eng_hydr_fail_1_brt)
-	
-	local eng_hydr_fail_2_brt = 0
-	if press_2 < 100 then eng_hydr_fail_2_brt = 1 end
-	eng_hydr_fail_2_brt = math.max(eng_hydr_fail_2_brt * lamps_brt, test_btn) 
-	set(eng_hydr_fail_2, eng_hydr_fail_2_brt)
-	
-	local eng_hydr_fail_3_brt = 0
-	if press_3 < 100 then eng_hydr_fail_3_brt = 1 end
-	eng_hydr_fail_3_brt = math.max(eng_hydr_fail_3_brt * lamps_brt, test_btn) 
-	set(eng_hydr_fail_3, eng_hydr_fail_3_brt)
-	
-	local eng_hydr_fail_4_brt = 0
-	if press_4 < 190 then eng_hydr_fail_4_brt = 1 end
-	eng_hydr_fail_4_brt = math.max(eng_hydr_fail_4_brt * lamps_brt, test_btn)
-	set(eng_hydr_fail_4, eng_hydr_fail_4_brt)
-	
+    local test_btn = get(lamp_test_hydro) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
+    local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
+
+    press_1 = get(gs_press_1)
+    press_2 = get(gs_press_2)
+    press_3 = get(gs_press_3)
+    press_4 = get(gs_press_4)
+
+    local eng_hydr_fail_1_brt = 0
+    if press_1 < 100 then
+        eng_hydr_fail_1_brt = 1
+    end
+    eng_hydr_fail_1_brt = math.max(eng_hydr_fail_1_brt * lamps_brt, test_btn)
+    set(eng_hydr_fail_1, eng_hydr_fail_1_brt)
+
+    local eng_hydr_fail_2_brt = 0
+    if press_2 < 100 then
+        eng_hydr_fail_2_brt = 1
+    end
+    eng_hydr_fail_2_brt = math.max(eng_hydr_fail_2_brt * lamps_brt, test_btn)
+    set(eng_hydr_fail_2, eng_hydr_fail_2_brt)
+
+    local eng_hydr_fail_3_brt = 0
+    if press_3 < 100 then
+        eng_hydr_fail_3_brt = 1
+    end
+    eng_hydr_fail_3_brt = math.max(eng_hydr_fail_3_brt * lamps_brt, test_btn)
+    set(eng_hydr_fail_3, eng_hydr_fail_3_brt)
+
+    local eng_hydr_fail_4_brt = 0
+    if press_4 < 190 then
+        eng_hydr_fail_4_brt = 1
+    end
+    eng_hydr_fail_4_brt = math.max(eng_hydr_fail_4_brt * lamps_brt, test_btn)
+    set(eng_hydr_fail_4, eng_hydr_fail_4_brt)
 end
 
 local function lamps_front()
-	local test_btn = get(lamp_test_front) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
-	local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
-	
-	local front_hydr_fail_1_brt = 0
-	if press_1 < 100 then front_hydr_fail_1_brt = 1 end
-	front_hydr_fail_1_brt = math.max(front_hydr_fail_1_brt * lamps_brt, test_btn)
-	set(front_hydr_fail_1, front_hydr_fail_1_brt)
-	
-	local front_hydr_fail_2_brt = 0
-	if press_2 < 100 then front_hydr_fail_2_brt = 1 end
-	front_hydr_fail_2_brt = math.max(front_hydr_fail_2_brt * lamps_brt, test_btn)
-	set(front_hydr_fail_2, front_hydr_fail_2_brt)
-	
-	local front_hydr_fail_3_brt = 0
-	if press_3 < 100 then front_hydr_fail_3_brt = 1 end
-	front_hydr_fail_3_brt = math.max(front_hydr_fail_3_brt * lamps_brt, test_btn) 
-	set(front_hydr_fail_3, front_hydr_fail_3_brt)
-	
-	local front_hydr_fail_4_brt = 0
-	if press_4 < 190 then front_hydr_fail_4_brt = 1 end
-	front_hydr_fail_4_brt = math.max(front_hydr_fail_4_brt * lamps_brt, test_btn)
-	set(front_hydr_fail_4, front_hydr_fail_4_brt)
-	
+    local test_btn = get(lamp_test_front) * math.max((get(bus27_volt_right) - 10) / 18.5, 0)
+    local lamps_brt = math.max((math.max(get(bus27_volt_left), get(bus27_volt_right)) - 10) / 18.5, 0)
+
+    local front_hydr_fail_1_brt = 0
+    if press_1 < 100 then
+        front_hydr_fail_1_brt = 1
+    end
+    front_hydr_fail_1_brt = math.max(front_hydr_fail_1_brt * lamps_brt, test_btn)
+    set(front_hydr_fail_1, front_hydr_fail_1_brt)
+
+    local front_hydr_fail_2_brt = 0
+    if press_2 < 100 then
+        front_hydr_fail_2_brt = 1
+    end
+    front_hydr_fail_2_brt = math.max(front_hydr_fail_2_brt * lamps_brt, test_btn)
+    set(front_hydr_fail_2, front_hydr_fail_2_brt)
+
+    local front_hydr_fail_3_brt = 0
+    if press_3 < 100 then
+        front_hydr_fail_3_brt = 1
+    end
+    front_hydr_fail_3_brt = math.max(front_hydr_fail_3_brt * lamps_brt, test_btn)
+    set(front_hydr_fail_3, front_hydr_fail_3_brt)
+
+    local front_hydr_fail_4_brt = 0
+    if press_4 < 190 then
+        front_hydr_fail_4_brt = 1
+    end
+    front_hydr_fail_4_brt = math.max(front_hydr_fail_4_brt * lamps_brt, test_btn)
+    set(front_hydr_fail_4, front_hydr_fail_4_brt)
 end
 
 local connect2to1_last = get(connect2to1)
@@ -165,29 +169,32 @@ local pump_2_last = get(pump_2)
 local pump_3_last = get(pump_3)
 local connect2to1_cap_last = get(connect2to1_cap)
 
-local function check_switchers ()
-	local connect2to1_sw = get(connect2to1)
-	local pump_2_sw = get(pump_2)
-	local pump_3_sw = get(pump_3)
-	
-	local connect2to1_cap_sw = get(connect2to1_cap)
-	
-	local sw_changes = connect2to1_sw + pump_2_sw + pump_3_sw - connect2to1_last - pump_2_last - pump_3_last
-	
-	if sw_changes ~= 0 then sasl.al.playSample(switcher_sound, false) end
-	
-	if connect2to1_cap_sw - connect2to1_cap_last ~= 0 then sasl.al.playSample(cap_sound, false) end
-	
-	connect2to1_last = connect2to1_sw
-	pump_2_last = pump_2_sw
-	pump_3_last = pump_3_sw
-	connect2to1_cap_last = connect2to1_cap_sw
-	
-	-- switch back under cap
-	if connect2to1_cap_sw == 0 then
-		set(connect2to1, 0)
-	end
-	
+local function check_switchers()
+    local connect2to1_sw = get(connect2to1)
+    local pump_2_sw = get(pump_2)
+    local pump_3_sw = get(pump_3)
+
+    local connect2to1_cap_sw = get(connect2to1_cap)
+
+    local sw_changes = connect2to1_sw + pump_2_sw + pump_3_sw - connect2to1_last - pump_2_last - pump_3_last
+
+    if sw_changes ~= 0 then
+        sasl.al.playSample(switcher_sound, false)
+    end
+
+    if connect2to1_cap_sw - connect2to1_cap_last ~= 0 then
+        sasl.al.playSample(cap_sound, false)
+    end
+
+    connect2to1_last = connect2to1_sw
+    pump_2_last = pump_2_sw
+    pump_3_last = pump_3_sw
+    connect2to1_cap_last = connect2to1_cap_sw
+
+    -- switch back under cap
+    if connect2to1_cap_sw == 0 then
+        set(connect2to1, 0)
+    end
 end
 
 local lamp_test_hydro_last = get(lamp_test_hydro)
@@ -195,46 +202,55 @@ local qty_test_12_last = get(qty_test_12)
 local qty_test_3_last = get(qty_test_3)
 local accum_fill_last = get(accum_fill)
 
-local function buttons_check ()
+local function buttons_check()
+    local lamp_test_hydro_sw = get(lamp_test_hydro)
+    local qty_test_12_sw = get(qty_test_12)
+    local qty_test_3_sw = get(qty_test_3)
+    local accum_fill_sw = get(accum_fill)
 
-	local lamp_test_hydro_sw = get(lamp_test_hydro)
-	local qty_test_12_sw = get(qty_test_12)
-	local qty_test_3_sw = get(qty_test_3)
-	local accum_fill_sw = get(accum_fill)
-	
-	--print(qty_test_12_sw, qty_test_3_sw, accum_fill_last_sw)
-	
-	local sw_changes = lamp_test_hydro_sw + qty_test_12_sw + qty_test_3_sw + accum_fill_sw - lamp_test_hydro_last - qty_test_12_last - qty_test_3_last - accum_fill_last
-	
-	if sw_changes ~= 0 then sasl.al.playSample(button_sound, false) end
-	
-	lamp_test_hydro_last = lamp_test_hydro_sw
-	qty_test_12_last = qty_test_12_sw
-	qty_test_3_last = qty_test_3_sw
-	accum_fill_last = accum_fill_sw
+    --print(qty_test_12_sw, qty_test_3_sw, accum_fill_last_sw)
 
+    local sw_changes = lamp_test_hydro_sw
+        + qty_test_12_sw
+        + qty_test_3_sw
+        + accum_fill_sw
+        - lamp_test_hydro_last
+        - qty_test_12_last
+        - qty_test_3_last
+        - accum_fill_last
+
+    if sw_changes ~= 0 then
+        sasl.al.playSample(button_sound, false)
+    end
+
+    lamp_test_hydro_last = lamp_test_hydro_sw
+    qty_test_12_last = qty_test_12_sw
+    qty_test_3_last = qty_test_3_sw
+    accum_fill_last = accum_fill_sw
 end
 
-local oil_qty_12_t = { 
-{  -1000, -180}, 
-{  0, -180},    
-{  24, -120 }, 
-{  28, -60 },     
-{  32, 0 },  
-{  36, 60 },
-{  40, 120 },
-{  42, 145 },
-{  1000, 150 }} 
+local oil_qty_12_t = {
+    { -1000, -180 },
+    { 0, -180 },
+    { 24, -120 },
+    { 28, -60 },
+    { 32, 0 },
+    { 36, 60 },
+    { 40, 120 },
+    { 42, 145 },
+    { 1000, 150 },
+}
 
-local oil_qty_3_t = { 
-{  -1000, -180}, 
-{  0, -180},    
-{  16, -100 },    
-{  20, -40 },    
-{  24, 20 },
-{  28, 80 },
-{  32, 125 },
-{  1000, 130 }} 
+local oil_qty_3_t = {
+    { -1000, -180 },
+    { 0, -180 },
+    { 16, -100 },
+    { 20, -40 },
+    { 24, 20 },
+    { 28, 80 },
+    { 32, 125 },
+    { 1000, 130 },
+}
 
 local oil_qty_12_act = -180
 local oil_qty_3_act = -180
@@ -243,50 +259,65 @@ local left_br_act = 0
 local right_br_act = 0
 
 local function gauges()
-	
-	local power36 = bool2int(get(bus36_volt_pts250_1) > 30 or get(bus36_volt_right) > 30)
-	local power27L = bool2int(get(bus27_volt_left) > 13)
-	local power27R = bool2int(get(bus27_volt_right) > 13)
-	
-	-- manometers
-	set(pressure_ind_1, press_1 * power36)
-	set(pressure_ind_2, press_2 * power36)
-	set(pressure_ind_3, press_3 * power36)
-	set(pressure_ind_emerg, press_4 * power36)
+    local power36 = bool2int(get(bus36_volt_pts250_1) > 30 or get(bus36_volt_right) > 30)
+    local power27L = bool2int(get(bus27_volt_left) > 13)
+    local power27R = bool2int(get(bus27_volt_right) > 13)
 
-	local park = get(parkbrake)
-	
-	local e_brake = get(brake_emerg)
-	local e_press = math.min(get(gs_press_4) / 120, 1)
-	
-	left_br_act = left_br_act + (math.max(math.min(get(l_brake_add), 1), e_brake * e_press) * 120 * power36 * bool2int(get(rel_lbrakes) < 6) - left_br_act) * passed * 10
-	right_br_act = right_br_act + (math.max(math.min(get(r_brake_add), 1), e_brake * e_press) * 120 * power36 * bool2int(get(rel_rbrakes) < 6) - right_br_act) * passed * 10
-	
-	set(gear_brake_press_L, left_br_act)
-	set(gear_brake_press_R, right_br_act)
-	
-	-- oil quantity
-	local test_btn_12 = get(qty_test_12)
-	local test_btn_3 = get(qty_test_3)
-	
-	local qty_12_need =  interpolate(oil_qty_12_t, get(gs_qty_12_show) * test_btn_12 * power27L)
-	local qty_3_need = interpolate(oil_qty_3_t, get(gs_qty_3_show) * test_btn_3 * power27R)
-	
-	oil_qty_12_act = oil_qty_12_act + (qty_12_need - oil_qty_12_act) * passed * 5
-	oil_qty_3_act = oil_qty_3_act + (qty_3_need - oil_qty_3_act) * passed * 5
-	
-	set(qty_12, oil_qty_12_act)
-	set(qty_3, oil_qty_3_act)
-	
+    -- manometers
+    set(pressure_ind_1, press_1 * power36)
+    set(pressure_ind_2, press_2 * power36)
+    set(pressure_ind_3, press_3 * power36)
+    set(pressure_ind_emerg, press_4 * power36)
+
+    local park = get(parkbrake)
+
+    local e_brake = get(brake_emerg)
+    local e_press = math.min(get(gs_press_4) / 120, 1)
+
+    left_br_act = left_br_act
+        + (
+                math.max(math.min(get(l_brake_add), 1), e_brake * e_press)
+                    * 120
+                    * power36
+                    * bool2int(get(rel_lbrakes) < 6)
+                - left_br_act
+            )
+            * passed
+            * 10
+    right_br_act = right_br_act
+        + (
+                math.max(math.min(get(r_brake_add), 1), e_brake * e_press)
+                    * 120
+                    * power36
+                    * bool2int(get(rel_rbrakes) < 6)
+                - right_br_act
+            )
+            * passed
+            * 10
+
+    set(gear_brake_press_L, left_br_act)
+    set(gear_brake_press_R, right_br_act)
+
+    -- oil quantity
+    local test_btn_12 = get(qty_test_12)
+    local test_btn_3 = get(qty_test_3)
+
+    local qty_12_need = interpolate(oil_qty_12_t, get(gs_qty_12_show) * test_btn_12 * power27L)
+    local qty_3_need = interpolate(oil_qty_3_t, get(gs_qty_3_show) * test_btn_3 * power27R)
+
+    oil_qty_12_act = oil_qty_12_act + (qty_12_need - oil_qty_12_act) * passed * 5
+    oil_qty_3_act = oil_qty_3_act + (qty_3_need - oil_qty_3_act) * passed * 5
+
+    set(qty_12, oil_qty_12_act)
+    set(qty_3, oil_qty_3_act)
 end
 
 function update()
-	passed = get(frame_time)
-	
-	check_switchers ()
-	buttons_check ()
-	lamps_eng()
-	lamps_front()
-	gauges()
-	
+    passed = get(frame_time)
+
+    check_switchers()
+    buttons_check()
+    lamps_eng()
+    lamps_front()
+    gauges()
 end

@@ -1,8 +1,8 @@
 -- apu_system.lua
--- this is the main APU script
+-- Registers APU simulation, cockpit indications and failures.
 
 components = {
-	apu_logic {},
-	apu_panel {},
-	apu_fails {},
+    apu_logic {},
+    apu_panel {},
+    apu_fails {},
 }

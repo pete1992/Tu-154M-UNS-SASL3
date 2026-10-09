@@ -1,5 +1,5 @@
 -- asu.lua
--- TA-6A ground air-start unit (ASU) logic for Tu-154M.
+-- Models the ground air-start unit and its pressure supply.
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
@@ -8,12 +8,12 @@ local function defineProps(defs)
 end
 
 defineProps({
-    {"rpm", "tu154/custom/asu/rpm", globalPropertyf},
-    {"air_press", "tu154/custom/asu/press", globalPropertyf},
-    {"work", "tu154/custom/asu/work", globalPropertyi},
-    {"sim_period", "sim/operation/misc/frame_rate_period", globalPropertyf},
-    {"GS", "sim/flightmodel/position/groundspeed", globalPropertyf},
-    {"show", "tu154/custom/anim/asu_show", globalPropertyf},
+    { "rpm", "tu154/custom/asu/rpm", globalPropertyf },
+    { "air_press", "tu154/custom/asu/press", globalPropertyf },
+    { "work", "tu154/custom/asu/work", globalPropertyi },
+    { "sim_period", "sim/operation/misc/frame_rate_period", globalPropertyf },
+    { "GS", "sim/flightmodel/position/groundspeed", globalPropertyf },
+    { "show", "tu154/custom/anim/asu_show", globalPropertyf },
 })
 
 local MAX_FRAME_TIME = 0.2
@@ -41,12 +41,7 @@ function update()
     if requested and stationary then
         set(show, 1)
 
-        local next_rpm = approach(
-            math.max(0, tonumber(get(rpm)) or 0),
-            RUN_RPM,
-            RPM_START_RATE,
-            passed
-        )
+        local next_rpm = approach(math.max(0, tonumber(get(rpm)) or 0), RUN_RPM, RPM_START_RATE, passed)
 
         if RUN_RPM - next_rpm < 0.01 then
             next_rpm = RUN_RPM
@@ -62,12 +57,8 @@ function update()
             pressure_rate = PRESSURE_START_RATE
         end
 
-        local next_pressure = approach(
-            math.max(0, tonumber(get(air_press)) or 0),
-            target_pressure,
-            pressure_rate,
-            passed
-        )
+        local next_pressure =
+            approach(math.max(0, tonumber(get(air_press)) or 0), target_pressure, pressure_rate, passed)
 
         set(air_press, next_pressure)
         return
@@ -80,18 +71,8 @@ function update()
         set(work, 0)
     end
 
-    local next_rpm = approach(
-        math.max(0, tonumber(get(rpm)) or 0),
-        0,
-        RPM_STOP_RATE,
-        passed
-    )
-    local next_pressure = approach(
-        math.max(0, tonumber(get(air_press)) or 0),
-        0,
-        PRESSURE_STOP_RATE,
-        passed
-    )
+    local next_rpm = approach(math.max(0, tonumber(get(rpm)) or 0), 0, RPM_STOP_RATE, passed)
+    local next_pressure = approach(math.max(0, tonumber(get(air_press)) or 0), 0, PRESSURE_STOP_RATE, passed)
 
     if next_rpm < 0.1 then
         next_rpm = 0

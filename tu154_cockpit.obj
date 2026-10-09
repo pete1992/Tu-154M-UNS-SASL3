@@ -17832,7 +17832,7 @@ ATTR_manip_toggle button 0.000000 1.000000 tu154/custom/panels/show_checklist_pa
 TRIS 22335 6
 ANIM_end
 ANIM_begin
-ATTR_manip_toggle button 0.000000 1.000000 tu154/custom/panels/show_nvu_panel 
+ATTR_manip_none
 TRIS 22341 6
 ANIM_end
 ANIM_begin

@@ -1,19 +1,7 @@
 -- cabin_sounds.lua
---[[
-Changelog
-- Grouped all 53 existing Dataref bindings through defineProps() while preserving property names, paths, constructors, and original binding order.
-- Uses SASL 3 boolean loop flags directly for X-Plane 12.
-- Replaced Russian comments with English comments.
-- Fixed radio-altimeter DH power logic so both left and right signals require 27 V power.
-- Tracks falling ABSU/STU mode edges independently; engagement is not a disconnect warning.
-- Replaced sum-based warning-switch and cap tracking with independent state tracking.
-- Reset pulsed siren and speaker timers when their corresponding warning condition is no longer active.
-- Avoided running the landing-light aerodynamic noise loop below its audible 150 kt threshold.
-- Cached repeatedly used frame values such as power, ground speed, gear compression, light extension, and volume controls.
-- Consolidated mutable sound state and sample handles into tables to keep Lua 5.1 upvalue counts low.
-- Fire warnings obey the common horn mute and complete one audible cycle after suppression.
-- Preserved other alarm timing, sound gains/pitches, taxi-noise threshold, failure probabilities, SmartCopilot ownership logic, and existing unused interfaces.
-]]
+-- Controls cockpit warnings, cabin and systems ambience, and alarm failures.
+
+-- Warning priority, pulse timing, and sample state are maintained independently.
 
 -- Main cockpit/cabin sound logic.
 
@@ -28,10 +16,6 @@ defineProps({
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf },
     { "external_view", "sim/graphics/view/view_is_external", globalPropertyi },
     -- Radio altimeter
-    -- { "dh_set_L", "tu154/custom/gauges/alt/radioalt_dh_left", globalPropertyf },
-    -- { "dh_set_R", "tu154/custom/gauges/alt/radioalt_dh_right", globalPropertyf },
-    -- { "rv_angle_L", "tu154/custom/gauges/alt/radioalt_needle_left", globalPropertyf },
-    -- { "rv_angle_R", "tu154/custom/gauges/alt/radioalt_needle_right", globalPropertyf },
     { "rv5_dh_signal_left", "tu154/custom/misc/rv5_dh_signal_left", globalPropertyi },
     { "rv5_dh_signal_right", "tu154/custom/misc/rv5_dh_signal_right", globalPropertyi },
     -- ABSU
@@ -45,7 +29,6 @@ defineProps({
     { "speaker_auasp", "tu154/custom/alarm/speaker_auasp", globalPropertyi },
     { "speaker_fuel", "tu154/custom/alarm/speaker_fuel", globalPropertyi },
     { "speaker_speed", "tu154/custom/alarm/speaker_speed", globalPropertyi },
-    -- { "speaker_absu", "tu154/custom/alarm/speaker_absu", globalPropertyi },
     { "fire_siren", "tu154/custom/fire/fire_siren", globalPropertyi },
     { "fire_buzzer", "tu154/custom/switchers/eng/fire_buzzer", globalPropertyi },
     { "fire_main_switch", "tu154/custom/switchers/eng/fire_main_switch", globalPropertyi },
@@ -77,14 +60,10 @@ defineProps({
     { "deflection_mtr_3", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[2]", globalProperty },
     { "groundspeed", "sim/flightmodel/position/groundspeed", globalPropertyf },
     -- Flaps
-    -- { "flaps_lever", "tu154/custom/controll/flaps_lever", globalPropertyf },
     -- X-Plane sound volume controls
-    -- { "engine_volume_ratio", "sim/operation/sound/engine_volume_ratio", globalPropertyf },
-    -- { "prop_volume_ratio", "sim/operation/sound/prop_volume_ratio", globalPropertyf },
     { "ground_volume_ratio", "sim/operation/sound/ground_volume_ratio", globalPropertyf },
     { "weather_volume_ratio", "sim/operation/sound/weather_volume_ratio", globalPropertyf },
     { "warning_volume_ratio", "sim/operation/sound/warning_volume_ratio", globalPropertyf },
-    -- { "radio_volume_ratio", "sim/operation/sound/radio_volume_ratio", globalPropertyf },
     { "fan_volume_ratio", "sim/operation/sound/fan_volume_ratio", globalPropertyf },
     -- Failures
     { "main_alarm_fail", "tu154/custom/failures/main_alarm_fail", globalPropertyi },
@@ -92,7 +71,6 @@ defineProps({
     { "failures_enabled", "tu154/custom/failures/failures_enabled", globalPropertyi },
     -- SmartCopilot
     { "ismaster", "scp/api/ismaster", globalPropertyf },
-    -- { "hascontrol_1", "scp/api/hascontrol_1", globalPropertyf },
 })
 
 local function playPanelSample(sample, looped)
@@ -159,14 +137,12 @@ function update()
 
     local warning_volume = get(warning_volume_ratio)
 
-    --------------------------------------------------------------------------
     -- Miscellaneous controls
-    --------------------------------------------------------------------------
+
     local srd_buzzer_now = get(srd_buzzer)
     local fuel_buzzer_now = get(fuel_buzzer)
 
-    if srd_buzzer_now ~= STATE.srd_buzzer_last
-        or fuel_buzzer_now ~= STATE.fuel_buzzer_last then
+    if srd_buzzer_now ~= STATE.srd_buzzer_last or fuel_buzzer_now ~= STATE.fuel_buzzer_last then
         playPanelSample(SAMPLES.switcher, false)
     end
 
@@ -176,8 +152,7 @@ function update()
     local srd_cap_now = get(srd_buzzer_cap)
     local fuel_cap_now = get(fuel_buzzer_cap)
 
-    if srd_cap_now ~= STATE.srd_cap_last
-        or fuel_cap_now ~= STATE.fuel_cap_last then
+    if srd_cap_now ~= STATE.srd_cap_last or fuel_cap_now ~= STATE.fuel_cap_last then
         playPanelSample(SAMPLES.cap, false)
     end
 
@@ -190,13 +165,9 @@ function update()
     end
     STATE.button_last = button_now
 
-    --------------------------------------------------------------------------
     -- Radio altimeter DH tone
-    --------------------------------------------------------------------------
-    local rv_must_play = (
-        get(rv5_dh_signal_left) == 1
-        or get(rv5_dh_signal_right) == 1
-    ) and power
+
+    local rv_must_play = (get(rv5_dh_signal_left) == 1 or get(rv5_dh_signal_right) == 1) and power
 
     if rv_must_play and not STATE.rv_played and external == 0 then
         STATE.rv_counter = 7
@@ -220,12 +191,12 @@ function update()
 
     sasl.al.setSampleGain(SAMPLES.rv5_tone, 1000 * warning_volume)
 
-    --------------------------------------------------------------------------
     -- Main siren
-    --------------------------------------------------------------------------
+
     local main_alarm_ok = get(main_alarm_fail) == 0
-    local fire_horn = (get(fire_siren) == 1
-        or (STATE.fire_siren_playing and sasl.al.isSamplePlaying(SAMPLES.long_siren)))
+    local fire_horn = (
+        get(fire_siren) == 1 or (STATE.fire_siren_playing and sasl.al.isSamplePlaying(SAMPLES.long_siren))
+    )
         and get(fire_buzzer) == 1
         and get(fire_main_switch) == 1
         and srd_buzzer_now == 1
@@ -233,7 +204,8 @@ function update()
         and external == 0
         and main_alarm_ok
         and passed ~= 0
-    local continuous_siren = get(main_gear_flaps) == 1 and power
+    local continuous_siren = get(main_gear_flaps) == 1
+        and power
         and srd_buzzer_now == 1
         and external == 0
         and main_alarm_ok
@@ -268,8 +240,7 @@ function update()
     elseif pulsed_pressure_siren then
         STATE.short_siren_timer = STATE.short_siren_timer + passed
 
-        if not sasl.al.isSamplePlaying(SAMPLES.long_siren)
-            and STATE.short_siren_timer > 0.2 then
+        if not sasl.al.isSamplePlaying(SAMPLES.long_siren) and STATE.short_siren_timer > 0.2 then
             playPanelSample(SAMPLES.long_siren, true)
         end
 
@@ -288,9 +259,8 @@ function update()
 
     sasl.al.setSampleGain(SAMPLES.long_siren, 1000 * warning_volume)
 
-    --------------------------------------------------------------------------
     -- Speaker alarm
-    --------------------------------------------------------------------------
+
     local roll_now = get(roll_main_mode)
     local pitch_now = get(pitch_main_mode)
     local stu_now = get(stu_mode)
@@ -299,47 +269,34 @@ function update()
     -- AP engagement and damper initialization must not sound AP OFF. Each
     -- axis still warns when it loses a previously available control level,
     -- including a disconnect while the other axis is being engaged.
-    local absu_disconnected = roll_now < STATE.roll_last
-        or pitch_now < STATE.pitch_last
+    local absu_disconnected = roll_now < STATE.roll_last or pitch_now < STATE.pitch_last
 
     local stu_disconnected = STATE.stu_last >= 3 and stu_now <= 2
 
-    if power
-        and external == 0
-        and fuel_buzzer_now == 1
-        and speaker_alarm_ok
-        and get(absu_fail_signal) == 1 then
-
+    if power and external == 0 and fuel_buzzer_now == 1 and speaker_alarm_ok and get(absu_fail_signal) == 1 then
         STATE.short_speaker_timer = 0
 
         if not sasl.al.isSamplePlaying(SAMPLES.absu) then
             playPanelSample(SAMPLES.absu, false)
         end
         sasl.al.stopSample(SAMPLES.long_speaker)
-
-    elseif get(speaker_auasp) == 1
-        and power
-        and external == 0
-        and fuel_buzzer_now == 1
-        and speaker_alarm_ok then
-
+    elseif get(speaker_auasp) == 1 and power and external == 0 and fuel_buzzer_now == 1 and speaker_alarm_ok then
         STATE.short_speaker_timer = 0
 
         if not sasl.al.isSamplePlaying(SAMPLES.long_speaker) then
             playPanelSample(SAMPLES.long_speaker, true)
         end
         sasl.al.stopSample(SAMPLES.absu)
-
-    elseif (get(speaker_fuel) == 1 or get(speaker_speed) == 1)
+    elseif
+        (get(speaker_fuel) == 1 or get(speaker_speed) == 1)
         and power
         and external == 0
         and fuel_buzzer_now == 1
-        and speaker_alarm_ok then
-
+        and speaker_alarm_ok
+    then
         STATE.short_speaker_timer = STATE.short_speaker_timer + passed
 
-        if not sasl.al.isSamplePlaying(SAMPLES.long_speaker)
-            and STATE.short_speaker_timer > 0.3 then
+        if not sasl.al.isSamplePlaying(SAMPLES.long_speaker) and STATE.short_speaker_timer > 0.3 then
             playPanelSample(SAMPLES.long_speaker, true)
         end
 
@@ -349,17 +306,16 @@ function update()
         end
 
         sasl.al.stopSample(SAMPLES.absu)
-
-    elseif (absu_disconnected or stu_disconnected)
+    elseif
+        (absu_disconnected or stu_disconnected)
         and power
         and external == 0
         and fuel_buzzer_now == 1
-        and speaker_alarm_ok then
-
+        and speaker_alarm_ok
+    then
         STATE.short_speaker_timer = 0
         playPanelSample(SAMPLES.absu, false)
         sasl.al.stopSample(SAMPLES.long_speaker)
-
     else
         STATE.short_speaker_timer = 0
         sasl.al.stopSample(SAMPLES.long_speaker)
@@ -371,12 +327,9 @@ function update()
 
     sasl.al.setSampleGain(SAMPLES.long_speaker, 1000 * warning_volume)
 
-    --------------------------------------------------------------------------
     -- Marker receiver
-    --------------------------------------------------------------------------
-    local marker_active = get(inner_marker) == 1
-        or get(middle_marker) == 1
-        or get(outer_marker) == 1
+
+    local marker_active = get(inner_marker) == 1 or get(middle_marker) == 1 or get(outer_marker) == 1
 
     if marker_active and power and external == 0 then
         if not sasl.al.isSamplePlaying(SAMPLES.bell) then
@@ -386,9 +339,8 @@ function update()
 
     sasl.al.setSampleGain(SAMPLES.bell, 1000 * warning_volume)
 
-    --------------------------------------------------------------------------
     -- Rectifier/inverter power noise
-    --------------------------------------------------------------------------
+
     local fan_volume = get(fan_volume_ratio)
     local vu_left = get(bus27_source_left)
     local vu_right = get(bus27_source_right)
@@ -406,19 +358,11 @@ function update()
     end
 
     local dist = -get(pilot_Z) + 9
-    local rectifier_count = bool2int(vu_left == 1 or vu_left == 2)
-        + bool2int(vu_right == 1 or vu_right == 2)
+    local rectifier_count = bool2int(vu_left == 1 or vu_left == 2) + bool2int(vu_right == 1 or vu_right == 2)
 
     sasl.al.setSampleGain(
         SAMPLES.inverters,
-        fan_volume
-            * STATE.invert_counter
-            * 200
-            * rectifier_count
-            * (1 - external)
-            * math.max(dist - 25, 0)
-            * 0.2
-            * run
+        fan_volume * STATE.invert_counter * 200 * rectifier_count * (1 - external) * math.max(dist - 25, 0) * 0.2 * run
     )
     sasl.al.setSamplePitch(SAMPLES.inverters, STATE.invert_counter * 800 + 200)
 
@@ -426,32 +370,19 @@ function update()
         sasl.al.setSampleGain(SAMPLES.inverters, 0)
     end
 
-    --------------------------------------------------------------------------
     -- Air-conditioning noise
-    --------------------------------------------------------------------------
+
     local air_usage = get(air_usage_L) + get(air_usage_R)
 
-    sasl.al.setSampleGain(
-        SAMPLES.air_cond_noise,
-        fan_volume
-            * math.min(600, air_usage)
-            * (1 - external)
-            * run
-    )
+    sasl.al.setSampleGain(SAMPLES.air_cond_noise, fan_volume * math.min(600, air_usage) * (1 - external) * run)
     sasl.al.setSamplePitch(SAMPLES.air_cond_noise, 1000)
 
-    --------------------------------------------------------------------------
     -- High-speed ground-roll noise
-    --------------------------------------------------------------------------
-    local groundspeed_now = get(groundspeed)
-    local gear_compression = math.max(
-        get(deflection_mtr_2),
-        get(deflection_mtr_3)
-    )
 
-    local taxi_gain = bool2int(gear_compression > 0.001)
-        * math.max(groundspeed_now - 50, 0)
-        * (1 - external)
+    local groundspeed_now = get(groundspeed)
+    local gear_compression = math.max(get(deflection_mtr_2), get(deflection_mtr_3))
+
+    local taxi_gain = bool2int(gear_compression > 0.001) * math.max(groundspeed_now - 50, 0) * (1 - external)
 
     local taxi_pitch = 1000 + (groundspeed_now - 80) * 3
 
@@ -463,15 +394,11 @@ function update()
         sasl.al.stopSample(SAMPLES.taxi_noise)
     end
 
-    sasl.al.setSampleGain(
-        SAMPLES.taxi_noise,
-        taxi_gain * 10 * get(ground_volume_ratio)
-    )
+    sasl.al.setSampleGain(SAMPLES.taxi_noise, taxi_gain * 10 * get(ground_volume_ratio))
     sasl.al.setSamplePitch(SAMPLES.taxi_noise, taxi_pitch)
 
-    --------------------------------------------------------------------------
     -- Extended landing-light aerodynamic noise
-    --------------------------------------------------------------------------
+
     local light_left = get(light_open_left)
     local light_right = get(light_open_right)
     local light_extension = light_left + light_right
@@ -483,10 +410,7 @@ function update()
             playPanelSample(SAMPLES.lights_noise, true)
         end
 
-        local gain = (ias - 150)
-            * light_extension
-            * (1 - external)
-            * get(weather_volume_ratio)
+        local gain = (ias - 150) * light_extension * (1 - external) * get(weather_volume_ratio)
 
         sasl.al.setSampleGain(SAMPLES.lights_noise, gain)
         sasl.al.setSamplePitch(SAMPLES.lights_noise, 250 + ias)
@@ -494,9 +418,8 @@ function update()
         sasl.al.stopSample(SAMPLES.lights_noise)
     end
 
-    --------------------------------------------------------------------------
     -- Random failures
-    --------------------------------------------------------------------------
+
     local run_failures_locally = get(ismaster) ~= 1
 
     if run_failures_locally then
@@ -512,19 +435,13 @@ function update()
                 STATE.check_time = math.random(15, 30)
 
                 if failure_level >= 2 then -- LOW retains causal damage only.
-                if get(main_alarm_fail) ~= 1 then
-                    set(
-                        main_alarm_fail,
-                        bool2int(math.random() < 0.00001 * fail_level * 0.3)
-                    )
-                end
+                    if get(main_alarm_fail) ~= 1 then
+                        set(main_alarm_fail, bool2int(math.random() < 0.00001 * fail_level * 0.3))
+                    end
 
-                if get(speaker_alarm_fail) ~= 1 then
-                    set(
-                        speaker_alarm_fail,
-                        bool2int(math.random() < 0.00001 * fail_level * 0.3)
-                    )
-                end
+                    if get(speaker_alarm_fail) ~= 1 then
+                        set(speaker_alarm_fail, bool2int(math.random() < 0.00001 * fail_level * 0.3))
+                    end
                 end
             end
         else
