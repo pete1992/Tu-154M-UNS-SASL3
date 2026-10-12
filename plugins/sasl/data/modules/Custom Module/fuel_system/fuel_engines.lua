@@ -36,11 +36,6 @@ defineProps({
     { "eng_mix_2", "sim/cockpit2/engine/actuators/mixture_ratio", globalPropertyfae, 2 },
     { "eng_mix_3", "sim/cockpit2/engine/actuators/mixture_ratio", globalPropertyfae, 3 },
 
-    -- animation
-    { "fuel_cutoff_1", "tu154/custom/controlls/fuel_cutoff_1", globalPropertyf },
-    { "fuel_cutoff_2", "tu154/custom/controlls/fuel_cutoff_2", globalPropertyf },
-    { "fuel_cutoff_3", "tu154/custom/controlls/fuel_cutoff_3", globalPropertyf },
-
     -- time
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- flight time
     { "startup_running", "sim/operation/prefs/startup_running", globalPropertyi },
@@ -152,11 +147,6 @@ function update()
     local mix_1 = get(eng_mix_1)
     local mix_2 = get(eng_mix_2)
     local mix_3 = get(eng_mix_3)
-
-    -- set animation
-    set(fuel_cutoff_1, mix_1)
-    set(fuel_cutoff_2, mix_2)
-    set(fuel_cutoff_3, mix_3)
 
     -- set sound
     if mix_1 ~= mix_1_last and mix_1 == 1 then

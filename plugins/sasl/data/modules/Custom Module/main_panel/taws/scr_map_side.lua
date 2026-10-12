@@ -95,6 +95,7 @@ local distance = 10
 
 local vvi = 0
 local elev_last = get(elevation)
+local vvi_elapsed = 0
 
 local GS = get(speed)
 
@@ -129,7 +130,20 @@ end
 function update()
     local passed = get(frame_time)
 
+    local was_screen_work = screen_work
     screen_work = get(mode_set) == 2
+    local elev_now = get(elevation)
+
+    -- A hidden or paused interval must not enter the next visible speed sample.
+    if not screen_work or not was_screen_work or passed <= 0 then
+        elev_last = elev_now
+        vvi_elapsed = 0
+        if not screen_work or not was_screen_work then
+            vvi = 0
+        end
+    else
+        vvi_elapsed = vvi_elapsed + passed
+    end
 
     if not screen_work then
         brightness = 0
@@ -211,9 +225,11 @@ function update()
             end
         end
 
-        local elev_now = get(elevation)
-        vvi = (elev_now - elev_last)
+        if vvi_elapsed > 0 then
+            vvi = (elev_now - elev_last) / vvi_elapsed
+        end
         elev_last = elev_now
+        vvi_elapsed = 0
 
         time_counter = 0
     end

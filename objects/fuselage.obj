@@ -26960,7 +26960,7 @@ ANIM_end
 # front_gear_door
 ANIM_begin
 	ANIM_trans	   0.4602   -3.8958  -16.1803	   0.4602   -3.8958  -16.1803	0 0	no_ref
-	ANIM_rotate_begin	  -0.0000   -0.0044    1.0000	tu154/custom/anim/lg/front_pos
+	ANIM_rotate_begin	  -0.0000   -0.0044    1.0000	sim/flightmodel2/gear/deploy_ratio[0]
 		ANIM_rotate_key	1.0	 78.38
 		ANIM_rotate_key	0.9	 87.67
 		ANIM_rotate_key	0.8	 94.07
@@ -26978,7 +26978,7 @@ ANIM_end
 # front_gear_door.003
 ANIM_begin
 	ANIM_trans	  -0.4602   -3.8958  -16.1803	  -0.4602   -3.8958  -16.1803	0 0	no_ref
-	ANIM_rotate_begin	  -0.0000    0.0044   -1.0000	tu154/custom/anim/lg/front_pos
+	ANIM_rotate_begin	  -0.0000    0.0044   -1.0000	sim/flightmodel2/gear/deploy_ratio[0]
 		ANIM_rotate_key	1.0	 78.38
 		ANIM_rotate_key	0.9	 87.67
 		ANIM_rotate_key	0.8	 94.07
@@ -27061,7 +27061,7 @@ ANIM_end
 # front_gear_door.002
 ANIM_begin
 	ANIM_trans	   0.4602   -3.8981  -14.6753	   0.4602   -3.8981  -14.6753	0 0	no_ref
-	ANIM_rotate_begin	   0.0000   -0.0015    1.0000	tu154/custom/anim/lg/front_pos
+	ANIM_rotate_begin	   0.0000   -0.0015    1.0000	sim/flightmodel2/gear/deploy_ratio[0]
 		ANIM_rotate_key	0	  0.00
 		ANIM_rotate_key	0.1	 90.00
 		ANIM_rotate_key	0.9	 90.00
@@ -27072,7 +27072,7 @@ ANIM_end
 # front_gear_door.001
 ANIM_begin
 	ANIM_trans	  -0.4600   -3.8981  -14.6753	  -0.4600   -3.8981  -14.6753	0 0	no_ref
-	ANIM_rotate_begin	   0.0000    0.0015   -1.0000	tu154/custom/anim/lg/front_pos
+	ANIM_rotate_begin	   0.0000    0.0015   -1.0000	sim/flightmodel2/gear/deploy_ratio[0]
 		ANIM_rotate_key	0	  0.00
 		ANIM_rotate_key	0.1	 90.00
 		ANIM_rotate_key	0.9	 90.00

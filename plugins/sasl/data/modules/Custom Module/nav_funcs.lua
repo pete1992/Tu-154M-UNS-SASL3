@@ -1,6 +1,11 @@
 -- nav_funcs.lua
 -- Shared navigation helpers for distances, bearings, cross-track error, and coordinates.
 
+-- Keep floating-point roundoff within the inverse-cosine domain.
+local function acos_clamped(value)
+    return math.acos(math.max(-1, math.min(1, value)))
+end
+
 -- Great-circle distance from coordinates in degrees.
 function calc_range(lat1, lon1, lat2, lon2)
     lat1 = math.rad(lat1)
@@ -8,7 +13,7 @@ function calc_range(lat1, lon1, lat2, lon2)
     lat2 = math.rad(lat2)
     lon2 = math.rad(lon2)
 
-    local d = math.acos(math.sin(lat1) * math.sin(lat2) + math.cos(lat1) * math.cos(lat2) * math.cos(lon1 - lon2))
+    local d = acos_clamped(math.sin(lat1) * math.sin(lat2) + math.cos(lat1) * math.cos(lat2) * math.cos(lon1 - lon2))
     return math.abs(math.deg(d) * 60), math.abs(d) -- in nm and radians
 end
 
@@ -26,7 +31,8 @@ function calc_true_course(lat1, lon1, lat2, lon2, dist)
 
     d = math.abs(d)
 
-    if d < 0.00001 then
+    -- Coincident and antipodal points have no unique initial course.
+    if d < 0.00001 or math.abs(math.pi - d) < 0.000000000001 then
         return 0
     end
 
@@ -37,13 +43,13 @@ function calc_true_course(lat1, lon1, lat2, lon2, dist)
     elseif lat1 < -89.9 then
         tc = 0
     elseif math.sin(math.rad(lon2 - lon1)) > 0 then
-        tc = math.acos(
+        tc = acos_clamped(
             (math.sin(math.rad(lat2)) - math.sin(math.rad(lat1)) * math.cos(d))
                 / (math.sin(d) * math.cos(math.rad(lat1)))
         )
     else
         tc = 2 * math.pi
-            - math.acos(
+            - acos_clamped(
                 (math.sin(math.rad(lat2)) - math.sin(math.rad(lat1)) * math.cos(d))
                     / (math.sin(d) * math.cos(math.rad(lat1)))
             )
@@ -79,7 +85,8 @@ local R = 6378.145 / 1.852 -- NM
 
 -- Distance in nautical miles from coordinates in radians.
 function calcDistanceRad(lat1, lon1, lat2, lon2)
-    local d = math.acos(math.sin(lat1) * math.sin(lat2) + math.cos(lat1) * math.cos(lat2) * math.cos(lon2 - lon1)) * R
+    local d = acos_clamped(math.sin(lat1) * math.sin(lat2) + math.cos(lat1) * math.cos(lat2) * math.cos(lon2 - lon1))
+        * R
     return d
 end
 

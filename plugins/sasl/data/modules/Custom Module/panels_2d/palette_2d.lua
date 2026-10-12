@@ -270,6 +270,7 @@ local Vapp_f45_tbl = {
 local show_side = 0
 
 local show_weight = 0
+local reference_weight_limited = false
 local CG_show = 0
 
 local show_V1_28 = "---"
@@ -355,17 +356,22 @@ function update()
     show_weight = math.floor(current_weight / 100) / 10
     CG_show = math.floor(current_CG * 10) / 10
 
-    if show_weight >= 70 and show_weight <= 100 then
-        show_V1_28 = math.floor(interpolate(V1_28_tbl, show_weight))
-        show_Vr_28 = math.floor(interpolate(Vr_28_tbl, show_weight))
-        show_V2_28 = math.floor(interpolate(V2_28_tbl, show_weight))
-        --show_Vfl_15_28 = math.floor(interpolate(Vfl_15_tbl, show_weight))
-        --show_Vfl_0 = math.floor(interpolate(Vfl_0_tbl, show_weight))
+    -- Preserve numeric speed consumers using the established 100 t upper limit.
+    -- The palette still shows actual mass and labels the limited reference values.
+    local reference_weight = math.min(show_weight, 100)
+    reference_weight_limited = current_weight > 100000
 
-        show_V1_15 = math.floor(interpolate(V1_15_tbl, show_weight))
-        show_Vr_15 = math.floor(interpolate(Vr_15_tbl, show_weight))
-        show_V2_15 = math.floor(interpolate(V2_15_tbl, show_weight))
-    elseif show_weight < 70 then
+    if reference_weight >= 70 and reference_weight <= 100 then
+        show_V1_28 = math.floor(interpolate(V1_28_tbl, reference_weight))
+        show_Vr_28 = math.floor(interpolate(Vr_28_tbl, reference_weight))
+        show_V2_28 = math.floor(interpolate(V2_28_tbl, reference_weight))
+        --show_Vfl_15_28 = math.floor(interpolate(Vfl_15_tbl, reference_weight))
+        --show_Vfl_0 = math.floor(interpolate(Vfl_0_tbl, reference_weight))
+
+        show_V1_15 = math.floor(interpolate(V1_15_tbl, reference_weight))
+        show_Vr_15 = math.floor(interpolate(Vr_15_tbl, reference_weight))
+        show_V2_15 = math.floor(interpolate(V2_15_tbl, reference_weight))
+    elseif reference_weight < 70 then
         show_V1_28 = 205
         show_Vr_28 = 215
         show_V2_28 = 235
@@ -377,13 +383,13 @@ function update()
         show_V2_15 = 270
     end
 
-    if show_weight >= 60 and show_weight <= 100 then
-        show_Vapp_0 = math.floor(interpolate(Vapp_f0_tbl, show_weight))
-        show_Vapp_15 = math.floor(interpolate(Vapp_f15_tbl, show_weight))
-        show_Vapp_28 = math.floor(interpolate(Vapp_f28_tbl, show_weight))
-        show_Vapp_36 = math.floor(interpolate(Vapp_f36_tbl, show_weight))
-        show_Vapp_45 = math.floor(interpolate(Vapp_f45_tbl, show_weight))
-    elseif show_weight < 60 then
+    if reference_weight >= 60 and reference_weight <= 100 then
+        show_Vapp_0 = math.floor(interpolate(Vapp_f0_tbl, reference_weight))
+        show_Vapp_15 = math.floor(interpolate(Vapp_f15_tbl, reference_weight))
+        show_Vapp_28 = math.floor(interpolate(Vapp_f28_tbl, reference_weight))
+        show_Vapp_36 = math.floor(interpolate(Vapp_f36_tbl, reference_weight))
+        show_Vapp_45 = math.floor(interpolate(Vapp_f45_tbl, reference_weight))
+    elseif reference_weight < 60 then
         show_Vapp_0 = 318
         show_Vapp_15 = 251
         show_Vapp_28 = 236
@@ -465,6 +471,19 @@ components = {
         bitmap = false,
         text = function()
             return CG_show
+        end,
+    },
+
+    -- Mark bounded reference speeds on either face when actual mass exceeds the limit.
+    text_draw {
+        position = { 5, 224, 140, 14 },
+        color = { 0.65, 0, 0, 1 },
+        font = palette_font,
+        font_size = 11,
+        bitmap = false,
+        text = "V REF: 100 t MAX",
+        visible = function()
+            return reference_weight_limited
         end,
     },
 

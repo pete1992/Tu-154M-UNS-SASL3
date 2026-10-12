@@ -273,21 +273,21 @@ function update()
                 check_time = math.random(15, 30)
                 -- random failures
                 if failure_level >= 2 then -- LOW retains causal damage only.
-                    if get(rel_lbrakes) ~= 1 then
+                    if get(rel_lbrakes) == 0 then
                         set(rel_lbrakes, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
                     end
-                    if get(rel_rbrakes) ~= 1 then
+                    if get(rel_rbrakes) == 0 then
                         set(rel_rbrakes, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
                     end
                 end
                 -- runtime failure
                 if get(brake_runtime_left) == 0 and left_blake > 0.1 then
-                    if (failure_level ~= 1 or get(rel_lbrakes) == 0) and get(rel_lbrakes) ~= 1 then
+                    if get(rel_lbrakes) == 0 then
                         set(rel_lbrakes, bool2int(math.random() < 0.1) * 6)
                     end
                 end
                 if get(brake_runtime_right) == 0 and right_blake > 0.1 then
-                    if (failure_level ~= 1 or get(rel_rbrakes) == 0) and get(rel_rbrakes) ~= 1 then
+                    if get(rel_rbrakes) == 0 then
                         set(rel_rbrakes, bool2int(math.random() < 0.1) * 6)
                     end
                 end

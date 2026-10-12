@@ -1,5 +1,9 @@
+-- packet.lua
 --[[
 Changelog
+2026-10-10
+- Size both electrical mailboxes to exactly 12 KiB through the shared capacity.
+- Reject output-mask bits beyond the known worker-owned state.
 2026-10-04
 - Replace path-keyed frame payloads with stable dense binding vectors.
 - Delta-encode queued frames after the first sample.
@@ -13,7 +17,7 @@ Changelog
 -- not.  Subsequent frames in one batch contain only changed slots.
 local Packet = {
     VERSION = 2,
-    CAPACITY = 16384,
+    CAPACITY = 8192, -- 12 KiB per request/response mailbox.
     MAX_FRAMES = 16,
     REQUEST_PATH = "tu154/custom/elec/worker_request",
     RESPONSE_PATH = "tu154/custom/elec/worker_response",
@@ -340,7 +344,8 @@ local function expand_outputs(mask, state, Core)
         value = value - 1
         for bit = 0, 3 do
             local index = (nibble - 1) * 4 + bit + 1
-            if index <= #Core.owned_bindings and math.floor(value / (2 ^ bit)) % 2 == 1 then
+            if math.floor(value / (2 ^ bit)) % 2 == 1 then
+                if index > #Core.owned_bindings then fail("output mask padding") end
                 local key = Core.owned_bindings[index].key
                 local item = state.values[key]
                 if not finite(item) then fail("output state value") end

@@ -1970,7 +1970,7 @@ TRIS 1350 480
 ANIM_end
 ANIM_begin
 ANIM_trans 0.000000 -3.739300 -17.088900 0.000000 -3.739300 -17.088900 0.000000 0.000000 none
-ANIM_rotate_begin -1.000000 0.000000 0.000000 tu154/custom/anim/lg/front_pos
+ANIM_rotate_begin -1.000000 0.000000 0.000000 sim/flightmodel2/gear/deploy_ratio[0]
 ANIM_rotate_key 0.000000 95.000000
 ANIM_rotate_key 0.100000 80.000000
 ANIM_rotate_key 0.200000 70.000000

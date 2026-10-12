@@ -54,7 +54,6 @@ defineProps({
     { "revers_R", "tu154/custom/controlls/revers_R", globalPropertyf },
     { "reverse_mid", "tu154/custom/anim/reverse_mid", globalPropertyf },
     -- Gear positions and deflections
-    { "front_pos", "tu154/custom/anim/lg/front_pos", globalPropertyf },
     { "front_defl", "tu154/custom/anim/lg/front_defl", globalPropertyf },
     { "front_turn", "tu154/custom/anim/lg/front_turn", globalPropertyf },
     { "main_pos_left", "tu154/custom/anim/lg/main_pos_left", globalPropertyf },
@@ -141,7 +140,6 @@ defineProps({
     { "tank3R_w", "sim/flightmodel/weight/m_fuel[4]", globalProperty },
     { "tank3L_w", "sim/flightmodel/weight/m_fuel[5]", globalProperty },
     { "tire_steer_actual_deg", "sim/flightmodel2/gear/tire_steer_actual_deg[0]", globalProperty },
-    { "deploy_ratio_1", "sim/flightmodel2/gear/deploy_ratio[0]", globalProperty },
     { "deploy_ratio_2", "sim/flightmodel2/gear/deploy_ratio[1]", globalProperty },
     { "deploy_ratio_3", "sim/flightmodel2/gear/deploy_ratio[2]", globalProperty },
     { "deflection_mtr_1", "sim/flightmodel2/gear/tire_vertical_deflection_mtr[0]", globalProperty },
@@ -301,7 +299,6 @@ function update()
     put(P.front_turn, gear_turn_pos)
 
     -- Landing-gear positions and strut deflections.
-    put(P.front_pos, n(get(P.deploy_ratio_1)))
     put(P.front_defl, defl_F * 10)
 
     local pos_L = n(get(P.deploy_ratio_2))

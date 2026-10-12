@@ -112,6 +112,7 @@ function update()
     end
 end
 
-function onModuleDone()
+-- Release the override on normal and error shutdown.
+function onModuleShutdown(isError)
     set(override_wheel_steer, 0)
 end

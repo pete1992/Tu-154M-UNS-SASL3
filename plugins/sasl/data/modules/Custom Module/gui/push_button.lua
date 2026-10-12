@@ -1,5 +1,5 @@
 -- push_button.lua
--- Draws a labeled button with hover feedback and a diagnostic click handler.
+-- Draws a labeled button with hover feedback and an optional left-click callback.
 
 defineProperty("click", nil)
 defineProperty("label", "")
@@ -15,8 +15,8 @@ state = {
 }
 
 function onMouseDown(component, x, y, button, parentX, parentY)
-    if button == MB_LEFT then
-        print(" Handled ! ")
+    if button == MB_LEFT and type(click) == "function" then
+        click(component, x, y, button, parentX, parentY)
     end
     return true
 end

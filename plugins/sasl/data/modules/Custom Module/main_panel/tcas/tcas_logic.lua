@@ -448,7 +448,11 @@ local function mark_calc()
                     or acf_local_tbl[i][3] - acf_local_last_tbl[i][3] ~= 0
                 then -- Ignore targets with unchanged horizontal coordinates
                     local iter_time = 0.5
-                    for t = 0, Tau_RA + 1, iter_time do
+                    for t = 0, Tau_TA + 1, iter_time do
+                        -- Preserve alerts already classified within the original lookahead.
+                        if t > Tau_RA + 1 and mark >= 3 then
+                            break
+                        end
                         local iter_x = x + delta_x * t
                         local iter_y = y + delta_y * t
                         local iter_z = alt + delta_z * t

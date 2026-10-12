@@ -242,6 +242,14 @@ local pos3_last = pos3
 
 local lever_last = get(gear_lever)
 
+-- Hydraulic pressure is expressed in kgf/cm2 in the Tu-154 custom system.
+-- Nominal pressure is about 210 kgf/cm2.  Keeping a pressure ratio here makes
+-- normal timing unchanged at nominal pressure while degraded pressure now
+-- correctly reduces gear-drive authority.
+local function hydraulic_ratio(pressure)
+    return math.min(math.max(pressure / 210, 0), 1)
+end
+
 function update()
     local total_flight_time = get(total_time)
     local height_agl = get(agl)
@@ -266,14 +274,6 @@ function update()
 
     -- SmartCopilot: 0 = plugin unavailable, 1 = slave, 2 = master.
     local is_master = get(ismaster) ~= 1
-
-    -- Hydraulic pressure is expressed in kgf/cm2 in the Tu-154 custom system.
-    -- Nominal pressure is about 210 kgf/cm2.  Keeping a pressure ratio here makes
-    -- normal timing unchanged at nominal pressure while degraded pressure now
-    -- correctly reduces gear-drive authority.
-    local function hydraulic_ratio(pressure)
-        return math.min(math.max(pressure / 210, 0), 1)
-    end
 
     local hydro_1 = hydraulic_ratio(get(gs_press_1))
     local hydro_2 = hydraulic_ratio(get(gs_press_2))
@@ -447,11 +447,12 @@ function update()
     end
 
     -- Wing separation removes the corresponding main gear.
+    -- ACF gear index 1 is left (pos2); index 2 is right (pos3).
     if get(rel_wing1L) == 6 then
-        pos3 = 0
+        pos2 = 0
     end
     if get(rel_wing1R) == 6 then
-        pos2 = 0
+        pos3 = 0
     end
 
     if is_master then

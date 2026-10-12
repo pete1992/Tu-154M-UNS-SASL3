@@ -297,21 +297,14 @@ local function rotary_sw()
     local right_sys_temp_set_sw = get(right_sys_temp_set)
     local sys_temp_select_sw = get(sys_temp_select)
 
-    local change = cockpit_temp_set_sw
-        + cabin1_temp_set_sw
-        + cabin2_temp_set_sw
-        + left_sys_temp_set_sw
-        + right_sys_temp_set_sw
-        + sys_temp_select_sw
-    change = change
-        - cockpit_temp_set_last
-        - cabin1_temp_set_last
-        - cabin2_temp_set_last
-        - left_sys_temp_set_last
-        - right_sys_temp_set_last
-        - sys_temp_select_last
+    local change = cockpit_temp_set_sw ~= cockpit_temp_set_last
+        or cabin1_temp_set_sw ~= cabin1_temp_set_last
+        or cabin2_temp_set_sw ~= cabin2_temp_set_last
+        or left_sys_temp_set_sw ~= left_sys_temp_set_last
+        or right_sys_temp_set_sw ~= right_sys_temp_set_last
+        or sys_temp_select_sw ~= sys_temp_select_last
 
-    if change ~= 0 then
+    if change then
         sasl.al.playSample(rotary_sound, false)
     end
 
@@ -483,52 +476,28 @@ local function check_switchers()
     local sard_disable_sw = get(sard_disable)
     local door_heat_sw = get(door_heat)
 
-    local change = cabin_sel_sw
-        + heat_close_sw
-        + ground_cond_on_sw
-        + skv_faster_work_sw
-        + psvp_left_on_sw
-        + psvp_right_on_sw
-    change = change
-        + air_valve_left_sw
-        + air_valve_right_sw
-        + emerg_decompress_sw
-        + eng_valve_1_sw
-        + eng_valve_2_sw
-        + eng_valve_3_sw
-        + dubler_on_sw
-    change = change
-        + cockpit_mode_set_sw
-        + cabin1_mode_set_sw
-        + cabin2_mode_set_sw
-        + left_sys_mode_set_sw
-        + right_sys_mode_set_sw
-    change = change + sard_disable_sw + door_heat_sw
+    local change = cabin_sel_sw ~= cabin_sel_last
+        or heat_close_sw ~= heat_close_last
+        or ground_cond_on_sw ~= ground_cond_on_last
+        or skv_faster_work_sw ~= skv_faster_work_last
+        or psvp_left_on_sw ~= psvp_left_on_last
+        or psvp_right_on_sw ~= psvp_right_on_last
+        or air_valve_left_sw ~= air_valve_left_last
+        or air_valve_right_sw ~= air_valve_right_last
+        or emerg_decompress_sw ~= emerg_decompress_last
+        or eng_valve_1_sw ~= eng_valve_1_last
+        or eng_valve_2_sw ~= eng_valve_2_last
+        or eng_valve_3_sw ~= eng_valve_3_last
+        or dubler_on_sw ~= dubler_on_last
+        or cockpit_mode_set_sw ~= cockpit_mode_set_last
+        or cabin1_mode_set_sw ~= cabin1_mode_set_last
+        or cabin2_mode_set_sw ~= cabin2_mode_set_last
+        or left_sys_mode_set_sw ~= left_sys_mode_set_last
+        or right_sys_mode_set_sw ~= right_sys_mode_set_last
+        or sard_disable_sw ~= sard_disable_last
+        or door_heat_sw ~= door_heat_last
 
-    change = change
-        - cabin_sel_last
-        - heat_close_last
-        - ground_cond_on_last
-        - skv_faster_work_last
-        - psvp_left_on_last
-        - psvp_right_on_last
-    change = change
-        - air_valve_left_last
-        - air_valve_right_last
-        - emerg_decompress_last
-        - eng_valve_1_last
-        - eng_valve_2_last
-        - eng_valve_3_last
-        - dubler_on_last
-    change = change
-        - cockpit_mode_set_last
-        - cabin1_mode_set_last
-        - cabin2_mode_set_last
-        - left_sys_mode_set_last
-        - right_sys_mode_set_last
-    change = change - sard_disable_last - door_heat_last
-
-    if change ~= 0 then
+    if change then
         sasl.al.playSample(switcher_sound, false)
     end
 
@@ -590,22 +559,16 @@ local function caps_check()
     local dubler_on_cap_sw = get(dubler_on_cap)
     local sard_disable_cap_sw = get(sard_disable_cap)
 
-    local change = heat_close_cap_sw
-        + ground_cond_on_cap_sw
-        + skv_faster_work_cap_sw
-        + psvp_left_on_cap_sw
-        + psvp_right_on_cap_sw
-    change = change + emerg_decompress_cap_sw + dubler_on_cap_sw + sard_disable_cap_sw
+    local change = heat_close_cap_sw ~= heat_close_cap_last
+        or ground_cond_on_cap_sw ~= ground_cond_on_cap_last
+        or skv_faster_work_cap_sw ~= skv_faster_work_cap_last
+        or psvp_left_on_cap_sw ~= psvp_left_on_cap_last
+        or psvp_right_on_cap_sw ~= psvp_right_on_cap_last
+        or emerg_decompress_cap_sw ~= emerg_decompress_cap_last
+        or dubler_on_cap_sw ~= dubler_on_cap_last
+        or sard_disable_cap_sw ~= sard_disable_cap_last
 
-    change = change
-        - heat_close_cap_last
-        - ground_cond_on_cap_last
-        - skv_faster_work_cap_last
-        - psvp_left_on_cap_last
-        - psvp_right_on_cap_last
-    change = change - emerg_decompress_cap_last - dubler_on_cap_last - sard_disable_cap_last
-
-    if change ~= 0 then
+    if change then
         sasl.al.playSample(cap_sound, false)
     end
 

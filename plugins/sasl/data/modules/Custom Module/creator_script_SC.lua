@@ -19,12 +19,26 @@ print("panel dir = ", panelDir)
 local dataref_filename = panelDir .. "/Custom Avionics/DataRefsTu154_int.txt" -- path for source file
 local save_filename = panelDir .. "/Custom Avionics/dataref_creator_2.lua" -- Output Lua file path.
 
-local dataref_file = io.open(dataref_filename, "r") -- read the source file
-local save_file = io.open(save_filename, "w") -- save output file
+-- Open the source first so a missing input cannot truncate an existing output.
+local dataref_file, input_error = io.open(dataref_filename, "r")
+if not dataref_file then
+    print("Cannot open DataRef input: " .. tostring(input_error))
+    return
+end
+local save_file, output_error = io.open(save_filename, "w")
+if not save_file then
+    dataref_file:close()
+    print("Cannot open DataRef output: " .. tostring(output_error))
+    return
+end
 
-if dataref_file then
+-- Always close both files, including malformed rows and failed reads/writes.
+local ok, generation_error = pcall(function()
     while true do
-        local line = dataref_file:read("*line") -- read file line by line
+        local line, read_error = dataref_file:read("*line") -- read file line by line
+        if read_error then
+            error(read_error)
+        end
         if line == nil then
             break
         end
@@ -68,7 +82,13 @@ if dataref_file then
                 .. dataref_descr
                 .. "\n"
 
-            save_file:write(save_text) -- save text to output file
+            assert(save_file:write(save_text)) -- Report write failures before closing both files.
         end
     end
+end)
+local input_closed, input_close_error = dataref_file:close()
+local output_closed, output_close_error = save_file:close()
+if not ok or not input_closed or not output_closed then
+    print("DataRef generation failed: " .. tostring(generation_error or input_close_error or output_close_error))
+    return
 end

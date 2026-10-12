@@ -394,6 +394,8 @@ function update()
         elseif get(stab_man_cap) == 1 then -- manual stab control
             stab_dirr = get(stab_manual)
             stab_pos_cmd = stab_pos_now
+        else
+            stab_dirr = 0
         end
 
         -- stab movements

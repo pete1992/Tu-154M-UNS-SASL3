@@ -719,42 +719,30 @@ local function check_controls()
     local gauges_on_3_cap_sw = get(gauges_on_3_cap)
 
     -- play sounds on change position
-    local change_but = control_ut_sw + control_vibro_1_sw + control_vibro_2_sw + control_vibro_3_sw + test_lamps_swt
-    change_but = change_but
-        - control_ut_last
-        - control_vibro_1_last
-        - control_vibro_2_last
-        - control_vibro_3_last
-        - test_lamps_last
+    local change_but = control_ut_sw ~= control_ut_last
+        or control_vibro_1_sw ~= control_vibro_1_last
+        or control_vibro_2_sw ~= control_vibro_2_last
+        or control_vibro_3_sw ~= control_vibro_3_last
+        or test_lamps_swt ~= test_lamps_last
 
-    local change_sw = vibro_sel_1_sw
-        + vibro_sel_2_sw
-        + vibro_sel_3_sw
-        - vibro_sel_1_last
-        - vibro_sel_2_last
-        - vibro_sel_3_last
-    change_sw = change_sw
-        + gauges_on_1_sw
-        + gauges_on_2_sw
-        + gauges_on_3_sw
-        - gauges_on_1_last
-        - gauges_on_2_last
-        - gauges_on_3_last
+    local change_sw = vibro_sel_1_sw ~= vibro_sel_1_last
+        or vibro_sel_2_sw ~= vibro_sel_2_last
+        or vibro_sel_3_sw ~= vibro_sel_3_last
+        or gauges_on_1_sw ~= gauges_on_1_last
+        or gauges_on_2_sw ~= gauges_on_2_last
+        or gauges_on_3_sw ~= gauges_on_3_last
 
-    local caps_change = gauges_on_1_cap_sw
-        + gauges_on_2_cap_sw
-        + gauges_on_3_cap_sw
-        - gauges_on_1_cap_last
-        - gauges_on_2_cap_last
-        - gauges_on_3_cap_last
+    local caps_change = gauges_on_1_cap_sw ~= gauges_on_1_cap_last
+        or gauges_on_2_cap_sw ~= gauges_on_2_cap_last
+        or gauges_on_3_cap_sw ~= gauges_on_3_cap_last
 
-    if change_but ~= 0 then
+    if change_but then
         sasl.al.playSample(button_sound, false)
     end
-    if change_sw ~= 0 then
+    if change_sw then
         sasl.al.playSample(rotary_sound, false)
     end
-    if caps_change ~= 0 then
+    if caps_change then
         sasl.al.playSample(cap_sound, false)
     end
 

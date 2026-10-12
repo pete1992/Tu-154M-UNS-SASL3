@@ -143,36 +143,20 @@ local function check_controls()
     local pitot_heat_2_sw = get(pitot_heat_2)
     local pitot_heat_3_sw = get(pitot_heat_3)
 
-    local changes = soi21_on_sw
-        + antiice_slats_sw
-        + antiice_eng_1_sw
-        + antiice_eng_2_sw
-        + antiice_eng_3_sw
-        + antiice_wing_sw
-    changes = changes
-        + window_heat_1_sw
-        + window_heat_2_sw
-        + window_heat_3_sw
-        + pitot_heat_1_sw
-        + pitot_heat_2_sw
-        + pitot_heat_3_sw
+    local changes = soi21_on_sw ~= soi21_on_last
+        or antiice_slats_sw ~= antiice_slats_last
+        or antiice_eng_1_sw ~= antiice_eng_1_last
+        or antiice_eng_2_sw ~= antiice_eng_2_last
+        or antiice_eng_3_sw ~= antiice_eng_3_last
+        or antiice_wing_sw ~= antiice_wing_last
+        or window_heat_1_sw ~= window_heat_1_last
+        or window_heat_2_sw ~= window_heat_2_last
+        or window_heat_3_sw ~= window_heat_3_last
+        or pitot_heat_1_sw ~= pitot_heat_1_last
+        or pitot_heat_2_sw ~= pitot_heat_2_last
+        or pitot_heat_3_sw ~= pitot_heat_3_last
 
-    changes = changes
-        - soi21_on_last
-        - antiice_slats_last
-        - antiice_eng_1_last
-        - antiice_eng_2_last
-        - antiice_eng_3_last
-        - antiice_wing_last
-    changes = changes
-        - window_heat_1_last
-        - window_heat_2_last
-        - window_heat_3_last
-        - pitot_heat_1_last
-        - pitot_heat_2_last
-        - pitot_heat_3_last
-
-    if 0 ~= changes then
+    if changes then
         sasl.al.playSample(switcher_sound, false)
     end
 

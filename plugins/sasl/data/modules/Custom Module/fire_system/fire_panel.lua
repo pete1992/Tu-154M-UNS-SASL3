@@ -223,7 +223,7 @@ local function reset_switchers()
 end
 
 ---------------------------------------------------------------------------
--- Detect control sounds from the sum of switch changes.
+-- Detect each changed control, including opposite changes in one frame.
 ---------------------------------------------------------------------------
 local lamp_test_last = get(P.lamp_test)
 local smoke_test_last = get(P.smoke_test)
@@ -256,39 +256,31 @@ local function swichers_check(lamp_test_sw, smoke_test_sw, ext_test_sw, fire_mai
     local fire_buzzer_sw = get(P.fire_buzzer)
     local fire_buzzer_cap_sw = get(P.fire_buzzer_cap)
 
-    local changes_but = lamp_test_sw
-        + smoke_test_sw
-        + ext_test_sw
-        + fire_ext_1_sw
-        + fire_ext_2_sw
-        + fire_ext_3_sw
-        + cold_eng_1_sw
-        + cold_eng_2_sw
-        + cold_eng_3_sw
-        + cold_apu_sw
-        + neutral_gas_sw
-        - lamp_test_last
-        - smoke_test_last
-        - ext_test_last
-        - fire_ext_1_last
-        - fire_ext_2_last
-        - fire_ext_3_last
-        - cold_eng_1_last
-        - cold_eng_2_last
-        - cold_eng_3_last
-        - cold_apu_last
-        - neutral_gas_last
-    if changes_but ~= 0 then
+    local changes_but = lamp_test_sw ~= lamp_test_last
+        or smoke_test_sw ~= smoke_test_last
+        or ext_test_sw ~= ext_test_last
+        or fire_ext_1_sw ~= fire_ext_1_last
+        or fire_ext_2_sw ~= fire_ext_2_last
+        or fire_ext_3_sw ~= fire_ext_3_last
+        or cold_eng_1_sw ~= cold_eng_1_last
+        or cold_eng_2_sw ~= cold_eng_2_last
+        or cold_eng_3_sw ~= cold_eng_3_last
+        or cold_apu_sw ~= cold_apu_last
+        or neutral_gas_sw ~= neutral_gas_last
+
+    if changes_but then
         playSample(button_sound, false)
     end
 
-    local changes_rot = fire_sensor_sel_sw + fire_place_sel_sw - fire_sensor_sel_last - fire_place_sel_last
-    if changes_rot ~= 0 then
+    local changes_rot = fire_sensor_sel_sw ~= fire_sensor_sel_last or fire_place_sel_sw ~= fire_place_sel_last
+
+    if changes_rot then
         playSample(rotary_sound, false)
     end
 
-    local changes_sw = fire_main_switch_sw + fire_buzzer_sw - fire_main_switch_last - fire_buzzer_last
-    if changes_sw ~= 0 then
+    local changes_sw = fire_main_switch_sw ~= fire_main_switch_last or fire_buzzer_sw ~= fire_buzzer_last
+
+    if changes_sw then
         playSample(switcher_sound, false)
     end
 

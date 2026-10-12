@@ -37,6 +37,7 @@ defineProps({
 
     { "gear1_deploy", "sim/aircraft/parts/acf_gear_deploy[0]", globalProperty }, -- deploy of front gear
     { "gear2_deploy", "sim/aircraft/parts/acf_gear_deploy[1]", globalProperty }, -- deploy of right gear
+    { "gear3_deploy", "sim/aircraft/parts/acf_gear_deploy", globalPropertyfae, 3 }, -- Deploy of left gear.
 })
 
 local rows = 60
@@ -189,6 +190,7 @@ local brightness = 0.8
 local screen_work = get(mode_set) == 1
 
 function update()
+    local was_screen_work = screen_work
     screen_work = get(mode_set) == 1
 
     if not screen_work then
@@ -241,7 +243,7 @@ function update()
         plane_x = get(pos_x)
         plane_y = get(pos_y)
         plane_z = get(pos_z)
-        LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear2_deploy) > 0.99
+        LG = get(gear1_deploy) > 0.99 and get(gear2_deploy) > 0.99 and get(gear3_deploy) > 0.99
 
         height = distance * 1000
         width = distance * 1250
@@ -271,11 +273,13 @@ function update()
             end
         end
     else
-        -- reset tables
-        for i = 1, cols, 1 do
-            for j = 1, rows, 1 do
-                heightTable[i][j] = 1
-                tempHeightTable[i][j] = 1
+        -- Both buffers start black; clear them once when leaving the map.
+        if was_screen_work then
+            for i = 1, cols, 1 do
+                for j = 1, rows, 1 do
+                    heightTable[i][j] = 1
+                    tempHeightTable[i][j] = 1
+                end
             end
         end
         frame_counter = 0

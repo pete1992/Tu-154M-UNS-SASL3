@@ -372,11 +372,11 @@ function update()
     sasl.al.setSamplePitch(out_behind_left_1, 1000 + (out_ptch_1 - 1000) * 0.4)
     sasl.al.setSamplePitch(out_behind_right_1, 1000 + (out_ptch_1 - 1000) * 0.4)
 
-    sasl.al.setSamplePitch(out_behind_left_2, 1000 + (out_ptch_1 - 1000) * 0.4)
-    sasl.al.setSamplePitch(out_behind_right_2, 1000 + (out_ptch_1 - 1000) * 0.4)
+    sasl.al.setSamplePitch(out_behind_left_2, 1000 + (out_ptch_2 - 1000) * 0.4)
+    sasl.al.setSamplePitch(out_behind_right_2, 1000 + (out_ptch_2 - 1000) * 0.4)
 
-    sasl.al.setSamplePitch(out_behind_left_3, 1000 + (out_ptch_1 - 1000) * 0.4)
-    sasl.al.setSamplePitch(out_behind_right_3, 1000 + (out_ptch_1 - 1000) * 0.4)
+    sasl.al.setSamplePitch(out_behind_left_3, 1000 + (out_ptch_3 - 1000) * 0.4)
+    sasl.al.setSamplePitch(out_behind_right_3, 1000 + (out_ptch_3 - 1000) * 0.4)
 
     sasl.al.setSamplePitch(inn_apu_left, apu_snd_pitch)
     sasl.al.setSamplePitch(inn_apu_right, apu_snd_pitch)
@@ -586,6 +586,8 @@ function update()
 
     -- mute all sounds
     if passed == 0 or get(main_sound_on) == 0 then
+        sasl.al.setSampleGain(inn_reverse, 0)
+
         sasl.al.setSampleGain(inn_middle_left_1, 0)
         sasl.al.setSampleGain(inn_middle_right_1, 0)
         sasl.al.setSampleGain(inn_starter_left_1, 0)

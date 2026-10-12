@@ -309,7 +309,7 @@ local function reset_switchers()
 end
 
 ---------------------------------------------------------------------------
--- Detect control sounds from the sum of switch changes.
+-- Detect each changed control, including opposite changes in one frame.
 ---------------------------------------------------------------------------
 local sw_last = {}
 for i = 1, #SW do
@@ -321,11 +321,11 @@ local mech_last = get(P.fuel_meter_mech_on)
 
 -- Return fuel_porc for the safety-cap logic.
 local function check_switchers(level_sw, meter_sw, mech_sw)
-    local change = level_sw + meter_sw + mech_sw - level_last - meter_last - mech_last
+    local change = level_sw ~= level_last or meter_sw ~= meter_last or mech_sw ~= mech_last
     local porc_sw = 0
     for i = 1, #SW do
         local v = get(SW[i])
-        change = change + v - sw_last[i]
+        change = change or v ~= sw_last[i]
         sw_last[i] = v
         if i == 1 then
             porc_sw = v
@@ -333,7 +333,7 @@ local function check_switchers(level_sw, meter_sw, mech_sw)
     end
     level_last, meter_last, mech_last = level_sw, meter_sw, mech_sw
 
-    if change ~= 0 then
+    if change then
         playSample(switcher_sound, false)
     end
     return porc_sw
@@ -345,13 +345,13 @@ for i = 1, #CAPS do
 end
 
 local function caps_check(porc_sw)
-    local change = 0
+    local change = false
     for i = 1, #CAPS do
         local v = get(CAPS[i])
-        change = change + v - cap_last[i]
+        change = change or v ~= cap_last[i]
         cap_last[i] = v
     end
-    if change ~= 0 then
+    if change then
         playSample(cap_sound, false)
     end
 

@@ -16,6 +16,7 @@ local function defineProps(defs)
 end
 
 defineProps({
+    { "gps_probe_time", "sim/time/total_running_time_sec", globalPropertyf },
     { "show_gns", "tu154/custom/anim/show_gns", globalPropertyi },
     { "show_RXP", "tu154/custom/anim/RXP", globalPropertyi },
     { "rxp_available", "tu154/custom/gps/rxp_available", globalPropertyi },
@@ -24,35 +25,42 @@ defineProps({
     { "rxp_flag", "tu154/custom/gps/rxp_flag", globalPropertyi },
 })
 
--- Probe every required external property silently before any read. Resolving
--- them again also detects late plugin startup and removed/changed DataRefs.
+-- Cache provider handles, but rescan once per second for late startup or reload.
+-- Navigation values still update every frame, including invalid-fix handling.
 local rxp_datarefs = {
     "RXP/radios/indicators/gps_course_degtm",
     "RXP/radios/indicators/gps_cross_track_nm",
     "RXP/radios/indicators/hsi_flag_from_to_pilot",
 }
+local rxp_refs = {}
+local available = false
+local last_probe_time
 
 local function finite(value)
     return type(value) == "number" and value == value and value > -math.huge and value < math.huge
 end
 
 local function update_source()
-    local refs = {}
-    local available = true
-    for i, path in ipairs(rxp_datarefs) do
-        local ref, kind = sasl.findDataRef(path, TYPE_UNKNOWN, true)
-        if ref and (kind == TYPE_FLOAT or kind == TYPE_DOUBLE or kind == TYPE_INT) then
-            refs[i] = ref
-        else
-            available = false
+    local now = get(gps_probe_time)
+    if not last_probe_time or now < last_probe_time or now - last_probe_time >= 1 then
+        last_probe_time = now
+        available = true
+        for i, path in ipairs(rxp_datarefs) do
+            local ref, kind = sasl.findDataRef(path, TYPE_UNKNOWN, true)
+            if ref and (kind == TYPE_FLOAT or kind == TYPE_DOUBLE or kind == TYPE_INT) then
+                rxp_refs[i] = ref
+            else
+                rxp_refs[i] = nil
+                available = false
+            end
         end
     end
 
     local course, deviation, flag = 0, 0, 0
     if available then
-        local raw_course = sasl.getDataRef(refs[1])
-        local raw_deviation = sasl.getDataRef(refs[2])
-        local raw_flag = sasl.getDataRef(refs[3])
+        local raw_course = sasl.getDataRef(rxp_refs[1])
+        local raw_deviation = sasl.getDataRef(rxp_refs[2])
+        local raw_flag = sasl.getDataRef(rxp_refs[3])
         -- No valid fix is not the same as no plugin. Retain RXP selection,
         -- but keep invalid/non-finite navigation values out of the indicators.
         if finite(raw_course) and finite(raw_deviation) and (raw_flag == 1 or raw_flag == 2) then

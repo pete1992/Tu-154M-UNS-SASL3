@@ -104,22 +104,22 @@ function update()
                 check_time = math.random(15, 30)
                 -- random failures
                 if failure_level >= 2 then -- LOW retains causal damage only.
-                    if get(rel_ice_inlet_heat1) ~= 1 then
+                    if get(rel_ice_inlet_heat1) == 0 then
                         set(rel_ice_inlet_heat1, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
                     end
-                    if get(rel_ice_inlet_heat2) ~= 1 then
+                    if get(rel_ice_inlet_heat2) == 0 then
                         set(rel_ice_inlet_heat2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
                     end
-                    if get(rel_ice_inlet_heat3) ~= 1 then
+                    if get(rel_ice_inlet_heat3) == 0 then
                         set(rel_ice_inlet_heat3, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
                     end
                     random_probe_failure(rel_ice_pitot_heat1, 6, 0.00001 * FAIL * 0.3)
                     random_probe_failure(rel_ice_pitot_heat2, 6, 0.00001 * FAIL * 0.3)
                     random_probe_failure(ppd_3_heat_fail, 1, 0.00001 * FAIL * 0.3)
-                    if get(rel_ice_surf_heat) ~= 1 then
+                    if get(rel_ice_surf_heat) == 0 then
                         set(rel_ice_surf_heat, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
                     end
-                    if get(rel_ice_surf_heat2) ~= 1 then
+                    if get(rel_ice_surf_heat2) == 0 then
                         set(rel_ice_surf_heat2, bool2int(math.random() < 0.00001 * FAIL * 0.3) * 6)
                     end
                     if get(rio_fail) ~= 1 then
@@ -146,10 +146,10 @@ function update()
                     random_probe_failure(ppd_3_heat_fail, 1, 0.1 * FAIL * 0.3)
                 end
                 if failure_level >= 2 then -- LOW retains causal damage only.
-                    if wing_counter > 90 and get(rel_ice_surf_heat) ~= 6 then
+                    if wing_counter > 90 and get(rel_ice_surf_heat) == 0 then
                         set(rel_ice_surf_heat, bool2int(math.random() < 0.3 * FAIL * 0.3) * 6)
                     end
-                    if stab_counter > 90 and get(rel_ice_surf_heat2) ~= 6 then
+                    if stab_counter > 90 and get(rel_ice_surf_heat2) == 0 then
                         set(rel_ice_surf_heat2, bool2int(math.random() < 0.3 * FAIL * 0.3) * 6)
                     end
                 end

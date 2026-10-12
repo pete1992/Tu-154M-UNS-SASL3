@@ -552,7 +552,7 @@ local function writeFile()
         get(nav_cs_flag),
         get(nav_gs_flag),
         floor2(get(wind_direction_degt)),
-        math.floor(get(wind_speed_kt) * 1.852 * 100) * 0.01,
+        math.floor(get(wind_speed_kt) * 3.6 * 100) * 0.01,
         floor2(get(rpm_high_1)) * (1 - 2 * bool2int(get(ENGN_propmode_1) == 3)),
         floor2(get(rpm_high_2)) * (1 - 2 * bool2int(get(ENGN_propmode_2) == 3)),
         floor2(get(rpm_high_3)) * (1 - 2 * bool2int(get(ENGN_propmode_3) == 3)),

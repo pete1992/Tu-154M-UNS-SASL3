@@ -133,7 +133,7 @@ local yaw_add = 0
 -- so full hardware travel still reaches exactly -1 / +1.
 local INPUT_DEADZONE = 0.02
 local INPUT_FILTER_TAU = 0.115
-local AILERON_RUDDER_COUPLING = 0.02
+local AILERON_RUDDER_COUPLING = 0.04
 
 local INPUT_STATE = {
     pitch = clamp(get(joy_pitch), -1, 1),

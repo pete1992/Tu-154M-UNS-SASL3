@@ -181,15 +181,30 @@ function update()
     then
         local tank2L_take = bool2int(tank2L_qty < 9500)
         local tank2R_take = bool2int(tank2R_qty < 9500)
-        -- take fuel from tanks 3 and 4
-        tank2L_qty = tank2L_qty - passed * pump2L
-        tank2R_qty = tank2R_qty - passed * pump2R
-        tank3L_qty = tank3L_qty - passed * pump3L
-        tank3R_qty = tank3R_qty - passed * pump3R
-        tank4_qty = tank4_qty - passed * pump4
-        -- move it to tanks 2
-        tank2L_qty = tank2L_qty + (pump2L + pump2R + pump3L + pump3R + pump4) * passed / (tank2L_take + tank2R_take)
-        tank2R_qty = tank2R_qty + (pump2L + pump2R + pump3L + pump3R + pump4) * passed / (tank2L_take + tank2R_take)
+        -- Limit donor withdrawals before sharing fuel between eligible tanks.
+        local take2L = math.min(math.max(passed * pump2L, 0), math.max(tank2L_qty, 0))
+        local take2R = math.min(math.max(passed * pump2R, 0), math.max(tank2R_qty, 0))
+        local take3L = math.min(math.max(passed * pump3L, 0), math.max(tank3L_qty, 0))
+        local take3R = math.min(math.max(passed * pump3R, 0), math.max(tank3R_qty, 0))
+        local take4 = math.min(math.max(passed * pump4, 0), math.max(tank4_qty, 0))
+        local share = (take2L + take2R + take3L + take3R + take4) / (tank2L_take + tank2R_take)
+        local change2L = share * tank2L_take - take2L
+        local change2R = share * tank2R_take - take2R
+
+        -- Scale the whole transfer to accepted capacity, retaining excess in donors.
+        -- The net changes include fuel recirculated by the tank 2 pumps.
+        local accepted = 1
+        if change2L > 0 then
+            accepted = math.min(accepted, (9550 - tank2L_qty) / change2L)
+        end
+        if change2R > 0 then
+            accepted = math.min(accepted, (9550 - tank2R_qty) / change2R)
+        end
+        tank2L_qty = tank2L_qty + change2L * accepted
+        tank2R_qty = tank2R_qty + change2R * accepted
+        tank3L_qty = tank3L_qty - take3L * accepted
+        tank3R_qty = tank3R_qty - take3R * accepted
+        tank4_qty = tank4_qty - take4 * accepted
     end
 
     -- take fuel for APU

@@ -119,6 +119,7 @@ defineProps({
 
     { "gears_ext_3GS", "tu154/custom/switchers/gears_ext_3GS", globalPropertyi },
     { "emerg_gear_ext", "tu154/custom/controll/emerg_gear_ext", globalPropertyi },
+    { "gear_lever", "tu154/custom/controll/gear_lever", globalPropertyi },
 
     -- busters
     { "buster_on_1", "tu154/custom/switchers/console/buster_on_1", globalPropertyi },
@@ -525,20 +526,28 @@ function update()
         gear_pos_2_last = get(gear2_deploy)
         gear_pos_3_last = get(gear3_deploy)
 
+        -- Match the operating circuit selected by landing_gears.lua. A requested
+        -- emergency circuit is only active with the main lever in NEUTRAL;
+        -- the GS3 selector additionally needs right DC power and GS2 stowed.
+        local lever_neutral = get(gear_lever) == 0
+        local emergency_requested = get(emerg_gear_ext) == 1
+        local emergency_active = emergency_requested and lever_neutral
+        local backup_active = get(gears_ext_3GS) ~= 0 and lever_neutral and not emergency_requested and power27R
+
         -- normal operation
-        if acc_1 > 0 and get(gears_ext_3GS) == 0 and get(emerg_gear_ext) == 0 then
+        if acc_1 > 0 and not emergency_active and not backup_active then
             acc_1 = acc_1 - gear_feed_1 - gear_feed_2 - gear_feed_3 -- take oil from HS1
             hs1_qty = hs1_qty + gear_feed_1 + gear_feed_2 + gear_feed_3 -- return it to barrel
         end
 
         -- emerg operation
-        if acc_2 > 0 and get(emerg_gear_ext) == 1 then
+        if acc_2 > 0 and emergency_active then
             acc_2 = acc_2 - gear_feed_1 - gear_feed_2 - gear_feed_3 -- take oil from HS2
             hs2_qty = hs2_qty + gear_feed_1 + gear_feed_2 + gear_feed_3 -- return it to barrel
         end
 
         -- 3'd HS operation
-        if acc_3 > 0 and get(gears_ext_3GS) == 1 and get(emerg_gear_ext) == 0 then
+        if acc_3 > 0 and backup_active then
             acc_3 = acc_3 - gear_feed_1 - gear_feed_2 - gear_feed_3 -- take oil from HS3
             hs3_qty = hs3_qty + gear_feed_1 + gear_feed_2 + gear_feed_3 -- return it to barrel
         end

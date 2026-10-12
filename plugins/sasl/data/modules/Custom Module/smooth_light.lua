@@ -18,5 +18,5 @@ end
 
 function set_smooth(dref, target, factor)
     factor = factor or 11
-    set(dref, smooth_light(target, get(dref)), factor)
+    set(dref, smooth_light(target, get(dref), factor))
 end

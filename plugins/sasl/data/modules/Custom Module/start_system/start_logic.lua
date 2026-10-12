@@ -400,10 +400,19 @@ local function processAirStart(engine, time_now, power27L, power27R, blocked, MA
     end
 end
 
-function onModuleDone()
+local function releaseStarterCommands()
     for i = 1, #ENGINES do
         endStarterCommand(ENGINES[i])
     end
+end
+
+function onModuleShutdown(isError)
+    -- SASL skips onModuleDone after a script error. Release our held commands here too.
+    releaseStarterCommands()
+end
+
+function onModuleDone()
+    releaseStarterCommands()
 end
 
 function onAirportLoaded()

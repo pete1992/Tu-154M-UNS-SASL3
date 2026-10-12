@@ -176,9 +176,9 @@ local function check_switchers()
 
     local connect2to1_cap_sw = get(connect2to1_cap)
 
-    local sw_changes = connect2to1_sw + pump_2_sw + pump_3_sw - connect2to1_last - pump_2_last - pump_3_last
+    local sw_changes = connect2to1_sw ~= connect2to1_last or pump_2_sw ~= pump_2_last or pump_3_sw ~= pump_3_last
 
-    if sw_changes ~= 0 then
+    if sw_changes then
         sasl.al.playSample(switcher_sound, false)
     end
 
@@ -210,16 +210,12 @@ local function buttons_check()
 
     --print(qty_test_12_sw, qty_test_3_sw, accum_fill_last_sw)
 
-    local sw_changes = lamp_test_hydro_sw
-        + qty_test_12_sw
-        + qty_test_3_sw
-        + accum_fill_sw
-        - lamp_test_hydro_last
-        - qty_test_12_last
-        - qty_test_3_last
-        - accum_fill_last
+    local sw_changes = lamp_test_hydro_sw ~= lamp_test_hydro_last
+        or qty_test_12_sw ~= qty_test_12_last
+        or qty_test_3_sw ~= qty_test_3_last
+        or accum_fill_sw ~= accum_fill_last
 
-    if sw_changes ~= 0 then
+    if sw_changes then
         sasl.al.playSample(button_sound, false)
     end
 
