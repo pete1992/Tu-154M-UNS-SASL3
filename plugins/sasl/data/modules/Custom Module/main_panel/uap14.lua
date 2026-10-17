@@ -43,7 +43,7 @@ defineProps({
     { "ismaster", "scp/api/ismaster", globalPropertyf },
 })
 
-local sector_ang = 12
+local sector_ang = 13
 local aoa_ang_act = 0
 local aoa_ang_need = 0
 local lamp_lit = false
@@ -89,6 +89,13 @@ function update()
         end
     end
 
+    -- Increase the critical AOA threshold by 1 degree.
+    -- Preserve the original 10-degree system test threshold.
+    if mode_sw ~= 1 then
+        sector_ang_need = sector_ang_need + 1.0
+    end
+
+    -- Move the critical sector indicator towards its target.
     if sector_ang > sector_ang_need + 0.01 then
         sector_ang = sector_ang - passed * power * 0.4
     elseif sector_ang < sector_ang_need - 0.01 then
@@ -156,7 +163,8 @@ function update()
     end
 
     -- Warning signals and lamp logic.
-    local aoa_crit = bool2int(aoa_ang_act >= sector_ang - 0.5) * power
+    -- The warning threshold matches the displayed critical AOA sector.
+    local aoa_crit = bool2int(aoa_ang_act >= sector_ang) * power
     local gf_crit = bool2int(gf_act >= 1.8 or gf_act <= -0.8) * power
 
     if aoa_crit + gf_crit > 0 then

@@ -4,7 +4,13 @@
 -- controls
 local function defineProps(defs)
     for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+        local prop
+        if d[4] ~= nil then
+            prop = d[3](d[2], d[4])
+        else
+            prop = d[3](d[2])
+        end
+        defineProperty(d[1], prop)
     end
 end
 
@@ -78,6 +84,11 @@ defineProps({
     { "brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf },
     { "brake_emerg_L", "tu154/custom/controlls/brake_emerg_L", globalPropertyf },
     { "brake_emerg_R", "tu154/custom/controlls/brake_emerg_R", globalPropertyf },
+
+    -- Powered nosewheel travel consumes GS2; passive pushback movement does not.
+    { "nosewheel_angle", "sim/flightmodel2/gear/tire_steer_actual_deg", globalPropertyfae, 1 },
+    { "nosewheel_ground", "sim/flightmodel2/gear/tire_vertical_deflection_mtr", globalPropertyfae, 1 },
+    { "nosewheel_power", "tu154/custom/hydro/nosewheel_turn_power", globalPropertyi },
 
     -- absu
     { "absu_contr_pitch", "tu154/custom/absu/contr_pitch", globalPropertyf },
@@ -219,10 +230,32 @@ local gear_pos_1_last = get(gear1_deploy)
 local gear_pos_2_last = get(gear2_deploy)
 local gear_pos_3_last = get(gear3_deploy)
 
-function update()
-    passed = get(frame_time)
+-- Simulation calibration: a full 126-degree sweep transfers 0.252 litres.
+-- Pump timing/current multipliers augment, rather than replace, the M curves.
+local STEERING_LITRES_PER_DEGREE = 0.002
+local PUMP_SPINUP_TAU = 0.35
+local PUMP_INRUSH_EXTRA = 0.35
+local pump2_speed, pump3_speed = 0, 0
+local nosewheel_last = get(nosewheel_angle)
 
+local function pumpResponse(speed, powered, dt)
+    if powered == 0 then return 0, 0 end
+    if dt == 0 then return speed, speed end
+    local response = 1 - math.exp(-dt / PUMP_SPINUP_TAU)
+    local average = 1 - (1 - speed) * PUMP_SPINUP_TAU * response / dt
+    return speed + (1 - speed) * response, math.max(0, math.min(1, average))
+end
+
+function update()
+    local passed = get(frame_time)
+    if passed ~= passed or passed < 0 or passed == math.huge then return end
+    local nosewheel_now = get(nosewheel_angle)
+    local steering_travel = math.abs(nosewheel_now - nosewheel_last)
+    nosewheel_last = nosewheel_now
     local MASTER = get(ismaster) ~= 1
+    if not MASTER then
+        pump2_speed, pump3_speed = 0, 0
+    end
 
     if MASTER then
         -- reset some variables for cold start
@@ -307,19 +340,26 @@ function update()
         local elec_pump_2 = bool2int(power115_1 and power27L and get(pump_2) == 1 and get(hydro_elec_fail_2) == 0)
         local elec_pump_3 = bool2int(power115_3 and power27R and get(pump_3) == 1 and get(hydro_elec_fail_3) == 0)
 
+        local pump2_average, pump3_average
+        pump2_speed, pump2_average = pumpResponse(pump2_speed, elec_pump_2, passed)
+        pump3_speed, pump3_average = pumpResponse(pump3_speed, elec_pump_3, passed)
         if hs2_qty > 0 then
-            local flow = elec_pump_2 * interpolate(electric_pumps_t, acc_2) * passed
+            local flow = math.min(hs2_qty, math.max(0, 4.21 - acc_2),
+                pump2_average * interpolate(electric_pumps_t, acc_2) * passed)
             acc_2 = acc_2 + flow
             hs2_qty = hs2_qty - flow
         end
         if hs3_qty > 0 then
-            local flow = elec_pump_3 * interpolate(electric_pumps_t, acc_3) * passed
+            local flow = math.min(hs3_qty, math.max(0, 4.21 - acc_3),
+                pump3_average * interpolate(electric_pumps_t, acc_3) * passed)
             acc_3 = acc_3 + flow
             hs3_qty = hs3_qty - flow
         end
 
         local pump2_current = elec_pump_2 * (32 + interpolate(electric_pumps_t, acc_2 * 50) * 0.15)
         local pump3_current = elec_pump_3 * (32 + interpolate(electric_pumps_t, acc_3 * 50) * 0.15)
+        pump2_current = pump2_current * (1 + PUMP_INRUSH_EXTRA * (1 - pump2_speed))
+        pump3_current = pump3_current * (1 + PUMP_INRUSH_EXTRA * (1 - pump3_speed))
 
         -- charge the accumulator for emergency brakes
         if get(accum_fill) == 1 and acc_4 < acc_1 and power27L then
@@ -401,6 +441,14 @@ function update()
         if acc_1 > 0 and main_brakes_feed > 0 then
             acc_1 = acc_1 - main_brakes_feed -- take oil from HS1
             hs1_qty = hs1_qty + main_brakes_feed -- return it to barrel
+        end
+
+        -- Track all motion even when unpowered so a tug or a slave-to-master
+        -- handover cannot create a delayed debit when steering is enabled.
+        if passed > 0 and get(nosewheel_power) == 1 and power27L and get(nosewheel_ground) > 0.05 then
+            local steering_feed = math.min(math.max(0, acc_2), steering_travel * STEERING_LITRES_PER_DEGREE)
+            acc_2 = acc_2 - steering_feed
+            hs2_qty = hs2_qty + steering_feed
         end
 
         -- emergency brakes

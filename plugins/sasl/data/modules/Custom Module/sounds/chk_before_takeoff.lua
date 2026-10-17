@@ -38,6 +38,7 @@ defineProps({
     { "fishka_20", "tu154/custom/checklist/fishka_20", globalPropertyi },
 
     { "checklist_selected", "tu154/custom/checklist/checklist_selected", globalPropertyi },
+    { "checklist_side", "tu154/custom/checklist/side", globalPropertyi },
 
     -- sources
     { "course_ga_1", "tu154/custom/tks/course_ga_1", globalPropertyf },
@@ -204,6 +205,9 @@ function checklist_5()
         if stage == 100 then
             checklist_started = false
             set(checklist_selected, 0)
+            -- Turn to the landing page at completion, including same-frame completion.
+            -- The next checklist section remains manually selected.
+            set(checklist_side, 1)
             stage = 0
             stage_status = 0
         end

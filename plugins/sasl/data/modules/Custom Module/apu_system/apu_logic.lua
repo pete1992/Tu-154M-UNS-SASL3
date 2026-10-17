@@ -43,6 +43,12 @@ defineProps({
     -- Engine 2 bleed air
     { "eng_airvalve_2", "tu154/custom/bleed/eng_airvalve_2", globalPropertyf }, -- Engine bleed air valve position
     { "rpm_high_2", "tu154/custom/gauges/engine/rpm_high_2", globalPropertyf }, -- Engine 2 high-pressure turbine RPM
+    -- Actual pneumatic consumers; the open APU bleed valve gates their load.
+    { "air_usage_L", "tu154/custom/bleed/air_usage_L", globalPropertyf },
+    { "air_usage_R", "tu154/custom/bleed/air_usage_R", globalPropertyf },
+    { "apd_working_1", "tu154/custom/start/apd_working_1", globalPropertyi },
+    { "apd_working_2", "tu154/custom/start/apd_working_2", globalPropertyi },
+    { "apd_working_3", "tu154/custom/start/apd_working_3", globalPropertyi },
     -- Timing
     { "frame_time", "tu154/custom/time/frame_time", globalPropertyf }, -- Frame time
     -- X-Plane environment datarefs
@@ -158,6 +164,11 @@ local oil_temp_tbl = {
 local false_bleed = 0
 local bleed_noise = 0
 local bleed_noise_time = 0
+local governor_torque = 0
+-- Conservative simulation calibration, not TA-6A certification data. Retain the
+-- M torque curves at 27 V and let the governor recover their original equilibrium.
+local GOVERNOR_TAU = 1.5
+local MAX_LOAD_TORQUE = 5
 
 -- Keep all forces and thermal feedback on a stable integration time step.
 -- A renderer stall must not make the starter and drag curves fight each other.
@@ -411,6 +422,25 @@ local function updateStep(passed)
         local bleed_eng = get(eng_airvalve_2) * engine_bleed_rpm * bleed_doors_pos * bleed_noise
         false_bleed = false_bleed + (bleed_eng - false_bleed) * (1 - math.exp(-passed * 0.5))
 
+        -- Actual loads cause a short rotor-speed dip while the governor catches
+        -- up. Closing the bleed valve removes both pneumatic consumers.
+        local bleed_load = math.min(1, math.max(0, get(air_usage_L) + get(air_usage_R)) / 1100)
+            * bleed_doors_pos
+        local start_load = bool2int(get(apd_working_1) + get(apd_working_2) + get(apd_working_3) > 0)
+            * bleed_doors_pos
+        local generator_load = math.min(1, math.max(0, get(gen4_amp_bus)) / 200)
+        local load_torque = 0
+        local governor_average = 0
+        if RPM > 90 and apu_burning_fuel == 1 and apu_emerg_off == 0 then
+            load_torque = math.min(MAX_LOAD_TORQUE, 2 * bleed_load + 3 * start_load + 2 * generator_load)
+            local response = 1 - math.exp(-passed / GOVERNOR_TAU)
+            governor_average = load_torque + (governor_torque - load_torque) * GOVERNOR_TAU * response / passed
+            governor_torque = governor_torque + (load_torque - governor_torque) * response
+        else
+            governor_torque = 0
+        end
+        local starter_voltage = math.max(0, math.min(1.1, power_apu / 27))
+
         -- Evaluate every torque at the same RPM before integrating their sum.
         local drag = interpolate(off_tbl, RPM)
             * t_stop_coef
@@ -418,6 +448,7 @@ local function updateStep(passed)
             * (2 - apu_fail_EGT)
             * (3 - apu_fail_OIL_T * 2)
         local starter = interpolate(starter_tbl, RPM)
+            * starter_voltage
             * apu_starter
             * starter_work
             * apu_fail_EGT
@@ -430,7 +461,7 @@ local function updateStep(passed)
             * apu_fail_EGT
             * apu_fail_OIL_T
             * (1 - get(apu_fail))
-        RPM = math.max(0, RPM + (drag + starter + fuel + RPM * false_bleed) * passed)
+        RPM = math.max(0, RPM + (drag + starter + fuel + governor_average - load_torque + RPM * false_bleed) * passed)
 
         -- calculate APU starter current
         local start_current = apu_starter * 600 / (1 + math.max(RPM - 10, 0) / 5)
@@ -438,15 +469,17 @@ local function updateStep(passed)
             start_current = apu_starter * 200
         end
 
+        start_current = start_current * starter_voltage
+
         -- calculate EGT
         local out_temp = get(outside_air_temp)
         local egt_heat_spd = (1000 - egt_current)
             * 0.1
             * apu_burning_fuel
-            * (bleed_doors_pos * 0.25 + 1)
+            * (math.min(1, bleed_load + start_load) * 0.25 + 1)
             * (get(gen4_amp_bus) * 0.0012 + 1)
             * (3 - apu_fail_last_fuel * 2)
-        -- Bleed loading heats the exhaust through the existing door/load term.
+        -- Actual pneumatic demand uses the existing M maximum bleed-heating factor.
         local egt_cool_spd = (egt_current - apu_temp) * (0.5 + ((RPM * 0.01) ^ 1.05) * 1.5) * 0.09
 
         egt_current = egt_current + (egt_heat_spd - egt_cool_spd) * passed

@@ -1,0 +1,101 @@
+A
+800
+OBJ
+
+TEXTURE tu154_particles.png
+PARTICLE_SYSTEM tu154_particles.pss
+POINT_COUNTS 0 0 0 0
+
+# Engine 1: source PSS points forward, OBJ rotates the jet aft.
+EMITTER EngineExhaust -2.96121 -1.56954 12.7275 176 -1 0 0
+EMITTER EngineHeatBlur -2.96121 -1.56954 12.7275 176 -1 0 0
+EMITTER EngineContrail -2.96121 -1.56954 12.7275 176 -1 0 0
+EMITTER EngineFire -2.96121 -1.56954 12.7275 176 -1 0 0
+EMITTER EngineSmoke -2.96121 -1.56954 12.7275 176 -1 0 0
+
+# Engine 2: source PSS points forward, OBJ rotates the jet aft.
+EMITTER EngineExhaust 0 -1.24968 16.764 180 0 0 1
+EMITTER EngineHeatBlur 0 -1.24968 16.764 180 0 0 1
+EMITTER EngineContrail 0 -1.24968 16.764 180 0 0 1
+EMITTER EngineFire 0 -1.24968 16.764 180 0 0 1
+EMITTER EngineSmoke 0 -1.24968 16.764 180 0 0 1
+
+# Engine 3: source PSS points forward, OBJ rotates the jet aft.
+EMITTER EngineExhaust 2.96121 -1.56954 12.7275 184 -1 0 2
+EMITTER EngineHeatBlur 2.96121 -1.56954 12.7275 184 -1 0 2
+EMITTER EngineContrail 2.96121 -1.56954 12.7275 184 -1 0 2
+EMITTER EngineFire 2.96121 -1.56954 12.7275 184 -1 0 2
+EMITTER EngineSmoke 2.96121 -1.56954 12.7275 184 -1 0 2
+
+# Wingtip 7: existing Tu wing flex, native outer-wing condensation.
+ANIM_begin
+ANIM_trans 7.2201 -2.9153 0.1676 7.2201 -2.9153 0.1676 0 0
+ANIM_rotate_begin 0.5299 -0.0000 -0.8480 tu154/custom/anim/wing_flx_right
+ANIM_rotate_key -1.0 1.00
+ANIM_rotate_key 0.0 0.00
+ANIM_rotate_key 1 0.00
+ANIM_rotate_end
+ANIM_begin
+ANIM_trans -0.0102 -0.4496 0.0162 -0.0102 -0.4496 0.0162 0 0
+ANIM_rotate_begin -0.5299 -0.0000 0.8480 tu154/custom/anim/wing_flx_right
+ANIM_rotate_key -1.0 0.00
+ANIM_rotate_key 0.0 0.00
+ANIM_rotate_key 1 1.00
+ANIM_rotate_end
+ANIM_begin
+ANIM_trans 6.8324 0.2632 4.8588 6.8324 0.2632 4.8588 0 0
+ANIM_rotate_begin -0.0000 0.0000 -1.0000 tu154/custom/anim/wing_flx_right
+ANIM_rotate_key -1.0 1.00
+ANIM_rotate_key 0.0 0.00
+ANIM_rotate_key 1 0.00
+ANIM_rotate_end
+ANIM_begin
+ANIM_trans 0.0000 -0.2788 0.0222 0.0000 -0.2788 0.0222 0 0
+ANIM_rotate_begin 0.0000 -0.0000 1.0000 tu154/custom/anim/wing_flx_right
+ANIM_rotate_key -1.0 0.00
+ANIM_rotate_key 0.0 0.00
+ANIM_rotate_key 1 1.00
+ANIM_rotate_end
+EMITTER WingTipTrails 4.5712 -0.0496 3.5151 0 0 0 7
+ANIM_end
+ANIM_end
+ANIM_end
+ANIM_end
+
+# Wingtip 6: existing Tu wing flex, native outer-wing condensation.
+ANIM_begin
+ANIM_trans -7.2200 -2.9153 0.1676 -7.2200 -2.9153 0.1676 0 0
+ANIM_rotate_begin 0.5299 0.0000 0.8480 tu154/custom/anim/wing_flx_left
+ANIM_rotate_key -1.0 1.00
+ANIM_rotate_key 0.0 0.00
+ANIM_rotate_key 1 0.00
+ANIM_rotate_end
+ANIM_begin
+ANIM_trans 0.0100 -0.4496 0.0162 0.0100 -0.4496 0.0162 0 0
+ANIM_rotate_begin -0.5299 0.0000 -0.8480 tu154/custom/anim/wing_flx_left
+ANIM_rotate_key -1.0 0.00
+ANIM_rotate_key 0.0 0.00
+ANIM_rotate_key 1 1.00
+ANIM_rotate_end
+ANIM_begin
+ANIM_trans -6.8320 0.2633 4.8588 -6.8320 0.2633 4.8588 0 0
+ANIM_rotate_begin -0.0000 -0.0000 1.0000 tu154/custom/anim/wing_flx_left
+ANIM_rotate_key -1.0 1.00
+ANIM_rotate_key 0.0 0.00
+ANIM_rotate_key 1 0.00
+ANIM_rotate_end
+ANIM_begin
+ANIM_trans 0.0000 -0.2789 0.0222 0.0000 -0.2789 0.0222 0 0
+ANIM_rotate_begin 0.0000 0.0000 -1.0000 tu154/custom/anim/wing_flx_left
+ANIM_rotate_key -1.0 0.00
+ANIM_rotate_key 0.0 0.00
+ANIM_rotate_key 1 1.00
+ANIM_rotate_end
+EMITTER WingTipTrails -4.5715 -0.0495 3.5151 0 0 0 6
+ANIM_end
+ANIM_end
+ANIM_end
+ANIM_end
+
+# APU: original outlet and direction, now in the shared particle system.
+EMITTER apu_effects 0 -0.05 17.2 0 0 0 0

@@ -17,6 +17,16 @@ defineProps({
 
     { "rsbn_on", "tu154/custom/switchers/ovhd/rsbn_on", globalPropertyi },
 
+    -- Local RSBN audio follows the existing SPU selection and simulator volume.
+    { "rsbn_recon", "tu154/custom/switchers/ovhd/rsbn_recon", globalPropertyi },
+    { "spu_power_sw", "tu154/custom/switchers/spu_1_power", globalPropertyi },
+    { "spu_source", "tu154/custom/switchers/spu_1_source", globalPropertyi },
+    { "radio_volume", "sim/operation/sound/radio_volume_ratio", globalPropertyf },
+    { "master_volume", "sim/operation/sound/master_volume_ratio", globalPropertyf },
+    { "sound_on", "sim/operation/sound/sound_on", globalPropertyi },
+    { "paused", "sim/time/paused", globalPropertyi },
+    { "external_view", "sim/graphics/view/view_is_external", globalPropertyi },
+
     -- Aircraft position
     { "latitude", "sim/flightmodel/position/latitude", globalPropertyd },
     { "longitude", "sim/flightmodel/position/longitude", globalPropertyd },
@@ -39,6 +49,82 @@ defineProps({
 })
 
 include("nav_funcs.lua")
+
+-- Keep identification local to the receiver: held instrument readings are not
+-- reception validity and must never keep a lost station audible.
+local ident_samples = {
+    ["."] = sasl.al.loadSample("Custom Sounds/dot_MORSE.wav"),
+    ["-"] = sasl.al.loadSample("Custom Sounds/dash_MORSE.wav"),
+}
+local morse_code = {
+    A = ".-", B = "-...", C = "-.-.", D = "-..", E = ".", F = "..-.",
+    G = "--.", H = "....", I = "..", J = ".---", K = "-.-", L = ".-..",
+    M = "--", N = "-.", O = "---", P = ".--.", Q = "--.-", R = ".-.",
+    S = "...", T = "-", U = "..-", V = "...-", W = ".--", X = "-..-",
+    Y = "-.--", Z = "--..", ["0"] = "-----", ["1"] = ".----",
+    ["2"] = "..---", ["3"] = "...--", ["4"] = "....-", ["5"] = ".....",
+    ["6"] = "-....", ["7"] = "--...", ["8"] = "---..", ["9"] = "----.",
+}
+local ident_key, ident_steps, ident_index, ident_remaining = nil, {}, 1, 0
+
+local function stopIdent()
+    for _, sample in pairs(ident_samples) do
+        if sample and sasl.al.isSamplePlaying(sample) then sasl.al.stopSample(sample) end
+    end
+end
+
+local function resetIdent()
+    stopIdent()
+    ident_key, ident_steps, ident_index, ident_remaining = nil, {}, 1, 0
+end
+
+local function audioVolume(value)
+    if type(value) ~= "number" or value ~= value then return 0 end
+    return math.max(0, math.min(1, value))
+end
+
+local function updateIdent(identifier, station_key, receiving, passed)
+    local gain = 1000 * audioVolume(get(radio_volume)) * audioVolume(get(master_volume))
+    if not receiving or get(rsbn_recon) ~= 1 or get(spu_power_sw) ~= 1 or get(spu_source) ~= 3
+        or get(paused) ~= 0 or get(sound_on) ~= 1 or get(external_view) ~= 0 or gain <= 0
+        or type(passed) ~= "number" or passed ~= passed or passed <= 0 or passed > 1 then
+        resetIdent()
+        return
+    end
+
+    if station_key ~= ident_key then
+        resetIdent()
+        local code = string.upper((identifier or ""):match("^%s*(.-)%s*$"))
+        if #code == 0 or #code > 8 then return end
+        for i = 1, #code do
+            local pattern = morse_code[code:sub(i, i)]
+            -- A malformed station code must not turn into a different audible ID.
+            if not pattern then resetIdent(); return end
+            for j = 1, #pattern do
+                local symbol = pattern:sub(j, j)
+                ident_steps[#ident_steps + 1] = { symbol, symbol == "." and 0.24 or 0.48 }
+            end
+            ident_steps[#ident_steps][2] = ident_steps[#ident_steps][2] + 0.24
+        end
+        -- Leave a clear break before repeating the complete identifier.
+        ident_steps[#ident_steps][2] = ident_steps[#ident_steps][2] + 4.76
+        ident_key = station_key
+    end
+
+    for _, sample in pairs(ident_samples) do
+        if sample then sasl.al.setSampleGain(sample, gain) end
+    end
+    ident_remaining = ident_remaining - passed
+    if ident_remaining <= 0 then
+        stopIdent()
+        local step = ident_steps[ident_index]
+        if not step then resetIdent(); return end
+        local sample = ident_samples[step[1]]
+        if sample then sasl.al.playSample(sample, false) end
+        ident_remaining = step[2]
+        ident_index = ident_index % #ident_steps + 1
+    end
+end
 
 -------------------------------------------------
 -- state
@@ -133,6 +219,7 @@ function read_nav_dat()
 
     file:close()
 
+    resetIdent()
     nav_table = parsed
     work_table = {}
     chan_last = -1 -- force a rebuild against the new database
@@ -188,7 +275,7 @@ local function get_nearest()
 
     local dist = 21600 -- nm, half the earth circumference
     local res_lat, res_lon, res_elev = 0, 0, 0
-    local res_name = ""
+    local res_name, res_ident = "", ""
 
     for i = 1, #work_table do
         local m = work_table[i]
@@ -200,10 +287,11 @@ local function get_nearest()
             res_lon = m.lon
             res_elev = m.elev
             res_name = m.name
+            res_ident = m.icao
         end
     end
 
-    return dist, res_lat, res_lon, res_elev, res_name
+    return dist, res_lat, res_lon, res_elev, res_name, res_ident
 end
 
 -------------------------------------------------
@@ -215,6 +303,7 @@ local beacon_lat = 0
 local beacon_lon = 0
 local beacon_elevation = 0
 local beacon_name = "none"
+local beacon_ident = ""
 local beacon_azimuth = 0
 
 local dist_show = 0
@@ -242,9 +331,9 @@ function update()
 
     -- Refresh the nearest beacon about once per second
     if table_read_timer == 0 and #work_table > 0 and power then
-        beacon_dist, beacon_lat, beacon_lon, beacon_elevation, beacon_name = get_nearest()
+        beacon_dist, beacon_lat, beacon_lon, beacon_elevation, beacon_name, beacon_ident = get_nearest()
     elseif #work_table == 0 or not power then
-        beacon_dist, beacon_lat, beacon_lon, beacon_elevation, beacon_name = 0, 0, 0, 0, "none"
+        beacon_dist, beacon_lat, beacon_lon, beacon_elevation, beacon_name, beacon_ident = 0, 0, 0, 0, "none", ""
     end
 
     local res_distance = 0
@@ -268,6 +357,10 @@ function update()
             beacon_azimuth = 0
         end
     end
+
+    local receiving = power and beacon_name ~= "none" and res_distance > 0 and res_distance < math.huge
+    local station_key = tostring(channel_set) .. ":" .. tostring(beacon_lat) .. ":" .. tostring(beacon_lon) .. ":" .. beacon_ident
+    updateIdent(beacon_ident, station_key, receiving, passed)
 
     -- Self test values
     if power and get(rsbn_control_azimuth) == 1 then
@@ -297,4 +390,14 @@ function update()
 
     set(distance, dist_show * 0.001) -- km
     set(azimuth, azimuth_show)
+end
+
+function onAirportLoaded()
+    resetIdent()
+    table_read_timer = 0
+    chan_last = -1
+end
+
+function onModuleShutdown(isError)
+    resetIdent()
 end

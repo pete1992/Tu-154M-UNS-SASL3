@@ -6,7 +6,7 @@
 --
 -- Main responsibilities:
 --   * staged payload loading, refueling, service vehicles, doors, and CG movement;
---   * VVI/slat smoothing, door icing, and brake-temperature behavior;
+--   * VVI/slat smoothing, door icing, and temperature-dependent brake fade;
 --   * engine RPM correction and associated annunciator logic.
 
 -- Create writable custom datarefs in the current xTLua namespace.
@@ -262,11 +262,9 @@ local tank3_l_cmplt = 0
 local tank4_cmplt = 0
 
 -- Miscellaneous system-model state.
-local brake_temp = 0
 local bus27 = 0
 local bus36 = 0
 local pump_test = 0
-local gears = 0
 local doors_icing = 0
 local rpm1_low_loc = 0
 local rpm2_low_loc = 0
@@ -277,8 +275,6 @@ local rpm3_correct = 0
 local rpm1_correct_loc = 0
 local rpm2_correct_loc = 0
 local rpm3_correct_loc = 0
-local brake_temp_loc_l = 0
-local brake_temp_loc_r = 0
 
 -- Outside-air-temperature-adjusted engine annunciator thresholds.
 local vna33_off = 0
@@ -848,95 +844,18 @@ end
                 end
             end
         end
-        -- Publish the current brake temperatures, then integrate the next model step.
-        simDR_brake_heat_left = brake_temp_loc_l
-        simDR_brake_heat_right = brake_temp_loc_r   
-        -- Add heat according to brake application and ground speed.
-        if simDR_brake_l > 0 and simDR_gs > 1 and simDR_on_ground > 0 then
-            if brake_temp < 1200 then
-                brake_temp_loc_l = brake_temp_loc_l + (simDR_brake_l * 0.015 * simDR_gs)
-            end
+        -- SASL brake_system owns temperature from native brake energy. Retain
+        -- the existing fade thresholds, consuming the synchronized temperatures.
+        local brake_temp_l = simDR_brake_heat_left
+        local brake_temp_r = simDR_brake_heat_right
+        if brake_temp_l > 450 then
+            simDR_brake_l = math.min(simDR_brake_l, math.max(0, (1450 - brake_temp_l) * 0.001))
         end
-        if simDR_brake_r > 0 and simDR_gs > 1 and simDR_on_ground > 0 then
-            if brake_temp < 1200 then
-                brake_temp_loc_r = brake_temp_loc_r + (simDR_brake_r * 0.015 * simDR_gs)
-            end
-        end
-
-
-        -- Apply passive cooling. Rates differ with gear position, aircraft motion,
-        -- and whether the outside-air temperature is above or below zero.
-        if simDR_oat < brake_temp_loc_l then
-            if gears > 0 then
-                if simDR_gs > 1 then
-                        brake_temp_loc_l = brake_temp_loc_l - 0.0005 * simDR_gs 
-                else
-                    if simDR_oat > 0 then
-                        brake_temp_loc_l = brake_temp_loc_l - 0.0000001*(50-math.abs(simDR_oat))
-                    else
-                        brake_temp_loc_l = brake_temp_loc_l - 0.000004*math.abs(simDR_oat)
-                    end
-                end
-            else
-                if simDR_oat > 0 then
-                    brake_temp_loc_l = brake_temp_loc_l - 0.000005
-                else
-                    brake_temp_loc_l = brake_temp_loc_l - 0.00015*math.abs(simDR_oat)
-                end
-            end
-        end
-
-        if simDR_oat < brake_temp_loc_r then
-            if gears > 0 then
-                if simDR_gs > 1 then
-                    brake_temp_loc_r = brake_temp_loc_r - 0.0005 * simDR_gs 
-                else
-                    if simDR_oat > 0 then
-                        brake_temp_loc_r = brake_temp_loc_r - 0.0000001*(50-math.abs(simDR_oat))
-                    else
-                        brake_temp_loc_r = brake_temp_loc_r - 0.000004*math.abs(simDR_oat)
-                    end
-                end
-            else
-                if simDR_oat > 0 then
-                    brake_temp_loc_r = brake_temp_loc_r - 0.000005
-                else
-                    brake_temp_loc_r = brake_temp_loc_r - 0.00015*math.abs(simDR_oat)
-                end
-            end
-        end
-        -- Powered brake fans provide additional cooling while on the ground.
-        if bus36 > 0 and simDR_gear_fan > 0 and simDR_on_ground > 0 then
-            if brake_temp_loc_l > simDR_oat then
-                brake_temp_loc_l = brake_temp_loc_l - 0.03
-            end
-        end
-        if bus36 > 0 and simDR_gear_fan > 0 and simDR_on_ground > 0 then
-            if brake_temp_loc_r > simDR_oat then
-                brake_temp_loc_r = brake_temp_loc_r - 0.03
-            end
-        end
-        -- Reduce available braking progressively above the modeled threshold of 450.
-        if brake_temp_loc_l > 450 then  
-            if simDR_brake_l > 1 - (1 - ((1450 - brake_temp_loc_l)*0.001)) then 
-                simDR_brake_l = 1 - (1 - ((1450 - brake_temp_loc_l)*0.001))
-            end
-        end
-        if brake_temp_loc_r > 450 then  
-            if simDR_brake_r > 1 - (1 - ((1450 - brake_temp_loc_r)*0.001)) then 
-                simDR_brake_r = 1 - (1 - ((1450 - brake_temp_loc_r)*0.001))
-            end
-        end
-        -- Cache whether any landing-gear leg is extended for the next cooling step.
-        if simDR_gear1 < 0.01 and simDR_gear2 < 0.01 and simDR_gear3 < 0.01 then
-            gears = 0
-        else
-            gears = 1
+        if brake_temp_r > 450 then
+            simDR_brake_r = math.min(simDR_brake_r, math.max(0, (1450 - brake_temp_r) * 0.001))
         end
     else
-        -- Disabling failures clears accumulated thermal and icing state.
-        brake_temp_loc_r = 0
-        brake_temp_loc_l = 0
+        -- Disabling failures clears only this component's icing state.
         doors_icing = 0
     end
 

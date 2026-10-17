@@ -67,6 +67,19 @@ defineProps({
     { "bus27_volt_left", "tu154/custom/elec/bus27_volt_left", globalPropertyf },
     { "bus27_volt_right", "tu154/custom/elec/bus27_volt_right", globalPropertyf },
 
+    -- Actual openings and configured passenger counts in the M cabin zones.
+    { "window_left", "tu154/custom/anim/cockpit_window_left", globalPropertyf },
+    { "window_right", "tu154/custom/anim/cockpit_window_right", globalPropertyf },
+    { "pax_door_1", "tu154/custom/anim/pax_door_1", globalPropertyf },
+    { "pax_door_2", "tu154/custom/anim/pax_door_2", globalPropertyf },
+    { "pax_door_3", "tu154/custom/anim/pax_door_3", globalPropertyf },
+    { "cockpit_door", "tu154/custom/anim/cockpit_door", globalPropertyf },
+    { "pax_zone_1", "tu154/custom/payload/zone_1", globalPropertyi },
+    { "pax_zone_2", "tu154/custom/payload/zone_2", globalPropertyi },
+    { "pax_zone_4", "tu154/custom/payload/zone_4", globalPropertyi },
+    { "pax_zone_5", "tu154/custom/payload/zone_5", globalPropertyi },
+    { "pax_zone_6", "tu154/custom/payload/zone_6", globalPropertyi },
+
     -- failures
     { "tth_left_fail", "tu154/custom/failures/tth_left_fail", globalPropertyi },
     { "tth_right_fail", "tu154/custom/failures/tth_right_fail", globalPropertyi },
@@ -111,8 +124,50 @@ local cabin_2_T = termo_out
 local cabin_2_tube_temp = termo_out
 local cabin_2_reg = 0.1
 
+-- Effective air/furnishing thermal capacities and opening conductances are
+-- conservative simulation tuning values, not certified Tu-154M measurements.
+local COCKPIT_CAPACITY = 200000 -- J/K
+local FRONT_CAPACITY = 1400000 -- J/K
+local AFT_CAPACITY = 2200000 -- J/K
+local PASSENGER_HEAT = 75 -- W of sensible heat per configured passenger
+
+local function bounded(value, maximum)
+    if value ~= value then return 0 end
+    return math.max(0, math.min(maximum, value))
+end
+
+local function openingExchange(temperature, ambient, rate, heat, capacity, dt)
+    if rate <= 0 then return temperature + heat / capacity * dt end
+    local target = ambient + heat / (capacity * rate)
+    return target + (temperature - target) * math.exp(-rate * dt)
+end
+
+local function cabinExchange(dt)
+    local windows = bounded(get(window_left), 1) + bounded(get(window_right), 1)
+    local door1 = bounded(get(pax_door_1), 1)
+    local door2 = bounded(get(pax_door_2), 1)
+    local door3 = bounded(get(pax_door_3), 1)
+    -- Seat limits match the existing M load panel (62 front / 104 aft).
+    local frontPax = bounded(get(pax_zone_1), 18) + bounded(get(pax_zone_2), 44)
+    local aftPax = bounded(get(pax_zone_4), 48) + bounded(get(pax_zone_5), 42) + bounded(get(pax_zone_6), 14)
+    cockpit_T = openingExchange(cockpit_T, termo_out, 0.015 * windows, 0, COCKPIT_CAPACITY, dt)
+    cabin_1_T = openingExchange(cabin_1_T, termo_out, 0.012 * door1 + 0.006 * door2,
+        PASSENGER_HEAT * frontPax, FRONT_CAPACITY, dt)
+    cabin_2_T = openingExchange(cabin_2_T, termo_out, 0.006 * door2 + 0.012 * door3,
+        PASSENGER_HEAT * aftPax, AFT_CAPACITY, dt)
+
+    -- Exact two-zone exchange conserves heat and cannot overshoot equilibrium.
+    local conductance = 4000 * bounded(get(cockpit_door), 1) -- W/K
+    local reducedCapacity = COCKPIT_CAPACITY * FRONT_CAPACITY / (COCKPIT_CAPACITY + FRONT_CAPACITY)
+    local transfer = (cabin_1_T - cockpit_T) * reducedCapacity
+        * (1 - math.exp(-conductance / reducedCapacity * dt))
+    cockpit_T = cockpit_T + transfer / COCKPIT_CAPACITY
+    cabin_1_T = cabin_1_T - transfer / FRONT_CAPACITY
+end
+
 function update()
     local passed = get(frame_time)
+    if passed <= 0 or passed ~= passed or passed == math.huge then return end
     local power_L = get(bus27_volt_left) > 13
     local power_R = get(bus27_volt_right) > 13
 
@@ -388,6 +443,8 @@ function update()
     elseif cabin_2_reg < 0 then
         cabin_2_reg = 0
     end
+
+    cabinExchange(passed)
 
     local MASTER = get(ismaster) ~= 1
 

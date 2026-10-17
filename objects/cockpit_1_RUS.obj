@@ -6,9 +6,6 @@ GLOBAL_specular 1.0
 TEXTURE cockpit_1_RUS.png
 TEXTURE_LIT cockpit_1_RUS_LIT.png
 TEXTURE_NORMAL cockpit_1_RUS_NML.png
-# XP12: the normal map blue channel follows albedo brightness, not material metalness.
-# Use dielectric PBR reflectance; preserve normal detail and alpha-channel gloss.
-# Two-sided surfaces use reversed triangles and normals for correct back-face lighting.
 POINT_COUNTS 148394 0 0 322269
 VT 0.874344 -1.332596 -19.724396 -1.000000 0.000000 0.000000 0.341797 0.463196
 VT 0.874344 -1.332596 -19.759186 -1.000000 0.000000 0.000000 0.293503 0.463196

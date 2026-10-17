@@ -7,4 +7,5 @@ components = {
     engines_sound {},
     crew_voices {},
     cockpit_control_sounds {},
+    mechanical_sounds {},
 }

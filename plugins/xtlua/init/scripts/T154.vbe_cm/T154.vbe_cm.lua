@@ -45,6 +45,15 @@ vbe_mode_l= deferred_dataref("tu154/custom/gauges/alt/vbe_mode_left_new", "numbe
 vbe_mode_r= deferred_dataref("tu154/custom/gauges/alt/vbe_mode_right_new", "number")
 
 
+-- Encoder inputs share the existing VBE values; no duplicate display state.
+local find_datarefs = {
+    { "hw_vbe_std_l", "tu154/custom/gauges/alt/vbe_std_left" },
+    { "hw_vbe_std_r", "tu154/custom/gauges/alt/vbe_std_right" },
+    { "hw_vbe_ismaster", "scp/api/ismaster" },
+}
+local vbe_hardware_env = getfenv(1)
+for _, def in ipairs(find_datarefs) do vbe_hardware_env[def[1]] = find_dataref(def[2]) end
+
 local f_level_lm = 0
 local altitude_current_l = 0
 local altitude_diff_l = 0
@@ -390,6 +399,54 @@ function vbecm_button_23_r_CMDhandler(phase, duration)
 end
 
 
+-- Independent pressure and selected-altitude encoders for external hardware.
+-- Repeat timing uses command duration, not the number of per-frame callbacks.
+local function registerVbeEncoder(side, kind, direction, suffix)
+    local pressed, next_repeat = false, 0.4
+    local function step()
+        if hw_vbe_ismaster == 1 then return end
+        local ready
+        if side == "l" then
+            ready = simDR_bus27left > 13 and simDR_vbe_on_l > 0 and start_self_test_l < 1 and self_test_l < 1
+        else
+            ready = simDR_bus27right > 13 and simDR_vbe_on_r > 0 and start_self_test_r < 1 and self_test_r < 1
+        end
+        if not ready then return end
+        local field = kind == "p" and "simDR_vbe_press_" .. side or "simDR_vbe_fl_" .. side
+        local value = vbe_hardware_env[field]
+        if type(value) ~= "number" or value ~= value or math.abs(value) == math.huge then return end
+        if kind == "p" then
+            if vbe_hardware_env["hw_vbe_std_" .. side] == 1 then return end
+            value = math.max(700, math.min(1080, value + direction))
+        else
+            local increment = vbe_hardware_env["vbe_mode_" .. side] == 1 and 152.4 or 100
+            value = math.max(0, math.min(12000, value + direction * increment))
+        end
+        vbe_hardware_env[field] = value
+        if side == "l" then start_reset_mod_timer_l = 0 else start_reset_mod_timer_r = 0 end
+    end
+    local label = kind == "p" and "pressure" or "selected altitude"
+    create_command("vbe/vbe_" .. side .. "_" .. kind .. "_" .. suffix,
+        "VBE " .. side:upper() .. " " .. label .. ": " .. suffix, function(phase, duration)
+            if phase == 0 then
+                pressed, next_repeat = true, 0.4
+                step()
+            elseif phase == 1 and pressed and type(duration) == "number" and duration >= next_repeat then
+                -- Never replay a backlog of encoder steps after a long frame.
+                next_repeat = duration + 0.1
+                step()
+            elseif phase == 2 then
+                pressed, next_repeat = false, 0.4
+            end
+        end)
+end
+for _, side in ipairs({ "l", "r" }) do
+    for _, kind in ipairs({ "p", "h" }) do
+        registerVbeEncoder(side, kind, 1, "plus")
+        registerVbeEncoder(side, kind, -1, "minus")
+    end
+end
+
 vbe_btn1_cmnd_l	= create_command("vbecm_l/vbe_btn1_cmnd", "VBE-CM BTN1", vbecm_button_1_CMDhandler)
 vbe_btn2_cmnd_l	= create_command("vbecm_l/vbe_btn2_cmnd", "VBE-CM BTN2", vbecm_button_2_CMDhandler)
 vbe_btn3_cmnd_l	= create_command("vbecm_l/vbe_btn3_cmnd", "VBE-CM BTN3", vbecm_button_3_CMDhandler)
@@ -495,7 +552,7 @@ function self_test()
         vbe_test_r2 = -1
         simDR_brt_r = 0
     end
-    if simDR_vbe_on_r > 0 and simDR_bus27left < 1 then
+    if simDR_vbe_on_r > 0 and simDR_bus27right < 1 then
         start_self_test_r = 1
         simDR_brt_r = 0
     end

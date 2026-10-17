@@ -9,7 +9,7 @@ TEXTURE glass2.png
 TEXTURE_NORMAL glass_NML.png
 GLOBAL_specular 1.0
 BLEND_GLASS
-RAIN_scale 0.5
+RAIN_scale 1.0
 
 THERMAL_texture windshield_thermal_out.png
 THERMAL_source2 0 tu154/custom/antiice/window_heat_time_1 sim/cockpit2/ice/ice_window_heat_running[0]

@@ -3,7 +3,13 @@
 
 local function defineProps(defs)
     for _, d in ipairs(defs) do
-        defineProperty(d[1], d[3](d[2]))
+        local prop
+        if d[4] ~= nil then
+            prop = d[3](d[2], d[4])
+        else
+            prop = d[3](d[2])
+        end
+        defineProperty(d[1], prop)
     end
 end
 
@@ -17,6 +23,12 @@ defineProps({
     { "r_brake_add", "sim/flightmodel/controls/r_brake_add", globalPropertyf },
     { "parkbrake", "sim/flightmodel/controls/parkbrake", globalPropertyf },
     { "parkbrake_2", "sim/cockpit2/controls/wheel_brake_ratio", globalPropertyf },
+    -- Native heat already includes brake work and cooling. ACF gear indexes 1/2
+    -- are the left/right main assemblies; SASL element accessors are one-based.
+    { "brake_energy_left", "sim/flightmodel2/gear/brake_absorbed_J", globalPropertyfae, 2 },
+    { "brake_energy_right", "sim/flightmodel2/gear/brake_absorbed_J", globalPropertyfae, 3 },
+    { "native_brake_fan", "sim/cockpit2/controls/brake_fan_on", globalPropertyi },
+    { "bus115_1_volt", "tu154/custom/elec/bus115_1_volt", globalPropertyf },
     -- Aircraft controls, animation and internal brake demand.
     { "gear_blocks", "tu154/custom/anim/gear_blocks", globalPropertyf },
     { "brake_emerg", "tu154/custom/controlls/brake_emerg", globalPropertyf },
@@ -80,6 +92,15 @@ regular_brk_comm = sasl.findCommand("sim/flight_controls/brakes_regular")
 
 local termo_left = get(thermo)
 local termo_right = get(thermo)
+-- Effective main-gear assembly heat capacity, a simulation calibration to be
+-- checked in XP12; this is not a certified M brake material/mass specification.
+local BRAKE_HEAT_CAPACITY_J_PER_C = 165000
+local fan_owned = false
+
+local function energyTemperature(energy, ambient)
+    if energy ~= energy or energy == math.huge or energy < 0 then energy = 0 end
+    return ambient + energy / BRAKE_HEAT_CAPACITY_J_PER_C
+end
 
 function regular_brk_hnd(phase)
     if 1 == phase then -- hold
@@ -205,6 +226,25 @@ local BRAKE_SYNC_DIFFERENCE = 0.10
 
 function update()
     passed = get(frame_time)
+    if passed ~= passed or passed < 0 or passed == math.huge then return end
+    local MASTER = get(ismaster) ~= 1
+    local have_control = get(hascontrol_1) ~= 1
+    if MASTER then
+        termo_left = energyTemperature(get(brake_energy_left), get(thermo))
+        termo_right = energyTemperature(get(brake_energy_right), get(thermo))
+        set(brake_heat_left, termo_left)
+        set(brake_heat_right, termo_right)
+    else
+        termo_left, termo_right = get(brake_heat_left), get(brake_heat_right)
+    end
+    -- Cooling belongs to the system master, independently of pilot controls.
+    if MASTER then
+        set(native_brake_fan, bool2int(get(gear_vent_set) == 1 and get(bus115_1_volt) > 105))
+        fan_owned = true
+    elseif fan_owned then
+        set(native_brake_fan, 0)
+        fan_owned = false
+    end
     -- controls
     -- pedals
     local brake_1 = get(joy_value_L)
@@ -329,14 +369,7 @@ function update()
         end
     end
 
-    termo_left = termo_left + left_blake * get(speed) * 0.9 * bool2int(get(gear2_deflect) > 0.05) * passed
-    termo_left = termo_left + (get(thermo) - termo_left) * passed * (1 + get(gear_vent_set) * 4) * 0.01
-    termo_right = termo_right + right_blake * get(speed) * 0.9 * bool2int(get(gear3_deflect) > 0.05) * passed
-    termo_right = termo_right + (get(thermo) - termo_right) * passed * (1 + get(gear_vent_set) * 4) * 0.01
-    set(brake_heat_left, termo_left)
-    set(brake_heat_right, termo_right)
-
-    local have_control = get(hascontrol_1) ~= 1
+    -- X-Plane owns energy accumulation and cooling; do not integrate heat again.
 
     if have_control then
         -- set results
@@ -358,5 +391,9 @@ end
 
 -- Release the override on normal shutdown and on SASL errors.
 function onModuleShutdown(isError)
+    if fan_owned then
+        set(native_brake_fan, 0)
+        fan_owned = false
+    end
     set(overr, 0)
 end

@@ -1,7 +1,7 @@
-; PFPX Aircraft Performance File PT Tu-154M
+; PFPX Aircraft Performance File Tu-154M
 
 [GENERAL]
-Author=Denis Urban
+Author=Peter Schwake
 Version=1.00
 AircraftType=Tupolev T-154M
 EngineType=Soloviev D-30KU

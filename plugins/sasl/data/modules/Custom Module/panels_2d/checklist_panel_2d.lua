@@ -1,5 +1,5 @@
 -- checklist_panel_2d.lua
--- Displays bilingual checklist pages and handles checklist selection and markers.
+-- Displays English checklist pages and handles checklist selection and markers.
 
 size = { 240, 850 }
 
@@ -16,7 +16,8 @@ local function defineProps(defs)
 end
 
 defineProps({
-    { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi }, --    . 1 = RUS
+    -- Fixed English artwork no longer uses the cockpit-language binding.
+    -- { "hide_eng_objects", "tu154/custom/lang/hide_eng_objects", globalPropertyi },
 
     -- controls
     { "show_checklist_panel", "tu154/custom/panels/show_checklist_panel", globalPropertyi },
@@ -57,14 +58,14 @@ local function checklistAtlasY(top, height)
     return CHECKLIST_ATLAS_HEIGHT - top - height
 end
 
-defineProperty("bg_img_0", sasl.gl.loadImage("checklist_tex.png", 0, checklistAtlasY(0, 850), 240, 850))
-defineProperty("bg_img_1", sasl.gl.loadImage("checklist_tex.png", 249, checklistAtlasY(0, 850), 240, 850))
+-- Use the texture directory explicitly; a design copy also exists in panels_2d.
+local checklistTexture = moduleDirectory .. "/Custom Module/texture/checklist.png"
 
-defineProperty("bg_img_0_RUS", sasl.gl.loadImage("checklist_tex_RUS.png", 0, checklistAtlasY(0, 850), 240, 850))
-defineProperty("bg_img_1_RUS", sasl.gl.loadImage("checklist_tex_RUS.png", 249, checklistAtlasY(0, 850), 240, 850))
+defineProperty("bg_img_0", sasl.gl.loadImage(checklistTexture, 0, checklistAtlasY(0, 944), 254, 944))
+defineProperty("bg_img_1", sasl.gl.loadImage(checklistTexture, 258, checklistAtlasY(0, 944), 254, 944))
 
-defineProperty("fishka_left", sasl.gl.loadImage("checklist_tex.png", 0, checklistAtlasY(859, 25), 166, 25))
-defineProperty("fishka_right", sasl.gl.loadImage("checklist_tex.png", 0, checklistAtlasY(887, 25), 166, 25))
+defineProperty("fishka_left", sasl.gl.loadImage(checklistTexture, 0, checklistAtlasY(954, 30), 175, 30))
+defineProperty("fishka_right", sasl.gl.loadImage(checklistTexture, 0, checklistAtlasY(984, 31), 175, 31))
 
 components = {
 
@@ -73,29 +74,14 @@ components = {
         position = { 0, 0, size[1], size[2] },
         image = get(bg_img_0),
         visible = function()
-            return get(side) == 0 and get(hide_eng_objects) == 0
+            return get(side) == 0
         end,
     },
     textureLit {
         position = { 0, 0, size[1], size[2] },
         image = get(bg_img_1),
         visible = function()
-            return get(side) == 1 and get(hide_eng_objects) == 0
-        end,
-    },
-
-    textureLit {
-        position = { 0, 0, size[1], size[2] },
-        image = get(bg_img_0_RUS),
-        visible = function()
-            return get(side) == 0 and get(hide_eng_objects) == 1
-        end,
-    },
-    textureLit {
-        position = { 0, 0, size[1], size[2] },
-        image = get(bg_img_1_RUS),
-        visible = function()
-            return get(side) == 1 and get(hide_eng_objects) == 1
+            return get(side) == 1
         end,
     },
 
@@ -649,6 +635,24 @@ components = {
         end,
     },
 }
+
+-- Synchronize only on selection changes so manual page turns remain usable.
+local previousChecklist
+
+function update()
+    local selected = get(checklist_selected)
+
+    if selected ~= previousChecklist then
+        if selected >= 1 and selected <= 5 then
+            set(side, 0)
+        elseif selected >= 6 and selected <= 9 then
+            set(side, 1)
+        end
+        previousChecklist = selected
+    end
+
+    updateAll(components)
+end
 
 function draw()
     drawAll(components)

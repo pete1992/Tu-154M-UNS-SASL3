@@ -14257,7 +14257,7 @@ P _engn/0/_part_x -9.899999619
 P _engn/0/_part_y 1.600000024
 P _engn/0/_part_z 110.000000000
 P _engn/0/_power_max_limit 0.000000000
-P _engn/0/_thrust_max_limit 2.3148537E4
+P _engn/0/_thrust_max_limit 2.35485E4
 P _engn/0/_type JET_2SPOOL
 P _engn/1/_RSC_max_pwr_ENGN 1.000000000
 P _engn/1/_RSC_redline_ENGN 1.000000000
@@ -14276,7 +14276,7 @@ P _engn/1/_part_x 0.000000000
 P _engn/1/_part_y 2.599999905
 P _engn/1/_part_z 125.000000000
 P _engn/1/_power_max_limit 0.000000000
-P _engn/1/_thrust_max_limit 2.3148537E4
+P _engn/1/_thrust_max_limit 2.35485E4
 P _engn/1/_type JET_2SPOOL
 P _engn/2/_RSC_max_pwr_ENGN 1.000000000
 P _engn/2/_RSC_redline_ENGN 1.000000000
@@ -14295,7 +14295,7 @@ P _engn/2/_part_x 9.899999619
 P _engn/2/_part_y 1.600000024
 P _engn/2/_part_z 110.000000000
 P _engn/2/_power_max_limit 0.000000000
-P _engn/2/_thrust_max_limit 2.3148537E4
+P _engn/2/_thrust_max_limit 2.35585E4
 P _engn/2/_type JET_2SPOOL
 P _engn/count 16
 P _gear/0/_axiE 0.000000000
@@ -15047,8 +15047,8 @@ P _lite/9/_v10_is_internal 1960963551
 P _lite/9/_v10_steers_with_gear 0
 P _lite/9/_width 56.000000000
 P _lite/count 26
-P _lite_equip/_land_lite_off_on_retract_EQ 0
-P _lite_equip/_taxi_lite_off_on_retract_EQ 0
+P _lite_equip/_land_lite_off_on_retract_EQ 1
+P _lite_equip/_taxi_lite_off_on_retract_EQ 1
 P _obja/0/_obj_flags 36877
 P _obja/0/_v10_att_body -1
 P _obja/0/_v10_att_file_stl ../tu154_cockpit.obj
@@ -15702,7 +15702,7 @@ P _obja/52/_v10_is_internal 0
 P _obja/52/_v10_steers_with_gear 0
 P _obja/53/_obj_flags 52
 P _obja/53/_v10_att_body -1
-P _obja/53/_v10_att_file_stl particles/particles.obj
+P _obja/53/_v10_att_file_stl particles/tu154_particles.obj
 P _obja/53/_v10_att_gear -1
 P _obja/53/_v10_att_phi_ref 0.000000000
 P _obja/53/_v10_att_psi_ref 0.000000000
@@ -45238,7 +45238,7 @@ P acf/_APU_ff_kgh 0.000000000
 P acf/_APU_fuel_src 0
 P acf/_APU_spooldn_time 1.000000000
 P acf/_APU_spoolup_time 1.000000000
-P acf/_AP_overspeed_prot 1
+P acf/_AP_overspeed_prot 0
 P acf/_AShi_alpha_k 0.000000000
 P acf/_AShi_alpha_sec 0.000000000
 P acf/_AShi_beta_k 0.100000001
@@ -47479,7 +47479,7 @@ P acf/_fadec_tla/0 0.000000000
 P acf/_fadec_tla/1 0.000000000
 P acf/_fadec_tla/2 0.000000000
 P acf/_fadec_tla/count 3
-P acf/_fan_rpm_for_n1_100 4739.625488281
+P acf/_fan_rpm_for_n1_100 4940.000000000
 P acf/_fbrk_on_td_EQ 0
 P acf/_fbrk_rto_vind 0.000000000
 P acf/_fdir_needed_to_engage_servo 0
@@ -47890,9 +47890,9 @@ P acf/_idle_rat/0 0.300000012
 P acf/_idle_rat/1 0.550000012
 P acf/_idle_rat/count 2
 P acf/_incidence_with_flaps 0
-P acf/_inlet_compression_efficiency 0.949999988
-P acf/_inlet_max_KEAS 900.000000000
-P acf/_inlet_max_temp_C 900.000000000
+P acf/_inlet_compression_efficiency 0.980000019
+P acf/_inlet_max_KEAS 990.000000000
+P acf/_inlet_max_temp_C 950.000000000
 P acf/_integrated_approach_navigation 0
 P acf/_inverted_fuel_oil_EQ 1
 P acf/_inverter_for_elec_gyros 0
@@ -48008,7 +48008,7 @@ P acf/_new_plot_XP3D_cock/0 1
 P acf/_new_plot_outer_acf/0 1
 P acf/_no_default_chocks 0
 P acf/_no_default_contact_fx 0
-P acf/_no_default_engine_fx 0
+P acf/_no_default_engine_fx 1
 P acf/_no_default_gear_fx 0
 P acf/_no_default_gun_fx 0
 P acf/_no_default_jato_fx 0
@@ -48031,14 +48031,14 @@ P acf/_num_prop 0
 P acf/_num_xmsn 3
 P acf/_o2_bottle_liter 55.000000000
 P acf/_oilT_is_C 1
-P acf/_ott_asi_kts_off_for_full_def 5.000000000
-P acf/_ott_asi_sec_into_future 60.000000000
-P acf/_ott_asi_thro_per_sec 0.100000001
+P acf/_ott_asi_kts_off_for_full_def 2.000000000
+P acf/_ott_asi_sec_into_future 160.000000000
+P acf/_ott_asi_thro_per_sec 0.319999993
 P acf/_ott_atr_Kd 5.750000000
 P acf/_ott_atr_Ki 2.500000000
 P acf/_ott_atr_Kp 9.000000000
 P acf/_ott_flare_begin 15.000000000
-P acf/_ott_flare_end 5.000000000
+P acf/_ott_flare_end 3.000000000
 P acf/_ott_gls_sec_into_future 300.000000000
 P acf/_ott_phi_deg_off_for_full_def 40.000000000
 P acf/_ott_phi_sec_into_future 60.000000000

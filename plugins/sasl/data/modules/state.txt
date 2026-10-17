@@ -1,100 +1,57 @@
 state = {
     ['contextWindows'] = {
-        ['nvu_2D_panel'] = {
-            ['position'] = {
-                [1] = 50;
-                [2] = 0;
-                [3] = 636;
-                [4] = 786;
-            };
-            ['visible'] = false;
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 0;
-                    [3] = 636;
-                    [4] = 786;
-                };
-                ['visible'] = false;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-        };
-        ['checklist_panel_2d'] = {
-            ['initState'] = {
-                ['position'] = {
-                    [1] = 50;
-                    [2] = 50;
-                    [3] = 300;
-                    [4] = 1062.5;
-                };
-                ['visible'] = false;
-            };
-            ['visible'] = false;
-            ['position'] = {
-                [1] = 141;
-                [2] = 304;
-                [3] = 300;
-                [4] = 1062;
-            };
-            ['mode'] = {
-                [1] = 0;
-            };
-        };
         ['ground_srv_panel'] = {
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 655;
                     [4] = 880;
                 };
-                ['visible'] = false;
             };
-            ['visible'] = false;
             ['position'] = {
                 [1] = 700;
                 [2] = 391;
-                [3] = 652;
-                [4] = 876;
+                [3] = 647;
+                [4] = 869;
             };
             ['mode'] = {
                 [1] = 0;
             };
+            ['visible'] = false;
         };
         ['uphone'] = {
-            ['position'] = {
-                [1] = 40;
-                [2] = 20;
-                [3] = 241;
-                [4] = 446;
-            };
-            ['visible'] = false;
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 40;
                     [2] = 20;
                     [3] = 241;
                     [4] = 446;
                 };
-                ['visible'] = false;
+            };
+            ['position'] = {
+                [1] = 40;
+                [2] = 20;
+                [3] = 241;
+                [4] = 446;
             };
             ['mode'] = {
                 [1] = 0;
             };
+            ['visible'] = false;
         };
         ['palette'] = {
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 351.4;
                     [4] = 427;
                 };
-                ['visible'] = false;
             };
-            ['visible'] = false;
             ['position'] = {
                 [1] = 50;
                 [2] = 343;
@@ -104,18 +61,18 @@ state = {
             ['mode'] = {
                 [1] = 0;
             };
+            ['visible'] = false;
         };
         ['camera_panel'] = {
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 512;
                     [4] = 512;
                 };
-                ['visible'] = false;
             };
-            ['visible'] = false;
             ['position'] = {
                 [1] = 50;
                 [2] = 258;
@@ -125,39 +82,39 @@ state = {
             ['mode'] = {
                 [1] = 0;
             };
+            ['visible'] = false;
         };
         ['absu_2d_panel'] = {
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 917;
                     [4] = 597;
                 };
-                ['visible'] = false;
             };
-            ['visible'] = false;
             ['position'] = {
-                [1] = 10;
-                [2] = 826;
+                [1] = 70;
+                [2] = 922;
                 [3] = 917;
                 [4] = 597;
             };
             ['mode'] = {
                 [1] = 0;
             };
+            ['visible'] = false;
         };
         ['payload_panel'] = {
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 50;
                     [3] = 1024;
                     [4] = 683;
                 };
-                ['visible'] = false;
             };
-            ['visible'] = false;
             ['position'] = {
                 [1] = 953;
                 [2] = 564;
@@ -167,18 +124,18 @@ state = {
             ['mode'] = {
                 [1] = 0;
             };
+            ['visible'] = false;
         };
         ['ovhd_2d_panel'] = {
             ['initState'] = {
+                ['visible'] = false;
                 ['position'] = {
                     [1] = 50;
                     [2] = 0;
                     [3] = 1458;
                     [4] = 1013;
                 };
-                ['visible'] = false;
             };
-            ['visible'] = false;
             ['position'] = {
                 [1] = 278;
                 [2] = 483;
@@ -188,21 +145,52 @@ state = {
             ['mode'] = {
                 [1] = 0;
             };
+            ['visible'] = false;
+        };
+        ['nvu_2D_panel'] = {
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 0;
+                    [3] = 636;
+                    [4] = 786;
+                };
+            };
+            ['position'] = {
+                [1] = 50;
+                [2] = 0;
+                [3] = 636;
+                [4] = 786;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
+        };
+        ['checklist_panel_2d'] = {
+            ['initState'] = {
+                ['visible'] = false;
+                ['position'] = {
+                    [1] = 50;
+                    [2] = 50;
+                    [3] = 300;
+                    [4] = 1062.5;
+                };
+            };
+            ['position'] = {
+                [1] = 141;
+                [2] = 304;
+                [3] = 300;
+                [4] = 1062;
+            };
+            ['mode'] = {
+                [1] = 0;
+            };
+            ['visible'] = false;
         };
     };
     ['legacyPopups'] = {
-        ['nvu_2D_panel'] = {
-            [1] = 367;
-            [2] = 972;
-            [3] = 525.196875;
-            [4] = 649.0640625;
-        };
-        ['checklist_panel_2d'] = {
-            [1] = 461;
-            [2] = 212;
-            [3] = 198.1875;
-            [4] = 701.9140625;
-        };
         ['ground_srv_panel'] = {
             [1] = 126;
             [2] = 224;
@@ -244,6 +232,18 @@ state = {
             [2] = 1132;
             [3] = 1203.9890625;
             [4] = 836.51640625;
+        };
+        ['nvu_2D_panel'] = {
+            [1] = 367;
+            [2] = 972;
+            [3] = 525.196875;
+            [4] = 649.0640625;
+        };
+        ['checklist_panel_2d'] = {
+            [1] = 461;
+            [2] = 212;
+            [3] = 198.1875;
+            [4] = 701.9140625;
         };
     };
 };

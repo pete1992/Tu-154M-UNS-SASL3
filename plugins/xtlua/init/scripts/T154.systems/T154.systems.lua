@@ -118,6 +118,27 @@ local DATAREFS = {
 
 bind_datarefs(DATAREFS)
 
+-- Additional hardware controls use the same M switch inputs as the cockpit.
+local find_datarefs = {
+    { "hw_bleed_left", "tu154/custom/switchers/airbleed/air_valve_left" },
+    { "hw_bleed_right", "tu154/custom/switchers/airbleed/air_valve_right" },
+    { "hw_booster_1", "tu154/custom/switchers/console/buster_on_1" },
+    { "hw_booster_2", "tu154/custom/switchers/console/buster_on_2" },
+    { "hw_booster_3", "tu154/custom/switchers/console/buster_on_3" },
+    { "hw_boosters_guard", "tu154/custom/switchers/console/busters_cap" },
+    { "hw_nws_power", "tu154/custom/switchers/nosewheel_turn_enable" },
+    { "hw_nws_mode", "tu154/custom/switchers/nosewheel_turn_sel" },
+    { "hw_nws_guard", "tu154/custom/switchers/nosewheel_turn_cap" },
+    { "hw_tks_course", "tu154/custom/switchers/ovhd/tks_course_set" },
+    { "hw_tks_source", "tu154/custom/switchers/ovhd/tks_mode_right" },
+    { "hw_tks_sync", "tu154/custom/buttons/ovhd/tks_corrr_button" },
+    { "hw_ismaster", "scp/api/ismaster" },
+}
+local hardware_env = getfenv(1)
+for _, def in ipairs(find_datarefs) do
+    hardware_env[def[1]] = find_dataref(def[2])
+end
+
 -- Runtime state -----------------------------------------------------------
 -- Saved lamp states are restored while 
 -- the general front-panel lamp test runs.
@@ -317,6 +338,102 @@ absu_nvu_cmnd = create_command("t154/absu_nvu", "T154 ABSU NVU", absu_nvu_CMDhan
 lights_up_cmnd = create_command("t154/lights_up", "T154 Lights up", land_lights_up_CMDhandler)
 lights_down_cmnd = create_command("t154/lights_down", "T154 Lights down", land_lights_down_CMDhandler)
 
+
+-- Momentary controls keep their position while held and return to neutral.
+-- Track both directions so releasing one button cannot cancel the other.
+local held_hardware = {}
+local function registerMomentary(property, definitions)
+    local state = { property = property, pressed = {}, serial = 0 }
+    held_hardware[#held_hardware + 1] = state
+    local function apply()
+        if hw_ismaster == 1 then return end
+        local newest, value = 0, 0
+        for direction, order in pairs(state.pressed) do
+            if order > newest then newest, value = order, direction end
+        end
+        hardware_env[property] = value
+    end
+    for _, def in ipairs(definitions) do
+        local direction = def[3]
+        create_command(def[1], def[2], function(phase, duration)
+            if phase == 2 then
+                if state.pressed[direction] then
+                    state.pressed[direction] = nil
+                    apply()
+                end
+            elseif phase == 0 and hw_ismaster ~= 1 then
+                state.serial = state.serial + 1
+                state.pressed[direction] = state.serial
+                apply()
+            elseif phase == 1 and state.pressed[direction] then
+                apply()
+            end
+        end)
+    end
+end
+
+registerMomentary("hw_bleed_left", {
+    { "t154/bleed/bleed_L_up", "Left air valve: hold open", 1 },
+    { "t154/bleed/bleed_L_dn", "Left air valve: hold closed", -1 },
+})
+registerMomentary("hw_bleed_right", {
+    { "t154/bleed/bleed_R_up", "Right air valve: hold open", 1 },
+    { "t154/bleed/bleed_R_dn", "Right air valve: hold closed", -1 },
+})
+registerMomentary("hw_tks_course", {
+    { "t154/tks/TKS_set_left", "TKS course: hold left", -1 },
+    { "t154/tks/TKS_set_right", "TKS course: hold right", 1 },
+})
+registerMomentary("hw_tks_sync", {
+    { "t154/tks/TKS_sync", "TKS synchronization: hold", 1 },
+})
+
+local function registerSwitch(command, description, property, guard)
+    local function change(value)
+        if hw_ismaster == 1 or (guard and hardware_env[guard] ~= 1) then return end
+        hardware_env[property] = value
+    end
+    create_command(command, description .. ": toggle", function(phase)
+        if phase == 0 then change(hardware_env[property] == 0 and 1 or 0) end
+    end)
+    create_command(command .. "_on", description .. ": on", function(phase)
+        if phase == 0 then change(1) end
+    end)
+    create_command(command .. "_off", description .. ": off", function(phase)
+        if phase == 0 then change(0) end
+    end)
+end
+for index = 1, 3 do
+    registerSwitch("t154/controlls/buster_" .. index, "Booster " .. index,
+        "hw_booster_" .. index, "hw_boosters_guard")
+end
+registerSwitch("t154/controlls/nws", "Nosewheel steering power", "hw_nws_power")
+registerSwitch("t154/controlls/nws_mode", "Nosewheel steering large-angle mode", "hw_nws_mode", "hw_nws_guard")
+create_command("t154/controlls/busters_guard", "Booster switch guard: toggle", function(phase)
+    if phase == 0 and hw_ismaster ~= 1 then hw_boosters_guard = hw_boosters_guard == 0 and 1 or 0 end
+end)
+create_command("t154/controlls/nws_guard", "Nosewheel steering mode guard: toggle", function(phase)
+    if phase == 0 and hw_ismaster ~= 1 then
+        hw_nws_guard = hw_nws_guard == 0 and 1 or 0
+        if hw_nws_guard == 0 then hw_nws_mode = 0 end
+    end
+end)
+for _, def in ipairs({
+    { "t154/tks/TKS_correct_main", "TKS correction: main reference", 1 },
+    { "t154/tks/TKS_correct_control", "TKS correction: control reference", 0 },
+}) do
+    local selected = def[3]
+    create_command(def[1], def[2], function(phase)
+        if phase == 0 and hw_ismaster ~= 1 then hw_tks_source = selected end
+    end)
+end
+
+function aircraft_unload()
+    for _, state in ipairs(held_hardware) do
+        if next(state.pressed) and hw_ismaster ~= 1 then hardware_env[state.property] = 0 end
+        state.pressed = {}
+    end
+end
 
 local function katet_finite(value)
     return type(value) == "number" and value == value and value > -math.huge and value < math.huge
